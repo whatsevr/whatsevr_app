@@ -1,4 +1,5 @@
 allprojects {
+
     repositories {
         google()
         mavenCentral()
@@ -9,8 +10,16 @@ rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
-    project.evaluationDependsOn(':app')
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'org.jetbrains.kotlin'
+                && details.requested.name.contains('kotlin-stdlib')) {
+                details.useVersion '1.8.10'
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {

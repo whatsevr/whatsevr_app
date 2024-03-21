@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
+
+import '../../src/features/splash/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
 CustomTransitionPage<SlideTransition> navigateWithTransition({
@@ -90,13 +93,35 @@ class AppNavigationService {
   ) {
     return GoRouter(
       navigatorKey: navigatorKey,
-      initialLocation: RoutesName.home,
+      initialLocation: RoutesName.splash,
       debugLogDiagnostics: true,
       observers: <NavigatorObserver>[
         FlutterSmartDialog.observer,
         // TalkerRouteObserver(talker),
       ],
-      routes: <RouteBase>[],
+      routes: <RouteBase>[
+        GoRoute(
+          path: RoutesName.splash,
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return navigateWithTransition(
+              context: context,
+              state: state,
+              child: const SplashPage(),
+            );
+          },
+        ),
+        GoRoute(
+          name: RoutesName.dashboard,
+          path: RoutesName.dashboard,
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return navigateWithTransition(
+              context: context,
+              state: state,
+              child: const DashboardPage(),
+            );
+          },
+        ),
+      ],
     );
   }
 }

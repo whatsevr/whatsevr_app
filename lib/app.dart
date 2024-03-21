@@ -20,7 +20,7 @@ class WhatsevrApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
         //flipkart
-        textTheme: GoogleFonts.openSansTextTheme(
+        textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme,
         ),
       ),
