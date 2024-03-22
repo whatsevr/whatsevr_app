@@ -13,8 +13,10 @@ import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:video_player/video_player.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 import '../../../../config/mocks/mocks.dart';
+import '../../../../config/routes/router.dart';
 import '../../../../config/widgets/pad_horizontal.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -254,7 +256,9 @@ class DashboardPage extends StatelessWidget {
               ),
               IconButton(
                 icon: Iconify(Pepicons.play_print),
-                onPressed: () {},
+                onPressed: () {
+                  AppNavigationService.newRoute(RoutesName.flicks);
+                },
               ),
               IconButton(
                 icon: Iconify(Ph.chat_circle_text_fill),
@@ -332,100 +336,102 @@ class _WTVPlayerMiniState extends State<WTVPlayerMini> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  if (controller.value.isPlaying) {
-                    controller.pause();
-                  } else {
-                    controller.play();
-                  }
-                });
+        InkWell(
+          onTap: () {
+            setState(() {
+              if (controller.value.isPlaying) {
+                controller.pause();
+              } else {
+                controller.play();
+              }
+            });
+          },
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Builder(
+              builder: (context) {
+                if (controller.value.isPlaying) {
+                  return VideoPlayer(controller);
+                }
+                return ExtendedImage.network(
+                  MockData.imagePlaceholderLandscape,
+                  width: double.infinity,
+                  height: 300,
+                  fit: BoxFit.cover,
+                );
               },
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Builder(
-                  builder: (context) {
-                    if (controller.value.isPlaying) {
-                      return VideoPlayer(controller);
-                    }
-                    return ExtendedImage.network(
-                      MockData.imageLandscape,
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
             ),
-            if (!controller.value.isPlaying)
-              IconButton(
-                icon: const Icon(
-                  Icons.play_arrow,
-                  size: 80,
-                ),
-                onPressed: () {
+          ),
+        ),
+        if (!controller.value.isPlaying)
+          IconButton(
+            icon: const Icon(
+              Icons.play_arrow,
+              size: 80,
+            ),
+            onPressed: () {
+              setState(() {
+                if (controller.value.isPlaying) {
+                  controller.pause();
+                } else {
+                  controller.play();
+                }
+              });
+            },
+          ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: Row(
+            children: [
+              InkWell(
+                onTap: () {
                   setState(() {
-                    if (controller.value.isPlaying) {
-                      controller.pause();
+                    if (controller.value.volume == 0) {
+                      controller.setVolume(1);
                     } else {
-                      controller.play();
+                      controller.setVolume(0);
                     }
                   });
                 },
-              ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        if (controller.value.volume == 0) {
-                          controller.setVolume(1);
-                        } else {
-                          controller.setVolume(0);
-                        }
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Icon(
-                        controller.value.volume == 0 ? Icons.volume_off : Icons.volume_up,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  Gap(8),
-                  InkWell(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text('CC', style: TextStyle(color: Colors.white)),
-                    ),
+                  child: Icon(
+                    controller.value.volume == 0 ? Icons.volume_off : Icons.volume_up,
+                    color: Colors.white,
+                    size: 20,
                   ),
-                ],
+                ),
               ),
-            )
-          ],
-        ),
+              Gap(8),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text('CC', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

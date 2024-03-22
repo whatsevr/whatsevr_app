@@ -4,6 +4,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
+import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 
 import '../../src/features/splash/views/page.dart';
 
@@ -118,6 +119,17 @@ class AppNavigationService {
               context: context,
               state: state,
               child: const DashboardPage(),
+            );
+          },
+        ),
+        GoRoute(
+          name: RoutesName.flicks,
+          path: RoutesName.flicks,
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return navigateWithTransition(
+              context: context,
+              state: state,
+              child: const FlicksPage(),
             );
           },
         ),
