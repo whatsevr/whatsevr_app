@@ -110,6 +110,7 @@ class AppNavigationService {
               child: const SplashPage(),
             );
           },
+
         ),
         GoRoute(
           name: RoutesName.dashboard,

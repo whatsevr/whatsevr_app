@@ -1,10 +1,17 @@
 part of 'dashboard_bloc.dart';
 
-sealed class DashboardState extends Equatable {
-  const DashboardState();
-}
+class DashboardState extends Equatable {
+  final Widget currentDashboardView;
+  const DashboardState({required this.currentDashboardView});
 
-final class DashboardInitial extends DashboardState {
+  DashboardState copyWith({
+    Widget? currentDashboardView,
+  }) {
+    return DashboardState(
+      currentDashboardView: currentDashboardView ?? this.currentDashboardView,
+    );
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [currentDashboardView];
 }
