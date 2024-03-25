@@ -24,7 +24,7 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
-    controller.play();
+    //controller.play();
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
         controller.seekTo(Duration.zero);

@@ -1,9 +1,12 @@
 import 'dart:math';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+
+import '../../../../config/mocks/mocks.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,26 +17,68 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 100.0,
+            height: 120.0,
             child: Builder(builder: (context) {
               List<Widget> children = [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.primaries[0],
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  width: 100.0,
-                  alignment: Alignment.center,
-                  child: Icon(Icons.add),
+                Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        width: 100.0,
+                        alignment: Alignment.center,
+                        child: Container(
+                          padding: EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.add,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Gap(24.0),
+                  ],
                 ),
                 for (int i = 0; i < 5; i++)
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.primaries[i % Colors.primaries.length],
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    width: 180.0,
-                    alignment: Alignment.center,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.primaries[i % Colors.primaries.length],
+                            borderRadius: BorderRadius.circular(18.0),
+                            image: DecorationImage(
+                              image: ExtendedNetworkImageProvider(
+                                MockData.randomImage,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          width: 180.0,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                      Gap(5.0),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: ExtendedNetworkImageProvider(
+                              MockData.imageAvatar,
+                            ),
+                            radius: 10.0,
+                          ),
+                          Gap(5.0),
+                          Text('Username'),
+                        ],
+                      )
+                    ],
                   ),
               ];
               return ListView.separated(
@@ -68,7 +113,13 @@ class HomePage extends StatelessWidget {
                 return Container(
                   decoration: BoxDecoration(
                     color: Colors.primaries[index % Colors.primaries.length],
-                    borderRadius: BorderRadius.circular(10.0),
+                    borderRadius: BorderRadius.circular(18.0),
+                    image: DecorationImage(
+                      image: ExtendedNetworkImageProvider(
+                        MockData.randomImage,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   height: 100.0 + Random().nextInt(300).toDouble(),
                   alignment: Alignment.center,

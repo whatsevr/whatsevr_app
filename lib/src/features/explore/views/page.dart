@@ -19,38 +19,7 @@ class ExplorePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Gap(8),
-        PadHorizontal(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey.shade200,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.search),
-                const Gap(8),
-                Expanded(
-                  child: AnimatedTextField(
-                    animationType:
-                        Animationtype.slide, // Use Animationtype.slide for Slide animations
 
-                    decoration: InputDecoration.collapsed(
-                      hintText: '',
-                    ),
-                    hintTexts: [
-                      'Search for "Posts"',
-                      'Search for "Profile"',
-                      'Search for "Fliks"',
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const Gap(8),
         SizedBox(
           height: 35,
           child: ListView(

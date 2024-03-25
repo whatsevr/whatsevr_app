@@ -1,6 +1,12 @@
+import 'dart:math';
+
 class MockData {
   static String get imageHxW {
     return 'https://placehold.jp/150x150.png';
+  }
+
+  static String get randomImage {
+    return 'https://picsum.photos/200/300?random=${Random().nextInt(100)}';
   }
 
   static String get imagePlaceholderLandscape {

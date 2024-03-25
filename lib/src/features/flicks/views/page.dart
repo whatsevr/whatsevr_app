@@ -16,7 +16,7 @@ class FlicksPage extends StatelessWidget {
         itemCount: MockData.portraitVideos.length,
         itemBuilder: (context, index) {
           return Stack(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.center,
             children: [
               //Reels
               FlicksPlayer(
