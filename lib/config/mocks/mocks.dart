@@ -5,8 +5,11 @@ class MockData {
     return 'https://placehold.jp/150x150.png';
   }
 
-  static String get randomImage {
-    return 'https://picsum.photos/200/300?random=${Random().nextInt(100)}';
+  static String randomImage([String? hw, int? index]) {
+    String url =
+        'https://picsum.photos/${hw ?? '800/800'}?random=${index ?? Random().nextInt(100)}';
+
+    return url;
   }
 
   static String get imagePlaceholderLandscape {
@@ -15,6 +18,10 @@ class MockData {
 
   static String get imageAvatar {
     return 'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2Fimages.png?alt=media&token=dbac761f-fe05-4107-a48c-36439eb05bf9';
+  }
+
+  static String randomImageAvatar([String? hw, int? index]) {
+    return 'https://i.pravatar.cc/${hw ?? 300}/?img=${index ?? Random().nextInt(100)}';
   }
 
   static List<String> get portraitVideos {

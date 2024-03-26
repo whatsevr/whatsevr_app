@@ -24,7 +24,7 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
-    //controller.play();
+    controller.play();
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
         controller.seekTo(Duration.zero);
@@ -54,21 +54,19 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
               }
             });
           },
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: Builder(
-              builder: (context) {
-                if (controller.value.isPlaying) {
-                  return VideoPlayer(controller);
-                }
-                return ExtendedImage.network(
-                  MockData.imagePlaceholderLandscape,
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.contain,
-                );
-              },
-            ),
+          child: Builder(
+            builder: (context) {
+              if (controller.value.isPlaying) {
+                return AspectRatio(
+                    aspectRatio: controller.value.aspectRatio, child: VideoPlayer(controller));
+              }
+              return ExtendedImage.network(
+                MockData.randomImage(),
+                height: double.infinity,
+                fit: BoxFit.cover,
+                enableLoadState: false,
+              );
+            },
           ),
         ),
       ],

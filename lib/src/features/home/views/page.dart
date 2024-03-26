@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(18.0),
                             image: DecorationImage(
                               image: ExtendedNetworkImageProvider(
-                                MockData.randomImage,
+                                MockData.randomImage(),
                               ),
                               fit: BoxFit.cover,
                             ),
@@ -116,7 +116,7 @@ class HomePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                     image: DecorationImage(
                       image: ExtendedNetworkImageProvider(
-                        MockData.randomImage,
+                        MockData.randomImage(),
                       ),
                       fit: BoxFit.cover,
                     ),

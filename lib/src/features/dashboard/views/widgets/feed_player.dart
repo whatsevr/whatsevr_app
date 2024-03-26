@@ -59,13 +59,13 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (context) {
-
                 if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
                   return ExtendedImage.network(
-                    MockData.imagePlaceholderLandscape,
+                    MockData.randomImage(),
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
+                    enableLoadState: false,
                   );
                 }
                 return VideoPlayer(controller);

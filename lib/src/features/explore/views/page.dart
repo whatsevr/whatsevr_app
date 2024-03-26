@@ -1,4 +1,3 @@
-import 'package:animated_hint_textfield/animated_hint_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -19,7 +18,6 @@ class ExplorePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         SizedBox(
           height: 35,
           child: ListView(
@@ -30,14 +28,13 @@ class ExplorePage extends StatelessWidget {
               for ((String label,) item in [
                 ('Wtv',),
                 ('Media',),
-                ('Trending',),
                 ('Memories',),
               ])
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(item.$1,
                       style: TextStyle(
-                        fontWeight: item.$1 == 'Wtv' ? FontWeight.bold : null,
+                        fontWeight: item.$1 == 'Media' ? FontWeight.bold : null,
                       )),
                 ),
               Gap(8),
@@ -46,9 +43,12 @@ class ExplorePage extends StatelessWidget {
         ),
         const Gap(8),
         Expanded(
-          child: ListView(
-            children: [
-              Column(
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: 20,
+            separatorBuilder: (context, index) => const Gap(8),
+            itemBuilder: (context, index) {
+              return Column(
                 children: [
                   WTVFeedPlayer(
                     videoUrl:
@@ -113,11 +113,8 @@ class ExplorePage extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-              const Gap(50),
-              Center(child: CircularProgressIndicator()),
-              const Gap(50),
-            ],
+              );
+            },
           ),
         ),
       ],

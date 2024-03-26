@@ -14,6 +14,7 @@ import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 
 import '../../../../config/widgets/pad_horizontal.dart';
+import '../../chats/views/page.dart';
 import '../../explore/views/page.dart';
 import '../../home/views/page.dart';
 
@@ -116,7 +117,11 @@ class DashboardPage extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Iconify(Ph.chat_circle_text_fill),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<DashboardBloc>().add(const TabChanged(
+                            newView: ChatsPage(),
+                          ));
+                    },
                   ),
                   IconButton(
                     icon: Iconify(Ic.twotone_notifications_none),
