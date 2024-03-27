@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 ///[WhatsApp Style Module - Copilot]
@@ -34,10 +35,10 @@ class ChatsPage extends StatelessWidget {
             Expanded(
               child: const TabBarView(
                 children: [
-                  ChatsPageChatView(),
-                  ChatsPageGroupView(),
-                  Text('Calls'),
-                  Text('Requests'),
+                  ChatsPageChatsView(),
+                  ChatsPageGroupsView(),
+                  ChatsPageCallsView(),
+                  ChatsPageRequestsView(),
                 ],
               ),
             ),
@@ -49,8 +50,107 @@ class ChatsPage extends StatelessWidget {
   }
 }
 
-class ChatsPageGroupView extends StatelessWidget {
-  const ChatsPageGroupView({
+class ChatsPageRequestsView extends StatelessWidget {
+  const ChatsPageRequestsView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.separated(
+        itemCount: 20,
+        separatorBuilder: (context, index) => const Divider(),
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
+            ),
+            title: Text('User $index'),
+            subtitle: Text('Request $index'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: 0,
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Colors.green.withOpacity(0.2)),
+                    foregroundColor: MaterialStateProperty.all(Colors.green),
+                  ),
+                  icon: const Icon(Icons.check),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: 0,
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Colors.red.withOpacity(0.2)),
+                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                  ),
+                  icon: const Icon(Icons.close),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ChatsPageCallsView extends StatelessWidget {
+  const ChatsPageCallsView({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView.separated(
+        itemCount: 20,
+        separatorBuilder: (context, index) => const Divider(),
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
+            ),
+            title: Text('User $index'),
+            subtitle: Row(
+              children: [
+                Text('Call $index'),
+                Gap(8),
+                Text('12:00'),
+              ],
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.call),
+              onPressed: () {},
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ChatsPageGroupsView extends StatelessWidget {
+  const ChatsPageGroupsView({
     super.key,
   });
 
@@ -71,16 +171,12 @@ class ChatsPageGroupView extends StatelessWidget {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.group),
-      ),
     );
   }
 }
 
-class ChatsPageChatView extends StatelessWidget {
-  const ChatsPageChatView({
+class ChatsPageChatsView extends StatelessWidget {
+  const ChatsPageChatsView({
     super.key,
   });
 
@@ -100,10 +196,6 @@ class ChatsPageChatView extends StatelessWidget {
             trailing: Text('12:00'),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.message),
       ),
     );
   }

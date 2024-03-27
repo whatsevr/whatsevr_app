@@ -33,4 +33,8 @@ class MockData {
       'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2Fglamxxaleen-20240323-0001.mp4?alt=media&token=52cf4de8-88c0-4547-96bd-2d86dfbb1882',
     }.toList();
   }
+
+  static String get demoVideo {
+    return 'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2FAMPLIFIER%20x%20PUBG%20MOBILE%20MONTAGE%20(ULTRA%20HD)%20_%2069%20JOKER.mp4?alt=media&token=580b20c1-a339-4802-9c60-7379b0917ea3';
+  }
 }

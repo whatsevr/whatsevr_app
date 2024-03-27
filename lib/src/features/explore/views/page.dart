@@ -51,8 +51,7 @@ class ExplorePage extends StatelessWidget {
               return Column(
                 children: [
                   WTVFeedPlayer(
-                    videoUrl:
-                        'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2FAMPLIFIER%20x%20PUBG%20MOBILE%20MONTAGE%20(ULTRA%20HD)%20_%2069%20JOKER.mp4?alt=media&token=580b20c1-a339-4802-9c60-7379b0917ea3',
+                    videoUrl: MockData.demoVideo,
                   ),
                   const Gap(8),
                   PadHorizontal(

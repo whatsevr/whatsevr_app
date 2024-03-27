@@ -14,6 +14,7 @@ import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 
 import '../../../../config/widgets/pad_horizontal.dart';
+import '../../account/views/page.dart';
 import '../../chats/views/page.dart';
 import '../../explore/views/page.dart';
 import '../../home/views/page.dart';
@@ -133,7 +134,11 @@ class DashboardPage extends StatelessWidget {
                   ),
                   IconButton(
                     icon: Iconify(Ic.sharp_account_circle),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<DashboardBloc>().add(const TabChanged(
+                            newView: AccountPage(),
+                          ));
+                    },
                   ),
                 ];
                 return SizedBox(
