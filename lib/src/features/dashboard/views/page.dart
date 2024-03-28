@@ -135,7 +135,7 @@ class DashboardPage extends StatelessWidget {
                   IconButton(
                     icon: Iconify(Ic.sharp_account_circle),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
+                      context.read<DashboardBloc>().add(TabChanged(
                             newView: AccountPage(),
                           ));
                     },

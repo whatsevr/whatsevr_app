@@ -21,7 +21,7 @@ class MockData {
   }
 
   static String randomImageAvatar([String? hw, int? index]) {
-    return 'https://i.pravatar.cc/${hw ?? 300}/?img=${index ?? Random().nextInt(100)}';
+    return 'https://i.pravatar.cc/${hw ?? 300}/?img=${index ?? Random().nextInt(50)}';
   }
 
   static List<String> get portraitVideos {

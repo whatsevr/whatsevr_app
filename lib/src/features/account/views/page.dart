@@ -1,14 +1,15 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../config/mocks/mocks.dart';
 
 class AccountPage extends StatelessWidget {
-  const AccountPage({super.key});
-
+  AccountPage({super.key});
+  final PageController controller = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +18,56 @@ class AccountPage extends StatelessWidget {
         children: [
           Stack(
             children: [
-              CoverVideo(videoUrl: MockData.demoVideo),
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: PageView(
+                  controller: controller,
+                  children: [
+                    CoverVideo(videoUrl: MockData.demoVideo),
+                    CoverVideo(videoUrl: MockData.demoVideo),
+                    ExtendedImage.network(
+                      MockData.randomImage(),
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
+                      enableLoadState: false,
+                    ),
+                    ExtendedImage.network(
+                      MockData.randomImage(),
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
+                      enableLoadState: false,
+                    ),
+                    ExtendedImage.network(
+                      MockData.randomImage(),
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
+                      enableLoadState: false,
+                    ),
+                  ],
+                ),
+              ),
+
+              ///3 dot
+              Positioned(
+                right: 0,
+                left: 0,
+                bottom: 8,
+                child: UnconstrainedBox(
+                  child: SmoothPageIndicator(
+                      controller: controller, // PageController
+                      count: 5,
+                      effect: WormEffect(
+                        dotWidth: 8.0,
+                        dotHeight: 8.0,
+                        activeDotColor: Colors.black,
+                        dotColor: Colors.white,
+                      ), // your preferred effect
+                      onDotClicked: (index) {}),
+                ),
+              ),
               Positioned(
                 bottom: 20,
                 left: 20,
@@ -60,7 +110,14 @@ class AccountPage extends StatelessWidget {
             ),
           ),
           Gap(8),
-          PadHorizontal(
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: PadHorizontal.padding,
+              vertical: 12,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.withOpacity(0.15),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -96,6 +153,193 @@ class AccountPage extends StatelessWidget {
               ],
             ),
           ),
+          Gap(8),
+          PadHorizontal(
+            child: Row(
+              children: [
+                Text('Suggestions', style: TextStyle(fontSize: 14)),
+                Spacer(),
+                Text('See All', style: TextStyle(fontSize: 14)),
+              ],
+            ),
+          ),
+          Gap(8),
+          SizedBox(
+            height: 200,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.black),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Gap(8),
+                            Expanded(
+                              child: ExtendedImage.network(
+                                MockData.randomImageAvatar(),
+                                shape: BoxShape.circle,
+                                fit: BoxFit.cover,
+                                enableLoadState: false,
+                              ),
+                            ),
+                            Gap(8),
+                            Text('John Doe', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    MaterialButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      minWidth: 150,
+                      color: Colors.blue,
+                      onPressed: () {},
+                      child: Text('Follow'),
+                    ),
+                  ],
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Gap(8);
+              },
+              itemCount: 10,
+            ),
+          ),
+          Gap(8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.withOpacity(0.15),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            child: DefaultTabController(
+              length: 7,
+              child: Column(
+                children: [
+                  Gap(12),
+                  TabBar(
+                    isScrollable: true,
+                    tabAlignment: TabAlignment.start,
+                    tabs: [
+                      Tab(text: 'About'),
+                      Tab(text: 'Media'),
+                      Tab(text: 'Flicks'),
+                      Tab(text: 'Docs'),
+                      Tab(text: 'Links'),
+                      Tab(text: 'Topics'),
+                      Tab(text: 'Events'),
+                    ],
+                  ),
+                  Gap(8),
+                  IndexedStack(
+                    children: [
+                      Column(
+                        children: [
+                          Gap(12),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Gap(8),
+                                    Text('Status',
+                                        style:
+                                            TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                    Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                        style: TextStyle(fontSize: 16)),
+                                    Gap(8),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Gap(8),
+                                    Text('Solution',
+                                        style:
+                                            TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                    Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                        style: TextStyle(fontSize: 16)),
+                                    Gap(8),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            checkColor: Colors.white,
+                            activeColor: Colors.black,
+                            value: false,
+                            onChanged: (value) {},
+                            title: Text('Bio',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            subtitle:
+                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                            isThreeLine: true,
+                          ),
+                          CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            checkColor: Colors.white,
+                            activeColor: Colors.black,
+                            value: false,
+                            onChanged: (value) {},
+                            title: Text('Address',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            subtitle:
+                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                            isThreeLine: true,
+                          ),
+                          CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            checkColor: Colors.white,
+                            activeColor: Colors.black,
+                            value: false,
+                            onChanged: (value) {},
+                            title: Text('Last seen of admin',
+                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                            subtitle:
+                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                            isThreeLine: true,
+                          ),
+                        ],
+                      ),
+                      Text('Videos'),
+                      Text('Photos'),
+                      Text('Audios'),
+                      Text('Documents'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -151,7 +395,7 @@ class _CoverVideoState extends State<CoverVideo> {
             });
           },
           child: AspectRatio(
-            aspectRatio: 16 / 5,
+            aspectRatio: 16 / 9,
             child: Builder(
               builder: (context) {
                 if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
@@ -176,6 +420,7 @@ class _CoverVideoState extends State<CoverVideo> {
               icon: const Icon(
                 Icons.play_arrow,
                 size: 40,
+                color: Colors.white,
               ),
               onPressed: () {
                 setState(() {

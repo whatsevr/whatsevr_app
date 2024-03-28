@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
+import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 
 import '../../src/features/splash/views/page.dart';
 
@@ -110,7 +111,6 @@ class AppNavigationService {
               child: const SplashPage(),
             );
           },
-
         ),
         GoRoute(
           name: RoutesName.dashboard,
@@ -131,6 +131,19 @@ class AppNavigationService {
               context: context,
               state: state,
               child: const FlicksPage(),
+            );
+          },
+        ),
+        GoRoute(
+          name: RoutesName.fullVideoPlayer,
+          path: RoutesName.fullVideoPlayer,
+          pageBuilder: (BuildContext context, GoRouterState state) {
+            return navigateWithTransition(
+              context: context,
+              state: state,
+              child: FullVideoPlayerPage(
+                videoSrcs: state.extra as List<String>,
+              ),
             );
           },
         ),
