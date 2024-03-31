@@ -3,22 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
 
-import '../../../../../config/routes/router.dart';
-
-class WTVFeedPlayer extends StatefulWidget {
+class FlickFeedPlayer extends StatefulWidget {
   final String? videoUrl;
-  const WTVFeedPlayer({
+  const FlickFeedPlayer({
     super.key,
     required this.videoUrl,
   });
 
   @override
-  State<WTVFeedPlayer> createState() => _WTVFeedPlayerState();
+  State<FlickFeedPlayer> createState() => _FlickFeedPlayerState();
 }
 
-class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
+class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
   late VideoPlayerController controller;
   @override
   void initState() {
@@ -59,7 +56,7 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
             });
           },
           child: AspectRatio(
-            aspectRatio: 16 / 9,
+            aspectRatio: 9 / 16,
             child: Builder(
               builder: (context) {
                 if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
@@ -141,17 +138,6 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
               ],
             ),
           ),
-          Positioned(
-              bottom: 8,
-              right: 4,
-              child: IconButton(
-                icon: const Icon(Icons.fullscreen),
-                color: Colors.white,
-                onPressed: () {
-                  AppNavigationService.newRoute(RoutesName.fullVideoPlayer,
-                      extras: [widget.videoUrl as String]);
-                },
-              )),
         ]
       ],
     );

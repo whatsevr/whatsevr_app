@@ -4,6 +4,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/flicks/views/widgets/player.dart';
 
+import '../../../../config/widgets/animated_like_icon_button.dart';
+
 class FlicksPage extends StatelessWidget {
   const FlicksPage({super.key});
 
@@ -34,7 +36,9 @@ class FlicksPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.favorite, color: Colors.red, size: 30),
+                          AnimatedLikeIconButton(
+                            size: 30,
+                          ),
                           Gap(16),
                           const Icon(Icons.link, size: 30),
                           Gap(16),

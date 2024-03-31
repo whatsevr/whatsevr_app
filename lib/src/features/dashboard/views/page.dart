@@ -1,4 +1,3 @@
-import 'package:animated_hint_textfield/animated_hint_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -13,7 +12,6 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 
-import '../../../../config/widgets/pad_horizontal.dart';
 import '../../account/views/page.dart';
 import '../../chats/views/page.dart';
 import '../../explore/views/page.dart';
@@ -36,43 +34,7 @@ class DashboardPage extends StatelessWidget {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         return Scaffold(
-          body: Column(
-            children: [
-              const Gap(8),
-              PadHorizontal(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey.shade200,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.search),
-                      const Gap(8),
-                      Expanded(
-                        child: AnimatedTextField(
-                          animationType:
-                              Animationtype.slide, // Use Animationtype.slide for Slide animations
-
-                          decoration: InputDecoration.collapsed(
-                            hintText: '',
-                          ),
-                          hintTexts: [
-                            'Search for "Posts"',
-                            'Search for "Profile"',
-                            'Search for "Fliks"',
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Gap(8),
-              Expanded(child: state.currentDashboardView),
-            ],
-          ),
+          body: state.currentDashboardView,
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
               color: Colors.white,

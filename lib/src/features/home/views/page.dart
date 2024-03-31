@@ -7,6 +7,7 @@ import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/animated_search_field.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,6 +17,17 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
+          PadHorizontal(
+            child: WhatsevrAnimatedSearchField(
+              hintTexts: const [
+                'Search for Wtv from connections',
+                'Search for Media from connections',
+                'Search for Memories from connections',
+                'Search for Flicks from connections',
+              ],
+            ),
+          ),
+          Gap(8.0),
           SizedBox(
             height: 120.0,
             child: Builder(builder: (context) {
@@ -100,33 +112,34 @@ class HomePage extends StatelessWidget {
           ),
           Gap(8.0),
           Expanded(
-              child: PadHorizontal(
-            child: WaterfallFlow.builder(
-              //cacheExtent: 0.0,
+            child: PadHorizontal(
+              child: WaterfallFlow.builder(
+                //cacheExtent: 0.0,
 
-              gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.primaries[index % Colors.primaries.length],
-                    borderRadius: BorderRadius.circular(18.0),
-                    image: DecorationImage(
-                      image: ExtendedNetworkImageProvider(
-                        MockData.randomImage(),
+                gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5.0,
+                  mainAxisSpacing: 5.0,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.primaries[index % Colors.primaries.length],
+                      borderRadius: BorderRadius.circular(18.0),
+                      image: DecorationImage(
+                        image: ExtendedNetworkImageProvider(
+                          MockData.randomImage(),
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
-                  ),
-                  height: 100.0 + Random().nextInt(300).toDouble(),
-                  alignment: Alignment.center,
-                );
-              },
+                    height: 100.0 + Random().nextInt(300).toDouble(),
+                    alignment: Alignment.center,
+                  );
+                },
+              ),
             ),
-          ))
+          )
         ],
       ),
     );

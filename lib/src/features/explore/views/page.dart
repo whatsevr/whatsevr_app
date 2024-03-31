@@ -1,14 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/charm.dart';
-import 'package:iconify_flutter/icons/ion.dart';
-import 'package:iconify_flutter/icons/material_symbols.dart';
-import 'package:iconify_flutter/icons/ph.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/media/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/memories/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
-import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/animated_search_field.dart';
 import '../../../../config/widgets/pad_horizontal.dart';
-import '../../dashboard/views/widgets/feed_player.dart';
+import '../../../../config/widgets/tab_bar.dart';
 
 class ExplorePage extends StatelessWidget {
   const ExplorePage({super.key});
@@ -16,104 +14,29 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: 35,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            children: [
-              Gap(8),
-              for ((String label,) item in [
-                ('Wtv',),
-                ('Media',),
-                ('Memories',),
-              ])
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(item.$1,
-                      style: TextStyle(
-                        fontWeight: item.$1 == 'Media' ? FontWeight.bold : null,
-                      )),
-                ),
-              Gap(8),
+        PadHorizontal(
+          child: WhatsevrAnimatedSearchField(
+            hintTexts: const [
+              'Search for Wtv',
+              'Search for Media',
+              'Search for Memories',
+              'Search for Flicks',
             ],
           ),
         ),
-        const Gap(8),
         Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: 20,
-            separatorBuilder: (context, index) => const Gap(8),
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  WTVFeedPlayer(
-                    videoUrl: MockData.demoVideo,
-                  ),
-                  const Gap(8),
-                  PadHorizontal(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(MockData.imageAvatar),
-                            ),
-                            const Gap(8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Short Fast Video Performance Test',
-                                  ),
-                                  Gap(4),
-                                  Text(
-                                    'Lorem ipsum TV: 2.5M views | 2 days ago',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.favorite),
-                              color: Colors.red,
-                              onPressed: () {},
-                            ),
-                            Text('2.5M'),
-                            IconButton(
-                              icon: Iconify(Ph.chat_centered_dots),
-                              onPressed: () {},
-                            ),
-                            Text('2.5M'),
-                            IconButton(
-                              icon: Iconify(MaterialSymbols.ios_share),
-                              onPressed: () {},
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              icon: Iconify(Ion.bookmark),
-                              onPressed: () {},
-                            ),
-                            IconButton(
-                              icon: Iconify(Charm.menu_kebab),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
+          child: WhatsevrTabBarWithViews(
+            tabs: const [
+              'Wtv',
+              'Media',
+              'Memories',
+            ],
+            tabViews: const [
+              ExplorePageWtvPage(),
+              ExplorePageMediaPage(),
+              ExplorePageMemoriesPage(),
+            ],
           ),
         ),
       ],

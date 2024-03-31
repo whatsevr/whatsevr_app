@@ -6,6 +6,7 @@ import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/animated_search_field.dart';
 
 class AccountPage extends StatelessWidget {
   AccountPage({super.key});
@@ -13,333 +14,351 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        shrinkWrap: true,
+      body: Column(
         children: [
-          Stack(
-            children: [
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: PageView(
-                  controller: controller,
-                  children: [
-                    CoverVideo(videoUrl: MockData.demoVideo),
-                    CoverVideo(videoUrl: MockData.demoVideo),
-                    ExtendedImage.network(
-                      MockData.randomImage(),
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                      enableLoadState: false,
-                    ),
-                    ExtendedImage.network(
-                      MockData.randomImage(),
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                      enableLoadState: false,
-                    ),
-                    ExtendedImage.network(
-                      MockData.randomImage(),
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                      enableLoadState: false,
-                    ),
-                  ],
-                ),
-              ),
-
-              ///3 dot
-              Positioned(
-                right: 0,
-                left: 0,
-                bottom: 8,
-                child: UnconstrainedBox(
-                  child: SmoothPageIndicator(
-                      controller: controller, // PageController
-                      count: 5,
-                      effect: WormEffect(
-                        dotWidth: 8.0,
-                        dotHeight: 8.0,
-                        activeDotColor: Colors.black,
-                        dotColor: Colors.white,
-                      ), // your preferred effect
-                      onDotClicked: (index) {}),
-                ),
-              ),
-              Positioned(
-                bottom: 20,
-                left: 20,
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: ExtendedImage.network(
-                    MockData.randomImageAvatar(),
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                    enableLoadState: false,
-                  ).image,
-                ),
-              ),
-            ],
-          ),
-          Gap(8),
           PadHorizontal(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('John Doe', style: TextStyle(fontSize: 24)),
-                      Text(' @johndoe', style: TextStyle(fontSize: 16)),
-                      Gap(8),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add_box_rounded),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {},
-                ),
+            child: WhatsevrAnimatedSearchField(
+              hintTexts: const [
+                'Search for Account',
+                'Search for Portfolio',
+                'Search for Community',
               ],
             ),
           ),
           Gap(8),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: PadHorizontal.padding,
-              vertical: 12,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey.withOpacity(0.15),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('1,000', style: TextStyle(fontSize: 24)),
-                      Text('Followers', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('1,000', style: TextStyle(fontSize: 24)),
-                      Text('Followers', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('1,000', style: TextStyle(fontSize: 24)),
-                      Text('Following', style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Gap(8),
-          PadHorizontal(
-            child: Row(
-              children: [
-                Text('Suggestions', style: TextStyle(fontSize: 14)),
-                Spacer(),
-                Text('See All', style: TextStyle(fontSize: 14)),
-              ],
-            ),
-          ),
-          Gap(8),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Column(
+                Stack(
                   children: [
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Gap(8),
-                            Expanded(
-                              child: ExtendedImage.network(
-                                MockData.randomImageAvatar(),
-                                shape: BoxShape.circle,
-                                fit: BoxFit.cover,
-                                enableLoadState: false,
-                              ),
-                            ),
-                            Gap(8),
-                            Text('John Doe', style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      minWidth: 150,
-                      color: Colors.blue,
-                      onPressed: () {},
-                      child: Text('Follow'),
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (context, index) {
-                return const Gap(8);
-              },
-              itemCount: 10,
-            ),
-          ),
-          Gap(8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey.withOpacity(0.15),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            ),
-            child: DefaultTabController(
-              length: 7,
-              child: Column(
-                children: [
-                  Gap(12),
-                  TabBar(
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    tabs: [
-                      Tab(text: 'About'),
-                      Tab(text: 'Media'),
-                      Tab(text: 'Flicks'),
-                      Tab(text: 'Docs'),
-                      Tab(text: 'Links'),
-                      Tab(text: 'Topics'),
-                      Tab(text: 'Events'),
-                    ],
-                  ),
-                  Gap(8),
-                  IndexedStack(
-                    children: [
-                      Column(
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: PageView(
+                        controller: controller,
                         children: [
-                          Gap(12),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Gap(8),
-                                    Text('Status',
-                                        style:
-                                            TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                    Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                        style: TextStyle(fontSize: 16)),
-                                    Gap(8),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          CoverVideo(videoUrl: MockData.demoVideo),
+                          CoverVideo(videoUrl: MockData.demoVideo),
+                          ExtendedImage.network(
+                            MockData.randomImage(),
+                            width: double.infinity,
+                            height: 300,
+                            fit: BoxFit.cover,
+                            enableLoadState: false,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Gap(8),
-                                    Text('Solution',
-                                        style:
-                                            TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                    Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                        style: TextStyle(fontSize: 16)),
-                                    Gap(8),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          ExtendedImage.network(
+                            MockData.randomImage(),
+                            width: double.infinity,
+                            height: 300,
+                            fit: BoxFit.cover,
+                            enableLoadState: false,
                           ),
-                          CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            checkColor: Colors.white,
-                            activeColor: Colors.black,
-                            value: false,
-                            onChanged: (value) {},
-                            title: Text('Bio',
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            subtitle:
-                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                            isThreeLine: true,
-                          ),
-                          CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            checkColor: Colors.white,
-                            activeColor: Colors.black,
-                            value: false,
-                            onChanged: (value) {},
-                            title: Text('Address',
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            subtitle:
-                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                            isThreeLine: true,
-                          ),
-                          CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            checkColor: Colors.white,
-                            activeColor: Colors.black,
-                            value: false,
-                            onChanged: (value) {},
-                            title: Text('Last seen of admin',
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            subtitle:
-                                Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                            isThreeLine: true,
+                          ExtendedImage.network(
+                            MockData.randomImage(),
+                            width: double.infinity,
+                            height: 300,
+                            fit: BoxFit.cover,
+                            enableLoadState: false,
                           ),
                         ],
                       ),
-                      Text('Videos'),
-                      Text('Photos'),
-                      Text('Audios'),
-                      Text('Documents'),
+                    ),
+
+                    ///3 dot
+                    Positioned(
+                      right: 0,
+                      left: 0,
+                      bottom: 8,
+                      child: UnconstrainedBox(
+                        child: SmoothPageIndicator(
+                            controller: controller, // PageController
+                            count: 5,
+                            effect: WormEffect(
+                              dotWidth: 8.0,
+                              dotHeight: 8.0,
+                              activeDotColor: Colors.black,
+                              dotColor: Colors.white,
+                            ), // your preferred effect
+                            onDotClicked: (index) {}),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 20,
+                      left: 20,
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundImage: ExtendedImage.network(
+                          MockData.randomImageAvatar(),
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          enableLoadState: false,
+                        ).image,
+                      ),
+                    ),
+                  ],
+                ),
+                Gap(8),
+                PadHorizontal(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('John Doe', style: TextStyle(fontSize: 24)),
+                            Text(' @johndoe', style: TextStyle(fontSize: 16)),
+                            Gap(8),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_box_rounded),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {},
+                      ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                Gap(8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: PadHorizontal.padding,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.withOpacity(0.15),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('1,000', style: TextStyle(fontSize: 24)),
+                            Text('Followers', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('1,000', style: TextStyle(fontSize: 24)),
+                            Text('Followers', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                      Spacer(),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('1,000', style: TextStyle(fontSize: 24)),
+                            Text('Following', style: TextStyle(fontSize: 16)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(8),
+                PadHorizontal(
+                  child: Row(
+                    children: [
+                      Text('Suggestions', style: TextStyle(fontSize: 14)),
+                      Spacer(),
+                      Text('See All', style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ),
+                Gap(8),
+                SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
+                              width: 150,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.black),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Gap(8),
+                                  Expanded(
+                                    child: ExtendedImage.network(
+                                      MockData.randomImageAvatar(),
+                                      shape: BoxShape.circle,
+                                      fit: BoxFit.cover,
+                                      enableLoadState: false,
+                                    ),
+                                  ),
+                                  Gap(8),
+                                  Text('John Doe', style: TextStyle(fontSize: 16)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            minWidth: 150,
+                            color: Colors.blue,
+                            onPressed: () {},
+                            child: Text('Follow'),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Gap(8);
+                    },
+                    itemCount: 10,
+                  ),
+                ),
+                Gap(8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.withOpacity(0.15),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
+                  child: DefaultTabController(
+                    length: 7,
+                    child: Column(
+                      children: [
+                        Gap(12),
+                        TabBar(
+                          isScrollable: true,
+                          tabAlignment: TabAlignment.start,
+                          tabs: [
+                            Tab(text: 'About'),
+                            Tab(text: 'Media'),
+                            Tab(text: 'Flicks'),
+                            Tab(text: 'Docs'),
+                            Tab(text: 'Links'),
+                            Tab(text: 'Topics'),
+                            Tab(text: 'Events'),
+                          ],
+                        ),
+                        Gap(8),
+                        IndexedStack(
+                          children: [
+                            Column(
+                              children: [
+                                Gap(12),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Gap(8),
+                                          Text('Status',
+                                              style: TextStyle(
+                                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                                          Text(
+                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                              style: TextStyle(fontSize: 16)),
+                                          Gap(8),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Gap(8),
+                                          Text('Solution',
+                                              style: TextStyle(
+                                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                                          Text(
+                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                              style: TextStyle(fontSize: 16)),
+                                          Gap(8),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Bio',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Address',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Last seen of admin',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
+                              ],
+                            ),
+                            Text('Videos'),
+                            Text('Photos'),
+                            Text('Audios'),
+                            Text('Documents'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
+          ),
         ],
       ),
     );

@@ -3,49 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
-///[WhatsApp Style Module - Copilot]
+import '../../../../config/widgets/animated_search_field.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
+import '../../../../config/widgets/tab_bar.dart';
+
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      child: Scaffold(
-        body: Column(
-          children: [
-            TabBar(
-              unselectedLabelColor: Colors.grey,
-              labelColor: Colors.black,
-              indicatorColor: Colors.black,
-              tabs: [
-                Tab(
-                  text: 'Chats',
-                ),
-                Tab(
-                  text: 'Groups',
-                ),
-                Tab(
-                  text: 'Calls',
-                ),
-                Tab(
-                  text: 'Requests',
-                ),
-              ],
-            ),
-            Expanded(
-              child: const TabBarView(
-                children: [
-                  ChatsPageChatsView(),
-                  ChatsPageGroupsView(),
-                  ChatsPageCallsView(),
-                  ChatsPageRequestsView(),
-                ],
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        PadHorizontal(
+          child: WhatsevrAnimatedSearchField(
+            hintTexts: const [
+              'Search for chats',
+              'Search for groups',
+              'Search for calls',
+              'Search for requests',
+            ],
+          ),
         ),
-      ),
-      length: 4,
+        Expanded(
+          child: WhatsevrTabBarWithViews(
+            tabs: const [
+              'Chats',
+              'Groups',
+              'Calls',
+              'Requests',
+            ],
+            tabViews: const [
+              ChatsPageChatsView(),
+              ChatsPageGroupsView(),
+              ChatsPageCallsView(),
+              ChatsPageRequestsView(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
