@@ -13,6 +13,7 @@ import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 
 import '../../account/views/page.dart';
+import '../../activities/views/page.dart';
 import '../../chats/views/page.dart';
 import '../../explore/views/page.dart';
 import '../../home/views/page.dart';
@@ -68,7 +69,11 @@ class DashboardPage extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Iconify(Ri.heart_add_fill),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<DashboardBloc>().add(const TabChanged(
+                            newView: ActivitiesPage(),
+                          ));
+                    },
                   ),
                   IconButton(
                     icon: Iconify(Pepicons.play_print),

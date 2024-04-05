@@ -4,9 +4,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
-import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 
+import '../../src/features/search_pages/account/views/page.dart';
 import '../../src/features/splash/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
@@ -53,24 +53,14 @@ class AppNavigationService {
     );
   }
 
-  static void newAnonRoute(
-    String routeName, {
-    Object? extras,
-  }) {
-    navigatorKey.currentContext?.pushNamed(
-      routeName,
-      extra: extras,
-    );
-  }
-
   static void clearAllAndNewRoute(
     String routeName, {
     Object? extra,
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Map<String, String> pathParameters = const <String, String>{},
   }) {
-    while (navigatorKey.currentState?.canPop() == true) {
-      navigatorKey.currentState?.pop();
+    while (navigatorKey.currentContext?.canPop() == true) {
+      navigatorKey.currentContext?.pop();
     }
     newRoute(
       routeName,
@@ -80,8 +70,8 @@ class AppNavigationService {
     );
   }
 
-  static void goBack({Object? result}) {
-    navigatorKey.currentState?.pop(result);
+  static void goBack({dynamic result}) {
+    navigatorKey.currentContext?.pop(result);
   }
 
   static void goBackAndStopAt(String stopRoute) {
@@ -90,7 +80,6 @@ class AppNavigationService {
 
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static GoRouter allRoutesConfig(
-    BuildContext context,
     String? initialLocation,
   ) {
     return GoRouter(
@@ -103,50 +92,56 @@ class AppNavigationService {
       ],
       routes: <RouteBase>[
         GoRoute(
-          path: RoutesName.splash,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return navigateWithTransition(
-              context: context,
-              state: state,
-              child: const SplashPage(),
-            );
-          },
-        ),
-        GoRoute(
-          name: RoutesName.dashboard,
-          path: RoutesName.dashboard,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return navigateWithTransition(
-              context: context,
-              state: state,
-              child: const DashboardPage(),
-            );
-          },
-        ),
-        GoRoute(
-          name: RoutesName.flicks,
-          path: RoutesName.flicks,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return navigateWithTransition(
-              context: context,
-              state: state,
-              child: const FlicksPage(),
-            );
-          },
-        ),
-        GoRoute(
-          name: RoutesName.fullVideoPlayer,
-          path: RoutesName.fullVideoPlayer,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return navigateWithTransition(
-              context: context,
-              state: state,
-              child: FullVideoPlayerPage(
-                videoSrcs: state.extra as List<String>,
+            path: RoutesName.splash,
+            pageBuilder: (BuildContext context, GoRouterState state) {
+              return navigateWithTransition(
+                context: context,
+                state: state,
+                child: const SplashPage(),
+              );
+            },
+            routes: [
+              GoRoute(
+                name: RoutesName.dashboard,
+                path: RoutesName.dashboard,
+                pageBuilder: (BuildContext context, GoRouterState state) {
+                  return navigateWithTransition(
+                    context: context,
+                    state: state,
+                    child: const DashboardPage(),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    name: RoutesName.fullVideoPlayer,
+                    path: RoutesName.fullVideoPlayer,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      return navigateWithTransition(
+                        context: context,
+                        state: state,
+                        child: FullVideoPlayerPage(
+                          videoSrcs: state.extra as List<String>,
+                        ),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: RoutesName.accountSearch,
+                    path: RoutesName.accountSearch,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      AccountSearchPage? accountSearchPage = state.extra as AccountSearchPage?;
+                      return navigateWithTransition(
+                        context: context,
+                        state: state,
+                        child: AccountSearchPage(
+                          hintTexts: accountSearchPage?.hintTexts,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            );
-          },
-        ),
+            ]),
       ],
     );
   }

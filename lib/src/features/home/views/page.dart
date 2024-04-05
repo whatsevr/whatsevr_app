@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -8,6 +6,9 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/animated_search_field.dart';
+import '../../../../config/widgets/post_tiles/flick.dart';
+import '../../../../config/widgets/post_tiles/photo.dart';
+import '../../../../config/widgets/post_tiles/video.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -116,26 +117,16 @@ class HomePage extends StatelessWidget {
               child: WaterfallFlow.builder(
                 //cacheExtent: 0.0,
 
-                gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 5.0,
                   mainAxisSpacing: 5.0,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.primaries[index % Colors.primaries.length],
-                      borderRadius: BorderRadius.circular(18.0),
-                      image: DecorationImage(
-                        image: ExtendedNetworkImageProvider(
-                          MockData.randomImage(),
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    height: 100.0 + Random().nextInt(300).toDouble(),
-                    alignment: Alignment.center,
-                  );
+                  if (index % 3 == 0) return PhotoPostTile();
+                  if (index % 3 == 1) return FlickPostTile();
+                  if (index % 3 == 2) return VideoPostTile();
+                  return SizedBox();
                 },
               ),
             ),

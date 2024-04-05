@@ -7,8 +7,10 @@ class AnimatedLikeIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LikeButton(
-      size: size ?? 24,
+    return UnconstrainedBox(
+      child: LikeButton(
+        size: size ?? 24,
+      ),
     );
   }
 }

@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
 import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/animated_search_field.dart';
@@ -23,6 +26,17 @@ class AccountPage extends StatelessWidget {
                 'Search for Portfolio',
                 'Search for Community',
               ],
+              readOnly: true,
+              onTap: () {
+                AppNavigationService.newRoute(RoutesName.accountSearch,
+                    extras: AccountSearchPage(
+                      hintTexts: [
+                        'Search for Account',
+                        'Search for Portfolio',
+                        'Search for Community',
+                      ],
+                    ));
+              },
             ),
           ),
           Gap(8),

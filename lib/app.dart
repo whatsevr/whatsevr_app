@@ -29,10 +29,9 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
     );
   }
 
+  GoRouter routeConfig = AppNavigationService.allRoutesConfig(null);
   @override
   Widget build(BuildContext context) {
-    final GoRouter routeConfig = AppNavigationService.allRoutesConfig(context, null);
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Whatsevr',
