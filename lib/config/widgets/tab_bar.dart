@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class WhatsevrTabBarWithViews extends StatelessWidget {
+  final bool? isScrollable;
   final List<String> tabs;
   final List<Widget> tabViews;
-  const WhatsevrTabBarWithViews({super.key, required this.tabs, required this.tabViews});
+  const WhatsevrTabBarWithViews({
+    super.key,
+    required this.tabs,
+    required this.tabViews,
+    this.isScrollable,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +20,9 @@ class WhatsevrTabBarWithViews extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TabBar(
-            tabAlignment: TabAlignment.start,
-            isScrollable: true,
-            indicatorColor: Colors.black,
+            tabAlignment: TabAlignment.fill,
+            isScrollable: isScrollable ?? false,
+            indicatorColor: Colors.blue,
             labelColor: Colors.black,
             tabs: tabs.map((e) => Tab(text: e)).toList(),
           ),
