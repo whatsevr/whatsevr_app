@@ -5,11 +5,13 @@ class WhatsevrTabBarWithViews extends StatelessWidget {
   final bool? isScrollable;
   final List<String> tabs;
   final List<Widget> tabViews;
+  final TabAlignment? tabAlignment;
   const WhatsevrTabBarWithViews({
     super.key,
     required this.tabs,
     required this.tabViews,
     this.isScrollable,
+    this.tabAlignment,
   });
 
   @override
@@ -19,12 +21,10 @@ class WhatsevrTabBarWithViews extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TabBar(
-            tabAlignment: TabAlignment.fill,
-            isScrollable: isScrollable ?? false,
-            indicatorColor: Colors.blue,
-            labelColor: Colors.black,
-            tabs: tabs.map((e) => Tab(text: e)).toList(),
+          WhatsevrTabBar(
+            tabs: tabs,
+            isScrollable: isScrollable,
+            tabAlignment: tabAlignment,
           ),
           const Gap(8),
           Expanded(
@@ -34,6 +34,24 @@ class WhatsevrTabBarWithViews extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class WhatsevrTabBar extends StatelessWidget {
+  final bool? isScrollable;
+  final List<String> tabs;
+  final TabAlignment? tabAlignment;
+  const WhatsevrTabBar({super.key, required this.tabs, this.isScrollable, this.tabAlignment});
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBar(
+      tabAlignment: tabAlignment ?? TabAlignment.fill,
+      isScrollable: isScrollable ?? false,
+      indicatorColor: Colors.blue,
+      labelColor: Colors.black,
+      tabs: tabs.map((e) => Tab(text: e)).toList(),
     );
   }
 }

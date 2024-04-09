@@ -10,6 +10,7 @@ import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
 import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/animated_search_field.dart';
+import '../../../../config/widgets/tab_bar.dart';
 
 class AccountPage extends StatelessWidget {
   AccountPage({super.key});
@@ -253,17 +254,16 @@ class AccountPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Gap(12),
-                        TabBar(
-                          isScrollable: true,
+                        WhatsevrTabBar(
                           tabAlignment: TabAlignment.start,
+                          isScrollable: true,
                           tabs: [
-                            Tab(text: 'About'),
-                            Tab(text: 'Media'),
-                            Tab(text: 'Flicks'),
-                            Tab(text: 'Docs'),
-                            Tab(text: 'Links'),
-                            Tab(text: 'Topics'),
-                            Tab(text: 'Events'),
+                            'About',
+                            'Media',
+                            'Videos',
+                            'Flicks',
+                            'Tags',
+                            'Offerings',
                           ],
                         ),
                         Gap(8),
@@ -286,31 +286,6 @@ class AccountPage extends StatelessWidget {
                                         children: [
                                           Gap(8),
                                           Text('Status',
-                                              style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
-                                          Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16)),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Gap(8),
-                                          Text('Solution',
                                               style: TextStyle(
                                                   fontSize: 14, fontWeight: FontWeight.bold)),
                                           Text(
