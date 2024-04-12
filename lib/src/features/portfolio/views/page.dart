@@ -3,44 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
 import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/animated_search_field.dart';
 import '../../../../config/widgets/tab_bar.dart';
 
-class AccountPage extends StatelessWidget {
-  AccountPage({super.key});
+class PortfolioPage extends StatelessWidget {
+  PortfolioPage({super.key});
   final PageController controller = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          PadHorizontal(
-            child: WhatsevrAnimatedSearchField(
-              hintTexts: const [
-                'Search for Account',
-                'Search for Portfolio',
-                'Search for Community',
-              ],
-              readOnly: true,
-              onTap: () {
-                AppNavigationService.newRoute(RoutesName.accountSearch,
-                    extras: AccountSearchPage(
-                      hintTexts: [
-                        'Search for Account',
-                        'Search for Portfolio',
-                        'Search for Community',
-                      ],
-                    ));
-              },
-            ),
-          ),
-          Gap(8),
           Expanded(
             child: ListView(
               shrinkWrap: true,
@@ -121,8 +96,8 @@ class AccountPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('John Doe', style: TextStyle(fontSize: 24)),
-                            Text(' @johndoe', style: TextStyle(fontSize: 16)),
+                            Text('Portfolio X', style: TextStyle(fontSize: 24)),
+                            Text(' @Portfoliox', style: TextStyle(fontSize: 16)),
                             Gap(8),
                           ],
                         ),
@@ -136,6 +111,15 @@ class AccountPage extends StatelessWidget {
                         onPressed: () {},
                       ),
                     ],
+                  ),
+                ),
+                PadHorizontal(
+                  child: Text(
+                    'Portfolio title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
                 Gap(8),
@@ -155,7 +139,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Followers', style: TextStyle(fontSize: 16)),
+                            Text('Likes', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -165,7 +149,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Followers', style: TextStyle(fontSize: 16)),
+                            Text('Networks', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -175,7 +159,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Following', style: TextStyle(fontSize: 16)),
+                            Text('Posts', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -260,10 +244,12 @@ class AccountPage extends StatelessWidget {
                           tabs: [
                             'About',
                             'Media',
-                            'Videos',
+                            'Wtv',
+                            'Services',
                             'Flicks',
-                            'Tags',
                             'Offerings',
+                            'Tags',
+                            'Pdf',
                           ],
                         ),
                         Gap(8),
@@ -297,38 +283,42 @@ class AccountPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                for ((String label, String info) itm in [
-                                  ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Working', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Email', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Birthday', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Join On', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Portfolio link', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Add info', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Total Connection', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                ])
-                                  CheckboxListTile(
-                                    visualDensity: VisualDensity.compact,
-                                    controlAffinity: ListTileControlAffinity.leading,
-                                    checkColor: Colors.white,
-                                    activeColor: Colors.black,
-                                    value: false,
-                                    onChanged: (value) {},
-                                    title: Text(
-                                      '${itm.$1}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      '${itm.$2}',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    isThreeLine: true,
-                                  ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Bio',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Address',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
+                                CheckboxListTile(
+                                  controlAffinity: ListTileControlAffinity.leading,
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.black,
+                                  value: false,
+                                  onChanged: (value) {},
+                                  title: Text('Last seen of admin',
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                  subtitle: Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+                                  isThreeLine: true,
+                                ),
                               ],
                             ),
                             Text('Videos'),

@@ -7,4 +7,5 @@ class RoutesName {
 
   static const String fullVideoPlayer = 'full-video-player';
   static const String accountSearch = 'account-search';
+  static const String portfolio = 'portfolio';
 }

@@ -47,7 +47,7 @@ class WhatsevrTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBar(
-      tabAlignment: tabAlignment ?? TabAlignment.fill,
+      tabAlignment: tabAlignment,
       isScrollable: isScrollable ?? false,
       indicatorColor: Colors.blue,
       labelColor: Colors.black,
