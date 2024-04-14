@@ -10,6 +10,7 @@ import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
 import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/animated_search_field.dart';
+import '../../../../config/widgets/content_upload_button_sheet.dart';
 import '../../../../config/widgets/tab_bar.dart';
 
 class AccountPage extends StatelessWidget {
@@ -129,11 +130,15 @@ class AccountPage extends StatelessWidget {
                       ),
                       IconButton(
                         icon: const Icon(Icons.add_box_rounded),
-                        onPressed: () {},
+                        onPressed: () {
+                          showContentUploadBottomSheet(context);
+                        },
                       ),
                       IconButton(
                         icon: const Icon(Icons.menu),
-                        onPressed: () {},
+                        onPressed: () {
+                          AppNavigationService.newRoute(RoutesName.settings);
+                        },
                       ),
                     ],
                   ),
@@ -155,7 +160,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Followers', style: TextStyle(fontSize: 16)),
+                            Text('Likes', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -165,7 +170,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Followers', style: TextStyle(fontSize: 16)),
+                            Text('Networks', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -175,7 +180,7 @@ class AccountPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Following', style: TextStyle(fontSize: 16)),
+                            Text('Connections', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
@@ -272,31 +277,6 @@ class AccountPage extends StatelessWidget {
                             Column(
                               children: [
                                 Gap(12),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Gap(8),
-                                          Text('Status',
-                                              style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
-                                          Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16)),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
                                 for ((String label, String info) itm in [
                                   ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),

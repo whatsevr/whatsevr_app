@@ -8,6 +8,7 @@ import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 import 'package:whatsevr_app/src/features/portfolio/views/page.dart';
 
 import '../../src/features/search_pages/account/views/page.dart';
+import '../../src/features/settings/views/page.dart';
 import '../../src/features/splash/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
@@ -149,6 +150,18 @@ class AppNavigationService {
                         context: context,
                         state: state,
                         child: PortfolioPage(),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: RoutesName.settings,
+                    path: RoutesName.settings,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      AccountSearchPage? accountSearchPage = state.extra as AccountSearchPage?;
+                      return navigateWithTransition(
+                        context: context,
+                        state: state,
+                        child: SettingsPage(),
                       );
                     },
                   ),
