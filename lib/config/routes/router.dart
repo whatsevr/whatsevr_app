@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 import 'package:whatsevr_app/src/features/portfolio/views/page.dart';
@@ -145,11 +146,23 @@ class AppNavigationService {
                     name: RoutesName.portfolio,
                     path: RoutesName.portfolio,
                     pageBuilder: (BuildContext context, GoRouterState state) {
-                      AccountSearchPage? accountSearchPage = state.extra as AccountSearchPage?;
+                      PortfolioPage? accountSearchPage = state.extra as PortfolioPage?;
                       return navigateWithTransition(
                         context: context,
                         state: state,
                         child: PortfolioPage(),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    name: RoutesName.community,
+                    path: RoutesName.community,
+                    pageBuilder: (BuildContext context, GoRouterState state) {
+                      CommunityPage? accountSearchPage = state.extra as CommunityPage?;
+                      return navigateWithTransition(
+                        context: context,
+                        state: state,
+                        child: CommunityPage(),
                       );
                     },
                   ),

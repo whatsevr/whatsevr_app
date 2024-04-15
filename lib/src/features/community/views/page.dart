@@ -8,8 +8,8 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/tab_bar.dart';
 
-class PortfolioPage extends StatelessWidget {
-  PortfolioPage({super.key});
+class CommunityPage extends StatelessWidget {
+  CommunityPage({super.key});
   final PageController controller = PageController();
   @override
   Widget build(BuildContext context) {
@@ -96,8 +96,8 @@ class PortfolioPage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Portfolio X', style: TextStyle(fontSize: 24)),
-                            Text(' @Portfoliox', style: TextStyle(fontSize: 16)),
+                            Text('Community X', style: TextStyle(fontSize: 24)),
+                            Text(' @Communityx', style: TextStyle(fontSize: 16)),
                             Gap(8),
                           ],
                         ),
@@ -115,7 +115,7 @@ class PortfolioPage extends StatelessWidget {
                 ),
                 PadHorizontal(
                   child: Text(
-                    'Portfolio title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
+                    'Community title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -257,7 +257,33 @@ class PortfolioPage extends StatelessWidget {
                           children: [
                             Column(
                               children: [
-                                Gap(12),
+                                Gap(8),
+
+                                ///Join and Leave
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: MaterialButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8)),
+                                        color: Colors.black,
+                                        onPressed: () {},
+                                        child: Text('Join', style: TextStyle(color: Colors.white)),
+                                      ),
+                                    ),
+                                    Gap(8),
+                                    Expanded(
+                                      child: MaterialButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8)),
+                                        color: Colors.blue,
+                                        onPressed: () {},
+                                        child:
+                                            Text('Message', style: TextStyle(color: Colors.white)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -283,6 +309,7 @@ class PortfolioPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
+
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
