@@ -6,7 +6,6 @@ import 'app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // MediaKit.ensureInitialized();
   WakelockPlus.enable();
   runApp(const WhatsevrApp());
 }
