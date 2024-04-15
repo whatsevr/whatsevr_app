@@ -24,7 +24,7 @@ class VideoPostTile extends StatelessWidget {
           height: 150,
           alignment: Alignment.center,
         ),
-        Positioned(
+        const Positioned(
           top: 8,
           right: 8,
           child: Icon(

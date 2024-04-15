@@ -123,7 +123,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
                     ),
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 InkWell(
                   onTap: () {},
                   child: Container(
@@ -132,7 +132,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
                       color: Colors.black.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Text('CC', style: TextStyle(color: Colors.white)),
+                    child: const Text('CC', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

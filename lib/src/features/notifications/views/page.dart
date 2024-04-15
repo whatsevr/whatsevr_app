@@ -14,8 +14,8 @@ class NotificationsPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PadHorizontal(
-            child: const Text(
+          const PadHorizontal(
+            child: Text(
               'Notifications',
               style: TextStyle(
                 fontSize: 24,
@@ -23,13 +23,13 @@ class NotificationsPage extends StatelessWidget {
               ),
             ),
           ),
-          Gap(8),
-          DefaultTabController(
+          const Gap(8),
+          const DefaultTabController(
             length: 3,
             child: WhatsevrTabBar(
               tabAlignment: TabAlignment.start,
               isScrollable: true,
-              tabs: const [
+              tabs: [
                 'All',
                 'Comments',
                 'Tags/mentions',
@@ -52,7 +52,7 @@ class NotificationsPage extends StatelessWidget {
                                   : index == 6
                                       ? 'Last week'
                                       : '',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
                           ),
@@ -74,7 +74,7 @@ class NotificationsPage extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Gap(8);
+                return const Gap(8);
               },
               itemCount: 30,
             ),

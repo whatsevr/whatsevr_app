@@ -24,9 +24,9 @@ class SplashPage extends StatelessWidget {
               'assets/images/whatsevr_app_logo.jpg',
               width: 100,
             ),
-            Text('Whatsevr', style: TextStyle(fontSize: 24)),
-            Gap(15),
-            SizedBox(
+            const Text('Whatsevr', style: TextStyle(fontSize: 24)),
+            const Gap(15),
+            const SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(

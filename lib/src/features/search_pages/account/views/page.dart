@@ -29,11 +29,11 @@ class AccountSearchPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Expanded(
+          const Expanded(
             child: WhatsevrTabBarWithViews(
               tabAlignment: TabAlignment.start,
               isScrollable: true,
-              tabs: const [
+              tabs: [
                 'Recents',
                 'Accounts',
                 'Portfolio',
@@ -56,9 +56,7 @@ class AccountSearchPage extends StatelessWidget {
 }
 
 class _OffersView extends StatelessWidget {
-  const _OffersView({
-    super.key,
-  });
+  const _OffersView();
 
   @override
   Widget build(BuildContext context) {
@@ -71,32 +69,32 @@ class _OffersView extends StatelessWidget {
           children: [
             Row(
               children: [
-                Gap(16),
+                const Gap(16),
                 CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage: ExtendedNetworkImageProvider(
                       MockData.randomImageAvatar(),
                     )),
-                Gap(16),
+                const Gap(16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Username',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
                         'Location',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            Gap(8),
+            const Gap(8),
             Stack(
               children: [
                 ExtendedImage.network(
@@ -116,7 +114,7 @@ class _OffersView extends StatelessWidget {
                     ),
                     child: Text(
                       'Freelancer',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
                           ),
                     ),
@@ -124,11 +122,11 @@ class _OffersView extends StatelessWidget {
                 ),
               ],
             ),
-            Gap(8),
+            const Gap(8),
             Row(
               children: [
-                Gap(8),
-                Expanded(
+                const Gap(8),
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -138,7 +136,7 @@ class _OffersView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 IconButton(
                   icon: const Icon(Icons.bookmark_border),
                   onPressed: () {},
@@ -157,9 +155,7 @@ class _OffersView extends StatelessWidget {
 }
 
 class _CommunityView extends StatelessWidget {
-  const _CommunityView({
-    super.key,
-  });
+  const _CommunityView();
 
   @override
   Widget build(BuildContext context) {
@@ -176,39 +172,39 @@ class _CommunityView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Gap(16),
+                  const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
                       )),
-                  Gap(16),
+                  const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Username',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
                           'Location',
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
                   ),
-                  Gap(8),
-                  Icon(Icons.star),
-                  Text(
+                  const Gap(8),
+                  const Icon(Icons.star),
+                  const Text(
                     'Rating 4.5',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   MaterialButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: () {},
@@ -217,12 +213,12 @@ class _CommunityView extends StatelessWidget {
                     ),
                     color: Colors.blue,
                     textColor: Colors.white,
-                    child: Text('Join'),
+                    child: const Text('Join'),
                   ),
-                  Gap(8),
+                  const Gap(8),
                 ],
               ),
-              Gap(8),
+              const Gap(8),
               Stack(
                 children: [
                   ExtendedImage.network(
@@ -242,7 +238,7 @@ class _CommunityView extends StatelessWidget {
                       ),
                       child: Text(
                         'Freelancer',
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: Colors.white,
                             ),
                       ),
@@ -250,11 +246,11 @@ class _CommunityView extends StatelessWidget {
                   ),
                 ],
               ),
-              Gap(8),
+              const Gap(8),
               Row(
                 children: [
-                  Gap(8),
-                  Expanded(
+                  const Gap(8),
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -264,7 +260,7 @@ class _CommunityView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   IconButton(
                     icon: const Icon(Icons.bookmark_border),
                     onPressed: () {},
@@ -284,9 +280,7 @@ class _CommunityView extends StatelessWidget {
 }
 
 class _PortfolioView extends StatelessWidget {
-  const _PortfolioView({
-    super.key,
-  });
+  const _PortfolioView();
 
   @override
   Widget build(BuildContext context) {
@@ -303,39 +297,39 @@ class _PortfolioView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Gap(16),
+                  const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
                       )),
-                  Gap(16),
+                  const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Username',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
                           'Location',
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
                   ),
-                  Gap(8),
-                  Icon(Icons.star),
-                  Text(
+                  const Gap(8),
+                  const Icon(Icons.star),
+                  const Text(
                     'Rating 4.5',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   MaterialButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: () {},
@@ -344,12 +338,12 @@ class _PortfolioView extends StatelessWidget {
                     ),
                     color: Colors.blue,
                     textColor: Colors.white,
-                    child: Text('Add Friend'),
+                    child: const Text('Add Friend'),
                   ),
-                  Gap(8),
+                  const Gap(8),
                 ],
               ),
-              Gap(8),
+              const Gap(8),
               Stack(
                 children: [
                   ExtendedImage.network(
@@ -369,7 +363,7 @@ class _PortfolioView extends StatelessWidget {
                       ),
                       child: Text(
                         'Freelancer',
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: Colors.white,
                             ),
                       ),
@@ -377,11 +371,11 @@ class _PortfolioView extends StatelessWidget {
                   ),
                 ],
               ),
-              Gap(8),
+              const Gap(8),
               Row(
                 children: [
-                  Gap(8),
-                  Expanded(
+                  const Gap(8),
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -391,7 +385,7 @@ class _PortfolioView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   IconButton(
                     icon: const Icon(Icons.bookmark_border),
                     onPressed: () {},
@@ -411,9 +405,7 @@ class _PortfolioView extends StatelessWidget {
 }
 
 class _AccountsView extends StatelessWidget {
-  const _AccountsView({
-    super.key,
-  });
+  const _AccountsView();
 
   @override
   Widget build(BuildContext context) {
@@ -428,30 +420,30 @@ class _AccountsView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Gap(16),
+                  const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
                       )),
-                  Gap(16),
+                  const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Username',
-                          style: Theme.of(context).textTheme.headline6,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Text(
                           'Location',
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ],
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   MaterialButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: () {},
@@ -460,21 +452,21 @@ class _AccountsView extends StatelessWidget {
                     ),
                     color: Colors.blue,
                     textColor: Colors.white,
-                    child: Text('Add Friend'),
+                    child: const Text('Add Friend'),
                   ),
-                  Gap(8),
+                  const Gap(8),
                 ],
               ),
-              Gap(8),
+              const Gap(8),
               Row(
                 children: [
-                  Gap(8),
+                  const Gap(8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: 'Bio\n',
@@ -531,7 +523,7 @@ class _AccountsView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Gap(8),
+                  const Gap(8),
                   IconButton(
                     icon: const Icon(Icons.bookmark_border),
                     onPressed: () {},
@@ -542,7 +534,7 @@ class _AccountsView extends StatelessWidget {
                   ),
                 ],
               ),
-              Align(
+              const Align(
                 alignment: Alignment.centerRight,
                 child: Text(
                   'Mutual Friends: 10',
@@ -557,9 +549,7 @@ class _AccountsView extends StatelessWidget {
 }
 
 class _RecentView extends StatelessWidget {
-  const _RecentView({
-    super.key,
-  });
+  const _RecentView();
 
   @override
   Widget build(BuildContext context) {
@@ -572,39 +562,39 @@ class _RecentView extends StatelessWidget {
           children: [
             Row(
               children: [
-                Gap(16),
+                const Gap(16),
                 CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage: ExtendedNetworkImageProvider(
                       MockData.randomImageAvatar(),
                     )),
-                Gap(16),
+                const Gap(16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Username',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       Text(
                         'Location',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ],
                   ),
                 ),
-                Gap(8),
-                Icon(Icons.star),
-                Text(
+                const Gap(8),
+                const Icon(Icons.star),
+                const Text(
                   'Rating 4.5',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.black,
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 MaterialButton(
                   visualDensity: VisualDensity.compact,
                   onPressed: () {},
@@ -613,12 +603,12 @@ class _RecentView extends StatelessWidget {
                   ),
                   color: Colors.blue,
                   textColor: Colors.white,
-                  child: Text('Add Friend'),
+                  child: const Text('Add Friend'),
                 ),
-                Gap(8),
+                const Gap(8),
               ],
             ),
-            Gap(8),
+            const Gap(8),
             Stack(
               children: [
                 ExtendedImage.network(
@@ -638,7 +628,7 @@ class _RecentView extends StatelessWidget {
                     ),
                     child: Text(
                       'Freelancer',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             color: Colors.white,
                           ),
                     ),
@@ -646,11 +636,11 @@ class _RecentView extends StatelessWidget {
                 ),
               ],
             ),
-            Gap(8),
+            const Gap(8),
             Row(
               children: [
-                Gap(8),
-                Expanded(
+                const Gap(8),
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -660,7 +650,7 @@ class _RecentView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 IconButton(
                   icon: const Icon(Icons.bookmark_border),
                   onPressed: () {},

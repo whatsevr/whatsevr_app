@@ -39,7 +39,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                 left: 8,
                 child: Container(
                   padding: const EdgeInsets.all(3.0),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.blue,
                     shape: BoxShape.circle,
                   ),

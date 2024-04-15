@@ -174,7 +174,7 @@ class AppNavigationService {
                       return navigateWithTransition(
                         context: context,
                         state: state,
-                        child: SettingsPage(),
+                        child: const SettingsPage(),
                       );
                     },
                   ),

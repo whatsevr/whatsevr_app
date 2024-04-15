@@ -26,7 +26,7 @@ class FlickPostTile extends StatelessWidget {
           height: 300,
           alignment: Alignment.center,
         ),
-        Positioned(
+        const Positioned(
           top: 8,
           right: 8,
           child: Iconify(

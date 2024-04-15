@@ -8,5 +8,5 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // MediaKit.ensureInitialized();
   WakelockPlus.enable();
-  runApp(WhatsevrApp());
+  runApp(const WhatsevrApp());
 }

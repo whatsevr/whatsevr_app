@@ -6,9 +6,9 @@ import 'package:video_player/video_player.dart';
 class FullVideoPlayerPage extends StatefulWidget {
   final List<String> videoSrcs;
   const FullVideoPlayerPage({
-    Key? key,
+    super.key,
     required this.videoSrcs,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() {

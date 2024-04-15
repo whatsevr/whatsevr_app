@@ -15,7 +15,7 @@ class ExplorePageMediaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WhatsevrTabBarWithViews(tabs: [
+    return const WhatsevrTabBarWithViews(tabs: [
       'Explore',
       'Flicks',
       'Photos',
@@ -28,9 +28,7 @@ class ExplorePageMediaPage extends StatelessWidget {
 }
 
 class _PhotosView extends StatelessWidget {
-  const _PhotosView({
-    super.key,
-  });
+  const _PhotosView();
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +37,14 @@ class _PhotosView extends StatelessWidget {
       itemCount: 20,
       separatorBuilder: (context, index) => const Gap(8),
       itemBuilder: (context, index) {
-        return PhotoFrame();
+        return const PhotoFrame();
       },
     );
   }
 }
 
 class _FlicksView extends StatelessWidget {
-  const _FlicksView({
-    super.key,
-  });
+  const _FlicksView();
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +53,14 @@ class _FlicksView extends StatelessWidget {
       itemCount: 20,
       separatorBuilder: (context, index) => const Gap(8),
       itemBuilder: (context, index) {
-        return FlickFrame();
+        return const FlickFrame();
       },
     );
   }
 }
 
 class _ExploreView extends StatelessWidget {
-  const _ExploreView({
-    super.key,
-  });
+  const _ExploreView();
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +68,16 @@ class _ExploreView extends StatelessWidget {
       child: WaterfallFlow.builder(
         //cacheExtent: 0.0,
 
-        gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 5.0,
         ),
         itemBuilder: (BuildContext context, int index) {
-          if (index % 3 == 0) return PhotoPostTile();
-          if (index % 3 == 1) return FlickPostTile();
-          if (index % 3 == 2) return VideoPostTile();
-          return SizedBox();
+          if (index % 3 == 0) return const PhotoPostTile();
+          if (index % 3 == 1) return const FlickPostTile();
+          if (index % 3 == 2) return const VideoPostTile();
+          return const SizedBox();
         },
       ),
     );

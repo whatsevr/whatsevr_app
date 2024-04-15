@@ -24,15 +24,15 @@ class ChatsPage extends StatelessWidget {
             ],
           ),
         ),
-        Expanded(
+        const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: const [
+            tabs: [
               'Chats',
               'Groups',
               'Calls',
               'Requests',
             ],
-            tabViews: const [
+            tabViews: [
               ChatsPageChatsView(),
               ChatsPageGroupsView(),
               ChatsPageCallsView(),
@@ -68,7 +68,7 @@ class ChatsPageRequestsView extends StatelessWidget {
               children: [
                 IconButton(
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
@@ -85,7 +85,7 @@ class ChatsPageRequestsView extends StatelessWidget {
                 ),
                 IconButton(
                   padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
@@ -129,8 +129,8 @@ class ChatsPageCallsView extends StatelessWidget {
             subtitle: Row(
               children: [
                 Text('Call $index'),
-                Gap(8),
-                Text('12:00'),
+                const Gap(8),
+                const Text('12:00'),
               ],
             ),
             trailing: IconButton(
@@ -162,7 +162,7 @@ class ChatsPageGroupsView extends StatelessWidget {
             ),
             title: Text('Group $index'),
             subtitle: Text('User: Message $index'),
-            trailing: Text('12:00'),
+            trailing: const Text('12:00'),
           );
         },
       ),
@@ -188,7 +188,7 @@ class ChatsPageChatsView extends StatelessWidget {
             ),
             title: Text('User $index'),
             subtitle: Text('Message $index'),
-            trailing: Text('12:00'),
+            trailing: const Text('12:00'),
           );
         },
       ),

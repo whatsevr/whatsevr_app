@@ -31,7 +31,7 @@ class AccountPage extends StatelessWidget {
               readOnly: true,
               onTap: () {
                 AppNavigationService.newRoute(RoutesName.accountSearch,
-                    extras: AccountSearchPage(
+                    extras: const AccountSearchPage(
                       hintTexts: [
                         'Search for Account',
                         'Search for Portfolio',
@@ -41,7 +41,7 @@ class AccountPage extends StatelessWidget {
               },
             ),
           ),
-          Gap(8),
+          const Gap(8),
           Expanded(
             child: ListView(
               shrinkWrap: true,
@@ -89,7 +89,7 @@ class AccountPage extends StatelessWidget {
                         child: SmoothPageIndicator(
                             controller: controller, // PageController
                             count: 5,
-                            effect: WormEffect(
+                            effect: const WormEffect(
                               dotWidth: 8.0,
                               dotHeight: 8.0,
                               activeDotColor: Colors.black,
@@ -114,11 +114,11 @@ class AccountPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Gap(8),
+                const Gap(8),
                 PadHorizontal(
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -143,7 +143,7 @@ class AccountPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: PadHorizontal.padding,
@@ -152,32 +152,30 @@ class AccountPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Likes', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
-                      Spacer(),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Networks', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
-                      Spacer(),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Connections', style: TextStyle(fontSize: 16)),
@@ -187,8 +185,8 @@ class AccountPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
-                PadHorizontal(
+                const Gap(8),
+                const PadHorizontal(
                   child: Row(
                     children: [
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
@@ -197,7 +195,7 @@ class AccountPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 SizedBox(
                   height: 200,
                   child: ListView.separated(
@@ -216,7 +214,7 @@ class AccountPage extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Gap(8),
+                                  const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
                                       MockData.randomImageAvatar(),
@@ -225,8 +223,8 @@ class AccountPage extends StatelessWidget {
                                       enableLoadState: false,
                                     ),
                                   ),
-                                  Gap(8),
-                                  Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Gap(8),
+                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
@@ -236,7 +234,7 @@ class AccountPage extends StatelessWidget {
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
-                            child: Text('Follow'),
+                            child: const Text('Follow'),
                           ),
                         ],
                       );
@@ -247,19 +245,19 @@ class AccountPage extends StatelessWidget {
                     itemCount: 10,
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: DefaultTabController(
                     length: 7,
                     child: Column(
                       children: [
-                        Gap(12),
-                        WhatsevrTabBar(
+                        const Gap(12),
+                        const WhatsevrTabBar(
                           tabAlignment: TabAlignment.start,
                           isScrollable: true,
                           tabs: [
@@ -271,12 +269,12 @@ class AccountPage extends StatelessWidget {
                             'Offerings',
                           ],
                         ),
-                        Gap(8),
+                        const Gap(8),
                         IndexedStack(
                           children: [
                             Column(
                               children: [
-                                Gap(12),
+                                const Gap(12),
                                 for ((String label, String info) itm in [
                                   ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
@@ -297,24 +295,24 @@ class AccountPage extends StatelessWidget {
                                     value: false,
                                     onChanged: (value) {},
                                     title: Text(
-                                      '${itm.$1}',
-                                      style: TextStyle(
+                                      itm.$1,
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     subtitle: Text(
-                                      '${itm.$2}',
-                                      style: TextStyle(fontSize: 12),
+                                      itm.$2,
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                     isThreeLine: true,
                                   ),
                               ],
                             ),
-                            Text('Videos'),
-                            Text('Photos'),
-                            Text('Audios'),
-                            Text('Documents'),
+                            const Text('Videos'),
+                            const Text('Photos'),
+                            const Text('Audios'),
+                            const Text('Documents'),
                           ],
                         ),
                       ],

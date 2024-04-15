@@ -63,7 +63,7 @@ class PortfolioPage extends StatelessWidget {
                         child: SmoothPageIndicator(
                             controller: controller, // PageController
                             count: 5,
-                            effect: WormEffect(
+                            effect: const WormEffect(
                               dotWidth: 8.0,
                               dotHeight: 8.0,
                               activeDotColor: Colors.black,
@@ -88,11 +88,11 @@ class PortfolioPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Gap(8),
+                const Gap(8),
                 PadHorizontal(
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -113,7 +113,7 @@ class PortfolioPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                PadHorizontal(
+                const PadHorizontal(
                   child: Text(
                     'Portfolio title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
                     style: TextStyle(
@@ -122,7 +122,7 @@ class PortfolioPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: PadHorizontal.padding,
@@ -131,7 +131,7 @@ class PortfolioPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Expanded(
@@ -166,8 +166,8 @@ class PortfolioPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
-                PadHorizontal(
+                const Gap(8),
+                const PadHorizontal(
                   child: Row(
                     children: [
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
@@ -176,7 +176,7 @@ class PortfolioPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 SizedBox(
                   height: 200,
                   child: ListView.separated(
@@ -195,7 +195,7 @@ class PortfolioPage extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Gap(8),
+                                  const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
                                       MockData.randomImageAvatar(),
@@ -204,8 +204,8 @@ class PortfolioPage extends StatelessWidget {
                                       enableLoadState: false,
                                     ),
                                   ),
-                                  Gap(8),
-                                  Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Gap(8),
+                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
@@ -215,7 +215,7 @@ class PortfolioPage extends StatelessWidget {
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
-                            child: Text('Follow'),
+                            child: const Text('Follow'),
                           ),
                         ],
                       );
@@ -226,19 +226,19 @@ class PortfolioPage extends StatelessWidget {
                     itemCount: 10,
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: DefaultTabController(
                     length: 7,
                     child: Column(
                       children: [
-                        Gap(12),
-                        WhatsevrTabBar(
+                        const Gap(12),
+                        const WhatsevrTabBar(
                           tabAlignment: TabAlignment.start,
                           isScrollable: true,
                           tabs: [
@@ -252,12 +252,12 @@ class PortfolioPage extends StatelessWidget {
                             'Pdf',
                           ],
                         ),
-                        Gap(8),
+                        const Gap(8),
                         IndexedStack(
                           children: [
                             Column(
                               children: [
-                                Gap(12),
+                                const Gap(12),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -265,8 +265,8 @@ class PortfolioPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.white,
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(12.0),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -290,8 +290,8 @@ class PortfolioPage extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(8),
                                       color: Colors.white,
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(12.0),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -314,9 +314,9 @@ class PortfolioPage extends StatelessWidget {
                                   activeColor: Colors.black,
                                   value: false,
                                   onChanged: (value) {},
-                                  title: Text('Bio',
+                                  title: const Text('Bio',
                                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
+                                  subtitle: const Text(
                                       'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
                                   isThreeLine: true,
                                 ),
@@ -326,9 +326,9 @@ class PortfolioPage extends StatelessWidget {
                                   activeColor: Colors.black,
                                   value: false,
                                   onChanged: (value) {},
-                                  title: Text('Address',
+                                  title: const Text('Address',
                                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
+                                  subtitle: const Text(
                                       'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
                                   isThreeLine: true,
                                 ),
@@ -338,18 +338,18 @@ class PortfolioPage extends StatelessWidget {
                                   activeColor: Colors.black,
                                   value: false,
                                   onChanged: (value) {},
-                                  title: Text('Last seen of admin',
+                                  title: const Text('Last seen of admin',
                                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
+                                  subtitle: const Text(
                                       'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
                                   isThreeLine: true,
                                 ),
                               ],
                             ),
-                            Text('Videos'),
-                            Text('Photos'),
-                            Text('Audios'),
-                            Text('Documents'),
+                            const Text('Videos'),
+                            const Text('Photos'),
+                            const Text('Audios'),
+                            const Text('Documents'),
                           ],
                         ),
                       ],

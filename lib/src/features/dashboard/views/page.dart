@@ -56,7 +56,7 @@ class DashboardPage extends StatelessWidget {
               builder: (context) {
                 List<Widget> children = [
                   IconButton(
-                    icon: Iconify(MaterialSymbols.explore),
+                    icon: const Iconify(MaterialSymbols.explore),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: ExplorePage(),
@@ -64,7 +64,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(Heroicons.home_solid),
+                    icon: const Iconify(Heroicons.home_solid),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: HomePage(),
@@ -78,7 +78,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(Pepicons.play_print),
+                    icon: const Iconify(Pepicons.play_print),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: FlicksPage(),
@@ -86,7 +86,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(Ph.chat_circle_text_fill),
+                    icon: const Iconify(Ph.chat_circle_text_fill),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: ChatsPage(),
@@ -94,7 +94,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(Ic.twotone_notifications_none),
+                    icon: const Iconify(Ic.twotone_notifications_none),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: NotificationsPage(),
@@ -102,7 +102,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(AkarIcons.settings_horizontal),
+                    icon: const Iconify(AkarIcons.settings_horizontal),
                     onPressed: () {
                       showModalBottomSheet(
                           useRootNavigator: true,
@@ -122,7 +122,7 @@ class DashboardPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(20),
                                 child: Column(
                                   children: [
-                                    Gap(20),
+                                    const Gap(20),
                                     MaterialButton(
                                       elevation: 0,
                                       color: Colors.blueGrey.withOpacity(0.2),
@@ -132,15 +132,15 @@ class DashboardPage extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       onPressed: () {},
-                                      child: Row(
+                                      child: const Row(
                                         children: [
                                           Iconify(Heroicons.document_magnifying_glass_solid),
-                                          const Gap(8),
-                                          const Text('Solutions'),
+                                          Gap(8),
+                                          Text('Solutions'),
                                         ],
                                       ),
                                     ),
-                                    Gap(8),
+                                    const Gap(8),
                                     MaterialButton(
                                       elevation: 0,
                                       color: Colors.blueGrey.withOpacity(0.2),
@@ -150,15 +150,15 @@ class DashboardPage extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       onPressed: () {},
-                                      child: Row(
+                                      child: const Row(
                                         children: [
                                           Iconify(Fa6Solid.magnifying_glass_chart),
-                                          const Gap(8),
-                                          const Text('Status'),
+                                          Gap(8),
+                                          Text('Status'),
                                         ],
                                       ),
                                     ),
-                                    Gap(35),
+                                    const Gap(35),
                                     GridView.count(
                                       physics: const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
@@ -190,8 +190,8 @@ class DashboardPage extends StatelessWidget {
                                                   ),
                                                 ),
                                               ),
-                                              Gap(8),
-                                              Text('${itm.$1}'),
+                                              const Gap(8),
+                                              Text(itm.$1),
                                             ],
                                           )
                                       ],
@@ -202,7 +202,7 @@ class DashboardPage extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Iconify(Ic.sharp_account_circle),
+                    icon: const Iconify(Ic.sharp_account_circle),
                     onPressed: () {
                       context.read<DashboardBloc>().add(TabChanged(
                             newView: AccountPage(),
@@ -218,7 +218,7 @@ class DashboardPage extends StatelessWidget {
                       return children[index];
                     },
                     separatorBuilder: (context, index) {
-                      return Gap(10);
+                      return const Gap(10);
                     },
                     itemCount: children.length,
                   ),

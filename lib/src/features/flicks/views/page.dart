@@ -32,7 +32,7 @@ class FlicksPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Column(
+                      const Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -40,12 +40,12 @@ class FlicksPage extends StatelessWidget {
                             size: 30,
                           ),
                           Gap(16),
-                          const Icon(Icons.link, size: 30),
+                          Icon(Icons.link, size: 30),
                           Gap(16),
-                          const Icon(Icons.share, size: 30),
+                          Icon(Icons.share, size: 30),
                         ],
                       ),
-                      Gap(16),
+                      const Gap(16),
                       Column(
                         children: [
                           Row(
@@ -55,27 +55,27 @@ class FlicksPage extends StatelessWidget {
                                 backgroundImage: NetworkImage(MockData.imageAvatar),
                               ),
                               const SizedBox(width: 8),
-                              Expanded(
+                              const Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('Username'),
-                                    const Text('Caption'),
+                                    Text('Username'),
+                                    Text('Caption'),
                                   ],
                                 ),
                               ),
                               const Icon(Icons.more_vert),
                             ],
                           ),
-                          Gap(8),
+                          const Gap(8),
                           Row(children: [
-                            Gap(8),
+                            const Gap(8),
                             CircleAvatar(
                               radius: 10,
                               backgroundImage: NetworkImage(MockData.imageAvatar),
                             ),
-                            Gap(8),
-                            Expanded(child: Text('Comment')),
+                            const Gap(8),
+                            const Expanded(child: Text('Comment')),
                             IconButton(
                               icon: const Icon(Icons.library_music),
                               onPressed: () {},
@@ -83,7 +83,7 @@ class FlicksPage extends StatelessWidget {
                           ]),
                         ],
                       ),
-                      Gap(16),
+                      const Gap(16),
                     ],
                   ),
                 ),

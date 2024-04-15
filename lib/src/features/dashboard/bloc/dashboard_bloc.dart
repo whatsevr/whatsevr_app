@@ -10,7 +10,7 @@ part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-  DashboardBloc() : super(DashboardState(currentDashboardView: ExplorePage())) {
+  DashboardBloc() : super(const DashboardState(currentDashboardView: ExplorePage())) {
     on<TabChanged>(tabChanged);
   }
 

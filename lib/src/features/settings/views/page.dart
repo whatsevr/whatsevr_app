@@ -42,22 +42,22 @@ class SettingsPage extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Camera',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               Switch(
                                 value: true,
                                 onChanged: (value) {},
                               ),
                             ],
                           ),
-                          Gap(8),
-                          Text(
+                          const Gap(8),
+                          const Text(
                             'Allow Whatsevr to access your camera to take photos and record videos.',
                             style: TextStyle(
                               fontSize: 14,
@@ -76,7 +76,7 @@ class SettingsPage extends StatelessWidget {
                 );
               },
             ),
-            Gap(16),
+            const Gap(16),
             const Text(
               'For Professionals',
               style: TextStyle(
@@ -91,7 +91,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -111,7 +111,7 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
             ),
-            Gap(16),
+            const Gap(16),
             const Text(
               'Support',
               style: TextStyle(
@@ -126,7 +126,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -153,7 +153,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -173,7 +173,7 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
             ),
-            Gap(16),
+            const Gap(16),
             const Text(
               'Accounts in this Device',
               style: TextStyle(
@@ -188,7 +188,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -215,7 +215,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -235,7 +235,7 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.grey[200],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(

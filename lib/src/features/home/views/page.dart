@@ -29,10 +29,10 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-          Gap(8.0),
-          Expanded(
+          const Gap(8.0),
+          const Expanded(
             child: WhatsevrTabBarWithViews(
-              tabs: const [
+              tabs: [
                 'For You',
                 'Communities',
                 'Activities',
@@ -57,8 +57,8 @@ class HomePageActivitiesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WhatsevrTabBarWithViews(
-      tabs: const [
+    return const WhatsevrTabBarWithViews(
+      tabs: [
         'History',
         'Downloads',
         'Saved Videos',
@@ -81,7 +81,7 @@ class HomePageCommunitiesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Media');
+    return const Text('Media');
   }
 }
 
@@ -109,18 +109,18 @@ class HomePageForYouPage extends StatelessWidget {
                       width: 100.0,
                       alignment: Alignment.center,
                       child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.add,
                         ),
                       ),
                     ),
                   ),
-                  Gap(24.0),
+                  const Gap(24.0),
                 ],
               ),
               for (int i = 0; i < 5; i++)
@@ -143,7 +143,7 @@ class HomePageForYouPage extends StatelessWidget {
                         alignment: Alignment.center,
                       ),
                     ),
-                    Gap(5.0),
+                    const Gap(5.0),
                     Row(
                       children: [
                         CircleAvatar(
@@ -152,8 +152,8 @@ class HomePageForYouPage extends StatelessWidget {
                           ),
                           radius: 10.0,
                         ),
-                        Gap(5.0),
-                        Text('Username'),
+                        const Gap(5.0),
+                        const Text('Username'),
                       ],
                     )
                   ],
@@ -170,13 +170,13 @@ class HomePageForYouPage extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Gap(5.0);
+                return const Gap(5.0);
               },
               itemCount: children.length,
             );
           }),
         ),
-        Gap(8.0),
+        const Gap(8.0),
         Expanded(
           child: PadHorizontal(
             child: WaterfallFlow.builder(
@@ -188,10 +188,10 @@ class HomePageForYouPage extends StatelessWidget {
                 mainAxisSpacing: 5.0,
               ),
               itemBuilder: (BuildContext context, int index) {
-                if (index % 3 == 0) return PhotoPostTile();
-                if (index % 3 == 1) return FlickPostTile();
-                if (index % 3 == 2) return VideoPostTile();
-                return SizedBox();
+                if (index % 3 == 0) return const PhotoPostTile();
+                if (index % 3 == 1) return const FlickPostTile();
+                if (index % 3 == 2) return const VideoPostTile();
+                return const SizedBox();
               },
             ),
           ),

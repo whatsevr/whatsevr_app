@@ -22,7 +22,7 @@ showContentUploadBottomSheet(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Gap(20),
+                const Gap(20),
                 MaterialButton(
                   elevation: 0,
                   color: Colors.blueGrey.withOpacity(0.2),
@@ -36,15 +36,15 @@ showContentUploadBottomSheet(BuildContext context) {
                       type: FileType.media,
                     );
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Iconify(Ic.round_history_toggle_off),
-                      const Gap(8),
-                      const Text('Upload Memories'),
+                      Gap(8),
+                      Text('Upload Memories'),
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 MaterialButton(
                   elevation: 0,
                   color: Colors.blueGrey.withOpacity(0.2),
@@ -58,15 +58,15 @@ showContentUploadBottomSheet(BuildContext context) {
                       type: FileType.image,
                     );
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Iconify(Mdi.camera_image),
-                      const Gap(8),
-                      const Text('Upload Photo'),
+                      Gap(8),
+                      Text('Upload Photo'),
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 MaterialButton(
                   elevation: 0,
                   color: Colors.blueGrey.withOpacity(0.2),
@@ -80,15 +80,15 @@ showContentUploadBottomSheet(BuildContext context) {
                       type: FileType.video,
                     );
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Iconify(Ic.sharp_slow_motion_video),
-                      const Gap(8),
-                      const Text('Upload Wtv Video'),
+                      Gap(8),
+                      Text('Upload Wtv Video'),
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 MaterialButton(
                   elevation: 0,
                   color: Colors.blueGrey.withOpacity(0.2),
@@ -102,15 +102,15 @@ showContentUploadBottomSheet(BuildContext context) {
                       type: FileType.video,
                     );
                   },
-                  child: Row(
+                  child: const Row(
                     children: [
                       Iconify(Pepicons.play_print),
-                      const Gap(8),
-                      const Text('Upload Flick Video'),
+                      Gap(8),
+                      Text('Upload Flick Video'),
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
               ],
             ));
       });

@@ -31,7 +31,7 @@ class VideoFrame extends StatelessWidget {
                     backgroundImage: NetworkImage(MockData.randomImageAvatar()),
                   ),
                   const Gap(8),
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -50,24 +50,24 @@ class VideoFrame extends StatelessWidget {
               const Gap(8),
               Row(
                 children: [
-                  AnimatedLikeIconButton(),
-                  Text('2.5M'),
+                  const AnimatedLikeIconButton(),
+                  const Text('2.5M'),
                   IconButton(
-                    icon: Iconify(Ph.chat_centered_dots),
+                    icon: const Iconify(Ph.chat_centered_dots),
                     onPressed: () {},
                   ),
-                  Text('2.5M'),
+                  const Text('2.5M'),
                   IconButton(
-                    icon: Iconify(MaterialSymbols.ios_share),
+                    icon: const Iconify(MaterialSymbols.ios_share),
                     onPressed: () {},
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: Iconify(Ion.bookmark),
+                    icon: const Iconify(Ion.bookmark),
                     onPressed: () {},
                   ),
                   IconButton(
-                    icon: Iconify(Charm.menu_kebab),
+                    icon: const Iconify(Charm.menu_kebab),
                     onPressed: () {},
                   ),
                 ],

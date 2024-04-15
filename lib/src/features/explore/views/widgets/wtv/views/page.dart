@@ -12,7 +12,7 @@ class ExplorePageWtvPage extends StatelessWidget {
       itemCount: 20,
       separatorBuilder: (context, index) => const Gap(8),
       itemBuilder: (context, index) {
-        return VideoFrame();
+        return const VideoFrame();
       },
     );
   }

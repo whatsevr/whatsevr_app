@@ -63,7 +63,7 @@ class CommunityPage extends StatelessWidget {
                         child: SmoothPageIndicator(
                             controller: controller, // PageController
                             count: 5,
-                            effect: WormEffect(
+                            effect: const WormEffect(
                               dotWidth: 8.0,
                               dotHeight: 8.0,
                               activeDotColor: Colors.black,
@@ -88,11 +88,11 @@ class CommunityPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                Gap(8),
+                const Gap(8),
                 PadHorizontal(
                   child: Row(
                     children: [
-                      Expanded(
+                      const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -113,7 +113,7 @@ class CommunityPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                PadHorizontal(
+                const PadHorizontal(
                   child: Text(
                     'Community title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
                     style: TextStyle(
@@ -122,7 +122,7 @@ class CommunityPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: PadHorizontal.padding,
@@ -131,43 +131,31 @@ class CommunityPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Likes', style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Networks', style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('1,000', style: TextStyle(fontSize: 24)),
-                            Text('Posts', style: TextStyle(fontSize: 16)),
-                          ],
-                        ),
-                      ),
-                    ],
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '2.5 Million Members',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Gap(8),
-                PadHorizontal(
+                const Gap(8),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.circle_rounded, size: 16, color: Colors.green),
+                    Gap(8),
+                    Text(
+                      '230K Online',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(8),
+                const PadHorizontal(
                   child: Row(
                     children: [
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
@@ -176,7 +164,7 @@ class CommunityPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 SizedBox(
                   height: 200,
                   child: ListView.separated(
@@ -195,7 +183,7 @@ class CommunityPage extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Gap(8),
+                                  const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
                                       MockData.randomImageAvatar(),
@@ -204,8 +192,8 @@ class CommunityPage extends StatelessWidget {
                                       enableLoadState: false,
                                     ),
                                   ),
-                                  Gap(8),
-                                  Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Gap(8),
+                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
@@ -215,7 +203,7 @@ class CommunityPage extends StatelessWidget {
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
-                            child: Text('Follow'),
+                            child: const Text('Follow'),
                           ),
                         ],
                       );
@@ -226,14 +214,14 @@ class CommunityPage extends StatelessWidget {
                     itemCount: 10,
                   ),
                 ),
-                Gap(8),
+                const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
                     color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
-                  child: DefaultTabController(
+                  child: const DefaultTabController(
                     length: 7,
                     child: Column(
                       children: [
@@ -255,128 +243,7 @@ class CommunityPage extends StatelessWidget {
                         Gap(8),
                         IndexedStack(
                           children: [
-                            Column(
-                              children: [
-                                Gap(8),
-
-                                ///Join and Leave
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: MaterialButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8)),
-                                        color: Colors.black,
-                                        onPressed: () {},
-                                        child: Text('Join', style: TextStyle(color: Colors.white)),
-                                      ),
-                                    ),
-                                    Gap(8),
-                                    Expanded(
-                                      child: MaterialButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8)),
-                                        color: Colors.blue,
-                                        onPressed: () {},
-                                        child:
-                                            Text('Message', style: TextStyle(color: Colors.white)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Gap(8),
-                                          Text('Status',
-                                              style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
-                                          Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16)),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Gap(8),
-                                          Text('Solutions',
-                                              style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
-                                          Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16)),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: Text('Bio',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: Text('Address',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: Text('Last seen of admin',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
-                              ],
-                            ),
-                            Text('Videos'),
-                            Text('Photos'),
-                            Text('Audios'),
-                            Text('Documents'),
+                            _AboutView(),
                           ],
                         ),
                       ],
@@ -388,6 +255,118 @@ class CommunityPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AboutView extends StatelessWidget {
+  const _AboutView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Gap(8),
+
+        ///Join and Leave
+        Row(
+          children: [
+            Expanded(
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                color: Colors.black,
+                onPressed: () {},
+                child: const Text('Join', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            const Gap(8),
+            Expanded(
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                color: Colors.blue,
+                onPressed: () {},
+                child: const Text('Message', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Gap(8),
+                  Text('Status', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                      style: TextStyle(fontSize: 16)),
+                  Gap(8),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Gap(8),
+                  Text('Solutions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                      style: TextStyle(fontSize: 16)),
+                  Gap(8),
+                ],
+              ),
+            ),
+          ),
+        ),
+        CheckboxListTile(
+          controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Colors.black,
+          value: false,
+          onChanged: (value) {},
+          title: const Text('Bio', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+          isThreeLine: true,
+        ),
+        CheckboxListTile(
+          controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Colors.black,
+          value: false,
+          onChanged: (value) {},
+          title: const Text('Address', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+          isThreeLine: true,
+        ),
+        CheckboxListTile(
+          controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Colors.black,
+          value: false,
+          onChanged: (value) {},
+          title: const Text('Last seen of admin',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+          isThreeLine: true,
+        ),
+      ],
     );
   }
 }
