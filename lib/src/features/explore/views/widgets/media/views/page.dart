@@ -67,30 +67,28 @@ class _ExploreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PadHorizontal(
-      child: Expanded(
-        child: GridView.custom(
-          gridDelegate: SliverQuiltedGridDelegate(
-            crossAxisCount: 3,
-            mainAxisSpacing: 2,
-            crossAxisSpacing: 2,
-            repeatPattern: QuiltedGridRepeatPattern.inverted,
-            pattern: [
-              QuiltedGridTile(2, 1),
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(1, 1),
-            ],
-          ),
-          childrenDelegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index % 5 == 0) return const FlickPostTile();
-              if (index % 5 == 1) return const PhotoPostTile();
-              if (index % 5 == 2) return const PhotoPostTile();
-              if (index % 5 == 3) return const PhotoPostTile();
-              return const VideoPostTile();
-            },
-          ),
+      child: GridView.custom(
+        gridDelegate: SliverQuiltedGridDelegate(
+          crossAxisCount: 3,
+          mainAxisSpacing: 2,
+          crossAxisSpacing: 2,
+          repeatPattern: QuiltedGridRepeatPattern.inverted,
+          pattern: [
+            QuiltedGridTile(2, 1),
+            QuiltedGridTile(1, 1),
+            QuiltedGridTile(1, 1),
+            QuiltedGridTile(1, 1),
+            QuiltedGridTile(1, 1),
+          ],
+        ),
+        childrenDelegate: SliverChildBuilderDelegate(
+          (context, index) {
+            if (index % 5 == 0) return const FlickPostTile();
+            if (index % 5 == 1) return const PhotoPostTile();
+            if (index % 5 == 2) return const PhotoPostTile();
+            if (index % 5 == 3) return const PhotoPostTile();
+            return const VideoPostTile();
+          },
         ),
       ),
     );

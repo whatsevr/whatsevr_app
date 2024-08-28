@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
+import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        AppNavigationService.newRoute(RoutesName.dashboard);
-      },
+    return BlocProvider(
+      lazy: false,
+      create: (context) => SplashBloc()..add(const InitialEvent()),
+      child: Builder(builder: (context) {
+        return buildPage(context);
+      }),
     );
+  }
+
+  Widget buildPage(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
