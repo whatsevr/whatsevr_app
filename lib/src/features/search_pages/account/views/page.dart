@@ -1,12 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/heroicons.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/animated_search_field.dart';
+import 'package:iconify_flutter/icons/akar_icons.dart';
+import 'package:iconify_flutter/icons/fa6_solid.dart';
 
 class AccountSearchPage extends StatelessWidget {
   final List<String>? hintTexts;
@@ -21,12 +25,114 @@ class AccountSearchPage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: WhatsevrAnimatedSearchField(
-              hintTexts: hintTexts ?? [],
-              showBackButton: true,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: WhatsevrAnimatedSearchField(
+                    hintTexts: hintTexts ?? [],
+                    showBackButton: true,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Iconify(AkarIcons.settings_horizontal),
+                onPressed: () {
+                  showModalBottomSheet(
+                      useRootNavigator: true,
+                      isScrollControlled: true,
+                      barrierColor: Colors.white.withOpacity(0.5),
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      builder: (context) {
+                        return IntrinsicHeight(
+                          child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 4,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  const Gap(20),
+                                  MaterialButton(
+                                    elevation: 0,
+                                    color: Colors.blueGrey.withOpacity(0.2),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Row(
+                                      children: [
+                                        Iconify(Heroicons
+                                            .document_magnifying_glass_solid),
+                                        Gap(8),
+                                        Text('Serve'),
+                                      ],
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  MaterialButton(
+                                    elevation: 0,
+                                    color: Colors.blueGrey.withOpacity(0.2),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Row(
+                                      children: [
+                                        Iconify(
+                                            Fa6Solid.magnifying_glass_chart),
+                                        Gap(8),
+                                        Text('Status'),
+                                      ],
+                                    ),
+                                  ),
+                                  const Gap(8),
+                                  MaterialButton(
+                                    elevation: 0,
+                                    color: Colors.blueGrey.withOpacity(0.2),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 18),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Row(
+                                      children: [
+                                        Iconify(
+                                            Fa6Solid.magnifying_glass_chart),
+                                        Gap(8),
+                                        Text('Location'),
+                                      ],
+                                    ),
+                                  ),
+                                  const Gap(35),
+                                ],
+                              )),
+                        );
+                      });
+                },
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           const Expanded(

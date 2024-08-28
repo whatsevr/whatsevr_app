@@ -14,6 +14,7 @@ class CommunityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -97,7 +98,8 @@ class CommunityPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Community X', style: TextStyle(fontSize: 24)),
-                            Text(' @Communityx', style: TextStyle(fontSize: 16)),
+                            Text(' @Communityx',
+                                style: TextStyle(fontSize: 16)),
                             Gap(8),
                           ],
                         ),
@@ -174,7 +176,8 @@ class CommunityPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? 8 : 0, right: 8),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -193,13 +196,15 @@ class CommunityPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Text('John Doe',
+                                      style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -216,10 +221,11 @@ class CommunityPage extends StatelessWidget {
                 ),
                 const Gap(8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: const DefaultTabController(
                     length: 7,
@@ -273,19 +279,23 @@ class _AboutView extends StatelessWidget {
           children: [
             Expanded(
               child: MaterialButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
                 color: Colors.black,
                 onPressed: () {},
-                child: const Text('Join', style: TextStyle(color: Colors.white)),
+                child:
+                    const Text('Join', style: TextStyle(color: Colors.white)),
               ),
             ),
             const Gap(8),
             Expanded(
               child: MaterialButton(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
                 color: Colors.blue,
                 onPressed: () {},
-                child: const Text('Message', style: TextStyle(color: Colors.white)),
+                child: const Text('Message',
+                    style: TextStyle(color: Colors.white)),
               ),
             ),
           ],
@@ -303,7 +313,9 @@ class _AboutView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Gap(8),
-                  Text('Status', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text('Status',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
                       style: TextStyle(fontSize: 16)),
                   Gap(8),
@@ -326,7 +338,9 @@ class _AboutView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Gap(8),
-                  Text('Solutions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                  Text('Serve',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
                       style: TextStyle(fontSize: 16)),
                   Gap(8),
@@ -335,37 +349,43 @@ class _AboutView extends StatelessWidget {
             ),
           ),
         ),
-        CheckboxListTile(
-          controlAffinity: ListTileControlAffinity.leading,
-          checkColor: Colors.white,
-          activeColor: Colors.black,
-          value: false,
-          onChanged: (value) {},
-          title: const Text('Bio', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-          isThreeLine: true,
-        ),
-        CheckboxListTile(
-          controlAffinity: ListTileControlAffinity.leading,
-          checkColor: Colors.white,
-          activeColor: Colors.black,
-          value: false,
-          onChanged: (value) {},
-          title: const Text('Address', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-          isThreeLine: true,
-        ),
-        CheckboxListTile(
-          controlAffinity: ListTileControlAffinity.leading,
-          checkColor: Colors.white,
-          activeColor: Colors.black,
-          value: false,
-          onChanged: (value) {},
-          title: const Text('Last seen of admin',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-          subtitle: const Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-          isThreeLine: true,
-        ),
+        for ((String?, String) item in [
+          ('Bio', 'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
+          (
+            'Description',
+            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
+          ),
+          (
+            'Invite Link',
+            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
+          ),
+          (
+            'Location',
+            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
+          ),
+          (
+            'Last seen of Admin',
+            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
+          ),
+          (
+            'Add Info',
+            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
+          ),
+          ('Total Post', '2355'),
+        ])
+          CheckboxListTile(
+            controlAffinity: ListTileControlAffinity.leading,
+            checkColor: Colors.white,
+            activeColor: Colors.black,
+            value: false,
+            onChanged: (value) {},
+            title: Text('${item.$1}',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            subtitle: Text(
+              '${item.$2}',
+            ),
+            isThreeLine: true,
+          ),
       ],
     );
   }
@@ -384,11 +404,12 @@ class _CoverVideoState extends State<CoverVideo> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
 
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
@@ -423,7 +444,8 @@ class _CoverVideoState extends State<CoverVideo> {
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (context) {
-                if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
+                if (controller.value.position == Duration.zero &&
+                    !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     MockData.randomImage(),
                     width: double.infinity,

@@ -14,6 +14,7 @@ class PortfolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -97,7 +98,8 @@ class PortfolioPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Portfolio X', style: TextStyle(fontSize: 24)),
-                            Text(' @Portfoliox', style: TextStyle(fontSize: 16)),
+                            Text(' @Portfoliox',
+                                style: TextStyle(fontSize: 16)),
                             Gap(8),
                           ],
                         ),
@@ -136,27 +138,25 @@ class PortfolioPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Likes', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
-                      Spacer(),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Networks', style: TextStyle(fontSize: 16)),
                           ],
                         ),
                       ),
-                      Spacer(),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Posts', style: TextStyle(fontSize: 16)),
@@ -186,7 +186,8 @@ class PortfolioPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? 8 : 0, right: 8),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -205,13 +206,15 @@ class PortfolioPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Text('John Doe',
+                                      style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -228,10 +231,11 @@ class PortfolioPage extends StatelessWidget {
                 ),
                 const Gap(8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: DefaultTabController(
                     length: 7,
@@ -268,12 +272,14 @@ class PortfolioPage extends StatelessWidget {
                                     child: const Padding(
                                       padding: EdgeInsets.all(12.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Gap(8),
                                           Text('Status',
                                               style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold)),
                                           Text(
                                               'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
                                               style: TextStyle(fontSize: 16)),
@@ -293,12 +299,14 @@ class PortfolioPage extends StatelessWidget {
                                     child: const Padding(
                                       padding: EdgeInsets.all(12.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Gap(8),
-                                          Text('Solutions',
+                                          Text('Serve',
                                               style: TextStyle(
-                                                  fontSize: 14, fontWeight: FontWeight.bold)),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold)),
                                           Text(
                                               'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
                                               style: TextStyle(fontSize: 16)),
@@ -308,42 +316,58 @@ class PortfolioPage extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: const Text('Bio',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: const Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: const Text('Address',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: const Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
-                                CheckboxListTile(
-                                  controlAffinity: ListTileControlAffinity.leading,
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.black,
-                                  value: false,
-                                  onChanged: (value) {},
-                                  title: const Text('Last seen of admin',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                                  subtitle: const Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-                                  isThreeLine: true,
-                                ),
+                                for ((String label, String info) itm in [
+                                  ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                                  ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                                  ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
+                                  (
+                                    'Working',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  ('Email', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                                  (
+                                    'Birthday',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Join On',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Portfolio link',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Total Connection',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  ('Total Views', '2524'),
+                                  (
+                                    'Add info',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                ])
+                                  CheckboxListTile(
+                                    visualDensity: VisualDensity.compact,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.black,
+                                    value: false,
+                                    onChanged: (value) {},
+                                    title: Text(
+                                      itm.$1,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      itm.$2,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    isThreeLine: true,
+                                  ),
                               ],
                             ),
                             const Text('Videos'),
@@ -378,11 +402,12 @@ class _CoverVideoState extends State<CoverVideo> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
 
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
@@ -417,7 +442,8 @@ class _CoverVideoState extends State<CoverVideo> {
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (context) {
-                if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
+                if (controller.value.position == Duration.zero &&
+                    !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     MockData.randomImage(),
                     width: double.infinity,

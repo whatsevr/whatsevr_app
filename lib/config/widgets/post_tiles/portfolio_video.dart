@@ -1,12 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/pepicons.dart';
 
 import '../../mocks/mocks.dart';
 
-class FlickPostTile extends StatelessWidget {
-  const FlickPostTile({super.key});
+class PortfolioVideoPostTile extends StatelessWidget {
+  const PortfolioVideoPostTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +21,14 @@ class FlickPostTile extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          width: double.infinity,
           alignment: Alignment.center,
         ),
         const Positioned(
           top: 8,
           right: 8,
-          child: Iconify(
-            Pepicons.play_print,
+          child: Icon(
+            Icons.play_arrow,
             color: Colors.white,
           ),
         ),

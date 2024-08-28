@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/akar_icons.dart';
-import 'package:iconify_flutter/icons/fa6_solid.dart';
+
 import 'package:iconify_flutter/icons/heroicons.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
@@ -99,106 +98,6 @@ class DashboardPage extends StatelessWidget {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: NotificationsPage(),
                           ));
-                    },
-                  ),
-                  IconButton(
-                    icon: const Iconify(AkarIcons.settings_horizontal),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          useRootNavigator: true,
-                          isScrollControlled: true,
-                          constraints: BoxConstraints(
-                            maxHeight: MediaQuery.of(context).size.height * 0.6,
-                          ),
-                          barrierColor: Colors.white.withOpacity(0.5),
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20),
-                            ),
-                          ),
-                          builder: (context) {
-                            return Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  children: [
-                                    const Gap(20),
-                                    MaterialButton(
-                                      elevation: 0,
-                                      color: Colors.blueGrey.withOpacity(0.2),
-                                      padding:
-                                          const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      onPressed: () {},
-                                      child: const Row(
-                                        children: [
-                                          Iconify(Heroicons.document_magnifying_glass_solid),
-                                          Gap(8),
-                                          Text('Solutions'),
-                                        ],
-                                      ),
-                                    ),
-                                    const Gap(8),
-                                    MaterialButton(
-                                      elevation: 0,
-                                      color: Colors.blueGrey.withOpacity(0.2),
-                                      padding:
-                                          const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      onPressed: () {},
-                                      child: const Row(
-                                        children: [
-                                          Iconify(Fa6Solid.magnifying_glass_chart),
-                                          Gap(8),
-                                          Text('Status'),
-                                        ],
-                                      ),
-                                    ),
-                                    const Gap(35),
-                                    GridView.count(
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      crossAxisCount: 3,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10,
-                                      childAspectRatio: 2 / 2.4,
-                                      children: [
-                                        for ((String title, String imgUrl) itm in [
-                                          ('WTV', MockData.randomImageAvatar()),
-                                          ('Posts', MockData.randomImageAvatar()),
-                                          ('Portfolio', MockData.randomImageAvatar()),
-                                          ('Jobs', MockData.randomImageAvatar()),
-                                          ('Places', MockData.randomImageAvatar()),
-                                          ('Community', MockData.randomImageAvatar()),
-                                        ])
-                                          Column(
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.blueGrey.withOpacity(0.2),
-                                                  image: DecorationImage(
-                                                    image: ExtendedNetworkImageProvider(
-                                                      itm.$2,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const Gap(8),
-                                              Text(itm.$1),
-                                            ],
-                                          )
-                                      ],
-                                    ),
-                                  ],
-                                ));
-                          });
                     },
                   ),
                   IconButton(

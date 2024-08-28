@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -8,6 +9,7 @@ import '../../../../config/mocks/mocks.dart';
 import '../../../../config/widgets/animated_search_field.dart';
 import '../../../../config/widgets/post_tiles/flick.dart';
 import '../../../../config/widgets/post_tiles/photo.dart';
+import '../../../../config/widgets/post_tiles/portfolio_video.dart';
 import '../../../../config/widgets/post_tiles/video.dart';
 import '../../../../config/widgets/tab_bar.dart';
 
@@ -60,13 +62,13 @@ class HomePageActivitiesPage extends StatelessWidget {
     return const WhatsevrTabBarWithViews(
       tabs: [
         'History',
-        'Downloads',
-        'Saved Videos',
+        'Offers',
+        'Saved',
         'Playlists',
       ],
       tabViews: [
         Text('History'),
-        Text('Downloads'),
+        Text('Offers'),
         Text('Playlists'),
         Text('Saved'),
       ],
@@ -165,7 +167,9 @@ class HomePageForYouPage extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.only(
                       left: index == 0 ? PadHorizontal.padding : 0.0,
-                      right: index == children.length - 1 ? PadHorizontal.padding : 0.0),
+                      right: index == children.length - 1
+                          ? PadHorizontal.padding
+                          : 0.0),
                   child: children[index],
                 );
               },
@@ -178,24 +182,37 @@ class HomePageForYouPage extends StatelessWidget {
         ),
         const Gap(8.0),
         Expanded(
-          child: PadHorizontal(
-            child: WaterfallFlow.builder(
-              //cacheExtent: 0.0,
+          child: GridView.custom(
+            gridDelegate: SliverQuiltedGridDelegate(
+              crossAxisCount: 3,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
+              repeatPattern: QuiltedGridRepeatPattern.inverted,
+              pattern: [
+                QuiltedGridTile(
+                  2,
+                  1,
+                ),
+                QuiltedGridTile(1, 1),
+                QuiltedGridTile(1, 1),
+                QuiltedGridTile(1, 1),
+                QuiltedGridTile(1, 1),
+                QuiltedGridTile(2, 3),
+              ],
+            ),
+            childrenDelegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index % 6 == 0) return const FlickPostTile();
 
-              gridDelegate: const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                if (index % 3 == 0) return const PhotoPostTile();
-                if (index % 3 == 1) return const FlickPostTile();
-                if (index % 3 == 2) return const VideoPostTile();
-                return const SizedBox();
+                if (index % 6 == 1) return const PhotoPostTile();
+                if (index % 6 == 2) return const PhotoPostTile();
+                if (index % 6 == 3) return const PhotoPostTile();
+                if (index % 6 == 4) return const VideoPostTile();
+                return const PortfolioVideoPostTile();
               },
             ),
           ),
-        ),
+        )
       ],
     );
   }

@@ -19,6 +19,7 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           PadHorizontal(
@@ -205,7 +206,8 @@ class AccountPage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(left: index == 0 ? 8 : 0, right: 8),
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? 8 : 0, right: 8),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -224,13 +226,15 @@ class AccountPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe', style: TextStyle(fontSize: 16)),
+                                  const Text('John Doe',
+                                      style: TextStyle(fontSize: 16)),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -247,10 +251,11 @@ class AccountPage extends StatelessWidget {
                 ),
                 const Gap(8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: PadHorizontal.padding),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: PadHorizontal.padding),
                   decoration: BoxDecoration(
-                    color: Colors.blueGrey.withOpacity(0.15),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: DefaultTabController(
                     length: 7,
@@ -279,17 +284,37 @@ class AccountPage extends StatelessWidget {
                                   ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Working', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                                  (
+                                    'Working',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
                                   ('Email', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Birthday', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Join On', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Portfolio link', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Add info', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Total Connection', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                                  (
+                                    'Birthday',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Join On',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Account link',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Add info',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  (
+                                    'Total Connection',
+                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                                  ),
+                                  ('Total Post', '2524'),
                                 ])
                                   CheckboxListTile(
                                     visualDensity: VisualDensity.compact,
-                                    controlAffinity: ListTileControlAffinity.leading,
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
                                     checkColor: Colors.white,
                                     activeColor: Colors.black,
                                     value: false,
@@ -341,11 +366,12 @@ class _CoverVideoState extends State<CoverVideo> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
 
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
@@ -380,7 +406,8 @@ class _CoverVideoState extends State<CoverVideo> {
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (context) {
-                if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
+                if (controller.value.position == Duration.zero &&
+                    !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     MockData.randomImage(),
                     width: double.infinity,
