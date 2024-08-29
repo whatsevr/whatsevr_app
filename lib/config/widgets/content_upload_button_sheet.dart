@@ -16,12 +16,12 @@ showContentUploadBottomSheet(BuildContext context) {
           top: Radius.circular(20),
         ),
       ),
-      builder: (context) {
+      builder: (BuildContext context) {
         return Container(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 const Gap(20),
                 MaterialButton(
                   elevation: 0,
@@ -37,7 +37,7 @@ showContentUploadBottomSheet(BuildContext context) {
                     );
                   },
                   child: const Row(
-                    children: [
+                    children: <Widget>[
                       Iconify(Ic.round_history_toggle_off),
                       Gap(8),
                       Text('Upload Memories'),
@@ -59,7 +59,7 @@ showContentUploadBottomSheet(BuildContext context) {
                     );
                   },
                   child: const Row(
-                    children: [
+                    children: <Widget>[
                       Iconify(Mdi.camera_image),
                       Gap(8),
                       Text('Upload Photo'),
@@ -81,7 +81,7 @@ showContentUploadBottomSheet(BuildContext context) {
                     );
                   },
                   child: const Row(
-                    children: [
+                    children: <Widget>[
                       Iconify(Ic.sharp_slow_motion_video),
                       Gap(8),
                       Text('Upload Wtv Video'),
@@ -103,7 +103,7 @@ showContentUploadBottomSheet(BuildContext context) {
                     );
                   },
                   child: const Row(
-                    children: [
+                    children: <Widget>[
                       Iconify(Pepicons.play_print),
                       Gap(8),
                       Text('Upload Flick Video'),
@@ -112,6 +112,6 @@ showContentUploadBottomSheet(BuildContext context) {
                 ),
                 const Gap(8),
               ],
-            ));
-      });
+            ),);
+      },);
 }

@@ -6,10 +6,10 @@ import 'package:iconify_flutter/icons/ion.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 
-import '../../mocks/mocks.dart';
-import '../animated_like_icon_button.dart';
-import '../feed_players/flick_player.dart';
-import '../pad_horizontal.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/flick_player.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 class FlickFrame extends StatelessWidget {
   const FlickFrame({super.key});
@@ -17,13 +17,13 @@ class FlickFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         PadHorizontal(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   CircleAvatar(
                     backgroundImage: NetworkImage(MockData.randomImageAvatar()),
                   ),
@@ -31,7 +31,7 @@ class FlickFrame extends StatelessWidget {
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                         ),
@@ -57,9 +57,9 @@ class FlickFrame extends StatelessWidget {
         const Gap(8),
         PadHorizontal(
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const AnimatedLikeIconButton(),
                   const Text('2.5M'),
                   IconButton(

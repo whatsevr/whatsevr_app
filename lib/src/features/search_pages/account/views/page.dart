@@ -7,8 +7,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
-import '../../../../../config/routes/routes_name.dart';
-import '../../../../../config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
 
@@ -23,15 +23,15 @@ class AccountSearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           const SizedBox(height: 8),
           Row(
-            children: [
+            children: <Widget>[
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: WhatsevrAnimatedSearchField(
-                    hintTexts: hintTexts ?? [],
+                    hintTexts: hintTexts ?? <String>[],
                     showBackButton: true,
                   ),
                 ),
@@ -49,7 +49,7 @@ class AccountSearchPage extends StatelessWidget {
                           top: Radius.circular(20),
                         ),
                       ),
-                      builder: (context) {
+                      builder: (BuildContext context) {
                         return IntrinsicHeight(
                           child: Container(
                               decoration: const BoxDecoration(
@@ -57,7 +57,7 @@ class AccountSearchPage extends StatelessWidget {
                                 borderRadius: BorderRadius.vertical(
                                   top: Radius.circular(20),
                                 ),
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.grey,
                                     blurRadius: 4,
@@ -67,21 +67,21 @@ class AccountSearchPage extends StatelessWidget {
                               ),
                               padding: const EdgeInsets.all(20),
                               child: Column(
-                                children: [
+                                children: <Widget>[
                                   const Gap(20),
                                   MaterialButton(
                                     elevation: 0,
                                     color: Colors.blueGrey.withOpacity(0.2),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18),
+                                        horizontal: 25, vertical: 18,),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     onPressed: () {},
                                     child: const Row(
-                                      children: [
+                                      children: <Widget>[
                                         Iconify(Heroicons
-                                            .document_magnifying_glass_solid),
+                                            .document_magnifying_glass_solid,),
                                         Gap(8),
                                         Text('Serve'),
                                       ],
@@ -92,15 +92,15 @@ class AccountSearchPage extends StatelessWidget {
                                     elevation: 0,
                                     color: Colors.blueGrey.withOpacity(0.2),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18),
+                                        horizontal: 25, vertical: 18,),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     onPressed: () {},
                                     child: const Row(
-                                      children: [
+                                      children: <Widget>[
                                         Iconify(
-                                            Fa6Solid.magnifying_glass_chart),
+                                            Fa6Solid.magnifying_glass_chart,),
                                         Gap(8),
                                         Text('Status'),
                                       ],
@@ -111,15 +111,15 @@ class AccountSearchPage extends StatelessWidget {
                                     elevation: 0,
                                     color: Colors.blueGrey.withOpacity(0.2),
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18),
+                                        horizontal: 25, vertical: 18,),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     onPressed: () {},
                                     child: const Row(
-                                      children: [
+                                      children: <Widget>[
                                         Iconify(
-                                            Fa6Solid.magnifying_glass_chart),
+                                            Fa6Solid.magnifying_glass_chart,),
                                         Gap(8),
                                         Text('Location'),
                                       ],
@@ -127,9 +127,9 @@ class AccountSearchPage extends StatelessWidget {
                                   ),
                                   const Gap(35),
                                 ],
-                              )),
+                              ),),
                         );
-                      });
+                      },);
                 },
               ),
             ],
@@ -139,14 +139,14 @@ class AccountSearchPage extends StatelessWidget {
             child: WhatsevrTabBarWithViews(
               tabAlignment: TabAlignment.start,
               isScrollable: true,
-              tabs: [
+              tabs: <String>[
                 'Recents',
                 'Accounts',
                 'Portfolio',
                 'Community',
                 'Offers',
               ],
-              tabViews: [
+              tabViews: <Widget>[
                 _RecentView(),
                 _AccountsView(),
                 _PortfolioView(),
@@ -169,24 +169,24 @@ class _OffersView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return Column(
-          children: [
+          children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage: ExtendedNetworkImageProvider(
                       MockData.randomImageAvatar(),
-                    )),
+                    ),),
                 const Gap(16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'Username',
                         style: Theme.of(context).textTheme.titleLarge,
@@ -202,7 +202,7 @@ class _OffersView extends StatelessWidget {
             ),
             const Gap(8),
             Stack(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   MockData.randomImageAvatar(),
                   width: double.infinity,
@@ -230,12 +230,12 @@ class _OffersView extends StatelessWidget {
             ),
             const Gap(8),
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(8),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text('Caption'),
                       Text('Joined On 4 April, MU 334'),
                       Text('#tag1 #tag2 #tag3'),
@@ -268,28 +268,28 @@ class _CommunityView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
             AppNavigationService.newRoute(RoutesName.community);
           },
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
-                      )),
+                      ),),
                   const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -326,7 +326,7 @@ class _CommunityView extends StatelessWidget {
               ),
               const Gap(8),
               Stack(
-                children: [
+                children: <Widget>[
                   ExtendedImage.network(
                     MockData.randomImageAvatar(),
                     width: double.infinity,
@@ -354,12 +354,12 @@ class _CommunityView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text('Caption'),
                         Text('Joined On 4 April, MU 334'),
                         Text('#tag1 #tag2 #tag3'),
@@ -393,28 +393,28 @@ class _PortfolioView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
             AppNavigationService.newRoute(RoutesName.portfolio);
           },
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
-                      )),
+                      ),),
                   const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -451,7 +451,7 @@ class _PortfolioView extends StatelessWidget {
               ),
               const Gap(8),
               Stack(
-                children: [
+                children: <Widget>[
                   ExtendedImage.network(
                     MockData.randomImageAvatar(),
                     width: double.infinity,
@@ -479,12 +479,12 @@ class _PortfolioView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text('Caption'),
                         Text('Joined On 4 April, MU 334'),
                         Text('#tag1 #tag2 #tag3'),
@@ -518,26 +518,26 @@ class _AccountsView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
-                      )),
+                      ),),
                   const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -565,22 +565,22 @@ class _AccountsView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         RichText(
                           text: const TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: 'Bio\n',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text:
                                         'Looking for a Motion Graphic Artist in Delhi Studio XYZ. Looking for a Motion Graphic Artist in Delhi',
@@ -597,7 +597,7 @@ class _AccountsView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text: 'Delhi',
                                     style: TextStyle(
@@ -613,7 +613,7 @@ class _AccountsView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text: 'Online',
                                     style: TextStyle(
@@ -662,24 +662,24 @@ class _RecentView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return Column(
-          children: [
+          children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage: ExtendedNetworkImageProvider(
                       MockData.randomImageAvatar(),
-                    )),
+                    ),),
                 const Gap(16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'Username',
                         style: Theme.of(context).textTheme.titleLarge,
@@ -716,7 +716,7 @@ class _RecentView extends StatelessWidget {
             ),
             const Gap(8),
             Stack(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   MockData.randomImageAvatar(),
                   width: double.infinity,
@@ -744,12 +744,12 @@ class _RecentView extends StatelessWidget {
             ),
             const Gap(8),
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(8),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text('Caption'),
                       Text('Joined On 4 April, MU 334'),
                       Text('#tag1 #tag2 #tag3'),

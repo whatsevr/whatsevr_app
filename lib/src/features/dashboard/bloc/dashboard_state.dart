@@ -13,5 +13,5 @@ class DashboardState extends Equatable {
   }
 
   @override
-  List<Object> get props => [currentDashboardView];
+  List<Object> get props => <Object>[currentDashboardView];
 }

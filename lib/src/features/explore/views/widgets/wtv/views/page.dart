@@ -10,8 +10,8 @@ class ExplorePageWtvPage extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Gap(8),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Gap(8),
+      itemBuilder: (BuildContext context, int index) {
         return const VideoFrame();
       },
     );

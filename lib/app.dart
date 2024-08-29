@@ -6,7 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});

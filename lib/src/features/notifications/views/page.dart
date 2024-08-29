@@ -13,7 +13,7 @@ class NotificationsPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const PadHorizontal(
             child: Text(
               'Notifications',
@@ -29,7 +29,7 @@ class NotificationsPage extends StatelessWidget {
             child: WhatsevrTabBar(
               tabAlignment: TabAlignment.start,
               isScrollable: true,
-              tabs: [
+              tabs: <String>[
                 'All',
                 'Comments',
                 'Tags/mentions',
@@ -38,10 +38,10 @@ class NotificationsPage extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     if (index == 0 || index == 3 || index == 6)
                       PadHorizontal(
                         child: Text(
@@ -67,13 +67,13 @@ class NotificationsPage extends StatelessWidget {
                         ),
                       ),
                       title: const Text(
-                          'Mr John Doe, liked your post XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                          'Mr John Doe, liked your post XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',),
                       trailing: const Icon(Icons.more_vert),
                     ),
                   ],
                 );
               },
-              separatorBuilder: (context, index) {
+              separatorBuilder: (BuildContext context, int index) {
                 return const Gap(8);
               },
               itemCount: 30,

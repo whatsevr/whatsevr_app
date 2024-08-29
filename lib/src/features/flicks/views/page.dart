@@ -4,7 +4,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/flicks/views/widgets/player.dart';
 
-import '../../../../config/widgets/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 
 class FlicksPage extends StatelessWidget {
   const FlicksPage({super.key});
@@ -16,10 +16,10 @@ class FlicksPage extends StatelessWidget {
       body: PageView.builder(
         scrollDirection: Axis.vertical,
         itemCount: MockData.portraitVideos.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return Stack(
             alignment: Alignment.center,
-            children: [
+            children: <Widget>[
               //Reels
               FlicksPlayer(
                 videoUrl: MockData.portraitVideos[index],
@@ -31,11 +31,11 @@ class FlicksPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: <Widget>[
                       const Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
-                        children: [
+                        children: <Widget>[
                           AnimatedLikeIconButton(
                             size: 30,
                           ),
@@ -47,9 +47,9 @@ class FlicksPage extends StatelessWidget {
                       ),
                       const Gap(16),
                       Column(
-                        children: [
+                        children: <Widget>[
                           Row(
-                            children: [
+                            children: <Widget>[
                               CircleAvatar(
                                 radius: 15,
                                 backgroundImage: NetworkImage(MockData.imageAvatar),
@@ -58,7 +58,7 @@ class FlicksPage extends StatelessWidget {
                               const Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: <Widget>[
                                     Text('Username'),
                                     Text('Caption'),
                                   ],
@@ -68,7 +68,7 @@ class FlicksPage extends StatelessWidget {
                             ],
                           ),
                           const Gap(8),
-                          Row(children: [
+                          Row(children: <Widget>[
                             const Gap(8),
                             CircleAvatar(
                               radius: 10,
@@ -80,7 +80,7 @@ class FlicksPage extends StatelessWidget {
                               icon: const Icon(Icons.library_music),
                               onPressed: () {},
                             ),
-                          ]),
+                          ],),
                         ],
                       ),
                       const Gap(16),

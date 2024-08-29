@@ -6,5 +6,5 @@ sealed class ChatsState extends Equatable {
 
 final class ChatsInitial extends ChatsState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

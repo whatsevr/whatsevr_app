@@ -25,7 +25,7 @@ class MockData {
   }
 
   static List<String> get portraitVideos {
-    return {
+    return <String>{
       'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2F_muskan_023_-20240323-0001.mp4?alt=media&token=1236edd4-8779-4dcd-bc50-b0767d48c610',
       'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2Fitsnoah.d-20240323-0001.mp4?alt=media&token=ec00c766-61f4-40d3-b289-3a60c5be3b92',
       'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2Ftrisara_restaurant-20240323-0001.mp4?alt=media&token=55009adc-5c45-4f27-8612-9ecbc90d9db6',

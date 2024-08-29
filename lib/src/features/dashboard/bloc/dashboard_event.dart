@@ -10,5 +10,5 @@ class TabChanged extends DashboardEvent {
   const TabChanged({required this.newView});
 
   @override
-  List<Object> get props => [newView];
+  List<Object> get props => <Object>[newView];
 }

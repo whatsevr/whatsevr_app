@@ -6,5 +6,5 @@ sealed class NotificationState extends Equatable {
 
 final class NotificationInitial extends NotificationState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

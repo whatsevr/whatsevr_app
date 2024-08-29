@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/flick.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/photo.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
-import '../../../../../../../config/widgets/post_tiles/flick.dart';
-import '../../../../../../../config/widgets/post_tiles/photo.dart';
-import '../../../../../../../config/widgets/post_tiles/portfolio_video.dart';
-import '../../../../../../../config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 
 class ExplorePageMediaPage extends StatelessWidget {
   const ExplorePageMediaPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const WhatsevrTabBarWithViews(tabs: [
+    return const WhatsevrTabBarWithViews(tabs: <String>[
       'Explore',
       'Flicks',
       'Posts',
-    ], tabViews: [
+    ], tabViews: <Widget>[
       _ExploreView(),
       _FlicksView(),
       _PostsView(),
-    ]);
+    ],);
   }
 }
 
@@ -37,8 +35,8 @@ class _PostsView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Gap(8),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Gap(8),
+      itemBuilder: (BuildContext context, int index) {
         return const PhotoFrame();
       },
     );
@@ -53,8 +51,8 @@ class _FlicksView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Gap(8),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Gap(8),
+      itemBuilder: (BuildContext context, int index) {
         return const FlickFrame();
       },
     );
@@ -73,7 +71,7 @@ class _ExploreView extends StatelessWidget {
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
-          pattern: [
+          pattern: <QuiltedGridTile>[
             QuiltedGridTile(2, 1),
             QuiltedGridTile(1, 1),
             QuiltedGridTile(1, 1),
@@ -82,7 +80,7 @@ class _ExploreView extends StatelessWidget {
           ],
         ),
         childrenDelegate: SliverChildBuilderDelegate(
-          (context, index) {
+          (BuildContext context, int index) {
             if (index % 5 == 0) return const FlickPostTile();
             if (index % 5 == 1) return const PhotoPostTile();
             if (index % 5 == 2) return const PhotoPostTile();

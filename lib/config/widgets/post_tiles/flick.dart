@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 
-import '../../mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class FlickPostTile extends StatelessWidget {
   const FlickPostTile({super.key});
@@ -11,7 +11,7 @@ class FlickPostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         Container(
           decoration: BoxDecoration(
             color: Colors.grey,

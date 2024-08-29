@@ -10,7 +10,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       body: PadHorizontal(
         child: ListView(
-          children: [
+          children: <Widget>[
             const Text(
               'Settings',
               style: TextStyle(
@@ -28,9 +28,9 @@ class SettingsPage extends StatelessWidget {
             ),
             const Gap(8),
             Builder(
-              builder: (context) {
-                List<Widget> children = [
-                  for (var i = 0; i < 5; i++)
+              builder: (BuildContext context) {
+                List<Widget> children = <Widget>[
+                  for (int i = 0; i < 5; i++)
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -39,9 +39,9 @@ class SettingsPage extends StatelessWidget {
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Row(
-                            children: [
+                            children: <Widget>[
                               const Text(
                                 'Camera',
                                 style: TextStyle(
@@ -52,7 +52,7 @@ class SettingsPage extends StatelessWidget {
                               const Spacer(),
                               Switch(
                                 value: true,
-                                onChanged: (value) {},
+                                onChanged: (bool value) {},
                               ),
                             ],
                           ),
@@ -71,8 +71,8 @@ class SettingsPage extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: children.length,
-                  separatorBuilder: (context, index) => const Gap(8),
-                  itemBuilder: (context, index) => children[index],
+                  separatorBuilder: (BuildContext context, int index) => const Gap(8),
+                  itemBuilder: (BuildContext context, int index) => children[index],
                 );
               },
             ),
@@ -93,7 +93,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Professional Mode',
                     style: TextStyle(
@@ -128,7 +128,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Contact Us',
                     style: TextStyle(
@@ -155,7 +155,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'About Us',
                     style: TextStyle(
@@ -190,7 +190,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Add Account',
                     style: TextStyle(
@@ -217,7 +217,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Log Out',
                     style: TextStyle(
@@ -237,7 +237,7 @@ class SettingsPage extends StatelessWidget {
               ),
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Log Out of All Accounts',
                     style: TextStyle(

@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -14,12 +13,11 @@ import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
 
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/content_upload_button_sheet.dart';
-import '../../account/views/page.dart';
-import '../../chats/views/page.dart';
-import '../../explore/views/page.dart';
-import '../../home/views/page.dart';
+import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:whatsevr_app/src/features/chats/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/page.dart';
+import 'package:whatsevr_app/src/features/home/views/page.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -27,22 +25,22 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DashboardBloc(),
-      child: Builder(builder: (context) {
+      create: (BuildContext context) => DashboardBloc(),
+      child: Builder(builder: (BuildContext context) {
         return buildPage(context);
-      }),
+      },),
     );
   }
 
   Widget buildPage(BuildContext context) {
     return BlocBuilder<DashboardBloc, DashboardState>(
-      builder: (context, state) {
+      builder: (BuildContext context, DashboardState state) {
         return Scaffold(
           body: state.currentDashboardView,
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              boxShadow: [
+              boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 5,
@@ -52,14 +50,14 @@ class DashboardPage extends StatelessWidget {
               ],
             ),
             child: Builder(
-              builder: (context) {
-                List<Widget> children = [
+              builder: (BuildContext context) {
+                List<Widget> children = <Widget>[
                   IconButton(
                     icon: const Iconify(MaterialSymbols.explore),
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: ExplorePage(),
-                          ));
+                          ),);
                     },
                   ),
                   IconButton(
@@ -67,7 +65,7 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: HomePage(),
-                          ));
+                          ),);
                     },
                   ),
                   IconButton(
@@ -81,7 +79,7 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: FlicksPage(),
-                          ));
+                          ),);
                     },
                   ),
                   IconButton(
@@ -89,7 +87,7 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: ChatsPage(),
-                          ));
+                          ),);
                     },
                   ),
                   IconButton(
@@ -97,7 +95,7 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () {
                       context.read<DashboardBloc>().add(const TabChanged(
                             newView: NotificationsPage(),
-                          ));
+                          ),);
                     },
                   ),
                   IconButton(
@@ -105,7 +103,7 @@ class DashboardPage extends StatelessWidget {
                     onPressed: () {
                       context.read<DashboardBloc>().add(TabChanged(
                             newView: AccountPage(),
-                          ));
+                          ),);
                     },
                   ),
                 ];
@@ -113,10 +111,10 @@ class DashboardPage extends StatelessWidget {
                   height: 60,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (BuildContext context, int index) {
                       return children[index];
                     },
-                    separatorBuilder: (context, index) {
+                    separatorBuilder: (BuildContext context, int index) {
                       return const Gap(10);
                     },
                     itemCount: children.length,

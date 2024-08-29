@@ -5,8 +5,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class CommunityPage extends StatelessWidget {
   CommunityPage({super.key});
@@ -16,18 +16,18 @@ class CommunityPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: ListView(
               shrinkWrap: true,
-              children: [
+              children: <Widget>[
                 Stack(
-                  children: [
+                  children: <Widget>[
                     AspectRatio(
                       aspectRatio: 16 / 9,
                       child: PageView(
                         controller: controller,
-                        children: [
+                        children: <Widget>[
                           CoverVideo(videoUrl: MockData.demoVideo),
                           CoverVideo(videoUrl: MockData.demoVideo),
                           ExtendedImage.network(
@@ -70,7 +70,7 @@ class CommunityPage extends StatelessWidget {
                               activeDotColor: Colors.black,
                               dotColor: Colors.white,
                             ), // your preferred effect
-                            onDotClicked: (index) {}),
+                            onDotClicked: (int index) {},),
                       ),
                     ),
                     Positioned(
@@ -92,14 +92,14 @@ class CommunityPage extends StatelessWidget {
                 const Gap(8),
                 PadHorizontal(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text('Community X', style: TextStyle(fontSize: 24)),
                             Text(' @Communityx',
-                                style: TextStyle(fontSize: 16)),
+                                style: TextStyle(fontSize: 16),),
                             Gap(8),
                           ],
                         ),
@@ -145,7 +145,7 @@ class CommunityPage extends StatelessWidget {
                 const Gap(8),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Icon(Icons.circle_rounded, size: 16, color: Colors.green),
                     Gap(8),
                     Text(
@@ -159,7 +159,7 @@ class CommunityPage extends StatelessWidget {
                 const Gap(8),
                 const PadHorizontal(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
                       Spacer(),
                       Text('See All', style: TextStyle(fontSize: 14)),
@@ -171,13 +171,13 @@ class CommunityPage extends StatelessWidget {
                   height: 200,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (BuildContext context, int index) {
                       return Column(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: index == 0 ? 8 : 0, right: 8),
+                                  left: index == 0 ? 8 : 0, right: 8,),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -185,7 +185,7 @@ class CommunityPage extends StatelessWidget {
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
@@ -197,14 +197,14 @@ class CommunityPage extends StatelessWidget {
                                   ),
                                   const Gap(8),
                                   const Text('John Doe',
-                                      style: TextStyle(fontSize: 16)),
+                                      style: TextStyle(fontSize: 16),),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                                borderRadius: BorderRadius.circular(8),),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -213,7 +213,7 @@ class CommunityPage extends StatelessWidget {
                         ],
                       );
                     },
-                    separatorBuilder: (context, index) {
+                    separatorBuilder: (BuildContext context, int index) {
                       return const Gap(8);
                     },
                     itemCount: 10,
@@ -222,7 +222,7 @@ class CommunityPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: PadHorizontal.padding),
+                      horizontal: PadHorizontal.padding,),
                   decoration: BoxDecoration(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(12)),
@@ -230,12 +230,12 @@ class CommunityPage extends StatelessWidget {
                   child: const DefaultTabController(
                     length: 7,
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         Gap(12),
                         WhatsevrTabBar(
                           tabAlignment: TabAlignment.start,
                           isScrollable: true,
-                          tabs: [
+                          tabs: <String>[
                             'About',
                             'Media',
                             'Wtv',
@@ -248,14 +248,14 @@ class CommunityPage extends StatelessWidget {
                         ),
                         Gap(8),
                         IndexedStack(
-                          children: [
+                          children: <Widget>[
                             _AboutView(),
                           ],
                         ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -271,16 +271,16 @@ class _AboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         const Gap(8),
 
         ///Join and Leave
         Row(
-          children: [
+          children: <Widget>[
             Expanded(
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),),
                 color: Colors.black,
                 onPressed: () {},
                 child:
@@ -291,11 +291,11 @@ class _AboutView extends StatelessWidget {
             Expanded(
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),),
                 color: Colors.blue,
                 onPressed: () {},
                 child: const Text('Message',
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(color: Colors.white),),
               ),
             ),
           ],
@@ -311,13 +311,13 @@ class _AboutView extends StatelessWidget {
               padding: EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Gap(8),
                   Text('Status',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16),),
                   Gap(8),
                 ],
               ),
@@ -336,20 +336,20 @@ class _AboutView extends StatelessWidget {
               padding: EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Gap(8),
                   Text('Serve',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16),),
                   Gap(8),
                 ],
               ),
             ),
           ),
         ),
-        for ((String?, String) item in [
+        for ((String?, String) item in <(String?, String)>[
           ('Bio', 'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
           (
             'Description',
@@ -378,11 +378,11 @@ class _AboutView extends StatelessWidget {
             checkColor: Colors.white,
             activeColor: Colors.black,
             value: false,
-            onChanged: (value) {},
+            onChanged: (bool? value) {},
             title: Text('${item.$1}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
             subtitle: Text(
-              '${item.$2}',
+              item.$2,
             ),
             isThreeLine: true,
           ),
@@ -429,7 +429,7 @@ class _CoverVideoState extends State<CoverVideo> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         InkWell(
           onTap: () {
             setState(() {
@@ -443,7 +443,7 @@ class _CoverVideoState extends State<CoverVideo> {
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 if (controller.value.position == Duration.zero &&
                     !controller.value.isPlaying) {
                   return ExtendedImage.network(

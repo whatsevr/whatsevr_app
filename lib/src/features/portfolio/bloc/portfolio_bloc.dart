@@ -6,7 +6,7 @@ part 'portfolio_state.dart';
 
 class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
   PortfolioBloc() : super(AccountInitial()) {
-    on<PortfolioEvent>((event, emit) {
+    on<PortfolioEvent>((PortfolioEvent event, Emitter<PortfolioState> emit) {
       // TODO: implement event handler
     });
   }

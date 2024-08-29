@@ -10,10 +10,10 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (context) => SplashBloc()..add(const InitialEvent()),
-      child: Builder(builder: (context) {
+      create: (BuildContext context) => SplashBloc()..add(const InitialEvent()),
+      child: Builder(builder: (BuildContext context) {
         return buildPage(context);
-      }),
+      },),
     );
   }
 
@@ -23,7 +23,7 @@ class SplashPage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Image.asset(
               'assets/images/whatsevr_app_logo.jpg',
               width: 100,

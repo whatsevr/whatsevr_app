@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 
-import '../../routes/router.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
 class WTVFeedPlayer extends StatefulWidget {
   final String? videoUrl;
@@ -47,7 +47,7 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         InkWell(
           onTap: () {
             setState(() {
@@ -61,7 +61,7 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     MockData.randomImage(),
@@ -80,7 +80,7 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black.withOpacity(0.3)),
+              backgroundColor: WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
             ),
             icon: const Icon(
               Icons.play_arrow,
@@ -97,12 +97,12 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
               });
             },
           ),
-        if (controller.value.isPlaying) ...[
+        if (controller.value.isPlaying) ...<Widget>[
           Positioned(
             top: 8,
             right: 8,
             child: Row(
-              children: [
+              children: <Widget>[
                 InkWell(
                   onTap: () {
                     setState(() {
@@ -149,10 +149,10 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
                 color: Colors.white,
                 onPressed: () {
                   AppNavigationService.newRoute(RoutesName.fullVideoPlayer,
-                      extras: [widget.videoUrl as String]);
+                      extras: <String>[widget.videoUrl as String],);
                 },
-              )),
-        ]
+              ),),
+        ],
       ],
     );
   }

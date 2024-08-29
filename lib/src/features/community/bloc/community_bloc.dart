@@ -6,7 +6,7 @@ part 'community_state.dart';
 
 class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
   CommunityBloc() : super(AccountInitial()) {
-    on<CommunityEvent>((event, emit) {
+    on<CommunityEvent>((CommunityEvent event, Emitter<CommunityState> emit) {
       // TODO: implement event handler
     });
   }

@@ -2,16 +2,15 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/post_tiles/flick.dart';
-import '../../../../config/widgets/post_tiles/photo.dart';
-import '../../../../config/widgets/post_tiles/portfolio_video.dart';
-import '../../../../config/widgets/post_tiles/video.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/portfolio_video.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,10 +19,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           PadHorizontal(
             child: WhatsevrAnimatedSearchField(
-              hintTexts: const [
+              hintTexts: const <String>[
                 'Search for Wtv from connections',
                 'Search for Media from connections',
                 'Search for Memories from connections',
@@ -34,12 +33,12 @@ class HomePage extends StatelessWidget {
           const Gap(8.0),
           const Expanded(
             child: WhatsevrTabBarWithViews(
-              tabs: [
+              tabs: <String>[
                 'For You',
                 'Communities',
                 'Activities',
               ],
-              tabViews: [
+              tabViews: <Widget>[
                 HomePageForYouPage(),
                 HomePageCommunitiesPage(),
                 HomePageActivitiesPage(),
@@ -60,13 +59,13 @@ class HomePageActivitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WhatsevrTabBarWithViews(
-      tabs: [
+      tabs: <String>[
         'History',
         'Offers',
         'Saved',
         'Playlists',
       ],
-      tabViews: [
+      tabViews: <Widget>[
         Text('History'),
         Text('Offers'),
         Text('Playlists'),
@@ -95,13 +94,13 @@ class HomePageForYouPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         SizedBox(
           height: 120.0,
-          child: Builder(builder: (context) {
-            List<Widget> children = [
+          child: Builder(builder: (BuildContext context) {
+            List<Widget> children = <Widget>[
               Column(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -128,7 +127,7 @@ class HomePageForYouPage extends StatelessWidget {
               for (int i = 0; i < 5; i++)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -147,7 +146,7 @@ class HomePageForYouPage extends StatelessWidget {
                     ),
                     const Gap(5.0),
                     Row(
-                      children: [
+                      children: <Widget>[
                         CircleAvatar(
                           backgroundImage: ExtendedNetworkImageProvider(
                             MockData.imageAvatar,
@@ -157,28 +156,28 @@ class HomePageForYouPage extends StatelessWidget {
                         const Gap(5.0),
                         const Text('Username'),
                       ],
-                    )
+                    ),
                   ],
                 ),
             ];
             return ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: EdgeInsets.only(
                       left: index == 0 ? PadHorizontal.padding : 0.0,
                       right: index == children.length - 1
                           ? PadHorizontal.padding
-                          : 0.0),
+                          : 0.0,),
                   child: children[index],
                 );
               },
-              separatorBuilder: (context, index) {
+              separatorBuilder: (BuildContext context, int index) {
                 return const Gap(5.0);
               },
               itemCount: children.length,
             );
-          }),
+          },),
         ),
         const Gap(8.0),
         Expanded(
@@ -188,7 +187,7 @@ class HomePageForYouPage extends StatelessWidget {
               mainAxisSpacing: 2,
               crossAxisSpacing: 2,
               repeatPattern: QuiltedGridRepeatPattern.inverted,
-              pattern: [
+              pattern: <QuiltedGridTile>[
                 QuiltedGridTile(
                   2,
                   1,
@@ -201,7 +200,7 @@ class HomePageForYouPage extends StatelessWidget {
               ],
             ),
             childrenDelegate: SliverChildBuilderDelegate(
-              (context, index) {
+              (BuildContext context, int index) {
                 if (index % 6 == 0) return const FlickPostTile();
 
                 if (index % 6 == 1) return const PhotoPostTile();
@@ -212,7 +211,7 @@ class HomePageForYouPage extends StatelessWidget {
               },
             ),
           ),
-        )
+        ),
       ],
     );
   }

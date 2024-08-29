@@ -8,9 +8,9 @@ import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 import 'package:whatsevr_app/src/features/portfolio/views/page.dart';
 
-import '../../src/features/search_pages/account/views/page.dart';
-import '../../src/features/settings/views/page.dart';
-import '../../src/features/splash/views/page.dart';
+import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
+import 'package:whatsevr_app/src/features/settings/views/page.dart';
+import 'package:whatsevr_app/src/features/splash/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
 CustomTransitionPage<SlideTransition> navigateWithTransition({
@@ -103,7 +103,7 @@ class AppNavigationService {
                 child: const SplashPage(),
               );
             },
-            routes: [
+            routes: <RouteBase>[
               GoRoute(
                 name: RoutesName.dashboard,
                 path: RoutesName.dashboard,
@@ -114,7 +114,7 @@ class AppNavigationService {
                     child: const DashboardPage(),
                   );
                 },
-                routes: [
+                routes: <RouteBase>[
                   GoRoute(
                     name: RoutesName.fullVideoPlayer,
                     path: RoutesName.fullVideoPlayer,
@@ -180,7 +180,7 @@ class AppNavigationService {
                   ),
                 ],
               ),
-            ]),
+            ],),
       ],
     );
   }

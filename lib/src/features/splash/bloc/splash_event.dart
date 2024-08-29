@@ -8,5 +8,5 @@ class InitialEvent extends SplashEvent {
   const InitialEvent();
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => <Object?>[];
 }

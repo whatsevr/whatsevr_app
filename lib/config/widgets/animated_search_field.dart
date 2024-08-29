@@ -2,7 +2,7 @@ import 'package:animated_hint_textfield/animated_hint_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../routes/router.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
 class WhatsevrAnimatedSearchField extends StatefulWidget {
   final bool? readOnly;
@@ -12,7 +12,7 @@ class WhatsevrAnimatedSearchField extends StatefulWidget {
   late TextEditingController? controller;
   WhatsevrAnimatedSearchField({
     super.key,
-    this.hintTexts = const [],
+    this.hintTexts = const <String>[],
     this.readOnly,
     this.onTap,
     this.showBackButton,
@@ -39,13 +39,13 @@ class _WhatsevrAnimatedSearchFieldState extends State<WhatsevrAnimatedSearchFiel
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
-        children: [
+        children: <Widget>[
           if (widget.showBackButton ?? false)
             GestureDetector(
                 onTap: () {
                   AppNavigationService.goBack();
                 },
-                child: const Icon(Icons.arrow_back)),
+                child: const Icon(Icons.arrow_back),),
           if (widget.showBackButton != true) const Icon(Icons.search),
           const Gap(8),
           Expanded(
@@ -58,7 +58,7 @@ class _WhatsevrAnimatedSearchFieldState extends State<WhatsevrAnimatedSearchFiel
               ),
               hintTexts: widget.hintTexts,
               controller: widget.controller,
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {});
               },
             ),

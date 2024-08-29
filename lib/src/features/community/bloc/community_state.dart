@@ -6,5 +6,5 @@ sealed class CommunityState extends Equatable {
 
 final class AccountInitial extends CommunityState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

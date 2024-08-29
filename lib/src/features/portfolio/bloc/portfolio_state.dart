@@ -6,5 +6,5 @@ sealed class PortfolioState extends Equatable {
 
 final class AccountInitial extends PortfolioState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

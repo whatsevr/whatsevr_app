@@ -6,7 +6,7 @@ part 'chats_state.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   ChatsBloc() : super(ChatsInitial()) {
-    on<ChatsEvent>((event, emit) {
+    on<ChatsEvent>((ChatsEvent event, Emitter<ChatsState> emit) {
       // TODO: implement event handler
     });
   }

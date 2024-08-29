@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../explore/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/page.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';

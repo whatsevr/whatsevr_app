@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class PortfolioVideoPostTile extends StatelessWidget {
   const PortfolioVideoPostTile({super.key});
@@ -9,7 +9,7 @@ class PortfolioVideoPostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         Container(
           decoration: BoxDecoration(
             color: Colors.grey,

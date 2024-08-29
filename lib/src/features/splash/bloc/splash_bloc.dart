@@ -5,8 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 
 part 'splash_event.dart';
@@ -18,27 +18,20 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   }
 
   FutureOr<void> _onInitial(
-      InitialEvent event, Emitter<SplashState> emit) async {
+      InitialEvent event, Emitter<SplashState> emit,) async {
     await Future.delayed(const Duration(seconds: 2));
     final Otpless otplessFlutterPlugin = Otpless();
-    var arg = {
+    Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
     };
 
-    String token = "";
     await otplessFlutterPlugin.openLoginPage((result) {
-      var message = "";
-      if (result['data'] != null) {
-        token = result['response']['token'];
+      log('result XXXXX: $result');
+      if (result['data']['token'].isNotEmpty) {
+        AppNavigationService.newRoute(RoutesName.dashboard);
       } else {
-        message = result['errorMessage'];
-        SmartDialog.showToast(message);
+        SmartDialog.showToast('${result['errorMessage']}');
       }
-    }, arg);
-    if (token.isNotEmpty) {
-      AppNavigationService.newRoute(RoutesName.dashboard);
-    } else {
-      SmartDialog.showToast('Login Failed');
-    }
+    }, arg,);
   }
 }

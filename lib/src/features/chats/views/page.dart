@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});
@@ -13,10 +13,10 @@ class ChatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         PadHorizontal(
           child: WhatsevrAnimatedSearchField(
-            hintTexts: const [
+            hintTexts: const <String>[
               'Search for chats',
               'Search for groups',
               'Search for calls',
@@ -26,13 +26,13 @@ class ChatsPage extends StatelessWidget {
         ),
         const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: [
+            tabs: <String>[
               'Chats',
               'Groups',
               'Calls',
               'Requests',
             ],
-            tabViews: [
+            tabViews: <Widget>[
               ChatsPageChatsView(),
               ChatsPageGroupsView(),
               ChatsPageCallsView(),
@@ -55,8 +55,8 @@ class ChatsPageRequestsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
@@ -65,20 +65,20 @@ class ChatsPageRequestsView extends StatelessWidget {
             subtitle: Text('Request $index'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: MaterialStateProperty.all(Colors.green.withOpacity(0.2)),
-                    foregroundColor: MaterialStateProperty.all(Colors.green),
+                    backgroundColor: WidgetStateProperty.all(Colors.green.withOpacity(0.2)),
+                    foregroundColor: WidgetStateProperty.all(Colors.green),
                   ),
                   icon: const Icon(Icons.check),
                   onPressed: () {},
@@ -89,13 +89,13 @@ class ChatsPageRequestsView extends StatelessWidget {
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: MaterialStateProperty.all(Colors.red.withOpacity(0.2)),
-                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                    backgroundColor: WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
+                    foregroundColor: WidgetStateProperty.all(Colors.red),
                   ),
                   icon: const Icon(Icons.close),
                   onPressed: () {},
@@ -119,15 +119,15 @@ class ChatsPageCallsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
             ),
             title: Text('User $index'),
             subtitle: Row(
-              children: [
+              children: <Widget>[
                 Text('Call $index'),
                 const Gap(8),
                 const Text('12:00'),
@@ -154,8 +154,8 @@ class ChatsPageGroupsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImage()),
@@ -180,8 +180,8 @@ class ChatsPageChatsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),

@@ -4,9 +4,9 @@ import 'package:whatsevr_app/src/features/explore/views/widgets/media/views/page
 import 'package:whatsevr_app/src/features/explore/views/widgets/memories/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class ExplorePage extends StatelessWidget {
   const ExplorePage({super.key});
@@ -14,10 +14,10 @@ class ExplorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         PadHorizontal(
           child: WhatsevrAnimatedSearchField(
-            hintTexts: const [
+            hintTexts: const <String>[
               'Search for Wtv',
               'Search for Media',
               'Search for Memories',
@@ -27,12 +27,12 @@ class ExplorePage extends StatelessWidget {
         ),
         const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: [
+            tabs: <String>[
               'Wtv',
               'Media',
               'Memories',
             ],
-            tabViews: [
+            tabViews: <Widget>[
               ExplorePageWtvPage(),
               ExplorePageMediaPage(),
               ExplorePageMemoriesPage(),

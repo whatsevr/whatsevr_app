@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../../../../../../../config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
   const ExplorePageMemoriesPage({super.key});
@@ -18,7 +18,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
         ),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
-            children: [
+            children: <Widget>[
               Container(
                 decoration: BoxDecoration(
                   color: Colors.primaries[index % Colors.primaries.length],

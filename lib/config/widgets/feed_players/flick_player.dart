@@ -44,7 +44,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         InkWell(
           onTap: () {
             setState(() {
@@ -58,7 +58,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
           child: AspectRatio(
             aspectRatio: 9 / 16,
             child: Builder(
-              builder: (context) {
+              builder: (BuildContext context) {
                 if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     MockData.randomImage(),
@@ -77,7 +77,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black.withOpacity(0.3)),
+              backgroundColor: WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
             ),
             icon: const Icon(
               Icons.play_arrow,
@@ -94,12 +94,12 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
               });
             },
           ),
-        if (controller.value.isPlaying) ...[
+        if (controller.value.isPlaying) ...<Widget>[
           Positioned(
             top: 8,
             right: 8,
             child: Row(
-              children: [
+              children: <Widget>[
                 InkWell(
                   onTap: () {
                     setState(() {
@@ -138,7 +138,7 @@ class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
               ],
             ),
           ),
-        ]
+        ],
       ],
     );
   }

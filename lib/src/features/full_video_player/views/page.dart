@@ -41,13 +41,13 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
         VideoPlayerController.networkUrl(Uri.parse(widget.videoSrcs[currPlayIndex]));
     _videoPlayerController2 =
         VideoPlayerController.networkUrl(Uri.parse(widget.videoSrcs[currPlayIndex]));
-    await Future.wait([_videoPlayerController1.initialize(), _videoPlayerController2.initialize()]);
+    await Future.wait(<Future<void>>[_videoPlayerController1.initialize(), _videoPlayerController2.initialize()]);
     _createChewieController();
     setState(() {});
   }
 
   void _createChewieController() {
-    final List<Subtitle> subtitles = [];
+    final List<Subtitle> subtitles = <Subtitle>[];
 
     _chewieController = ChewieController(
       useRootNavigator: true,
@@ -56,7 +56,7 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
       looping: false,
       progressIndicatorDelay: bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
 
-      additionalOptions: (context) {
+      additionalOptions: (BuildContext context) {
         return <OptionItem>[
           OptionItem(
             onTap: toggleVideo,
@@ -66,7 +66,7 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
         ];
       },
       subtitle: Subtitles(subtitles),
-      subtitleBuilder: (context, dynamic subtitle) => Container(
+      subtitleBuilder: (BuildContext context, dynamic subtitle) => Container(
         padding: const EdgeInsets.all(10.0),
         child: subtitle is InlineSpan
             ? RichText(
@@ -122,7 +122,7 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
                     )
                   : const Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         CircularProgressIndicator(),
                       ],
                     ),

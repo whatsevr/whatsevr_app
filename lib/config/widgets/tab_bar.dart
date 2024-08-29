@@ -20,7 +20,7 @@ class WhatsevrTabBarWithViews extends StatelessWidget {
       length: tabs.length,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           WhatsevrTabBar(
             tabs: tabs,
             isScrollable: isScrollable,
@@ -51,7 +51,7 @@ class WhatsevrTabBar extends StatelessWidget {
       isScrollable: isScrollable ?? false,
       indicatorColor: Colors.blue,
       labelColor: Colors.black,
-      tabs: tabs.map((e) => Tab(text: e)).toList(),
+      tabs: tabs.map((String e) => Tab(text: e)).toList(),
     );
   }
 }

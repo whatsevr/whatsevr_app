@@ -2,7 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../../../../config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class FlicksPlayer extends StatefulWidget {
   final String? videoUrl;
@@ -43,7 +43,7 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         InkWell(
           onTap: () {
             setState(() {
@@ -55,10 +55,10 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
             });
           },
           child: Builder(
-            builder: (context) {
+            builder: (BuildContext context) {
               if (controller.value.isPlaying) {
                 return AspectRatio(
-                    aspectRatio: controller.value.aspectRatio, child: VideoPlayer(controller));
+                    aspectRatio: controller.value.aspectRatio, child: VideoPlayer(controller),);
               }
               return ExtendedImage.network(
                 MockData.randomImage(),

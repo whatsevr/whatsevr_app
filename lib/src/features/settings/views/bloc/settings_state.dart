@@ -6,5 +6,5 @@ sealed class SettingsState extends Equatable {
 
 final class SettingsInitial extends SettingsState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }
