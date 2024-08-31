@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -12,14 +13,36 @@ import 'package:whatsevr_app/config/widgets/feed_players/wtv_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 class VideoFrame extends StatelessWidget {
-  const VideoFrame({super.key});
+  final String? title;
+  final String? description;
+  final String? videoUrl;
+  final String? views;
+  final String? timeAgo;
+  final String? avatarUrl;
+  final String? likes;
+  final String? username;
+  final String? thumbnail;
+
+  const VideoFrame({
+    super.key,
+    this.title,
+    this.description,
+    this.videoUrl,
+    this.views,
+    this.timeAgo,
+    this.avatarUrl,
+    this.likes,
+    this.username,
+    this.thumbnail,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         WTVFeedPlayer(
-          videoUrl: MockData.demoVideo,
+          videoUrl: videoUrl,
+          thumbnail: thumbnail,
         ),
         const Gap(8),
         PadHorizontal(
@@ -28,19 +51,21 @@ class VideoFrame extends StatelessWidget {
               Row(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: NetworkImage(MockData.randomImageAvatar()),
+                    backgroundImage: ExtendedNetworkImageProvider(
+                      avatarUrl ?? MockData.imageAvatar,
+                    ),
                   ),
                   const Gap(8),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Short Fast Video Performance Test',
+                          '${title}',
                         ),
                         Gap(4),
                         Text(
-                          'Lorem ipsum TV: 2.5M views | 2 days ago',
+                          '${username}',
                         ),
                       ],
                     ),

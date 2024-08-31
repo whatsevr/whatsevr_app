@@ -31,14 +31,16 @@ class AccountPage extends StatelessWidget {
               ],
               readOnly: true,
               onTap: () {
-                AppNavigationService.newRoute(RoutesName.accountSearch,
-                    extras: const AccountSearchPage(
-                      hintTexts: <String>[
-                        'Search for Account',
-                        'Search for Portfolio',
-                        'Search for Community',
-                      ],
-                    ),);
+                AppNavigationService.newRoute(
+                  RoutesName.accountSearch,
+                  extras: const AccountSearchPage(
+                    hintTexts: <String>[
+                      'Search for Account',
+                      'Search for Portfolio',
+                      'Search for Community',
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -88,15 +90,16 @@ class AccountPage extends StatelessWidget {
                       bottom: 8,
                       child: UnconstrainedBox(
                         child: SmoothPageIndicator(
-                            controller: controller, // PageController
-                            count: 5,
-                            effect: const WormEffect(
-                              dotWidth: 8.0,
-                              dotHeight: 8.0,
-                              activeDotColor: Colors.black,
-                              dotColor: Colors.white,
-                            ), // your preferred effect
-                            onDotClicked: (int index) {},),
+                          controller: controller, // PageController
+                          count: 5,
+                          effect: const WormEffect(
+                            dotWidth: 8.0,
+                            dotHeight: 8.0,
+                            activeDotColor: Colors.black,
+                            dotColor: Colors.white,
+                          ), // your preferred effect
+                          onDotClicked: (int index) {},
+                        ),
                       ),
                     ),
                     Positioned(
@@ -207,7 +210,9 @@ class AccountPage extends StatelessWidget {
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: index == 0 ? 8 : 0, right: 8,),
+                                left: index == 0 ? 8 : 0,
+                                right: 8,
+                              ),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -226,15 +231,18 @@ class AccountPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe',
-                                      style: TextStyle(fontSize: 16),),
+                                  const Text(
+                                    'John Doe',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -252,7 +260,8 @@ class AccountPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: PadHorizontal.padding,),
+                    horizontal: PadHorizontal.padding,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(12)),
@@ -280,7 +289,8 @@ class AccountPage extends StatelessWidget {
                             Column(
                               children: <Widget>[
                                 const Gap(12),
-                                for ((String label, String info) itm in <(String, String)>[
+                                for ((String label, String info) itm
+                                    in <(String, String)>[
                                   ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
@@ -299,10 +309,6 @@ class AccountPage extends StatelessWidget {
                                   ),
                                   (
                                     'Account link',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  (
-                                    'Add info',
                                     'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
                                   ),
                                   (

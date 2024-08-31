@@ -18,20 +18,27 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   }
 
   FutureOr<void> _onInitial(
-      InitialEvent event, Emitter<SplashState> emit,) async {
+    InitialEvent event,
+    Emitter<SplashState> emit,
+  ) async {
     await Future.delayed(const Duration(seconds: 2));
+    AppNavigationService.newRoute(RoutesName.dashboard);
+    return;
     final Otpless otplessFlutterPlugin = Otpless();
     Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
     };
 
-    await otplessFlutterPlugin.openLoginPage((result) {
-      log('result XXXXX: $result');
-      if (result['data']['token'].isNotEmpty) {
-        AppNavigationService.newRoute(RoutesName.dashboard);
-      } else {
-        SmartDialog.showToast('${result['errorMessage']}');
-      }
-    }, arg,);
+    await otplessFlutterPlugin.openLoginPage(
+      (result) {
+        log('result XXXXX: $result');
+        if (result['data']['token'].isNotEmpty) {
+          AppNavigationService.newRoute(RoutesName.dashboard);
+        } else {
+          SmartDialog.showToast('${result['errorMessage']}');
+        }
+      },
+      arg,
+    );
   }
 }

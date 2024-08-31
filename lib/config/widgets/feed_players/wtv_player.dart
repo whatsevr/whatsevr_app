@@ -9,9 +9,11 @@ import 'package:whatsevr_app/config/routes/router.dart';
 
 class WTVFeedPlayer extends StatefulWidget {
   final String? videoUrl;
+  final String? thumbnail;
   const WTVFeedPlayer({
     super.key,
     required this.videoUrl,
+    this.thumbnail,
   });
 
   @override
@@ -23,11 +25,12 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
 
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
@@ -62,9 +65,10 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (BuildContext context) {
-                if (controller.value.position == Duration.zero && !controller.value.isPlaying) {
+                if (controller.value.position == Duration.zero &&
+                    !controller.value.isPlaying) {
                   return ExtendedImage.network(
-                    MockData.randomImage(),
+                    widget.thumbnail ?? MockData.imageAvatar,
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
@@ -80,7 +84,8 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
+              backgroundColor:
+                  WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
             ),
             icon: const Icon(
               Icons.play_arrow,
@@ -120,7 +125,9 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Icon(
-                      controller.value.volume == 0 ? Icons.volume_off : Icons.volume_up,
+                      controller.value.volume == 0
+                          ? Icons.volume_off
+                          : Icons.volume_up,
                       color: Colors.white,
                       size: 20,
                     ),
@@ -135,23 +142,27 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
                       color: Colors.black.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Text('CC', style: TextStyle(color: Colors.white)),
+                    child:
+                        const Text('CC', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
             ),
           ),
           Positioned(
-              bottom: 8,
-              right: 4,
-              child: IconButton(
-                icon: const Icon(Icons.fullscreen),
-                color: Colors.white,
-                onPressed: () {
-                  AppNavigationService.newRoute(RoutesName.fullVideoPlayer,
-                      extras: <String>[widget.videoUrl as String],);
-                },
-              ),),
+            bottom: 8,
+            right: 4,
+            child: IconButton(
+              icon: const Icon(Icons.fullscreen),
+              color: Colors.white,
+              onPressed: () {
+                AppNavigationService.newRoute(
+                  RoutesName.fullVideoPlayer,
+                  extras: <String>[widget.videoUrl as String],
+                );
+              },
+            ),
+          ),
         ],
       ],
     );

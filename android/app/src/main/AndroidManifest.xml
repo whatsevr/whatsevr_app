@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="otpless"
-                    android:scheme= "otpless.YAA8EYVROHZ00125AAAV"/>
+                    android:scheme= "otpless.yaa8eyvrohz00125aaav"/>
             </intent-filter>
             <!--            End-OtpLess-->
         </activity>

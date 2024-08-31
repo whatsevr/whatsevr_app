@@ -17,7 +17,7 @@ class MockData {
   }
 
   static String get imageAvatar {
-    return 'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2Fimages.png?alt=media&token=dbac761f-fe05-4107-a48c-36439eb05bf9';
+    return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/user.png';
   }
 
   static String randomImageAvatar([String? hw, int? index]) {

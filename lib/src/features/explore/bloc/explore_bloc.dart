@@ -1,0 +1,31 @@
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:whatsevr_app/config/api/models/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/recommendations.dart';
+
+part 'explore_event.dart';
+part 'explore_state.dart';
+
+class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
+  ExploreBloc() : super(ExploreState()) {
+    on<ExploreInitialEvent>(_onInitial);
+  }
+
+  Future<void> _onInitial(
+      ExploreInitialEvent event, Emitter<ExploreState> emit) async {
+    try {
+      RecommendationVideos? recommendationVideos =
+          await RecommendationApi.videos();
+      SmartDialog.showToast('${recommendationVideos?.message}');
+      emit(state.copyWith(
+        recommendationVideos: recommendationVideos?.recommendationVideos,
+      ));
+    } catch (e) {
+      SmartDialog.showToast('Error: $e');
+    }
+  }
+}

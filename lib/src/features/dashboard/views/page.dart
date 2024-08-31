@@ -10,6 +10,7 @@ import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
 
@@ -18,17 +19,27 @@ import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 import 'package:whatsevr_app/src/features/home/views/page.dart';
+import 'package:iconify_flutter/icons/game_icons.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => DashboardBloc(),
-      child: Builder(builder: (BuildContext context) {
-        return buildPage(context);
-      },),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => DashboardBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ExploreBloc()..add(ExploreInitialEvent()),
+        ),
+      ],
+      child: Builder(
+        builder: (BuildContext context) {
+          return buildPage(context);
+        },
+      ),
     );
   }
 
@@ -53,62 +64,95 @@ class DashboardPage extends StatelessWidget {
               builder: (BuildContext context) {
                 List<Widget> children = <Widget>[
                   IconButton(
-                    icon: const Iconify(MaterialSymbols.explore),
+                    icon: const Iconify(
+                      MaterialSymbols.explore,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
-                            newView: ExplorePage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            const TabChanged(
+                              newView: ExplorePage(),
+                            ),
+                          );
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Heroicons.home_solid),
+                    icon: Iconify(
+                      GameIcons.nest_eggs,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
-                            newView: HomePage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            const TabChanged(
+                              newView: HomePage(),
+                            ),
+                          );
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Ri.heart_add_fill),
+                    icon: const Iconify(
+                      Ri.heart_add_fill,
+                      size: 30,
+                    ),
                     onPressed: () {
                       showContentUploadBottomSheet(context);
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Pepicons.play_print),
+                    icon: const Iconify(
+                      Pepicons.play_print,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
-                            newView: FlicksPage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            const TabChanged(
+                              newView: FlicksPage(),
+                            ),
+                          );
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Ph.chat_circle_text_fill),
+                    icon: const Iconify(
+                      Ph.chat_circle_text_fill,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
-                            newView: ChatsPage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            const TabChanged(
+                              newView: ChatsPage(),
+                            ),
+                          );
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Ic.twotone_notifications_none),
+                    icon: const Iconify(
+                      Ic.twotone_notifications_none,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(const TabChanged(
-                            newView: NotificationsPage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            const TabChanged(
+                              newView: NotificationsPage(),
+                            ),
+                          );
                     },
                   ),
                   IconButton(
-                    icon: const Iconify(Ic.sharp_account_circle),
+                    icon: const Iconify(
+                      Ic.sharp_account_circle,
+                      size: 30,
+                    ),
                     onPressed: () {
-                      context.read<DashboardBloc>().add(TabChanged(
-                            newView: AccountPage(),
-                          ),);
+                      context.read<DashboardBloc>().add(
+                            TabChanged(
+                              newView: AccountPage(),
+                            ),
+                          );
                     },
                   ),
                 ];
                 return SizedBox(
-                  height: 60,
+                  height: 45,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {

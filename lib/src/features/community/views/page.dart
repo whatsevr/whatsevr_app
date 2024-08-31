@@ -62,15 +62,16 @@ class CommunityPage extends StatelessWidget {
                       bottom: 8,
                       child: UnconstrainedBox(
                         child: SmoothPageIndicator(
-                            controller: controller, // PageController
-                            count: 5,
-                            effect: const WormEffect(
-                              dotWidth: 8.0,
-                              dotHeight: 8.0,
-                              activeDotColor: Colors.black,
-                              dotColor: Colors.white,
-                            ), // your preferred effect
-                            onDotClicked: (int index) {},),
+                          controller: controller, // PageController
+                          count: 5,
+                          effect: const WormEffect(
+                            dotWidth: 8.0,
+                            dotHeight: 8.0,
+                            activeDotColor: Colors.black,
+                            dotColor: Colors.white,
+                          ), // your preferred effect
+                          onDotClicked: (int index) {},
+                        ),
                       ),
                     ),
                     Positioned(
@@ -98,8 +99,10 @@ class CommunityPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text('Community X', style: TextStyle(fontSize: 24)),
-                            Text(' @Communityx',
-                                style: TextStyle(fontSize: 16),),
+                            Text(
+                              ' @Communityx',
+                              style: TextStyle(fontSize: 16),
+                            ),
                             Gap(8),
                           ],
                         ),
@@ -177,7 +180,9 @@ class CommunityPage extends StatelessWidget {
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: index == 0 ? 8 : 0, right: 8,),
+                                left: index == 0 ? 8 : 0,
+                                right: 8,
+                              ),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -196,15 +201,18 @@ class CommunityPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe',
-                                      style: TextStyle(fontSize: 16),),
+                                  const Text(
+                                    'John Doe',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -222,7 +230,8 @@ class CommunityPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: PadHorizontal.padding,),
+                    horizontal: PadHorizontal.padding,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(12)),
@@ -280,7 +289,8 @@ class _AboutView extends StatelessWidget {
             Expanded(
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 color: Colors.black,
                 onPressed: () {},
                 child:
@@ -291,11 +301,14 @@ class _AboutView extends StatelessWidget {
             Expanded(
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),),
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 color: Colors.blue,
                 onPressed: () {},
-                child: const Text('Message',
-                    style: TextStyle(color: Colors.white),),
+                child: const Text(
+                  'Message',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -313,11 +326,14 @@ class _AboutView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Gap(8),
-                  Text('Status',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-                  Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16),),
+                  Text(
+                    'Status',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   Gap(8),
                 ],
               ),
@@ -338,11 +354,14 @@ class _AboutView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Gap(8),
-                  Text('Serve',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
-                  Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16),),
+                  Text(
+                    'Serve',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                    style: TextStyle(fontSize: 16),
+                  ),
                   Gap(8),
                 ],
               ),
@@ -351,10 +370,6 @@ class _AboutView extends StatelessWidget {
         ),
         for ((String?, String) item in <(String?, String)>[
           ('Bio', 'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-          (
-            'Description',
-            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
-          ),
           (
             'Invite Link',
             'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
@@ -379,8 +394,10 @@ class _AboutView extends StatelessWidget {
             activeColor: Colors.black,
             value: false,
             onChanged: (bool? value) {},
-            title: Text('${item.$1}',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+            title: Text(
+              '${item.$1}',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
             subtitle: Text(
               item.$2,
             ),
