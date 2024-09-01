@@ -22,7 +22,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     try {
       RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.videoPosts();
-      SmartDialog.showToast('${recommendationVideos?.message}');
       emit(state.copyWith(
         recommendationVideos: recommendationVideos?.recommendedVideos,
       ));

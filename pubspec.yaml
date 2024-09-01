@@ -46,6 +46,8 @@ dependencies:
   otpless_flutter: ^2.1.7
   skeletonizer: ^1.4.2
   detectable_text_field: ^3.0.2
+  supabase: ^2.3.0
+  easy_refresh: ^3.4.0
 
 
 

@@ -10,3 +10,24 @@ class CreatePostInitialEvent extends CreatePostEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SubmitPostEvent extends CreatePostEvent {
+  const SubmitPostEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PickVideoEvent extends CreatePostEvent {
+  const PickVideoEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PickThumbnailEvent extends CreatePostEvent {
+  const PickThumbnailEvent();
+
+  @override
+  List<Object?> get props => [];
+}
