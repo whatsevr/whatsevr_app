@@ -6,6 +6,8 @@ import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 void showContentUploadBottomSheet(BuildContext context) {
   showModalBottomSheet(
@@ -76,10 +78,7 @@ void showContentUploadBottomSheet(BuildContext context) {
                 borderRadius: BorderRadius.circular(10),
               ),
               onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  allowMultiple: true,
-                  type: FileType.video,
-                );
+                AppNavigationService.newRoute(RoutesName.createPost);
               },
               child: const Row(
                 children: <Widget>[

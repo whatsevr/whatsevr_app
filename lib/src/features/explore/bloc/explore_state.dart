@@ -1,7 +1,7 @@
 part of 'explore_bloc.dart';
 
 class ExploreState extends Equatable {
-  final List<RecommendationVideo>? recommendationVideos;
+  final List<RecommendedVideo>? recommendationVideos;
   const ExploreState({
     this.recommendationVideos,
   });
@@ -10,7 +10,7 @@ class ExploreState extends Equatable {
   List<Object?> get props => [recommendationVideos];
 
   ExploreState copyWith({
-    List<RecommendationVideo>? recommendationVideos,
+    List<RecommendedVideo>? recommendationVideos,
   }) {
     return ExploreState(
       recommendationVideos: recommendationVideos ?? this.recommendationVideos,

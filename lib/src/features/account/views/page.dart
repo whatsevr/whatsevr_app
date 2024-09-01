@@ -150,7 +150,7 @@ class AccountPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: PadHorizontal.padding,
+                    horizontal: PadHorizontal.paddingValue,
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
@@ -260,7 +260,7 @@ class AccountPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: PadHorizontal.padding,
+                    horizontal: PadHorizontal.paddingValue,
                   ),
                   decoration: BoxDecoration(
                     borderRadius:

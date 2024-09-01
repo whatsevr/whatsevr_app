@@ -97,87 +97,91 @@ class HomePageForYouPage extends StatelessWidget {
       children: <Widget>[
         SizedBox(
           height: 120.0,
-          child: Builder(builder: (BuildContext context) {
-            List<Widget> children = <Widget>[
-              Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      width: 100.0,
-                      alignment: Alignment.center,
-                      child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Gap(24.0),
-                ],
-              ),
-              for (int i = 0; i < 5; i++)
+          child: Builder(
+            builder: (BuildContext context) {
+              List<Widget> children = <Widget>[
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.primaries[i % Colors.primaries.length],
+                          color: Colors.blue,
                           borderRadius: BorderRadius.circular(18.0),
-                          image: DecorationImage(
-                            image: ExtendedNetworkImageProvider(
-                              MockData.randomImage(),
-                            ),
-                            fit: BoxFit.cover,
+                        ),
+                        width: 100.0,
+                        alignment: Alignment.center,
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.add,
                           ),
                         ),
-                        width: 180.0,
-                        alignment: Alignment.center,
                       ),
                     ),
-                    const Gap(5.0),
-                    Row(
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: ExtendedNetworkImageProvider(
-                            MockData.imageAvatar,
-                          ),
-                          radius: 10.0,
-                        ),
-                        const Gap(5.0),
-                        const Text('Username'),
-                      ],
-                    ),
+                    const Gap(24.0),
                   ],
                 ),
-            ];
-            return ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      left: index == 0 ? PadHorizontal.padding : 0.0,
+                for (int i = 0; i < 5; i++)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color:
+                                Colors.primaries[i % Colors.primaries.length],
+                            borderRadius: BorderRadius.circular(18.0),
+                            image: DecorationImage(
+                              image: ExtendedNetworkImageProvider(
+                                MockData.randomImage(),
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          width: 180.0,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                      const Gap(5.0),
+                      Row(
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage: ExtendedNetworkImageProvider(
+                              MockData.imageAvatar,
+                            ),
+                            radius: 10.0,
+                          ),
+                          const Gap(5.0),
+                          const Text('Username'),
+                        ],
+                      ),
+                    ],
+                  ),
+              ];
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: index == 0 ? PadHorizontal.paddingValue : 0.0,
                       right: index == children.length - 1
-                          ? PadHorizontal.padding
-                          : 0.0,),
-                  child: children[index],
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Gap(5.0);
-              },
-              itemCount: children.length,
-            );
-          },),
+                          ? PadHorizontal.paddingValue
+                          : 0.0,
+                    ),
+                    child: children[index],
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Gap(5.0);
+                },
+                itemCount: children.length,
+              );
+            },
+          ),
         ),
         const Gap(8.0),
         Expanded(

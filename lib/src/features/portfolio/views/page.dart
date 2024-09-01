@@ -62,15 +62,16 @@ class PortfolioPage extends StatelessWidget {
                       bottom: 8,
                       child: UnconstrainedBox(
                         child: SmoothPageIndicator(
-                            controller: controller, // PageController
-                            count: 5,
-                            effect: const WormEffect(
-                              dotWidth: 8.0,
-                              dotHeight: 8.0,
-                              activeDotColor: Colors.black,
-                              dotColor: Colors.white,
-                            ), // your preferred effect
-                            onDotClicked: (int index) {},),
+                          controller: controller, // PageController
+                          count: 5,
+                          effect: const WormEffect(
+                            dotWidth: 8.0,
+                            dotHeight: 8.0,
+                            activeDotColor: Colors.black,
+                            dotColor: Colors.white,
+                          ), // your preferred effect
+                          onDotClicked: (int index) {},
+                        ),
                       ),
                     ),
                     Positioned(
@@ -98,8 +99,10 @@ class PortfolioPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text('Portfolio X', style: TextStyle(fontSize: 24)),
-                            Text(' @Portfoliox',
-                                style: TextStyle(fontSize: 16),),
+                            Text(
+                              ' @Portfoliox',
+                              style: TextStyle(fontSize: 16),
+                            ),
                             Gap(8),
                           ],
                         ),
@@ -127,7 +130,7 @@ class PortfolioPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: PadHorizontal.padding,
+                    horizontal: PadHorizontal.paddingValue,
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
@@ -187,7 +190,9 @@ class PortfolioPage extends StatelessWidget {
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: index == 0 ? 8 : 0, right: 8,),
+                                left: index == 0 ? 8 : 0,
+                                right: 8,
+                              ),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -206,15 +211,18 @@ class PortfolioPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe',
-                                      style: TextStyle(fontSize: 16),),
+                                  const Text(
+                                    'John Doe',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -232,7 +240,8 @@ class PortfolioPage extends StatelessWidget {
                 const Gap(8),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: PadHorizontal.padding,),
+                    horizontal: PadHorizontal.paddingValue,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(12)),
@@ -276,13 +285,17 @@ class PortfolioPage extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Gap(8),
-                                          Text('Status',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,),),
                                           Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16),),
+                                            'Status',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                           Gap(8),
                                         ],
                                       ),
@@ -303,20 +316,25 @@ class PortfolioPage extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Gap(8),
-                                          Text('Serve',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,),),
                                           Text(
-                                              'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                              style: TextStyle(fontSize: 16),),
+                                            'Serve',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                           Gap(8),
                                         ],
                                       ),
                                     ),
                                   ),
                                 ),
-                                for ((String label, String info) itm in <(String, String)>[
+                                for ((String label, String info) itm
+                                    in <(String, String)>[
                                   ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
                                   ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
