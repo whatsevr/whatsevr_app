@@ -241,10 +241,11 @@ class CommunityPage extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Gap(12),
-                        WhatsevrTabBar(
+                        WhatsevrTabBarWithViews(
+                          shrinkViews: true,
                           tabAlignment: TabAlignment.start,
-                          isScrollable: true,
-                          tabs: <String>[
+                          isTabsScrollable: true,
+                          tabs: [
                             'About',
                             'Media',
                             'Wtv',
@@ -254,11 +255,15 @@ class CommunityPage extends StatelessWidget {
                             'Tags',
                             'Pdf',
                           ],
-                        ),
-                        Gap(8),
-                        IndexedStack(
-                          children: <Widget>[
+                          tabViews: [
                             _AboutView(),
+                            Text('Media'),
+                            Text('Wtv'),
+                            Text('Services'),
+                            Text('Flicks'),
+                            Text('Offerings'),
+                            Text('Tags'),
+                            Text('Pdf'),
                           ],
                         ),
                       ],

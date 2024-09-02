@@ -1,6 +1,9 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+
+import '../../../../config/mocks/mocks.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -16,6 +19,92 @@ class SettingsPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Gap(8),
+            //stories with name and image
+            const Text(
+              'Your communities',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Gap(8),
+            SizedBox(
+              height: 100,
+              child: Builder(builder: (context) {
+                List<Widget> children = [
+                  //create community
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        child: const Icon(Icons.add),
+                        radius: 30,
+                      ),
+                    ],
+                  ),
+                  for (var i = 0; i < 15; i++)
+                    Column(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: ExtendedNetworkImageProvider(
+                            MockData.randomImageAvatar(),
+                          ),
+                          radius: 30,
+                        ),
+                        const Gap(8),
+                        Text('Group $i'),
+                      ],
+                    )
+                ];
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return children[index];
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Gap(8);
+                  },
+                  itemCount: children.length,
+                );
+              }),
+            ),
+            const Gap(8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: const Text(
+                          'Show rating when someone views your profile',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Switch(
+                        value: true,
+                        onChanged: (value) {},
+                      ),
+                    ],
+                  ),
+                  const Gap(8),
+                  const Text(
+                    'This will show a rating when someone views your profile.',
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
             const Gap(8),

@@ -11,6 +11,12 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import '../../mocks/mocks.dart';
+import '../../routes/router.dart';
+import '../../routes/routes_name.dart';
+import '../animated_like_icon_button.dart';
+import '../feed_players/wtv_player.dart';
+import '../pad_horizontal.dart';
 
 class VideoFrame extends StatelessWidget {
   final String? title;
@@ -48,29 +54,34 @@ class VideoFrame extends StatelessWidget {
         PadHorizontal(
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: ExtendedNetworkImageProvider(
-                      avatarUrl ?? MockData.imageAvatar,
+              GestureDetector(
+                onTap: () {
+                  AppNavigationService.newRoute(RoutesName.wtvDetails);
+                },
+                child: Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: ExtendedNetworkImageProvider(
+                        avatarUrl ?? MockData.imageAvatar,
+                      ),
                     ),
-                  ),
-                  const Gap(8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '${title}',
-                        ),
-                        Gap(4),
-                        Text(
-                          '${username}',
-                        ),
-                      ],
+                    const Gap(8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            '${title}',
+                          ),
+                          Gap(4),
+                          Text(
+                            '${username}',
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const Gap(8),
               Row(
@@ -93,7 +104,26 @@ class VideoFrame extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Iconify(Charm.menu_kebab),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                title: const Text('Report'),
+                                leading: const Icon(Icons.report),
+                              ),
+                              ListTile(
+                                title: const Text('Delete'),
+                                leading: const Icon(Icons.block),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ],
               ),

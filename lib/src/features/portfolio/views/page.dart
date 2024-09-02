@@ -4,6 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/src/features/portfolio/views/widgets/about.dart';
+import 'package:whatsevr_app/src/features/portfolio/views/widgets/wtv.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
@@ -160,7 +162,7 @@ class PortfolioPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
+                          children: [
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Posts', style: TextStyle(fontSize: 16)),
                           ],
@@ -172,7 +174,7 @@ class PortfolioPage extends StatelessWidget {
                 const Gap(8),
                 const PadHorizontal(
                   child: Row(
-                    children: <Widget>[
+                    children: [
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
                       Spacer(),
                       Text('See All', style: TextStyle(fontSize: 14)),
@@ -200,7 +202,7 @@ class PortfolioPage extends StatelessWidget {
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
+                                children: [
                                   const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
@@ -249,12 +251,13 @@ class PortfolioPage extends StatelessWidget {
                   child: DefaultTabController(
                     length: 7,
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         const Gap(12),
-                        const WhatsevrTabBar(
+                        const WhatsevrTabBarWithViews(
                           tabAlignment: TabAlignment.start,
-                          isScrollable: true,
-                          tabs: <String>[
+                          shrinkViews: true,
+                          isTabsScrollable: true,
+                          tabs: [
                             'About',
                             'Media',
                             'Wtv',
@@ -264,131 +267,10 @@ class PortfolioPage extends StatelessWidget {
                             'Tags',
                             'Pdf',
                           ],
-                        ),
-                        const Gap(8),
-                        IndexedStack(
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                const Gap(12),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Gap(8),
-                                          Text(
-                                            'Status',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white,
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Gap(8),
-                                          Text(
-                                            'Serve',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          Gap(8),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                for ((String label, String info) itm
-                                    in <(String, String)>[
-                                  ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
-                                  (
-                                    'Working',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  ('Email', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
-                                  (
-                                    'Birthday',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  (
-                                    'Join On',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  (
-                                    'Portfolio link',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  (
-                                    'Total Connection',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                  ('Total Views', '2524'),
-                                  (
-                                    'Add info',
-                                    'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
-                                  ),
-                                ])
-                                  CheckboxListTile(
-                                    visualDensity: VisualDensity.compact,
-                                    controlAffinity:
-                                        ListTileControlAffinity.leading,
-                                    checkColor: Colors.white,
-                                    activeColor: Colors.black,
-                                    value: false,
-                                    onChanged: (bool? value) {},
-                                    title: Text(
-                                      itm.$1,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      itm.$2,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    isThreeLine: true,
-                                  ),
-                              ],
-                            ),
-                            const Text('Videos'),
+                          tabViews: [
+                            PortfolioPageAboutView(),
+                            const Text('Media'),
+                            PortfolioPageWtvView(),
                             const Text('Photos'),
                             const Text('Audios'),
                             const Text('Documents'),
@@ -445,7 +327,7 @@ class _CoverVideoState extends State<CoverVideo> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: <Widget>[
+      children: [
         InkWell(
           onTap: () {
             setState(() {
