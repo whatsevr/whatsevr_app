@@ -10,10 +10,14 @@ import 'package:whatsevr_app/config/routes/router.dart';
 class WTVFeedPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
+  final Function()? onTapFreeArea;
+  final bool? loopVideo;
   const WTVFeedPlayer({
     super.key,
     required this.videoUrl,
     this.thumbnail,
+    this.onTapFreeArea,
+    this.loopVideo,
   });
 
   @override
@@ -21,28 +25,41 @@ class WTVFeedPlayer extends StatefulWidget {
 }
 
 class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
-  late VideoPlayerController controller;
+  VideoPlayerController? controller;
   @override
   void initState() {
     super.initState();
-    controller =
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-          });
+  }
 
-    controller.addListener(() {
-      if (controller.value.position == controller.value.duration) {
-        controller.seekTo(Duration.zero);
-        controller.play();
-      }
-    });
+  Future<void> initiateVideoPlayer() async {
+    if (controller == null) {
+      controller =
+          VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+            ..initialize().then((_) {
+              // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+              setState(() {});
+            });
+
+      controller?.play();
+      controller?.addListener(() async {
+        if (controller?.value.position == controller?.value.duration) {
+          await Future<void>.delayed(const Duration(seconds: 1));
+          controller?.seekTo(Duration.zero);
+          if (widget.loopVideo == true) {
+            controller?.play();
+          } else {
+            controller?.pause();
+            controller = null;
+            setState(() {});
+          }
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -51,22 +68,20 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
-        InkWell(
+        GestureDetector(
           onTap: () {
-            setState(() {
-              if (controller.value.isPlaying) {
-                controller.pause();
-              } else {
-                controller.play();
-              }
-            });
+            widget.onTapFreeArea?.call();
+            if (controller != null) {
+              controller?.pause();
+              controller = null;
+              setState(() {});
+            }
           },
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: Builder(
               builder: (BuildContext context) {
-                if (controller.value.position == Duration.zero &&
-                    !controller.value.isPlaying) {
+                if (controller == null) {
                   return ExtendedImage.network(
                     widget.thumbnail ?? MockData.imageAvatar,
                     width: double.infinity,
@@ -75,12 +90,12 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
                     enableLoadState: false,
                   );
                 }
-                return VideoPlayer(controller);
+                return VideoPlayer(controller!);
               },
             ),
           ),
         ),
-        if (!controller.value.isPlaying)
+        if (controller?.value.isPlaying != true)
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(
@@ -92,66 +107,47 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
               color: Colors.white,
               size: 45,
             ),
-            onPressed: () {
+            onPressed: () async {
+              await initiateVideoPlayer();
               setState(() {
-                if (controller.value.isPlaying) {
-                  controller.pause();
+                if (controller?.value.isPlaying == true) {
+                  controller?.pause();
                 } else {
-                  controller.play();
+                  controller?.play();
                 }
               });
             },
           ),
-        if (controller.value.isPlaying) ...<Widget>[
+        if (controller?.value.isPlaying == true) ...<Widget>[
           Positioned(
-            top: 8,
-            right: 8,
+            top: 2,
+            right: 2,
             child: Row(
               children: <Widget>[
-                InkWell(
-                  onTap: () {
+                IconButton(
+                  onPressed: () {
                     setState(() {
-                      if (controller.value.volume == 0) {
-                        controller.setVolume(1);
+                      if (controller!.value.volume == 0) {
+                        controller!.setVolume(1);
                       } else {
-                        controller.setVolume(0);
+                        controller!.setVolume(0);
                       }
                     });
                   },
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Icon(
-                      controller.value.volume == 0
-                          ? Icons.volume_off
-                          : Icons.volume_up,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ),
-                const Gap(8),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child:
-                        const Text('CC', style: TextStyle(color: Colors.white)),
+                  icon: Icon(
+                    controller?.value.volume == 0
+                        ? Icons.volume_off
+                        : Icons.volume_up,
+                    color: Colors.white,
+                    size: 20,
                   ),
                 ),
               ],
             ),
           ),
           Positioned(
-            bottom: 8,
-            right: 4,
+            bottom: 2,
+            right: 2,
             child: IconButton(
               icon: const Icon(Icons.fullscreen),
               color: Colors.white,

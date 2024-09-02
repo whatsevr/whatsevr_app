@@ -40,21 +40,25 @@ class VideoFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        WTVFeedPlayer(
-          videoUrl: videoUrl,
-          thumbnail: thumbnail,
-        ),
-        const Gap(8),
-        PadHorizontal(
-          child: Column(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  AppNavigationService.newRoute(RoutesName.wtvDetails);
-                },
-                child: Row(
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        AppNavigationService.newRoute(RoutesName.wtvDetails);
+      },
+      child: Column(
+        children: <Widget>[
+          WTVFeedPlayer(
+            videoUrl: videoUrl,
+            thumbnail: thumbnail,
+            onTapFreeArea: () {
+              AppNavigationService.newRoute(RoutesName.wtvDetails);
+            },
+          ),
+          const Gap(8),
+          PadHorizontal(
+            child: Column(
+              children: <Widget>[
+                Row(
                   children: <Widget>[
                     CircleAvatar(
                       backgroundImage: ExtendedNetworkImageProvider(
@@ -78,55 +82,55 @@ class VideoFrame extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              const Gap(8),
-              Row(
-                children: <Widget>[
-                  const AnimatedLikeIconButton(),
-                  const Text('2.5M'),
-                  IconButton(
-                    icon: const Iconify(Ph.chat_centered_dots),
-                    onPressed: () {},
-                  ),
-                  const Text('2.5M'),
-                  IconButton(
-                    icon: const Iconify(MaterialSymbols.ios_share),
-                    onPressed: () {},
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    icon: const Iconify(Ion.bookmark),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Iconify(Charm.menu_kebab),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const <ListTile>[
-                              ListTile(
-                                title: Text('Report'),
-                                leading: Icon(Icons.report),
-                              ),
-                              ListTile(
-                                title: Text('Delete'),
-                                leading: Icon(Icons.block),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
+                const Gap(8),
+                Row(
+                  children: <Widget>[
+                    const AnimatedLikeIconButton(),
+                    const Text('2.5M'),
+                    IconButton(
+                      icon: const Iconify(Ph.chat_centered_dots),
+                      onPressed: () {},
+                    ),
+                    const Text('2.5M'),
+                    IconButton(
+                      icon: const Iconify(MaterialSymbols.ios_share),
+                      onPressed: () {},
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Iconify(Ion.bookmark),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      icon: const Iconify(Charm.menu_kebab),
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const <ListTile>[
+                                ListTile(
+                                  title: Text('Report'),
+                                  leading: Icon(Icons.report),
+                                ),
+                                ListTile(
+                                  title: Text('Delete'),
+                                  leading: Icon(Icons.block),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
