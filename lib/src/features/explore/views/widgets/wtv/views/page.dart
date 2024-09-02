@@ -1,15 +1,13 @@
-import 'dart:math';
 
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
-import '../../../../../../../config/api/response_model/recommendation_videos.dart';
-import '../../../../../../../config/widgets/refresh_indicator.dart';
-import '../../../../bloc/explore_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
 class ExplorePageWtvPage extends StatelessWidget {
   const ExplorePageWtvPage({super.key});

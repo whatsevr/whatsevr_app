@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-import '../../../../../config/mocks/mocks.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/post_tiles/flick.dart';
-import '../../../../../config/widgets/post_tiles/photo.dart';
-import '../../../../../config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 
 class HomePageForYouPage extends StatelessWidget {
   const HomePageForYouPage({
@@ -17,13 +17,13 @@ class HomePageForYouPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         SizedBox(
           height: 120.0,
-          child: Builder(builder: (context) {
-            List<Widget> children = [
+          child: Builder(builder: (BuildContext context) {
+            List<Widget> children = <Widget>[
               Column(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -50,7 +50,7 @@ class HomePageForYouPage extends StatelessWidget {
               for (int i = 0; i < 5; i++)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -69,7 +69,7 @@ class HomePageForYouPage extends StatelessWidget {
                     ),
                     const Gap(5.0),
                     Row(
-                      children: [
+                      children: <Widget>[
                         CircleAvatar(
                           backgroundImage: ExtendedNetworkImageProvider(
                             MockData.imageAvatar,
@@ -79,26 +79,26 @@ class HomePageForYouPage extends StatelessWidget {
                         const Gap(5.0),
                         const Text('Username'),
                       ],
-                    )
+                    ),
                   ],
                 ),
             ];
             return ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: EdgeInsets.only(
                       left: index == 0 ? PadHorizontal.paddingValue : 0.0,
-                      right: index == children.length - 1 ? PadHorizontal.paddingValue : 0.0),
+                      right: index == children.length - 1 ? PadHorizontal.paddingValue : 0.0,),
                   child: children[index],
                 );
               },
-              separatorBuilder: (context, index) {
+              separatorBuilder: (BuildContext context, int index) {
                 return const Gap(5.0);
               },
               itemCount: children.length,
             );
-          }),
+          },),
         ),
         const Gap(8.0),
         Expanded(

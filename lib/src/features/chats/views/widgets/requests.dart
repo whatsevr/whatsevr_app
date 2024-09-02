@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class ChatsPageRequestsView extends StatelessWidget {
   const ChatsPageRequestsView({
@@ -13,8 +13,8 @@ class ChatsPageRequestsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
@@ -23,20 +23,20 @@ class ChatsPageRequestsView extends StatelessWidget {
             subtitle: Text('Request $index'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 IconButton(
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: MaterialStateProperty.all(Colors.green.withOpacity(0.2)),
-                    foregroundColor: MaterialStateProperty.all(Colors.green),
+                    backgroundColor: WidgetStateProperty.all(Colors.green.withOpacity(0.2)),
+                    foregroundColor: WidgetStateProperty.all(Colors.green),
                   ),
                   icon: const Icon(Icons.check),
                   onPressed: () {},
@@ -47,13 +47,13 @@ class ChatsPageRequestsView extends StatelessWidget {
                     minWidth: 0,
                   ),
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: MaterialStateProperty.all(Colors.red.withOpacity(0.2)),
-                    foregroundColor: MaterialStateProperty.all(Colors.red),
+                    backgroundColor: WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
+                    foregroundColor: WidgetStateProperty.all(Colors.red),
                   ),
                   icon: const Icon(Icons.close),
                   onPressed: () {},

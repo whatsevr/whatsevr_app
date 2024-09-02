@@ -11,12 +11,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import '../../mocks/mocks.dart';
-import '../../routes/router.dart';
-import '../../routes/routes_name.dart';
-import '../animated_like_icon_button.dart';
-import '../feed_players/wtv_player.dart';
-import '../pad_horizontal.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 class VideoFrame extends StatelessWidget {
   final String? title;
@@ -71,11 +67,11 @@ class VideoFrame extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            '${title}',
+                            '$title',
                           ),
                           Gap(4),
                           Text(
-                            '${username}',
+                            '$username',
                           ),
                         ],
                       ),
@@ -107,17 +103,17 @@ class VideoFrame extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (context) {
+                        builder: (BuildContext context) {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: const <ListTile>[
                               ListTile(
-                                title: const Text('Report'),
-                                leading: const Icon(Icons.report),
+                                title: Text('Report'),
+                                leading: Icon(Icons.report),
                               ),
                               ListTile(
-                                title: const Text('Delete'),
-                                leading: const Icon(Icons.block),
+                                title: Text('Delete'),
+                                leading: Icon(Icons.block),
                               ),
                             ],
                           );

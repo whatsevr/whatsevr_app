@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 
-import '../response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> videos({
@@ -15,5 +15,6 @@ class RecommendationApi {
     } catch (e) {
       ApiClient.apiMethodException(e);
     }
+    return null;
   }
 }

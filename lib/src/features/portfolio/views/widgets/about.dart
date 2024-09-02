@@ -7,7 +7,7 @@ class PortfolioPageAboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         const Gap(12),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -20,13 +20,13 @@ class PortfolioPageAboutView extends StatelessWidget {
               padding: EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Gap(8),
                   Text('Status',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16),),
                   Gap(8),
                 ],
               ),
@@ -44,13 +44,13 @@ class PortfolioPageAboutView extends StatelessWidget {
               padding: EdgeInsets.all(12.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Gap(8),
                   Text('Serve',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                   Text('Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                      style: TextStyle(fontSize: 16)),
+                      style: TextStyle(fontSize: 16),),
                   Gap(8),
                 ],
               ),

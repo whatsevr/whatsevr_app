@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'client.dart';
-import 'response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> videoPosts({

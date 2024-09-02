@@ -28,27 +28,28 @@ class CreateVideoPostRequest {
 
   factory CreateVideoPostRequest.fromMap(Map<String, dynamic> json) =>
       CreateVideoPostRequest(
-        title: json["title"],
-        description: json["description"],
-        userUid: json["user_uid"],
-        thumbnail: json["thumbnail"],
-        location: json["location"],
-        hashtags: json["hashtags"] == null
-            ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        postCreatorType: json["post_creator_type"],
-        videoUrl: json["video_url"],
+        title: json['title'],
+        description: json['description'],
+        userUid: json['user_uid'],
+        thumbnail: json['thumbnail'],
+        location: json['location'],
+        hashtags: json['hashtags'] == null
+            ? <String>[]
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        postCreatorType: json['post_creator_type'],
+        videoUrl: json['video_url'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "title": title,
-        "description": description,
-        "user_uid": userUid,
-        "thumbnail": thumbnail,
-        "location": location,
-        "hashtags":
-            hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "post_creator_type": postCreatorType,
-        "video_url": videoUrl,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'title': title,
+        'description': description,
+        'user_uid': userUid,
+        'thumbnail': thumbnail,
+        'location': location,
+        'hashtags': hashtags == null
+            ? <String>[]
+            : List<dynamic>.from(hashtags!.map((String x) => x)),
+        'post_creator_type': postCreatorType,
+        'video_url': videoUrl,
       };
 }

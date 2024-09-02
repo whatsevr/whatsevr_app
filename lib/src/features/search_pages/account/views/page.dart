@@ -23,7 +23,7 @@ class AccountSearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           const SizedBox(height: 8),
           Row(
             children: <Widget>[
@@ -139,14 +139,14 @@ class AccountSearchPage extends StatelessWidget {
             child: WhatsevrTabBarWithViews(
               tabAlignment: TabAlignment.start,
               isTabsScrollable: true,
-              tabs: [
+              tabs: <String>[
                 'Recents',
                 'Accounts',
                 'Portfolio',
                 'Community',
                 'Offers',
               ],
-              tabViews: [
+              tabViews: <Widget>[
                 _RecentView(),
                 _AccountsView(),
                 _PortfolioView(),
@@ -172,9 +172,9 @@ class _OffersView extends StatelessWidget {
       separatorBuilder: (BuildContext context, int index) => const Divider(),
       itemBuilder: (BuildContext context, int index) {
         return Column(
-          children: [
+          children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
                     radius: 20,
@@ -186,7 +186,7 @@ class _OffersView extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'Username',
                         style: Theme.of(context).textTheme.titleLarge,
@@ -202,7 +202,7 @@ class _OffersView extends StatelessWidget {
             ),
             const Gap(8),
             Stack(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   MockData.randomImageAvatar(),
                   width: double.infinity,
@@ -230,12 +230,12 @@ class _OffersView extends StatelessWidget {
             ),
             const Gap(8),
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(8),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text('Caption'),
                       Text('Joined On 4 April, MU 334'),
                       Text('#tag1 #tag2 #tag3'),
@@ -275,9 +275,9 @@ class _CommunityView extends StatelessWidget {
             AppNavigationService.newRoute(RoutesName.community);
           },
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
@@ -289,7 +289,7 @@ class _CommunityView extends StatelessWidget {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -326,7 +326,7 @@ class _CommunityView extends StatelessWidget {
               ),
               const Gap(8),
               Stack(
-                children: [
+                children: <Widget>[
                   ExtendedImage.network(
                     MockData.randomImageAvatar(),
                     width: double.infinity,
@@ -354,12 +354,12 @@ class _CommunityView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text('Caption'),
                         Text('Joined On 4 April, MU 334'),
                         Text('#tag1 #tag2 #tag3'),
@@ -400,21 +400,21 @@ class _PortfolioView extends StatelessWidget {
             AppNavigationService.newRoute(RoutesName.portfolio);
           },
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
-                      )),
+                      ),),
                   const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -451,7 +451,7 @@ class _PortfolioView extends StatelessWidget {
               ),
               const Gap(8),
               Stack(
-                children: [
+                children: <Widget>[
                   ExtendedImage.network(
                     MockData.randomImageAvatar(),
                     width: double.infinity,
@@ -479,12 +479,12 @@ class _PortfolioView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text('Caption'),
                         Text('Joined On 4 April, MU 334'),
                         Text('#tag1 #tag2 #tag3'),
@@ -523,21 +523,21 @@ class _AccountsView extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: ExtendedNetworkImageProvider(
                         MockData.randomImageAvatar(),
-                      )),
+                      ),),
                   const Gap(16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Username',
                           style: Theme.of(context).textTheme.titleLarge,
@@ -565,22 +565,22 @@ class _AccountsView extends StatelessWidget {
               ),
               const Gap(8),
               Row(
-                children: [
+                children: <Widget>[
                   const Gap(8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         RichText(
                           text: const TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               TextSpan(
                                 text: 'Bio\n',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text:
                                         'Looking for a Motion Graphic Artist in Delhi Studio XYZ. Looking for a Motion Graphic Artist in Delhi',
@@ -597,7 +597,7 @@ class _AccountsView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text: 'Delhi',
                                     style: TextStyle(
@@ -613,7 +613,7 @@ class _AccountsView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
-                                children: [
+                                children: <InlineSpan>[
                                   TextSpan(
                                     text: 'Online',
                                     style: TextStyle(
@@ -662,24 +662,24 @@ class _RecentView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemCount: 20,
-      separatorBuilder: (context, index) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
         return Column(
-          children: [
+          children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.grey,
                     backgroundImage: ExtendedNetworkImageProvider(
                       MockData.randomImageAvatar(),
-                    )),
+                    ),),
                 const Gap(16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'Username',
                         style: Theme.of(context).textTheme.titleLarge,
@@ -716,7 +716,7 @@ class _RecentView extends StatelessWidget {
             ),
             const Gap(8),
             Stack(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   MockData.randomImageAvatar(),
                   width: double.infinity,
@@ -744,12 +744,12 @@ class _RecentView extends StatelessWidget {
             ),
             const Gap(8),
             Row(
-              children: [
+              children: <Widget>[
                 const Gap(8),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text('Caption'),
                       Text('Joined On 4 April, MU 334'),
                       Text('#tag1 #tag2 #tag3'),

@@ -15,7 +15,7 @@ class FlicksPage extends StatelessWidget {
       body: PageView.builder(
         scrollDirection: Axis.vertical,
         itemCount: MockData.portraitVideos.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return FlickPageFlickView(
             index: index,
           );

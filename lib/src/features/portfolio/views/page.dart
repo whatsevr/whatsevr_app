@@ -162,7 +162,7 @@ class PortfolioPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Posts', style: TextStyle(fontSize: 16)),
                           ],
@@ -174,7 +174,7 @@ class PortfolioPage extends StatelessWidget {
                 const Gap(8),
                 const PadHorizontal(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
                       Spacer(),
                       Text('See All', style: TextStyle(fontSize: 14)),
@@ -202,7 +202,7 @@ class PortfolioPage extends StatelessWidget {
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
@@ -251,13 +251,13 @@ class PortfolioPage extends StatelessWidget {
                   child: DefaultTabController(
                     length: 7,
                     child: Column(
-                      children: [
-                        const Gap(12),
-                        const WhatsevrTabBarWithViews(
+                      children: const <Widget>[
+                        Gap(12),
+                        WhatsevrTabBarWithViews(
                           tabAlignment: TabAlignment.start,
                           shrinkViews: true,
                           isTabsScrollable: true,
-                          tabs: [
+                          tabs: <String>[
                             'About',
                             'Media',
                             'Wtv',
@@ -267,13 +267,13 @@ class PortfolioPage extends StatelessWidget {
                             'Tags',
                             'Pdf',
                           ],
-                          tabViews: [
+                          tabViews: <Widget>[
                             PortfolioPageAboutView(),
-                            const Text('Media'),
+                            Text('Media'),
                             PortfolioPageWtvView(),
-                            const Text('Photos'),
-                            const Text('Audios'),
-                            const Text('Documents'),
+                            Text('Photos'),
+                            Text('Audios'),
+                            Text('Documents'),
                           ],
                         ),
                       ],
@@ -327,7 +327,7 @@ class _CoverVideoState extends State<CoverVideo> {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         InkWell(
           onTap: () {
             setState(() {

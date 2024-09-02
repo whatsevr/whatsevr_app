@@ -6,7 +6,7 @@ class CreatePostState extends Equatable {
   const CreatePostState({this.videoFile, this.thumbnailFile});
 
   @override
-  List<Object?> get props => [videoFile, thumbnailFile];
+  List<Object?> get props => <Object?>[videoFile, thumbnailFile];
 
   CreatePostState copyWith({
     File? videoFile,

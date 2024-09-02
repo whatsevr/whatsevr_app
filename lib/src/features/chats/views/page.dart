@@ -1,15 +1,12 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/calls.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/chats.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/groups.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/requests.dart';
 
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});
@@ -17,10 +14,10 @@ class ChatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         PadHorizontal(
           child: WhatsevrAnimatedSearchField(
-            hintTexts: const [
+            hintTexts: const <String>[
               'Search for chats',
               'Search for groups',
               'Search for calls',
@@ -30,13 +27,13 @@ class ChatsPage extends StatelessWidget {
         ),
         const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: [
+            tabs: <String>[
               'Chats',
               'Groups',
               'Calls',
               'Requests',
             ],
-            tabViews: [
+            tabViews: <Widget>[
               ChatsPageChatsView(),
               ChatsPageGroupsView(),
               ChatsPageCallsView(),

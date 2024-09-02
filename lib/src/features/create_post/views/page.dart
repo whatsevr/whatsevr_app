@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,9 @@ import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
-import '../bloc/create_post_bloc.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/src/features/create_post/bloc/create_post_bloc.dart';
 
 class CreatePost extends StatelessWidget {
   const CreatePost({super.key});
@@ -19,10 +18,10 @@ class CreatePost extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (context) =>
+      create: (BuildContext context) =>
           CreatePostBloc()..add(const CreatePostInitialEvent()),
       child: Builder(
-        builder: (context) {
+        builder: (BuildContext context) {
           return buildPage(context);
         },
       ),
@@ -31,20 +30,20 @@ class CreatePost extends StatelessWidget {
 
   Widget buildPage(BuildContext context) {
     return BlocBuilder<CreatePostBloc, CreatePostState>(
-      builder: (context, state) {
+      builder: (BuildContext context, CreatePostState state) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Create Post'),
           ),
           body: ListView(
             padding: PadHorizontal.padding,
-            children: [
+            children: <Widget>[
               Gap(12),
               Builder(
-                builder: (context) {
+                builder: (BuildContext context) {
                   if (state.thumbnailFile != null) {
                     return Stack(
-                      children: [
+                      children: <Widget>[
                         ExtendedImage.file(
                           state.thumbnailFile!,
                           width: double.infinity,
@@ -89,7 +88,7 @@ class CreatePost extends StatelessWidget {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: const <Widget>[
                           Icon(Icons.photo_size_select_large_rounded),
                           Text('Add a thumbnail'),
                         ],
@@ -110,7 +109,7 @@ class CreatePost extends StatelessWidget {
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: const <Widget>[
                         Icon(Icons.video_file_rounded),
                         Text('Add a video'),
                       ],
@@ -191,7 +190,7 @@ class CreatePost extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text('Create Post',
-                  style: TextStyle(color: Colors.white)),
+                  style: TextStyle(color: Colors.white),),
             ),
           ),
         );

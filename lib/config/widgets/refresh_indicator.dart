@@ -8,7 +8,7 @@ class MyRefreshIndicator extends StatelessWidget {
   final FutureOr<dynamic> Function()? onPullDown;
   final FutureOr<dynamic> Function()? onScrollFinished;
   const MyRefreshIndicator(
-      {super.key, required this.child, this.onPullDown, this.onScrollFinished});
+      {super.key, required this.child, this.onPullDown, this.onScrollFinished,});
 
   @override
   Widget build(BuildContext context) {

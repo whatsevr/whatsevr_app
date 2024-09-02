@@ -2,7 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class ChatsPageCallsView extends StatelessWidget {
   const ChatsPageCallsView({
@@ -14,15 +14,15 @@ class ChatsPageCallsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
             ),
             title: Text('User $index'),
             subtitle: Row(
-              children: [
+              children: <Widget>[
                 Text('Call $index'),
                 const Gap(8),
                 const Text('12:00'),

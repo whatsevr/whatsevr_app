@@ -12,8 +12,8 @@ class ChatsPageChatsView extends StatelessWidget {
     return Scaffold(
       body: ListView.separated(
         itemCount: 20,
-        separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) {
+        separatorBuilder: (BuildContext context, int index) => const Divider(),
+        itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
               backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),

@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -6,14 +5,7 @@ import 'package:whatsevr_app/src/features/home/views/widgets/activities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/tab_bar.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/portfolio_video.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class HomePage extends StatelessWidget {

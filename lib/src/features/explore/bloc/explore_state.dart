@@ -7,7 +7,7 @@ class ExploreState extends Equatable {
   });
 
   @override
-  List<Object?> get props => [recommendationVideos];
+  List<Object?> get props => <Object?>[recommendationVideos];
 
   ExploreState copyWith({
     List<RecommendedVideo>? recommendationVideos,

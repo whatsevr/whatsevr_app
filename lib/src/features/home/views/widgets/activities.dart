@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class HomePageActivitiesPage extends StatelessWidget {
   const HomePageActivitiesPage({
@@ -10,13 +10,13 @@ class HomePageActivitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WhatsevrTabBarWithViews(
-      tabs: [
+      tabs: <String>[
         'History',
         'Downloads',
         'Saved Videos',
         'Playlists',
       ],
-      tabViews: [
+      tabViews: <Widget>[
         Text('History'),
         Text('Downloads'),
         Text('Playlists'),

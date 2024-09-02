@@ -245,7 +245,7 @@ class CommunityPage extends StatelessWidget {
                           shrinkViews: true,
                           tabAlignment: TabAlignment.start,
                           isTabsScrollable: true,
-                          tabs: [
+                          tabs: <String>[
                             'About',
                             'Media',
                             'Wtv',
@@ -255,7 +255,7 @@ class CommunityPage extends StatelessWidget {
                             'Tags',
                             'Pdf',
                           ],
-                          tabViews: [
+                          tabViews: <Widget>[
                             _AboutView(),
                             Text('Media'),
                             Text('Wtv'),

@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/src/features/wtv_details/views/widgets/related_videos.dart';
 
-import '../../../../config/widgets/feed_players/wtv_player.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/wtv_player.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 // Youtube video player page clone
 class WtvDetailsPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class WtvDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           // Video player
           WTVFeedPlayer(
             videoUrl: MockData.demoVideo,
@@ -22,7 +22,7 @@ class WtvDetailsPage extends StatelessWidget {
           // Video title
           Expanded(
               child: ListView(
-            children: [
+            children: <Widget>[
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -37,7 +37,7 @@ class WtvDetailsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     // Channel name
                     Expanded(
                       child: Text(
@@ -64,9 +64,9 @@ class WtvDetailsPage extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       // Like button
-                      for ((String label, IconData icon) record in [
+                      for ((String label, IconData icon) record in <(String, IconData)>[
                         ('Like', Icons.thumb_up),
                         ('Share', Icons.share),
                         ('Save', Icons.bookmark),
@@ -74,7 +74,7 @@ class WtvDetailsPage extends StatelessWidget {
                         MaterialButton(
                           onPressed: () {},
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Icon(record.$2),
                               Gap(5),
                               Text(record.$1),
@@ -93,7 +93,7 @@ class WtvDetailsPage extends StatelessWidget {
               WtvVideoDetailsRelatedVideosView(),
               Gap(10),
             ],
-          ))
+          ),),
         ],
       ),
     );

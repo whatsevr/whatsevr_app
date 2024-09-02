@@ -6,7 +6,7 @@ class ApiClient {
   ApiClient._();
 
   // static const String BASE_URL = "https://www.whatsevr.com"; cannot use this for now for follow redirect 300+ code use
-  static const String BASE_URL = "https://whatsevr-server-dev.onrender.com/";
+  static const String BASE_URL = 'https://whatsevr-server-dev.onrender.com/';
   static late Dio client;
   static void init() {
     client = Dio(
@@ -15,10 +15,10 @@ class ApiClient {
         connectTimeout: Duration(seconds: 30),
         receiveTimeout: Duration(seconds: 30),
         sendTimeout: Duration(seconds: 30),
-        validateStatus: (status) {
+        validateStatus: (int? status) {
           return status == 200;
         },
-        headers: {
+        headers: <String, dynamic>{
           'secret': 'your_secret_key',
         },
       ),

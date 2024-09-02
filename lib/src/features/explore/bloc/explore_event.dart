@@ -6,5 +6,5 @@ sealed class ExploreEvent extends Equatable {
 
 class ExploreInitialEvent extends ExploreEvent {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

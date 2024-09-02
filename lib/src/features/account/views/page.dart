@@ -8,10 +8,10 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/animated_search_field.dart';
-import '../../../../config/widgets/content_upload_button_sheet.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class AccountPage extends StatelessWidget {
   AccountPage({super.key});
@@ -20,24 +20,26 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
+        children: <Widget>[
           PadHorizontal(
             child: WhatsevrAnimatedSearchField(
-              hintTexts: const [
+              hintTexts: const <String>[
                 'Search for Account',
                 'Search for Portfolio',
                 'Search for Community',
               ],
               readOnly: true,
               onTap: () {
-                AppNavigationService.newRoute(RoutesName.accountSearch,
-                    extras: const AccountSearchPage(
-                      hintTexts: [
-                        'Search for Account',
-                        'Search for Portfolio',
-                        'Search for Community',
-                      ],
-                    ));
+                AppNavigationService.newRoute(
+                  RoutesName.accountSearch,
+                  extras: const AccountSearchPage(
+                    hintTexts: <String>[
+                      'Search for Account',
+                      'Search for Portfolio',
+                      'Search for Community',
+                    ],
+                  ),
+                );
               },
             ),
           ),
@@ -45,14 +47,14 @@ class AccountPage extends StatelessWidget {
           Expanded(
             child: ListView(
               shrinkWrap: true,
-              children: [
+              children: <Widget>[
                 Stack(
-                  children: [
+                  children: <Widget>[
                     AspectRatio(
                       aspectRatio: 16 / 9,
                       child: PageView(
                         controller: controller,
-                        children: [
+                        children: <Widget>[
                           CoverVideo(videoUrl: MockData.demoVideo),
                           CoverVideo(videoUrl: MockData.demoVideo),
                           ExtendedImage.network(
@@ -87,15 +89,16 @@ class AccountPage extends StatelessWidget {
                       bottom: 8,
                       child: UnconstrainedBox(
                         child: SmoothPageIndicator(
-                            controller: controller, // PageController
-                            count: 5,
-                            effect: const WormEffect(
-                              dotWidth: 8.0,
-                              dotHeight: 8.0,
-                              activeDotColor: Colors.black,
-                              dotColor: Colors.white,
-                            ), // your preferred effect
-                            onDotClicked: (index) {}),
+                          controller: controller, // PageController
+                          count: 5,
+                          effect: const WormEffect(
+                            dotWidth: 8.0,
+                            dotHeight: 8.0,
+                            activeDotColor: Colors.black,
+                            dotColor: Colors.white,
+                          ), // your preferred effect
+                          onDotClicked: (int index) {},
+                        ),
                       ),
                     ),
                     Positioned(
@@ -117,11 +120,11 @@ class AccountPage extends StatelessWidget {
                 const Gap(8),
                 PadHorizontal(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       const Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text('John Doe', style: TextStyle(fontSize: 24)),
                             Text(' @johndoe', style: TextStyle(fontSize: 16)),
                             Gap(8),
@@ -154,11 +157,11 @@ class AccountPage extends StatelessWidget {
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Likes', style: TextStyle(fontSize: 16)),
                           ],
@@ -167,7 +170,7 @@ class AccountPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Networks', style: TextStyle(fontSize: 16)),
                           ],
@@ -176,7 +179,7 @@ class AccountPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             Text('1,000', style: TextStyle(fontSize: 24)),
                             Text('Connections', style: TextStyle(fontSize: 16)),
                           ],
@@ -188,7 +191,7 @@ class AccountPage extends StatelessWidget {
                 const Gap(8),
                 const PadHorizontal(
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text('Suggestions', style: TextStyle(fontSize: 14)),
                       Spacer(),
                       Text('See All', style: TextStyle(fontSize: 14)),
@@ -200,13 +203,15 @@ class AccountPage extends StatelessWidget {
                   height: 200,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (BuildContext context, int index) {
                       return Column(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: Container(
                               margin: EdgeInsets.only(
-                                  left: index == 0 ? 8 : 0, right: 8),
+                                left: index == 0 ? 8 : 0,
+                                right: 8,
+                              ),
                               width: 150,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
@@ -214,7 +219,7 @@ class AccountPage extends StatelessWidget {
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   const Gap(8),
                                   Expanded(
                                     child: ExtendedImage.network(
@@ -225,15 +230,18 @@ class AccountPage extends StatelessWidget {
                                     ),
                                   ),
                                   const Gap(8),
-                                  const Text('John Doe',
-                                      style: TextStyle(fontSize: 16)),
+                                  const Text(
+                                    'John Doe',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           MaterialButton(
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             minWidth: 150,
                             color: Colors.blue,
                             onPressed: () {},
@@ -242,7 +250,7 @@ class AccountPage extends StatelessWidget {
                         ],
                       );
                     },
-                    separatorBuilder: (context, index) {
+                    separatorBuilder: (BuildContext context, int index) {
                       return const Gap(8);
                     },
                     itemCount: 10,
@@ -258,13 +266,13 @@ class AccountPage extends StatelessWidget {
                         const BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: Column(
-                    children: [
-                      const Gap(12),
-                      const WhatsevrTabBarWithViews(
+                    children: const <Widget>[
+                      Gap(12),
+                      WhatsevrTabBarWithViews(
                         shrinkViews: true,
                         tabAlignment: TabAlignment.start,
                         isTabsScrollable: true,
-                        tabs: [
+                        tabs: <String>[
                           'About',
                           'Media',
                           'Videos',
@@ -272,19 +280,19 @@ class AccountPage extends StatelessWidget {
                           'Tags',
                           'Offerings',
                         ],
-                        tabViews: [
+                        tabViews: <Widget>[
                           AccountPageAboutView(),
-                          const Text('Media'),
-                          const Text('Videos'),
-                          const Text('Flicks'),
-                          const Text('Tags'),
-                          const Text('Offerings'),
+                          Text('Media'),
+                          Text('Videos'),
+                          Text('Flicks'),
+                          Text('Tags'),
+                          Text('Offerings'),
                         ],
                       ),
-                      const Gap(8),
+                      Gap(8),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -302,9 +310,9 @@ class AccountPageAboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         const Gap(12),
-        for ((String label, String info) itm in [
+        for ((String label, String info) itm in <(String, String)>[
           ('Bio', 'XXXXXXXXXXXXXXXXXXXXXXXXXXX'),
           ('Address', 'XXXXXXXXXXXXXXXXXXXXXXXXXX'),
           ('Education', 'XXXXXXXXXXXXXXXXXXXXXX'),
@@ -323,7 +331,7 @@ class AccountPageAboutView extends StatelessWidget {
             checkColor: Colors.white,
             activeColor: Colors.black,
             value: false,
-            onChanged: (value) {},
+            onChanged: (bool? value) {},
             title: Text(
               itm.$1,
               style: const TextStyle(

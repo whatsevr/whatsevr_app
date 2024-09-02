@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 
@@ -24,7 +22,7 @@ class FileUploadService {
       final String fileName =
           '${DateTime.now().microsecondsSinceEpoch}${file.path.split('.').last}';
 
-      final String? uploadStorageResponse = await _supabaseStorageClient
+      final String uploadStorageResponse = await _supabaseStorageClient
           .from('files') // Replace with your storage bucket name
           .upload(
             fileName,

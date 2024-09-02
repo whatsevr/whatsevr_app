@@ -6,5 +6,5 @@ sealed class WtvDetailsState extends Equatable {
 
 final class WtvDetailsInitial extends WtvDetailsState {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

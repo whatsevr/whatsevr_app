@@ -11,11 +11,11 @@ class PortfolioPageWtvView extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return Row(
-          children: [
+          children: <Widget>[
             Stack(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   MockData.randomImage(),
                   borderRadius: BorderRadius.circular(8),
@@ -33,11 +33,13 @@ class PortfolioPageWtvView extends StatelessWidget {
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Text('10:00',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        )),
+                    child: Text(
+                      '10:00',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -46,23 +48,26 @@ class PortfolioPageWtvView extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const <StatelessWidget>[
                   Text(
-                      'Title XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const Gap(8),
-                  Text('2M views . 2 days ago . 122k likes',
-                      style: TextStyle(
-                        fontSize: 12,
-                      )),
+                    'Title XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  Gap(8),
+                  Text(
+                    '2M views . 2 days ago . 122k likes',
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         );
       },
-      separatorBuilder: (context, index) {
+      separatorBuilder: (BuildContext context, int index) {
         return Gap(8);
       },
       itemCount: 10,

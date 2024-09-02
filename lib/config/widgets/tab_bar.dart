@@ -39,7 +39,7 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
             tabAlignment: widget.tabAlignment,
           ),
           const Gap(8),
-          Builder(builder: (context) {
+          Builder(builder: (BuildContext context) {
             if (widget.shrinkViews == true) {
               return IndexedStack(
                 sizing: StackFit.loose,
@@ -53,7 +53,7 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
                 children: widget.tabViews,
               ),
             );
-          }),
+          },),
         ],
       ),
     );
