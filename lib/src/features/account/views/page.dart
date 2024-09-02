@@ -282,15 +282,6 @@ class AccountPage extends StatelessWidget {
                         ],
                       ),
                       const Gap(8),
-                      // IndexedStack(
-                      //   children: [
-                      //     AccountPageAboutView(),
-                      //     const Text('Videos'),
-                      //     const Text('Photos'),
-                      //     const Text('Audios'),
-                      //     const Text('Documents'),
-                      //   ],
-                      // ),
                     ],
                   ),
                 )
