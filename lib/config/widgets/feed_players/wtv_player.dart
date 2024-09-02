@@ -32,29 +32,26 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
   }
 
   Future<void> initiateVideoPlayer() async {
-    if (controller == null) {
-      controller =
-          VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-            ..initialize().then((_) {
-              // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-              setState(() {});
-            });
-
-      controller?.play();
-      controller?.addListener(() async {
-        if (controller?.value.position == controller?.value.duration) {
-          await Future<void>.delayed(const Duration(seconds: 1));
-          controller?.seekTo(Duration.zero);
-          if (widget.loopVideo == true) {
+    controller ??=
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             controller?.play();
-          } else {
-            controller?.pause();
-            controller = null;
             setState(() {});
-          }
-        }
-      });
-    }
+            controller?.addListener(() async {
+              if (controller?.value.position == controller?.value.duration) {
+                await Future<void>.delayed(const Duration(seconds: 1));
+                controller?.seekTo(Duration.zero);
+                if (widget.loopVideo == true) {
+                  controller?.play();
+                } else {
+                  controller?.pause();
+                  controller = null;
+                }
+                setState(() {});
+              }
+            });
+          });
   }
 
   @override

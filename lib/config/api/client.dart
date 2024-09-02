@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 
+import 'interceptors/cache.dart';
+import 'interceptors/retry.dart';
+
 class ApiClient {
   /// Restricting any instantiation of this class
   ApiClient._();
@@ -23,19 +26,10 @@ class ApiClient {
         },
       ),
     );
-    client.interceptors.add(
-      RetryInterceptor(
-        dio: client,
-        logPrint: print,
-        retries: 3,
-        retryDelays: const <Duration>[
-          // set delays between retries (optional)
-          Duration(seconds: 1),
-          Duration(seconds: 2),
-          Duration(seconds: 3),
-        ],
-      ),
-    );
+    client.interceptors.addAll([
+      ApiRetryInterceptor(dio: client),
+      ApiCacheInterceptor(),
+    ]);
   }
 
   static void apiMethodException(Object e) {

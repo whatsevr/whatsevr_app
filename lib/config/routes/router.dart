@@ -20,6 +20,7 @@ CustomTransitionPage<SlideTransition> _navigateWithTransition({
   required BuildContext context,
   required GoRouterState state,
   required Widget child,
+  bool? slideFromBottom,
 }) {
   return CustomTransitionPage<SlideTransition>(
     transitionDuration: const Duration(milliseconds: 300),
@@ -31,6 +32,17 @@ CustomTransitionPage<SlideTransition> _navigateWithTransition({
       Animation<double> secondaryAnimation,
       Widget child,
     ) {
+      if (slideFromBottom == true) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 1),
+            end: Offset.zero,
+          ).animate(
+            animation,
+          ),
+          child: child,
+        );
+      }
       return SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(1, 0),
@@ -192,6 +204,7 @@ class AppNavigationService {
               pageBuilder: (BuildContext context, GoRouterState state) {
                 SettingsPage? accountSearchPage = state.extra as SettingsPage?;
                 return _navigateWithTransition(
+                  slideFromBottom: true,
                   context: context,
                   state: state,
                   child: const WtvDetailsPage(),
