@@ -10,3 +10,18 @@ class InitialEvent extends SplashEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class LoginOrSignupEvent extends SplashEvent {
+  const LoginOrSignupEvent();
+
+  @override
+  List<Object?> get props => <Object?>[];
+}
+
+class CheckUserStatus extends SplashEvent {
+  final String? userUid;
+  const CheckUserStatus({this.userUid});
+
+  @override
+  List<Object?> get props => <Object?>[userUid];
+}

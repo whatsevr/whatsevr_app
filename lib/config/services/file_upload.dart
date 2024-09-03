@@ -1,8 +1,9 @@
 import 'dart:io';
 
-
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
+
+import '../../constants.dart';
 
 class FileUploadService {
   static late final SupabaseStorageClient _supabaseStorageClient;
@@ -13,11 +14,11 @@ class FileUploadService {
     ).storage;
   }
 
-  static Future<String?> uploadFiles(File file) async {
+  static Future<String?> uploadFilesToSST(File file) async {
     try {
       //restrict file size to 50MB
-      if (file.lengthSync() > 50000000) {
-        throw ('File size too large (Max 50MB)');
+      if (file.lengthSync() > kMaxMediaFileUploadSizeInMb * 1000000) {
+        throw ('File size too large (Max $kMaxMediaFileUploadSizeInMb MB)');
       }
       final String fileName =
           '${DateTime.now().microsecondsSinceEpoch}${file.path.split('.').last}';

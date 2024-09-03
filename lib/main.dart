@@ -6,9 +6,12 @@ import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
+import 'config/services/logged_user.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WakelockPlus.enable();
+  LoggedUser.initDB();
   ApiClient.init();
   FileUploadService.init();
   runApp(const WhatsevrApp());

@@ -28,7 +28,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     on<PickThumbnailEvent>(_onPickThumbnail);
   }
   FutureOr<void> _onInitial(
-      CreatePostInitialEvent event, Emitter<CreatePostState> emit,) async {
+    CreatePostInitialEvent event,
+    Emitter<CreatePostState> emit,
+  ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.video,
@@ -38,7 +40,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   }
 
   FutureOr<void> _onSubmit(
-      SubmitPostEvent event, Emitter<CreatePostState> emit,) async {
+    SubmitPostEvent event,
+    Emitter<CreatePostState> emit,
+  ) async {
     try {
       titleController.text = titleController.text.trim();
       descriptionController.text = descriptionController.text.trim();
@@ -52,9 +56,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
 
       SmartDialog.showLoading();
       final String? videoUrl =
-          await FileUploadService.uploadFiles(state.videoFile!);
+          await FileUploadService.uploadFilesToSST(state.videoFile!);
       final String? thumbnailUrl =
-          await FileUploadService.uploadFiles(state.thumbnailFile!);
+          await FileUploadService.uploadFilesToSST(state.thumbnailFile!);
       CreateVideoPostResponse? response = await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: titleController.text,
@@ -76,7 +80,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   }
 
   FutureOr<void> _onPickVideo(
-      PickVideoEvent event, Emitter<CreatePostState> emit,) async {
+    PickVideoEvent event,
+    Emitter<CreatePostState> emit,
+  ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.image,
@@ -86,7 +92,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   }
 
   FutureOr<void> _onPickThumbnail(
-      PickThumbnailEvent event, Emitter<CreatePostState> emit,) async {
+    PickThumbnailEvent event,
+    Emitter<CreatePostState> emit,
+  ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
       type: FileType.image,
