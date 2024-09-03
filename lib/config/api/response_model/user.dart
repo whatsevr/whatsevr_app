@@ -1,48 +1,10 @@
 import 'dart:convert';
 
 class AuthorisedUserResponse {
-  final int? id;
-  final DateTime? registeredOn;
-  final bool? isActive;
-  final String? uid;
-  final String? userName;
-  final String? mobileNumber;
-  final String? emailId;
-  final String? name;
-  final String? bio;
-  final String? address;
-  final String? dob;
-  final String? profilePicture;
-  final bool? isPortfolio;
-  final String? portfolioStatus;
-  final List<String>? portfolioServices;
-  final String? portfolioDescription;
-  final bool? isBanned;
-  final bool? isSpam;
-  final bool? isDiactivated;
-  final DateTime? portfolioCreatedAt;
+  final Data? data;
 
   AuthorisedUserResponse({
-    this.id,
-    this.registeredOn,
-    this.isActive,
-    this.uid,
-    this.userName,
-    this.mobileNumber,
-    this.emailId,
-    this.name,
-    this.bio,
-    this.address,
-    this.dob,
-    this.profilePicture,
-    this.isPortfolio,
-    this.portfolioStatus,
-    this.portfolioServices,
-    this.portfolioDescription,
-    this.isBanned,
-    this.isSpam,
-    this.isDiactivated,
-    this.portfolioCreatedAt,
+    this.data,
   });
 
   factory AuthorisedUserResponse.fromJson(String str) =>
@@ -52,56 +14,354 @@ class AuthorisedUserResponse {
 
   factory AuthorisedUserResponse.fromMap(Map<String, dynamic> json) =>
       AuthorisedUserResponse(
-        id: json["id"],
-        registeredOn: json["registered_on"] == null
-            ? null
-            : DateTime.parse(json["registered_on"]),
-        isActive: json["is_active"],
-        uid: json["uid"],
-        userName: json["user_name"],
-        mobileNumber: json["mobile_number"],
-        emailId: json["email_id"],
-        name: json["name"],
-        bio: json["bio"],
-        address: json["address"],
-        dob: json["dob"],
-        profilePicture: json["profile_picture"],
-        isPortfolio: json["is_portfolio"],
-        portfolioStatus: json["portfolio_status"],
-        portfolioServices: json["portfolio_services"] == null
-            ? []
-            : List<String>.from(json["portfolio_services"]!.map((x) => x)),
-        portfolioDescription: json["portfolio_description"],
-        isBanned: json["is_banned"],
-        isSpam: json["is_spam"],
-        isDiactivated: json["is_diactivated"],
-        portfolioCreatedAt: json["portfolio_created_at"] == null
-            ? null
-            : DateTime.parse(json["portfolio_created_at"]),
+        data: json["data"] == null ? null : Data.fromMap(json["data"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "registered_on": registeredOn?.toIso8601String(),
-        "is_active": isActive,
-        "uid": uid,
-        "user_name": userName,
-        "mobile_number": mobileNumber,
-        "email_id": emailId,
-        "name": name,
-        "bio": bio,
-        "address": address,
-        "dob": dob,
-        "profile_picture": profilePicture,
-        "is_portfolio": isPortfolio,
-        "portfolio_status": portfolioStatus,
-        "portfolio_services": portfolioServices == null
+        "data": data?.toMap(),
+      };
+}
+
+class Data {
+  final Info? firebaseInfo;
+  final String? token;
+  final String? status;
+  final String? userId;
+  final DateTime? timestamp;
+  final List<Identity>? identities;
+  final String? idToken;
+  final Network? network;
+  final DeviceInfo? deviceInfo;
+  final Info? sessionInfo;
+
+  Data({
+    this.firebaseInfo,
+    this.token,
+    this.status,
+    this.userId,
+    this.timestamp,
+    this.identities,
+    this.idToken,
+    this.network,
+    this.deviceInfo,
+    this.sessionInfo,
+  });
+
+  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Data.fromMap(Map<String, dynamic> json) => Data(
+        firebaseInfo: json["firebaseInfo"] == null
+            ? null
+            : Info.fromMap(json["firebaseInfo"]),
+        token: json["token"],
+        status: json["status"],
+        userId: json["userId"],
+        timestamp: json["timestamp"] == null
+            ? null
+            : DateTime.parse(json["timestamp"]),
+        identities: json["identities"] == null
             ? []
-            : List<dynamic>.from(portfolioServices!.map((x) => x)),
-        "portfolio_description": portfolioDescription,
-        "is_banned": isBanned,
-        "is_spam": isSpam,
-        "is_diactivated": isDiactivated,
-        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
+            : List<Identity>.from(
+                json["identities"]!.map((x) => Identity.fromMap(x))),
+        idToken: json["idToken"],
+        network:
+            json["network"] == null ? null : Network.fromMap(json["network"]),
+        deviceInfo: json["deviceInfo"] == null
+            ? null
+            : DeviceInfo.fromMap(json["deviceInfo"]),
+        sessionInfo: json["sessionInfo"] == null
+            ? null
+            : Info.fromMap(json["sessionInfo"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "firebaseInfo": firebaseInfo?.toMap(),
+        "token": token,
+        "status": status,
+        "userId": userId,
+        "timestamp": timestamp?.toIso8601String(),
+        "identities": identities == null
+            ? []
+            : List<dynamic>.from(identities!.map((x) => x.toMap())),
+        "idToken": idToken,
+        "network": network?.toMap(),
+        "deviceInfo": deviceInfo?.toMap(),
+        "sessionInfo": sessionInfo?.toMap(),
+      };
+}
+
+class DeviceInfo {
+  final String? userAgent;
+  final String? platform;
+  final String? vendor;
+  final String? browser;
+  final String? connection;
+  final String? language;
+  final bool? cookieEnabled;
+  final int? screenWidth;
+  final int? screenHeight;
+  final int? screenColorDepth;
+  final double? devicePixelRatio;
+  final int? timezoneOffset;
+  final String? cpuArchitecture;
+  final String? fontFamily;
+
+  DeviceInfo({
+    this.userAgent,
+    this.platform,
+    this.vendor,
+    this.browser,
+    this.connection,
+    this.language,
+    this.cookieEnabled,
+    this.screenWidth,
+    this.screenHeight,
+    this.screenColorDepth,
+    this.devicePixelRatio,
+    this.timezoneOffset,
+    this.cpuArchitecture,
+    this.fontFamily,
+  });
+
+  factory DeviceInfo.fromJson(String str) =>
+      DeviceInfo.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory DeviceInfo.fromMap(Map<String, dynamic> json) => DeviceInfo(
+        userAgent: json["userAgent"],
+        platform: json["platform"],
+        vendor: json["vendor"],
+        browser: json["browser"],
+        connection: json["connection"],
+        language: json["language"],
+        cookieEnabled: json["cookieEnabled"],
+        screenWidth: json["screenWidth"],
+        screenHeight: json["screenHeight"],
+        screenColorDepth: json["screenColorDepth"],
+        devicePixelRatio: json["devicePixelRatio"]?.toDouble(),
+        timezoneOffset: json["timezoneOffset"],
+        cpuArchitecture: json["cpuArchitecture"],
+        fontFamily: json["fontFamily"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "userAgent": userAgent,
+        "platform": platform,
+        "vendor": vendor,
+        "browser": browser,
+        "connection": connection,
+        "language": language,
+        "cookieEnabled": cookieEnabled,
+        "screenWidth": screenWidth,
+        "screenHeight": screenHeight,
+        "screenColorDepth": screenColorDepth,
+        "devicePixelRatio": devicePixelRatio,
+        "timezoneOffset": timezoneOffset,
+        "cpuArchitecture": cpuArchitecture,
+        "fontFamily": fontFamily,
+      };
+}
+
+class Info {
+  Info();
+
+  factory Info.fromJson(String str) => Info.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Info.fromMap(Map<String, dynamic> json) => Info();
+
+  Map<String, dynamic> toMap() => {};
+}
+
+class Identity {
+  final String? identityType;
+  final String? identityValue;
+  final String? channel;
+  final List<String>? methods;
+  final bool? verified;
+  final DateTime? verifiedAt;
+
+  Identity({
+    this.identityType,
+    this.identityValue,
+    this.channel,
+    this.methods,
+    this.verified,
+    this.verifiedAt,
+  });
+
+  factory Identity.fromJson(String str) => Identity.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Identity.fromMap(Map<String, dynamic> json) => Identity(
+        identityType: json["identityType"],
+        identityValue: json["identityValue"],
+        channel: json["channel"],
+        methods: json["methods"] == null
+            ? []
+            : List<String>.from(json["methods"]!.map((x) => x)),
+        verified: json["verified"],
+        verifiedAt: json["verifiedAt"] == null
+            ? null
+            : DateTime.parse(json["verifiedAt"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "identityType": identityType,
+        "identityValue": identityValue,
+        "channel": channel,
+        "methods":
+            methods == null ? [] : List<dynamic>.from(methods!.map((x) => x)),
+        "verified": verified,
+        "verifiedAt": verifiedAt?.toIso8601String(),
+      };
+}
+
+class Network {
+  final String? ip;
+  final String? timezone;
+  final IpLocation? ipLocation;
+
+  Network({
+    this.ip,
+    this.timezone,
+    this.ipLocation,
+  });
+
+  factory Network.fromJson(String str) => Network.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Network.fromMap(Map<String, dynamic> json) => Network(
+        ip: json["ip"],
+        timezone: json["timezone"],
+        ipLocation: json["ipLocation"] == null
+            ? null
+            : IpLocation.fromMap(json["ipLocation"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "ip": ip,
+        "timezone": timezone,
+        "ipLocation": ipLocation?.toMap(),
+      };
+}
+
+class IpLocation {
+  final City? city;
+  final Country? subdivisions;
+  final Country? country;
+  final Continent? continent;
+  final double? latitude;
+  final double? longitude;
+  final String? postalCode;
+
+  IpLocation({
+    this.city,
+    this.subdivisions,
+    this.country,
+    this.continent,
+    this.latitude,
+    this.longitude,
+    this.postalCode,
+  });
+
+  factory IpLocation.fromJson(String str) =>
+      IpLocation.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory IpLocation.fromMap(Map<String, dynamic> json) => IpLocation(
+        city: json["city"] == null ? null : City.fromMap(json["city"]),
+        subdivisions: json["subdivisions"] == null
+            ? null
+            : Country.fromMap(json["subdivisions"]),
+        country:
+            json["country"] == null ? null : Country.fromMap(json["country"]),
+        continent: json["continent"] == null
+            ? null
+            : Continent.fromMap(json["continent"]),
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
+        postalCode: json["postalCode"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "city": city?.toMap(),
+        "subdivisions": subdivisions?.toMap(),
+        "country": country?.toMap(),
+        "continent": continent?.toMap(),
+        "latitude": latitude,
+        "longitude": longitude,
+        "postalCode": postalCode,
+      };
+}
+
+class City {
+  final String? name;
+
+  City({
+    this.name,
+  });
+
+  factory City.fromJson(String str) => City.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory City.fromMap(Map<String, dynamic> json) => City(
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "name": name,
+      };
+}
+
+class Continent {
+  final String? code;
+
+  Continent({
+    this.code,
+  });
+
+  factory Continent.fromJson(String str) => Continent.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Continent.fromMap(Map<String, dynamic> json) => Continent(
+        code: json["code"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "code": code,
+      };
+}
+
+class Country {
+  final String? code;
+  final String? name;
+
+  Country({
+    this.code,
+    this.name,
+  });
+
+  factory Country.fromJson(String str) => Country.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Country.fromMap(Map<String, dynamic> json) => Country(
+        code: json["code"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "code": code,
+        "name": name,
       };
 }

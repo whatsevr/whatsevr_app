@@ -11,7 +11,7 @@ import 'config/services/logged_user.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WakelockPlus.enable();
-  LoggedUser.initDB();
+  AuthUserDb.initDB();
   ApiClient.init();
   FileUploadService.init();
   runApp(const WhatsevrApp());

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -31,8 +32,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Emitter<SplashState> emit,
   ) async {
     await Future.delayed(const Duration(seconds: 2));
-    AuthorisedUserResponse? user = await LoggedUser.getLoggedUser();
-    if (user != null) {
+    AuthorisedUserResponse? loggedAuthorisedUserResponse =
+        await AuthUserDb.getAuthorisedUser();
+    if (loggedAuthorisedUserResponse != null) {
       AppNavigationService.newRoute(RoutesName.dashboard);
     } else {
       add(LoginOrSignupEvent());
@@ -49,8 +51,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     await otplessFlutterPlugin.openLoginPage(
       (result) {
         log('result XXXXX: $result');
-        if (result['data']['userId'].isNotEmpty) {
-          add(CheckUserStatus(userUid: result['data']['userId']));
+        print(result.runtimeType);
+        if (result['data'] != null) {
+          add(CheckUserStatus(authUserData: result));
         } else {
           SmartDialog.showToast('${result['errorMessage']}');
         }
@@ -62,10 +65,15 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   FutureOr<void> _onCheckUserStatus(
       CheckUserStatus event, Emitter<SplashState> emit) async {
     try {
+      AuthorisedUserResponse? authorisedUserResponse =
+          AuthorisedUserResponse.fromMap(event.authUserData!);
       UserStatusResponse? userStatusResponse = await UsersApi.checkUserStatus(
-        userUid: event.userUid!,
+        userUid: authorisedUserResponse.data!.userId!,
       );
+      await AuthUserDb.saveAuthorisedUser(authorisedUserResponse);
       SmartDialog.showToast('${userStatusResponse!.message}');
+
+      AppNavigationService.newRoute(RoutesName.dashboard);
     } catch (e) {
       SmartDialog.showToast('Error: $e');
       if (kDebugMode) rethrow;
