@@ -33,7 +33,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   ) async {
     await Future.delayed(const Duration(seconds: 2));
     AuthorisedUserResponse? loggedAuthorisedUserResponse =
-        await AuthUserDb.getAuthorisedUser();
+        await AuthUserDb.getLastLoggedAuthorisedUser();
     if (loggedAuthorisedUserResponse != null) {
       AppNavigationService.newRoute(RoutesName.dashboard);
     } else {
@@ -71,6 +71,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         userUid: authorisedUserResponse.data!.userId!,
       );
       await AuthUserDb.saveAuthorisedUser(authorisedUserResponse);
+      await AuthUserDb.saveLastLoggedUserId(authorisedUserResponse);
       SmartDialog.showToast('${userStatusResponse!.message}');
 
       AppNavigationService.newRoute(RoutesName.dashboard);
