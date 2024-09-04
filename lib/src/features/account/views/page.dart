@@ -13,6 +13,8 @@ import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
+import '../../../../config/enums/post_creator_type.dart';
+
 class AccountPage extends StatelessWidget {
   AccountPage({super.key});
   final PageController controller = PageController();
@@ -134,7 +136,8 @@ class AccountPage extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.add_box_rounded),
                         onPressed: () {
-                          showContentUploadBottomSheet(context);
+                          showContentUploadBottomSheet(context,
+                              postCreatorType: EnumPostCreatorType.ACCOUNT);
                         },
                       ),
                       IconButton(

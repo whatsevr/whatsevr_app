@@ -14,7 +14,7 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 
 import '../../../../config/api/methods/users.dart';
-import '../../../../config/api/response_model/user.dart';
+import '../../../../config/api/response_model/auth_user.dart';
 import '../../../../config/services/auth_db.dart';
 
 part 'splash_event.dart';
@@ -32,7 +32,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Emitter<SplashState> emit,
   ) async {
     await Future.delayed(const Duration(seconds: 2));
-    
+
     AuthorisedUserResponse? loggedAuthorisedUserResponse =
         await AuthUserDb.getLastLoggedAuthorisedUser();
     if (loggedAuthorisedUserResponse != null) {

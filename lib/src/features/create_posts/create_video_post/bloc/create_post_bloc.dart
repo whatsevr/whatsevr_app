@@ -7,21 +7,26 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
+
+import '../../../../../utils/video.dart';
 
 part 'create_post_event.dart';
 part 'create_post_state.dart';
 
-class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
+class CreateVideoPostBloc
+    extends Bloc<CreateVideoPostEvent, CreateVideoPostState> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final TextEditingController hashtagsController = TextEditingController();
 
-  CreatePostBloc() : super(CreatePostState()) {
+  CreateVideoPostBloc() : super(CreateVideoPostState()) {
     on<CreatePostInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
@@ -29,19 +34,15 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
-    Emitter<CreatePostState> emit,
+    Emitter<CreateVideoPostState> emit,
   ) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.video,
-    );
-
-    emit(state.copyWith(videoFile: File(result!.files.single.path!)));
+    emit(state.copyWith(pageArgument: event.pageArgument));
+    add(PickVideoEvent());
   }
 
   FutureOr<void> _onSubmit(
     SubmitPostEvent event,
-    Emitter<CreatePostState> emit,
+    Emitter<CreateVideoPostState> emit,
   ) async {
     try {
       titleController.text = titleController.text.trim();
@@ -63,10 +64,10 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
         post: CreateVideoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
-          userUid: 'MO-2a58e344d0b9463686c486ad99929666',
+          userUid: await AuthUserDb.getLastLoggedUserId(),
           hashtags: <String>['hashtag1', 'hashtag2'],
           location: 'Location',
-          postCreatorType: 'account',
+          postCreatorType: state.pageArgument?.postCreatorType.value,
           thumbnail: thumbnailUrl,
           videoUrl: videoUrl,
         ),
@@ -81,19 +82,22 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
 
   FutureOr<void> _onPickVideo(
     PickVideoEvent event,
-    Emitter<CreatePostState> emit,
+    Emitter<CreateVideoPostState> emit,
   ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
-      type: FileType.image,
+      type: FileType.video,
     );
 
     emit(state.copyWith(videoFile: File(result!.files.single.path!)));
+
+    emit(state.copyWith(
+        thumbnailFile: await getThumbnailFile(state.videoFile!)));
   }
 
   FutureOr<void> _onPickThumbnail(
     PickThumbnailEvent event,
-    Emitter<CreatePostState> emit,
+    Emitter<CreateVideoPostState> emit,
   ) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,

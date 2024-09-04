@@ -6,14 +6,16 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../../utils/conversion.dart';
-import '../api/response_model/user.dart';
+import '../api/response_model/auth_user.dart';
 
 class AuthUserDb {
   AuthUserDb._();
 
   static late Box<dynamic> _authorisedCustomersBox;
+
   static const String _lastLoggedUserId = 'last_logged_user_id';
   static const String _allLoggedUsers = 'all_logged_users';
+
   static Future<void> initDB() async {
     String dbBoxName = 'logged-user-hive-boxs-5254325';
     await Hive.initFlutter();
@@ -50,8 +52,19 @@ class AuthUserDb {
     return AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(user)));
   }
 
-  static Future<void> clearAllAuthorisedUser() async {
-    await _authorisedCustomersBox.clear();
+  static Future<List<AuthorisedUserResponse>> getAllAuthorisedUser() async {
+    List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+    if (users == null) return [];
+    return users
+        .map((e) => AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(e))))
+        .toList();
+  }
+
+  static Future<void> removeAuthorisedUser(String userId) async {
+    List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+    if (users == null) return;
+    users.removeWhere((element) => element['data']['userId'] == userId);
+    await _authorisedCustomersBox.put(_allLoggedUsers, users);
   }
 
   ///[saveLastLoggedUserId]
@@ -61,5 +74,18 @@ class AuthUserDb {
 
   static Future<String?> getLastLoggedUserId() async {
     return _authorisedCustomersBox.get(_lastLoggedUserId);
+  }
+
+  ///[clearAllAuthorisedUser]
+  static Future<void> clearAllAuthorisedUser() async {
+    await _authorisedCustomersBox.delete(_allLoggedUsers);
+  }
+
+  static Future<void> clearLastLoggedUserId() async {
+    await _authorisedCustomersBox.delete(_lastLoggedUserId);
+  }
+
+  static Future<void> clearAllAuthData() async {
+    await _authorisedCustomersBox.clear();
   }
 }

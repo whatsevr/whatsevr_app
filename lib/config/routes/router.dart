@@ -12,7 +12,7 @@ import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/splash/views/page.dart';
 
-import 'package:whatsevr_app/src/features/create_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/src/features/wtv_details/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
@@ -212,15 +212,17 @@ class AppNavigationService {
               },
             ),
             GoRoute(
-              name: RoutesName.createPost,
-              path: RoutesName.createPost,
+              name: RoutesName.createVideoPost,
+              path: RoutesName.createVideoPost,
               pageBuilder: (BuildContext context, GoRouterState state) {
-                AccountSearchPage? accountSearchPage =
-                    state.extra as AccountSearchPage?;
+                CreateVideoPostPageArgument pageArgument =
+                    state.extra as CreateVideoPostPageArgument;
                 return _navigateWithTransition(
                   context: context,
                   state: state,
-                  child: const CreatePost(),
+                  child: CreateVideoPost(
+                    pageArgument: pageArgument,
+                  ),
                 );
               },
             ),

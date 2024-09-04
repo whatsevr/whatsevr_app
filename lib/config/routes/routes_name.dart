@@ -11,5 +11,5 @@ class RoutesName {
   static const String community = 'community';
   static const String settings = 'settings';
   static const String wtvDetails = 'wtv-details';
-  static const String createPost = 'create-post';
+  static const String createVideoPost = 'create-post';
 }

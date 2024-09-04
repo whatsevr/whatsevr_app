@@ -50,6 +50,7 @@ dependencies:
   supabase: ^2.3.0
   easy_refresh: ^3.4.0
   collection: ^1.18.0
+  video_thumbnail: ^0.5.3
 
 
 dev_dependencies:

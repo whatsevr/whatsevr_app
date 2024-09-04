@@ -18,6 +18,8 @@ import 'package:whatsevr_app/src/features/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 import 'package:whatsevr_app/src/features/home/views/page.dart';
 
+import '../../../../../config/enums/post_creator_type.dart';
+
 class DashboardPageBottomNavigationBar extends StatelessWidget {
   const DashboardPageBottomNavigationBar({
     super.key,
@@ -73,9 +75,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(const TabChanged(
-              newView: ExplorePage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              const TabChanged(
+                newView: ExplorePage(),
+              ),
+            );
       },
     ),
     (
@@ -84,9 +88,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(const TabChanged(
-              newView: HomePage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              const TabChanged(
+                newView: HomePage(),
+              ),
+            );
       },
     ),
     (
@@ -95,7 +101,8 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        showContentUploadBottomSheet(context);
+        showContentUploadBottomSheet(context,
+            postCreatorType: EnumPostCreatorType.ACCOUNT);
       },
     ),
     (
@@ -104,9 +111,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(const TabChanged(
-              newView: FlicksPage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              const TabChanged(
+                newView: FlicksPage(),
+              ),
+            );
       },
     ),
     (
@@ -115,9 +124,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(const TabChanged(
-              newView: ChatsPage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              const TabChanged(
+                newView: ChatsPage(),
+              ),
+            );
       },
     ),
     (
@@ -126,9 +137,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(const TabChanged(
-              newView: NotificationsPage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              const TabChanged(
+                newView: NotificationsPage(),
+              ),
+            );
       },
     ),
     (
@@ -137,9 +150,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
         size: 30,
       ),
       () {
-        context.read<DashboardBloc>().add(TabChanged(
-              newView: AccountPage(),
-            ),);
+        context.read<DashboardBloc>().add(
+              TabChanged(
+                newView: AccountPage(),
+              ),
+            );
       },
     ),
   ];
