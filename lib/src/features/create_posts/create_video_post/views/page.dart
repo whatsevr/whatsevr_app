@@ -10,6 +10,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -120,8 +121,24 @@ class CreateVideoPost extends StatelessWidget {
                   ),
                   if (state.videoFile != null || state.thumbnailFile != null)
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        if (state.videoFile != null)
+                          FutureBuilder<String?>(
+                            future: getFileSize(state.videoFile!),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return Text(
+                                  'Video size: ${snapshot.data}',
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                );
+                              }
+                              return CircularProgressIndicator();
+                            },
+                          ),
+                        Spacer(),
                         if (state.videoFile != null &&
                             state.thumbnailFile != null)
                           MaterialButton(
