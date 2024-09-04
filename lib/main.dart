@@ -6,7 +6,7 @@ import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
-import 'config/services/logged_user.dart';
+import 'config/services/auth_db.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

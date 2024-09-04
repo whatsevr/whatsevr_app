@@ -15,7 +15,7 @@ import 'package:otpless_flutter/otpless_flutter.dart';
 
 import '../../../../config/api/methods/users.dart';
 import '../../../../config/api/response_model/user.dart';
-import '../../../../config/services/logged_user.dart';
+import '../../../../config/services/auth_db.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';

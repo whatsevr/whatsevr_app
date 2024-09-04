@@ -16,7 +16,6 @@ class FileUploadService {
 
   static Future<String?> uploadFilesToSST(File file) async {
     try {
-      //restrict file size to 50MB
       if (file.lengthSync() > kMaxMediaFileUploadSizeInMb * 1000000) {
         throw ('File size too large (Max $kMaxMediaFileUploadSizeInMb MB)');
       }
