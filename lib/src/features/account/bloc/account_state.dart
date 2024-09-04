@@ -1,10 +1,20 @@
 part of 'account_bloc.dart';
 
-sealed class AccountState extends Equatable {
-  const AccountState();
-}
+class AccountState extends Equatable {
+  final ProfileDetailsResponse? profileDetailsResponse;
+  const AccountState({
+    this.profileDetailsResponse,
+  });
 
-final class AccountInitial extends AccountState {
   @override
-  List<Object> get props => <Object>[];
+  List<Object?> get props => [profileDetailsResponse];
+
+  AccountState copyWith({
+    ProfileDetailsResponse? profileDetailsResponse,
+  }) {
+    return AccountState(
+      profileDetailsResponse:
+          profileDetailsResponse ?? this.profileDetailsResponse,
+    );
+  }
 }

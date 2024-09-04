@@ -51,6 +51,7 @@ dependencies:
   easy_refresh: ^3.4.0
   collection: ^1.18.0
   video_thumbnail: ^0.5.3
+  shorebird_code_push: ^1.1.4
 
 
 dev_dependencies:
@@ -74,4 +75,5 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - shorebird.yaml
 

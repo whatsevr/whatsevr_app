@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 
@@ -19,7 +21,8 @@ class ApiClient {
         receiveTimeout: Duration(seconds: 30),
         sendTimeout: Duration(seconds: 30),
         validateStatus: (int? status) {
-          return status == 200;
+          /// this client will only accept status code 200 and 204 as success
+          return status == HttpStatus.ok || status == HttpStatus.noContent;
         },
         headers: <String, dynamic>{
           'secret': 'your_secret_key',
@@ -35,11 +38,11 @@ class ApiClient {
   static void apiMethodException(Object e) {
     if (e is DioException) {
       if (e.response?.statusCode == 500) {
-        throw ('Internal Server Error');
+        throw ('Server response: Internal Server Error');
       }
-      throw ('${e.response?.data['message']}');
+      throw ('Server response: ${e.response?.data['message']}');
     }
 
-    throw ('Error creating post: ${e.toString()}');
+    throw ('App Error: ${e.toString()}');
   }
 }

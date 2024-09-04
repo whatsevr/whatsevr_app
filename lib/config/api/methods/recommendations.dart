@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
@@ -11,7 +13,9 @@ class RecommendationApi {
     try {
       Response response =
           await ApiClient.client.get('/v1/recommendations/videos');
-      return RecommendationVideosResponse.fromMap(response.data);
+      if (response.statusCode == HttpStatus.ok) {
+        return RecommendationVideosResponse.fromMap(response.data);
+      }
     } catch (e) {
       ApiClient.apiMethodException(e);
     }

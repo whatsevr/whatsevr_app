@@ -44,7 +44,7 @@ class AuthUserDb {
   static Future<AuthorisedUserResponse?> getLastLoggedAuthorisedUser() async {
     List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
     if (users == null) return null;
-    var lastLoggedUserId = await getLastLoggedUserId();
+    var lastLoggedUserId = await getLastLoggedUserUid();
     if (lastLoggedUserId == null) return null;
     var user = users.firstWhereOrNull(
         (element) => element['data']['userId'] == lastLoggedUserId);
@@ -72,7 +72,7 @@ class AuthUserDb {
     await _authorisedCustomersBox.put(_lastLoggedUserId, user.data!.userId);
   }
 
-  static Future<String?> getLastLoggedUserId() async {
+  static Future<String?> getLastLoggedUserUid() async {
     return _authorisedCustomersBox.get(_lastLoggedUserId);
   }
 

@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 import 'package:supabase/supabase.dart';
 import 'package:whatsevr_app/config/api/response_model/user_status.dart';
 
@@ -68,7 +69,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     try {
       AuthorisedUserResponse? authorisedUserResponse =
           AuthorisedUserResponse.fromMap(event.authUserData!);
-      UserStatusResponse? userStatusResponse = await UsersApi.checkUserStatus(
+      UserDetailsResponse? userStatusResponse = await UsersApi.getUserDetails(
         userUid: authorisedUserResponse.data!.userId!,
       );
       await AuthUserDb.saveAuthorisedUser(authorisedUserResponse);

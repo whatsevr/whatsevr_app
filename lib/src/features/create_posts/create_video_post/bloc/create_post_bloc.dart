@@ -64,7 +64,7 @@ class CreateVideoPostBloc
         post: CreateVideoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserId(),
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
           hashtags: <String>['hashtag1', 'hashtag2'],
           location: 'Location',
           postCreatorType: state.pageArgument?.postCreatorType.value,

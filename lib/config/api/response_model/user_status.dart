@@ -1,21 +1,21 @@
 import 'dart:convert';
 
-class UserStatusResponse {
+class UserDetailsResponse {
   final String? message;
   final Data? data;
 
-  UserStatusResponse({
+  UserDetailsResponse({
     this.message,
     this.data,
   });
 
-  factory UserStatusResponse.fromJson(String str) =>
-      UserStatusResponse.fromMap(json.decode(str));
+  factory UserDetailsResponse.fromJson(String str) =>
+      UserDetailsResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserStatusResponse.fromMap(Map<String, dynamic> json) =>
-      UserStatusResponse(
+  factory UserDetailsResponse.fromMap(Map<String, dynamic> json) =>
+      UserDetailsResponse(
         message: json["message"],
         data: json["data"] == null ? null : Data.fromMap(json["data"]),
       );
