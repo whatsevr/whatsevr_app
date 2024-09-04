@@ -11,9 +11,11 @@ class SplashPage extends StatelessWidget {
     return BlocProvider(
       lazy: false,
       create: (BuildContext context) => SplashBloc()..add(const InitialEvent()),
-      child: Builder(builder: (BuildContext context) {
-        return buildPage(context);
-      },),
+      child: Builder(
+        builder: (BuildContext context) {
+          return buildPage(context);
+        },
+      ),
     );
   }
 

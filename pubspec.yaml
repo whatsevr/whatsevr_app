@@ -49,7 +49,7 @@ dependencies:
   detectable_text_field: ^3.0.2
   supabase: ^2.3.0
   easy_refresh: ^3.4.0
-  collection: ^1.19.0
+  collection: ^1.18.0
 
 
 dev_dependencies:
