@@ -52,12 +52,12 @@ class UserInfo {
   final String? profilePicture;
   final bool? isPortfolio;
   final String? portfolioStatus;
-  final List<String>? portfolioServices;
   final String? portfolioDescription;
   final bool? isBanned;
   final bool? isSpam;
   final bool? isDiactivated;
   final dynamic portfolioCreatedAt;
+  final String? portfolioTitle;
 
   UserInfo({
     this.id,
@@ -74,12 +74,12 @@ class UserInfo {
     this.profilePicture,
     this.isPortfolio,
     this.portfolioStatus,
-    this.portfolioServices,
     this.portfolioDescription,
     this.isBanned,
     this.isSpam,
     this.isDiactivated,
     this.portfolioCreatedAt,
+    this.portfolioTitle,
   });
 
   factory UserInfo.fromJson(String str) => UserInfo.fromMap(json.decode(str));
@@ -103,14 +103,12 @@ class UserInfo {
         profilePicture: json["profile_picture"],
         isPortfolio: json["is_portfolio"],
         portfolioStatus: json["portfolio_status"],
-        portfolioServices: json["portfolio_services"] == null
-            ? []
-            : List<String>.from(json["portfolio_services"]!.map((x) => x)),
         portfolioDescription: json["portfolio_description"],
         isBanned: json["is_banned"],
         isSpam: json["is_spam"],
         isDiactivated: json["is_diactivated"],
         portfolioCreatedAt: json["portfolio_created_at"],
+        portfolioTitle: json["portfolio_title"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -129,14 +127,12 @@ class UserInfo {
         "profile_picture": profilePicture,
         "is_portfolio": isPortfolio,
         "portfolio_status": portfolioStatus,
-        "portfolio_services": portfolioServices == null
-            ? []
-            : List<dynamic>.from(portfolioServices!.map((x) => x)),
         "portfolio_description": portfolioDescription,
         "is_banned": isBanned,
         "is_spam": isSpam,
         "is_diactivated": isDiactivated,
         "portfolio_created_at": portfolioCreatedAt,
+        "portfolio_title": portfolioTitle,
       };
 }
 

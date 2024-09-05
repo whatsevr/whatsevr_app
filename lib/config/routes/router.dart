@@ -6,7 +6,6 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
-import 'package:whatsevr_app/src/features/portfolio/views/page.dart';
 
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
@@ -14,6 +13,8 @@ import 'package:whatsevr_app/src/features/splash/views/page.dart';
 
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/src/features/wtv_details/views/page.dart';
+
+import '../../src/features/account/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
 CustomTransitionPage<SlideTransition> _navigateWithTransition({
@@ -163,12 +164,10 @@ class AppNavigationService {
               name: RoutesName.portfolio,
               path: RoutesName.portfolio,
               pageBuilder: (BuildContext context, GoRouterState state) {
-                PortfolioPage? accountSearchPage =
-                    state.extra as PortfolioPage?;
                 return _navigateWithTransition(
                   context: context,
                   state: state,
-                  child: PortfolioPage(),
+                  child: AccountPage(),
                 );
               },
             ),

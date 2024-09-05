@@ -116,11 +116,22 @@ class AccountPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Positioned(
-                            bottom: 20,
-                            left: 20,
-                            child: CircleAvatar(
-                              radius: 40,
+                        ],
+                      ),
+                      const Gap(8),
+                      PadHorizontal(
+                        child: Text(
+                          '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Gap(8),
+                      PadHorizontal(
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 30,
                               backgroundImage: ExtendedImage.network(
                                 '${state.profileDetailsResponse?.userInfo?.profilePicture}',
                                 width: 80,
@@ -129,23 +140,18 @@ class AccountPage extends StatelessWidget {
                                 enableLoadState: false,
                               ).image,
                             ),
-                          ),
-                        ],
-                      ),
-                      const Gap(8),
-                      PadHorizontal(
-                        child: Row(
-                          children: <Widget>[
+                            Gap(8),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                       '${state.profileDetailsResponse?.userInfo?.name}',
-                                      style: TextStyle(fontSize: 24)),
+                                      style: TextStyle(fontSize: 14)),
                                   Text(
                                       ' @${state.profileDetailsResponse?.userInfo?.userName}',
-                                      style: TextStyle(fontSize: 16)),
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.grey)),
                                   Gap(8),
                                 ],
                               ),
@@ -168,15 +174,8 @@ class AccountPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Gap(8),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: PadHorizontal.paddingValue,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey.withOpacity(0.15),
-                        ),
+                      const Gap(28),
+                      PadHorizontal(
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -184,8 +183,8 @@ class AccountPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text('1,000', style: TextStyle(fontSize: 24)),
-                                  Text('Likes', style: TextStyle(fontSize: 16)),
+                                  Text('1,000', style: TextStyle(fontSize: 20)),
+                                  Text('Likes', style: TextStyle(fontSize: 14)),
                                 ],
                               ),
                             ),
@@ -193,9 +192,9 @@ class AccountPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text('1,000', style: TextStyle(fontSize: 24)),
+                                  Text('1,000', style: TextStyle(fontSize: 20)),
                                   Text('Networks',
-                                      style: TextStyle(fontSize: 16)),
+                                      style: TextStyle(fontSize: 14)),
                                 ],
                               ),
                             ),
@@ -203,9 +202,9 @@ class AccountPage extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  Text('1,000', style: TextStyle(fontSize: 24)),
+                                  Text('1,000', style: TextStyle(fontSize: 20)),
                                   Text('Connections',
-                                      style: TextStyle(fontSize: 16)),
+                                      style: TextStyle(fontSize: 14)),
                                 ],
                               ),
                             ),
@@ -213,75 +212,79 @@ class AccountPage extends StatelessWidget {
                         ),
                       ),
                       const Gap(8),
-                      const PadHorizontal(
-                        child: Row(
-                          children: <Widget>[
-                            Text('Suggestions', style: TextStyle(fontSize: 14)),
-                            Spacer(),
-                            Text('See All', style: TextStyle(fontSize: 14)),
-                          ],
+                      if (false) ...[
+                        const PadHorizontal(
+                          child: Row(
+                            children: <Widget>[
+                              Text('Suggestions',
+                                  style: TextStyle(fontSize: 14)),
+                              Spacer(),
+                              Text('See All', style: TextStyle(fontSize: 14)),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Gap(8),
-                      SizedBox(
-                        height: 200,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                      left: index == 0 ? 8 : 0,
-                                      right: 8,
-                                    ),
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: Colors.black),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        const Gap(8),
-                                        Expanded(
-                                          child: ExtendedImage.network(
-                                            MockData.randomImageAvatar(),
-                                            shape: BoxShape.circle,
-                                            fit: BoxFit.cover,
-                                            enableLoadState: false,
+                        const Gap(8),
+                        SizedBox(
+                          height: 200,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.only(
+                                        left: index == 0 ? 8 : 0,
+                                        right: 8,
+                                      ),
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          const Gap(8),
+                                          Expanded(
+                                            child: ExtendedImage.network(
+                                              MockData.randomImageAvatar(),
+                                              shape: BoxShape.circle,
+                                              fit: BoxFit.cover,
+                                              enableLoadState: false,
+                                            ),
                                           ),
-                                        ),
-                                        const Gap(8),
-                                        const Text(
-                                          'John Doe',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ],
+                                          const Gap(8),
+                                          const Text(
+                                            'John Doe',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                MaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                  MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    minWidth: 150,
+                                    color: Colors.blue,
+                                    onPressed: () {},
+                                    child: const Text('Follow'),
                                   ),
-                                  minWidth: 150,
-                                  color: Colors.blue,
-                                  onPressed: () {},
-                                  child: const Text('Follow'),
-                                ),
-                              ],
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const Gap(8);
-                          },
-                          itemCount: 10,
+                                ],
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const Gap(8);
+                            },
+                            itemCount: 10,
+                          ),
                         ),
-                      ),
-                      const Gap(8),
+                        const Gap(8),
+                      ],
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: PadHorizontal.paddingValue,
@@ -299,19 +302,23 @@ class AccountPage extends StatelessWidget {
                               isTabsScrollable: true,
                               tabs: <String>[
                                 'About',
+                                'Services',
                                 'Media',
                                 'Videos',
                                 'Flicks',
-                                'Tags',
                                 'Offerings',
+                                'Tags',
+                                'Pdf',
                               ],
                               tabViews: <Widget>[
                                 AccountPageAboutView(),
+                                Text('Services'),
                                 Text('Media'),
                                 AccountPageVideosView(),
                                 Text('Flicks'),
                                 Text('Tags'),
                                 Text('Offerings'),
+                                Text('Pdf'),
                               ],
                             ),
                             Gap(8),
@@ -342,6 +349,104 @@ class AccountPageAboutView extends StatelessWidget {
         return Column(
           children: <Widget>[
             const Gap(12),
+            if (state.profileDetailsResponse?.userInfo?.isPortfolio ==
+                true) ...[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Gap(8),
+                        Text(
+                          'Status',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Gap(8),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Gap(8),
+                        Row(
+                          children: [
+                            Text(
+                              'Serve',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              'View More>>',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        // ListView.separated(
+                        //   shrinkWrap: true,
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemBuilder: (BuildContext context, int index) {
+                        //     return Chip(label: Text("wetrt4363543"));
+                        //   },
+                        //   separatorBuilder: (BuildContext context, int index) {
+                        //     return const Gap(8);
+                        //   },
+                        //   itemCount: 5,
+                        // ),
+                        Wrap(
+                          spacing: 8,
+                          children: <Widget>[
+                            for (String tag in ['2525235435', '252424324235'])
+                              ActionChip(
+                                backgroundColor: Colors.blueGrey,
+                                label: Text(tag,
+                                    style:
+                                        const TextStyle(color: Colors.white)),
+                                onPressed: () {},
+                              ),
+                          ],
+                        ),
+                        Gap(8),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
             for ((String label, String info) itm in <(String, String)>[
               ('Bio', '${state.profileDetailsResponse?.userInfo?.bio}'),
               ('Address', '${state.profileDetailsResponse?.userInfo?.address}'),
@@ -368,23 +473,23 @@ class AccountPageAboutView extends StatelessWidget {
               ('Total Connection', ''),
               ('Total Post', '2524'),
             ])
-              CheckboxListTile(
+              ListTile(
                 visualDensity: VisualDensity.compact,
-                controlAffinity: ListTileControlAffinity.leading,
-                checkColor: Colors.white,
-                activeColor: Colors.black,
-                value: false,
-                onChanged: (bool? value) {},
                 title: Text(
                   itm.$1,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
+                    color: Colors.grey,
                   ),
                 ),
                 subtitle: Text(
                   itm.$2,
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 isThreeLine: true,
               ),
