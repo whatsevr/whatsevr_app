@@ -11,6 +11,7 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
 
 class AccountSearchPage extends StatelessWidget {
   final List<String>? hintTexts;
@@ -40,96 +41,107 @@ class AccountSearchPage extends StatelessWidget {
                 icon: const Iconify(AkarIcons.settings_horizontal),
                 onPressed: () {
                   showModalBottomSheet(
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      barrierColor: Colors.white.withOpacity(0.5),
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    barrierColor: Colors.white.withOpacity(0.5),
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
                       ),
-                      builder: (BuildContext context) {
-                        return IntrinsicHeight(
-                          child: Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(20),
-                                ),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 4,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
+                    ),
+                    builder: (BuildContext context) {
+                      return IntrinsicHeight(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20),
+                            ),
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 4,
+                                spreadRadius: 2,
                               ),
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                children: <Widget>[
-                                  const Gap(20),
-                                  MaterialButton(
-                                    elevation: 0,
-                                    color: Colors.blueGrey.withOpacity(0.2),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18,),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: <Widget>[
+                              const Gap(20),
+                              MaterialButton(
+                                elevation: 0,
+                                color: Colors.blueGrey.withOpacity(0.2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 18,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onPressed: () {},
+                                child: const Row(
+                                  children: <Widget>[
+                                    Iconify(
+                                      Heroicons.document_magnifying_glass_solid,
                                     ),
-                                    onPressed: () {},
-                                    child: const Row(
-                                      children: <Widget>[
-                                        Iconify(Heroicons
-                                            .document_magnifying_glass_solid,),
-                                        Gap(8),
-                                        Text('Serve'),
-                                      ],
+                                    Gap(8),
+                                    Text('Serve'),
+                                  ],
+                                ),
+                              ),
+                              const Gap(8),
+                              MaterialButton(
+                                elevation: 0,
+                                color: Colors.blueGrey.withOpacity(0.2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 18,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onPressed: () {},
+                                child: const Row(
+                                  children: <Widget>[
+                                    Iconify(
+                                      Fa6Solid.magnifying_glass_chart,
                                     ),
-                                  ),
-                                  const Gap(8),
-                                  MaterialButton(
-                                    elevation: 0,
-                                    color: Colors.blueGrey.withOpacity(0.2),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18,),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                                    Gap(8),
+                                    Text('Status'),
+                                  ],
+                                ),
+                              ),
+                              const Gap(8),
+                              MaterialButton(
+                                elevation: 0,
+                                color: Colors.blueGrey.withOpacity(0.2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 18,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onPressed: () {},
+                                child: const Row(
+                                  children: <Widget>[
+                                    Iconify(
+                                      Fa6Solid.magnifying_glass_chart,
                                     ),
-                                    onPressed: () {},
-                                    child: const Row(
-                                      children: <Widget>[
-                                        Iconify(
-                                            Fa6Solid.magnifying_glass_chart,),
-                                        Gap(8),
-                                        Text('Status'),
-                                      ],
-                                    ),
-                                  ),
-                                  const Gap(8),
-                                  MaterialButton(
-                                    elevation: 0,
-                                    color: Colors.blueGrey.withOpacity(0.2),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 18,),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    onPressed: () {},
-                                    child: const Row(
-                                      children: <Widget>[
-                                        Iconify(
-                                            Fa6Solid.magnifying_glass_chart,),
-                                        Gap(8),
-                                        Text('Location'),
-                                      ],
-                                    ),
-                                  ),
-                                  const Gap(35),
-                                ],
-                              ),),
-                        );
-                      },);
+                                    Gap(8),
+                                    Text('Location'),
+                                  ],
+                                ),
+                              ),
+                              const Gap(35),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ],
@@ -177,11 +189,12 @@ class _OffersView extends StatelessWidget {
               children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: ExtendedNetworkImageProvider(
-                      MockData.randomImageAvatar(),
-                    ),),
+                  radius: 20,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: ExtendedNetworkImageProvider(
+                    MockData.randomImageAvatar(),
+                  ),
+                ),
                 const Gap(16),
                 Expanded(
                   child: Column(
@@ -280,11 +293,12 @@ class _CommunityView extends StatelessWidget {
                 children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: ExtendedNetworkImageProvider(
-                        MockData.randomImageAvatar(),
-                      ),),
+                    radius: 20,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: ExtendedNetworkImageProvider(
+                      MockData.randomImageAvatar(),
+                    ),
+                  ),
                   const Gap(16),
                   Expanded(
                     child: Column(
@@ -397,7 +411,8 @@ class _PortfolioView extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
-            AppNavigationService.newRoute(RoutesName.portfolio);
+            AppNavigationService.newRoute(RoutesName.account,
+                extras: AccountPageArgument(isEditMode: false));
           },
           child: Column(
             children: <Widget>[
@@ -405,11 +420,12 @@ class _PortfolioView extends StatelessWidget {
                 children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: ExtendedNetworkImageProvider(
-                        MockData.randomImageAvatar(),
-                      ),),
+                    radius: 20,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: ExtendedNetworkImageProvider(
+                      MockData.randomImageAvatar(),
+                    ),
+                  ),
                   const Gap(16),
                   Expanded(
                     child: Column(
@@ -528,11 +544,12 @@ class _AccountsView extends StatelessWidget {
                 children: <Widget>[
                   const Gap(16),
                   CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: ExtendedNetworkImageProvider(
-                        MockData.randomImageAvatar(),
-                      ),),
+                    radius: 20,
+                    backgroundColor: Colors.grey,
+                    backgroundImage: ExtendedNetworkImageProvider(
+                      MockData.randomImageAvatar(),
+                    ),
+                  ),
                   const Gap(16),
                   Expanded(
                     child: Column(
@@ -670,11 +687,12 @@ class _RecentView extends StatelessWidget {
               children: <Widget>[
                 const Gap(16),
                 CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.grey,
-                    backgroundImage: ExtendedNetworkImageProvider(
-                      MockData.randomImageAvatar(),
-                    ),),
+                  radius: 20,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: ExtendedNetworkImageProvider(
+                    MockData.randomImageAvatar(),
+                  ),
+                ),
                 const Gap(16),
                 Expanded(
                   child: Column(

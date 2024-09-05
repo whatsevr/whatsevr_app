@@ -161,13 +161,17 @@ class AppNavigationService {
               },
             ),
             GoRoute(
-              name: RoutesName.portfolio,
-              path: RoutesName.portfolio,
+              name: RoutesName.account,
+              path: RoutesName.account,
               pageBuilder: (BuildContext context, GoRouterState state) {
+                AccountPageArgument accountPageArgument =
+                    state.extra as AccountPageArgument;
                 return _navigateWithTransition(
                   context: context,
                   state: state,
-                  child: AccountPage(),
+                  child: AccountPage(
+                    pageArgument: accountPageArgument,
+                  ),
                 );
               },
             ),

@@ -20,7 +20,7 @@ class FileUploadService {
         throw ('File size too large (Max $kMaxMediaFileUploadSizeInMb MB)');
       }
       final String fileName =
-          '${DateTime.now().microsecondsSinceEpoch}${file.path.split('.').last}';
+          '${DateTime.now().microsecondsSinceEpoch}.${file.path.split('.').last}';
 
       final String uploadStorageResponse = await _supabaseStorageClient
           .from('files') // Replace with your storage bucket name

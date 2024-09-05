@@ -56,7 +56,7 @@ class UserInfo {
   final bool? isBanned;
   final bool? isSpam;
   final bool? isDiactivated;
-  final dynamic portfolioCreatedAt;
+  final DateTime? portfolioCreatedAt;
   final String? portfolioTitle;
 
   UserInfo({
@@ -107,7 +107,9 @@ class UserInfo {
         isBanned: json["is_banned"],
         isSpam: json["is_spam"],
         isDiactivated: json["is_diactivated"],
-        portfolioCreatedAt: json["portfolio_created_at"],
+        portfolioCreatedAt: json["portfolio_created_at"] == null
+            ? null
+            : DateTime.parse(json["portfolio_created_at"]),
         portfolioTitle: json["portfolio_title"],
       );
 
@@ -131,7 +133,7 @@ class UserInfo {
         "is_banned": isBanned,
         "is_spam": isSpam,
         "is_diactivated": isDiactivated,
-        "portfolio_created_at": portfolioCreatedAt,
+        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
         "portfolio_title": portfolioTitle,
       };
 }

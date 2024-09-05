@@ -152,7 +152,11 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
       () {
         context.read<DashboardBloc>().add(
               TabChanged(
-                newView: AccountPage(),
+                newView: AccountPage(
+                  pageArgument: AccountPageArgument(
+                    isEditMode: true,
+                  ),
+                ),
               ),
             );
       },

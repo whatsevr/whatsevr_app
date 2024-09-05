@@ -23,11 +23,6 @@ class DashboardPage extends StatelessWidget {
           create: (BuildContext context) =>
               ExploreBloc()..add(ExploreInitialEvent()),
         ),
-        BlocProvider(
-          lazy: false,
-          create: (BuildContext context) =>
-              AccountBloc()..add(AccountInitialEvent()),
-        ),
       ],
       child: Builder(
         builder: (BuildContext context) {
