@@ -128,7 +128,9 @@ class AccountPageAboutView extends StatelessWidget {
                   '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.registeredOn!)}'
                 ),
               (
-                'Account link',
+                state.profileDetailsResponse?.userInfo?.isPortfolio == true
+                    ? 'Portfolio link'
+                    : 'Account link',
                 'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.userName}'
               ),
               if (state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
@@ -138,7 +140,7 @@ class AccountPageAboutView extends StatelessWidget {
                   '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.portfolioCreatedAt!)}'
                 ),
               (
-                'About',
+                'Description',
                 '${state.profileDetailsResponse?.userInfo?.portfolioDescription}'
               ),
               ('Total Connection', '3636'),

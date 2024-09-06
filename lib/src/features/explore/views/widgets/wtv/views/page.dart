@@ -6,8 +6,9 @@ import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
-import 'package:whatsevr_app/config/widgets/shiny_skeleton.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ExplorePageWtvPage extends StatelessWidget {
   const ExplorePageWtvPage({super.key});
@@ -25,15 +26,53 @@ class ExplorePageWtvPage extends StatelessWidget {
           onScrollFinished: () async {
             await Future<void>.delayed(const Duration(seconds: 2));
           },
-          child: ShinySkeleton(
-            showSkeleton: data == null || data.isEmpty,
-            skeleton: ListView.separated(
+          child: ContentMask(
+            showMask: data == null || data.isEmpty,
+            customMask: ListView.separated(
               shrinkWrap: data == null || data.isEmpty,
               itemCount: 3,
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
-              itemBuilder: (BuildContext context, int index) =>
-                  const VideoFrame(),
+              itemBuilder: (BuildContext context, int index) => Container(
+                width: double.infinity,
+                height: 280,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: Container(
+                      color: Colors.grey[300],
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const Gap(8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Gap(8),
+                                Text('XXXXXXXXXXXXXX'),
+                                Text('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
             child: ListView.separated(
               shrinkWrap: data == null || data.isEmpty,
@@ -48,6 +87,9 @@ class ExplorePageWtvPage extends StatelessWidget {
                   description: data?[index].description,
                   videoUrl: data?[index].videoUrl,
                   thumbnail: data?[index].thumbnail,
+                  timeAgo: timeago.format(
+                    data![index].createdAt!,
+                  ),
                 );
               },
             ),

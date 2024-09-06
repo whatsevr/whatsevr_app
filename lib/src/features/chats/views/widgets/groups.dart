@@ -16,9 +16,10 @@ class ChatsPageGroupsView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: ExtendedNetworkImageProvider(MockData.randomImage()),
+              backgroundImage:
+                  ExtendedNetworkImageProvider(MockData.randomImage()),
             ),
-            title: Text('Group $index'),
+            title: Text('Community $index'),
             subtitle: Text('User: Message $index'),
             trailing: const Text('12:00'),
           );

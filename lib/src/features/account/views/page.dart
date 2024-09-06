@@ -9,7 +9,7 @@ import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/shiny_skeleton.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
@@ -74,8 +74,8 @@ class AccountPage extends StatelessWidget {
                       context.read<AccountBloc>().add(AccountInitialEvent());
                       await Future<void>.delayed(const Duration(seconds: 2));
                     },
-                    child: ShinySkeleton(
-                      showSkeleton: state.profileDetailsResponse == null,
+                    child: ContentMask(
+                      showMask: state.profileDetailsResponse == null,
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[

@@ -19,7 +19,7 @@ class ChatsPage extends StatelessWidget {
           child: WhatsevrAnimatedSearchField(
             hintTexts: const <String>[
               'Search for chats',
-              'Search for groups',
+              'Search for communities',
               'Search for calls',
               'Search for requests',
             ],
@@ -29,8 +29,8 @@ class ChatsPage extends StatelessWidget {
           child: WhatsevrTabBarWithViews(
             tabs: <String>[
               'Chats',
-              'Groups',
-              'Calls',
+              'Communities',
+              'Contacts',
               'Requests',
             ],
             tabViews: <Widget>[
@@ -45,11 +45,3 @@ class ChatsPage extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-

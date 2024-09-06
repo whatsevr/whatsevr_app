@@ -75,7 +75,7 @@ class VideoFrame extends StatelessWidget {
                           ),
                           Gap(4),
                           Text(
-                            '$username',
+                            '$username  • $timeAgo',
                           ),
                         ],
                       ),

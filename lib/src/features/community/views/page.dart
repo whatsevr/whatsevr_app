@@ -388,7 +388,7 @@ class _AboutView extends StatelessWidget {
             'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
           ),
           (
-            'Add Info',
+            'Description',
             'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
           ),
           ('Total Post', '2355'),
