@@ -12,6 +12,8 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/pdfs.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/services.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
@@ -190,7 +192,7 @@ class AccountPage extends StatelessWidget {
                             ),
                           ),
                           const Gap(8),
-                          if (false) ...[
+                          if (pageArgument?.isEditMode != true) ...[
                             const PadHorizontal(
                               child: Row(
                                 children: <Widget>[
@@ -294,13 +296,13 @@ class AccountPage extends StatelessWidget {
                                   ],
                                   tabViews: <Widget>[
                                     AccountPageAboutView(),
-                                    Text('Services'),
+                                    AccountPageServicesView(),
                                     Text('Media'),
                                     AccountPageVideosView(),
                                     Text('Flicks'),
                                     Text('Tags'),
                                     Text('Offerings'),
-                                    Text('Pdf'),
+                                    AccountPagePdfsView(),
                                   ],
                                 ),
                                 Gap(8),

@@ -17,7 +17,8 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
   });
 
   @override
-  State<WhatsevrTabBarWithViews> createState() => _WhatsevrTabBarWithViewsState();
+  State<WhatsevrTabBarWithViews> createState() =>
+      _WhatsevrTabBarWithViewsState();
 }
 
 class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
@@ -39,21 +40,19 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
             tabAlignment: widget.tabAlignment,
           ),
           const Gap(8),
-          Builder(builder: (BuildContext context) {
-            if (widget.shrinkViews == true) {
-              return IndexedStack(
-                sizing: StackFit.loose,
-                index: DefaultTabController.of(context).index,
-                children: widget.tabViews,
+          Builder(
+            builder: (BuildContext context) {
+              if (widget.shrinkViews == true) {
+                return widget.tabViews[DefaultTabController.of(context).index];
+              }
+              return Expanded(
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: widget.tabViews,
+                ),
               );
-            }
-            return Expanded(
-              child: TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                children: widget.tabViews,
-              ),
-            );
-          },),
+            },
+          ),
         ],
       ),
     );

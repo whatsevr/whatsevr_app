@@ -52,6 +52,8 @@ dependencies:
   collection: ^1.18.0
   video_thumbnail: ^0.5.3
   shorebird_code_push: ^1.1.4
+  background_downloader: ^8.5.5
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:

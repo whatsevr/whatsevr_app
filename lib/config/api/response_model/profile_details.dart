@@ -274,12 +274,14 @@ class UserPdf {
   final DateTime? createdAt;
   final String? fileUrl;
   final String? userUid;
+  final String? title;
 
   UserPdf({
     this.id,
     this.createdAt,
     this.fileUrl,
     this.userUid,
+    this.title,
   });
 
   factory UserPdf.fromJson(String str) => UserPdf.fromMap(json.decode(str));
@@ -293,6 +295,7 @@ class UserPdf {
             : DateTime.parse(json["created_at"]),
         fileUrl: json["file_url"],
         userUid: json["user_uid"],
+        title: json["title"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -300,6 +303,7 @@ class UserPdf {
         "created_at": createdAt?.toIso8601String(),
         "file_url": fileUrl,
         "user_uid": userUid,
+        "title": title,
       };
 }
 

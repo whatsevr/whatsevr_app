@@ -16,7 +16,8 @@ class DashboardPage extends StatelessWidget {
       providers: [
         BlocProvider(
           lazy: false,
-          create: (BuildContext context) => DashboardBloc(),
+          create: (BuildContext context) =>
+              DashboardBloc()..add(DashboardInitialEvent()),
         ),
         BlocProvider(
           lazy: false,
