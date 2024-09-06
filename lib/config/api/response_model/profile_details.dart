@@ -4,11 +4,19 @@ class ProfileDetailsResponse {
   final String? message;
   final UserInfo? userInfo;
   final List<UserVideoPost>? userVideoPosts;
+  final List<UserEducation>? userEducations;
+  final List<UserCoverMedia>? userCoverMedia;
+  final List<UserPdf>? userPdfs;
+  final List<UserService>? userServices;
 
   ProfileDetailsResponse({
     this.message,
     this.userInfo,
     this.userVideoPosts,
+    this.userEducations,
+    this.userCoverMedia,
+    this.userPdfs,
+    this.userServices,
   });
 
   factory ProfileDetailsResponse.fromJson(String str) =>
@@ -26,6 +34,22 @@ class ProfileDetailsResponse {
             ? []
             : List<UserVideoPost>.from(
                 json["user_video_posts"]!.map((x) => UserVideoPost.fromMap(x))),
+        userEducations: json["user_educations"] == null
+            ? []
+            : List<UserEducation>.from(
+                json["user_educations"]!.map((x) => UserEducation.fromMap(x))),
+        userCoverMedia: json["user_cover_media"] == null
+            ? []
+            : List<UserCoverMedia>.from(json["user_cover_media"]!
+                .map((x) => UserCoverMedia.fromMap(x))),
+        userPdfs: json["user_pdfs"] == null
+            ? []
+            : List<UserPdf>.from(
+                json["user_pdfs"]!.map((x) => UserPdf.fromMap(x))),
+        userServices: json["user_services"] == null
+            ? []
+            : List<UserService>.from(
+                json["user_services"]!.map((x) => UserService.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -34,6 +58,113 @@ class ProfileDetailsResponse {
         "user_video_posts": userVideoPosts == null
             ? []
             : List<dynamic>.from(userVideoPosts!.map((x) => x.toMap())),
+        "user_educations": userEducations == null
+            ? []
+            : List<dynamic>.from(userEducations!.map((x) => x.toMap())),
+        "user_cover_media": userCoverMedia == null
+            ? []
+            : List<dynamic>.from(userCoverMedia!.map((x) => x.toMap())),
+        "user_pdfs": userPdfs == null
+            ? []
+            : List<dynamic>.from(userPdfs!.map((x) => x.toMap())),
+        "user_services": userServices == null
+            ? []
+            : List<dynamic>.from(userServices!.map((x) => x.toMap())),
+      };
+}
+
+class UserCoverMedia {
+  final int? id;
+  final DateTime? createdAt;
+  final String? imageUrl;
+  final bool? isVideo;
+  final String? userUid;
+  final String? videoUrl;
+
+  UserCoverMedia({
+    this.id,
+    this.createdAt,
+    this.imageUrl,
+    this.isVideo,
+    this.userUid,
+    this.videoUrl,
+  });
+
+  factory UserCoverMedia.fromJson(String str) =>
+      UserCoverMedia.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserCoverMedia.fromMap(Map<String, dynamic> json) => UserCoverMedia(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        imageUrl: json["image_url"],
+        isVideo: json["is_video"],
+        userUid: json["user_uid"],
+        videoUrl: json["video_url"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "image_url": imageUrl,
+        "is_video": isVideo,
+        "user_uid": userUid,
+        "video_url": videoUrl,
+      };
+}
+
+class UserEducation {
+  final int? id;
+  final DateTime? createdAt;
+  final String? userUid;
+  final String? title;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? degree;
+
+  UserEducation({
+    this.id,
+    this.createdAt,
+    this.userUid,
+    this.title,
+    this.startDate,
+    this.endDate,
+    this.degree,
+  });
+
+  factory UserEducation.fromJson(String str) =>
+      UserEducation.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserEducation.fromMap(Map<String, dynamic> json) => UserEducation(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        userUid: json["user_uid"],
+        title: json["title"],
+        startDate: json["start_date"] == null
+            ? null
+            : DateTime.parse(json["start_date"]),
+        endDate:
+            json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
+        degree: json["degree"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "user_uid": userUid,
+        "title": title,
+        "start_date":
+            "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
+        "end_date":
+            "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
+        "degree": degree,
       };
 }
 
@@ -138,6 +269,79 @@ class UserInfo {
       };
 }
 
+class UserPdf {
+  final int? id;
+  final DateTime? createdAt;
+  final String? fileUrl;
+  final String? userUid;
+
+  UserPdf({
+    this.id,
+    this.createdAt,
+    this.fileUrl,
+    this.userUid,
+  });
+
+  factory UserPdf.fromJson(String str) => UserPdf.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserPdf.fromMap(Map<String, dynamic> json) => UserPdf(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        fileUrl: json["file_url"],
+        userUid: json["user_uid"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "file_url": fileUrl,
+        "user_uid": userUid,
+      };
+}
+
+class UserService {
+  final int? id;
+  final DateTime? createdAt;
+  final String? title;
+  final String? userUid;
+  final String? description;
+
+  UserService({
+    this.id,
+    this.createdAt,
+    this.title,
+    this.userUid,
+    this.description,
+  });
+
+  factory UserService.fromJson(String str) =>
+      UserService.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserService.fromMap(Map<String, dynamic> json) => UserService(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        title: json["title"],
+        userUid: json["user_uid"],
+        description: json["description"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "title": title,
+        "user_uid": userUid,
+        "description": description,
+      };
+}
+
 class UserVideoPost {
   final int? id;
   final DateTime? createdAt;
@@ -160,6 +364,10 @@ class UserVideoPost {
   final String? location;
   final dynamic locationLatitude;
   final dynamic locationLongitude;
+  final String? videoLength;
+  final int? totalViews;
+  final int? totalLikes;
+  final int? totalComments;
 
   UserVideoPost({
     this.id,
@@ -183,6 +391,10 @@ class UserVideoPost {
     this.location,
     this.locationLatitude,
     this.locationLongitude,
+    this.videoLength,
+    this.totalViews,
+    this.totalLikes,
+    this.totalComments,
   });
 
   factory UserVideoPost.fromJson(String str) =>
@@ -218,6 +430,10 @@ class UserVideoPost {
         location: json["location"],
         locationLatitude: json["location_latitude"],
         locationLongitude: json["location_longitude"],
+        videoLength: json["video_length"],
+        totalViews: json["total_views"],
+        totalLikes: json["total_likes"],
+        totalComments: json["total_comments"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -243,5 +459,9 @@ class UserVideoPost {
         "location": location,
         "location_latitude": locationLatitude,
         "location_longitude": locationLongitude,
+        "video_length": videoLength,
+        "total_views": totalViews,
+        "total_likes": totalLikes,
+        "total_comments": totalComments,
       };
 }

@@ -1,19 +1,11 @@
 import 'dart:math';
 
 class MockData {
-  static String get imageHxW {
-    return 'https://placehold.jp/150x150.png';
-  }
-
   static String randomImage([String? hw, int? index]) {
     String url =
         'https://picsum.photos/${hw ?? '800/800'}?random=${index ?? Random().nextInt(100)}';
 
     return url;
-  }
-
-  static String get imagePlaceholderLandscape {
-    return 'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2FPlaceholder_view_vector.svg.png?alt=media&token=7783263f-402f-4016-b522-2eebb48dd18b';
   }
 
   static String get imageAvatar {
@@ -36,5 +28,9 @@ class MockData {
 
   static String get demoVideo {
     return 'https://firebasestorage.googleapis.com/v0/b/whatsevr-dev.appspot.com/o/demos%2FAMPLIFIER%20x%20PUBG%20MOBILE%20MONTAGE%20(ULTRA%20HD)%20_%2069%20JOKER.mp4?alt=media&token=580b20c1-a339-4802-9c60-7379b0917ea3';
+  }
+
+  static String imagePlaceholder([String label = 'Image']) {
+    return 'https://placehold.co/600x400?text=$label';
   }
 }

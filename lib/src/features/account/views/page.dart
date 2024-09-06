@@ -11,6 +11,7 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/shiny_skeleton.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 
@@ -34,7 +35,7 @@ class AccountPageArgument {
 class AccountPage extends StatelessWidget {
   final AccountPageArgument? pageArgument;
   AccountPage({super.key, required this.pageArgument});
-  final PageController controller = PageController();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -78,61 +79,7 @@ class AccountPage extends StatelessWidget {
                       child: ListView(
                         shrinkWrap: true,
                         children: <Widget>[
-                          Stack(
-                            children: <Widget>[
-                              AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: PageView(
-                                  controller: controller,
-                                  children: <Widget>[
-                                    CoverVideo(videoUrl: MockData.demoVideo),
-                                    CoverVideo(videoUrl: MockData.demoVideo),
-                                    ExtendedImage.network(
-                                      MockData.randomImage(),
-                                      width: double.infinity,
-                                      height: 300,
-                                      fit: BoxFit.cover,
-                                      enableLoadState: false,
-                                    ),
-                                    ExtendedImage.network(
-                                      MockData.randomImage(),
-                                      width: double.infinity,
-                                      height: 300,
-                                      fit: BoxFit.cover,
-                                      enableLoadState: false,
-                                    ),
-                                    ExtendedImage.network(
-                                      MockData.randomImage(),
-                                      width: double.infinity,
-                                      height: 300,
-                                      fit: BoxFit.cover,
-                                      enableLoadState: false,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              ///3 dot
-                              Positioned(
-                                right: 0,
-                                left: 0,
-                                bottom: 8,
-                                child: UnconstrainedBox(
-                                  child: SmoothPageIndicator(
-                                    controller: controller, // PageController
-                                    count: 5,
-                                    effect: const WormEffect(
-                                      dotWidth: 8.0,
-                                      dotHeight: 8.0,
-                                      activeDotColor: Colors.black,
-                                      dotColor: Colors.white,
-                                    ), // your preferred effect
-                                    onDotClicked: (int index) {},
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          AccountPageCoverVideoView(),
                           const Gap(8),
                           PadHorizontal(
                             child: Text(
@@ -370,100 +317,6 @@ class AccountPage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-}
-
-class CoverVideo extends StatefulWidget {
-  final String? videoUrl;
-  const CoverVideo({super.key, required this.videoUrl});
-
-  @override
-  State<CoverVideo> createState() => _CoverVideoState();
-}
-
-class _CoverVideoState extends State<CoverVideo> {
-  late VideoPlayerController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-          });
-
-    controller.addListener(() {
-      if (controller.value.position == controller.value.duration) {
-        controller.seekTo(Duration.zero);
-        controller.play();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            setState(() {
-              if (controller.value.isPlaying) {
-                controller.pause();
-              } else {
-                controller.play();
-              }
-            });
-          },
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Builder(
-              builder: (BuildContext context) {
-                if (controller.value.position == Duration.zero &&
-                    !controller.value.isPlaying) {
-                  return ExtendedImage.network(
-                    MockData.randomImage(),
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                    enableLoadState: false,
-                  );
-                }
-                return VideoPlayer(controller);
-              },
-            ),
-          ),
-        ),
-        if (!controller.value.isPlaying)
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(
-              icon: const Icon(
-                Icons.play_arrow,
-                size: 40,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                setState(() {
-                  if (controller.value.isPlaying) {
-                    controller.pause();
-                  } else {
-                    controller.play();
-                  }
-                });
-              },
-            ),
-          ),
-      ],
     );
   }
 }

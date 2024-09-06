@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
+import '../../../../../config/api/response_model/profile_details.dart';
+
 class AccountPageAboutView extends StatelessWidget {
   const AccountPageAboutView({
     super.key,
@@ -84,24 +86,15 @@ class AccountPageAboutView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        // ListView.separated(
-                        //   shrinkWrap: true,
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return Chip(label: Text("wetrt4363543"));
-                        //   },
-                        //   separatorBuilder: (BuildContext context, int index) {
-                        //     return const Gap(8);
-                        //   },
-                        //   itemCount: 5,
-                        // ),
                         Wrap(
                           spacing: 8,
                           children: <Widget>[
-                            for (String tag in ['2525235435', '252424324235'])
+                            for (UserService? service
+                                in state.profileDetailsResponse?.userServices ??
+                                    [])
                               ActionChip(
                                 backgroundColor: Colors.blueGrey,
-                                label: Text(tag,
+                                label: Text('${service?.title}',
                                     style:
                                         const TextStyle(color: Colors.white)),
                                 onPressed: () {},
@@ -118,8 +111,11 @@ class AccountPageAboutView extends StatelessWidget {
             for ((String label, String info) itm in <(String, String)>[
               ('Bio', '${state.profileDetailsResponse?.userInfo?.bio}'),
               ('Address', '${state.profileDetailsResponse?.userInfo?.address}'),
-              ('Education', ''),
-              ('Working', ''),
+              (
+                'Education',
+                '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.title} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
+              ),
+              ('Working', 'Currently working at Fiverr'),
               ('Email', '${state.profileDetailsResponse?.userInfo?.emailId}'),
               if (state.profileDetailsResponse?.userInfo?.dob != null)
                 (
@@ -131,15 +127,21 @@ class AccountPageAboutView extends StatelessWidget {
                   'Join On',
                   '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.registeredOn!)}'
                 ),
-              ('Account link', ''),
+              (
+                'Account link',
+                'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.userName}'
+              ),
               if (state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
                   null)
                 (
                   'Portfolio Created On',
                   '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.portfolioCreatedAt!)}'
                 ),
-              ('About', ''),
-              ('Total Connection', ''),
+              (
+                'About',
+                '${state.profileDetailsResponse?.userInfo?.portfolioDescription}'
+              ),
+              ('Total Connection', '3636'),
               ('Total Post', '2524'),
             ])
               ListTile(
