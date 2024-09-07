@@ -14,7 +14,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 
-class VideoFrame extends StatelessWidget {
+class WtvVideoPostFrame extends StatelessWidget {
   final String? title;
   final String? description;
   final String? videoUrl;
@@ -24,8 +24,10 @@ class VideoFrame extends StatelessWidget {
   final String? likes;
   final String? username;
   final String? thumbnail;
+  final List<String>? taggedUserUids;
+  final Function()? onTapTaggedUser;
 
-  const VideoFrame({
+  const WtvVideoPostFrame({
     super.key,
     this.title,
     this.description,
@@ -36,6 +38,8 @@ class VideoFrame extends StatelessWidget {
     this.likes,
     this.username,
     this.thumbnail,
+    this.taggedUserUids,
+    this.onTapTaggedUser,
   });
 
   @override
@@ -47,12 +51,55 @@ class VideoFrame extends StatelessWidget {
       },
       child: Column(
         children: <Widget>[
-          WTVFeedPlayer(
-            videoUrl: videoUrl,
-            thumbnail: thumbnail,
-            onTapFreeArea: () {
-              AppNavigationService.newRoute(RoutesName.wtvDetails);
-            },
+          Stack(
+            children: [
+              WTVFeedPlayer(
+                videoUrl: videoUrl,
+                thumbnail: thumbnail,
+                onTapFreeArea: () {
+                  AppNavigationService.newRoute(RoutesName.wtvDetails);
+                },
+                showFullScreenButton: false,
+                loopVideo: true,
+              ),
+              if (taggedUserUids != null && taggedUserUids!.isNotEmpty)
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (taggedUserUids != null &&
+                          taggedUserUids!.isNotEmpty) {
+                        onTapTaggedUser?.call();
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          const Icon(
+                            Icons.person,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          const Gap(4),
+                          Text(
+                            '${taggedUserUids!.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const Gap(8),
           PadHorizontal(

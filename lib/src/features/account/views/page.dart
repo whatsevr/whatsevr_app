@@ -2,6 +2,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ri.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -21,6 +23,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import '../../../../config/enums/post_creator_type.dart';
 import '../../../../config/widgets/refresh_indicator.dart';
@@ -84,10 +87,28 @@ class AccountPage extends StatelessWidget {
                           AccountPageCoverVideoView(),
                           const Gap(8),
                           PadHorizontal(
-                            child: Text(
-                              '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Gap(8),
+                                if (pageArgument?.isEditMode == true) ...[
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      AppNavigationService.newRoute(
+                                          RoutesName.updateProfile,
+                                          extras: ProfileUpdatePageArgument());
+                                    },
+                                  ),
+                                ]
+                              ],
                             ),
                           ),
                           const Gap(8),
@@ -124,7 +145,10 @@ class AccountPage extends StatelessWidget {
                                 ),
                                 if (pageArgument?.isEditMode == true) ...[
                                   IconButton(
-                                    icon: const Icon(Icons.add_box_rounded),
+                                    icon: Iconify(
+                                      Ri.heart_add_fill,
+                                      size: 30,
+                                    ),
                                     onPressed: () {
                                       showContentUploadBottomSheet(context,
                                           postCreatorType: state

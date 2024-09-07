@@ -7,6 +7,7 @@ import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -80,7 +81,7 @@ class ExplorePageWtvPage extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
               itemBuilder: (BuildContext context, int index) {
-                return VideoFrame(
+                return WtvVideoPostFrame(
                   avatarUrl: data?[index].user?.profilePicture,
                   username: data?[index].user?.userName,
                   title: data?[index].title,
@@ -90,6 +91,13 @@ class ExplorePageWtvPage extends StatelessWidget {
                   timeAgo: timeago.format(
                     data![index].createdAt!,
                   ),
+                  taggedUserUids: data[index].taggedUserUids,
+                  onTapTaggedUser: () {
+                    showTaggedUsersBottomSheet(
+                      context,
+                      taggedUserUids: data[index].taggedUserUids,
+                    );
+                  },
                 );
               },
             ),

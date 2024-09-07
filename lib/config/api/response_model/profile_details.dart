@@ -275,6 +275,7 @@ class UserPdf {
   final String? fileUrl;
   final String? userUid;
   final String? title;
+  final String? thumbnailUrl;
 
   UserPdf({
     this.id,
@@ -282,6 +283,7 @@ class UserPdf {
     this.fileUrl,
     this.userUid,
     this.title,
+    this.thumbnailUrl,
   });
 
   factory UserPdf.fromJson(String str) => UserPdf.fromMap(json.decode(str));
@@ -296,6 +298,7 @@ class UserPdf {
         fileUrl: json["file_url"],
         userUid: json["user_uid"],
         title: json["title"],
+        thumbnailUrl: json["thumbnail_url"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -304,6 +307,7 @@ class UserPdf {
         "file_url": fileUrl,
         "user_uid": userUid,
         "title": title,
+        "thumbnail_url": thumbnailUrl,
       };
 }
 

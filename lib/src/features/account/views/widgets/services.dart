@@ -24,11 +24,6 @@ class AccountPageServicesView extends StatelessWidget {
                 state.profileDetailsResponse?.userServices?[index];
             return Row(
               children: <Widget>[
-                Iconify(
-                  Mdi.briefcase_clock,
-                  size: 35,
-                ),
-                const Gap(8),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,9 +48,9 @@ class AccountPageServicesView extends StatelessWidget {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Gap(8);
+            return Divider();
           },
-          itemCount: state.profileDetailsResponse?.userPdfs?.length ?? 0,
+          itemCount: state.profileDetailsResponse?.userServices?.length ?? 0,
         );
       },
     );

@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 import 'package:supabase/supabase.dart';
-import 'package:whatsevr_app/config/api/response_model/user_status.dart';
+import 'package:whatsevr_app/config/api/response_model/user_profile.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';

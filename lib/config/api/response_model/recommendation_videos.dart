@@ -38,10 +38,7 @@ class RecommendedVideo {
   final String? title;
   final String? description;
   final List<String>? hashtags;
-  final List<String>? taggedUsersUid;
-  final List<String>? taggedPortfolios;
-  final List<String>? taggedCommunitiesUid;
-  final int? likesCount;
+  final List<String>? taggedUserUids;
   final bool? isDeleted;
   final bool? isArchived;
   final bool? isActive;
@@ -51,8 +48,14 @@ class RecommendedVideo {
   final String? thumbnail;
   final String? videoUrl;
   final String? location;
-  final String? locationLatitude;
-  final String? locationLongitude;
+  final dynamic locationLatitude;
+  final dynamic locationLongitude;
+  final String? videoDuration;
+  final int? totalViews;
+  final int? totalLikes;
+  final int? totalComments;
+  final dynamic internalAiPostDescription;
+  final dynamic internalAiPostTags;
   final User? user;
 
   RecommendedVideo({
@@ -62,10 +65,7 @@ class RecommendedVideo {
     this.title,
     this.description,
     this.hashtags,
-    this.taggedUsersUid,
-    this.taggedPortfolios,
-    this.taggedCommunitiesUid,
-    this.likesCount,
+    this.taggedUserUids,
     this.isDeleted,
     this.isArchived,
     this.isActive,
@@ -77,6 +77,12 @@ class RecommendedVideo {
     this.location,
     this.locationLatitude,
     this.locationLongitude,
+    this.videoDuration,
+    this.totalViews,
+    this.totalLikes,
+    this.totalComments,
+    this.internalAiPostDescription,
+    this.internalAiPostTags,
     this.user,
   });
 
@@ -97,16 +103,9 @@ class RecommendedVideo {
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUsersUid: json["tagged_users_uid"] == null
+        taggedUserUids: json["tagged_user_uids"] == null
             ? []
-            : List<String>.from(json["tagged_users_uid"]!.map((x) => x)),
-        taggedPortfolios: json["tagged_portfolios"] == null
-            ? []
-            : List<String>.from(json["tagged_portfolios"]!.map((x) => x)),
-        taggedCommunitiesUid: json["tagged_communities_uid"] == null
-            ? []
-            : List<String>.from(json["tagged_communities_uid"]!.map((x) => x)),
-        likesCount: json["likes_count"],
+            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
         isDeleted: json["is_deleted"],
         isArchived: json["is_archived"],
         isActive: json["is_active"],
@@ -120,6 +119,12 @@ class RecommendedVideo {
         location: json["location"],
         locationLatitude: json["location_latitude"],
         locationLongitude: json["location_longitude"],
+        videoDuration: json["video_duration"],
+        totalViews: json["total_views"],
+        totalLikes: json["total_likes"],
+        totalComments: json["total_comments"],
+        internalAiPostDescription: json["internal_ai_post_description"],
+        internalAiPostTags: json["internal_ai_post_tags"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
 
@@ -131,16 +136,9 @@ class RecommendedVideo {
         "description": description,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_users_uid": taggedUsersUid == null
+        "tagged_user_uids": taggedUserUids == null
             ? []
-            : List<dynamic>.from(taggedUsersUid!.map((x) => x)),
-        "tagged_portfolios": taggedPortfolios == null
-            ? []
-            : List<dynamic>.from(taggedPortfolios!.map((x) => x)),
-        "tagged_communities_uid": taggedCommunitiesUid == null
-            ? []
-            : List<dynamic>.from(taggedCommunitiesUid!.map((x) => x)),
-        "likes_count": likesCount,
+            : List<dynamic>.from(taggedUserUids!.map((x) => x)),
         "is_deleted": isDeleted,
         "is_archived": isArchived,
         "is_active": isActive,
@@ -152,6 +150,12 @@ class RecommendedVideo {
         "location": location,
         "location_latitude": locationLatitude,
         "location_longitude": locationLongitude,
+        "video_duration": videoDuration,
+        "total_views": totalViews,
+        "total_likes": totalLikes,
+        "total_comments": totalComments,
+        "internal_ai_post_description": internalAiPostDescription,
+        "internal_ai_post_tags": internalAiPostTags,
         "user": user?.toMap(),
       };
 }
@@ -159,7 +163,7 @@ class RecommendedVideo {
 class User {
   final int? id;
   final String? bio;
-  final String? dob;
+  final DateTime? dob;
   final String? uid;
   final String? name;
   final String? address;
@@ -172,9 +176,12 @@ class User {
   final String? mobileNumber;
   final DateTime? registeredOn;
   final bool? isDiactivated;
+  final String? portfolioTitle;
   final String? profilePicture;
+  final int? totalFollowers;
   final String? portfolioStatus;
-  final List<String>? portfolioServices;
+  final int? totalFollowings;
+  final int? totalPostLikes;
   final DateTime? portfolioCreatedAt;
   final String? portfolioDescription;
 
@@ -194,9 +201,12 @@ class User {
     this.mobileNumber,
     this.registeredOn,
     this.isDiactivated,
+    this.portfolioTitle,
     this.profilePicture,
+    this.totalFollowers,
     this.portfolioStatus,
-    this.portfolioServices,
+    this.totalFollowings,
+    this.totalPostLikes,
     this.portfolioCreatedAt,
     this.portfolioDescription,
   });
@@ -208,7 +218,7 @@ class User {
   factory User.fromMap(Map<String, dynamic> json) => User(
         id: json["id"],
         bio: json["bio"],
-        dob: json["dob"],
+        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
         uid: json["uid"],
         name: json["name"],
         address: json["address"],
@@ -223,11 +233,12 @@ class User {
             ? null
             : DateTime.parse(json["registered_on"]),
         isDiactivated: json["is_diactivated"],
+        portfolioTitle: json["portfolio_title"],
         profilePicture: json["profile_picture"],
+        totalFollowers: json["total_followers"],
         portfolioStatus: json["portfolio_status"],
-        portfolioServices: json["portfolio_services"] == null
-            ? []
-            : List<String>.from(json["portfolio_services"]!.map((x) => x)),
+        totalFollowings: json["total_followings"],
+        totalPostLikes: json["total_post_likes"],
         portfolioCreatedAt: json["portfolio_created_at"] == null
             ? null
             : DateTime.parse(json["portfolio_created_at"]),
@@ -237,7 +248,8 @@ class User {
   Map<String, dynamic> toMap() => {
         "id": id,
         "bio": bio,
-        "dob": dob,
+        "dob":
+            "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
         "uid": uid,
         "name": name,
         "address": address,
@@ -250,11 +262,12 @@ class User {
         "mobile_number": mobileNumber,
         "registered_on": registeredOn?.toIso8601String(),
         "is_diactivated": isDiactivated,
+        "portfolio_title": portfolioTitle,
         "profile_picture": profilePicture,
+        "total_followers": totalFollowers,
         "portfolio_status": portfolioStatus,
-        "portfolio_services": portfolioServices == null
-            ? []
-            : List<dynamic>.from(portfolioServices!.map((x) => x)),
+        "total_followings": totalFollowings,
+        "total_post_likes": totalPostLikes,
         "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
         "portfolio_description": portfolioDescription,
       };

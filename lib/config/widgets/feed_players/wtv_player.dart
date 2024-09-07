@@ -12,12 +12,14 @@ class WTVFeedPlayer extends StatefulWidget {
   final String? thumbnail;
   final Function()? onTapFreeArea;
   final bool? loopVideo;
+  final bool showFullScreenButton;
   const WTVFeedPlayer({
     super.key,
     required this.videoUrl,
     this.thumbnail,
     this.onTapFreeArea,
     this.loopVideo,
+    this.showFullScreenButton = true,
   });
 
   @override
@@ -80,7 +82,7 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
               builder: (BuildContext context) {
                 if (controller == null) {
                   return ExtendedImage.network(
-                    widget.thumbnail ?? MockData.imageAvatar,
+                    widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
@@ -142,20 +144,21 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
               ],
             ),
           ),
-          Positioned(
-            bottom: 2,
-            right: 2,
-            child: IconButton(
-              icon: const Icon(Icons.fullscreen),
-              color: Colors.white,
-              onPressed: () {
-                AppNavigationService.newRoute(
-                  RoutesName.fullVideoPlayer,
-                  extras: <String>[widget.videoUrl as String],
-                );
-              },
+          if (widget.showFullScreenButton)
+            Positioned(
+              bottom: 2,
+              right: 2,
+              child: IconButton(
+                icon: const Icon(Icons.fullscreen),
+                color: Colors.white,
+                onPressed: () {
+                  AppNavigationService.newRoute(
+                    RoutesName.fullVideoPlayer,
+                    extras: <String>[widget.videoUrl as String],
+                  );
+                },
+              ),
             ),
-          ),
         ],
       ],
     );

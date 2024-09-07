@@ -21,43 +21,54 @@ class AccountPagePdfsView extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
-            return Row(
-              children: <Widget>[
-                Iconify(
-                  VscodeIcons.file_type_pdf2,
-                  size: 45,
-                ),
-                const Gap(8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <StatelessWidget>[
-                      Text(
-                        '${userPdf?.title}',
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Gap(8),
-                      Text(
-                        'Updated on ${DateFormat('dd MMM yyyy').format(userPdf!.createdAt!)}',
-                        style: TextStyle(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
+            return Column(
+              children: [
+                ExtendedImage.network(
+                  '${userPdf?.thumbnailUrl}',
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
                 ),
                 Gap(8),
-                IconButton(
-                  onPressed: () {
-                    DownloadService.downloadFile(
-                        '${userPdf.fileUrl}', '${userPdf.title}.pdf');
-                  },
-                  icon: Icon(
-                    Icons.download,
-                    size: 30,
-                  ),
+                Row(
+                  children: <Widget>[
+                    Iconify(
+                      VscodeIcons.file_type_pdf2,
+                      size: 45,
+                    ),
+                    const Gap(8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <StatelessWidget>[
+                          Text(
+                            '${userPdf?.title}',
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Gap(8),
+                          Text(
+                            'Updated on ${DateFormat('dd MMM yyyy').format(userPdf!.createdAt!)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Gap(8),
+                    IconButton(
+                      onPressed: () {
+                        DownloadService.downloadFile(
+                            '${userPdf.fileUrl}', '${userPdf.title}.pdf');
+                      },
+                      icon: Icon(
+                        Icons.download,
+                        size: 30,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );

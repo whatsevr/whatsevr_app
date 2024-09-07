@@ -15,6 +15,7 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 import 'package:whatsevr_app/src/features/wtv_details/views/page.dart';
 
 import '../../src/features/account/views/page.dart';
+import '../../src/features/update_profile/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
 CustomTransitionPage<SlideTransition> _navigateWithTransition({
@@ -226,6 +227,19 @@ class AppNavigationService {
                   child: CreateVideoPost(
                     pageArgument: pageArgument,
                   ),
+                );
+              },
+            ),
+            GoRoute(
+              name: RoutesName.updateProfile,
+              path: RoutesName.updateProfile,
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                ProfileUpdatePageArgument pageArgument =
+                    state.extra as ProfileUpdatePageArgument;
+                return _navigateWithTransition(
+                  context: context,
+                  state: state,
+                  child: ProfileUpdatePage(),
                 );
               },
             ),
