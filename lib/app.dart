@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
@@ -48,7 +50,28 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       ),
       builder: FlutterSmartDialog.init(
         builder: (BuildContext context, Widget? child) {
-          return SafeArea(child: child!);
+          return SafeArea(
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: GestureDetector(
+                onTap: () {
+                  AppNavigationService.newRoute(RoutesName.takerDebug);
+                },
+                child: Banner(
+                  color: Colors.red,
+                  message: "Debug",
+                  location: BannerLocation.topEnd,
+                  textStyle: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.0 * 0.85,
+                    fontWeight: FontWeight.w900,
+                    height: 1.0,
+                  ),
+                  child: child,
+                ),
+              ),
+            ),
+          );
         },
       ),
     );

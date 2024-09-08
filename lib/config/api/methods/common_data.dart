@@ -3,18 +3,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
-class RecommendationApi {
-  static Future<RecommendationVideosResponse?> publicVideoPosts({
-    int? page = 1,
-  }) async {
+class CommonDataApi {
+  static Future<CommonDataResponse?> getAllCommonData() async {
     try {
-      Response response =
-          await ApiClient.client.get('/v1/recommendations/videos');
+      Response response = await ApiClient.client.get('/v1/common-data');
       if (response.statusCode == HttpStatus.ok) {
-        return RecommendationVideosResponse.fromMap(response.data);
+        return CommonDataResponse.fromMap(response.data);
       }
     } catch (e) {
       ApiClient.apiMethodException(e);

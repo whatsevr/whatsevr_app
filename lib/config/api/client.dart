@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:whatsevr_app/app.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/talker.dart';
 
 import 'interceptors/cache.dart';
 import 'interceptors/retry.dart';
@@ -32,6 +36,7 @@ class ApiClient {
     client.interceptors.addAll([
       ApiRetryInterceptor(dio: client),
       ApiCacheInterceptor(),
+      TalkerService.dioLogger,
     ]);
   }
 

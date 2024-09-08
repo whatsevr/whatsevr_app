@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/talker.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
@@ -122,6 +124,17 @@ class AppNavigationService {
             );
           },
           routes: <RouteBase>[
+            GoRoute(
+              name: RoutesName.takerDebug,
+              path: RoutesName.takerDebug,
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                return _navigateWithTransition(
+                  context: context,
+                  state: state,
+                  child: TalkerScreen(talker: TalkerService.instance),
+                );
+              },
+            ),
             GoRoute(
               name: RoutesName.dashboard,
               path: RoutesName.dashboard,
