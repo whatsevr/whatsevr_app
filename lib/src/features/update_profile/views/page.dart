@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 // Adjust the import
@@ -15,55 +17,9 @@ class ProfileUpdatePage extends StatefulWidget {
 }
 
 class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
-  final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
   // TextEditingControllers for each field
-  late TextEditingController _nameController;
-  late TextEditingController _userNameController;
-  late TextEditingController _emailController;
-  late TextEditingController _mobileController;
-  late TextEditingController _bioController;
-  late TextEditingController _addressController;
-  late TextEditingController _dobController;
-  late TextEditingController _portfolioTitleController;
-  late TextEditingController _portfolioDescriptionController;
-  late TextEditingController _service1Controller;
-  late TextEditingController _service2Controller;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize controllers with empty values or Bloc state
-    _nameController = TextEditingController();
-    _userNameController = TextEditingController();
-    _emailController = TextEditingController();
-    _mobileController = TextEditingController();
-    _bioController = TextEditingController();
-    _addressController = TextEditingController();
-    _dobController = TextEditingController();
-    _portfolioTitleController = TextEditingController();
-    _portfolioDescriptionController = TextEditingController();
-    _service1Controller = TextEditingController();
-    _service2Controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    // Dispose controllers when the widget is removed from the tree
-    _nameController.dispose();
-    _userNameController.dispose();
-    _emailController.dispose();
-    _mobileController.dispose();
-    _bioController.dispose();
-    _addressController.dispose();
-    _dobController.dispose();
-    _portfolioTitleController.dispose();
-    _portfolioDescriptionController.dispose();
-    _service1Controller.dispose();
-    _service2Controller.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,178 +28,187 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
       child: Builder(
         builder: (context) {
           return Scaffold(
+            backgroundColor: Colors.blueGrey[50],
             appBar: AppBar(
               title: Text('Edit Profile'),
             ),
             body: BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
-                // Update controllers with initial values from state
-                _nameController.text = state.name;
-                _userNameController.text = state.userName;
-                _emailController.text = state.email;
-                _mobileController.text = state.mobile;
-                _bioController.text = state.bio;
-                _addressController.text = state.address;
-                _dobController.text = state.dob;
-                _portfolioTitleController.text = state.portfolioTitle;
-                _portfolioDescriptionController.text =
-                    state.portfolioDescription;
-                _service1Controller.text = state.service1;
-                _service2Controller.text = state.service2;
-
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: ListView(
-                      children: [
-                        // Personal Info Section
-                        _buildSectionHeader('Personal Information'),
-                        _buildTextField(
-                          controller: _nameController,
-                          label: "Name",
-                        ),
-                        _buildTextField(
-                          controller: _userNameController,
-                          label: "Username",
-                        ),
-                        _buildTextField(
-                          controller: _emailController,
-                          label: "Email",
-                        ),
-                        _buildTextField(
-                          controller: _mobileController,
-                          label: "Mobile",
-                        ),
-                        _buildTextField(
-                          controller: _bioController,
-                          label: "Bio",
-                        ),
-                        _buildTextField(
-                          controller: _addressController,
-                          label: "Address",
-                        ),
-                        _buildTextField(
-                          controller: _dobController,
-                          label: "Date of Birth",
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Service Info Section
-                        _buildSectionHeader('Service Information'),
-                        _buildTextField(
-                          controller: _service1Controller,
-                          label: "Service 1",
-                        ),
-                        _buildTextField(
-                          controller: _service2Controller,
-                          label: "Service 2",
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Portfolio Info Section
-                        _buildSectionHeader('Portfolio Information'),
-                        _buildTextField(
-                          controller: _portfolioTitleController,
-                          label: "Portfolio Title",
-                        ),
-                        _buildTextField(
-                          controller: _portfolioDescriptionController,
-                          label: "Portfolio Description",
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Profile and Cover Image Section
-                        _buildSectionHeader('Images'),
-                        _buildImagePicker(
-                          label: "Profile Image",
-                          currentImage: state.profileImage,
-                          onImageSelected: (file) {
-                            context
-                                .read<ProfileBloc>()
-                                .add(UploadProfilePicture(file));
-                          },
-                        ),
-                        _buildImagePicker(
-                          label: "Cover Image",
-                          currentImage: state.coverImage,
-                          onImageSelected: (file) {
-                            context
-                                .read<ProfileBloc>()
-                                .add(UploadCoverPicture(file));
-                          },
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Submit Button
-                        ElevatedButton(
-                          onPressed: state.isSubmitting
-                              ? null
-                              : () {
-                                  if (_formKey.currentState?.validate() ??
-                                      false) {
-                                    // Collect values from TextEditingController and dispatch SubmitProfile
-                                    final name = _nameController.text;
-                                    final userName = _userNameController.text;
-                                    final email = _emailController.text;
-                                    final mobile = _mobileController.text;
-                                    final bio = _bioController.text;
-                                    final address = _addressController.text;
-                                    final dob = _dobController.text;
-                                    final portfolioTitle =
-                                        _portfolioTitleController.text;
-                                    final portfolioDescription =
-                                        _portfolioDescriptionController.text;
-                                    final service1 = _service1Controller.text;
-                                    final service2 = _service2Controller.text;
-
-                                    // Dispatch SubmitProfile with all the data
-                                    context
-                                        .read<ProfileBloc>()
-                                        .add(SubmitProfile(
-                                          name: name,
-                                          userName: userName,
-                                          email: email,
-                                          mobile: mobile,
-                                          bio: bio,
-                                          address: address,
-                                          dob: dob,
-                                          portfolioTitle: portfolioTitle,
-                                          portfolioDescription:
-                                              portfolioDescription,
-                                          service1: service1,
-                                          service2: service2,
-                                        ));
-                                  }
-                                },
-                          child: state.isSubmitting
-                              ? CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : Text('Submit Profile'),
-                        ),
-
-                        if (state.isSuccess)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Profile submitted successfully!',
-                              style: TextStyle(color: Colors.green),
+                return ListView(
+                  padding: PadHorizontal.padding,
+                  children: [
+                    Gap(12),
+                    Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          Gap(35),
+                          GestureDetector(
+                            onTap: () async {
+                              final XFile? pickedFile = await _picker.pickImage(
+                                  source: ImageSource.gallery);
+                              if (pickedFile != null) {
+                                context.read<ProfileBloc>().add(
+                                    UploadProfilePicture(
+                                        File(pickedFile.path)));
+                              }
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
+                                  height: 120,
+                                  width: 120,
+                                  padding: const EdgeInsets.all(16),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 2,
+                                    ),
+                                    image: state.profileImage != null
+                                        ? DecorationImage(
+                                            image:
+                                                FileImage(state.profileImage!),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: -10,
+                                  right: 0,
+                                  left: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        if (state.isFailure)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Profile submission failed.',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                      ],
+                          Gap(35),
+                        ],
+                      ),
                     ),
-                  ),
+
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().nameController,
+                            label: "Name",
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().userNameController,
+                            label: "Username",
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().emailController,
+                            label: "Email",
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().mobileController,
+                            label: "Mobile",
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().bioController,
+                            label: "Bio",
+                            minLines: 3,
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().addressController,
+                            label: "Address",
+                          ),
+                          Gap(8),
+                          _buildTextField(
+                            controller:
+                                context.read<ProfileBloc>().dobController,
+                            label: "Date of Birth",
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Service Info Section
+                    _buildSectionHeader('Education & Services'),
+                    _buildTextField(
+                      controller:
+                          context.read<ProfileBloc>().service1Controller,
+                      label: "Add Service",
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // Portfolio Info Section
+                    _buildSectionHeader('Portfolio Information'),
+
+                    _buildTextField(
+                      controller: context
+                          .read<ProfileBloc>()
+                          .portfolioDescriptionController,
+                      label: "Portfolio Description",
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 );
               },
+            ),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: Offset(0, -1),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(16),
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.blueAccent,
+                onPressed: () {
+                  context.read<ProfileBloc>().add(SubmitProfile());
+                },
+                child: Text('SAVE', style: TextStyle(color: Colors.white)),
+              ),
             ),
           );
         },
@@ -269,47 +234,29 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
+    final int minLines = 1,
   }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(labelText: label),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return '$label is required';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildImagePicker({
-    required String label,
-    required File? currentImage,
-    required Function(File) onImageSelected,
-  }) {
+    var border = OutlineInputBorder(borderRadius: BorderRadius.circular(10));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-        const SizedBox(height: 10),
-        GestureDetector(
-          onTap: () async {
-            final XFile? pickedFile =
-                await _picker.pickImage(source: ImageSource.gallery);
-            if (pickedFile != null) {
-              onImageSelected(File(pickedFile.path));
-            }
-          },
-          child: currentImage == null
-              ? Container(
-                  height: 100,
-                  width: 100,
-                  color: Colors.grey[200],
-                  child: Icon(Icons.add_a_photo),
-                )
-              : Image.file(currentImage, height: 100, width: 100),
+        Gap(6),
+        TextFormField(
+          minLines: minLines,
+          maxLines: minLines,
+          controller: controller,
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            border: border,
+            enabledBorder: border,
+            focusedBorder: border,
+            errorBorder: border,
+            focusedErrorBorder: border,
+          ),
         ),
-        const SizedBox(height: 20),
       ],
     );
   }

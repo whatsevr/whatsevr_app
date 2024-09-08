@@ -1,40 +1,32 @@
 part of 'bloc.dart';
 
 class ProfileState extends Equatable {
-  final String name;
-  final String userName;
-  final String email;
-  final String mobile;
-  final String bio;
-  final String address;
-  final String dob;
+  final String? name;
+  final String? userName;
+  final String? email;
+  final String? mobile;
+  final String? bio;
+  final String? address;
+  final String? dob;
   final File? profileImage;
   final File? coverImage;
-  final String portfolioTitle;
-  final String portfolioDescription;
-  final String service1;
-  final String service2;
-  final bool isSubmitting;
-  final bool isSuccess;
-  final bool isFailure;
+  final String? portfolioTitle;
+  final String? portfolioDescription;
+  final String? service1;
 
   const ProfileState({
-    this.name = '',
-    this.userName = '',
-    this.email = '',
-    this.mobile = '',
-    this.bio = '',
-    this.address = '',
-    this.dob = '',
+    this.name,
+    this.userName,
+    this.email,
+    this.mobile,
+    this.bio,
+    this.address,
+    this.dob,
     this.profileImage,
     this.coverImage,
-    this.portfolioTitle = '',
-    this.portfolioDescription = '',
-    this.service1 = '',
-    this.service2 = '',
-    this.isSubmitting = false,
-    this.isSuccess = false,
-    this.isFailure = false,
+    this.portfolioTitle,
+    this.portfolioDescription,
+    this.service1,
   });
 
   ProfileState copyWith({
@@ -68,10 +60,6 @@ class ProfileState extends Equatable {
       portfolioTitle: portfolioTitle ?? this.portfolioTitle,
       portfolioDescription: portfolioDescription ?? this.portfolioDescription,
       service1: service1 ?? this.service1,
-      service2: service2 ?? this.service2,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
     );
   }
 
@@ -89,9 +77,5 @@ class ProfileState extends Equatable {
         portfolioTitle,
         portfolioDescription,
         service1,
-        service2,
-        isSubmitting,
-        isSuccess,
-        isFailure,
       ];
 }

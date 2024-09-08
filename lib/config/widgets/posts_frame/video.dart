@@ -158,12 +158,12 @@ class WtvVideoPostFrame extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: const <ListTile>[
                                 ListTile(
-                                  title: Text('Report'),
-                                  leading: Icon(Icons.report),
+                                  title: Text('View Account'),
+                                  leading: Icon(Icons.account_box_rounded),
                                 ),
                                 ListTile(
-                                  title: Text('Delete'),
-                                  leading: Icon(Icons.block),
+                                  title: Text('Report'),
+                                  leading: Icon(Icons.report),
                                 ),
                               ],
                             );

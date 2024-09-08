@@ -32,11 +32,13 @@ class HomePage extends StatelessWidget {
               tabs: <String>[
                 'For You',
                 'Communities',
+                'Offers',
                 'Activities',
               ],
               tabViews: <Widget>[
                 HomePageForYouPage(),
                 HomePageCommunitiesPage(),
+                Text('Offers'),
                 HomePageActivitiesPage(),
               ],
             ),

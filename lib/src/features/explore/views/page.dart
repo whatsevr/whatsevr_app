@@ -30,11 +30,13 @@ class ExplorePage extends StatelessWidget {
             tabs: <String>[
               'Wtv',
               'Media',
+              'Offers',
               'Memories',
             ],
             tabViews: <Widget>[
               ExplorePageWtvPage(),
               ExplorePageMediaPage(),
+              Text('Offers'),
               ExplorePageMemoriesPage(),
             ],
           ),

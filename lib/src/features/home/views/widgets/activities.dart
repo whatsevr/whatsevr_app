@@ -12,14 +12,10 @@ class HomePageActivitiesPage extends StatelessWidget {
     return const WhatsevrTabBarWithViews(
       tabs: <String>[
         'History',
-        'Downloads',
-        'Saved Videos',
-        'Playlists',
+        'Saved',
       ],
       tabViews: <Widget>[
         Text('History'),
-        Text('Downloads'),
-        Text('Playlists'),
         Text('Saved'),
       ],
     );

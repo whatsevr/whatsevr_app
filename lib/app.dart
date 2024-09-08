@@ -54,7 +54,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: GestureDetector(
-                onTap: () {
+                onLongPress: () {
                   AppNavigationService.newRoute(RoutesName.takerDebug);
                 },
                 child: Banner(
