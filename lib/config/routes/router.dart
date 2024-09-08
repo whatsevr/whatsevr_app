@@ -252,7 +252,9 @@ class AppNavigationService {
                 return _navigateWithTransition(
                   context: context,
                   state: state,
-                  child: ProfileUpdatePage(),
+                  child: ProfileUpdatePage(
+                    pageArgument: pageArgument,
+                  ),
                 );
               },
             ),

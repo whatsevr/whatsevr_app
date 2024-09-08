@@ -104,7 +104,9 @@ class AccountPage extends StatelessWidget {
                                     onPressed: () {
                                       AppNavigationService.newRoute(
                                           RoutesName.updateProfile,
-                                          extras: ProfileUpdatePageArgument());
+                                          extras: ProfileUpdatePageArgument(
+                                              profileDetailsResponse: state
+                                                  .profileDetailsResponse));
                                     },
                                   ),
                                 ]

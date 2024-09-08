@@ -7,6 +7,15 @@ abstract class ProfileEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class InitialEvent extends ProfileEvent {
+  final ProfileUpdatePageArgument pageArgument;
+
+  const InitialEvent({required this.pageArgument});
+
+  @override
+  List<Object?> get props => [pageArgument];
+}
+
 class UploadProfilePicture extends ProfileEvent {
   final File image;
 

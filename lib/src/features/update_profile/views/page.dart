@@ -1,30 +1,36 @@
 import 'dart:io';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 // Adjust the import
-class ProfileUpdatePageArgument {}
+class ProfileUpdatePageArgument {
+  final ProfileDetailsResponse? profileDetailsResponse;
 
-class ProfileUpdatePage extends StatefulWidget {
-  const ProfileUpdatePage({Key? key}) : super(key: key);
-
-  @override
-  _ProfileUpdatePageState createState() => _ProfileUpdatePageState();
+  ProfileUpdatePageArgument({required this.profileDetailsResponse});
 }
 
-class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
+class ProfileUpdatePage extends StatelessWidget {
+  final ProfileUpdatePageArgument pageArgument;
+  ProfileUpdatePage({
+    Key? key,
+    required this.pageArgument,
+  }) : super(key: key);
+
   final ImagePicker _picker = ImagePicker();
 
   // TextEditingControllers for each field
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileBloc(),
+      create: (context) =>
+          ProfileBloc()..add(InitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -67,20 +73,21 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                                   padding: const EdgeInsets.all(16),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 2,
-                                    ),
-                                    image: state.profileImage != null
-                                        ? DecorationImage(
-                                            image:
-                                                FileImage(state.profileImage!),
-                                            fit: BoxFit.cover,
-                                          )
-                                        : null,
-                                  ),
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 2,
+                                      ),
+                                      image: DecorationImage(
+                                        image: state.profileImage != null
+                                            ? FileImage(state.profileImage!)
+                                            : ExtendedNetworkImageProvider(
+                                                MockData.imageAvatar),
+                                        fit: BoxFit.cover,
+                                      )
+                                      // : ,
+                                      ),
                                 ),
                                 Positioned(
                                   bottom: -10,
@@ -107,7 +114,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    Gap(12),
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -124,20 +131,8 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                           Gap(8),
                           _buildTextField(
                             controller:
-                                context.read<ProfileBloc>().userNameController,
-                            label: "Username",
-                          ),
-                          Gap(8),
-                          _buildTextField(
-                            controller:
                                 context.read<ProfileBloc>().emailController,
                             label: "Email",
-                          ),
-                          Gap(8),
-                          _buildTextField(
-                            controller:
-                                context.read<ProfileBloc>().mobileController,
-                            label: "Mobile",
                           ),
                           Gap(8),
                           _buildTextField(
@@ -181,6 +176,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                           .read<ProfileBloc>()
                           .portfolioDescriptionController,
                       label: "Portfolio Description",
+                      minLines: 5,
                     ),
                     const SizedBox(height: 20),
                   ],
@@ -244,7 +240,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
         Gap(6),
         TextFormField(
           minLines: minLines,
-          maxLines: minLines,
+          maxLines: minLines + 5,
           controller: controller,
           decoration: InputDecoration(
             isDense: true,

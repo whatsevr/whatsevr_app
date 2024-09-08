@@ -120,19 +120,19 @@ class UserEducation {
   final int? id;
   final DateTime? createdAt;
   final String? userUid;
-  final String? title;
+  final String? name;
   final DateTime? startDate;
   final DateTime? endDate;
-  final String? degree;
+  final String? type;
 
   UserEducation({
     this.id,
     this.createdAt,
     this.userUid,
-    this.title,
+    this.name,
     this.startDate,
     this.endDate,
-    this.degree,
+    this.type,
   });
 
   factory UserEducation.fromJson(String str) =>
@@ -146,25 +146,25 @@ class UserEducation {
             ? null
             : DateTime.parse(json["created_at"]),
         userUid: json["user_uid"],
-        title: json["title"],
+        name: json["name"],
         startDate: json["start_date"] == null
             ? null
             : DateTime.parse(json["start_date"]),
         endDate:
             json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
-        degree: json["degree"],
+        type: json["type"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "created_at": createdAt?.toIso8601String(),
         "user_uid": userUid,
-        "title": title,
+        "name": name,
         "start_date":
             "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
         "end_date":
             "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
-        "degree": degree,
+        "type": type,
       };
 }
 
