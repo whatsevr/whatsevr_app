@@ -38,7 +38,12 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       debugShowCheckedModeBanner: false,
       title: 'Whatsevr',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        primaryColor: Colors.blue,
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.grey,
+          selectionColor: Colors.grey,
+          selectionHandleColor: Colors.grey,
+        ),
         useMaterial3: true,
         //flipkart
         textTheme: GoogleFonts.openSansTextTheme(),

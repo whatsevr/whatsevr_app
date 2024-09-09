@@ -11,6 +11,8 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
+import '../../../../config/widgets/mask_text.dart';
+
 // Adjust the import
 class ProfileUpdatePageArgument {
   final ProfileDetailsResponse? profileDetailsResponse;
@@ -54,7 +56,7 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          Gap(35),
+                          Gap(25),
                           GestureDetector(
                             onTap: () async {
                               final XFile? pickedFile = await _picker.pickImage(
@@ -119,7 +121,23 @@ class ProfileUpdatePage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Gap(35),
+                          Gap(22),
+                          MaskText(
+                            key: ValueKey(state.currentProfileDetailsResponse
+                                    ?.userInfo?.mobileNumber ??
+                                ''), // Add a key to the widget to force rebuild
+                            text: state.currentProfileDetailsResponse?.userInfo
+                                    ?.mobileNumber ??
+                                '',
+                            maskLength: 5,
+                            maskFirstDigits: false,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Gap(25),
                         ],
                       ),
                     ),
@@ -133,33 +151,36 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SuperTextFormField.general(
+                          SuperFormField.generalTextField(
                             controller:
                                 context.read<ProfileBloc>().nameController,
                             headingTitle: "Name",
-                            maxLength: 50,
+                            maxLength: 40,
                           ),
                           Gap(8),
-                          SuperTextFormField.email(
+                          SuperFormField.email(
                             controller:
                                 context.read<ProfileBloc>().emailController,
                             headingTitle: "Email",
+                            maxLength: 60,
                           ),
                           Gap(8),
-                          SuperTextFormField.multiline(
+                          SuperFormField.multilineTextField(
                             controller:
                                 context.read<ProfileBloc>().bioController,
                             headingTitle: "Bio",
                             minLines: 3,
+                            maxLength: 300,
                           ),
                           Gap(8),
-                          SuperTextFormField.multiline(
+                          SuperFormField.multilineTextField(
                             controller:
                                 context.read<ProfileBloc>().addressController,
                             headingTitle: "Address",
+                            maxLength: 100,
                           ),
                           Gap(8),
-                          SuperTextFormField.datePicker(
+                          SuperFormField.datePicker(
                             context: context,
                             controller: TextEditingController(
                                 text: state.dob == null
@@ -188,7 +209,7 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SuperTextFormField.general(
+                          SuperFormField.generalTextField(
                             controller:
                                 context.read<ProfileBloc>().service1Controller,
                             headingTitle: "Add Service",
@@ -198,7 +219,7 @@ class ProfileUpdatePage extends StatelessWidget {
 
                           // Portfolio Info Section
 
-                          SuperTextFormField.multiline(
+                          SuperFormField.multilineTextField(
                             controller: context
                                 .read<ProfileBloc>()
                                 .portfolioDescriptionController,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class SuperTextFormField extends StatefulWidget {
+class SuperFormField extends StatefulWidget {
   final String? headingTitle;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -27,7 +27,7 @@ class SuperTextFormField extends StatefulWidget {
   final List<DropdownMenuItem<String>>? dropdownItems;
   final ValueChanged<String?>? onChanged;
 
-  const SuperTextFormField._internal({
+  const SuperFormField._internal({
     Key? key,
     this.headingTitle,
     this.controller,
@@ -53,7 +53,7 @@ class SuperTextFormField extends StatefulWidget {
   }) : super(key: key);
 
   // General text input factory with maxLength support
-  factory SuperTextFormField.general({
+  factory SuperFormField.generalTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -69,7 +69,7 @@ class SuperTextFormField extends StatefulWidget {
     int? maxLines,
     int? maxLength,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -91,14 +91,14 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Factory: Date Picker
-  factory SuperTextFormField.datePicker({
+  factory SuperFormField.datePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(DateTime)? onDateSelected,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -120,14 +120,14 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Factory: DateTime Picker
-  factory SuperTextFormField.dateTimePicker({
+  factory SuperFormField.dateTimePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(DateTime)? onDateTimeSelected,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -164,14 +164,14 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Factory: Time Picker
-  factory SuperTextFormField.timePicker({
+  factory SuperFormField.timePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(TimeOfDay)? onTimeSelected,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -191,26 +191,45 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Factory: Dropdown with Arrow Down
-  factory SuperTextFormField.dropdown({
+  factory SuperFormField.showModalSheetOnTap({
+    required BuildContext context,
     String? headingTitle,
-    String? value,
-    List<DropdownMenuItem<String>>? dropdownItems,
-    ValueChanged<String?>? onChanged,
-    Function()? onTap,
+    TextEditingController? controller,
+    String? hintText,
+    String? labelText,
+    Widget? suffixWidget, // List of icons or widgets to display
+    bool readOnly = true, // TextField is read-only by default
+    Widget? modalSheetUi, // Function to be invoked on tap
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
-      dropdownItems: dropdownItems,
-      dropdownValue: value,
-      suffixIcon: const Icon(Icons.arrow_drop_down),
-      onChanged: onChanged,
-      onTap: onTap,
-      readOnly: true,
+      controller: controller,
+      hintText: hintText,
+      labelText: labelText,
+      readOnly: readOnly,
+      onTap: () {
+        showModalBottomSheet(
+          useRootNavigator: true,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.6,
+          ),
+          backgroundColor: Colors.white,
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          builder: (context) => modalSheetUi!,
+        );
+      },
+      suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
     );
   }
 
   // Factory: TextField with Clear Icon
-  factory SuperTextFormField.withClearIcon({
+  factory SuperFormField.textFieldWithClearIcon({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -219,7 +238,7 @@ class SuperTextFormField extends StatefulWidget {
     String? Function(String?)? validator,
     TextInputType? keyboardType,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -244,7 +263,7 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Password input with visibility toggle and maxLength support
-  factory SuperTextFormField.secret({
+  factory SuperFormField.secretTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -252,7 +271,7 @@ class SuperTextFormField extends StatefulWidget {
     List<TextInputFormatter>? inputFormatters,
     int? maxLength,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       obscureText: true,
       headingTitle: headingTitle,
       controller: controller,
@@ -267,14 +286,13 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Email input with maxLength support
-  factory SuperTextFormField.email({
+  factory SuperFormField.email({
     String? headingTitle,
     TextEditingController? controller,
-    String? hintText = 'Enter your email',
-    String? labelText = 'Email',
+    String? hintText,
     int? maxLength,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -288,14 +306,13 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Phone number input with maxLength support
-  factory SuperTextFormField.phone({
+  factory SuperFormField.phoneTextField({
     String? headingTitle,
     TextEditingController? controller,
-    String? hintText = 'Enter your phone number',
-    String? labelText = 'Phone',
+    String? hintText,
     int? maxLength = 10,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -310,7 +327,7 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   // Multiline input with maxLength support
-  factory SuperTextFormField.multiline({
+  factory SuperFormField.multilineTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -318,7 +335,7 @@ class SuperTextFormField extends StatefulWidget {
     int? maxLines,
     int? maxLength,
   }) {
-    return SuperTextFormField._internal(
+    return SuperFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -333,10 +350,10 @@ class SuperTextFormField extends StatefulWidget {
   }
 
   @override
-  _SuperTextFormFieldState createState() => _SuperTextFormFieldState();
+  _SuperFormFieldState createState() => _SuperFormFieldState();
 }
 
-class _SuperTextFormFieldState extends State<SuperTextFormField> {
+class _SuperFormFieldState extends State<SuperFormField> {
   late ValueNotifier<bool> _obscureTextNotifier;
 
   @override
@@ -358,39 +375,6 @@ class _SuperTextFormFieldState extends State<SuperTextFormField> {
       borderSide: BorderSide(color: Colors.grey.shade500),
       borderRadius: BorderRadius.circular(10),
     );
-
-    if (widget.dropdownItems != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.headingTitle != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 6.0),
-              child: Text(
-                widget.headingTitle!,
-                style: const TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          DropdownButtonFormField<String>(
-            isDense: true,
-            value: widget.dropdownValue,
-            items: widget.dropdownItems,
-            onChanged: widget.onChanged,
-            decoration: InputDecoration(
-              contentPadding: defaultContextPadding,
-              labelText: widget.labelText,
-              suffixIcon: widget.suffixIcon,
-              border: border,
-              enabledBorder: border,
-              focusedBorder: border,
-            ),
-          ),
-        ],
-      );
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
