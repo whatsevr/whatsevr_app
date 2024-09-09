@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 // Adjust the import
@@ -82,8 +84,16 @@ class ProfileUpdatePage extends StatelessWidget {
                                       image: DecorationImage(
                                         image: state.profileImage != null
                                             ? FileImage(state.profileImage!)
-                                            : ExtendedNetworkImageProvider(
-                                                MockData.imageAvatar),
+                                            : state.currentProfileDetailsResponse
+                                                        ?.userInfo?.profilePicture !=
+                                                    null
+                                                ? ExtendedNetworkImageProvider(state
+                                                        .currentProfileDetailsResponse
+                                                        ?.userInfo
+                                                        ?.profilePicture ??
+                                                    MockData.imageAvatar)
+                                                : ExtendedNetworkImageProvider(
+                                                    MockData.imageAvatar),
                                         fit: BoxFit.cover,
                                       )
                                       // : ,
@@ -123,62 +133,81 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          _buildTextField(
+                          SuperTextFormField.normal(
                             controller:
                                 context.read<ProfileBloc>().nameController,
-                            label: "Name",
+                            headingTitle: "Name",
                           ),
                           Gap(8),
-                          _buildTextField(
+                          SuperTextFormField.normal(
                             controller:
                                 context.read<ProfileBloc>().emailController,
-                            label: "Email",
+                            headingTitle: "Email",
                           ),
                           Gap(8),
-                          _buildTextField(
+                          SuperTextFormField.normal(
                             controller:
                                 context.read<ProfileBloc>().bioController,
-                            label: "Bio",
+                            headingTitle: "Bio",
                             minLines: 3,
                           ),
                           Gap(8),
-                          _buildTextField(
+                          SuperTextFormField.normal(
                             controller:
                                 context.read<ProfileBloc>().addressController,
-                            label: "Address",
+                            headingTitle: "Address",
                           ),
                           Gap(8),
-                          _buildTextField(
-                            controller:
-                                context.read<ProfileBloc>().dobController,
-                            label: "Date of Birth",
+                          SuperTextFormField.date(
+                            context: context,
+                            controller: TextEditingController(
+                                text: state.dob == null
+                                    ? ''
+                                    : DateFormat('dd-MM-yyyy')
+                                        .format(state.dob!)),
+                            headingTitle: 'Date of Birth',
+                            onDateSelected: (DateTime date) {
+                              context
+                                  .read<ProfileBloc>()
+                                  .emit(state.copyWith(dob: date));
+                            },
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    Gap(12),
 
                     // Service Info Section
-                    _buildSectionHeader('Education & Services'),
-                    _buildTextField(
-                      controller:
-                          context.read<ProfileBloc>().service1Controller,
-                      label: "Add Service",
+
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                          SuperTextFormField.normal(
+                            controller:
+                                context.read<ProfileBloc>().service1Controller,
+                            headingTitle: "Add Service",
+                          ),
+
+                          Gap(12),
+
+                          // Portfolio Info Section
+
+                          SuperTextFormField.normal(
+                            controller: context
+                                .read<ProfileBloc>()
+                                .portfolioDescriptionController,
+                            headingTitle: "Portfolio Description",
+                            minLines: 5,
+                          ),
+                        ],
+                      ),
                     ),
-
-                    const SizedBox(height: 20),
-
-                    // Portfolio Info Section
-                    _buildSectionHeader('Portfolio Information'),
-
-                    _buildTextField(
-                      controller: context
-                          .read<ProfileBloc>()
-                          .portfolioDescriptionController,
-                      label: "Portfolio Description",
-                      minLines: 5,
-                    ),
-                    const SizedBox(height: 20),
+                    Gap(12),
                   ],
                 );
               },
@@ -209,51 +238,6 @@ class ProfileUpdatePage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  // Builds a header for sections
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 10),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    final int minLines = 1,
-  }) {
-    var border = OutlineInputBorder(borderRadius: BorderRadius.circular(10));
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
-        Gap(6),
-        TextFormField(
-          minLines: minLines,
-          maxLines: minLines + 5,
-          controller: controller,
-          decoration: InputDecoration(
-            isDense: true,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            border: border,
-            enabledBorder: border,
-            focusedBorder: border,
-            errorBorder: border,
-            focusedErrorBorder: border,
-          ),
-        ),
-      ],
     );
   }
 }

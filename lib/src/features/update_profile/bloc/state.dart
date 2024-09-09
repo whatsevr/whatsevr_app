@@ -2,18 +2,21 @@ part of 'bloc.dart';
 
 class ProfileState extends Equatable {
   final ProfileDetailsResponse? currentProfileDetailsResponse;
+
   final String? name;
 
   final String? email;
 
   final String? bio;
   final String? address;
-  final String? dob;
+  final DateTime? dob;
   final File? profileImage;
-  final File? coverImage;
+  final List<File>? coverImages;
+  final List<File>? coverVideos;
   final List<String>? services;
   final String? portfolioTitle;
   final String? portfolioDescription;
+
   const ProfileState({
     this.currentProfileDetailsResponse,
     this.name,
@@ -22,7 +25,8 @@ class ProfileState extends Equatable {
     this.address,
     this.dob,
     this.profileImage,
-    this.coverImage,
+    this.coverImages,
+    this.coverVideos,
     this.portfolioTitle,
     this.portfolioDescription,
     this.services,
@@ -34,9 +38,10 @@ class ProfileState extends Equatable {
     String? email,
     String? bio,
     String? address,
-    String? dob,
+    DateTime? dob,
     File? profileImage,
-    File? coverImage,
+    List<File>? coverImages,
+    List<File>? coverVideos,
     String? portfolioTitle,
     String? portfolioDescription,
     List<String>? services,
@@ -50,7 +55,8 @@ class ProfileState extends Equatable {
       address: address ?? this.address,
       dob: dob ?? this.dob,
       profileImage: profileImage ?? this.profileImage,
-      coverImage: coverImage ?? this.coverImage,
+      coverImages: coverImages ?? this.coverImages,
+      coverVideos: coverVideos ?? this.coverVideos,
       portfolioTitle: portfolioTitle ?? this.portfolioTitle,
       portfolioDescription: portfolioDescription ?? this.portfolioDescription,
       services: services ?? this.services,
@@ -66,7 +72,8 @@ class ProfileState extends Equatable {
         address,
         dob,
         profileImage,
-        coverImage,
+        coverImages,
+        coverVideos,
         portfolioTitle,
         portfolioDescription,
         services,

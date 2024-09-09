@@ -15,12 +15,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   TextEditingController bioController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController dobController = TextEditingController();
 
   TextEditingController portfolioDescriptionController =
       TextEditingController();
   TextEditingController service1Controller = TextEditingController();
-  TextEditingController service2Controller = TextEditingController();
 
   ProfileBloc() : super(ProfileState()) {
     on<InitialEvent>(_onInitialEvent);
@@ -30,6 +28,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
   FutureOr<void> _onInitialEvent(
       InitialEvent event, Emitter<ProfileState> emit) {
+    emit(state.copyWith(
+      currentProfileDetailsResponse: event.pageArgument.profileDetailsResponse,
+      dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
+    ));
     // Set the initial values of the text controllers
     nameController.text =
         event.pageArgument.profileDetailsResponse?.userInfo?.name ?? '';
@@ -55,8 +57,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onUploadCoverPicture(
       UploadCoverPicture event, Emitter<ProfileState> emit) {
-    // Update cover image in the state
-    emit(state.copyWith(coverImage: event.image));
+    //
+    // emit(state.copyWith(coverImages: Li));
   }
 
   Future<void> _onSubmitProfile(
