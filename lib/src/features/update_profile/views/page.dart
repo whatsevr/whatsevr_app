@@ -133,32 +133,33 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SuperTextFormField.normal(
+                          SuperTextFormField.general(
                             controller:
                                 context.read<ProfileBloc>().nameController,
                             headingTitle: "Name",
+                            maxLength: 50,
                           ),
                           Gap(8),
-                          SuperTextFormField.normal(
+                          SuperTextFormField.email(
                             controller:
                                 context.read<ProfileBloc>().emailController,
                             headingTitle: "Email",
                           ),
                           Gap(8),
-                          SuperTextFormField.normal(
+                          SuperTextFormField.multiline(
                             controller:
                                 context.read<ProfileBloc>().bioController,
                             headingTitle: "Bio",
                             minLines: 3,
                           ),
                           Gap(8),
-                          SuperTextFormField.normal(
+                          SuperTextFormField.multiline(
                             controller:
                                 context.read<ProfileBloc>().addressController,
                             headingTitle: "Address",
                           ),
                           Gap(8),
-                          SuperTextFormField.date(
+                          SuperTextFormField.datePicker(
                             context: context,
                             controller: TextEditingController(
                                 text: state.dob == null
@@ -187,7 +188,7 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          SuperTextFormField.normal(
+                          SuperTextFormField.general(
                             controller:
                                 context.read<ProfileBloc>().service1Controller,
                             headingTitle: "Add Service",
@@ -197,7 +198,7 @@ class ProfileUpdatePage extends StatelessWidget {
 
                           // Portfolio Info Section
 
-                          SuperTextFormField.normal(
+                          SuperTextFormField.multiline(
                             controller: context
                                 .read<ProfileBloc>()
                                 .portfolioDescriptionController,

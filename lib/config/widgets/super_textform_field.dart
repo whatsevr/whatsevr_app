@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class SuperTextFormField extends StatelessWidget {
+class SuperTextFormField extends StatefulWidget {
   final String? headingTitle;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -13,30 +13,22 @@ class SuperTextFormField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final String? labelText;
-
   final bool enabled;
-
   final String? Function(String?)? validator;
-  final List<TextInputFormatter>?
-      inputFormatters; // New input formatter parameter
+  final List<TextInputFormatter>? inputFormatters;
+  final bool readOnly;
+  final int? minLines;
+  final int? maxLines;
+  final int? maxLength;
+  final Function()? customFunction;
 
-  // Dropdown-specific
-  final List<DropdownMenuItem<String>>? dropdownItems;
+  // Dropdown specific
   final String? dropdownValue;
+  final List<DropdownMenuItem<String>>? dropdownItems;
   final ValueChanged<String?>? onChanged;
 
-  // Date and Time pickers
-  final bool isDatePicker;
-  final bool isTimePicker;
-  final bool isDateTimePicker;
-
-  // Custom Function
-  final Function()? customFunction;
-  final bool? readOnly;
-  final int? minLines;
-
   const SuperTextFormField._internal({
-    super.key,
+    Key? key,
     this.headingTitle,
     this.controller,
     this.focusNode,
@@ -49,97 +41,57 @@ class SuperTextFormField extends StatelessWidget {
     this.labelText,
     this.enabled = true,
     this.validator,
-    this.inputFormatters, // Input formatters parameter added here
-    this.dropdownItems,
-    this.dropdownValue,
-    this.onChanged,
-    this.isDatePicker = false,
-    this.isTimePicker = false,
-    this.isDateTimePicker = false,
-    this.customFunction,
-    this.readOnly,
+    this.inputFormatters,
+    this.readOnly = false,
     this.minLines,
-  });
+    this.maxLines,
+    this.maxLength,
+    this.customFunction,
+    this.dropdownValue,
+    this.dropdownItems,
+    this.onChanged,
+  }) : super(key: key);
 
-  // Normal text input
-  factory SuperTextFormField.normal({
+  // General text input factory with maxLength support
+  factory SuperTextFormField.general({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
-    String? labelText,
     TextInputType? keyboardType,
+    bool obscureText = false,
     Widget? suffixIcon,
     Widget? prefixIcon,
     Function()? onTap,
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
-    bool? readOnly,
+    bool readOnly = false,
     int? minLines,
     int? maxLines,
-    // Input formatter added to factory
+    int? maxLength,
   }) {
     return SuperTextFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
-      labelText: labelText,
       keyboardType: keyboardType,
+      obscureText: obscureText,
       suffixIcon: suffixIcon,
       prefixIcon: prefixIcon,
       onTap: onTap,
       validator: validator,
-      inputFormatters: inputFormatters,
+      inputFormatters: [
+        ...?inputFormatters,
+        if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
+      ],
       readOnly: readOnly,
       minLines: minLines,
-
-      // Pass input formatters to internal
+      maxLines: maxLines,
+      maxLength: maxLength,
     );
   }
 
-  // Search text input
-  factory SuperTextFormField.search({
-    String? headingTitle,
-    TextEditingController? controller,
-    String? hintText = 'Search',
-    Function()? onTap,
-    String? Function(String?)? validator,
-    List<TextInputFormatter>?
-        inputFormatters, // Input formatter added to factory
-  }) {
-    return SuperTextFormField._internal(
-      headingTitle: headingTitle,
-      controller: controller,
-      hintText: hintText,
-      prefixIcon: const Icon(Icons.search),
-      onTap: onTap,
-      validator: validator,
-      inputFormatters: inputFormatters,
-    );
-  }
-
-  // Dropdown input
-  factory SuperTextFormField.dropdown({
-    String? headingTitle,
-    String? value,
-    List<DropdownMenuItem<String>>? dropdownItems,
-    String? labelText,
-    ValueChanged<String?>? onChanged,
-    Function()? onTap,
-  }) {
-    return SuperTextFormField._internal(
-      headingTitle: headingTitle,
-      dropdownItems: dropdownItems,
-      dropdownValue: value,
-      labelText: labelText,
-      suffixIcon: const Icon(Icons.arrow_drop_down),
-      onChanged: onChanged,
-      onTap: onTap,
-      readOnly: true,
-    );
-  }
-
-  // Date picker input
-  factory SuperTextFormField.date({
+  // Factory: Date Picker
+  factory SuperTextFormField.datePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
@@ -151,7 +103,6 @@ class SuperTextFormField extends StatelessWidget {
       controller: controller,
       hintText: hintText,
       suffixIcon: const Icon(Icons.calendar_today),
-      isDatePicker: true,
       readOnly: true,
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
@@ -168,36 +119,8 @@ class SuperTextFormField extends StatelessWidget {
     );
   }
 
-  // Time picker input
-  factory SuperTextFormField.time({
-    required BuildContext context,
-    String? headingTitle,
-    TextEditingController? controller,
-    String? hintText,
-    Function(TimeOfDay)? onTimeSelected,
-  }) {
-    return SuperTextFormField._internal(
-      headingTitle: headingTitle,
-      readOnly: true,
-      controller: controller,
-      hintText: hintText,
-      suffixIcon: const Icon(Icons.access_time),
-      isTimePicker: true,
-      onTap: () async {
-        TimeOfDay? pickedTime = await showTimePicker(
-          context: context,
-          initialTime: TimeOfDay.now(),
-        );
-        if (pickedTime != null && onTimeSelected != null) {
-          controller?.text = pickedTime.format(context);
-          onTimeSelected(pickedTime);
-        }
-      },
-    );
-  }
-
-  // DateTime picker input
-  factory SuperTextFormField.dateTime({
+  // Factory: DateTime Picker
+  factory SuperTextFormField.dateTimePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
@@ -205,12 +128,11 @@ class SuperTextFormField extends StatelessWidget {
     Function(DateTime)? onDateTimeSelected,
   }) {
     return SuperTextFormField._internal(
-      readOnly: true,
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
       suffixIcon: const Icon(Icons.calendar_today),
-      isDateTimePicker: true,
+      readOnly: true,
       onTap: () async {
         DateTime? pickedDate = await showDatePicker(
           context: context,
@@ -240,136 +162,295 @@ class SuperTextFormField extends StatelessWidget {
       },
     );
   }
-//Secret input
-  factory SuperTextFormField.secretInput({
+
+  // Factory: Time Picker
+  factory SuperTextFormField.timePicker({
+    required BuildContext context,
+    String? headingTitle,
+    TextEditingController? controller,
+    String? hintText,
+    Function(TimeOfDay)? onTimeSelected,
+  }) {
+    return SuperTextFormField._internal(
+      headingTitle: headingTitle,
+      controller: controller,
+      hintText: hintText,
+      suffixIcon: const Icon(Icons.access_time),
+      readOnly: true,
+      onTap: () async {
+        TimeOfDay? pickedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+        );
+        if (pickedTime != null && onTimeSelected != null) {
+          controller?.text = pickedTime.format(context);
+          onTimeSelected(pickedTime);
+        }
+      },
+    );
+  }
+
+  // Factory: Dropdown with Arrow Down
+  factory SuperTextFormField.dropdown({
+    String? headingTitle,
+    String? value,
+    List<DropdownMenuItem<String>>? dropdownItems,
+    ValueChanged<String?>? onChanged,
+    Function()? onTap,
+  }) {
+    return SuperTextFormField._internal(
+      headingTitle: headingTitle,
+      dropdownItems: dropdownItems,
+      dropdownValue: value,
+      suffixIcon: const Icon(Icons.arrow_drop_down),
+      onChanged: onChanged,
+      onTap: onTap,
+      readOnly: true,
+    );
+  }
+
+  // Factory: TextField with Clear Icon
+  factory SuperTextFormField.withClearIcon({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     String? labelText,
-    TextInputType? keyboardType,
-    Widget? suffixIcon,
-    Widget? prefixIcon,
     Function()? onTap,
     String? Function(String?)? validator,
+    TextInputType? keyboardType,
+  }) {
+    return SuperTextFormField._internal(
+      headingTitle: headingTitle,
+      controller: controller,
+      hintText: hintText,
+      labelText: labelText,
+      suffixIcon: ValueListenableBuilder(
+        valueListenable: controller!,
+        builder: (context, TextEditingValue value, __) {
+          return value.text.isNotEmpty
+              ? GestureDetector(
+                  onTap: () {
+                    controller.clear(); // Clears the text field
+                  },
+                  child: const Icon(Icons.clear),
+                )
+              : const SizedBox.shrink();
+        },
+      ),
+      onTap: onTap,
+      keyboardType: keyboardType,
+      validator: validator,
+    );
+  }
+
+  // Password input with visibility toggle and maxLength support
+  factory SuperTextFormField.secret({
+    String? headingTitle,
+    TextEditingController? controller,
+    String? hintText,
+    String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
-    bool? readOnly,
-    int? minLines,
-    int? maxLines,
-    // Input formatter added to factory
+    int? maxLength,
   }) {
     return SuperTextFormField._internal(
       obscureText: true,
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
-      labelText: labelText,
-      keyboardType: TextInputType.visiblePassword,
-      suffixIcon: suffixIcon,
-      prefixIcon: prefixIcon,
-      onTap: onTap,
       validator: validator,
-      inputFormatters: inputFormatters,
-      readOnly: readOnly,
-      minLines: minLines,
-
-      // Pass input formatters to internal
+      inputFormatters: [
+        ...?inputFormatters,
+        if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
+      ],
+      maxLength: maxLength,
     );
   }
-  // Invoke custom function input
-  factory SuperTextFormField.invokeFunction({
+
+  // Email input with maxLength support
+  factory SuperTextFormField.email({
     String? headingTitle,
     TextEditingController? controller,
-    String? hintText,
-    Function()? customFunction,
-    Widget? suffixIcon,
-    Widget? prefixIcon,
-    String? labelText,
-    Function()? onTap,
+    String? hintText = 'Enter your email',
+    String? labelText = 'Email',
+    int? maxLength,
   }) {
     return SuperTextFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
-      suffixIcon: suffixIcon,
-      prefixIcon: prefixIcon,
-      labelText: labelText,
-      customFunction: customFunction,
-      onTap: onTap,
-      readOnly: true,
+      keyboardType: TextInputType.emailAddress,
+      prefixIcon: const Icon(Icons.email),
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(maxLength),
+      ],
+      maxLength: maxLength,
+    );
+  }
+
+  // Phone number input with maxLength support
+  factory SuperTextFormField.phone({
+    String? headingTitle,
+    TextEditingController? controller,
+    String? hintText = 'Enter your phone number',
+    String? labelText = 'Phone',
+    int? maxLength = 10,
+  }) {
+    return SuperTextFormField._internal(
+      headingTitle: headingTitle,
+      controller: controller,
+      hintText: hintText,
+      keyboardType: TextInputType.phone,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(maxLength),
+      ],
+      prefixIcon: const Icon(Icons.phone),
+      maxLength: maxLength,
+    );
+  }
+
+  // Multiline input with maxLength support
+  factory SuperTextFormField.multiline({
+    String? headingTitle,
+    TextEditingController? controller,
+    String? hintText,
+    int minLines = 3,
+    int? maxLines,
+    int? maxLength,
+  }) {
+    return SuperTextFormField._internal(
+      headingTitle: headingTitle,
+      controller: controller,
+      hintText: hintText,
+      minLines: minLines,
+      maxLines: maxLines ?? minLines + 5,
+      keyboardType: TextInputType.multiline,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(maxLength),
+      ],
+      maxLength: maxLength,
     );
   }
 
   @override
+  _SuperTextFormFieldState createState() => _SuperTextFormFieldState();
+}
+
+class _SuperTextFormFieldState extends State<SuperTextFormField> {
+  late ValueNotifier<bool> _obscureTextNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureTextNotifier = ValueNotifier<bool>(widget.obscureText);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var overallColor = Colors.grey.shade500;
+    if (widget.customFunction != null) {
+      return widget.customFunction!();
+    }
+    var defaultContextPadding = const EdgeInsets.symmetric(
+      vertical: 10.0,
+      horizontal: 12.0,
+    );
     var border = OutlineInputBorder(
-        borderSide: BorderSide(color: overallColor),
-        borderRadius: BorderRadius.circular(10));
+      borderSide: BorderSide(color: Colors.grey.shade500),
+      borderRadius: BorderRadius.circular(10),
+    );
+
+    if (widget.dropdownItems != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (widget.headingTitle != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6.0),
+              child: Text(
+                widget.headingTitle!,
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          DropdownButtonFormField<String>(
+            isDense: true,
+            value: widget.dropdownValue,
+            items: widget.dropdownItems,
+            onChanged: widget.onChanged,
+            decoration: InputDecoration(
+              contentPadding: defaultContextPadding,
+              labelText: widget.labelText,
+              suffixIcon: widget.suffixIcon,
+              border: border,
+              enabledBorder: border,
+              focusedBorder: border,
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (headingTitle != null)
+        if (widget.headingTitle != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Text(
-              headingTitle!,
+              widget.headingTitle!,
               style: const TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        if (dropdownItems != null)
-          DropdownButtonFormField<String>(
-            value: dropdownValue,
-            items: dropdownItems,
-            onChanged: enabled ? onChanged : null,
-            decoration: InputDecoration(
-              labelText: labelText,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              enabledBorder: border,
-              focusedBorder: border,
-              errorBorder: border,
-              focusedErrorBorder: border,
-            ),
-          )
-        else
-          TextFormField(
-            controller: controller,
-            focusNode: focusNode,
-            onTap:
-                isDatePicker || isTimePicker || isDateTimePicker ? onTap : null,
-            keyboardType: keyboardType,
-            obscureText: obscureText,
-            enabled: enabled,
-
-            inputFormatters: inputFormatters, // Set the input formatters here
-            readOnly: readOnly ?? false,
-            minLines: minLines,
-            maxLines: minLines == null ? 1 : minLines! + 5,
-            decoration: InputDecoration(
-              hintText: hintText,
-              suffixIcon: suffixIcon != null
-                  ? IconTheme(
-                      data: IconThemeData(color: overallColor),
-                      child: suffixIcon!)
-                  : null,
-              prefixIcon: prefixIcon != null
-                  ? IconTheme(
-                      data: IconThemeData(color: overallColor),
-                      child: prefixIcon!)
-                  : null,
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              border: border,
-              enabledBorder: border,
-              focusedBorder: border,
-              errorBorder: border,
-              focusedErrorBorder: border,
-            ),
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: _obscureTextNotifier,
+          builder: (context, obscureText, _) {
+            return TextFormField(
+              controller: widget.controller,
+              focusNode: widget.focusNode,
+              onTap: widget.onTap,
+              keyboardType: widget.keyboardType,
+              obscureText: obscureText,
+              enabled: widget.enabled,
+              inputFormatters: widget.inputFormatters,
+              readOnly: widget.readOnly,
+              minLines: widget.minLines,
+              maxLines: widget.maxLines ?? 1,
+              decoration: InputDecoration(
+                isDense: true,
+                contentPadding: defaultContextPadding,
+                hintText: widget.hintText,
+                suffixIcon: widget.obscureText
+                    ? GestureDetector(
+                        onTap: () {
+                          _obscureTextNotifier.value =
+                              !_obscureTextNotifier.value;
+                        },
+                        child: Icon(
+                          obscureText ? Icons.visibility_off : Icons.visibility,
+                        ),
+                      )
+                    : widget.suffixIcon,
+                prefixIcon: widget.prefixIcon,
+                border: border,
+                enabledBorder: border,
+                focusedBorder: border,
+              ),
+              validator: widget.validator,
+            );
+          },
+        ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _obscureTextNotifier.dispose();
+    super.dispose();
   }
 }
