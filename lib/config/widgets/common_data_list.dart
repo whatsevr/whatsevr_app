@@ -8,7 +8,7 @@ import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 
 class CommonDataSearchSelectPage extends StatefulWidget {
-  final bool showAppBar;
+  final bool scaffoldView;
   final bool showEducationDegrees;
   final Function(EducationDegree)? onEducationDegreeSelected;
   final bool showGenders;
@@ -24,7 +24,7 @@ class CommonDataSearchSelectPage extends StatefulWidget {
 
   const CommonDataSearchSelectPage({
     Key? key,
-    this.showAppBar = false,
+    this.scaffoldView = false,
     this.showEducationDegrees = false,
     this.showGenders = false,
     this.showWorkingModes = false,
@@ -143,24 +143,27 @@ class _CommonDataSearchSelectPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: widget.showAppBar
-          ? AppBar(
-              title: const Text('Search and Select'),
-            )
-          : null,
-      body: _isLoading
-          ? const Center(child: CupertinoActivityIndicator())
-          : _errorMessage.isNotEmpty
-              ? Center(child: Text(_errorMessage)) // Show error message
-              : _buildBody(),
-    );
+    Widget child = _isLoading
+        ? const Center(child: CupertinoActivityIndicator())
+        : _errorMessage.isNotEmpty
+            ? Center(child: Text(_errorMessage)) // Show error message
+            : _buildBody();
+    if (widget.scaffoldView) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: const Text('Search and Select'),
+        ),
+        body: child,
+      );
+    }
+    return child;
   }
 
   // Build the body based on filtered items
   Widget _buildBody() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (widget.showSearchBar)
           Padding(
@@ -170,16 +173,14 @@ class _CommonDataSearchSelectPageState
               hintText: 'Search...',
             ),
           ),
-        Expanded(
-          child: _filteredItems.isNotEmpty
-              ? _buildListView(_filteredItems)
-              : const Center(
-                  child: Text(
-                    'No items found',
-                    style: TextStyle(fontSize: 16.0, color: Colors.grey),
-                  ),
+        _filteredItems.isNotEmpty
+            ? _buildListView(_filteredItems)
+            : const Center(
+                child: Text(
+                  'No items found',
+                  style: TextStyle(fontSize: 16.0, color: Colors.grey),
                 ),
-        ),
+              ),
         if (widget.showInterests && _selectedInterests.isNotEmpty)
           MaterialButton(
             color: Colors.blue,
@@ -198,6 +199,7 @@ class _CommonDataSearchSelectPageState
   // ListView builder that handles different data types
   Widget _buildListView(List<dynamic> items) {
     return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: items.length,
       itemBuilder: (_, index) {

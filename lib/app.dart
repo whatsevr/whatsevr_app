@@ -63,6 +63,9 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
                 onLongPress: () {
                   AppNavigationService.newRoute(RoutesName.takerDebug);
                 },
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
                 child: Banner(
                   color: Colors.red,
                   message: "Debug",

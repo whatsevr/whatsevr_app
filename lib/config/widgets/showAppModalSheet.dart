@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 showAppModalSheet({required BuildContext context, required Widget? child}) {
   showModalBottomSheet(
@@ -8,7 +9,6 @@ showAppModalSheet({required BuildContext context, required Widget? child}) {
       maxHeight: MediaQuery.of(context).size.height * 0.9,
       minWidth: MediaQuery.of(context).size.width,
     ),
-    useSafeArea: true,
     backgroundColor: Colors.white,
     context: context,
     shape: const RoundedRectangleBorder(
@@ -20,7 +20,21 @@ showAppModalSheet({required BuildContext context, required Widget? child}) {
     isScrollControlled: true,
     showDragHandle: true,
     builder: (BuildContext context) {
-      return PadHorizontal(child: child ?? const SizedBox.shrink());
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom:
+              MediaQuery.of(context).viewInsets.bottom, // Keyboard adjustment
+        ),
+        child: DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.7,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return SingleChildScrollView(
+                controller: scrollController,
+                child: PadHorizontal(child: child ?? const SizedBox.shrink()));
+          },
+        ),
+      );
     },
   );
 }

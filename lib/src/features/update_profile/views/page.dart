@@ -193,18 +193,18 @@ class ProfileUpdatePage extends StatelessWidget {
                           Gap(8),
                           SuperFormField.showModalSheetOnTap(
                             context: context,
-                            controller:
-                                context.read<ProfileBloc>().service1Controller,
                             headingTitle: "Add Educations",
                             modalSheetUi: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                SuperFormField.generalTextField(
+                                  headingTitle: "Enter School",
+                                ),
+                                Gap(12),
                                 SuperFormField.invokeCustomFunction(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
-                                  headingTitle: "Select Education",
+                                  headingTitle: "Select Degree",
+                                  readOnly: false,
                                   customFunction: () {
                                     showAppModalSheet(
                                       context: context,
@@ -217,17 +217,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 Gap(12),
                                 SuperFormField.datePicker(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
                                   headingTitle: "Select Start Date",
                                 ),
                                 Gap(12),
                                 SuperFormField.datePicker(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
                                   headingTitle: "Select End Date",
                                 ),
                                 Gap(12),
@@ -245,24 +239,16 @@ class ProfileUpdatePage extends StatelessWidget {
                           Gap(8),
                           SuperFormField.showModalSheetOnTap(
                             context: context,
-                            controller:
-                                context.read<ProfileBloc>().service1Controller,
                             headingTitle: "Work Experience",
                             modalSheetUi: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 SuperFormField.generalTextField(
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
-                                  headingTitle: "Enter Title",
+                                  headingTitle: "Enter Organization",
                                 ),
                                 Gap(12),
                                 SuperFormField.invokeCustomFunction(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
                                   headingTitle: "Select Mode of Work",
                                   customFunction: () {
                                     showAppModalSheet(
@@ -276,17 +262,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 Gap(12),
                                 SuperFormField.datePicker(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
                                   headingTitle: "Start Start Date",
                                 ),
                                 Gap(12),
                                 SuperFormField.datePicker(
                                   context: context,
-                                  controller: context
-                                      .read<ProfileBloc>()
-                                      .service1Controller,
                                   headingTitle: "End Date",
                                 ),
                                 Gap(12),
@@ -309,13 +289,6 @@ class ProfileUpdatePage extends StatelessWidget {
                               showGenders: true,
                             ),
                           ),
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: 'Select Interests',
-                            modalSheetUi: CommonDataSearchSelectPage(
-                              showInterests: true,
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -334,9 +307,6 @@ class ProfileUpdatePage extends StatelessWidget {
                         child: Column(
                           children: [
                             SuperFormField.generalTextField(
-                              controller: context
-                                  .read<ProfileBloc>()
-                                  .service1Controller,
                               headingTitle: "Add Service",
                             ),
 

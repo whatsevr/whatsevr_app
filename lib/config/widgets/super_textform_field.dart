@@ -401,7 +401,7 @@ class _SuperFormFieldState extends State<SuperFormField> {
             return TextFormField(
               controller: widget.controller,
               focusNode: widget.focusNode,
-              onTap: widget.onTap,
+              onTap: widget.readOnly == true ? widget.onTap : null,
               keyboardType: widget.keyboardType,
               obscureText: obscureText,
               enabled: widget.enabled,
@@ -423,7 +423,12 @@ class _SuperFormFieldState extends State<SuperFormField> {
                           obscureText ? Icons.visibility_off : Icons.visibility,
                         ),
                       )
-                    : widget.suffixIcon,
+                    : widget.onTap != null
+                        ? GestureDetector(
+                            onTap: widget.onTap,
+                            child: widget.suffixIcon,
+                          )
+                        : widget.suffixIcon,
                 prefixIcon: widget.prefixIcon,
                 border: border,
                 enabledBorder: border,
