@@ -16,13 +16,11 @@ class InitialEvent extends ProfileEvent {
   List<Object?> get props => [pageArgument];
 }
 
-class UploadProfilePicture extends ProfileEvent {
-  final File image;
-
-  const UploadProfilePicture(this.image);
+class ChangeProfilePictureEvent extends ProfileEvent {
+  const ChangeProfilePictureEvent();
 
   @override
-  List<Object?> get props => [image];
+  List<Object?> get props => [];
 }
 
 class UploadCoverPicture extends ProfileEvent {

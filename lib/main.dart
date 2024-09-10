@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -17,9 +18,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WakelockPlus.enable();
   AuthUserDb.initDB();
-  ApiClient.init();
+  await ApiClient.init();
   FileUploadService.init();
   DownloadService.init();
   TalkerService.init();
+
   runApp(const WhatsevrApp());
 }

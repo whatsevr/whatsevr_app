@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../client.dart';
+import '../requests_model/update_profile_picture.dart';
 import '../response_model/multiple_user_details.dart';
 import '../response_model/profile_details.dart';
+import '../response_model/update_profile_picture_response.dart';
 import '../response_model/user_profile.dart';
 
 class UsersApi {
@@ -46,6 +48,21 @@ class UsersApi {
       if (response.statusCode == HttpStatus.ok) {
         return MultipleUserDetailsResponse.fromMap(response.data);
       }
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<ProfilePictureUpdateResponse?> updateUserProfilePicture(
+      ProfilePictureUpdateRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-profile-picture',
+        data: request.toMap(),
+      );
+
+      return ProfilePictureUpdateResponse.fromMap(response.data);
     } catch (e) {
       ApiClient.apiMethodException(e);
     }

@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -26,11 +27,11 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
+            ExtendedImage.asset(
               'assets/images/whatsevr_app_logo.jpg',
               width: 100,
             ),
-            const Text('Whatsevr', style: TextStyle(fontSize: 24)),
+            const Text('WhatsEvr', style: TextStyle(fontSize: 24)),
             const Gap(15),
             const SizedBox(
               width: 24,

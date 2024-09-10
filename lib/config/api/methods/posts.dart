@@ -15,9 +15,8 @@ class PostApi {
         '/v1/create-video-post',
         data: post.toMap(),
       );
-      if (response.statusCode == HttpStatus.ok) {
-        return CreateVideoPostResponse.fromMap(response.data);
-      }
+
+      return CreateVideoPostResponse.fromMap(response.data);
     } catch (e) {
       ApiClient.apiMethodException(e);
     }

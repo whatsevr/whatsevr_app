@@ -101,12 +101,15 @@ class AccountPage extends StatelessWidget {
                                 if (pageArgument?.isEditMode == true) ...[
                                   IconButton(
                                     icon: Icon(Icons.edit),
-                                    onPressed: () {
-                                      AppNavigationService.newRoute(
+                                    onPressed: () async {
+                                      await AppNavigationService.newRoute(
                                           RoutesName.updateProfile,
                                           extras: ProfileUpdatePageArgument(
                                               profileDetailsResponse: state
                                                   .profileDetailsResponse));
+                                      context
+                                          .read<AccountBloc>()
+                                          .add(AccountInitialEvent());
                                     },
                                   ),
                                 ]

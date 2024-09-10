@@ -120,7 +120,7 @@ class UserEducation {
   final int? id;
   final DateTime? createdAt;
   final String? userUid;
-  final String? name;
+  final String? title;
   final DateTime? startDate;
   final DateTime? endDate;
   final String? type;
@@ -129,7 +129,7 @@ class UserEducation {
     this.id,
     this.createdAt,
     this.userUid,
-    this.name,
+    this.title,
     this.startDate,
     this.endDate,
     this.type,
@@ -146,7 +146,7 @@ class UserEducation {
             ? null
             : DateTime.parse(json["created_at"]),
         userUid: json["user_uid"],
-        name: json["name"],
+        title: json["title"],
         startDate: json["start_date"] == null
             ? null
             : DateTime.parse(json["start_date"]),
@@ -159,7 +159,7 @@ class UserEducation {
         "id": id,
         "created_at": createdAt?.toIso8601String(),
         "user_uid": userUid,
-        "name": name,
+        "title": title,
         "start_date":
             "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
         "end_date":

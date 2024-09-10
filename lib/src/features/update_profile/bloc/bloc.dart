@@ -3,8 +3,13 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+
+import '../../../../config/api/requests_model/update_profile_picture.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -22,7 +27,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc() : super(ProfileState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<UploadProfilePicture>(_onUploadProfilePicture);
+    on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
     on<UploadCoverPicture>(_onUploadCoverPicture);
     on<SubmitProfile>(_onSubmitProfile);
   }
@@ -49,10 +54,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         '';
   }
 
-  void _onUploadProfilePicture(
-      UploadProfilePicture event, Emitter<ProfileState> emit) {
-    // Update profile image in the state
-    emit(state.copyWith(profileImage: event.image));
+  final ImagePicker _picker = ImagePicker();
+  void _onChangeProfilePicture(
+      ChangeProfilePictureEvent event, Emitter<ProfileState> emit) async {
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
+    if (pickedFile == null) return;
+    emit(state.copyWith(profileImage: File(pickedFile.path)));
+    String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
+      state.profileImage!,
+    );
+    await UsersApi.updateUserProfilePicture(
+      ProfilePictureUpdateRequest(
+        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        profilePictureUrl: profilePictureUrl,
+      ),
+    );
   }
 
   void _onUploadCoverPicture(

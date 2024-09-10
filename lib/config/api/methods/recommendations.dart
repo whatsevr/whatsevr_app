@@ -13,7 +13,7 @@ class RecommendationApi {
     try {
       Response response =
           await ApiClient.client.get('/v1/recommendations/videos');
-      if (response.statusCode == HttpStatus.ok) {
+      if (response.data != null) {
         return RecommendationVideosResponse.fromMap(response.data);
       }
     } catch (e) {

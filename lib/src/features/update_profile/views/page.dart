@@ -7,7 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
@@ -26,8 +28,6 @@ class ProfileUpdatePage extends StatelessWidget {
     Key? key,
     required this.pageArgument,
   }) : super(key: key);
-
-  final ImagePicker _picker = ImagePicker();
 
   // TextEditingControllers for each field
   @override
@@ -59,13 +59,9 @@ class ProfileUpdatePage extends StatelessWidget {
                           Gap(25),
                           GestureDetector(
                             onTap: () async {
-                              final XFile? pickedFile = await _picker.pickImage(
-                                  source: ImageSource.gallery);
-                              if (pickedFile != null) {
-                                context.read<ProfileBloc>().add(
-                                    UploadProfilePicture(
-                                        File(pickedFile.path)));
-                              }
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(ChangeProfilePictureEvent());
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -194,68 +190,186 @@ class ProfileUpdatePage extends StatelessWidget {
                                   .emit(state.copyWith(dob: date));
                             },
                           ),
+                          Gap(8),
+                          SuperFormField.showModalSheetOnTap(
+                            context: context,
+                            controller:
+                                context.read<ProfileBloc>().service1Controller,
+                            headingTitle: "Add Educations",
+                            modalSheetUi: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SuperFormField.invokeCustomFunction(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Select Education",
+                                  customFunction: () {
+                                    showAppModalSheet(
+                                      context: context,
+                                      child: CommonDataSearchSelectPage(
+                                        showEducationDegrees: true,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Gap(12),
+                                SuperFormField.datePicker(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Select Start Date",
+                                ),
+                                Gap(12),
+                                SuperFormField.datePicker(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Select End Date",
+                                ),
+                                Gap(12),
+                                MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    color: Colors.blueAccent,
+                                    onPressed: () {},
+                                    child: Text('Add',
+                                        style: TextStyle(color: Colors.white))),
+                              ],
+                            ),
+                          ),
+                          Gap(8),
+                          SuperFormField.showModalSheetOnTap(
+                            context: context,
+                            controller:
+                                context.read<ProfileBloc>().service1Controller,
+                            headingTitle: "Work Experience",
+                            modalSheetUi: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SuperFormField.generalTextField(
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Enter Title",
+                                ),
+                                Gap(12),
+                                SuperFormField.invokeCustomFunction(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Select Mode of Work",
+                                  customFunction: () {
+                                    showAppModalSheet(
+                                      context: context,
+                                      child: CommonDataSearchSelectPage(
+                                        showWorkingModes: true,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Gap(12),
+                                SuperFormField.datePicker(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "Start Start Date",
+                                ),
+                                Gap(12),
+                                SuperFormField.datePicker(
+                                  context: context,
+                                  controller: context
+                                      .read<ProfileBloc>()
+                                      .service1Controller,
+                                  headingTitle: "End Date",
+                                ),
+                                Gap(12),
+                                MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    color: Colors.blueAccent,
+                                    onPressed: () {},
+                                    child: Text('Add',
+                                        style: TextStyle(color: Colors.white))),
+                              ],
+                            ),
+                          ),
+                          Gap(8),
+                          SuperFormField.showModalSheetOnTap(
+                            context: context,
+                            headingTitle: 'Select Gender',
+                            modalSheetUi: CommonDataSearchSelectPage(
+                              showGenders: true,
+                            ),
+                          ),
+                          SuperFormField.showModalSheetOnTap(
+                            context: context,
+                            headingTitle: 'Select Interests',
+                            modalSheetUi: CommonDataSearchSelectPage(
+                              showInterests: true,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     Gap(12),
 
                     // Service Info Section
+                    if (state.currentProfileDetailsResponse?.userInfo
+                            ?.isPortfolio ==
+                        true) ...[
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            SuperFormField.generalTextField(
+                              controller: context
+                                  .read<ProfileBloc>()
+                                  .service1Controller,
+                              headingTitle: "Add Service",
+                            ),
 
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
+                            Gap(12),
+
+                            // Portfolio Info Section
+
+                            SuperFormField.multilineTextField(
+                              controller: context
+                                  .read<ProfileBloc>()
+                                  .portfolioDescriptionController,
+                              headingTitle: "Portfolio Description",
+                              minLines: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Gap(12),
+                    ],
+                    MaterialButton(
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        children: [
-                          SuperFormField.generalTextField(
-                            controller:
-                                context.read<ProfileBloc>().service1Controller,
-                            headingTitle: "Add Service",
-                          ),
-
-                          Gap(12),
-
-                          // Portfolio Info Section
-
-                          SuperFormField.multilineTextField(
-                            controller: context
-                                .read<ProfileBloc>()
-                                .portfolioDescriptionController,
-                            headingTitle: "Portfolio Description",
-                            minLines: 5,
-                          ),
-                        ],
-                      ),
+                      color: Colors.blueAccent,
+                      onPressed: () {
+                        context.read<ProfileBloc>().add(SubmitProfile());
+                      },
+                      child:
+                          Text('SAVE', style: TextStyle(color: Colors.white)),
                     ),
-                    Gap(12),
                   ],
                 );
               },
-            ),
-            bottomNavigationBar: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: Offset(0, -1),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.all(16),
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: Colors.blueAccent,
-                onPressed: () {
-                  context.read<ProfileBloc>().add(SubmitProfile());
-                },
-                child: Text('SAVE', style: TextStyle(color: Colors.white)),
-              ),
             ),
           );
         },

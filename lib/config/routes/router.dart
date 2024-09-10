@@ -61,13 +61,13 @@ CustomTransitionPage<SlideTransition> _navigateWithTransition({
 }
 
 class AppNavigationService {
-  static void newRoute(
+  static Future<void> newRoute(
     String routeName, {
     Object? extras,
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Map<String, String> pathParameters = const <String, String>{},
-  }) {
-    navigatorKey.currentContext?.pushNamed(
+  }) async {
+    await navigatorKey.currentContext?.pushNamed(
       routeName,
       extra: extras,
       queryParameters: queryParameters,

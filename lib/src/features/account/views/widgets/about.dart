@@ -113,7 +113,7 @@ class AccountPageAboutView extends StatelessWidget {
               ('Address', '${state.profileDetailsResponse?.userInfo?.address}'),
               (
                 'Education',
-                '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.name} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
+                '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.title} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
               ),
               ('Working', 'Currently working at Fiverr'),
               ('Email', '${state.profileDetailsResponse?.userInfo?.emailId}'),

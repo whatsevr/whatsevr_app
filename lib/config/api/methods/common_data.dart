@@ -11,7 +11,8 @@ class CommonDataApi {
   static Future<CommonDataResponse?> getAllCommonData() async {
     try {
       Response response = await ApiClient.client.get('/v1/common-data');
-      if (response.statusCode == HttpStatus.ok) {
+
+      if (response.data != null) {
         return CommonDataResponse.fromMap(response.data);
       }
     } catch (e) {

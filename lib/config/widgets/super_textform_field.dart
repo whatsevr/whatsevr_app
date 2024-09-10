@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+
 class SuperFormField extends StatefulWidget {
   final String? headingTitle;
   final TextEditingController? controller;
@@ -20,7 +22,6 @@ class SuperFormField extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
-  final Function()? customFunction;
 
   // Dropdown specific
   final String? dropdownValue;
@@ -46,7 +47,6 @@ class SuperFormField extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.maxLength,
-    this.customFunction,
     this.dropdownValue,
     this.dropdownItems,
     this.onChanged,
@@ -189,7 +189,26 @@ class SuperFormField extends StatefulWidget {
       },
     );
   }
-
+  factory SuperFormField.invokeCustomFunction({
+    required BuildContext context,
+    String? headingTitle,
+    TextEditingController? controller,
+    String? hintText,
+    String? labelText,
+    Widget? suffixWidget, // List of icons or widgets to display
+    bool readOnly = true,
+    required Function() customFunction,
+  }) {
+    return SuperFormField._internal(
+      headingTitle: headingTitle,
+      controller: controller,
+      hintText: hintText,
+      labelText: labelText,
+      readOnly: readOnly,
+      onTap: customFunction,
+      suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
+    );
+  }
   // Factory: Dropdown with Arrow Down
   factory SuperFormField.showModalSheetOnTap({
     required BuildContext context,
@@ -208,20 +227,9 @@ class SuperFormField extends StatefulWidget {
       labelText: labelText,
       readOnly: readOnly,
       onTap: () {
-        showModalBottomSheet(
-          useRootNavigator: true,
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.6,
-          ),
-          backgroundColor: Colors.white,
+        showAppModalSheet(
           context: context,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-          ),
-          builder: (context) => modalSheetUi!,
+          child: modalSheetUi,
         );
       },
       suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
@@ -364,9 +372,6 @@ class _SuperFormFieldState extends State<SuperFormField> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.customFunction != null) {
-      return widget.customFunction!();
-    }
     var defaultContextPadding = const EdgeInsets.symmetric(
       vertical: 10.0,
       horizontal: 12.0,

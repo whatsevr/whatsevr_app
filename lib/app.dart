@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -36,7 +37,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Whatsevr',
+      title: 'WhatsEvr',
       theme: ThemeData(
         primaryColor: Colors.blue,
         textSelectionTheme: const TextSelectionThemeData(

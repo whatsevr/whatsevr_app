@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
@@ -17,7 +18,7 @@ class ApiClient {
   // static const String BASE_URL = "https://www.whatsevr.com"; cannot use this for now for follow redirect 300+ code use
   static const String BASE_URL = 'https://whatsevr-server-dev.onrender.com/';
   static late Dio client;
-  static void init() {
+  static Future<void> init() async {
     client = Dio(
       BaseOptions(
         baseUrl: BASE_URL,
@@ -33,9 +34,10 @@ class ApiClient {
         },
       ),
     );
+    Directory deviceTemporaryDirectory = await getTemporaryDirectory();
     client.interceptors.addAll([
       ApiRetryInterceptor(dio: client),
-      ApiCacheInterceptor(),
+      ApiCacheInterceptor(cacheDirectoryPath: deviceTemporaryDirectory.path),
       TalkerService.dioLogger,
     ]);
   }

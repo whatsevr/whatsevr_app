@@ -32,7 +32,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     InitialEvent event,
     Emitter<SplashState> emit,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 3));
 
     AuthorisedUserResponse? loggedAuthorisedUserResponse =
         await AuthUserDb.getLastLoggedAuthorisedUser();
