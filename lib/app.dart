@@ -56,29 +56,12 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       ),
       builder: FlutterSmartDialog.init(
         builder: (BuildContext context, Widget? child) {
-          return SafeArea(
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: GestureDetector(
-                onLongPress: () {
-                  AppNavigationService.newRoute(RoutesName.takerDebug);
-                },
-                onTap: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-                child: Banner(
-                  color: Colors.red,
-                  message: "Debug",
-                  location: BannerLocation.topEnd,
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0 * 0.85,
-                    fontWeight: FontWeight.w900,
-                    height: 1.0,
-                  ),
-                  child: child,
-                ),
-              ),
+          return GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: SafeArea(
+              child: child!,
             ),
           );
         },

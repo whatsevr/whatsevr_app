@@ -32,6 +32,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<UpdateGender>(_onUpdateGender);
     on<AddOrRemoveEducation>(_onAddOrRemoveEducation);
     on<AddOrRemoveWorkExperience>(_onAddOrRemoveWorkExperience);
+    on<AddOrRemoveService>(_onAddOrRemoveService);
 
     on<SubmitProfile>(_onSubmitProfile);
   }
@@ -168,7 +169,49 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   FutureOr<void> _onAddOrRemoveWorkExperience(
-      AddOrRemoveWorkExperience event, Emitter<ProfileState> emit) {}
+      AddOrRemoveWorkExperience event, Emitter<ProfileState> emit) {
+    if (event.isRemove == true) {
+      emit(state.copyWith(
+        workExperiences: state.workExperiences?.where((element) {
+          return element != event.workExperience;
+        }).toList(),
+      ));
+    } else {
+      emit(state.copyWith(
+        workExperiences: [
+          ...state.workExperiences ?? [],
+          UiWorkExperience(
+            designation: event.workExperience?.designation,
+            startDate: event.workExperience?.startDate,
+            endDate: event.workExperience?.endDate,
+            isCurrentlyWorking: event.workExperience?.isCurrentlyWorking,
+            workingMode: event.workExperience?.workingMode,
+          ),
+        ],
+      ));
+    }
+  }
+
+  FutureOr<void> _onAddOrRemoveService(
+      AddOrRemoveService event, Emitter<ProfileState> emit) {
+    if (event.isRemove == true) {
+      emit(state.copyWith(
+        services: state.services?.where((element) {
+          return element != event.service;
+        }).toList(),
+      ));
+    } else {
+      emit(state.copyWith(
+        services: [
+          ...state.services ?? [],
+          UiService(
+            serviceName: event.service?.serviceName,
+            serviceDescription: event.service?.serviceDescription,
+          ),
+        ],
+      ));
+    }
+  }
 
   Future<void> _onSubmitProfile(
       SubmitProfile event, Emitter<ProfileState> emit) async {}

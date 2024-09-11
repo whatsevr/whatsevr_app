@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/label_container.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -41,8 +42,9 @@ class ProfileUpdatePage extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             backgroundColor: Colors.blueGrey[50],
-            appBar: AppBar(
-              title: Text('Edit Profile'),
+            appBar: CustomAppBar(
+              title: 'Update Profile',
+              showAiAction: true,
             ),
             body: BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
@@ -349,61 +351,121 @@ class ProfileUpdatePage extends StatelessWidget {
                             Gap(8),
                           ],
 
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: "Work Experience",
-                            modalSheetUi: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SuperFormField.generalTextField(
-                                  headingTitle: "Enter Organization",
-                                ),
-                                Gap(12),
-                                SuperFormField.invokeCustomFunction(
-                                  context: context,
-                                  headingTitle: "Select Mode of Work",
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      context: context,
-                                      child: CommonDataSearchSelectPage(
-                                        showWorkingModes: true,
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Start Start Date",
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "End Date",
-                                ),
-                                Gap(12),
-                                MaterialButton(
-                                    minWidth: double.infinity,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                          Builder(
+                            builder: (context) {
+                              TextEditingController organizationController =
+                                  TextEditingController();
+                              TextEditingController designationController =
+                                  TextEditingController();
+                              TextEditingController workingModeController =
+                                  TextEditingController();
+                              TextEditingController startDateController =
+                                  TextEditingController();
+                              TextEditingController endDateController =
+                                  TextEditingController();
+
+                              return SuperFormField.showModalSheetOnTap(
+                                context: context,
+                                headingTitle: "Work Experience",
+                                hintText: "Add Work Experience",
+                                modalSheetUi: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SuperFormField.generalTextField(
+                                      headingTitle: "Enter Organization",
+                                      controller: organizationController,
                                     ),
-                                    color: Colors.blueAccent,
-                                    onPressed: () {
-                                      context
-                                          .read<ProfileBloc>()
-                                          .add(AddOrRemoveWorkExperience(
-                                            workExperience: UiWorkExperience(
-                                              workingMode: 'Full Time',
-                                              designation: 'Software Engineer',
-                                              startDate: DateTime.now(),
-                                              endDate: DateTime.now(),
-                                            ),
-                                          ));
-                                    },
-                                    child: Text('Add',
-                                        style: TextStyle(color: Colors.white))),
-                              ],
-                            ),
+                                    Gap(12),
+                                    SuperFormField.invokeCustomFunction(
+                                      context: context,
+                                      headingTitle: "Select Mode of Work",
+                                      controller: workingModeController,
+                                      customFunction: () {
+                                        showAppModalSheet(
+                                          context: context,
+                                          child: CommonDataSearchSelectPage(
+                                            showWorkingModes: true,
+                                            onWorkingModeSelected:
+                                                (WorkingMode p0) {
+                                              workingModeController.text =
+                                                  p0.mode ?? '';
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    Gap(12),
+                                    SuperFormField.datePicker(
+                                      context: context,
+                                      controller: startDateController,
+                                      headingTitle: "Start Start Date",
+                                      onDateSelected: (DateTime date) {
+                                        startDateController.text =
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(date);
+                                      },
+                                    ),
+                                    Gap(12),
+                                    SuperFormField.datePicker(
+                                      context: context,
+                                      headingTitle: "End Date",
+                                      controller: endDateController,
+                                      onDateSelected: (DateTime date) {
+                                        endDateController.text =
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(date);
+                                      },
+                                    ),
+                                    Gap(12),
+                                    MaterialButton(
+                                        minWidth: double.infinity,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        color: Colors.blueAccent,
+                                        onPressed: () {
+                                          if (organizationController
+                                                  .text.isNotEmpty &&
+                                              workingModeController
+                                                  .text.isNotEmpty &&
+                                              startDateController
+                                                  .text.isNotEmpty &&
+                                              endDateController
+                                                  .text.isNotEmpty) {
+                                            context.read<ProfileBloc>().add(
+                                                  AddOrRemoveWorkExperience(
+                                                    workExperience:
+                                                        UiWorkExperience(
+                                                      designation:
+                                                          designationController
+                                                              .text,
+                                                      workingMode:
+                                                          workingModeController
+                                                              .text,
+                                                      startDate: DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .parse(
+                                                              startDateController
+                                                                  .text),
+                                                      endDate: DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .parse(
+                                                              endDateController
+                                                                  .text),
+                                                    ),
+                                                  ),
+                                                );
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text('Add',
+                                            style: TextStyle(
+                                                color: Colors.white))),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           Gap(8),
                           if (state.workExperiences != null) ...[
@@ -418,7 +480,13 @@ class ProfileUpdatePage extends StatelessWidget {
                                         child: Text(
                                             '${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}')),
                                     GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        context.read<ProfileBloc>().add(
+                                            AddOrRemoveWorkExperience(
+                                                workExperience: state
+                                                    .workExperiences?[index],
+                                                isRemove: true));
+                                      },
                                       child: Icon(
                                         Icons.close_rounded,
                                         color: Colors.red,
@@ -438,7 +506,8 @@ class ProfileUpdatePage extends StatelessWidget {
                             context: context,
                             controller:
                                 TextEditingController(text: state.gender),
-                            headingTitle: 'Select Gender',
+                            headingTitle: 'Gender',
+                            hintText: 'Select Gender',
                             modalSheetUi: CommonDataSearchSelectPage(
                               showGenders: true,
                               onGenderSelected: (Gender p0) {
@@ -462,44 +531,76 @@ class ProfileUpdatePage extends StatelessWidget {
                         child: Column(
                           children: [
                             SuperFormField.generalTextField(
-                              headingTitle: "Add Status",
+                              headingTitle: "Status",
+                              hintText: "Add Status on Portfolio",
                               controller:
                                   context.read<ProfileBloc>().portfolioStatus,
                             ),
 
                             Gap(12),
-                            SuperFormField.invokeCustomFunction(
-                              context: context,
-                              headingTitle: "Add Services",
-                              suffixWidget: Icon(Icons.add_circle_rounded),
-                              customFunction: () {
-                                showAppModalSheet(
+                            Builder(
+                              builder: (context) {
+                                TextEditingController titleController =
+                                    TextEditingController();
+                                TextEditingController descriptionController =
+                                    TextEditingController();
+
+                                return SuperFormField.invokeCustomFunction(
                                   context: context,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SuperFormField.generalTextField(
-                                        headingTitle: "Enter Title",
+                                  headingTitle: "Services",
+                                  hintText: "Add Service you provide",
+                                  suffixWidget: Icon(Icons.add_circle_rounded),
+                                  customFunction: () {
+                                    showAppModalSheet(
+                                      context: context,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          SuperFormField.generalTextField(
+                                            headingTitle: "Enter Title",
+                                            controller: titleController,
+                                          ),
+                                          Gap(12),
+                                          SuperFormField.multilineTextField(
+                                            headingTitle: "Enter Description",
+                                            controller: descriptionController,
+                                          ),
+                                          Gap(12),
+                                          MaterialButton(
+                                            minWidth: double.infinity,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            color: Colors.blueAccent,
+                                            onPressed: () {
+                                              if (titleController
+                                                      .text.isNotEmpty &&
+                                                  descriptionController
+                                                      .text.isNotEmpty) {
+                                                context.read<ProfileBloc>().add(
+                                                      AddOrRemoveService(
+                                                        service: UiService(
+                                                          serviceName:
+                                                              titleController
+                                                                  .text,
+                                                          serviceDescription:
+                                                              descriptionController
+                                                                  .text,
+                                                        ),
+                                                      ),
+                                                    );
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                            child: Text('Add',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                          ),
+                                        ],
                                       ),
-                                      Gap(12),
-                                      SuperFormField.multilineTextField(
-                                        headingTitle: "Enter Description",
-                                      ),
-                                      Gap(12),
-                                      MaterialButton(
-                                        minWidth: double.infinity,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        color: Colors.blueAccent,
-                                        onPressed: () {},
-                                        child: Text('Add',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                      ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -516,7 +617,13 @@ class ProfileUpdatePage extends StatelessWidget {
                                           child: Text(
                                               '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ')),
                                       GestureDetector(
-                                        onTap: () {},
+                                        onTap: () {
+                                          context.read<ProfileBloc>().add(
+                                              AddOrRemoveService(
+                                                  service:
+                                                      state.services?[index],
+                                                  isRemove: true));
+                                        },
                                         child: Icon(
                                           Icons.close_rounded,
                                           color: Colors.red,

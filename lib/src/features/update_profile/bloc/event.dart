@@ -62,10 +62,10 @@ class AddOrRemoveWorkExperience extends ProfileEvent {
 }
 
 class AddOrRemoveService extends ProfileEvent {
-  final UiService service;
-  final bool isRemove;
+  final UiService? service;
+  final bool? isRemove;
 
-  AddOrRemoveService(this.service, this.isRemove);
+  AddOrRemoveService({this.service, this.isRemove});
 
   @override
   List<Object?> get props => [service, isRemove];

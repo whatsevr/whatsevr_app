@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
@@ -39,8 +40,9 @@ class CreateVideoPost extends StatelessWidget {
     return BlocBuilder<CreateVideoPostBloc, CreateVideoPostState>(
       builder: (BuildContext context, CreateVideoPostState state) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text('Create ${pageArgument.postCreatorType.value} post'),
+          appBar: CustomAppBar(
+            title: 'Create Video Post',
+            showAiAction: true,
           ),
           body: ListView(
             padding: PadHorizontal.padding,
@@ -166,6 +168,7 @@ class CreateVideoPost extends StatelessWidget {
                     ),
                 ],
               ),
+              Gap(12),
               TextField(
                 maxLength: 100,
                 controller: context.read<CreateVideoPostBloc>().titleController,
