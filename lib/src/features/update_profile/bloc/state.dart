@@ -10,12 +10,16 @@ class ProfileState extends Equatable {
   final String? bio;
   final String? address;
   final DateTime? dob;
+
+  final String? gender;
   final File? profileImage;
   final List<File>? coverImages;
   final List<File>? coverVideos;
   final List<String>? services;
   final String? portfolioTitle;
   final String? portfolioDescription;
+  final List<UiEducation>? educations;
+  final List<UiWorkExperience>? workExperiences;
 
   const ProfileState({
     this.currentProfileDetailsResponse,
@@ -30,6 +34,9 @@ class ProfileState extends Equatable {
     this.portfolioTitle,
     this.portfolioDescription,
     this.services,
+    this.educations,
+    this.workExperiences,
+    this.gender,
   });
 
   ProfileState copyWith({
@@ -45,6 +52,9 @@ class ProfileState extends Equatable {
     String? portfolioTitle,
     String? portfolioDescription,
     List<String>? services,
+    List<UiEducation>? educations,
+    List<UiWorkExperience>? workExperiences,
+    String? gender,
   }) {
     return ProfileState(
       currentProfileDetailsResponse:
@@ -60,6 +70,9 @@ class ProfileState extends Equatable {
       portfolioTitle: portfolioTitle ?? this.portfolioTitle,
       portfolioDescription: portfolioDescription ?? this.portfolioDescription,
       services: services ?? this.services,
+      educations: educations ?? this.educations,
+      workExperiences: workExperiences ?? this.workExperiences,
+      gender: gender ?? this.gender,
     );
   }
 
@@ -77,5 +90,98 @@ class ProfileState extends Equatable {
         portfolioTitle,
         portfolioDescription,
         services,
+        gender,
+      ];
+}
+
+class UiEducation extends Equatable {
+  final String? degree;
+  final String? school;
+  final String? fieldOfStudy;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool? isCurrentlyStudying;
+
+  UiEducation({
+    this.degree,
+    this.school,
+    this.fieldOfStudy,
+    this.startDate,
+    this.endDate,
+    this.isCurrentlyStudying,
+  });
+
+  UiEducation copyWith({
+    String? degree,
+    String? school,
+    String? fieldOfStudy,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isCurrentlyStudying,
+  }) {
+    return UiEducation(
+      degree: degree ?? this.degree,
+      school: school ?? this.school,
+      fieldOfStudy: fieldOfStudy ?? this.fieldOfStudy,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isCurrentlyStudying: isCurrentlyStudying ?? this.isCurrentlyStudying,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        degree,
+        school,
+        fieldOfStudy,
+        startDate,
+        endDate,
+        isCurrentlyStudying,
+      ];
+}
+
+class UiWorkExperience extends Equatable {
+  final String? title;
+  final String? company;
+  final String? location;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final bool? isCurrentlyWorking;
+
+  UiWorkExperience({
+    this.title,
+    this.company,
+    this.location,
+    this.startDate,
+    this.endDate,
+    this.isCurrentlyWorking,
+  });
+
+  UiWorkExperience copyWith({
+    String? title,
+    String? company,
+    String? location,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isCurrentlyWorking,
+  }) {
+    return UiWorkExperience(
+      title: title ?? this.title,
+      company: company ?? this.company,
+      location: location ?? this.location,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      isCurrentlyWorking: isCurrentlyWorking ?? this.isCurrentlyWorking,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        title,
+        company,
+        location,
+        startDate,
+        endDate,
+        isCurrentlyWorking,
       ];
 }

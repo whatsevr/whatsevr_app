@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 showAppModalSheet({required BuildContext context, required Widget? child}) {
   showModalBottomSheet(

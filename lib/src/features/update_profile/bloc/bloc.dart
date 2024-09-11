@@ -23,6 +23,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   TextEditingController portfolioDescriptionController =
       TextEditingController();
+  TextEditingController portfolioStatus = TextEditingController();
 
   ProfileBloc() : super(ProfileState()) {
     on<InitialEvent>(_onInitialEvent);

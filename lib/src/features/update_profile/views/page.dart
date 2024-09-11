@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/common_data_list.dart';
+import 'package:whatsevr_app/config/widgets/material_label_container.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -139,157 +140,165 @@ class ProfileUpdatePage extends StatelessWidget {
                     ),
 
                     Gap(12),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        children: [
-                          SuperFormField.generalTextField(
-                            controller:
-                                context.read<ProfileBloc>().nameController,
-                            headingTitle: "Name",
-                            maxLength: 40,
-                          ),
-                          Gap(8),
-                          SuperFormField.email(
-                            controller:
-                                context.read<ProfileBloc>().emailController,
-                            headingTitle: "Email",
-                            maxLength: 60,
-                          ),
-                          Gap(8),
-                          SuperFormField.multilineTextField(
-                            controller:
-                                context.read<ProfileBloc>().bioController,
-                            headingTitle: "Bio",
-                            minLines: 3,
-                            maxLength: 300,
-                          ),
-                          Gap(8),
-                          SuperFormField.multilineTextField(
-                            controller:
-                                context.read<ProfileBloc>().addressController,
-                            headingTitle: "Address",
-                            maxLength: 100,
-                          ),
-                          Gap(8),
-                          SuperFormField.datePicker(
-                            context: context,
-                            controller: TextEditingController(
-                                text: state.dob == null
-                                    ? ''
-                                    : DateFormat('dd-MM-yyyy')
-                                        .format(state.dob!)),
-                            headingTitle: 'Date of Birth',
-                            onDateSelected: (DateTime date) {
-                              context
-                                  .read<ProfileBloc>()
-                                  .emit(state.copyWith(dob: date));
-                            },
-                          ),
-                          Gap(8),
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: "Add Educations",
-                            modalSheetUi: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SuperFormField.generalTextField(
-                                  headingTitle: "Enter School",
-                                ),
-                                Gap(12),
-                                SuperFormField.invokeCustomFunction(
-                                  context: context,
-                                  headingTitle: "Select Degree",
-                                  readOnly: false,
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      context: context,
-                                      child: CommonDataSearchSelectPage(
-                                        showEducationDegrees: true,
+                    MaterialLabelContainer(
+                      fontSize: 16,
+                      title: 'Personal Info',
+                      titleColor: Colors.black,
+                      textAlign: TextAlignTitledContainer.Center,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                            SuperFormField.generalTextField(
+                              controller:
+                                  context.read<ProfileBloc>().nameController,
+                              headingTitle: "Name",
+                              maxLength: 40,
+                            ),
+                            Gap(8),
+                            SuperFormField.email(
+                              controller:
+                                  context.read<ProfileBloc>().emailController,
+                              headingTitle: "Email",
+                              maxLength: 60,
+                            ),
+                            Gap(8),
+                            SuperFormField.multilineTextField(
+                              controller:
+                                  context.read<ProfileBloc>().bioController,
+                              headingTitle: "Bio",
+                              minLines: 3,
+                              maxLength: 300,
+                            ),
+                            Gap(8),
+                            SuperFormField.multilineTextField(
+                              controller:
+                                  context.read<ProfileBloc>().addressController,
+                              headingTitle: "Address",
+                              maxLength: 100,
+                            ),
+                            Gap(8),
+                            SuperFormField.datePicker(
+                              context: context,
+                              controller: TextEditingController(
+                                  text: state.dob == null
+                                      ? ''
+                                      : DateFormat('dd-MM-yyyy')
+                                          .format(state.dob!)),
+                              headingTitle: 'Date of Birth',
+                              onDateSelected: (DateTime date) {
+                                context
+                                    .read<ProfileBloc>()
+                                    .emit(state.copyWith(dob: date));
+                              },
+                            ),
+                            Gap(8),
+                            SuperFormField.showModalSheetOnTap(
+                              context: context,
+                              headingTitle: "Add Educations",
+                              modalSheetUi: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SuperFormField.generalTextField(
+                                    headingTitle: "Enter School",
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.invokeCustomFunction(
+                                    context: context,
+                                    headingTitle: "Select Degree",
+                                    readOnly: false,
+                                    customFunction: () {
+                                      showAppModalSheet(
+                                        context: context,
+                                        child: CommonDataSearchSelectPage(
+                                          showEducationDegrees: true,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.datePicker(
+                                    context: context,
+                                    headingTitle: "Select Start Date",
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.datePicker(
+                                    context: context,
+                                    headingTitle: "Select End Date",
+                                  ),
+                                  Gap(12),
+                                  MaterialButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                    );
-                                  },
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Select Start Date",
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Select End Date",
-                                ),
-                                Gap(12),
-                                MaterialButton(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    color: Colors.blueAccent,
-                                    onPressed: () {},
-                                    child: Text('Add',
-                                        style: TextStyle(color: Colors.white))),
-                              ],
+                                      color: Colors.blueAccent,
+                                      onPressed: () {},
+                                      child: Text('Add',
+                                          style:
+                                              TextStyle(color: Colors.white))),
+                                ],
+                              ),
                             ),
-                          ),
-                          Gap(8),
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: "Work Experience",
-                            modalSheetUi: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SuperFormField.generalTextField(
-                                  headingTitle: "Enter Organization",
-                                ),
-                                Gap(12),
-                                SuperFormField.invokeCustomFunction(
-                                  context: context,
-                                  headingTitle: "Select Mode of Work",
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      context: context,
-                                      child: CommonDataSearchSelectPage(
-                                        showWorkingModes: true,
+                            Gap(8),
+                            SuperFormField.showModalSheetOnTap(
+                              context: context,
+                              headingTitle: "Work Experience",
+                              modalSheetUi: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SuperFormField.generalTextField(
+                                    headingTitle: "Enter Organization",
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.invokeCustomFunction(
+                                    context: context,
+                                    headingTitle: "Select Mode of Work",
+                                    customFunction: () {
+                                      showAppModalSheet(
+                                        context: context,
+                                        child: CommonDataSearchSelectPage(
+                                          showWorkingModes: true,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.datePicker(
+                                    context: context,
+                                    headingTitle: "Start Start Date",
+                                  ),
+                                  Gap(12),
+                                  SuperFormField.datePicker(
+                                    context: context,
+                                    headingTitle: "End Date",
+                                  ),
+                                  Gap(12),
+                                  MaterialButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
-                                    );
-                                  },
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Start Start Date",
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "End Date",
-                                ),
-                                Gap(12),
-                                MaterialButton(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    color: Colors.blueAccent,
-                                    onPressed: () {},
-                                    child: Text('Add',
-                                        style: TextStyle(color: Colors.white))),
-                              ],
+                                      color: Colors.blueAccent,
+                                      onPressed: () {},
+                                      child: Text('Add',
+                                          style:
+                                              TextStyle(color: Colors.white))),
+                                ],
+                              ),
                             ),
-                          ),
-                          Gap(8),
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: 'Select Gender',
-                            modalSheetUi: CommonDataSearchSelectPage(
-                              showGenders: true,
+                            Gap(8),
+                            SuperFormField.showModalSheetOnTap(
+                              context: context,
+                              headingTitle: 'Select Gender',
+                              modalSheetUi: CommonDataSearchSelectPage(
+                                showGenders: true,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Gap(12),
@@ -307,9 +316,17 @@ class ProfileUpdatePage extends StatelessWidget {
                         child: Column(
                           children: [
                             SuperFormField.generalTextField(
-                              headingTitle: "Add Service",
+                              headingTitle: "Add Status",
                             ),
 
+                            Gap(12),
+                            SuperFormField.invokeCustomFunction(
+                              context: context,
+                              readOnly: false,
+                              headingTitle: "Add Services",
+                              suffixWidget: Icon(Icons.add_circle_rounded),
+                              customFunction: () {},
+                            ),
                             Gap(12),
 
                             // Portfolio Info Section
@@ -325,6 +342,8 @@ class ProfileUpdatePage extends StatelessWidget {
                         ),
                       ),
                       Gap(12),
+                      SuperFormField.invokeCustomFunction(
+                          context: context, customFunction: () {}),
                     ],
                     MaterialButton(
                       shape: RoundedRectangleBorder(
