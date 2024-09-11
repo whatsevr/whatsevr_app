@@ -3,36 +3,23 @@ part of 'bloc.dart';
 class ProfileState extends Equatable {
   final ProfileDetailsResponse? currentProfileDetailsResponse;
 
-  final String? name;
-
-  final String? email;
-
-  final String? bio;
-  final String? address;
   final DateTime? dob;
 
   final String? gender;
   final File? profileImage;
   final List<File>? coverImages;
   final List<File>? coverVideos;
-  final List<String>? services;
-  final String? portfolioTitle;
-  final String? portfolioDescription;
+  final List<UiService>? services;
+
   final List<UiEducation>? educations;
   final List<UiWorkExperience>? workExperiences;
 
   const ProfileState({
     this.currentProfileDetailsResponse,
-    this.name,
-    this.email,
-    this.bio,
-    this.address,
     this.dob,
     this.profileImage,
     this.coverImages,
     this.coverVideos,
-    this.portfolioTitle,
-    this.portfolioDescription,
     this.services,
     this.educations,
     this.workExperiences,
@@ -41,17 +28,11 @@ class ProfileState extends Equatable {
 
   ProfileState copyWith({
     ProfileDetailsResponse? currentProfileDetailsResponse,
-    String? name,
-    String? email,
-    String? bio,
-    String? address,
     DateTime? dob,
     File? profileImage,
     List<File>? coverImages,
     List<File>? coverVideos,
-    String? portfolioTitle,
-    String? portfolioDescription,
-    List<String>? services,
+    List<UiService>? services,
     List<UiEducation>? educations,
     List<UiWorkExperience>? workExperiences,
     String? gender,
@@ -59,16 +40,10 @@ class ProfileState extends Equatable {
     return ProfileState(
       currentProfileDetailsResponse:
           currentProfileDetailsResponse ?? this.currentProfileDetailsResponse,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      bio: bio ?? this.bio,
-      address: address ?? this.address,
       dob: dob ?? this.dob,
       profileImage: profileImage ?? this.profileImage,
       coverImages: coverImages ?? this.coverImages,
       coverVideos: coverVideos ?? this.coverVideos,
-      portfolioTitle: portfolioTitle ?? this.portfolioTitle,
-      portfolioDescription: portfolioDescription ?? this.portfolioDescription,
       services: services ?? this.services,
       educations: educations ?? this.educations,
       workExperiences: workExperiences ?? this.workExperiences,
@@ -79,79 +54,74 @@ class ProfileState extends Equatable {
   @override
   List<Object?> get props => [
         currentProfileDetailsResponse,
-        name,
-        email,
-        bio,
-        address,
         dob,
         profileImage,
         coverImages,
         coverVideos,
-        portfolioTitle,
-        portfolioDescription,
         services,
         gender,
+        educations,
+        workExperiences,
       ];
 }
 
 class UiEducation extends Equatable {
-  final String? degree;
-  final String? school;
-  final String? fieldOfStudy;
+  final String? degreeType;
+  final String? institute;
+  final String? degreeName;
   final DateTime? startDate;
   final DateTime? endDate;
-  final bool? isCurrentlyStudying;
+  final bool? isOngoingEducation;
 
   UiEducation({
-    this.degree,
-    this.school,
-    this.fieldOfStudy,
+    this.degreeType,
+    this.institute,
+    this.degreeName,
     this.startDate,
     this.endDate,
-    this.isCurrentlyStudying,
+    this.isOngoingEducation,
   });
 
   UiEducation copyWith({
-    String? degree,
+    String? degreeType,
     String? school,
-    String? fieldOfStudy,
+    String? degreeName,
     DateTime? startDate,
     DateTime? endDate,
-    bool? isCurrentlyStudying,
+    bool? isOngoingEducation,
   }) {
     return UiEducation(
-      degree: degree ?? this.degree,
-      school: school ?? this.school,
-      fieldOfStudy: fieldOfStudy ?? this.fieldOfStudy,
+      degreeType: degreeType ?? this.degreeType,
+      institute: school ?? this.institute,
+      degreeName: degreeName ?? this.degreeName,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      isCurrentlyStudying: isCurrentlyStudying ?? this.isCurrentlyStudying,
+      isOngoingEducation: isOngoingEducation ?? this.isOngoingEducation,
     );
   }
 
   @override
   List<Object?> get props => [
-        degree,
-        school,
-        fieldOfStudy,
+        degreeType,
+        institute,
+        degreeName,
         startDate,
         endDate,
-        isCurrentlyStudying,
+        isOngoingEducation,
       ];
 }
 
 class UiWorkExperience extends Equatable {
-  final String? title;
-  final String? company;
-  final String? location;
+  final String? designation;
+  final String? workingMode;
+
   final DateTime? startDate;
   final DateTime? endDate;
   final bool? isCurrentlyWorking;
 
   UiWorkExperience({
-    this.title,
-    this.company,
-    this.location,
+    this.designation,
+    this.workingMode,
     this.startDate,
     this.endDate,
     this.isCurrentlyWorking,
@@ -159,16 +129,15 @@ class UiWorkExperience extends Equatable {
 
   UiWorkExperience copyWith({
     String? title,
-    String? company,
+    String? workingMode,
     String? location,
     DateTime? startDate,
     DateTime? endDate,
     bool? isCurrentlyWorking,
   }) {
     return UiWorkExperience(
-      title: title ?? this.title,
-      company: company ?? this.company,
-      location: location ?? this.location,
+      designation: title ?? this.designation,
+      workingMode: workingMode ?? this.workingMode,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       isCurrentlyWorking: isCurrentlyWorking ?? this.isCurrentlyWorking,
@@ -177,11 +146,33 @@ class UiWorkExperience extends Equatable {
 
   @override
   List<Object?> get props => [
-        title,
-        company,
-        location,
+        designation,
+        workingMode,
         startDate,
         endDate,
         isCurrentlyWorking,
       ];
+}
+
+class UiService extends Equatable {
+  final String? serviceName;
+  final String? serviceDescription;
+
+  UiService({
+    this.serviceName,
+    this.serviceDescription,
+  });
+
+  UiService copyWith({
+    String? serviceName,
+    String? serviceDescription,
+  }) {
+    return UiService(
+      serviceName: serviceName ?? this.serviceName,
+      serviceDescription: serviceDescription ?? this.serviceDescription,
+    );
+  }
+
+  @override
+  List<Object?> get props => [serviceName, serviceDescription];
 }

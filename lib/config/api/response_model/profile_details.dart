@@ -8,6 +8,7 @@ class ProfileDetailsResponse {
   final List<UserCoverMedia>? userCoverMedia;
   final List<UserPdf>? userPdfs;
   final List<UserService>? userServices;
+  final List<UserWorkExperience>? userWorkExperiences;
 
   ProfileDetailsResponse({
     this.message,
@@ -17,6 +18,7 @@ class ProfileDetailsResponse {
     this.userCoverMedia,
     this.userPdfs,
     this.userServices,
+    this.userWorkExperiences,
   });
 
   factory ProfileDetailsResponse.fromJson(String str) =>
@@ -50,6 +52,10 @@ class ProfileDetailsResponse {
             ? []
             : List<UserService>.from(
                 json["user_services"]!.map((x) => UserService.fromMap(x))),
+        userWorkExperiences: json["user_work_experiences"] == null
+            ? []
+            : List<UserWorkExperience>.from(json["user_work_experiences"]!
+                .map((x) => UserWorkExperience.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -70,6 +76,9 @@ class ProfileDetailsResponse {
         "user_services": userServices == null
             ? []
             : List<dynamic>.from(userServices!.map((x) => x.toMap())),
+        "user_work_experiences": userWorkExperiences == null
+            ? []
+            : List<dynamic>.from(userWorkExperiences!.map((x) => x.toMap())),
       };
 }
 
@@ -124,6 +133,8 @@ class UserEducation {
   final DateTime? startDate;
   final DateTime? endDate;
   final String? type;
+  final dynamic institute;
+  final bool? isOngoingEducation;
 
   UserEducation({
     this.id,
@@ -133,6 +144,8 @@ class UserEducation {
     this.startDate,
     this.endDate,
     this.type,
+    this.institute,
+    this.isOngoingEducation,
   });
 
   factory UserEducation.fromJson(String str) =>
@@ -153,6 +166,8 @@ class UserEducation {
         endDate:
             json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
         type: json["type"],
+        institute: json["institute"],
+        isOngoingEducation: json["is_ongoing_education"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -165,6 +180,8 @@ class UserEducation {
         "end_date":
             "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
         "type": type,
+        "institute": institute,
+        "is_ongoing_education": isOngoingEducation,
       };
 }
 
@@ -189,6 +206,10 @@ class UserInfo {
   final bool? isDiactivated;
   final DateTime? portfolioCreatedAt;
   final String? portfolioTitle;
+  final int? totalFollowers;
+  final int? totalFollowings;
+  final int? totalPostLikes;
+  final String? gender;
 
   UserInfo({
     this.id,
@@ -211,6 +232,10 @@ class UserInfo {
     this.isDiactivated,
     this.portfolioCreatedAt,
     this.portfolioTitle,
+    this.totalFollowers,
+    this.totalFollowings,
+    this.totalPostLikes,
+    this.gender,
   });
 
   factory UserInfo.fromJson(String str) => UserInfo.fromMap(json.decode(str));
@@ -242,6 +267,10 @@ class UserInfo {
             ? null
             : DateTime.parse(json["portfolio_created_at"]),
         portfolioTitle: json["portfolio_title"],
+        totalFollowers: json["total_followers"],
+        totalFollowings: json["total_followings"],
+        totalPostLikes: json["total_post_likes"],
+        gender: json["gender"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -266,6 +295,10 @@ class UserInfo {
         "is_diactivated": isDiactivated,
         "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
         "portfolio_title": portfolioTitle,
+        "total_followers": totalFollowers,
+        "total_followings": totalFollowings,
+        "total_post_likes": totalPostLikes,
+        "gender": gender,
       };
 }
 
@@ -357,10 +390,7 @@ class UserVideoPost {
   final String? title;
   final String? description;
   final List<String>? hashtags;
-  final dynamic taggedUsersUid;
-  final dynamic taggedPortfolios;
-  final dynamic taggedCommunitiesUid;
-  final dynamic likesCount;
+  final List<String>? taggedUserUids;
   final bool? isDeleted;
   final bool? isArchived;
   final bool? isActive;
@@ -372,10 +402,12 @@ class UserVideoPost {
   final String? location;
   final dynamic locationLatitude;
   final dynamic locationLongitude;
-  final String? videoLength;
+  final String? videoDuration;
   final int? totalViews;
   final int? totalLikes;
   final int? totalComments;
+  final dynamic internalAiPostDescription;
+  final dynamic internalAiPostTags;
 
   UserVideoPost({
     this.id,
@@ -384,10 +416,7 @@ class UserVideoPost {
     this.title,
     this.description,
     this.hashtags,
-    this.taggedUsersUid,
-    this.taggedPortfolios,
-    this.taggedCommunitiesUid,
-    this.likesCount,
+    this.taggedUserUids,
     this.isDeleted,
     this.isArchived,
     this.isActive,
@@ -399,10 +428,12 @@ class UserVideoPost {
     this.location,
     this.locationLatitude,
     this.locationLongitude,
-    this.videoLength,
+    this.videoDuration,
     this.totalViews,
     this.totalLikes,
     this.totalComments,
+    this.internalAiPostDescription,
+    this.internalAiPostTags,
   });
 
   factory UserVideoPost.fromJson(String str) =>
@@ -421,10 +452,9 @@ class UserVideoPost {
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUsersUid: json["tagged_users_uid"],
-        taggedPortfolios: json["tagged_portfolios"],
-        taggedCommunitiesUid: json["tagged_communities_uid"],
-        likesCount: json["likes_count"],
+        taggedUserUids: json["tagged_user_uids"] == null
+            ? []
+            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
         isDeleted: json["is_deleted"],
         isArchived: json["is_archived"],
         isActive: json["is_active"],
@@ -438,10 +468,12 @@ class UserVideoPost {
         location: json["location"],
         locationLatitude: json["location_latitude"],
         locationLongitude: json["location_longitude"],
-        videoLength: json["video_length"],
+        videoDuration: json["video_duration"],
         totalViews: json["total_views"],
         totalLikes: json["total_likes"],
         totalComments: json["total_comments"],
+        internalAiPostDescription: json["internal_ai_post_description"],
+        internalAiPostTags: json["internal_ai_post_tags"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -452,10 +484,9 @@ class UserVideoPost {
         "description": description,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_users_uid": taggedUsersUid,
-        "tagged_portfolios": taggedPortfolios,
-        "tagged_communities_uid": taggedCommunitiesUid,
-        "likes_count": likesCount,
+        "tagged_user_uids": taggedUserUids == null
+            ? []
+            : List<dynamic>.from(taggedUserUids!.map((x) => x)),
         "is_deleted": isDeleted,
         "is_archived": isArchived,
         "is_active": isActive,
@@ -467,9 +498,72 @@ class UserVideoPost {
         "location": location,
         "location_latitude": locationLatitude,
         "location_longitude": locationLongitude,
-        "video_length": videoLength,
+        "video_duration": videoDuration,
         "total_views": totalViews,
         "total_likes": totalLikes,
         "total_comments": totalComments,
+        "internal_ai_post_description": internalAiPostDescription,
+        "internal_ai_post_tags": internalAiPostTags,
+      };
+}
+
+class UserWorkExperience {
+  final int? id;
+  final DateTime? createdAt;
+  final String? designation;
+  final DateTime? startDate;
+  final DateTime? endDate;
+  final String? userUid;
+  final String? workingMode;
+  final bool? isCurrentlyWorking;
+  final String? companyName;
+
+  UserWorkExperience({
+    this.id,
+    this.createdAt,
+    this.designation,
+    this.startDate,
+    this.endDate,
+    this.userUid,
+    this.workingMode,
+    this.isCurrentlyWorking,
+    this.companyName,
+  });
+
+  factory UserWorkExperience.fromJson(String str) =>
+      UserWorkExperience.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserWorkExperience.fromMap(Map<String, dynamic> json) =>
+      UserWorkExperience(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        designation: json["designation"],
+        startDate: json["start_date"] == null
+            ? null
+            : DateTime.parse(json["start_date"]),
+        endDate:
+            json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
+        userUid: json["user_uid"],
+        workingMode: json["working_mode"],
+        isCurrentlyWorking: json["is_currently_working"],
+        companyName: json["company_name"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "designation": designation,
+        "start_date":
+            "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
+        "end_date":
+            "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
+        "user_uid": userUid,
+        "working_mode": workingMode,
+        "is_currently_working": isCurrentlyWorking,
+        "company_name": companyName,
       };
 }

@@ -47,7 +47,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
         ),
         useMaterial3: true,
         //flipkart
-        textTheme: GoogleFonts.openSansTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(),
       ),
       routerConfig: routeConfig,
       scrollBehavior: const MaterialScrollBehavior().copyWith(

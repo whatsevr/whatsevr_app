@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/common_data_list.dart';
@@ -143,6 +144,7 @@ class ProfileUpdatePage extends StatelessWidget {
                     LabelContainer(
                       labelText: 'Personal Info',
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SuperFormField.generalTextField(
                             controller:
@@ -188,52 +190,165 @@ class ProfileUpdatePage extends StatelessWidget {
                             },
                           ),
                           Gap(8),
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            headingTitle: "Add Educations",
-                            modalSheetUi: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SuperFormField.generalTextField(
-                                  headingTitle: "Enter School",
-                                ),
-                                Gap(12),
-                                SuperFormField.invokeCustomFunction(
-                                  context: context,
-                                  headingTitle: "Select Degree",
-                                  readOnly: false,
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      context: context,
-                                      child: CommonDataSearchSelectPage(
-                                        showEducationDegrees: true,
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Select Start Date",
-                                ),
-                                Gap(12),
-                                SuperFormField.datePicker(
-                                  context: context,
-                                  headingTitle: "Select End Date",
-                                ),
-                                Gap(12),
-                                MaterialButton(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+                          Builder(
+                            builder: (context) {
+                              TextEditingController schoolController =
+                                  TextEditingController();
+                              TextEditingController degreeController =
+                                  TextEditingController();
+                              TextEditingController degreeTypeController =
+                                  TextEditingController();
+                              TextEditingController startDateController =
+                                  TextEditingController();
+                              TextEditingController endDateController =
+                                  TextEditingController();
+
+                              return SuperFormField.showModalSheetOnTap(
+                                context: context,
+                                headingTitle: "Educations",
+                                hintText: "Add Education",
+                                modalSheetUi: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SuperFormField.generalTextField(
+                                      headingTitle: "Enter School",
+                                      controller: schoolController,
                                     ),
-                                    color: Colors.blueAccent,
-                                    onPressed: () {},
-                                    child: Text('Add',
-                                        style: TextStyle(color: Colors.white))),
-                              ],
-                            ),
+                                    Gap(12),
+                                    SuperFormField.invokeCustomFunction(
+                                      context: context,
+                                      headingTitle: "Select Degree",
+                                      controller: degreeController,
+                                      readOnly: false,
+                                      customFunction: () {
+                                        showAppModalSheet(
+                                          context: context,
+                                          child: CommonDataSearchSelectPage(
+                                            showEducationDegrees: true,
+                                            onEducationDegreeSelected:
+                                                (EducationDegree p0) {
+                                              degreeController.text =
+                                                  p0.title ?? '';
+                                              degreeTypeController.text =
+                                                  p0.type ?? '';
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    Gap(12),
+                                    SuperFormField.generalTextField(
+                                      readOnly: true,
+                                      controller: degreeTypeController,
+                                      headingTitle: "Degree Type",
+                                    ),
+                                    Gap(12),
+                                    SuperFormField.datePicker(
+                                        context: context,
+                                        controller: startDateController,
+                                        headingTitle: "Select Start Date",
+                                        onDateSelected: (DateTime date) {
+                                          startDateController.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(date);
+                                        }),
+                                    Gap(12),
+                                    SuperFormField.datePicker(
+                                        context: context,
+                                        controller: endDateController,
+                                        headingTitle: "Select End Date",
+                                        onDateSelected: (DateTime date) {
+                                          endDateController.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(date);
+                                        }),
+                                    Gap(12),
+                                    MaterialButton(
+                                        minWidth: double.infinity,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        color: Colors.blueAccent,
+                                        onPressed: () {
+                                          if (degreeController.text.isNotEmpty &&
+                                              schoolController
+                                                  .text.isNotEmpty &&
+                                              startDateController
+                                                  .text.isNotEmpty &&
+                                              endDateController
+                                                  .text.isNotEmpty) {
+                                            context.read<ProfileBloc>().add(
+                                                  AddOrRemoveEducation(
+                                                    education: UiEducation(
+                                                      degreeName:
+                                                          degreeController.text,
+                                                      degreeType:
+                                                          degreeTypeController
+                                                              .text,
+                                                      startDate: DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .parse(
+                                                              startDateController
+                                                                  .text),
+                                                      endDate: DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .parse(
+                                                              endDateController
+                                                                  .text),
+                                                      institute:
+                                                          schoolController.text,
+                                                    ),
+                                                  ),
+                                                );
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text('Add',
+                                            style: TextStyle(
+                                                color: Colors.white))),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           Gap(8),
+                          //show eduction as list
+                          if (state.educations != null) ...[
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: state.educations?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                            '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}')),
+                                    GestureDetector(
+                                      onTap: () {
+                                        context.read<ProfileBloc>().add(
+                                            AddOrRemoveEducation(
+                                                education:
+                                                    state.educations?[index],
+                                                isRemove: true));
+                                      },
+                                      child: Icon(
+                                        Icons.close_rounded,
+                                        color: Colors.red,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Gap(2);
+                              },
+                            ),
+                            Gap(8),
+                          ],
+
                           SuperFormField.showModalSheetOnTap(
                             context: context,
                             headingTitle: "Work Experience",
@@ -268,22 +383,69 @@ class ProfileUpdatePage extends StatelessWidget {
                                 ),
                                 Gap(12),
                                 MaterialButton(
+                                    minWidth: double.infinity,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     color: Colors.blueAccent,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context
+                                          .read<ProfileBloc>()
+                                          .add(AddOrRemoveWorkExperience(
+                                            workExperience: UiWorkExperience(
+                                              workingMode: 'Full Time',
+                                              designation: 'Software Engineer',
+                                              startDate: DateTime.now(),
+                                              endDate: DateTime.now(),
+                                            ),
+                                          ));
+                                    },
                                     child: Text('Add',
                                         style: TextStyle(color: Colors.white))),
                               ],
                             ),
                           ),
                           Gap(8),
+                          if (state.workExperiences != null) ...[
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: state.workExperiences?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                            '${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}')),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Icon(
+                                        Icons.close_rounded,
+                                        color: Colors.red,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Gap(2);
+                              },
+                            ),
+                            Gap(8),
+                          ],
                           SuperFormField.showModalSheetOnTap(
                             context: context,
+                            controller:
+                                TextEditingController(text: state.gender),
                             headingTitle: 'Select Gender',
                             modalSheetUi: CommonDataSearchSelectPage(
                               showGenders: true,
+                              onGenderSelected: (Gender p0) {
+                                context
+                                    .read<ProfileBloc>()
+                                    .add(UpdateGender(p0.gender));
+                              },
                             ),
                           ),
                         ],
@@ -301,18 +463,75 @@ class ProfileUpdatePage extends StatelessWidget {
                           children: [
                             SuperFormField.generalTextField(
                               headingTitle: "Add Status",
+                              controller:
+                                  context.read<ProfileBloc>().portfolioStatus,
                             ),
 
                             Gap(12),
                             SuperFormField.invokeCustomFunction(
                               context: context,
-                              readOnly: false,
                               headingTitle: "Add Services",
                               suffixWidget: Icon(Icons.add_circle_rounded),
-                              customFunction: () {},
+                              customFunction: () {
+                                showAppModalSheet(
+                                  context: context,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SuperFormField.generalTextField(
+                                        headingTitle: "Enter Title",
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.multilineTextField(
+                                        headingTitle: "Enter Description",
+                                      ),
+                                      Gap(12),
+                                      MaterialButton(
+                                        minWidth: double.infinity,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        color: Colors.blueAccent,
+                                        onPressed: () {},
+                                        child: Text('Add',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
                             Gap(12),
-
+                            if (state.services != null) ...[
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: state.services?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                              '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ')),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Icon(
+                                          Icons.close_rounded,
+                                          color: Colors.red,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Gap(2);
+                                },
+                              ),
+                              Gap(8),
+                            ],
                             // Portfolio Info Section
 
                             SuperFormField.multilineTextField(

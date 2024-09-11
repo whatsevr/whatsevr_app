@@ -79,7 +79,7 @@ class SuperFormField extends StatefulWidget {
       prefixIcon: prefixIcon,
       onTap: onTap,
       validator: validator,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         ...?inputFormatters,
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
       ],
@@ -253,7 +253,7 @@ class SuperFormField extends StatefulWidget {
       labelText: labelText,
       suffixIcon: ValueListenableBuilder(
         valueListenable: controller!,
-        builder: (context, TextEditingValue value, __) {
+        builder: (BuildContext context, TextEditingValue value, __) {
           return value.text.isNotEmpty
               ? GestureDetector(
                   onTap: () {
@@ -285,7 +285,7 @@ class SuperFormField extends StatefulWidget {
       controller: controller,
       hintText: hintText,
       validator: validator,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         ...?inputFormatters,
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
       ],
@@ -306,7 +306,7 @@ class SuperFormField extends StatefulWidget {
       hintText: hintText,
       keyboardType: TextInputType.emailAddress,
       prefixIcon: const Icon(Icons.email),
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(maxLength),
       ],
       maxLength: maxLength,
@@ -325,7 +325,7 @@ class SuperFormField extends StatefulWidget {
       controller: controller,
       hintText: hintText,
       keyboardType: TextInputType.phone,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(maxLength),
       ],
@@ -350,7 +350,7 @@ class SuperFormField extends StatefulWidget {
       minLines: minLines,
       maxLines: maxLines ?? minLines + 5,
       keyboardType: TextInputType.multiline,
-      inputFormatters: [
+      inputFormatters: <TextInputFormatter>[
         LengthLimitingTextInputFormatter(maxLength),
       ],
       maxLength: maxLength,
@@ -372,18 +372,19 @@ class _SuperFormFieldState extends State<SuperFormField> {
 
   @override
   Widget build(BuildContext context) {
-    var defaultContextPadding = const EdgeInsets.symmetric(
+    Color baseColor = Colors.grey.shade500;
+    EdgeInsets defaultContextPadding = const EdgeInsets.symmetric(
       vertical: 10.0,
       horizontal: 12.0,
     );
-    var border = OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade500),
+    OutlineInputBorder border = OutlineInputBorder(
+      borderSide: BorderSide(color: baseColor),
       borderRadius: BorderRadius.circular(10),
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         if (widget.headingTitle != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
@@ -397,7 +398,7 @@ class _SuperFormFieldState extends State<SuperFormField> {
           ),
         ValueListenableBuilder<bool>(
           valueListenable: _obscureTextNotifier,
-          builder: (context, obscureText, _) {
+          builder: (BuildContext context, bool obscureText, _) {
             return TextFormField(
               controller: widget.controller,
               focusNode: widget.focusNode,
@@ -413,6 +414,14 @@ class _SuperFormFieldState extends State<SuperFormField> {
                 isDense: true,
                 contentPadding: defaultContextPadding,
                 hintText: widget.hintText,
+                alignLabelWithHint: true,
+                hintStyle: TextStyle(
+                  color: baseColor,
+                  fontSize: 14.0,
+                  fontStyle: FontStyle.italic,
+                ),
+                suffixIconColor: baseColor,
+                prefixIconColor: baseColor,
                 suffixIcon: widget.obscureText
                     ? GestureDetector(
                         onTap: () {
