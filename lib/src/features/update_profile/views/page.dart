@@ -143,388 +143,401 @@ class ProfileUpdatePage extends StatelessWidget {
                     ),
 
                     Gap(12),
-                    LabelContainer(
-                      labelText: 'Personal Info',
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SuperFormField.generalTextField(
-                            controller:
-                                context.read<ProfileBloc>().nameController,
-                            headingTitle: "Name",
-                            maxLength: 40,
-                          ),
-                          Gap(8),
-                          SuperFormField.email(
-                            controller:
-                                context.read<ProfileBloc>().emailController,
-                            headingTitle: "Email",
-                            maxLength: 60,
-                          ),
-                          Gap(8),
-                          SuperFormField.multilineTextField(
-                            controller:
-                                context.read<ProfileBloc>().bioController,
-                            headingTitle: "Bio",
-                            minLines: 3,
-                            maxLength: 300,
-                          ),
-                          Gap(8),
-                          SuperFormField.multilineTextField(
-                            controller:
-                                context.read<ProfileBloc>().addressController,
-                            headingTitle: "Address",
-                            maxLength: 100,
-                          ),
-                          Gap(8),
-                          SuperFormField.datePicker(
-                            context: context,
-                            controller: TextEditingController(
-                                text: state.dob == null
-                                    ? ''
-                                    : DateFormat('dd-MM-yyyy')
-                                        .format(state.dob!)),
-                            headingTitle: 'Date of Birth',
-                            onDateSelected: (DateTime date) {
-                              context
-                                  .read<ProfileBloc>()
-                                  .emit(state.copyWith(dob: date));
-                            },
-                          ),
-                          Gap(8),
-                          Builder(
-                            builder: (context) {
-                              TextEditingController schoolController =
-                                  TextEditingController();
-                              TextEditingController degreeController =
-                                  TextEditingController();
-                              TextEditingController degreeTypeController =
-                                  TextEditingController();
-                              TextEditingController startDateController =
-                                  TextEditingController();
-                              TextEditingController endDateController =
-                                  TextEditingController();
+                    ...[
+                      LabelContainer(
+                        labelText: 'Personal Info',
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SuperFormField.generalTextField(
+                              controller:
+                                  context.read<ProfileBloc>().nameController,
+                              headingTitle: "Name",
+                              maxLength: 40,
+                            ),
+                            Gap(8),
+                            SuperFormField.email(
+                              controller:
+                                  context.read<ProfileBloc>().emailController,
+                              headingTitle: "Email",
+                              maxLength: 60,
+                            ),
+                            Gap(8),
+                            SuperFormField.multilineTextField(
+                              controller:
+                                  context.read<ProfileBloc>().bioController,
+                              headingTitle: "Bio",
+                              minLines: 3,
+                              maxLength: 300,
+                            ),
+                            Gap(8),
+                            SuperFormField.multilineTextField(
+                              controller:
+                                  context.read<ProfileBloc>().addressController,
+                              headingTitle: "Address",
+                              maxLength: 100,
+                            ),
+                            Gap(8),
+                            SuperFormField.datePicker(
+                              context: context,
+                              controller: TextEditingController(
+                                  text: state.dob == null
+                                      ? ''
+                                      : DateFormat('dd-MM-yyyy')
+                                          .format(state.dob!)),
+                              headingTitle: 'Date of Birth',
+                              onDateSelected: (DateTime date) {
+                                context
+                                    .read<ProfileBloc>()
+                                    .emit(state.copyWith(dob: date));
+                              },
+                            ),
+                            Gap(8),
+                            Builder(
+                              builder: (context) {
+                                TextEditingController schoolController =
+                                    TextEditingController();
+                                TextEditingController degreeController =
+                                    TextEditingController();
+                                TextEditingController degreeTypeController =
+                                    TextEditingController();
+                                TextEditingController startDateController =
+                                    TextEditingController();
+                                TextEditingController endDateController =
+                                    TextEditingController();
 
-                              return SuperFormField.showModalSheetOnTap(
-                                context: context,
-                                headingTitle: "Educations",
-                                hintText: "Add Education",
-                                modalSheetUi: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SuperFormField.generalTextField(
-                                      headingTitle: "Enter School",
-                                      controller: schoolController,
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.invokeCustomFunction(
-                                      context: context,
-                                      headingTitle: "Select Degree",
-                                      controller: degreeController,
-                                      readOnly: false,
-                                      customFunction: () {
-                                        showAppModalSheet(
+                                return SuperFormField.showModalSheetOnTap(
+                                  context: context,
+                                  headingTitle: "Educations",
+                                  hintText: "Add Education",
+                                  modalSheetUi: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SuperFormField.generalTextField(
+                                        headingTitle: "Enter School",
+                                        controller: schoolController,
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.invokeCustomFunction(
+                                        context: context,
+                                        headingTitle: "Select Degree",
+                                        controller: degreeController,
+                                        readOnly: false,
+                                        customFunction: () {
+                                          showAppModalSheet(
+                                            context: context,
+                                            child: CommonDataSearchSelectPage(
+                                              showEducationDegrees: true,
+                                              onEducationDegreeSelected:
+                                                  (EducationDegree p0) {
+                                                degreeController.text =
+                                                    p0.title ?? '';
+                                                degreeTypeController.text =
+                                                    p0.type ?? '';
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.generalTextField(
+                                        readOnly: true,
+                                        controller: degreeTypeController,
+                                        headingTitle: "Degree Type",
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.datePicker(
                                           context: context,
-                                          child: CommonDataSearchSelectPage(
-                                            showEducationDegrees: true,
-                                            onEducationDegreeSelected:
-                                                (EducationDegree p0) {
-                                              degreeController.text =
-                                                  p0.title ?? '';
-                                              degreeTypeController.text =
-                                                  p0.type ?? '';
-                                            },
+                                          controller: startDateController,
+                                          headingTitle: "Select Start Date",
+                                          onDateSelected: (DateTime date) {
+                                            startDateController.text =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date);
+                                          }),
+                                      Gap(12),
+                                      SuperFormField.datePicker(
+                                          context: context,
+                                          controller: endDateController,
+                                          headingTitle: "Select End Date",
+                                          onDateSelected: (DateTime date) {
+                                            endDateController.text =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date);
+                                          }),
+                                      Gap(12),
+                                      MaterialButton(
+                                          minWidth: double.infinity,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
-                                        );
-                                      },
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.generalTextField(
-                                      readOnly: true,
-                                      controller: degreeTypeController,
-                                      headingTitle: "Degree Type",
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.datePicker(
+                                          color: Colors.blueAccent,
+                                          onPressed: () {
+                                            if (degreeController.text.isNotEmpty &&
+                                                schoolController
+                                                    .text.isNotEmpty &&
+                                                startDateController
+                                                    .text.isNotEmpty &&
+                                                endDateController
+                                                    .text.isNotEmpty) {
+                                              context.read<ProfileBloc>().add(
+                                                    AddOrRemoveEducation(
+                                                      education: UiEducation(
+                                                        degreeName:
+                                                            degreeController
+                                                                .text,
+                                                        degreeType:
+                                                            degreeTypeController
+                                                                .text,
+                                                        startDate: DateFormat(
+                                                                'dd-MM-yyyy')
+                                                            .parse(
+                                                                startDateController
+                                                                    .text),
+                                                        endDate: DateFormat(
+                                                                'dd-MM-yyyy')
+                                                            .parse(
+                                                                endDateController
+                                                                    .text),
+                                                        institute:
+                                                            schoolController
+                                                                .text,
+                                                        isOngoingEducation:
+                                                            false,
+                                                      ),
+                                                    ),
+                                                  );
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: Text('Add',
+                                              style: TextStyle(
+                                                  color: Colors.white))),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            Gap(8),
+                            //show eduction as list
+                            if (state.educations != null) ...[
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: state.educations?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                              '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}')),
+                                      GestureDetector(
+                                        onTap: () {
+                                          context.read<ProfileBloc>().add(
+                                              AddOrRemoveEducation(
+                                                  education:
+                                                      state.educations?[index],
+                                                  isRemove: true));
+                                        },
+                                        child: Icon(
+                                          Icons.close_rounded,
+                                          color: Colors.red,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Gap(2);
+                                },
+                              ),
+                              Gap(8),
+                            ],
+
+                            Builder(
+                              builder: (context) {
+                                TextEditingController companyNameController =
+                                    TextEditingController();
+                                TextEditingController designationController =
+                                    TextEditingController();
+                                TextEditingController workingModeController =
+                                    TextEditingController();
+                                TextEditingController startDateController =
+                                    TextEditingController();
+                                TextEditingController endDateController =
+                                    TextEditingController();
+
+                                return SuperFormField.showModalSheetOnTap(
+                                  context: context,
+                                  headingTitle: "Work Experience",
+                                  hintText: "Add Work Experience",
+                                  modalSheetUi: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SuperFormField.generalTextField(
+                                        headingTitle: "Enter Company Name",
+                                        controller: companyNameController,
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.generalTextField(
+                                        headingTitle: "Enter Designation",
+                                        controller: designationController,
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.invokeCustomFunction(
+                                        context: context,
+                                        headingTitle: "Select Mode of Work",
+                                        controller: workingModeController,
+                                        customFunction: () {
+                                          showAppModalSheet(
+                                            context: context,
+                                            child: CommonDataSearchSelectPage(
+                                              showWorkingModes: true,
+                                              onWorkingModeSelected:
+                                                  (WorkingMode p0) {
+                                                workingModeController.text =
+                                                    p0.mode ?? '';
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
-                                        headingTitle: "Select Start Date",
+                                        headingTitle: "Start Start Date",
                                         onDateSelected: (DateTime date) {
                                           startDateController.text =
                                               DateFormat('dd-MM-yyyy')
                                                   .format(date);
-                                        }),
-                                    Gap(12),
-                                    SuperFormField.datePicker(
+                                        },
+                                      ),
+                                      Gap(12),
+                                      SuperFormField.datePicker(
                                         context: context,
+                                        headingTitle: "End Date",
                                         controller: endDateController,
-                                        headingTitle: "Select End Date",
                                         onDateSelected: (DateTime date) {
                                           endDateController.text =
                                               DateFormat('dd-MM-yyyy')
                                                   .format(date);
-                                        }),
-                                    Gap(12),
-                                    MaterialButton(
-                                        minWidth: double.infinity,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        color: Colors.blueAccent,
-                                        onPressed: () {
-                                          if (degreeController.text.isNotEmpty &&
-                                              schoolController
-                                                  .text.isNotEmpty &&
-                                              startDateController
-                                                  .text.isNotEmpty &&
-                                              endDateController
-                                                  .text.isNotEmpty) {
-                                            context.read<ProfileBloc>().add(
-                                                  AddOrRemoveEducation(
-                                                    education: UiEducation(
-                                                      degreeName:
-                                                          degreeController.text,
-                                                      degreeType:
-                                                          degreeTypeController
-                                                              .text,
-                                                      startDate: DateFormat(
-                                                              'dd-MM-yyyy')
-                                                          .parse(
-                                                              startDateController
-                                                                  .text),
-                                                      endDate: DateFormat(
-                                                              'dd-MM-yyyy')
-                                                          .parse(
-                                                              endDateController
-                                                                  .text),
-                                                      institute:
-                                                          schoolController.text,
-                                                    ),
-                                                  ),
-                                                );
-                                            Navigator.pop(context);
-                                          }
                                         },
-                                        child: Text('Add',
-                                            style: TextStyle(
-                                                color: Colors.white))),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          Gap(8),
-                          //show eduction as list
-                          if (state.educations != null) ...[
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: state.educations?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                            '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}')),
-                                    GestureDetector(
-                                      onTap: () {
-                                        context.read<ProfileBloc>().add(
-                                            AddOrRemoveEducation(
-                                                education:
-                                                    state.educations?[index],
-                                                isRemove: true));
-                                      },
-                                      child: Icon(
-                                        Icons.close_rounded,
-                                        color: Colors.red,
-                                        size: 16,
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Gap(2);
-                              },
-                            ),
-                            Gap(8),
-                          ],
-
-                          Builder(
-                            builder: (context) {
-                              TextEditingController organizationController =
-                                  TextEditingController();
-                              TextEditingController designationController =
-                                  TextEditingController();
-                              TextEditingController workingModeController =
-                                  TextEditingController();
-                              TextEditingController startDateController =
-                                  TextEditingController();
-                              TextEditingController endDateController =
-                                  TextEditingController();
-
-                              return SuperFormField.showModalSheetOnTap(
-                                context: context,
-                                headingTitle: "Work Experience",
-                                hintText: "Add Work Experience",
-                                modalSheetUi: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SuperFormField.generalTextField(
-                                      headingTitle: "Enter Organization",
-                                      controller: organizationController,
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.invokeCustomFunction(
-                                      context: context,
-                                      headingTitle: "Select Mode of Work",
-                                      controller: workingModeController,
-                                      customFunction: () {
-                                        showAppModalSheet(
-                                          context: context,
-                                          child: CommonDataSearchSelectPage(
-                                            showWorkingModes: true,
-                                            onWorkingModeSelected:
-                                                (WorkingMode p0) {
-                                              workingModeController.text =
-                                                  p0.mode ?? '';
-                                            },
+                                      Gap(12),
+                                      MaterialButton(
+                                          minWidth: double.infinity,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
-                                        );
-                                      },
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.datePicker(
-                                      context: context,
-                                      controller: startDateController,
-                                      headingTitle: "Start Start Date",
-                                      onDateSelected: (DateTime date) {
-                                        startDateController.text =
-                                            DateFormat('dd-MM-yyyy')
-                                                .format(date);
-                                      },
-                                    ),
-                                    Gap(12),
-                                    SuperFormField.datePicker(
-                                      context: context,
-                                      headingTitle: "End Date",
-                                      controller: endDateController,
-                                      onDateSelected: (DateTime date) {
-                                        endDateController.text =
-                                            DateFormat('dd-MM-yyyy')
-                                                .format(date);
-                                      },
-                                    ),
-                                    Gap(12),
-                                    MaterialButton(
-                                        minWidth: double.infinity,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        color: Colors.blueAccent,
-                                        onPressed: () {
-                                          if (organizationController
-                                                  .text.isNotEmpty &&
-                                              workingModeController
-                                                  .text.isNotEmpty &&
-                                              startDateController
-                                                  .text.isNotEmpty &&
-                                              endDateController
-                                                  .text.isNotEmpty) {
-                                            context.read<ProfileBloc>().add(
-                                                  AddOrRemoveWorkExperience(
-                                                    workExperience:
-                                                        UiWorkExperience(
-                                                      companyName:
-                                                          organizationController
-                                                              .text,
-                                                      isCurrentlyWorking: false,
-                                                      designation:
-                                                          designationController
-                                                              .text,
-                                                      workingMode:
-                                                          workingModeController
-                                                              .text,
-                                                      startDate: DateFormat(
-                                                              'dd-MM-yyyy')
-                                                          .parse(
-                                                              startDateController
-                                                                  .text),
-                                                      endDate: DateFormat(
-                                                              'dd-MM-yyyy')
-                                                          .parse(
-                                                              endDateController
-                                                                  .text),
+                                          color: Colors.blueAccent,
+                                          onPressed: () {
+                                            if (companyNameController.text.isNotEmpty &&
+                                                workingModeController
+                                                    .text.isNotEmpty &&
+                                                startDateController
+                                                    .text.isNotEmpty &&
+                                                endDateController
+                                                    .text.isNotEmpty &&
+                                                designationController
+                                                    .text.isNotEmpty) {
+                                              context.read<ProfileBloc>().add(
+                                                    AddOrRemoveWorkExperience(
+                                                      workExperience:
+                                                          UiWorkExperience(
+                                                        companyName:
+                                                            companyNameController
+                                                                .text,
+                                                        isCurrentlyWorking:
+                                                            false,
+                                                        designation:
+                                                            designationController
+                                                                .text,
+                                                        workingMode:
+                                                            workingModeController
+                                                                .text,
+                                                        startDate: DateFormat(
+                                                                'dd-MM-yyyy')
+                                                            .parse(
+                                                                startDateController
+                                                                    .text),
+                                                        endDate: DateFormat(
+                                                                'dd-MM-yyyy')
+                                                            .parse(
+                                                                endDateController
+                                                                    .text),
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: Text('Add',
-                                            style: TextStyle(
-                                                color: Colors.white))),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          Gap(8),
-                          if (state.workExperiences != null) ...[
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: state.workExperiences?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                            '${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}')),
-                                    GestureDetector(
-                                      onTap: () {
-                                        context.read<ProfileBloc>().add(
-                                            AddOrRemoveWorkExperience(
-                                                workExperience: state
-                                                    .workExperiences?[index],
-                                                isRemove: true));
-                                      },
-                                      child: Icon(
-                                        Icons.close_rounded,
-                                        color: Colors.red,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ],
+                                                  );
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: Text('Add',
+                                              style: TextStyle(
+                                                  color: Colors.white))),
+                                    ],
+                                  ),
                                 );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Gap(2);
                               },
                             ),
                             Gap(8),
-                          ],
-                          SuperFormField.showModalSheetOnTap(
-                            context: context,
-                            controller:
-                                TextEditingController(text: state.gender),
-                            headingTitle: 'Gender',
-                            hintText: 'Select Gender',
-                            modalSheetUi: CommonDataSearchSelectPage(
-                              showGenders: true,
-                              onGenderSelected: (Gender p0) {
-                                context
-                                    .read<ProfileBloc>()
-                                    .add(UpdateGender(p0.gender));
-                              },
+                            if (state.workExperiences != null) ...[
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: state.workExperiences?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                              '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}')),
+                                      GestureDetector(
+                                        onTap: () {
+                                          context.read<ProfileBloc>().add(
+                                              AddOrRemoveWorkExperience(
+                                                  workExperience: state
+                                                      .workExperiences?[index],
+                                                  isRemove: true));
+                                        },
+                                        child: Icon(
+                                          Icons.close_rounded,
+                                          color: Colors.red,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Gap(2);
+                                },
+                              ),
+                              Gap(8),
+                            ],
+                            SuperFormField.showModalSheetOnTap(
+                              context: context,
+                              controller:
+                                  TextEditingController(text: state.gender),
+                              headingTitle: 'Gender',
+                              hintText: 'Select Gender',
+                              modalSheetUi: CommonDataSearchSelectPage(
+                                showGenders: true,
+                                onGenderSelected: (Gender p0) {
+                                  context
+                                      .read<ProfileBloc>()
+                                      .add(UpdateGender(p0.gender));
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Gap(12),
+                      Gap(12),
+                    ],
 
                     // Service Info Section
                     if (state.currentProfileDetailsResponse?.userInfo

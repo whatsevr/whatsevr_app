@@ -17,15 +17,15 @@ class UpdateUserWorkExperiencesRequest {
   factory UpdateUserWorkExperiencesRequest.fromMap(Map<String, dynamic> json) =>
       UpdateUserWorkExperiencesRequest(
         userUid: json["user_uid"],
-        userWorkExperiences: json["user-work-experiences"] == null
+        userWorkExperiences: json["user_work_experiences"] == null
             ? []
-            : List<UserWorkExperience>.from(json["user-work-experiences"]!
+            : List<UserWorkExperience>.from(json["user_work_experiences"]!
                 .map((x) => UserWorkExperience.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "user_uid": userUid,
-        "user-work-experiences": userWorkExperiences == null
+        "user_work_experiences": userWorkExperiences == null
             ? []
             : List<dynamic>.from(userWorkExperiences!.map((x) => x.toMap())),
       };

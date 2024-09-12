@@ -70,7 +70,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     portfolioStatus.text =
         event.pageArgument.profileDetailsResponse?.userInfo?.portfolioStatus ??
             '';
-
+    portfolioTitle.text =
+        event.pageArgument.profileDetailsResponse?.userInfo?.portfolioTitle ??
+            '';
     emit(state.copyWith(
       educations: List.generate(
         event.pageArgument.profileDetailsResponse?.userEducations?.length ?? 0,
@@ -163,14 +165,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(
         educations: [
           ...state.educations ?? [],
-          UiEducation(
-            degreeName: event.education?.degreeName,
-            degreeType: event.education?.degreeType,
-            startDate: event.education?.startDate,
-            endDate: event.education?.endDate,
-            isOngoingEducation: event.education?.isOngoingEducation,
-            institute: event.education?.institute,
-          ),
+          event.education!,
         ],
       ));
     }
@@ -188,13 +183,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(
         workExperiences: [
           ...state.workExperiences ?? [],
-          UiWorkExperience(
-            designation: event.workExperience?.designation,
-            startDate: event.workExperience?.startDate,
-            endDate: event.workExperience?.endDate,
-            isCurrentlyWorking: event.workExperience?.isCurrentlyWorking,
-            workingMode: event.workExperience?.workingMode,
-          ),
+          event.workExperience!,
         ],
       ));
     }
@@ -212,10 +201,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(
         services: [
           ...state.services ?? [],
-          UiService(
-            serviceName: event.service?.serviceName,
-            serviceDescription: event.service?.serviceDescription,
-          ),
+          event.service!,
         ],
       ));
     }
@@ -286,10 +272,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             )
             .toList(),
       );
-      await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
-      await UsersApi.updateEducations(newUserEducationsRequest);
-      await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
-      await UsersApi.updateServices(newUserServicesRequest);
+      String? m1 = await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
+      SmartDialog.showLoading(msg: '$m1');
+      String? m2 = await UsersApi.updateEducations(newUserEducationsRequest);
+      SmartDialog.showLoading(msg: '$m2');
+      String? m3 =
+          await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
+      SmartDialog.showLoading(msg: '$m3');
+      String? m4 = await UsersApi.updateServices(newUserServicesRequest);
+      SmartDialog.showLoading(msg: '$m4');
       SmartDialog.dismiss();
       AppNavigationService.goBack();
     } catch (e) {

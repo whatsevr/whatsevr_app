@@ -11,7 +11,7 @@ import '../requests_model/update_profile_picture.dart';
 import '../requests_model/update_user_info.dart';
 import '../response_model/multiple_user_details.dart';
 import '../response_model/profile_details.dart';
-import '../response_model/update_profile_picture_response.dart';
+
 import '../response_model/user_profile.dart';
 
 class UsersApi {
@@ -32,8 +32,8 @@ class UsersApi {
   static Future<ProfileDetailsResponse?> getProfileDetails(
       {required String userUid}) async {
     try {
-      Response response = await ApiClient.client
-          .get('/v1/profile-details', queryParameters: {'user_uid': userUid});
+      Response response = await ApiClient.client.get('/v1/user-profile-details',
+          queryParameters: {'user_uid': userUid});
       if (response.statusCode == HttpStatus.ok) {
         return ProfileDetailsResponse.fromMap(response.data);
       }
@@ -58,7 +58,7 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfilePictureUpdateResponse?> updateProfilePicture(
+  static Future<String?> updateProfilePicture(
       ProfilePictureUpdateRequest request) async {
     try {
       Response response = await ApiClient.client.post(
@@ -66,7 +66,7 @@ class UsersApi {
         data: request.toMap(),
       );
 
-      return ProfilePictureUpdateResponse.fromMap(response.data);
+      return response.data['message'];
     } catch (e) {
       ApiClient.apiMethodException(e);
     }
