@@ -16,8 +16,8 @@ class AiButton extends StatelessWidget {
         showAppModalSheet(context: context, child: _Ui());
       },
       icon: Row(
-        children: [
-          if (showLabel) ...[
+        children: <Widget>[
+          if (showLabel) ...<Widget>[
             const Text('AI'),
             Gap(3),
           ],
@@ -33,14 +33,12 @@ class AiButton extends StatelessWidget {
 }
 
 class _Ui extends StatelessWidget {
-  const _Ui({
-    super.key,
-  });
+  const _Ui();
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         SuperFormField.multilineTextField(
           minLines: 2,
           maxLines: 15,

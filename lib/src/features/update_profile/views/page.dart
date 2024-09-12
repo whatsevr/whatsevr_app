@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
@@ -16,7 +14,7 @@ import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
-import '../../../../config/widgets/mask_text.dart';
+import 'package:whatsevr_app/config/widgets/mask_text.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {
@@ -27,19 +25,19 @@ class ProfileUpdatePageArgument {
 
 class ProfileUpdatePage extends StatelessWidget {
   final ProfileUpdatePageArgument pageArgument;
-  ProfileUpdatePage({
-    Key? key,
+  const ProfileUpdatePage({
+    super.key,
     required this.pageArgument,
-  }) : super(key: key);
+  });
 
   // TextEditingControllers for each field
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
+      create: (BuildContext context) =>
           ProfileBloc()..add(InitialEvent(pageArgument: pageArgument)),
       child: Builder(
-        builder: (context) {
+        builder: (BuildContext context) {
           return Scaffold(
             backgroundColor: Colors.blueGrey[50],
             appBar: CustomAppBar(
@@ -47,10 +45,10 @@ class ProfileUpdatePage extends StatelessWidget {
               showAiAction: true,
             ),
             body: BlocBuilder<ProfileBloc, ProfileState>(
-              builder: (context, state) {
+              builder: (BuildContext context, ProfileState state) {
                 return ListView(
                   padding: PadHorizontal.padding,
-                  children: [
+                  children: <Widget>[
                     Gap(12),
                     Container(
                       alignment: Alignment.center,
@@ -59,7 +57,7 @@ class ProfileUpdatePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           Gap(25),
                           GestureDetector(
                             onTap: () async {
@@ -70,7 +68,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             child: Stack(
                               alignment: Alignment.center,
                               clipBehavior: Clip.none,
-                              children: [
+                              children: <Widget>[
                                 Container(
                                   height: 120,
                                   width: 120,
@@ -93,11 +91,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                                         .currentProfileDetailsResponse
                                                         ?.userInfo
                                                         ?.profilePicture ??
-                                                    MockData.imageAvatar)
+                                                    MockData.imageAvatar,)
                                                 : ExtendedNetworkImageProvider(
-                                                    MockData.imageAvatar),
+                                                    MockData.imageAvatar,),
                                         fit: BoxFit.cover,
-                                      )
+                                      ),
                                       // : ,
                                       ),
                                 ),
@@ -125,7 +123,7 @@ class ProfileUpdatePage extends StatelessWidget {
                           MaskText(
                             key: ValueKey(state.currentProfileDetailsResponse
                                     ?.userInfo?.mobileNumber ??
-                                ''), // Add a key to the widget to force rebuild
+                                '',), // Add a key to the widget to force rebuild
                             text: state.currentProfileDetailsResponse?.userInfo
                                     ?.mobileNumber ??
                                 '',
@@ -143,30 +141,30 @@ class ProfileUpdatePage extends StatelessWidget {
                     ),
 
                     Gap(12),
-                    ...[
+                    ...<Widget>[
                       LabelContainer(
                         labelText: 'Personal Info',
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             SuperFormField.generalTextField(
                               controller:
                                   context.read<ProfileBloc>().nameController,
-                              headingTitle: "Name",
+                              headingTitle: 'Name',
                               maxLength: 40,
                             ),
                             Gap(8),
                             SuperFormField.email(
                               controller:
                                   context.read<ProfileBloc>().emailController,
-                              headingTitle: "Email",
+                              headingTitle: 'Email',
                               maxLength: 60,
                             ),
                             Gap(8),
                             SuperFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().bioController,
-                              headingTitle: "Bio",
+                              headingTitle: 'Bio',
                               minLines: 3,
                               maxLength: 300,
                             ),
@@ -174,7 +172,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             SuperFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().addressController,
-                              headingTitle: "Address",
+                              headingTitle: 'Address',
                               maxLength: 100,
                             ),
                             Gap(8),
@@ -184,7 +182,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                   text: state.dob == null
                                       ? ''
                                       : DateFormat('dd-MM-yyyy')
-                                          .format(state.dob!)),
+                                          .format(state.dob!),),
                               headingTitle: 'Date of Birth',
                               onDateSelected: (DateTime date) {
                                 context
@@ -194,7 +192,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             ),
                             Gap(8),
                             Builder(
-                              builder: (context) {
+                              builder: (BuildContext context) {
                                 TextEditingController schoolController =
                                     TextEditingController();
                                 TextEditingController degreeController =
@@ -208,19 +206,19 @@ class ProfileUpdatePage extends StatelessWidget {
 
                                 return SuperFormField.showModalSheetOnTap(
                                   context: context,
-                                  headingTitle: "Educations",
-                                  hintText: "Add Education",
+                                  headingTitle: 'Educations',
+                                  hintText: 'Add Education',
                                   modalSheetUi: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: [
+                                    children: <Widget>[
                                       SuperFormField.generalTextField(
-                                        headingTitle: "Enter School",
+                                        headingTitle: 'Enter School',
                                         controller: schoolController,
                                       ),
                                       Gap(12),
                                       SuperFormField.invokeCustomFunction(
                                         context: context,
-                                        headingTitle: "Select Degree",
+                                        headingTitle: 'Select Degree',
                                         controller: degreeController,
                                         readOnly: false,
                                         customFunction: () {
@@ -243,28 +241,28 @@ class ProfileUpdatePage extends StatelessWidget {
                                       SuperFormField.generalTextField(
                                         readOnly: true,
                                         controller: degreeTypeController,
-                                        headingTitle: "Degree Type",
+                                        headingTitle: 'Degree Type',
                                       ),
                                       Gap(12),
                                       SuperFormField.datePicker(
                                           context: context,
                                           controller: startDateController,
-                                          headingTitle: "Select Start Date",
+                                          headingTitle: 'Select Start Date',
                                           onDateSelected: (DateTime date) {
                                             startDateController.text =
                                                 DateFormat('dd-MM-yyyy')
                                                     .format(date);
-                                          }),
+                                          },),
                                       Gap(12),
                                       SuperFormField.datePicker(
                                           context: context,
                                           controller: endDateController,
-                                          headingTitle: "Select End Date",
+                                          headingTitle: 'Select End Date',
                                           onDateSelected: (DateTime date) {
                                             endDateController.text =
                                                 DateFormat('dd-MM-yyyy')
                                                     .format(date);
-                                          }),
+                                          },),
                                       Gap(12),
                                       MaterialButton(
                                           minWidth: double.infinity,
@@ -291,15 +289,15 @@ class ProfileUpdatePage extends StatelessWidget {
                                                             degreeTypeController
                                                                 .text,
                                                         startDate: DateFormat(
-                                                                'dd-MM-yyyy')
+                                                                'dd-MM-yyyy',)
                                                             .parse(
                                                                 startDateController
-                                                                    .text),
+                                                                    .text,),
                                                         endDate: DateFormat(
-                                                                'dd-MM-yyyy')
+                                                                'dd-MM-yyyy',)
                                                             .parse(
                                                                 endDateController
-                                                                    .text),
+                                                                    .text,),
                                                         institute:
                                                             schoolController
                                                                 .text,
@@ -313,7 +311,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                           },
                                           child: Text('Add',
                                               style: TextStyle(
-                                                  color: Colors.white))),
+                                                  color: Colors.white,),),),
                                     ],
                                   ),
                                 );
@@ -321,24 +319,24 @@ class ProfileUpdatePage extends StatelessWidget {
                             ),
                             Gap(8),
                             //show eduction as list
-                            if (state.educations != null) ...[
+                            if (state.educations != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: state.educations?.length ?? 0,
-                                itemBuilder: (context, index) {
+                                itemBuilder: (BuildContext context, int index) {
                                   return Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                           child: Text(
-                                              '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}')),
+                                              '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}',),),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
                                               AddOrRemoveEducation(
                                                   education:
                                                       state.educations?[index],
-                                                  isRemove: true));
+                                                  isRemove: true,),);
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -349,7 +347,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (context, index) {
+                                separatorBuilder: (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),
@@ -357,7 +355,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             ],
 
                             Builder(
-                              builder: (context) {
+                              builder: (BuildContext context) {
                                 TextEditingController companyNameController =
                                     TextEditingController();
                                 TextEditingController designationController =
@@ -371,24 +369,24 @@ class ProfileUpdatePage extends StatelessWidget {
 
                                 return SuperFormField.showModalSheetOnTap(
                                   context: context,
-                                  headingTitle: "Work Experience",
-                                  hintText: "Add Work Experience",
+                                  headingTitle: 'Work Experience',
+                                  hintText: 'Add Work Experience',
                                   modalSheetUi: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: [
+                                    children: <Widget>[
                                       SuperFormField.generalTextField(
-                                        headingTitle: "Enter Company Name",
+                                        headingTitle: 'Enter Company Name',
                                         controller: companyNameController,
                                       ),
                                       Gap(12),
                                       SuperFormField.generalTextField(
-                                        headingTitle: "Enter Designation",
+                                        headingTitle: 'Enter Designation',
                                         controller: designationController,
                                       ),
                                       Gap(12),
                                       SuperFormField.invokeCustomFunction(
                                         context: context,
-                                        headingTitle: "Select Mode of Work",
+                                        headingTitle: 'Select Mode of Work',
                                         controller: workingModeController,
                                         customFunction: () {
                                           showAppModalSheet(
@@ -408,7 +406,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       SuperFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
-                                        headingTitle: "Start Start Date",
+                                        headingTitle: 'Start Start Date',
                                         onDateSelected: (DateTime date) {
                                           startDateController.text =
                                               DateFormat('dd-MM-yyyy')
@@ -418,7 +416,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       Gap(12),
                                       SuperFormField.datePicker(
                                         context: context,
-                                        headingTitle: "End Date",
+                                        headingTitle: 'End Date',
                                         controller: endDateController,
                                         onDateSelected: (DateTime date) {
                                           endDateController.text =
@@ -460,15 +458,15 @@ class ProfileUpdatePage extends StatelessWidget {
                                                             workingModeController
                                                                 .text,
                                                         startDate: DateFormat(
-                                                                'dd-MM-yyyy')
+                                                                'dd-MM-yyyy',)
                                                             .parse(
                                                                 startDateController
-                                                                    .text),
+                                                                    .text,),
                                                         endDate: DateFormat(
-                                                                'dd-MM-yyyy')
+                                                                'dd-MM-yyyy',)
                                                             .parse(
                                                                 endDateController
-                                                                    .text),
+                                                                    .text,),
                                                       ),
                                                     ),
                                                   );
@@ -477,31 +475,31 @@ class ProfileUpdatePage extends StatelessWidget {
                                           },
                                           child: Text('Add',
                                               style: TextStyle(
-                                                  color: Colors.white))),
+                                                  color: Colors.white,),),),
                                     ],
                                   ),
                                 );
                               },
                             ),
                             Gap(8),
-                            if (state.workExperiences != null) ...[
+                            if (state.workExperiences != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: state.workExperiences?.length ?? 0,
-                                itemBuilder: (context, index) {
+                                itemBuilder: (BuildContext context, int index) {
                                   return Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                           child: Text(
-                                              '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}')),
+                                              '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}',),),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
                                               AddOrRemoveWorkExperience(
                                                   workExperience: state
                                                       .workExperiences?[index],
-                                                  isRemove: true));
+                                                  isRemove: true,),);
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -512,7 +510,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (context, index) {
+                                separatorBuilder: (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),
@@ -542,28 +540,28 @@ class ProfileUpdatePage extends StatelessWidget {
                     // Service Info Section
                     if (state.currentProfileDetailsResponse?.userInfo
                             ?.isPortfolio ==
-                        true) ...[
+                        true) ...<Widget>[
                       LabelContainer(
                         labelText: 'Portfolio Info',
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             SuperFormField.generalTextField(
-                              headingTitle: "Title",
-                              hintText: "Enter Portfolio Title",
+                              headingTitle: 'Title',
+                              hintText: 'Enter Portfolio Title',
                               controller:
                                   context.read<ProfileBloc>().portfolioTitle,
                             ),
                             Gap(12),
                             SuperFormField.generalTextField(
-                              headingTitle: "Status",
-                              hintText: "Add Status on Portfolio",
+                              headingTitle: 'Status',
+                              hintText: 'Add Status on Portfolio',
                               controller:
                                   context.read<ProfileBloc>().portfolioStatus,
                             ),
 
                             Gap(12),
                             Builder(
-                              builder: (context) {
+                              builder: (BuildContext context) {
                                 TextEditingController titleController =
                                     TextEditingController();
                                 TextEditingController descriptionController =
@@ -571,22 +569,22 @@ class ProfileUpdatePage extends StatelessWidget {
 
                                 return SuperFormField.invokeCustomFunction(
                                   context: context,
-                                  headingTitle: "Services",
-                                  hintText: "Add Service you provide",
+                                  headingTitle: 'Services',
+                                  hintText: 'Add Service you provide',
                                   suffixWidget: Icon(Icons.add_circle_rounded),
                                   customFunction: () {
                                     showAppModalSheet(
                                       context: context,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        children: [
+                                        children: <Widget>[
                                           SuperFormField.generalTextField(
-                                            headingTitle: "Enter Title",
+                                            headingTitle: 'Enter Title',
                                             controller: titleController,
                                           ),
                                           Gap(12),
                                           SuperFormField.multilineTextField(
-                                            headingTitle: "Enter Description",
+                                            headingTitle: 'Enter Description',
                                             controller: descriptionController,
                                           ),
                                           Gap(12),
@@ -619,7 +617,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             },
                                             child: Text('Add',
                                                 style: TextStyle(
-                                                    color: Colors.white)),
+                                                    color: Colors.white,),),
                                           ),
                                         ],
                                       ),
@@ -629,24 +627,24 @@ class ProfileUpdatePage extends StatelessWidget {
                               },
                             ),
                             Gap(12),
-                            if (state.services != null) ...[
+                            if (state.services != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: state.services?.length ?? 0,
-                                itemBuilder: (context, index) {
+                                itemBuilder: (BuildContext context, int index) {
                                   return Row(
-                                    children: [
+                                    children: <Widget>[
                                       Expanded(
                                           child: Text(
-                                              '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ')),
+                                              '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ',),),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
                                               AddOrRemoveService(
                                                   service:
                                                       state.services?[index],
-                                                  isRemove: true));
+                                                  isRemove: true,),);
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -657,7 +655,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (context, index) {
+                                separatorBuilder: (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),
@@ -669,7 +667,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               controller: context
                                   .read<ProfileBloc>()
                                   .portfolioDescriptionController,
-                              headingTitle: "Portfolio Description",
+                              headingTitle: 'Portfolio Description',
                               minLines: 5,
                             ),
                           ],

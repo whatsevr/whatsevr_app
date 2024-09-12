@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nested/nested.dart';
 
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/widgets/bottom_navigation.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
-import '../../account/bloc/account_bloc.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -13,7 +13,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
+      providers: <SingleChildWidget>[
         BlocProvider(
           lazy: false,
           create: (BuildContext context) =>

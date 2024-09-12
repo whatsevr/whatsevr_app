@@ -6,5 +6,5 @@ sealed class AccountEvent extends Equatable {
 
 class AccountInitialEvent extends AccountEvent {
   @override
-  List<Object> get props => [];
+  List<Object> get props => <Object>[];
 }

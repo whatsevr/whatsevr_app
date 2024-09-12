@@ -35,7 +35,10 @@ class _MaskTextState extends State<MaskText> {
         setState(() {
           _maskedText = _maskedText == widget.text
               ? maskString(
-                  widget.text, widget.maskLength, widget.maskFirstDigits)
+                  widget.text,
+                  widget.maskLength,
+                  widget.maskFirstDigits,
+                )
               : widget.text;
         });
       },

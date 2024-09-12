@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
@@ -34,21 +33,22 @@ class ExplorePageWtvPage extends StatelessWidget {
               itemCount: 3,
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
-              itemBuilder: (BuildContext context, int index) => Container(
+              itemBuilder: (BuildContext context, int index) => SizedBox(
                 width: double.infinity,
                 height: 280,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Expanded(
-                        child: Container(
-                      color: Colors.grey[300],
-                    )),
+                      child: Container(
+                        color: Colors.grey[300],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Container(
                             width: 40,
                             height: 40,
@@ -61,7 +61,7 @@ class ExplorePageWtvPage extends StatelessWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const <StatelessWidget>[
                                 Gap(8),
                                 Text('XXXXXXXXXXXXXX'),
                                 Text('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),

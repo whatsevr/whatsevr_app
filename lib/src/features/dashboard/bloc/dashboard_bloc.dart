@@ -17,7 +17,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<TabChanged>(tabChanged);
   }
   FutureOr<void> _onInitialEvent(
-      DashboardInitialEvent event, Emitter<DashboardState> emit) {
+      DashboardInitialEvent event, Emitter<DashboardState> emit,) {
     PermissionService.requestAllPermissions();
   }
 

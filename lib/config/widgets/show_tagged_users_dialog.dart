@@ -6,7 +6,7 @@ import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dar
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 void showTaggedUsersBottomSheet(BuildContext context,
-    {List<String>? taggedUserUids}) {
+    {List<String>? taggedUserUids,}) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -18,7 +18,7 @@ void showTaggedUsersBottomSheet(BuildContext context,
 
 class _Ui extends StatefulWidget {
   final List<String>? taggedUserUids;
-  const _Ui({super.key, required this.taggedUserUids});
+  const _Ui({required this.taggedUserUids});
 
   @override
   State<_Ui> createState() => _UiState();
@@ -32,7 +32,7 @@ class _UiState extends State<_Ui> {
     super.initState();
     if (widget.taggedUserUids != null) {
       UsersApi.getMultipleUserDetails(userUids: widget.taggedUserUids!)
-          .then((value) {
+          .then((MultipleUserDetailsResponse? value) {
         setState(() {
           _multipleUserDetailsResponse = value;
         });
@@ -47,7 +47,7 @@ class _UiState extends State<_Ui> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           const Text(
             'Tagged',
             style: TextStyle(
@@ -57,7 +57,7 @@ class _UiState extends State<_Ui> {
           ),
           const SizedBox(height: 16),
           Builder(
-            builder: (context) {
+            builder: (BuildContext context) {
               if (_multipleUserDetailsResponse == null) {
                 return const Center(child: CupertinoActivityIndicator());
               }
@@ -67,18 +67,18 @@ class _UiState extends State<_Ui> {
               return ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
-                  final user = _multipleUserDetailsResponse!.users![index];
+                  final User user = _multipleUserDetailsResponse!.users![index];
                   return Row(
-                    children: [
+                    children: <Widget>[
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                            user.profilePicture ?? MockData.imageAvatar),
+                            user.profilePicture ?? MockData.imageAvatar,),
                       ),
                       const Gap(8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text('${user.name}'),
                             Text('${user.totalFollowers} followers'),
                           ],

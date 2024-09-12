@@ -16,8 +16,8 @@ import 'package:whatsevr_app/src/features/splash/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/src/features/wtv_details/views/page.dart';
 
-import '../../src/features/account/views/page.dart';
-import '../../src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 // import 'package:talker_flutter/talker_flutter.dart';
 CustomTransitionPage<SlideTransition> _navigateWithTransition({

@@ -5,7 +5,7 @@ sealed class DashboardEvent extends Equatable {
 }
 
 class DashboardInitialEvent extends DashboardEvent {
-  DashboardInitialEvent();
+  const DashboardInitialEvent();
   @override
   List<Object> get props => <Object>[];
 }

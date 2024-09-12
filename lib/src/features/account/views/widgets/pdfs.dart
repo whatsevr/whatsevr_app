@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPagePdfsView extends StatelessWidget {
   const AccountPagePdfsView({super.key});
@@ -15,14 +15,14 @@ class AccountPagePdfsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
-      builder: (context, state) {
+      builder: (BuildContext context, AccountState state) {
         return ListView.separated(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
             return Column(
-              children: [
+              children: <Widget>[
                 ExtendedImage.network(
                   '${userPdf?.thumbnailUrl}',
                   width: double.infinity,
@@ -45,7 +45,7 @@ class AccountPagePdfsView extends StatelessWidget {
                             '${userPdf?.title}',
                             maxLines: 2,
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold,),
                           ),
                           Gap(8),
                           Text(
@@ -61,7 +61,7 @@ class AccountPagePdfsView extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         DownloadService.downloadFile(
-                            '${userPdf.fileUrl}', '${userPdf.title}.pdf');
+                            '${userPdf.fileUrl}', '${userPdf.title}.pdf',);
                       },
                       icon: Icon(
                         Icons.download,

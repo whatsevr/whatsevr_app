@@ -52,7 +52,7 @@ class ProfileState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         currentProfileDetailsResponse,
         dob,
         profileImage,
@@ -73,7 +73,7 @@ class UiEducation extends Equatable {
   final DateTime? endDate;
   final bool? isOngoingEducation;
 
-  UiEducation({
+  const UiEducation({
     this.degreeType,
     this.institute,
     this.degreeName,
@@ -92,7 +92,7 @@ class UiEducation extends Equatable {
   }) {
     return UiEducation(
       degreeType: degreeType ?? this.degreeType,
-      institute: school ?? this.institute,
+      institute: school ?? institute,
       degreeName: degreeName ?? this.degreeName,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -101,7 +101,7 @@ class UiEducation extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         degreeType,
         institute,
         degreeName,
@@ -120,7 +120,7 @@ class UiWorkExperience extends Equatable {
   final DateTime? endDate;
   final bool? isCurrentlyWorking;
 
-  UiWorkExperience({
+  const UiWorkExperience({
     this.companyName,
     this.designation,
     this.workingMode,
@@ -149,7 +149,7 @@ class UiWorkExperience extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         companyName,
         designation,
         workingMode,
@@ -163,7 +163,7 @@ class UiService extends Equatable {
   final String? serviceName;
   final String? serviceDescription;
 
-  UiService({
+  const UiService({
     this.serviceName,
     this.serviceDescription,
   });
@@ -179,5 +179,5 @@ class UiService extends Equatable {
   }
 
   @override
-  List<Object?> get props => [serviceName, serviceDescription];
+  List<Object?> get props => <Object?>[serviceName, serviceDescription];
 }

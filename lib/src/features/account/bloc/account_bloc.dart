@@ -16,7 +16,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   }
 
   FutureOr<void> _onInitial(
-      AccountInitialEvent event, Emitter<AccountState> emit) async {
+      AccountInitialEvent event, Emitter<AccountState> emit,) async {
     try {
       String? userUid = await AuthUserDb.getLastLoggedUserUid();
       if (userUid == null) return;
@@ -24,7 +24,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           await UsersApi.getProfileDetails(userUid: userUid);
       emit(state.copyWith(
         profileDetailsResponse: profileDetailsResponse,
-      ));
+      ),);
     } catch (e) {
       SmartDialog.showToast('$e');
     }

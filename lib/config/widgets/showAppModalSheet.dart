@@ -30,7 +30,7 @@ showAppModalSheet({required BuildContext context, required Widget? child}) {
           builder: (BuildContext context, ScrollController scrollController) {
             return SingleChildScrollView(
                 controller: scrollController,
-                child: PadHorizontal(child: child ?? const SizedBox.shrink()));
+                child: PadHorizontal(child: child ?? const SizedBox.shrink()),);
           },
         ),
       );

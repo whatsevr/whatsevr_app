@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 
-import '../../constants.dart';
+import 'package:whatsevr_app/constants.dart';
 
 class FileUploadService {
   static late final SupabaseStorageClient _supabaseStorageClient;

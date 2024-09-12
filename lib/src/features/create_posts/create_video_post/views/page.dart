@@ -49,7 +49,7 @@ class CreateVideoPost extends StatelessWidget {
             children: <Widget>[
               Gap(12),
               Column(
-                children: [
+                children: <Widget>[
                   Builder(
                     builder: (BuildContext context) {
                       if (state.thumbnailFile != null) {
@@ -123,18 +123,18 @@ class CreateVideoPost extends StatelessWidget {
                   ),
                   if (state.videoFile != null || state.thumbnailFile != null)
                     Row(
-                      children: [
+                      children: <Widget>[
                         if (state.videoFile != null)
                           FutureBuilder<String?>(
                             future: getFileSize(state.videoFile!),
                             builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot) {
+                                AsyncSnapshot<dynamic> snapshot,) {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
                                 return Text(
                                   'Video size: ${snapshot.data}',
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey),
+                                      fontSize: 12, color: Colors.grey,),
                                 );
                               }
                               return CircularProgressIndicator();
@@ -152,7 +152,7 @@ class CreateVideoPost extends StatelessWidget {
                               },
                               child: Text('Update Thumbnail',
                                   style: TextStyle(
-                                      color: Colors.blue, fontSize: 12))),
+                                      color: Colors.blue, fontSize: 12,),),),
                         if (state.videoFile != null)
                           MaterialButton(
                               visualDensity: VisualDensity.compact,
@@ -163,7 +163,7 @@ class CreateVideoPost extends StatelessWidget {
                               },
                               child: Text('Update Video',
                                   style: TextStyle(
-                                      color: Colors.blue, fontSize: 12))),
+                                      color: Colors.blue, fontSize: 12,),),),
                       ],
                     ),
                 ],

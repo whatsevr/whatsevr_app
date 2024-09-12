@@ -4,10 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
-import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -25,10 +21,9 @@ import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
-import '../../../../config/enums/post_creator_type.dart';
-import '../../../../config/widgets/refresh_indicator.dart';
-import '../../../../utils/conversion.dart';
-import '../bloc/account_bloc.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPageArgument {
   final bool isEditMode;
@@ -39,14 +34,14 @@ class AccountPageArgument {
 
 class AccountPage extends StatelessWidget {
   final AccountPageArgument? pageArgument;
-  AccountPage({super.key, required this.pageArgument});
+  const AccountPage({super.key, required this.pageArgument});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AccountBloc()..add(AccountInitialEvent()),
+      create: (BuildContext context) => AccountBloc()..add(AccountInitialEvent()),
       child: BlocBuilder<AccountBloc, AccountState>(
-        builder: (context, state) {
+        builder: (BuildContext context, AccountState state) {
           return Scaffold(
             body: Column(
               children: <Widget>[
@@ -88,17 +83,17 @@ class AccountPage extends StatelessWidget {
                           const Gap(8),
                           PadHorizontal(
                             child: Row(
-                              children: [
+                              children: <Widget>[
                                 Expanded(
                                   child: Text(
                                     '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
                                     style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,),
                                   ),
                                 ),
                                 Gap(8),
-                                if (pageArgument?.isEditMode == true) ...[
+                                if (pageArgument?.isEditMode == true) ...<Widget>[
                                   IconButton(
                                     icon: Icon(Icons.edit),
                                     onPressed: () async {
@@ -106,13 +101,13 @@ class AccountPage extends StatelessWidget {
                                           RoutesName.updateProfile,
                                           extras: ProfileUpdatePageArgument(
                                               profileDetailsResponse: state
-                                                  .profileDetailsResponse));
+                                                  .profileDetailsResponse,),);
                                       context
                                           .read<AccountBloc>()
                                           .add(AccountInitialEvent());
                                     },
                                   ),
-                                ]
+                                ],
                               ],
                             ),
                           ),
@@ -138,17 +133,17 @@ class AccountPage extends StatelessWidget {
                                     children: <Widget>[
                                       Text(
                                           '${state.profileDetailsResponse?.userInfo?.name}',
-                                          style: TextStyle(fontSize: 14)),
+                                          style: TextStyle(fontSize: 14),),
                                       Text(
                                           ' @${state.profileDetailsResponse?.userInfo?.userName}',
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: Colors.grey)),
+                                              color: Colors.grey,),),
                                       Gap(8),
                                     ],
                                   ),
                                 ),
-                                if (pageArgument?.isEditMode == true) ...[
+                                if (pageArgument?.isEditMode == true) ...<Widget>[
                                   IconButton(
                                     icon: Iconify(
                                       Ri.heart_add_fill,
@@ -162,17 +157,17 @@ class AccountPage extends StatelessWidget {
                                                       ?.isPortfolio ==
                                                   true
                                               ? EnumPostCreatorType.PORTFOLIO
-                                              : EnumPostCreatorType.ACCOUNT);
+                                              : EnumPostCreatorType.ACCOUNT,);
                                     },
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.menu),
                                     onPressed: () {
                                       AppNavigationService.newRoute(
-                                          RoutesName.settings);
+                                          RoutesName.settings,);
                                     },
                                   ),
-                                ]
+                                ],
                               ],
                             ),
                           ),
@@ -187,9 +182,9 @@ class AccountPage extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text('1,000',
-                                          style: TextStyle(fontSize: 20)),
+                                          style: TextStyle(fontSize: 20),),
                                       Text('Likes',
-                                          style: TextStyle(fontSize: 14)),
+                                          style: TextStyle(fontSize: 14),),
                                     ],
                                   ),
                                 ),
@@ -199,9 +194,9 @@ class AccountPage extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text('1,000',
-                                          style: TextStyle(fontSize: 20)),
+                                          style: TextStyle(fontSize: 20),),
                                       Text('Networks',
-                                          style: TextStyle(fontSize: 14)),
+                                          style: TextStyle(fontSize: 14),),
                                     ],
                                   ),
                                 ),
@@ -211,9 +206,9 @@ class AccountPage extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text('1,000',
-                                          style: TextStyle(fontSize: 20)),
+                                          style: TextStyle(fontSize: 20),),
                                       Text('Connections',
-                                          style: TextStyle(fontSize: 14)),
+                                          style: TextStyle(fontSize: 14),),
                                     ],
                                   ),
                                 ),
@@ -221,15 +216,15 @@ class AccountPage extends StatelessWidget {
                             ),
                           ),
                           const Gap(8),
-                          if (pageArgument?.isEditMode != true) ...[
+                          if (pageArgument?.isEditMode != true) ...<Widget>[
                             const PadHorizontal(
                               child: Row(
                                 children: <Widget>[
                                   Text('Suggestions',
-                                      style: TextStyle(fontSize: 14)),
+                                      style: TextStyle(fontSize: 14),),
                                   Spacer(),
                                   Text('See All',
-                                      style: TextStyle(fontSize: 14)),
+                                      style: TextStyle(fontSize: 14),),
                                 ],
                               ),
                             ),
@@ -304,7 +299,7 @@ class AccountPage extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12)),
+                                  top: Radius.circular(12),),
                             ),
                             child: Column(
                               children: const <Widget>[

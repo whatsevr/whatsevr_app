@@ -1,15 +1,11 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
-import 'package:whatsevr_app/app.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/talker.dart';
 
-import 'interceptors/cache.dart';
-import 'interceptors/retry.dart';
+import 'package:whatsevr_app/config/api/interceptors/cache.dart';
+import 'package:whatsevr_app/config/api/interceptors/retry.dart';
 
 class ApiClient {
   /// Restricting any instantiation of this class
@@ -35,7 +31,7 @@ class ApiClient {
       ),
     );
     Directory deviceTemporaryDirectory = await getTemporaryDirectory();
-    client.interceptors.addAll([
+    client.interceptors.addAll(<Interceptor>[
       ApiRetryInterceptor(dio: client),
       ApiCacheInterceptor(cacheDirectoryPath: deviceTemporaryDirectory.path),
       TalkerService.dioLogger,

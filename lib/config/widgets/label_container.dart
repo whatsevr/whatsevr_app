@@ -22,12 +22,12 @@ class LabelContainer extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: <Widget>[
                   Text(
                     labelText,
                     style: TextStyle(
@@ -54,6 +54,6 @@ class LabelContainer extends StatelessWidget {
               child: child,
             ),
           ],
-        ));
+        ),);
   }
 }

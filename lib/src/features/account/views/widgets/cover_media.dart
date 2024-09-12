@@ -13,16 +13,16 @@ class AccountPageCoverVideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
-      builder: (context, state) {
+      builder: (BuildContext context, AccountState state) {
         return Stack(
-          children: [
+          children: <Widget>[
             AspectRatio(
               aspectRatio: 16 / 9,
               child: PageView.builder(
                 controller: controller,
                 itemCount:
                     state.profileDetailsResponse?.userCoverMedia?.length ?? 0,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   UserCoverMedia? coverMedia =
                       state.profileDetailsResponse?.userCoverMedia?[index];
                   if (coverMedia?.isVideo == true) {
@@ -71,7 +71,7 @@ class AccountPageCoverVideoView extends StatelessWidget {
 class _CoverVideoUi extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnailUrl;
-  const _CoverVideoUi({super.key, required this.videoUrl, this.thumbnailUrl});
+  const _CoverVideoUi({required this.videoUrl, this.thumbnailUrl});
 
   @override
   State<_CoverVideoUi> createState() => _CoverVideoUiState();
@@ -148,7 +148,7 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                   ),
-                )),
+                ),),
               ),
               icon: const Icon(
                 Icons.play_arrow,

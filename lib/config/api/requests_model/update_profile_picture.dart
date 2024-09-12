@@ -16,12 +16,12 @@ class ProfilePictureUpdateRequest {
 
   factory ProfilePictureUpdateRequest.fromMap(Map<String, dynamic> json) =>
       ProfilePictureUpdateRequest(
-        userUid: json["user_uid"],
-        profilePictureUrl: json["profile_picture_url"],
+        userUid: json['user_uid'],
+        profilePictureUrl: json['profile_picture_url'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "profile_picture_url": profilePictureUrl,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'user_uid': userUid,
+        'profile_picture_url': profilePictureUrl,
       };
 }

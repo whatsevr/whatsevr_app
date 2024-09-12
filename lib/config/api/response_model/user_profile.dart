@@ -16,13 +16,13 @@ class UserDetailsResponse {
 
   factory UserDetailsResponse.fromMap(Map<String, dynamic> json) =>
       UserDetailsResponse(
-        message: json["message"],
-        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+        message: json['message'],
+        data: json['data'] == null ? null : Data.fromMap(json['data']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "message": message,
-        "data": data?.toMap(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'message': message,
+        'data': data?.toMap(),
       };
 }
 
@@ -76,56 +76,56 @@ class Data {
   String toJson() => json.encode(toMap());
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-        id: json["id"],
-        registeredOn: json["registered_on"] == null
+        id: json['id'],
+        registeredOn: json['registered_on'] == null
             ? null
-            : DateTime.parse(json["registered_on"]),
-        isActive: json["is_active"],
-        uid: json["uid"],
-        userName: json["user_name"],
-        mobileNumber: json["mobile_number"],
-        emailId: json["email_id"],
-        name: json["name"],
-        bio: json["bio"],
-        address: json["address"],
-        dob: json["dob"],
-        profilePicture: json["profile_picture"],
-        isPortfolio: json["is_portfolio"],
-        portfolioStatus: json["portfolio_status"],
-        portfolioServices: json["portfolio_services"] == null
-            ? []
-            : List<String>.from(json["portfolio_services"]!.map((x) => x)),
-        portfolioDescription: json["portfolio_description"],
-        isBanned: json["is_banned"],
-        isSpam: json["is_spam"],
-        isDiactivated: json["is_diactivated"],
-        portfolioCreatedAt: json["portfolio_created_at"] == null
+            : DateTime.parse(json['registered_on']),
+        isActive: json['is_active'],
+        uid: json['uid'],
+        userName: json['user_name'],
+        mobileNumber: json['mobile_number'],
+        emailId: json['email_id'],
+        name: json['name'],
+        bio: json['bio'],
+        address: json['address'],
+        dob: json['dob'],
+        profilePicture: json['profile_picture'],
+        isPortfolio: json['is_portfolio'],
+        portfolioStatus: json['portfolio_status'],
+        portfolioServices: json['portfolio_services'] == null
+            ? <String>[]
+            : List<String>.from(json['portfolio_services']!.map((x) => x)),
+        portfolioDescription: json['portfolio_description'],
+        isBanned: json['is_banned'],
+        isSpam: json['is_spam'],
+        isDiactivated: json['is_diactivated'],
+        portfolioCreatedAt: json['portfolio_created_at'] == null
             ? null
-            : DateTime.parse(json["portfolio_created_at"]),
+            : DateTime.parse(json['portfolio_created_at']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "registered_on": registeredOn?.toIso8601String(),
-        "is_active": isActive,
-        "uid": uid,
-        "user_name": userName,
-        "mobile_number": mobileNumber,
-        "email_id": emailId,
-        "name": name,
-        "bio": bio,
-        "address": address,
-        "dob": dob,
-        "profile_picture": profilePicture,
-        "is_portfolio": isPortfolio,
-        "portfolio_status": portfolioStatus,
-        "portfolio_services": portfolioServices == null
-            ? []
-            : List<dynamic>.from(portfolioServices!.map((x) => x)),
-        "portfolio_description": portfolioDescription,
-        "is_banned": isBanned,
-        "is_spam": isSpam,
-        "is_diactivated": isDiactivated,
-        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'registered_on': registeredOn?.toIso8601String(),
+        'is_active': isActive,
+        'uid': uid,
+        'user_name': userName,
+        'mobile_number': mobileNumber,
+        'email_id': emailId,
+        'name': name,
+        'bio': bio,
+        'address': address,
+        'dob': dob,
+        'profile_picture': profilePicture,
+        'is_portfolio': isPortfolio,
+        'portfolio_status': portfolioStatus,
+        'portfolio_services': portfolioServices == null
+            ? <dynamic>[]
+            : List<dynamic>.from(portfolioServices!.map((String x) => x)),
+        'portfolio_description': portfolioDescription,
+        'is_banned': isBanned,
+        'is_spam': isSpam,
+        'is_diactivated': isDiactivated,
+        'portfolio_created_at': portfolioCreatedAt?.toIso8601String(),
       };
 }

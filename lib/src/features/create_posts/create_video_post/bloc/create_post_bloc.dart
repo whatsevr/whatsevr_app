@@ -14,7 +14,7 @@ import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
-import '../../../../../utils/video.dart';
+import 'package:whatsevr_app/utils/video.dart';
 
 part 'create_post_event.dart';
 part 'create_post_state.dart';
@@ -92,7 +92,7 @@ class CreateVideoPostBloc
     emit(state.copyWith(videoFile: File(result!.files.single.path!)));
 
     emit(state.copyWith(
-        thumbnailFile: await getThumbnailFile(state.videoFile!)));
+        thumbnailFile: await getThumbnailFile(state.videoFile!),),);
   }
 
   FutureOr<void> _onPickThumbnail(

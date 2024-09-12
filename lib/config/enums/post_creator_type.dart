@@ -1,7 +1,7 @@
 enum EnumPostCreatorType {
-  ACCOUNT("account"),
-  PORTFOLIO("portfolio"),
-  COMMUNITY("community"),
+  ACCOUNT('account'),
+  PORTFOLIO('portfolio'),
+  COMMUNITY('community'),
   ;
 
   final String value;

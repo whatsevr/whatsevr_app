@@ -23,7 +23,7 @@ class CommonDataSearchSelectPage extends StatefulWidget {
   final bool showSearchBar;
 
   const CommonDataSearchSelectPage({
-    Key? key,
+    super.key,
     this.scaffoldView = false,
     this.showEducationDegrees = false,
     this.showGenders = false,
@@ -34,7 +34,7 @@ class CommonDataSearchSelectPage extends StatefulWidget {
     this.onGenderSelected,
     this.onWorkingModeSelected,
     this.onPersonalInterestsSelected,
-  }) : super(key: key);
+  });
 
   @override
   _CommonDataSearchSelectPageState createState() =>
@@ -47,8 +47,8 @@ class _CommonDataSearchSelectPageState
   Timer? _debounce;
 
   CommonDataResponse? _commonData;
-  List<dynamic> _filteredItems = [];
-  List<Interest> _selectedInterests = [];
+  List<dynamic> _filteredItems = <dynamic>[];
+  final List<Interest> _selectedInterests = <Interest>[];
   bool _isLoading = true;
   String _errorMessage = '';
 
@@ -110,31 +110,41 @@ class _CommonDataSearchSelectPageState
   }
 
   void _filterList() {
-    final query = _searchController.text.toLowerCase();
+    final String query = _searchController.text.toLowerCase();
 
     setState(() {
       if (_commonData != null) {
         if (widget.showEducationDegrees) {
           _filteredItems = _commonData!.educationDegrees!
-              .where((item) =>
-                  item.title != null &&
-                  item.title!.toLowerCase().contains(query))
+              .where(
+                (EducationDegree item) =>
+                    item.title != null &&
+                    item.title!.toLowerCase().contains(query),
+              )
               .toList();
         } else if (widget.showGenders) {
           _filteredItems = _commonData!.genders!
-              .where((item) =>
-                  item.gender != null &&
-                  item.gender!.toLowerCase().contains(query))
+              .where(
+                (Gender item) =>
+                    item.gender != null &&
+                    item.gender!.toLowerCase().contains(query),
+              )
               .toList();
         } else if (widget.showWorkingModes) {
           _filteredItems = _commonData!.workingModes!
-              .where((item) =>
-                  item.mode != null && item.mode!.toLowerCase().contains(query))
+              .where(
+                (WorkingMode item) =>
+                    item.mode != null &&
+                    item.mode!.toLowerCase().contains(query),
+              )
               .toList();
         } else if (widget.showInterests) {
           _filteredItems = _commonData!.interests!
-              .where((item) =>
-                  item.name != null && item.name!.toLowerCase().contains(query))
+              .where(
+                (Interest item) =>
+                    item.name != null &&
+                    item.name!.toLowerCase().contains(query),
+              )
               .toList();
         }
       }
@@ -164,7 +174,7 @@ class _CommonDataSearchSelectPageState
   Widget _buildBody() {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [
+      children: <Widget>[
         if (widget.showSearchBar)
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -202,7 +212,7 @@ class _CommonDataSearchSelectPageState
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: items.length,
-      itemBuilder: (_, index) {
+      itemBuilder: (_, int index) {
         final item = items[index];
 
         // Single-select items

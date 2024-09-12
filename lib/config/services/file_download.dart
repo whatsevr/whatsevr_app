@@ -20,8 +20,8 @@ class DownloadService {
       allowPause: true,
     );
     await FileDownloader().download(task,
-        onProgress: (progress) => print('Progress: ${progress * 100}%'),
-        onStatus: (status) => print('Status: $status'));
+        onProgress: (double progress) => print('Progress: ${progress * 100}%'),
+        onStatus: (TaskStatus status) => print('Status: $status'),);
     await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
   }
 }

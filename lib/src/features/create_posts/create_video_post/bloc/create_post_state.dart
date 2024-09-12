@@ -5,7 +5,7 @@ class CreateVideoPostState extends Equatable {
   final File? videoFile;
   final File? thumbnailFile;
   const CreateVideoPostState(
-      {this.pageArgument, this.videoFile, this.thumbnailFile});
+      {this.pageArgument, this.videoFile, this.thumbnailFile,});
 
   @override
   List<Object?> get props => <Object?>[videoFile, thumbnailFile, pageArgument];

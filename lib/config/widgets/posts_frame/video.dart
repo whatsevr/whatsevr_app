@@ -52,7 +52,7 @@ class WtvVideoPostFrame extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Stack(
-            children: [
+            children: <Widget>[
               WTVFeedPlayer(
                 videoUrl: videoUrl,
                 thumbnail: thumbnail,

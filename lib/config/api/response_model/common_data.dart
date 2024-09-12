@@ -22,38 +22,44 @@ class CommonDataResponse {
 
   factory CommonDataResponse.fromMap(Map<String, dynamic> json) =>
       CommonDataResponse(
-        message: json["message"],
-        educationDegrees: json["education_degrees"] == null
-            ? []
-            : List<EducationDegree>.from(json["education_degrees"]!
-                .map((x) => EducationDegree.fromMap(x))),
-        genders: json["genders"] == null
-            ? []
-            : List<Gender>.from(json["genders"]!.map((x) => Gender.fromMap(x))),
-        workingModes: json["working_modes"] == null
-            ? []
+        message: json['message'],
+        educationDegrees: json['education_degrees'] == null
+            ? <EducationDegree>[]
+            : List<EducationDegree>.from(
+                json['education_degrees']!
+                    .map((x) => EducationDegree.fromMap(x)),
+              ),
+        genders: json['genders'] == null
+            ? <Gender>[]
+            : List<Gender>.from(json['genders']!.map((x) => Gender.fromMap(x))),
+        workingModes: json['working_modes'] == null
+            ? <WorkingMode>[]
             : List<WorkingMode>.from(
-                json["working_modes"]!.map((x) => WorkingMode.fromMap(x))),
-        interests: json["interests"] == null
-            ? []
+                json['working_modes']!.map((x) => WorkingMode.fromMap(x)),
+              ),
+        interests: json['interests'] == null
+            ? <Interest>[]
             : List<Interest>.from(
-                json["interests"]!.map((x) => Interest.fromMap(x))),
+                json['interests']!.map((x) => Interest.fromMap(x)),
+              ),
       );
 
-  Map<String, dynamic> toMap() => {
-        "message": message,
-        "education_degrees": educationDegrees == null
-            ? []
-            : List<dynamic>.from(educationDegrees!.map((x) => x.toMap())),
-        "genders": genders == null
-            ? []
-            : List<dynamic>.from(genders!.map((x) => x.toMap())),
-        "working_modes": workingModes == null
-            ? []
-            : List<dynamic>.from(workingModes!.map((x) => x.toMap())),
-        "interests": interests == null
-            ? []
-            : List<dynamic>.from(interests!.map((x) => x.toMap())),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'message': message,
+        'education_degrees': educationDegrees == null
+            ? <dynamic>[]
+            : List<dynamic>.from(
+                educationDegrees!.map((EducationDegree x) => x.toMap())),
+        'genders': genders == null
+            ? <dynamic>[]
+            : List<dynamic>.from(genders!.map((Gender x) => x.toMap())),
+        'working_modes': workingModes == null
+            ? <dynamic>[]
+            : List<dynamic>.from(
+                workingModes!.map((WorkingMode x) => x.toMap())),
+        'interests': interests == null
+            ? <dynamic>[]
+            : List<dynamic>.from(interests!.map((Interest x) => x.toMap())),
       };
 }
 
@@ -76,19 +82,19 @@ class EducationDegree {
   String toJson() => json.encode(toMap());
 
   factory EducationDegree.fromMap(Map<String, dynamic> json) => EducationDegree(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        type: json["type"],
-        title: json["title"],
+            : DateTime.parse(json['created_at']),
+        type: json['type'],
+        title: json['title'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "type": type,
-        "title": title,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'type': type,
+        'title': title,
       };
 }
 
@@ -108,17 +114,17 @@ class Gender {
   String toJson() => json.encode(toMap());
 
   factory Gender.fromMap(Map<String, dynamic> json) => Gender(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        gender: json["gender"],
+            : DateTime.parse(json['created_at']),
+        gender: json['gender'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "gender": gender,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'gender': gender,
       };
 }
 
@@ -138,17 +144,17 @@ class Interest {
   String toJson() => json.encode(toMap());
 
   factory Interest.fromMap(Map<String, dynamic> json) => Interest(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        name: json["name"],
+            : DateTime.parse(json['created_at']),
+        name: json['name'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "name": name,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'name': name,
       };
 }
 
@@ -169,16 +175,16 @@ class WorkingMode {
   String toJson() => json.encode(toMap());
 
   factory WorkingMode.fromMap(Map<String, dynamic> json) => WorkingMode(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        mode: json["mode"],
+            : DateTime.parse(json['created_at']),
+        mode: json['mode'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "mode": mode,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'mode': mode,
       };
 }

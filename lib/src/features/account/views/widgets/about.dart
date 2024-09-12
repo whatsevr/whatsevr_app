@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
-import '../../../../../config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
 class AccountPageAboutView extends StatelessWidget {
   const AccountPageAboutView({
@@ -15,12 +15,12 @@ class AccountPageAboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
-      builder: (context, state) {
+      builder: (BuildContext context, AccountState state) {
         return Column(
           children: <Widget>[
             const Gap(12),
             if (state.profileDetailsResponse?.userInfo?.isPortfolio ==
-                true) ...[
+                true) ...<Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -46,7 +46,9 @@ class AccountPageAboutView extends StatelessWidget {
                         Text(
                           '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
                           style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Gap(8),
                       ],
@@ -69,7 +71,7 @@ class AccountPageAboutView extends StatelessWidget {
                       children: <Widget>[
                         Gap(8),
                         Row(
-                          children: [
+                          children: <StatelessWidget>[
                             Text(
                               'Serve',
                               style: TextStyle(
@@ -78,7 +80,7 @@ class AccountPageAboutView extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                             ),
-                            const Spacer(),
+                            Spacer(),
                             Text(
                               'View More>>',
                               style:
@@ -91,12 +93,13 @@ class AccountPageAboutView extends StatelessWidget {
                           children: <Widget>[
                             for (UserService? service
                                 in state.profileDetailsResponse?.userServices ??
-                                    [])
+                                    <UserService?>[])
                               ActionChip(
                                 backgroundColor: Colors.blueGrey,
-                                label: Text('${service?.title}',
-                                    style:
-                                        const TextStyle(color: Colors.white)),
+                                label: Text(
+                                  '${service?.title}',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                                 onPressed: () {},
                               ),
                           ],
@@ -128,7 +131,8 @@ class AccountPageAboutView extends StatelessWidget {
               if (state.profileDetailsResponse?.userInfo?.registeredOn != null)
                 (
                   'Join On',
-                  '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.registeredOn!)}'
+                  (DateFormat('hh:mm a, dd MMM,yyyy').format(
+                      state.profileDetailsResponse!.userInfo!.registeredOn!))
                 ),
               (
                 state.profileDetailsResponse?.userInfo?.isPortfolio == true
@@ -140,7 +144,8 @@ class AccountPageAboutView extends StatelessWidget {
                   null)
                 (
                   'Portfolio Created On',
-                  '${DateFormat('hh:mm a, dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.portfolioCreatedAt!)}'
+                  (DateFormat('hh:mm a, dd MMM,yyyy').format(state
+                      .profileDetailsResponse!.userInfo!.portfolioCreatedAt!))
                 ),
               (
                 'Description',

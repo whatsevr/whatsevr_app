@@ -14,11 +14,11 @@ class AuthorisedUserResponse {
 
   factory AuthorisedUserResponse.fromMap(Map<String, dynamic> json) =>
       AuthorisedUserResponse(
-        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+        data: json['data'] == null ? null : Data.fromMap(json['data']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'data': data?.toMap(),
       };
 }
 
@@ -52,43 +52,44 @@ class Data {
   String toJson() => json.encode(toMap());
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
-        firebaseInfo: json["firebaseInfo"] == null
+        firebaseInfo: json['firebaseInfo'] == null
             ? null
-            : Info.fromMap(json["firebaseInfo"]),
-        token: json["token"],
-        status: json["status"],
-        userId: json["userId"],
-        timestamp: json["timestamp"] == null
+            : Info.fromMap(json['firebaseInfo']),
+        token: json['token'],
+        status: json['status'],
+        userId: json['userId'],
+        timestamp: json['timestamp'] == null
             ? null
-            : DateTime.parse(json["timestamp"]),
-        identities: json["identities"] == null
-            ? []
+            : DateTime.parse(json['timestamp']),
+        identities: json['identities'] == null
+            ? <Identity>[]
             : List<Identity>.from(
-                json["identities"]!.map((x) => Identity.fromMap(x))),
-        idToken: json["idToken"],
+                json['identities']!.map((x) => Identity.fromMap(x)),
+              ),
+        idToken: json['idToken'],
         network:
-            json["network"] == null ? null : Network.fromMap(json["network"]),
-        deviceInfo: json["deviceInfo"] == null
+            json['network'] == null ? null : Network.fromMap(json['network']),
+        deviceInfo: json['deviceInfo'] == null
             ? null
-            : DeviceInfo.fromMap(json["deviceInfo"]),
-        sessionInfo: json["sessionInfo"] == null
+            : DeviceInfo.fromMap(json['deviceInfo']),
+        sessionInfo: json['sessionInfo'] == null
             ? null
-            : Info.fromMap(json["sessionInfo"]),
+            : Info.fromMap(json['sessionInfo']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "firebaseInfo": firebaseInfo?.toMap(),
-        "token": token,
-        "status": status,
-        "userId": userId,
-        "timestamp": timestamp?.toIso8601String(),
-        "identities": identities == null
-            ? []
-            : List<dynamic>.from(identities!.map((x) => x.toMap())),
-        "idToken": idToken,
-        "network": network?.toMap(),
-        "deviceInfo": deviceInfo?.toMap(),
-        "sessionInfo": sessionInfo?.toMap(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'firebaseInfo': firebaseInfo?.toMap(),
+        'token': token,
+        'status': status,
+        'userId': userId,
+        'timestamp': timestamp?.toIso8601String(),
+        'identities': identities == null
+            ? <dynamic>[]
+            : List<dynamic>.from(identities!.map((Identity x) => x.toMap())),
+        'idToken': idToken,
+        'network': network?.toMap(),
+        'deviceInfo': deviceInfo?.toMap(),
+        'sessionInfo': sessionInfo?.toMap(),
       };
 }
 
@@ -131,37 +132,37 @@ class DeviceInfo {
   String toJson() => json.encode(toMap());
 
   factory DeviceInfo.fromMap(Map<String, dynamic> json) => DeviceInfo(
-        userAgent: json["userAgent"],
-        platform: json["platform"],
-        vendor: json["vendor"],
-        browser: json["browser"],
-        connection: json["connection"],
-        language: json["language"],
-        cookieEnabled: json["cookieEnabled"],
-        screenWidth: json["screenWidth"],
-        screenHeight: json["screenHeight"],
-        screenColorDepth: json["screenColorDepth"],
-        devicePixelRatio: json["devicePixelRatio"]?.toDouble(),
-        timezoneOffset: json["timezoneOffset"],
-        cpuArchitecture: json["cpuArchitecture"],
-        fontFamily: json["fontFamily"],
+        userAgent: json['userAgent'],
+        platform: json['platform'],
+        vendor: json['vendor'],
+        browser: json['browser'],
+        connection: json['connection'],
+        language: json['language'],
+        cookieEnabled: json['cookieEnabled'],
+        screenWidth: json['screenWidth'],
+        screenHeight: json['screenHeight'],
+        screenColorDepth: json['screenColorDepth'],
+        devicePixelRatio: json['devicePixelRatio']?.toDouble(),
+        timezoneOffset: json['timezoneOffset'],
+        cpuArchitecture: json['cpuArchitecture'],
+        fontFamily: json['fontFamily'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "userAgent": userAgent,
-        "platform": platform,
-        "vendor": vendor,
-        "browser": browser,
-        "connection": connection,
-        "language": language,
-        "cookieEnabled": cookieEnabled,
-        "screenWidth": screenWidth,
-        "screenHeight": screenHeight,
-        "screenColorDepth": screenColorDepth,
-        "devicePixelRatio": devicePixelRatio,
-        "timezoneOffset": timezoneOffset,
-        "cpuArchitecture": cpuArchitecture,
-        "fontFamily": fontFamily,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'userAgent': userAgent,
+        'platform': platform,
+        'vendor': vendor,
+        'browser': browser,
+        'connection': connection,
+        'language': language,
+        'cookieEnabled': cookieEnabled,
+        'screenWidth': screenWidth,
+        'screenHeight': screenHeight,
+        'screenColorDepth': screenColorDepth,
+        'devicePixelRatio': devicePixelRatio,
+        'timezoneOffset': timezoneOffset,
+        'cpuArchitecture': cpuArchitecture,
+        'fontFamily': fontFamily,
       };
 }
 
@@ -174,7 +175,7 @@ class Info {
 
   factory Info.fromMap(Map<String, dynamic> json) => Info();
 
-  Map<String, dynamic> toMap() => {};
+  Map<String, dynamic> toMap() => <String, dynamic>{};
 }
 
 class Identity {
@@ -199,26 +200,27 @@ class Identity {
   String toJson() => json.encode(toMap());
 
   factory Identity.fromMap(Map<String, dynamic> json) => Identity(
-        identityType: json["identityType"],
-        identityValue: json["identityValue"],
-        channel: json["channel"],
-        methods: json["methods"] == null
-            ? []
-            : List<String>.from(json["methods"]!.map((x) => x)),
-        verified: json["verified"],
-        verifiedAt: json["verifiedAt"] == null
+        identityType: json['identityType'],
+        identityValue: json['identityValue'],
+        channel: json['channel'],
+        methods: json['methods'] == null
+            ? <String>[]
+            : List<String>.from(json['methods']!.map((x) => x)),
+        verified: json['verified'],
+        verifiedAt: json['verifiedAt'] == null
             ? null
-            : DateTime.parse(json["verifiedAt"]),
+            : DateTime.parse(json['verifiedAt']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "identityType": identityType,
-        "identityValue": identityValue,
-        "channel": channel,
-        "methods":
-            methods == null ? [] : List<dynamic>.from(methods!.map((x) => x)),
-        "verified": verified,
-        "verifiedAt": verifiedAt?.toIso8601String(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'identityType': identityType,
+        'identityValue': identityValue,
+        'channel': channel,
+        'methods': methods == null
+            ? <dynamic>[]
+            : List<dynamic>.from(methods!.map((String x) => x)),
+        'verified': verified,
+        'verifiedAt': verifiedAt?.toIso8601String(),
       };
 }
 
@@ -238,17 +240,17 @@ class Network {
   String toJson() => json.encode(toMap());
 
   factory Network.fromMap(Map<String, dynamic> json) => Network(
-        ip: json["ip"],
-        timezone: json["timezone"],
-        ipLocation: json["ipLocation"] == null
+        ip: json['ip'],
+        timezone: json['timezone'],
+        ipLocation: json['ipLocation'] == null
             ? null
-            : IpLocation.fromMap(json["ipLocation"]),
+            : IpLocation.fromMap(json['ipLocation']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "ip": ip,
-        "timezone": timezone,
-        "ipLocation": ipLocation?.toMap(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'ip': ip,
+        'timezone': timezone,
+        'ipLocation': ipLocation?.toMap(),
       };
 }
 
@@ -277,28 +279,28 @@ class IpLocation {
   String toJson() => json.encode(toMap());
 
   factory IpLocation.fromMap(Map<String, dynamic> json) => IpLocation(
-        city: json["city"] == null ? null : City.fromMap(json["city"]),
-        subdivisions: json["subdivisions"] == null
+        city: json['city'] == null ? null : City.fromMap(json['city']),
+        subdivisions: json['subdivisions'] == null
             ? null
-            : Country.fromMap(json["subdivisions"]),
+            : Country.fromMap(json['subdivisions']),
         country:
-            json["country"] == null ? null : Country.fromMap(json["country"]),
-        continent: json["continent"] == null
+            json['country'] == null ? null : Country.fromMap(json['country']),
+        continent: json['continent'] == null
             ? null
-            : Continent.fromMap(json["continent"]),
-        latitude: json["latitude"]?.toDouble(),
-        longitude: json["longitude"]?.toDouble(),
-        postalCode: json["postalCode"],
+            : Continent.fromMap(json['continent']),
+        latitude: json['latitude']?.toDouble(),
+        longitude: json['longitude']?.toDouble(),
+        postalCode: json['postalCode'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "city": city?.toMap(),
-        "subdivisions": subdivisions?.toMap(),
-        "country": country?.toMap(),
-        "continent": continent?.toMap(),
-        "latitude": latitude,
-        "longitude": longitude,
-        "postalCode": postalCode,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'city': city?.toMap(),
+        'subdivisions': subdivisions?.toMap(),
+        'country': country?.toMap(),
+        'continent': continent?.toMap(),
+        'latitude': latitude,
+        'longitude': longitude,
+        'postalCode': postalCode,
       };
 }
 
@@ -314,11 +316,11 @@ class City {
   String toJson() => json.encode(toMap());
 
   factory City.fromMap(Map<String, dynamic> json) => City(
-        name: json["name"],
+        name: json['name'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "name": name,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'name': name,
       };
 }
 
@@ -334,11 +336,11 @@ class Continent {
   String toJson() => json.encode(toMap());
 
   factory Continent.fromMap(Map<String, dynamic> json) => Continent(
-        code: json["code"],
+        code: json['code'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "code": code,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'code': code,
       };
 }
 
@@ -356,12 +358,12 @@ class Country {
   String toJson() => json.encode(toMap());
 
   factory Country.fromMap(Map<String, dynamic> json) => Country(
-        code: json["code"],
-        name: json["name"],
+        code: json['code'],
+        name: json['name'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "code": code,
-        "name": name,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'code': code,
+        'name': name,
       };
 }

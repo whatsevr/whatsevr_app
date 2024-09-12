@@ -16,15 +16,15 @@ class UpdateUserInfoRequest {
 
   factory UpdateUserInfoRequest.fromMap(Map<String, dynamic> json) =>
       UpdateUserInfoRequest(
-        userUid: json["user_uid"],
-        userInfo: json["user_info"] == null
+        userUid: json['user_uid'],
+        userInfo: json['user_info'] == null
             ? null
-            : UserInfo.fromMap(json["user_info"]),
+            : UserInfo.fromMap(json['user_info']),
       );
 
-  Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "user_info": userInfo?.toMap(),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'user_uid': userUid,
+        'user_info': userInfo?.toMap(),
       };
 }
 
@@ -56,27 +56,27 @@ class UserInfo {
   String toJson() => json.encode(toMap());
 
   factory UserInfo.fromMap(Map<String, dynamic> json) => UserInfo(
-        emailId: json["email_id"],
-        name: json["name"],
-        bio: json["bio"],
-        address: json["address"],
-        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
-        portfolioStatus: json["portfolio_status"],
-        portfolioDescription: json["portfolio_description"],
-        portfolioTitle: json["portfolio_title"],
-        gender: json["gender"],
+        emailId: json['email_id'],
+        name: json['name'],
+        bio: json['bio'],
+        address: json['address'],
+        dob: json['dob'] == null ? null : DateTime.parse(json['dob']),
+        portfolioStatus: json['portfolio_status'],
+        portfolioDescription: json['portfolio_description'],
+        portfolioTitle: json['portfolio_title'],
+        gender: json['gender'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "email_id": emailId,
-        "name": name,
-        "bio": bio,
-        "address": address,
-        "dob":
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'email_id': emailId,
+        'name': name,
+        'bio': bio,
+        'address': address,
+        'dob':
             "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
-        "portfolio_status": portfolioStatus,
-        "portfolio_description": portfolioDescription,
-        "portfolio_title": portfolioTitle,
-        "gender": gender,
+        'portfolio_status': portfolioStatus,
+        'portfolio_description': portfolioDescription,
+        'portfolio_title': portfolioTitle,
+        'gender': gender,
       };
 }

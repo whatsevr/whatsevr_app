@@ -7,7 +7,7 @@ class AccountState extends Equatable {
   });
 
   @override
-  List<Object?> get props => [profileDetailsResponse];
+  List<Object?> get props => <Object?>[profileDetailsResponse];
 
   AccountState copyWith({
     ProfileDetailsResponse? profileDetailsResponse,

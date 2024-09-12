@@ -9,7 +9,7 @@ class ContentMask extends StatelessWidget {
       {super.key,
       required this.child,
       required this.showMask,
-      this.customMask});
+      this.customMask,});
 
   @override
   Widget build(BuildContext context) {

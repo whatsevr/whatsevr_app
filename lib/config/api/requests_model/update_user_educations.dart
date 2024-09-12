@@ -16,18 +16,20 @@ class UpdateUserEducationsRequest {
 
   factory UpdateUserEducationsRequest.fromMap(Map<String, dynamic> json) =>
       UpdateUserEducationsRequest(
-        userUid: json["user_uid"],
-        userEducations: json["user_educations"] == null
-            ? []
+        userUid: json['user_uid'],
+        userEducations: json['user_educations'] == null
+            ? <UserEducation>[]
             : List<UserEducation>.from(
-                json["user_educations"]!.map((x) => UserEducation.fromMap(x))),
+                json['user_educations']!.map((x) => UserEducation.fromMap(x)),
+              ),
       );
 
-  Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "user_educations": userEducations == null
-            ? []
-            : List<dynamic>.from(userEducations!.map((x) => x.toMap())),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'user_uid': userUid,
+        'user_educations': userEducations == null
+            ? <dynamic>[]
+            : List<dynamic>.from(
+                userEducations!.map((UserEducation x) => x.toMap())),
       };
 }
 
@@ -56,27 +58,27 @@ class UserEducation {
   String toJson() => json.encode(toMap());
 
   factory UserEducation.fromMap(Map<String, dynamic> json) => UserEducation(
-        userUid: json["user_uid"],
-        title: json["title"],
-        startDate: json["start_date"] == null
+        userUid: json['user_uid'],
+        title: json['title'],
+        startDate: json['start_date'] == null
             ? null
-            : DateTime.parse(json["start_date"]),
+            : DateTime.parse(json['start_date']),
         endDate:
-            json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
-        type: json["type"],
-        institute: json["institute"],
-        isOngoingEducation: json["is_ongoing_education"],
+            json['end_date'] == null ? null : DateTime.parse(json['end_date']),
+        type: json['type'],
+        institute: json['institute'],
+        isOngoingEducation: json['is_ongoing_education'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "title": title,
-        "start_date":
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'user_uid': userUid,
+        'title': title,
+        'start_date':
             "${startDate!.year.toString().padLeft(4, '0')}-${startDate!.month.toString().padLeft(2, '0')}-${startDate!.day.toString().padLeft(2, '0')}",
-        "end_date":
+        'end_date':
             "${endDate!.year.toString().padLeft(4, '0')}-${endDate!.month.toString().padLeft(2, '0')}-${endDate!.day.toString().padLeft(2, '0')}",
-        "type": type,
-        "institute": institute,
-        "is_ongoing_education": isOngoingEducation,
+        'type': type,
+        'institute': institute,
+        'is_ongoing_education': isOngoingEducation,
       };
 }

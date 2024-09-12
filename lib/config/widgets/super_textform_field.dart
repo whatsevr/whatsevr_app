@@ -7,7 +7,7 @@ import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 class SuperFormField extends StatefulWidget {
   final String? headingTitle;
   final TextEditingController? controller;
-  final FocusNode? focusNode;
+
   final Function()? onTap;
   final String? hintText;
   final Widget? suffixIcon;
@@ -15,7 +15,7 @@ class SuperFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final String? labelText;
-  final bool enabled;
+
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
@@ -23,16 +23,9 @@ class SuperFormField extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
 
-  // Dropdown specific
-  final String? dropdownValue;
-  final List<DropdownMenuItem<String>>? dropdownItems;
-  final ValueChanged<String?>? onChanged;
-
   const SuperFormField._internal({
-    Key? key,
     this.headingTitle,
     this.controller,
-    this.focusNode,
     this.onTap,
     this.hintText,
     this.suffixIcon,
@@ -40,17 +33,13 @@ class SuperFormField extends StatefulWidget {
     this.keyboardType,
     this.obscureText = false,
     this.labelText,
-    this.enabled = true,
     this.validator,
     this.inputFormatters,
     this.readOnly = false,
     this.minLines,
     this.maxLines,
     this.maxLength,
-    this.dropdownValue,
-    this.dropdownItems,
-    this.onChanged,
-  }) : super(key: key);
+  });
 
   // General text input factory with maxLength support
   factory SuperFormField.generalTextField({
@@ -401,11 +390,9 @@ class _SuperFormFieldState extends State<SuperFormField> {
           builder: (BuildContext context, bool obscureText, _) {
             return TextFormField(
               controller: widget.controller,
-              focusNode: widget.focusNode,
               onTap: widget.readOnly == true ? widget.onTap : null,
               keyboardType: widget.keyboardType,
               obscureText: obscureText,
-              enabled: widget.enabled,
               inputFormatters: widget.inputFormatters,
               readOnly: widget.readOnly,
               minLines: widget.minLines,

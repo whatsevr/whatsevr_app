@@ -18,7 +18,7 @@ import 'package:whatsevr_app/src/features/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 import 'package:whatsevr_app/src/features/home/views/page.dart';
 
-import '../../../../../config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
 class DashboardPageBottomNavigationBar extends StatelessWidget {
   const DashboardPageBottomNavigationBar({
@@ -102,7 +102,7 @@ List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
       ),
       () {
         showContentUploadBottomSheet(context,
-            postCreatorType: EnumPostCreatorType.ACCOUNT);
+            postCreatorType: EnumPostCreatorType.ACCOUNT,);
       },
     ),
     (

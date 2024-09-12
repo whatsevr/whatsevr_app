@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPageVideosView extends StatelessWidget {
   const AccountPageVideosView({super.key});
@@ -12,7 +12,7 @@ class AccountPageVideosView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
-      builder: (context, state) {
+      builder: (BuildContext context, AccountState state) {
         return ListView.separated(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
@@ -60,7 +60,7 @@ class AccountPageVideosView extends StatelessWidget {
                         '${userVideoPost?.title}',
                         maxLines: 2,
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                            fontSize: 16, fontWeight: FontWeight.bold,),
                       ),
                       Gap(8),
                       Text(

@@ -1,15 +1,12 @@
 import 'dart:ui';
 
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:talker_flutter/talker_flutter.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
@@ -22,7 +19,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);

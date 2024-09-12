@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import '../../utils/conversion.dart';
-import '../api/response_model/auth_user.dart';
+import 'package:whatsevr_app/config/api/response_model/auth_user.dart';
 
 class AuthUserDb {
   AuthUserDb._();
@@ -28,10 +26,11 @@ class AuthUserDb {
     if (user == null) return;
     log('hiveDb.saveLoggedUser: ${user.toMap()}');
     List<dynamic> allLoggedUsers =
-        await _authorisedCustomersBox.get(_allLoggedUsers) ?? [];
+        await _authorisedCustomersBox.get(_allLoggedUsers) ?? <dynamic>[];
 
     int index = allLoggedUsers.indexWhere(
-        (element) => element['data']['userId'] == user.data!.userId);
+      (element) => element['data']['userId'] == user.data!.userId,
+    );
     if (index != -1) {
       allLoggedUsers[index] = user.toMap();
     } else {
@@ -44,17 +43,18 @@ class AuthUserDb {
   static Future<AuthorisedUserResponse?> getLastLoggedAuthorisedUser() async {
     List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
     if (users == null) return null;
-    var lastLoggedUserId = await getLastLoggedUserUid();
+    String? lastLoggedUserId = await getLastLoggedUserUid();
     if (lastLoggedUserId == null) return null;
     var user = users.firstWhereOrNull(
-        (element) => element['data']['userId'] == lastLoggedUserId);
+      (element) => element['data']['userId'] == lastLoggedUserId,
+    );
     if (user == null) return null;
     return AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(user)));
   }
 
   static Future<List<AuthorisedUserResponse>> getAllAuthorisedUser() async {
     List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-    if (users == null) return [];
+    if (users == null) return <AuthorisedUserResponse>[];
     return users
         .map((e) => AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(e))))
         .toList();

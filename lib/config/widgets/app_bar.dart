@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:whatsevr_app/config/widgets/ai_button.dart';
-import 'package:whatsevr_app/generated/assets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -11,13 +8,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final bool showAiAction;
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     this.actions,
     this.leading,
     this.backgroundColor,
     this.showAiAction = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +34,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: Colors.black, // Black title text
               fontSize: 17.0,
               fontWeight: FontWeight.w600,
-            )),
-        actions: [
+            ),),
+        actions: <Widget>[
           ...?actions,
           if (showAiAction) AiButton(),
         ],
@@ -49,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: true,
         surfaceTintColor: Colors.white, // Center the title like iOS
         iconTheme: const IconThemeData(
-            color: Colors.black), // Black icon color for iOS style
+            color: Colors.black,), // Black icon color for iOS style
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 
@@ -11,7 +10,7 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
             options: CacheOptions(
           store: HiveCacheStore(cacheDirectoryPath),
           policy: CachePolicy.request,
-          hitCacheOnErrorExcept: [
+          hitCacheOnErrorExcept: <int>[
             HttpStatus.unauthorized,
             HttpStatus.forbidden,
           ],
@@ -20,5 +19,5 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
           cipher: null,
           keyBuilder: CacheOptions.defaultCacheKeyBuilder,
           allowPostMethod: false,
-        ));
+        ),);
 }

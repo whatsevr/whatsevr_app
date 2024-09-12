@@ -412,7 +412,7 @@ class _PortfolioView extends StatelessWidget {
         return InkWell(
           onTap: () {
             AppNavigationService.newRoute(RoutesName.account,
-                extras: AccountPageArgument(isEditMode: false));
+                extras: AccountPageArgument(isEditMode: false),);
           },
           child: Column(
             children: <Widget>[

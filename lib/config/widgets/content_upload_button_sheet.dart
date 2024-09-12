@@ -10,10 +10,10 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
-import '../enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
 void showContentUploadBottomSheet(BuildContext context,
-    {required EnumPostCreatorType postCreatorType}) {
+    {required EnumPostCreatorType postCreatorType,}) {
   showModalBottomSheet(
     useRootNavigator: true,
     barrierColor: Colors.white.withOpacity(0.5),
@@ -103,7 +103,7 @@ class _Ui extends StatelessWidget {
             onPressed: () async {
               AppNavigationService.newRoute(RoutesName.createVideoPost,
                   extras: CreateVideoPostPageArgument(
-                      postCreatorType: postCreatorType));
+                      postCreatorType: postCreatorType,),);
             },
             child: const Row(
               children: <Widget>[
@@ -135,7 +135,7 @@ class _Ui extends StatelessWidget {
               ],
             ),
           ),
-          if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...[
+          if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...<Widget>[
             const Gap(8),
             MaterialButton(
               elevation: 0,

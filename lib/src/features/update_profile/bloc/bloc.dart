@@ -16,8 +16,8 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
-import '../../../../config/api/requests_model/update_profile_picture.dart';
-import '../../../../config/api/requests_model/update_user_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -45,12 +45,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<SubmitProfile>(_onSubmitProfile);
   }
   FutureOr<void> _onInitialEvent(
-      InitialEvent event, Emitter<ProfileState> emit) {
+      InitialEvent event, Emitter<ProfileState> emit,) {
     emit(state.copyWith(
       currentProfileDetailsResponse: event.pageArgument.profileDetailsResponse,
       dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
       gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
-    ));
+    ),);
 
     // Set the initial values of the text controllers
     nameController.text =
@@ -76,7 +76,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(
       educations: List.generate(
         event.pageArgument.profileDetailsResponse?.userEducations?.length ?? 0,
-        (index) => UiEducation(
+        (int index) => UiEducation(
           degreeName: event.pageArgument.profileDetailsResponse
               ?.userEducations?[index].title,
           degreeType: event
@@ -91,12 +91,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               ?.userEducations?[index].institute,
         ),
       ),
-    ));
+    ),);
     emit(state.copyWith(
         workExperiences: List.generate(
       event.pageArgument.profileDetailsResponse?.userWorkExperiences?.length ??
           0,
-      (index) => UiWorkExperience(
+      (int index) => UiWorkExperience(
         designation: event.pageArgument.profileDetailsResponse
             ?.userWorkExperiences?[index].designation,
         startDate: event.pageArgument.profileDetailsResponse
@@ -107,24 +107,26 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             ?.userWorkExperiences?[index].isCurrentlyWorking,
         workingMode: event.pageArgument.profileDetailsResponse
             ?.userWorkExperiences?[index].workingMode,
+        companyName: event.pageArgument.profileDetailsResponse
+            ?.userWorkExperiences?[index].companyName,
       ),
-    )));
+    ),),);
     emit(state.copyWith(
       services: List.generate(
         event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
-        (index) => UiService(
+        (int index) => UiService(
           serviceName: event
               .pageArgument.profileDetailsResponse?.userServices?[index].title,
           serviceDescription: event.pageArgument.profileDetailsResponse
               ?.userServices?[index].description,
         ),
       ),
-    ));
+    ),);
   }
 
   final ImagePicker _picker = ImagePicker();
   void _onChangeProfilePicture(
-      ChangeProfilePictureEvent event, Emitter<ProfileState> emit) async {
+      ChangeProfilePictureEvent event, Emitter<ProfileState> emit,) async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 70,
@@ -143,72 +145,72 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   void _onUploadCoverPicture(
-      UploadCoverMediaEvent event, Emitter<ProfileState> emit) {
+      UploadCoverMediaEvent event, Emitter<ProfileState> emit,) {
     //
     // emit(state.copyWith(coverImages: Li));
   }
 
   FutureOr<void> _onUpdateGender(
-      UpdateGender event, Emitter<ProfileState> emit) {
+      UpdateGender event, Emitter<ProfileState> emit,) {
     emit(state.copyWith(gender: event.gender));
   }
 
   FutureOr<void> _onAddOrRemoveEducation(
-      AddOrRemoveEducation event, Emitter<ProfileState> emit) {
+      AddOrRemoveEducation event, Emitter<ProfileState> emit,) {
     if (event.isRemove == true) {
       emit(state.copyWith(
-        educations: state.educations?.where((element) {
+        educations: state.educations?.where((UiEducation element) {
           return element != event.education;
         }).toList(),
-      ));
+      ),);
     } else {
       emit(state.copyWith(
-        educations: [
-          ...state.educations ?? [],
+        educations: <UiEducation>[
+          ...state.educations ?? <UiEducation>[],
           event.education!,
         ],
-      ));
+      ),);
     }
   }
 
   FutureOr<void> _onAddOrRemoveWorkExperience(
-      AddOrRemoveWorkExperience event, Emitter<ProfileState> emit) {
+      AddOrRemoveWorkExperience event, Emitter<ProfileState> emit,) {
     if (event.isRemove == true) {
       emit(state.copyWith(
-        workExperiences: state.workExperiences?.where((element) {
+        workExperiences: state.workExperiences?.where((UiWorkExperience element) {
           return element != event.workExperience;
         }).toList(),
-      ));
+      ),);
     } else {
       emit(state.copyWith(
-        workExperiences: [
-          ...state.workExperiences ?? [],
+        workExperiences: <UiWorkExperience>[
+          ...state.workExperiences ?? <UiWorkExperience>[],
           event.workExperience!,
         ],
-      ));
+      ),);
     }
   }
 
   FutureOr<void> _onAddOrRemoveService(
-      AddOrRemoveService event, Emitter<ProfileState> emit) {
+      AddOrRemoveService event, Emitter<ProfileState> emit,) {
     if (event.isRemove == true) {
       emit(state.copyWith(
-        services: state.services?.where((element) {
+        services: state.services?.where((UiService element) {
           return element != event.service;
         }).toList(),
-      ));
+      ),);
     } else {
       emit(state.copyWith(
-        services: [
-          ...state.services ?? [],
+        services: <UiService>[
+          ...state.services ?? <UiService>[],
           event.service!,
         ],
-      ));
+      ),);
     }
   }
 
   Future<void> _onSubmitProfile(
-      SubmitProfile event, Emitter<ProfileState> emit) async {
+      SubmitProfile event, Emitter<ProfileState> emit,) async {
     try {
       SmartDialog.showLoading();
       UpdateUserInfoRequest newUpdateUserInfoRequest = UpdateUserInfoRequest(
@@ -230,7 +232,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userEducations: state.educations
             ?.map(
-              (e) => UserEducation(
+              (UiEducation e) => UserEducation(
                 userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
                 title: e.degreeName,
                 type: e.degreeType,
@@ -247,7 +249,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userWorkExperiences: state.workExperiences
             ?.map(
-              (e) => UserWorkExperience(
+              (UiWorkExperience e) => UserWorkExperience(
                 userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
                 designation: e.designation,
                 startDate: e.startDate,
@@ -264,7 +266,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userServices: state.services
             ?.map(
-              (e) => UserService(
+              (UiService e) => UserService(
                 userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
                 title: e.serviceName,
                 description: e.serviceDescription,
