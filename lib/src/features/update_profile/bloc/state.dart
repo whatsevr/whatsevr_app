@@ -7,8 +7,8 @@ class ProfileState extends Equatable {
 
   final String? gender;
   final File? profileImage;
-  final List<File>? coverImages;
-  final List<File>? coverVideos;
+  final List<UiCoverMedia>? coverMedia;
+
   final List<UiService>? services;
 
   final List<UiEducation>? educations;
@@ -18,8 +18,7 @@ class ProfileState extends Equatable {
     this.currentProfileDetailsResponse,
     this.dob,
     this.profileImage,
-    this.coverImages,
-    this.coverVideos,
+    this.coverMedia,
     this.services,
     this.educations,
     this.workExperiences,
@@ -30,8 +29,7 @@ class ProfileState extends Equatable {
     ProfileDetailsResponse? currentProfileDetailsResponse,
     DateTime? dob,
     File? profileImage,
-    List<File>? coverImages,
-    List<File>? coverVideos,
+    List<UiCoverMedia>? coverMedia,
     List<UiService>? services,
     List<UiEducation>? educations,
     List<UiWorkExperience>? workExperiences,
@@ -42,8 +40,7 @@ class ProfileState extends Equatable {
           currentProfileDetailsResponse ?? this.currentProfileDetailsResponse,
       dob: dob ?? this.dob,
       profileImage: profileImage ?? this.profileImage,
-      coverImages: coverImages ?? this.coverImages,
-      coverVideos: coverVideos ?? this.coverVideos,
+      coverMedia: coverMedia ?? this.coverMedia,
       services: services ?? this.services,
       educations: educations ?? this.educations,
       workExperiences: workExperiences ?? this.workExperiences,
@@ -56,8 +53,7 @@ class ProfileState extends Equatable {
         currentProfileDetailsResponse,
         dob,
         profileImage,
-        coverImages,
-        coverVideos,
+        coverMedia,
         services,
         gender,
         educations,
@@ -180,4 +176,33 @@ class UiService extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[serviceName, serviceDescription];
+}
+
+class UiCoverMedia extends Equatable {
+  final String? imageUrl;
+  final bool? isVideo;
+
+  final String? videoUrl;
+
+  const UiCoverMedia({
+    this.imageUrl,
+    this.isVideo,
+    this.videoUrl,
+  });
+
+  UiCoverMedia copyWith({
+    String? imageUrl,
+    bool? isVideo,
+    String? userUid,
+    String? videoUrl,
+  }) {
+    return UiCoverMedia(
+      imageUrl: imageUrl ?? this.imageUrl,
+      isVideo: isVideo ?? this.isVideo,
+      videoUrl: videoUrl ?? this.videoUrl,
+    );
+  }
+
+  @override
+  List<Object?> get props => <Object?>[imageUrl, isVideo, videoUrl];
 }

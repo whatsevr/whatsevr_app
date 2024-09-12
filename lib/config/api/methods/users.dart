@@ -3,11 +3,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
@@ -129,6 +130,21 @@ class UsersApi {
     try {
       Response response = await ApiClient.client.post(
         '/v1/user-services',
+        data: request.toMap(),
+      );
+      return response.data['message'];
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<String?> updateCoverMedia(
+    UpdateUserCoverMediaRequest request,
+  ) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-cover-media',
         data: request.toMap(),
       );
       return response.data['message'];

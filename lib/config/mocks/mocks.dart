@@ -31,6 +31,6 @@ class MockData {
   }
 
   static String imagePlaceholder([String label = 'Image']) {
-    return 'https://placehold.co/600x400?text=$label';
+    return 'https://placehold.co/600x400/png?text=$label';
   }
 }

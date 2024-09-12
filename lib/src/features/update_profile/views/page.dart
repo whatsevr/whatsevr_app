@@ -75,29 +75,32 @@ class ProfileUpdatePage extends StatelessWidget {
                                   padding: const EdgeInsets.all(16),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        width: 2,
-                                      ),
-                                      image: DecorationImage(
-                                        image: state.profileImage != null
-                                            ? FileImage(state.profileImage!)
-                                            : state.currentProfileDetailsResponse
-                                                        ?.userInfo?.profilePicture !=
-                                                    null
-                                                ? ExtendedNetworkImageProvider(state
-                                                        .currentProfileDetailsResponse
-                                                        ?.userInfo
-                                                        ?.profilePicture ??
-                                                    MockData.imageAvatar,)
-                                                : ExtendedNetworkImageProvider(
-                                                    MockData.imageAvatar,),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      // : ,
-                                      ),
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 2,
+                                    ),
+                                    image: DecorationImage(
+                                      image: state.profileImage != null
+                                          ? FileImage(state.profileImage!)
+                                          : state.currentProfileDetailsResponse
+                                                      ?.userInfo?.profilePicture !=
+                                                  null
+                                              ? ExtendedNetworkImageProvider(
+                                                  state
+                                                          .currentProfileDetailsResponse
+                                                          ?.userInfo
+                                                          ?.profilePicture ??
+                                                      MockData.imageAvatar,
+                                                )
+                                              : ExtendedNetworkImageProvider(
+                                                  MockData.imageAvatar,
+                                                ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    // : ,
+                                  ),
                                 ),
                                 Positioned(
                                   bottom: -10,
@@ -121,9 +124,11 @@ class ProfileUpdatePage extends StatelessWidget {
                           ),
                           Gap(22),
                           MaskText(
-                            key: ValueKey(state.currentProfileDetailsResponse
-                                    ?.userInfo?.mobileNumber ??
-                                '',), // Add a key to the widget to force rebuild
+                            key: ValueKey(
+                              state.currentProfileDetailsResponse?.userInfo
+                                      ?.mobileNumber ??
+                                  '',
+                            ), // Add a key to the widget to force rebuild
                             text: state.currentProfileDetailsResponse?.userInfo
                                     ?.mobileNumber ??
                                 '',
@@ -139,7 +144,141 @@ class ProfileUpdatePage extends StatelessWidget {
                         ],
                       ),
                     ),
-
+                    Gap(12),
+                    ExpansionTile(
+                      dense: true,
+                      title: Text('Cover Media',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      initiallyExpanded: true,
+                      visualDensity: VisualDensity.compact,
+                      backgroundColor: Colors.white,
+                      collapsedBackgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      collapsedShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      children: <Widget>[
+                        for (UiCoverMedia coverMedia in state.coverMedia ?? [])
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                            ),
+                            child: Builder(
+                              builder: (context) {
+                                return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ExtendedImage.network(
+                                      coverMedia.isVideo == true
+                                          ? MockData.imagePlaceholder(
+                                              'Cover Video')
+                                          : coverMedia.imageUrl ??
+                                              MockData.imagePlaceholder(
+                                                  'Cover Image'),
+                                      width: double.infinity,
+                                      height: 200,
+                                      fit: BoxFit.cover,
+                                      enableLoadState: false,
+                                    ),
+                                    if (coverMedia.isVideo == true)
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: IconButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                WidgetStateProperty.all(
+                                              Colors.black.withOpacity(0.5),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            // Play video
+                                          },
+                                          icon: Icon(
+                                            Icons.play_arrow,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ),
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          context.read<ProfileBloc>().add(
+                                                AddOrRemoveCoverMedia(
+                                                  removableCoverMedia:
+                                                      coverMedia,
+                                                ),
+                                              );
+                                        },
+                                        icon: Icon(
+                                          Icons.close_rounded,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                context
+                                    .read<ProfileBloc>()
+                                    .add(AddOrRemoveCoverMedia(
+                                      isImage: true,
+                                    ));
+                              },
+                              child: Text(
+                                'Add Cover Image',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Gap(12),
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                side: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                context
+                                    .read<ProfileBloc>()
+                                    .add(AddOrRemoveCoverMedia(
+                                      isVideo: true,
+                                    ));
+                              },
+                              child: Text(
+                                'Add Cover Video',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Gap(12),
+                      ],
+                    ),
                     Gap(12),
                     ...<Widget>[
                       LabelContainer(
@@ -179,10 +318,11 @@ class ProfileUpdatePage extends StatelessWidget {
                             SuperFormField.datePicker(
                               context: context,
                               controller: TextEditingController(
-                                  text: state.dob == null
-                                      ? ''
-                                      : DateFormat('dd-MM-yyyy')
-                                          .format(state.dob!),),
+                                text: state.dob == null
+                                    ? ''
+                                    : DateFormat('dd-MM-yyyy')
+                                        .format(state.dob!),
+                              ),
                               headingTitle: 'Date of Birth',
                               onDateSelected: (DateTime date) {
                                 context
@@ -245,73 +385,77 @@ class ProfileUpdatePage extends StatelessWidget {
                                       ),
                                       Gap(12),
                                       SuperFormField.datePicker(
-                                          context: context,
-                                          controller: startDateController,
-                                          headingTitle: 'Select Start Date',
-                                          onDateSelected: (DateTime date) {
-                                            startDateController.text =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date);
-                                          },),
+                                        context: context,
+                                        controller: startDateController,
+                                        headingTitle: 'Select Start Date',
+                                        onDateSelected: (DateTime date) {
+                                          startDateController.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(date);
+                                        },
+                                      ),
                                       Gap(12),
                                       SuperFormField.datePicker(
-                                          context: context,
-                                          controller: endDateController,
-                                          headingTitle: 'Select End Date',
-                                          onDateSelected: (DateTime date) {
-                                            endDateController.text =
-                                                DateFormat('dd-MM-yyyy')
-                                                    .format(date);
-                                          },),
+                                        context: context,
+                                        controller: endDateController,
+                                        headingTitle: 'Select End Date',
+                                        onDateSelected: (DateTime date) {
+                                          endDateController.text =
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(date);
+                                        },
+                                      ),
                                       Gap(12),
                                       MaterialButton(
-                                          minWidth: double.infinity,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          color: Colors.blueAccent,
-                                          onPressed: () {
-                                            if (degreeController.text.isNotEmpty &&
-                                                schoolController
-                                                    .text.isNotEmpty &&
-                                                startDateController
-                                                    .text.isNotEmpty &&
-                                                endDateController
-                                                    .text.isNotEmpty) {
-                                              context.read<ProfileBloc>().add(
-                                                    AddOrRemoveEducation(
-                                                      education: UiEducation(
-                                                        degreeName:
-                                                            degreeController
-                                                                .text,
-                                                        degreeType:
-                                                            degreeTypeController
-                                                                .text,
-                                                        startDate: DateFormat(
-                                                                'dd-MM-yyyy',)
-                                                            .parse(
-                                                                startDateController
-                                                                    .text,),
-                                                        endDate: DateFormat(
-                                                                'dd-MM-yyyy',)
-                                                            .parse(
-                                                                endDateController
-                                                                    .text,),
-                                                        institute:
-                                                            schoolController
-                                                                .text,
-                                                        isOngoingEducation:
-                                                            false,
+                                        minWidth: double.infinity,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        color: Colors.blueAccent,
+                                        onPressed: () {
+                                          if (degreeController.text.isNotEmpty &&
+                                              schoolController
+                                                  .text.isNotEmpty &&
+                                              startDateController
+                                                  .text.isNotEmpty &&
+                                              endDateController
+                                                  .text.isNotEmpty) {
+                                            context.read<ProfileBloc>().add(
+                                                  AddOrRemoveEducation(
+                                                    education: UiEducation(
+                                                      degreeName:
+                                                          degreeController.text,
+                                                      degreeType:
+                                                          degreeTypeController
+                                                              .text,
+                                                      startDate: DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).parse(
+                                                        startDateController
+                                                            .text,
                                                       ),
+                                                      endDate: DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).parse(
+                                                        endDateController.text,
+                                                      ),
+                                                      institute:
+                                                          schoolController.text,
+                                                      isOngoingEducation: false,
                                                     ),
-                                                  );
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                          child: Text('Add',
-                                              style: TextStyle(
-                                                  color: Colors.white,),),),
+                                                  ),
+                                                );
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text(
+                                          'Add',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -328,15 +472,19 @@ class ProfileUpdatePage extends StatelessWidget {
                                   return Row(
                                     children: <Widget>[
                                       Expanded(
-                                          child: Text(
-                                              '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}',),),
+                                        child: Text(
+                                          '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}',
+                                        ),
+                                      ),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
-                                              AddOrRemoveEducation(
+                                                AddOrRemoveEducation(
                                                   education:
                                                       state.educations?[index],
-                                                  isRemove: true,),);
+                                                  isRemove: true,
+                                                ),
+                                              );
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -347,7 +495,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (BuildContext context, int index) {
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),
@@ -426,56 +575,60 @@ class ProfileUpdatePage extends StatelessWidget {
                                       ),
                                       Gap(12),
                                       MaterialButton(
-                                          minWidth: double.infinity,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          color: Colors.blueAccent,
-                                          onPressed: () {
-                                            if (companyNameController.text.isNotEmpty &&
-                                                workingModeController
-                                                    .text.isNotEmpty &&
-                                                startDateController
-                                                    .text.isNotEmpty &&
-                                                endDateController
-                                                    .text.isNotEmpty &&
-                                                designationController
-                                                    .text.isNotEmpty) {
-                                              context.read<ProfileBloc>().add(
-                                                    AddOrRemoveWorkExperience(
-                                                      workExperience:
-                                                          UiWorkExperience(
-                                                        companyName:
-                                                            companyNameController
-                                                                .text,
-                                                        isCurrentlyWorking:
-                                                            false,
-                                                        designation:
-                                                            designationController
-                                                                .text,
-                                                        workingMode:
-                                                            workingModeController
-                                                                .text,
-                                                        startDate: DateFormat(
-                                                                'dd-MM-yyyy',)
-                                                            .parse(
-                                                                startDateController
-                                                                    .text,),
-                                                        endDate: DateFormat(
-                                                                'dd-MM-yyyy',)
-                                                            .parse(
-                                                                endDateController
-                                                                    .text,),
+                                        minWidth: double.infinity,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        color: Colors.blueAccent,
+                                        onPressed: () {
+                                          if (companyNameController.text.isNotEmpty &&
+                                              workingModeController
+                                                  .text.isNotEmpty &&
+                                              startDateController
+                                                  .text.isNotEmpty &&
+                                              endDateController
+                                                  .text.isNotEmpty &&
+                                              designationController
+                                                  .text.isNotEmpty) {
+                                            context.read<ProfileBloc>().add(
+                                                  AddOrRemoveWorkExperience(
+                                                    workExperience:
+                                                        UiWorkExperience(
+                                                      companyName:
+                                                          companyNameController
+                                                              .text,
+                                                      isCurrentlyWorking: false,
+                                                      designation:
+                                                          designationController
+                                                              .text,
+                                                      workingMode:
+                                                          workingModeController
+                                                              .text,
+                                                      startDate: DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).parse(
+                                                        startDateController
+                                                            .text,
+                                                      ),
+                                                      endDate: DateFormat(
+                                                        'dd-MM-yyyy',
+                                                      ).parse(
+                                                        endDateController.text,
                                                       ),
                                                     ),
-                                                  );
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                          child: Text('Add',
-                                              style: TextStyle(
-                                                  color: Colors.white,),),),
+                                                  ),
+                                                );
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text(
+                                          'Add',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -491,15 +644,19 @@ class ProfileUpdatePage extends StatelessWidget {
                                   return Row(
                                     children: <Widget>[
                                       Expanded(
-                                          child: Text(
-                                              '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}',),),
+                                        child: Text(
+                                          '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}',
+                                        ),
+                                      ),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
-                                              AddOrRemoveWorkExperience(
+                                                AddOrRemoveWorkExperience(
                                                   workExperience: state
                                                       .workExperiences?[index],
-                                                  isRemove: true,),);
+                                                  isRemove: true,
+                                                ),
+                                              );
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -510,7 +667,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (BuildContext context, int index) {
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),
@@ -615,9 +773,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 Navigator.pop(context);
                                               }
                                             },
-                                            child: Text('Add',
-                                                style: TextStyle(
-                                                    color: Colors.white,),),
+                                            child: Text(
+                                              'Add',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -636,15 +797,19 @@ class ProfileUpdatePage extends StatelessWidget {
                                   return Row(
                                     children: <Widget>[
                                       Expanded(
-                                          child: Text(
-                                              '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ',),),
+                                        child: Text(
+                                          '${state.services?[index].serviceName} - ${state.services?[index].serviceDescription} ',
+                                        ),
+                                      ),
                                       GestureDetector(
                                         onTap: () {
                                           context.read<ProfileBloc>().add(
-                                              AddOrRemoveService(
+                                                AddOrRemoveService(
                                                   service:
                                                       state.services?[index],
-                                                  isRemove: true,),);
+                                                  isRemove: true,
+                                                ),
+                                              );
                                         },
                                         child: Icon(
                                           Icons.close_rounded,
@@ -655,7 +820,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ],
                                   );
                                 },
-                                separatorBuilder: (BuildContext context, int index) {
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
                                   return Gap(2);
                                 },
                               ),

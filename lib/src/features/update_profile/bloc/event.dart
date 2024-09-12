@@ -23,13 +23,16 @@ class ChangeProfilePictureEvent extends ProfileEvent {
   List<Object?> get props => <Object?>[];
 }
 
-class UploadCoverMediaEvent extends ProfileEvent {
-  final File image;
+class AddOrRemoveCoverMedia extends ProfileEvent {
+  final bool? isImage;
+  final bool? isVideo;
+  final UiCoverMedia? removableCoverMedia;
 
-  const UploadCoverMediaEvent(this.image);
+  const AddOrRemoveCoverMedia(
+      {this.isImage, this.isVideo, this.removableCoverMedia});
 
   @override
-  List<Object?> get props => <Object?>[image];
+  List<Object?> get props => <Object?>[isImage, isVideo, removableCoverMedia];
 }
 
 class UpdateGender extends ProfileEvent {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,15 +9,21 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
-    hide UserInfo, UserEducation, UserWorkExperience, UserService;
+    hide
+        UserInfo,
+        UserEducation,
+        UserWorkExperience,
+        UserService,
+        UserCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
-import 'package:whatsevr_app/config/api/requests_model/update_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 part 'event.dart';
 part 'state.dart';
@@ -36,7 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileState()) {
     on<InitialEvent>(_onInitialEvent);
     on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
-    on<UploadCoverMediaEvent>(_onUploadCoverPicture);
+    on<AddOrRemoveCoverMedia>(_onAddOrRemoveCoverMedia);
     on<UpdateGender>(_onUpdateGender);
     on<AddOrRemoveEducation>(_onAddOrRemoveEducation);
     on<AddOrRemoveWorkExperience>(_onAddOrRemoveWorkExperience);
@@ -45,12 +52,70 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<SubmitProfile>(_onSubmitProfile);
   }
   FutureOr<void> _onInitialEvent(
-      InitialEvent event, Emitter<ProfileState> emit,) {
+    InitialEvent event,
+    Emitter<ProfileState> emit,
+  ) {
     emit(state.copyWith(
       currentProfileDetailsResponse: event.pageArgument.profileDetailsResponse,
       dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
       gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
-    ),);
+      educations: List.generate(
+        event.pageArgument.profileDetailsResponse?.userEducations?.length ?? 0,
+        (int index) => UiEducation(
+          degreeName: event.pageArgument.profileDetailsResponse
+              ?.userEducations?[index].title,
+          degreeType: event
+              .pageArgument.profileDetailsResponse?.userEducations?[index].type,
+          startDate: event.pageArgument.profileDetailsResponse
+              ?.userEducations?[index].startDate,
+          endDate: event.pageArgument.profileDetailsResponse
+              ?.userEducations?[index].endDate,
+          isOngoingEducation: event.pageArgument.profileDetailsResponse
+              ?.userEducations?[index].isOngoingEducation,
+          institute: event.pageArgument.profileDetailsResponse
+              ?.userEducations?[index].institute,
+        ),
+      ),
+      workExperiences: List.generate(
+        event.pageArgument.profileDetailsResponse?.userWorkExperiences
+                ?.length ??
+            0,
+        (int index) => UiWorkExperience(
+          designation: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].designation,
+          startDate: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].startDate,
+          endDate: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].endDate,
+          isCurrentlyWorking: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].isCurrentlyWorking,
+          workingMode: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].workingMode,
+          companyName: event.pageArgument.profileDetailsResponse
+              ?.userWorkExperiences?[index].companyName,
+        ),
+      ),
+      services: List.generate(
+        event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
+        (int index) => UiService(
+          serviceName: event
+              .pageArgument.profileDetailsResponse?.userServices?[index].title,
+          serviceDescription: event.pageArgument.profileDetailsResponse
+              ?.userServices?[index].description,
+        ),
+      ),
+      coverMedia: List.generate(
+        event.pageArgument.profileDetailsResponse?.userCoverMedia?.length ?? 0,
+        (int index) => UiCoverMedia(
+          imageUrl: event.pageArgument.profileDetailsResponse
+              ?.userCoverMedia?[index].imageUrl,
+          videoUrl: event.pageArgument.profileDetailsResponse
+              ?.userCoverMedia?[index].videoUrl,
+          isVideo: event.pageArgument.profileDetailsResponse
+              ?.userCoverMedia?[index].isVideo,
+        ),
+      ),
+    ));
 
     // Set the initial values of the text controllers
     nameController.text =
@@ -73,60 +138,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     portfolioTitle.text =
         event.pageArgument.profileDetailsResponse?.userInfo?.portfolioTitle ??
             '';
-    emit(state.copyWith(
-      educations: List.generate(
-        event.pageArgument.profileDetailsResponse?.userEducations?.length ?? 0,
-        (int index) => UiEducation(
-          degreeName: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].title,
-          degreeType: event
-              .pageArgument.profileDetailsResponse?.userEducations?[index].type,
-          startDate: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].startDate,
-          endDate: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].endDate,
-          isOngoingEducation: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].isOngoingEducation,
-          institute: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].institute,
-        ),
-      ),
-    ),);
-    emit(state.copyWith(
-        workExperiences: List.generate(
-      event.pageArgument.profileDetailsResponse?.userWorkExperiences?.length ??
-          0,
-      (int index) => UiWorkExperience(
-        designation: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].designation,
-        startDate: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].startDate,
-        endDate: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].endDate,
-        isCurrentlyWorking: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].isCurrentlyWorking,
-        workingMode: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].workingMode,
-        companyName: event.pageArgument.profileDetailsResponse
-            ?.userWorkExperiences?[index].companyName,
-      ),
-    ),),);
-    emit(state.copyWith(
-      services: List.generate(
-        event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
-        (int index) => UiService(
-          serviceName: event
-              .pageArgument.profileDetailsResponse?.userServices?[index].title,
-          serviceDescription: event.pageArgument.profileDetailsResponse
-              ?.userServices?[index].description,
-        ),
-      ),
-    ),);
   }
 
   final ImagePicker _picker = ImagePicker();
   void _onChangeProfilePicture(
-      ChangeProfilePictureEvent event, Emitter<ProfileState> emit,) async {
+    ChangeProfilePictureEvent event,
+    Emitter<ProfileState> emit,
+  ) async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 70,
@@ -144,73 +162,159 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
   }
 
-  void _onUploadCoverPicture(
-      UploadCoverMediaEvent event, Emitter<ProfileState> emit,) {
-    //
-    // emit(state.copyWith(coverImages: Li));
+  void _onAddOrRemoveCoverMedia(
+    AddOrRemoveCoverMedia event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      if (event.removableCoverMedia != null) {
+        emit(
+          state.copyWith(
+            coverMedia: state.coverMedia?.where((UiCoverMedia element) {
+              return element != event.removableCoverMedia;
+            }).toList(),
+          ),
+        );
+      } else {
+        //only allow 4
+        if (state.coverMedia?.length == 4) {
+          SmartDialog.showToast('You can only add 4 cover media');
+          return;
+        }
+        final FilePickerResult? pickedFile = event.isImage == true
+            ? await FilePicker.platform.pickFiles(
+                type: FileType.image,
+                allowMultiple: false,
+              )
+            : await FilePicker.platform.pickFiles(
+                type: FileType.video,
+                allowMultiple: false,
+              );
+        if (pickedFile == null) return;
+        final File file = File(pickedFile.files.single.path!);
+        SmartDialog.showLoading(msg: 'Uploading cover media');
+        String? url = await FileUploadService.uploadFilesToSST(file);
+        emit(
+          state.copyWith(
+            coverMedia: <UiCoverMedia>[
+              ...state.coverMedia ?? <UiCoverMedia>[],
+              UiCoverMedia(
+                imageUrl: event.isImage == true ? url : null,
+                videoUrl: event.isVideo == true ? url : null,
+                isVideo: event.isVideo,
+              ),
+            ],
+          ),
+        );
+      }
+      List<UiCoverMedia> coverMedia = state.coverMedia ?? <UiCoverMedia>[];
+      await UsersApi.updateCoverMedia(
+        UpdateUserCoverMediaRequest(
+          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          userCoverMedia: coverMedia
+              .map(
+                (UiCoverMedia e) => UserCoverMedia(
+                  imageUrl: e.imageUrl,
+                  videoUrl: e.videoUrl,
+                  isVideo: e.isVideo,
+                  userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                ),
+              )
+              .toList(),
+        ),
+      );
+      SmartDialog.dismiss();
+    } catch (e) {
+      SmartDialog.dismiss();
+      SmartDialog.showToast(e.toString());
+      if (kDebugMode) rethrow;
+    }
   }
 
   FutureOr<void> _onUpdateGender(
-      UpdateGender event, Emitter<ProfileState> emit,) {
+    UpdateGender event,
+    Emitter<ProfileState> emit,
+  ) {
     emit(state.copyWith(gender: event.gender));
   }
 
   FutureOr<void> _onAddOrRemoveEducation(
-      AddOrRemoveEducation event, Emitter<ProfileState> emit,) {
+    AddOrRemoveEducation event,
+    Emitter<ProfileState> emit,
+  ) {
     if (event.isRemove == true) {
-      emit(state.copyWith(
-        educations: state.educations?.where((UiEducation element) {
-          return element != event.education;
-        }).toList(),
-      ),);
+      emit(
+        state.copyWith(
+          educations: state.educations?.where((UiEducation element) {
+            return element != event.education;
+          }).toList(),
+        ),
+      );
     } else {
-      emit(state.copyWith(
-        educations: <UiEducation>[
-          ...state.educations ?? <UiEducation>[],
-          event.education!,
-        ],
-      ),);
+      emit(
+        state.copyWith(
+          educations: <UiEducation>[
+            ...state.educations ?? <UiEducation>[],
+            event.education!,
+          ],
+        ),
+      );
     }
   }
 
   FutureOr<void> _onAddOrRemoveWorkExperience(
-      AddOrRemoveWorkExperience event, Emitter<ProfileState> emit,) {
+    AddOrRemoveWorkExperience event,
+    Emitter<ProfileState> emit,
+  ) {
     if (event.isRemove == true) {
-      emit(state.copyWith(
-        workExperiences: state.workExperiences?.where((UiWorkExperience element) {
-          return element != event.workExperience;
-        }).toList(),
-      ),);
+      emit(
+        state.copyWith(
+          workExperiences:
+              state.workExperiences?.where((UiWorkExperience element) {
+            return element != event.workExperience;
+          }).toList(),
+        ),
+      );
     } else {
-      emit(state.copyWith(
-        workExperiences: <UiWorkExperience>[
-          ...state.workExperiences ?? <UiWorkExperience>[],
-          event.workExperience!,
-        ],
-      ),);
+      emit(
+        state.copyWith(
+          workExperiences: <UiWorkExperience>[
+            ...state.workExperiences ?? <UiWorkExperience>[],
+            event.workExperience!,
+          ],
+        ),
+      );
     }
   }
 
   FutureOr<void> _onAddOrRemoveService(
-      AddOrRemoveService event, Emitter<ProfileState> emit,) {
+    AddOrRemoveService event,
+    Emitter<ProfileState> emit,
+  ) {
     if (event.isRemove == true) {
-      emit(state.copyWith(
-        services: state.services?.where((UiService element) {
-          return element != event.service;
-        }).toList(),
-      ),);
+      emit(
+        state.copyWith(
+          services: state.services?.where((UiService element) {
+            return element != event.service;
+          }).toList(),
+        ),
+      );
     } else {
-      emit(state.copyWith(
-        services: <UiService>[
-          ...state.services ?? <UiService>[],
-          event.service!,
-        ],
-      ),);
+      emit(
+        state.copyWith(
+          services: <UiService>[
+            ...state.services ?? <UiService>[],
+            event.service!,
+          ],
+        ),
+      );
     }
   }
 
   Future<void> _onSubmitProfile(
-      SubmitProfile event, Emitter<ProfileState> emit,) async {
+    SubmitProfile event,
+    Emitter<ProfileState> emit,
+  ) async {
     try {
       SmartDialog.showLoading();
       UpdateUserInfoRequest newUpdateUserInfoRequest = UpdateUserInfoRequest(
