@@ -437,6 +437,10 @@ class ProfileUpdatePage extends StatelessWidget {
                                                   AddOrRemoveWorkExperience(
                                                     workExperience:
                                                         UiWorkExperience(
+                                                      companyName:
+                                                          organizationController
+                                                              .text,
+                                                      isCurrentlyWorking: false,
                                                       designation:
                                                           designationController
                                                               .text,
