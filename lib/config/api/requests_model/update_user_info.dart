@@ -37,6 +37,7 @@ class UserInfo {
   final String? portfolioStatus;
   final String? portfolioDescription;
   final String? portfolioTitle;
+  final String? gender;
 
   UserInfo({
     this.emailId,
@@ -47,6 +48,7 @@ class UserInfo {
     this.portfolioStatus,
     this.portfolioDescription,
     this.portfolioTitle,
+    this.gender,
   });
 
   factory UserInfo.fromJson(String str) => UserInfo.fromMap(json.decode(str));
@@ -62,6 +64,7 @@ class UserInfo {
         portfolioStatus: json["portfolio_status"],
         portfolioDescription: json["portfolio_description"],
         portfolioTitle: json["portfolio_title"],
+        gender: json["gender"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -74,5 +77,6 @@ class UserInfo {
         "portfolio_status": portfolioStatus,
         "portfolio_description": portfolioDescription,
         "portfolio_title": portfolioTitle,
+        "gender": gender,
       };
 }

@@ -1,15 +1,23 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
+    hide UserInfo, UserEducation, UserWorkExperience, UserService;
+import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import '../../../../config/api/requests_model/update_profile_picture.dart';
+import '../../../../config/api/requests_model/update_user_info.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -20,7 +28,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   TextEditingController bioController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-
+  TextEditingController portfolioTitle = TextEditingController();
   TextEditingController portfolioDescriptionController =
       TextEditingController();
   TextEditingController portfolioStatus = TextEditingController();
@@ -124,7 +132,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
       state.profileImage!,
     );
-    await UsersApi.updateUserProfilePicture(
+    await UsersApi.updateProfilePicture(
       ProfilePictureUpdateRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         profilePictureUrl: profilePictureUrl,
@@ -214,5 +222,80 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   Future<void> _onSubmitProfile(
-      SubmitProfile event, Emitter<ProfileState> emit) async {}
+      SubmitProfile event, Emitter<ProfileState> emit) async {
+    try {
+      SmartDialog.showLoading();
+      UpdateUserInfoRequest newUpdateUserInfoRequest = UpdateUserInfoRequest(
+        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        userInfo: UserInfo(
+          name: nameController.text,
+          bio: bioController.text,
+          address: addressController.text,
+          portfolioStatus: portfolioStatus.text,
+          portfolioDescription: portfolioDescriptionController.text,
+          portfolioTitle: portfolioTitle.text,
+          emailId: emailController.text,
+          dob: state.dob,
+          gender: state.gender,
+        ),
+      );
+      UpdateUserEducationsRequest newUserEducationsRequest =
+          UpdateUserEducationsRequest(
+        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        userEducations: state.educations
+            ?.map(
+              (e) => UserEducation(
+                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                title: e.degreeName,
+                type: e.degreeType,
+                startDate: e.startDate,
+                endDate: e.endDate,
+                isOngoingEducation: e.isOngoingEducation,
+                institute: e.institute,
+              ),
+            )
+            .toList(),
+      );
+      UpdateUserWorkExperiencesRequest newUserWorkExperiencesRequest =
+          UpdateUserWorkExperiencesRequest(
+        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        userWorkExperiences: state.workExperiences
+            ?.map(
+              (e) => UserWorkExperience(
+                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                designation: e.designation,
+                startDate: e.startDate,
+                endDate: e.endDate,
+                isCurrentlyWorking: e.isCurrentlyWorking,
+                workingMode: e.workingMode,
+                companyName: e.companyName,
+              ),
+            )
+            .toList(),
+      );
+      UpdateUserServicesRequest newUserServicesRequest =
+          UpdateUserServicesRequest(
+        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        userServices: state.services
+            ?.map(
+              (e) => UserService(
+                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                title: e.serviceName,
+                description: e.serviceDescription,
+              ),
+            )
+            .toList(),
+      );
+      await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
+      await UsersApi.updateEducations(newUserEducationsRequest);
+      await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
+      await UsersApi.updateServices(newUserServicesRequest);
+      SmartDialog.dismiss();
+      AppNavigationService.goBack();
+    } catch (e) {
+      SmartDialog.dismiss();
+      SmartDialog.showToast(e.toString());
+      if (kDebugMode) rethrow;
+    }
+  }
 }

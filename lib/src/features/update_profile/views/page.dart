@@ -531,6 +531,13 @@ class ProfileUpdatePage extends StatelessWidget {
                         child: Column(
                           children: [
                             SuperFormField.generalTextField(
+                              headingTitle: "Title",
+                              hintText: "Enter Portfolio Title",
+                              controller:
+                                  context.read<ProfileBloc>().portfolioTitle,
+                            ),
+                            Gap(12),
+                            SuperFormField.generalTextField(
                               headingTitle: "Status",
                               hintText: "Add Status on Portfolio",
                               controller:

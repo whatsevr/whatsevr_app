@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
 
 import '../client.dart';
 import '../requests_model/update_profile_picture.dart';
+import '../requests_model/update_user_info.dart';
 import '../response_model/multiple_user_details.dart';
 import '../response_model/profile_details.dart';
 import '../response_model/update_profile_picture_response.dart';
@@ -54,7 +58,7 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfilePictureUpdateResponse?> updateUserProfilePicture(
+  static Future<ProfilePictureUpdateResponse?> updateProfilePicture(
       ProfilePictureUpdateRequest request) async {
     try {
       Response response = await ApiClient.client.post(
@@ -63,6 +67,61 @@ class UsersApi {
       );
 
       return ProfilePictureUpdateResponse.fromMap(response.data);
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<String?> updateUserInfo(UpdateUserInfoRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-info',
+        data: request.toMap(),
+      );
+      return response.data['message'];
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<String?> updateEducations(
+      UpdateUserEducationsRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-educations',
+        data: request.toMap(),
+      );
+      return response.data['message'];
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<String?> updateWorkExperiences(
+      UpdateUserWorkExperiencesRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-work-experiences',
+        data: request.toMap(),
+      );
+      return response.data['message'];
+    } catch (e) {
+      ApiClient.apiMethodException(e);
+    }
+    return null;
+  }
+
+  static Future<String?> updateServices(
+      UpdateUserServicesRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/user-services',
+        data: request.toMap(),
+      );
+      return response.data['message'];
     } catch (e) {
       ApiClient.apiMethodException(e);
     }

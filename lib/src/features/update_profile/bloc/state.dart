@@ -112,6 +112,7 @@ class UiEducation extends Equatable {
 }
 
 class UiWorkExperience extends Equatable {
+  final String? companyName;
   final String? designation;
   final String? workingMode;
 
@@ -120,6 +121,7 @@ class UiWorkExperience extends Equatable {
   final bool? isCurrentlyWorking;
 
   UiWorkExperience({
+    this.companyName,
     this.designation,
     this.workingMode,
     this.startDate,
@@ -128,7 +130,8 @@ class UiWorkExperience extends Equatable {
   });
 
   UiWorkExperience copyWith({
-    String? title,
+    String? companyName,
+    String? designation,
     String? workingMode,
     String? location,
     DateTime? startDate,
@@ -136,7 +139,8 @@ class UiWorkExperience extends Equatable {
     bool? isCurrentlyWorking,
   }) {
     return UiWorkExperience(
-      designation: title ?? this.designation,
+      companyName: companyName ?? this.companyName,
+      designation: designation ?? this.designation,
       workingMode: workingMode ?? this.workingMode,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
@@ -146,6 +150,7 @@ class UiWorkExperience extends Equatable {
 
   @override
   List<Object?> get props => [
+        companyName,
         designation,
         workingMode,
         startDate,
