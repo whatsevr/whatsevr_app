@@ -1,22 +1,50 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-class ThumbnailSelectionPage extends StatefulWidget {
-  final File videoFile;
-  const ThumbnailSelectionPage({super.key, required this.videoFile});
+import 'button.dart';
 
-  @override
-  State<ThumbnailSelectionPage> createState() => _ThumbnailSelectionPageState();
+Future<File?> showThumbnailSelectionPage(
+    {required File videoFile, Function(File)? onThumbnailSelected}) async {
+  File? file;
+  await SmartDialog.show(
+      alignment: Alignment.bottomCenter,
+      builder: (context) {
+        return _Ui(
+          videoFile: videoFile,
+          onThumbnailSelected: (File file0) {
+            onThumbnailSelected?.call(file0);
+            file = file0;
+            SmartDialog.dismiss();
+          },
+        );
+      });
+
+  return file;
 }
 
-class _ThumbnailSelectionPageState extends State<ThumbnailSelectionPage> {
+class _Ui extends StatefulWidget {
+  final File videoFile;
+  final Function(File) onThumbnailSelected;
+
+  const _Ui(
+      {super.key, required this.videoFile, required this.onThumbnailSelected});
+
+  @override
+  State<_Ui> createState() => _UiState();
+}
+
+class _UiState extends State<_Ui> {
   VideoPlayerController? _controller;
   int videoDurationInMs = 0;
   List<MemoryImage> thumbnails = [];
@@ -75,76 +103,97 @@ class _ThumbnailSelectionPageState extends State<ThumbnailSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Select Thumbnail'),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Builder(
-              builder: (context) {
-                if (selectedThumbnail == null) {
-                  return const CupertinoActivityIndicator();
-                }
-                return Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    image: DecorationImage(
-                      image: selectedThumbnail!,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const Gap(8.0),
-          SizedBox(
-            height: 200,
-            child: ListView.separated(
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Gap(8.0),
-              scrollDirection: Axis.horizontal,
-              itemCount: thumbnails.length,
-              itemBuilder: (BuildContext context, int index) {
-                final MemoryImage thumbnail = thumbnails[index];
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedThumbnail = thumbnail;
-                    });
-                  },
-                  child: Container(
-                    width: 200,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: selectedThumbnail == thumbnail
-                            ? Colors.black
-                            : Colors.transparent,
-                        width: 2,
-                      ),
-                    ),
-                    child: ExtendedImage.memory(
-                      thumbnail.bytes,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          MaterialButton(
-            minWidth: double.infinity,
-            color: Colors.blue,
-            textColor: Colors.white,
-            onPressed: () async {
-              File? file = await saveImageAsFile(selectedThumbnail!.bytes);
-              Navigator.of(context).pop(file);
+      appBar: CustomAppBar(
+        title: 'Select Thumbnail',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              SmartDialog.dismiss();
             },
-            child: const Text('Done'),
           ),
         ],
+      ),
+      body: PadHorizontal(
+        child: Column(
+          children: [
+            Expanded(
+              child: Builder(
+                builder: (context) {
+                  if (selectedThumbnail == null) {
+                    return const CupertinoActivityIndicator();
+                  }
+                  return Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: selectedThumbnail!,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const Gap(8.0),
+            SizedBox(
+              height: 150,
+              child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Gap(8.0),
+                scrollDirection: Axis.horizontal,
+                itemCount: thumbnails.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final MemoryImage thumbnail = thumbnails[index];
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedThumbnail = thumbnail;
+                      });
+                    },
+                    child: Container(
+                      width: 150,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: selectedThumbnail == thumbnail
+                              ? Colors.black
+                              : Colors.transparent,
+                          width: 2,
+                        ),
+                      ),
+                      child: ExtendedImage.memory(
+                        thumbnail.bytes,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            WhatsevrButton.outlined(
+              label: 'Pick From Gallery',
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  allowMultiple: false,
+                  type: FileType.image,
+                );
+                if (result == null) {
+                  return;
+                }
+                widget.onThumbnailSelected(File(result.files.single.path!));
+              },
+            ),
+            WhatsevrButton.filled(
+              label: 'Done',
+              onPressed: () async {
+                File? file = await saveImageAsFile(selectedThumbnail!.bytes);
+                if (file != null) {
+                  widget.onThumbnailSelected(file);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

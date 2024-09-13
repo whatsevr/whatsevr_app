@@ -195,22 +195,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               );
         if (pickedFile == null) return;
         final File file = File(pickedFile.files.single.path!);
-        SmartDialog.showLoading(msg: 'Uploading cover media');
+
         File? thumbnail;
         String? imageUrl;
         String? videoUrl;
         if (event.isVideo == true) {
-          thumbnail = await getThumbnailFile(videoFile: file);
+          thumbnail = await showThumbnailSelectionPage(videoFile: file);
           if (thumbnail == null) {
-            SmartDialog.dismiss();
             SmartDialog.showToast('Thumbnail not generated');
             return;
           }
+          SmartDialog.showLoading(msg: 'Uploading cover media');
           imageUrl = await FileUploadService.uploadFilesToSST(thumbnail!);
           videoUrl = await FileUploadService.uploadFilesToSST(file);
         }
 
         if (event.isImage == true) {
+          SmartDialog.showLoading(msg: 'Uploading cover media');
           imageUrl = await FileUploadService.uploadFilesToSST(file);
         }
 
@@ -236,7 +237,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
                 (UiCoverMedia e) => UserCoverMedia(
                   imageUrl: e.imageUrl,
                   videoUrl: e.videoUrl,
-                  isVideo: e.isVideo,
+                  isVideo: e.isVideo ?? false,
                   userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
                 ),
               )

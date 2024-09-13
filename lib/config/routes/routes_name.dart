@@ -14,5 +14,4 @@ class RoutesName {
   static const String wtvDetails = 'wtv-details';
   static const String createVideoPost = 'create-post';
   static const String updateProfile = 'update-profile';
-  static const String thumbnailSelection = 'thumbnail-selection';
 }

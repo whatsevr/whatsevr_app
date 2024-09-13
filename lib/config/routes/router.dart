@@ -261,20 +261,6 @@ class AppNavigationService {
                 );
               },
             ),
-            GoRoute(
-              name: RoutesName.thumbnailSelection,
-              path: RoutesName.thumbnailSelection,
-              pageBuilder: (BuildContext context, GoRouterState state) {
-                File pageArgument = state.extra as File;
-                return _navigateWithTransition(
-                  context: context,
-                  state: state,
-                  child: ThumbnailSelectionPage(
-                    videoFile: pageArgument,
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ],

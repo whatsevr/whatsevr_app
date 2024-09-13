@@ -105,14 +105,11 @@ class CreateVideoPostBloc
     PickThumbnailEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    File? thumbnailFile = await AppNavigationService.newRoute(
-      RoutesName.thumbnailSelection,
-      extras: state.videoFile!,
+    await showThumbnailSelectionPage(
+      videoFile: state.videoFile!,
+      onThumbnailSelected: (File thumbnailFile) {
+        emit(state.copyWith(thumbnailFile: thumbnailFile));
+      },
     );
-    // FilePickerResult? result = await FilePicker.platform.pickFiles(
-    //   allowMultiple: false,
-    //   type: FileType.image,
-    // );
-    emit(state.copyWith(thumbnailFile: thumbnailFile));
   }
 }
