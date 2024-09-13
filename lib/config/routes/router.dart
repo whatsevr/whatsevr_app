@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -5,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/talker.dart';
+import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
@@ -61,13 +64,13 @@ CustomTransitionPage<SlideTransition> _navigateWithTransition({
 }
 
 class AppNavigationService {
-  static Future<void> newRoute(
+  static Future<dynamic> newRoute(
     String routeName, {
     Object? extras,
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Map<String, String> pathParameters = const <String, String>{},
   }) async {
-    await navigatorKey.currentContext?.pushNamed(
+    return await navigatorKey.currentContext?.pushNamed(
       routeName,
       extra: extras,
       queryParameters: queryParameters,
@@ -254,6 +257,20 @@ class AppNavigationService {
                   state: state,
                   child: ProfileUpdatePage(
                     pageArgument: pageArgument,
+                  ),
+                );
+              },
+            ),
+            GoRoute(
+              name: RoutesName.thumbnailSelection,
+              path: RoutesName.thumbnailSelection,
+              pageBuilder: (BuildContext context, GoRouterState state) {
+                File pageArgument = state.extra as File;
+                return _navigateWithTransition(
+                  context: context,
+                  state: state,
+                  child: ThumbnailSelectionPage(
+                    videoFile: pageArgument,
                   ),
                 );
               },

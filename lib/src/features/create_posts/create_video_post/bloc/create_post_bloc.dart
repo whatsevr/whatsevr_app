@@ -7,11 +7,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
 import 'package:whatsevr_app/utils/video.dart';
@@ -91,18 +94,25 @@ class CreateVideoPostBloc
 
     emit(state.copyWith(videoFile: File(result!.files.single.path!)));
 
-    emit(state.copyWith(
-        thumbnailFile: await getThumbnailFile(state.videoFile!),),);
+    emit(
+      state.copyWith(
+        thumbnailFile: await getThumbnailFile(videoFile: state.videoFile!),
+      ),
+    );
   }
 
   FutureOr<void> _onPickThumbnail(
     PickThumbnailEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.image,
+    File? thumbnailFile = await AppNavigationService.newRoute(
+      RoutesName.thumbnailSelection,
+      extras: state.videoFile!,
     );
-    emit(state.copyWith(thumbnailFile: File(result!.files.single.path!)));
+    // FilePickerResult? result = await FilePicker.platform.pickFiles(
+    //   allowMultiple: false,
+    //   type: FileType.image,
+    // );
+    emit(state.copyWith(thumbnailFile: thumbnailFile));
   }
 }

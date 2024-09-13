@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/material.dart';
+
 class MockData {
   static String randomImage([String? hw, int? index]) {
     String url =
@@ -32,5 +35,10 @@ class MockData {
 
   static String imagePlaceholder([String label = 'Image']) {
     return 'https://placehold.co/600x400/png?text=$label';
+    return 'https://whastevr-ai-ml-server.onrender.com/placeholder-image?width=600&height=300&text=$label&bg_color=ff0000&text_color=ffffff';
+  }
+
+  static ImageProvider imageProvider(String url) {
+    return ExtendedImage(image: NetworkImage(url)).image;
   }
 }

@@ -39,7 +39,8 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AccountBloc()..add(AccountInitialEvent()),
+      create: (BuildContext context) =>
+          AccountBloc()..add(AccountInitialEvent()),
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
           return Scaffold(
@@ -88,20 +89,24 @@ class AccountPage extends StatelessWidget {
                                   child: Text(
                                     '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
                                     style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                                 Gap(8),
-                                if (pageArgument?.isEditMode == true) ...<Widget>[
+                                if (pageArgument?.isEditMode ==
+                                    true) ...<Widget>[
                                   IconButton(
                                     icon: Icon(Icons.edit),
                                     onPressed: () async {
                                       await AppNavigationService.newRoute(
-                                          RoutesName.updateProfile,
-                                          extras: ProfileUpdatePageArgument(
-                                              profileDetailsResponse: state
-                                                  .profileDetailsResponse,),);
+                                        RoutesName.updateProfile,
+                                        extras: ProfileUpdatePageArgument(
+                                          profileDetailsResponse:
+                                              state.profileDetailsResponse,
+                                        ),
+                                      );
                                       context
                                           .read<AccountBloc>()
                                           .add(AccountInitialEvent());
@@ -132,39 +137,46 @@ class AccountPage extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                          '${state.profileDetailsResponse?.userInfo?.name}',
-                                          style: TextStyle(fontSize: 14),),
+                                        '${state.profileDetailsResponse?.userInfo?.name}',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                       Text(
-                                          ' @${state.profileDetailsResponse?.userInfo?.userName}',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,),),
+                                        ' @${state.profileDetailsResponse?.userInfo?.userName}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
                                       Gap(8),
                                     ],
                                   ),
                                 ),
-                                if (pageArgument?.isEditMode == true) ...<Widget>[
+                                if (pageArgument?.isEditMode ==
+                                    true) ...<Widget>[
                                   IconButton(
                                     icon: Iconify(
                                       Ri.heart_add_fill,
                                       size: 30,
                                     ),
                                     onPressed: () {
-                                      showContentUploadBottomSheet(context,
-                                          postCreatorType: state
-                                                      .profileDetailsResponse
-                                                      ?.userInfo
-                                                      ?.isPortfolio ==
-                                                  true
-                                              ? EnumPostCreatorType.PORTFOLIO
-                                              : EnumPostCreatorType.ACCOUNT,);
+                                      showContentUploadBottomSheet(
+                                        context,
+                                        postCreatorType: state
+                                                    .profileDetailsResponse
+                                                    ?.userInfo
+                                                    ?.isPortfolio ==
+                                                true
+                                            ? EnumPostCreatorType.PORTFOLIO
+                                            : EnumPostCreatorType.ACCOUNT,
+                                      );
                                     },
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.menu),
                                     onPressed: () {
                                       AppNavigationService.newRoute(
-                                          RoutesName.settings,);
+                                        RoutesName.settings,
+                                      );
                                     },
                                   ),
                                 ],
@@ -181,10 +193,14 @@ class AccountPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('1,000',
-                                          style: TextStyle(fontSize: 20),),
-                                      Text('Likes',
-                                          style: TextStyle(fontSize: 14),),
+                                      Text(
+                                        '1,000',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      Text(
+                                        'Likes',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -193,10 +209,14 @@ class AccountPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('1,000',
-                                          style: TextStyle(fontSize: 20),),
-                                      Text('Networks',
-                                          style: TextStyle(fontSize: 14),),
+                                      Text(
+                                        '1,000',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      Text(
+                                        'Networks',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -205,10 +225,14 @@ class AccountPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('1,000',
-                                          style: TextStyle(fontSize: 20),),
-                                      Text('Connections',
-                                          style: TextStyle(fontSize: 14),),
+                                      Text(
+                                        '1,000',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      Text(
+                                        'Connections',
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -220,11 +244,15 @@ class AccountPage extends StatelessWidget {
                             const PadHorizontal(
                               child: Row(
                                 children: <Widget>[
-                                  Text('Suggestions',
-                                      style: TextStyle(fontSize: 14),),
+                                  Text(
+                                    'Suggestions',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                   Spacer(),
-                                  Text('See All',
-                                      style: TextStyle(fontSize: 14),),
+                                  Text(
+                                    'See All',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                 ],
                               ),
                             ),
@@ -299,7 +327,8 @@ class AccountPage extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12),),
+                                top: Radius.circular(12),
+                              ),
                             ),
                             child: Column(
                               children: const <Widget>[

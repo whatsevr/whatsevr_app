@@ -174,12 +174,9 @@ class ProfileUpdatePage extends StatelessWidget {
                                   alignment: Alignment.center,
                                   children: [
                                     ExtendedImage.network(
-                                      coverMedia.isVideo == true
-                                          ? MockData.imagePlaceholder(
-                                              'Cover Video')
-                                          : coverMedia.imageUrl ??
-                                              MockData.imagePlaceholder(
-                                                  'Cover Image'),
+                                      coverMedia.imageUrl ??
+                                          MockData.imagePlaceholder(
+                                              'Cover Media'),
                                       width: double.infinity,
                                       height: 200,
                                       fit: BoxFit.cover,

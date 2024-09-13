@@ -21,10 +21,13 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
         UserCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
+
+import '../../../../utils/video.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -193,14 +196,31 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if (pickedFile == null) return;
         final File file = File(pickedFile.files.single.path!);
         SmartDialog.showLoading(msg: 'Uploading cover media');
-        String? url = await FileUploadService.uploadFilesToSST(file);
+        File? thumbnail;
+        String? imageUrl;
+        String? videoUrl;
+        if (event.isVideo == true) {
+          thumbnail = await getThumbnailFile(videoFile: file);
+          if (thumbnail == null) {
+            SmartDialog.dismiss();
+            SmartDialog.showToast('Thumbnail not generated');
+            return;
+          }
+          imageUrl = await FileUploadService.uploadFilesToSST(thumbnail!);
+          videoUrl = await FileUploadService.uploadFilesToSST(file);
+        }
+
+        if (event.isImage == true) {
+          imageUrl = await FileUploadService.uploadFilesToSST(file);
+        }
+
         emit(
           state.copyWith(
             coverMedia: <UiCoverMedia>[
               ...state.coverMedia ?? <UiCoverMedia>[],
               UiCoverMedia(
-                imageUrl: event.isImage == true ? url : null,
-                videoUrl: event.isVideo == true ? url : null,
+                imageUrl: imageUrl,
+                videoUrl: videoUrl,
                 isVideo: event.isVideo,
               ),
             ],

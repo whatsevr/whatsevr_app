@@ -14,6 +14,18 @@ class AccountPageCoverVideoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (BuildContext context, AccountState state) {
+        //show empty container if there is no cover media
+        if (state.profileDetailsResponse?.userCoverMedia?.isEmpty ?? true) {
+          return Container(
+            height: 120,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(MockData.imagePlaceholder('Cover Media')),
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        }
         return Stack(
           children: <Widget>[
             AspectRatio(
@@ -33,7 +45,7 @@ class AccountPageCoverVideoView extends StatelessWidget {
                   }
                   return ExtendedImage.network(
                     coverMedia?.imageUrl ??
-                        MockData.imagePlaceholder('Cover Image'),
+                        MockData.imagePlaceholder('Cover Media'),
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
@@ -125,7 +137,7 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
                     !controller.value.isPlaying) {
                   return ExtendedImage.network(
                     widget.thumbnailUrl ??
-                        MockData.imagePlaceholder('Cover Image'),
+                        MockData.imagePlaceholder('Cover Media'),
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
@@ -144,11 +156,13 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
             child: IconButton(
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Colors.black38),
-                shape: WidgetStateProperty.all(const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
+                shape: WidgetStateProperty.all(
+                  const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                    ),
                   ),
-                ),),
+                ),
               ),
               icon: const Icon(
                 Icons.play_arrow,
