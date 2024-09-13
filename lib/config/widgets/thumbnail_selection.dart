@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -42,7 +44,7 @@ class _ThumbnailSelectionPageState extends State<ThumbnailSelectionPage> {
       return;
     }
 
-    const int thumbnailCount = 5;
+    const int thumbnailCount = 20;
     final int interval =
         videoDurationInMs ~/ thumbnailCount; // Ensure distinct intervals
 
@@ -93,7 +95,6 @@ class _ThumbnailSelectionPageState extends State<ThumbnailSelectionPage> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  child: Text('${thumbnails.indexOf(selectedThumbnail!) + 1}'),
                 );
               },
             ),
@@ -137,8 +138,9 @@ class _ThumbnailSelectionPageState extends State<ThumbnailSelectionPage> {
             minWidth: double.infinity,
             color: Colors.blue,
             textColor: Colors.white,
-            onPressed: () {
-              Navigator.pop(context, selectedThumbnail);
+            onPressed: () async {
+              File? file = await saveImageAsFile(selectedThumbnail!.bytes);
+              Navigator.of(context).pop(file);
             },
             child: const Text('Done'),
           ),
@@ -154,7 +156,7 @@ Future<MemoryImage?> getThumbnailMemoryImage(
     // Generate a thumbnail at the specified time in milliseconds
     final String? tempPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
-      thumbnailPath: videoFile.parent.path,
+
       imageFormat: ImageFormat.JPEG,
       quality: 70,
       timeMs: forDuration, // Ensure this time is unique for each thumbnail
@@ -213,4 +215,20 @@ Future<File?> getThumbnailFile(
     print('Error generating thumbnail: $e');
     return null;
   }
+}
+
+Future<File?> saveImageAsFile(Uint8List bytes) async {
+  try {
+    Directory root = await getTemporaryDirectory();
+    String directoryPath = '${root.path}/appName';
+    // Create the directory if it doesn't exist
+    await Directory(directoryPath).create(recursive: true);
+    String filePath =
+        '$directoryPath/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final file = await File(filePath).writeAsBytes(bytes);
+    return file;
+  } catch (e) {
+    debugPrint(e.toString());
+  }
+  return null;
 }
