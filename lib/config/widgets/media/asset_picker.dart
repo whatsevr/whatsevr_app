@@ -11,10 +11,17 @@ import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 
+import 'image_editor.dart';
+
 class CustomAssetPicker {
   CustomAssetPicker._();
 
-  static Future<File?> captureImage(BuildContext context) async {
+  static Future<File?> captureImage(
+    BuildContext context, {
+    bool cropImage = true,
+    bool editImage = true,
+    List<double> cropRatio = const <double>[1 / 1],
+  }) async {
     final List<CameraDescription> cameraDescriptions = await availableCameras();
     if (cameraDescriptions.isEmpty) throw Exception('No cameras available');
 
@@ -29,8 +36,15 @@ class CustomAssetPicker {
       extras: WhatsevrCameraSurfacePageArgument(controller: cameraController),
     );
     if (capturedFile == null) throw Exception('No image captured');
-
-    return await showWhatsevrImageCropper(capturedFile);
+    if (!cropImage) return capturedFile;
+    File? croppedImage =
+        await showWhatsevrImageCropper(imageFile: capturedFile);
+    if (croppedImage == null) throw Exception('No image cropped');
+    if (!editImage) return croppedImage;
+    File? editedImage = await AppNavigationService.newRoute(
+        RoutesName.imageEditor,
+        extras: ImageEditorPageArgument(file: croppedImage));
+    return editedImage ?? capturedFile;
   }
 
   static Future<File?> pickImageFromGallery(
@@ -56,7 +70,7 @@ class CustomAssetPicker {
 
     final File? imageFile = await pickedAssets.first.file;
     if (imageFile == null) throw Exception('File does not exist');
-    return await showWhatsevrImageCropper(imageFile);
+    return await showWhatsevrImageCropper(imageFile: imageFile);
   }
 
   static Future<File?> pickVideoFromGallery(
@@ -83,7 +97,7 @@ class CustomAssetPicker {
     final File? videoFile = await pickedAssets.first.file;
     if (videoFile == null) throw Exception('File does not exist');
     final File? editedVideo = await AppNavigationService.newRoute(
-        RoutesName.editVideo,
+        RoutesName.videoEditor,
         extras: VideoEditorPageArgument(videoFile: videoFile));
     if (editedVideo == null) return videoFile;
     return editedVideo;

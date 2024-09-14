@@ -6,6 +6,8 @@ class PermissionService {
     Map<Permission, PermissionStatus> statuses = await <Permission>[
       Permission.notification,
       Permission.storage,
+      Permission.camera,
+      Permission.mediaLibrary,
     ].request();
     debugPrint('$statuses');
   }

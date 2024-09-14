@@ -78,9 +78,9 @@ class DraggableWidget extends StatefulWidget {
     super.key,
     this.horizontalSpace = 0,
     this.verticalSpace = 0,
-    this.initialPosition = AnchoringPosition.topRight,
+    this.initialPosition = AnchoringPosition.bottomRight,
     this.intialVisibility = true,
-    this.bottomMargin = 24,
+    this.bottomMargin = 70,
     this.topMargin = 24,
     this.statusBarHeight = 24,
     this.shadowBorderRadius = 10,
@@ -301,19 +301,21 @@ class _DraggableWidgetState extends State<DraggableWidget>
                       ),
                       child: Transform.scale(
                         scale: dragging ? widget.dragAnimationScale : 1,
-                        child: IconButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                              Colors.red,
+                        child: SafeArea(
+                          child: IconButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                Colors.red,
+                              ),
                             ),
+                            color: Colors.white,
+                            onPressed: () {
+                              AppNavigationService.newRoute(
+                                DeveloperRoutes.developerPage,
+                              );
+                            },
+                            icon: Icon(Icons.developer_mode),
                           ),
-                          color: Colors.white,
-                          onPressed: () {
-                            AppNavigationService.newRoute(
-                              DeveloperRoutes.developerPage,
-                            );
-                          },
-                          icon: Icon(Icons.developer_mode),
                         ),
                       ),
                     ),

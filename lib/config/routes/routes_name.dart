@@ -15,7 +15,8 @@ class RoutesName {
   static const String createVideoPost = 'create-post';
   static const String updateProfile = 'update-profile';
 
-  static const String editVideo = 'edit-video';
+  static const String videoEditor = 'video-editor';
 
   static const String cameraView = 'camera-view';
+  static const String imageEditor = 'image-editor';
 }

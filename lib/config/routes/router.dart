@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
+import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
@@ -177,12 +178,23 @@ class AppNavigationService {
             },
           ),
           GoRoute(
-            name: RoutesName.editVideo,
-            path: RoutesName.editVideo,
+            name: RoutesName.videoEditor,
+            path: RoutesName.videoEditor,
             builder: (BuildContext context, GoRouterState state) {
               VideoEditorPageArgument pageArgument =
                   state.extra as VideoEditorPageArgument;
               return VideoEditorPage(
+                pageArgument: pageArgument,
+              );
+            },
+          ),
+          GoRoute(
+            name: RoutesName.imageEditor,
+            path: RoutesName.imageEditor,
+            builder: (BuildContext context, GoRouterState state) {
+              ImageEditorPageArgument pageArgument =
+                  state.extra as ImageEditorPageArgument;
+              return ImageEditorPage(
                 pageArgument: pageArgument,
               );
             },
