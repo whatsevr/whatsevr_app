@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/asset_picker.dart'; // Assuming this is where CustomAssetPicker is
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart'; // Assuming this is where CustomAssetPicker is
 import 'package:video_player/video_player.dart';
 
 class DeveloperPage extends StatefulWidget {

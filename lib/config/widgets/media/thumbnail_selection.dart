@@ -12,9 +12,9 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import 'button.dart';
+import '../button.dart';
 
-Future<File?> showThumbnailSelectionPage(
+Future<File?> showWhatsevrThumbnailSelectionPage(
     {required File videoFile, Function(File)? onThumbnailSelected}) async {
   File? file;
   await SmartDialog.show(

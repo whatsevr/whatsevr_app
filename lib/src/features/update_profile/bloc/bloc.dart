@@ -21,7 +21,7 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
         UserCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
+import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
@@ -200,7 +200,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         String? imageUrl;
         String? videoUrl;
         if (event.isVideo == true) {
-          thumbnail = await showThumbnailSelectionPage(videoFile: file);
+          thumbnail = await showWhatsevrThumbnailSelectionPage(videoFile: file);
           if (thumbnail == null) {
             SmartDialog.showToast('Thumbnail not generated');
             return;

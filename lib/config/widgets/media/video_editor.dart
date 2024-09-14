@@ -1,43 +1,42 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:camera/camera.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_session.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:ffmpeg_kit_flutter/statistics.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:video_editor/video_editor.dart';
-import 'package:video_player/video_player.dart';
-import 'package:video_trimmer/video_trimmer.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+
 import 'package:fraction/fraction.dart';
-import 'package:path/path.dart' as path;
+import 'package:whatsevr_app/config/routes/router.dart';
+
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/media/video_player.dart';
 
-class VideoEditor extends StatefulWidget {
-  const VideoEditor({super.key, required this.file});
-
-  final File file;
-
-  @override
-  State<VideoEditor> createState() => _VideoEditorState();
+class VideoEditorPageArgument {
+  final File videoFile;
+  VideoEditorPageArgument({required this.videoFile});
 }
 
-class _VideoEditorState extends State<VideoEditor> {
-  final _exportingProgress = ValueNotifier<double>(0.0);
-  final _isExporting = ValueNotifier<bool>(false);
+class VideoEditorPage extends StatefulWidget {
+  const VideoEditorPage({super.key, required this.pageArgument});
+
+  final VideoEditorPageArgument pageArgument;
+
+  @override
+  State<VideoEditorPage> createState() => _VideoEditorPageState();
+}
+
+class _VideoEditorPageState extends State<VideoEditorPage> {
+  final ValueNotifier<double> _exportingProgress = ValueNotifier<double>(0.0);
+  final ValueNotifier<bool> _isExporting = ValueNotifier<bool>(false);
   final double baseHeight = 60;
 
   late final VideoEditorController _controller = VideoEditorController.file(
-    widget.file,
+    widget.pageArgument.videoFile,
     minDuration: const Duration(seconds: 1),
     maxDuration: const Duration(seconds: 10),
   );
@@ -50,8 +49,8 @@ class _VideoEditorState extends State<VideoEditor> {
         .then((_) => setState(() {}))
         .catchError((error) {
       // handle minumum duration bigger than video duration error
-      Navigator.pop(context);
-    }, test: (e) => e is VideoMinDurationError);
+      AppNavigationService.goBack();
+    }, test: (Object e) => e is VideoMinDurationError);
   }
 
   @override
@@ -63,37 +62,25 @@ class _VideoEditorState extends State<VideoEditor> {
     super.dispose();
   }
 
-  void _showErrorSnackBar(String message) =>
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 1),
-        ),
-      );
-
   void _exportVideo() async {
     _exportingProgress.value = 0;
     _isExporting.value = true;
 
-    final config = VideoFFmpegVideoEditorConfig(
+    final VideoFFmpegVideoEditorConfig config = VideoFFmpegVideoEditorConfig(
       _controller,
     );
 
     await ExportService.runFFmpegCommand(
       await config.getExecuteConfig(),
-      onProgress: (stats) {
+      onProgress: (Statistics stats) {
         _exportingProgress.value =
             config.getFFmpegProgress(stats.getTime().toInt());
       },
-      onError: (e, s) => _showErrorSnackBar("Error on export video :("),
-      onCompleted: (file) {
+      onError: (Object e, StackTrace s) =>
+          SmartDialog.showToast("Error on export video :("),
+      onCompleted: (File file) async {
         _isExporting.value = false;
-        if (!mounted) return;
-
-        showDialog(
-          context: context,
-          builder: (_) => VideoResultPopup(video: file),
-        );
+        AppNavigationService.goBack<File>(result: file);
       },
     );
   }
@@ -102,17 +89,11 @@ class _VideoEditorState extends State<VideoEditor> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: !_isExporting.value,
-      onPopInvokedWithResult: (bool didPop, dynamic result) {
-        if (didPop) {
-          _controller.dispose();
-          Navigator.pop(context, widget.file);
-        }
-      },
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
           title: 'Edit',
-          actions: [
+          actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: _exportVideo,
@@ -122,11 +103,11 @@ class _VideoEditorState extends State<VideoEditor> {
         body: _controller.initialized
             ? SafeArea(
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: Stack(
                         alignment: Alignment.center,
-                        children: [
+                        children: <Widget>[
                           CropGridViewer.preview(controller: _controller),
                           AnimatedBuilder(
                             animation: _controller.video,
@@ -157,7 +138,7 @@ class _VideoEditorState extends State<VideoEditor> {
                       height: 200,
                       margin: const EdgeInsets.only(top: 10),
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -197,7 +178,7 @@ class _VideoEditorState extends State<VideoEditor> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
-          children: [
+          children: <Widget>[
             Expanded(
               child: IconButton(
                 onPressed: () =>
@@ -219,7 +200,8 @@ class _VideoEditorState extends State<VideoEditor> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => CropPage(controller: _controller),
+                    builder: (BuildContext context) =>
+                        CropPage(controller: _controller),
                   ),
                 ),
                 icon: const Icon(Icons.crop),
@@ -232,15 +214,15 @@ class _VideoEditorState extends State<VideoEditor> {
     );
   }
 
-  String formatter(Duration duration) => [
+  String formatter(Duration duration) => <String>[
         duration.inMinutes.remainder(60).toString().padLeft(2, '0'),
         duration.inSeconds.remainder(60).toString().padLeft(2, '0')
       ].join(":");
 
   List<Widget> _trimSlider() {
-    return [
+    return <Widget>[
       AnimatedBuilder(
-        animation: Listenable.merge([
+        animation: Listenable.merge(<Listenable?>[
           _controller,
           _controller.video,
         ]),
@@ -250,13 +232,13 @@ class _VideoEditorState extends State<VideoEditor> {
 
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: baseHeight / 4),
-            child: Row(children: [
+            child: Row(children: <Widget>[
               Text(formatter(Duration(seconds: pos.toInt()))),
               const Expanded(child: SizedBox()),
               AnimatedOpacity(
                 opacity: _controller.isTrimming ? 1 : 0,
                 duration: kThemeAnimationDuration,
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   Text(formatter(_controller.startTrim)),
                   const SizedBox(width: 10),
                   Text(formatter(_controller.endTrim)),
@@ -295,8 +277,8 @@ class CropPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Column(children: [
-            Row(children: [
+          child: Column(children: <Widget>[
+            Row(children: <Widget>[
               Expanded(
                 child: IconButton(
                   onPressed: () =>
@@ -321,7 +303,7 @@ class CropPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15),
-            Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Row(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
               Expanded(
                 flex: 2,
                 child: IconButton(
@@ -339,10 +321,10 @@ class CropPage extends StatelessWidget {
                 child: AnimatedBuilder(
                   animation: controller,
                   builder: (_, __) => Column(
-                    children: [
+                    children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           IconButton(
                             onPressed: () =>
                                 controller.preferredCropAspectRatio = controller
@@ -372,7 +354,7 @@ class CropPage extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        children: [
+                        children: <Widget>[
                           _buildCropButton(context, null),
                           _buildCropButton(context, 1.toFraction()),
                           _buildCropButton(
@@ -437,7 +419,7 @@ class CropPage extends StatelessWidget {
 
 class ExportService {
   static Future<void> dispose() async {
-    final executions = await FFmpegKit.listSessions();
+    final List<FFmpegSession> executions = await FFmpegKit.listSessions();
     if (executions.isNotEmpty) await FFmpegKit.cancel();
   }
 
@@ -450,10 +432,10 @@ class ExportService {
     log('FFmpeg start process with command = ${execute.command}');
     return FFmpegKit.executeAsync(
       execute.command,
-      (session) async {
-        final state =
+      (FFmpegSession session) async {
+        final String state =
             FFmpegKitConfig.sessionStateToString(await session.getState());
-        final code = await session.getReturnCode();
+        final ReturnCode? code = await session.getReturnCode();
 
         if (ReturnCode.isSuccess(code)) {
           onCompleted(File(execute.outputPath));
@@ -470,143 +452,6 @@ class ExportService {
       },
       null,
       onProgress,
-    );
-  }
-}
-
-Future<void> _getImageDimension(File file,
-    {required Function(Size) onResult}) async {
-  var decodedImage = await decodeImageFromList(file.readAsBytesSync());
-  onResult(Size(decodedImage.width.toDouble(), decodedImage.height.toDouble()));
-}
-
-String _fileMBSize(File file) =>
-    ' ${(file.lengthSync() / (1024 * 1024)).toStringAsFixed(1)} MB';
-
-class VideoResultPopup extends StatefulWidget {
-  const VideoResultPopup({super.key, required this.video});
-
-  final File video;
-
-  @override
-  State<VideoResultPopup> createState() => _VideoResultPopupState();
-}
-
-class _VideoResultPopupState extends State<VideoResultPopup> {
-  VideoPlayerController? _controller;
-  FileImage? _fileImage;
-  Size _fileDimension = Size.zero;
-  late final bool _isGif =
-      path.extension(widget.video.path).toLowerCase() == ".gif";
-  late String _fileMbSize;
-
-  @override
-  void initState() {
-    super.initState();
-    if (_isGif) {
-      _getImageDimension(
-        widget.video,
-        onResult: (d) => setState(() => _fileDimension = d),
-      );
-    } else {
-      _controller = VideoPlayerController.file(widget.video);
-      _controller?.initialize().then((_) {
-        _fileDimension = _controller?.value.size ?? Size.zero;
-        setState(() {});
-        _controller?.play();
-        _controller?.setLooping(true);
-      });
-    }
-    _fileMbSize = _fileMBSize(widget.video);
-  }
-
-  @override
-  void dispose() {
-    if (_isGif) {
-      _fileImage?.evict();
-    } else {
-      _controller?.pause();
-      _controller?.dispose();
-    }
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(30),
-      child: Center(
-        child: Stack(
-          alignment: Alignment.bottomLeft,
-          children: [
-            AspectRatio(
-              aspectRatio: _fileDimension.aspectRatio == 0
-                  ? 1
-                  : _fileDimension.aspectRatio,
-              child:
-                  _isGif ? Image.file(widget.video) : VideoPlayer(_controller!),
-            ),
-            Positioned(
-              bottom: 0,
-              child: FileDescription(
-                description: {
-                  'Video path': widget.video.path,
-                  if (!_isGif)
-                    'Video duration':
-                        '${((_controller?.value.duration.inMilliseconds ?? 0) / 1000).toStringAsFixed(2)}s',
-                  'Video ratio': Fraction.fromDouble(_fileDimension.aspectRatio)
-                      .reduce()
-                      .toString(),
-                  'Video dimension': _fileDimension.toString(),
-                  'Video size': _fileMbSize,
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class FileDescription extends StatelessWidget {
-  const FileDescription({super.key, required this.description});
-
-  final Map<String, String> description;
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTextStyle(
-      style: const TextStyle(fontSize: 11),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 60,
-        padding: const EdgeInsets.all(10),
-        color: Colors.black.withOpacity(0.5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: description.entries
-              .map(
-                (entry) => Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${entry.key}: ',
-                        style: const TextStyle(fontSize: 11),
-                      ),
-                      TextSpan(
-                        text: entry.value,
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.white.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-      ),
     );
   }
 }

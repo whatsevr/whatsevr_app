@@ -14,7 +14,7 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
-import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
+import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
 import 'package:whatsevr_app/utils/video.dart';
@@ -105,7 +105,7 @@ class CreateVideoPostBloc
     PickThumbnailEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    await showThumbnailSelectionPage(
+    await showWhatsevrThumbnailSelectionPage(
       videoFile: state.videoFile!,
       onThumbnailSelected: (File thumbnailFile) {
         emit(state.copyWith(thumbnailFile: thumbnailFile));

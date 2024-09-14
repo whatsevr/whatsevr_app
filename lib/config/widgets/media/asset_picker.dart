@@ -4,7 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:whatsevr_app/config/widgets/video_editor.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
+
+import 'camera_surface.dart';
+import 'image_cropper.dart';
 
 class CustomAssetPicker {
   CustomAssetPicker._();
@@ -25,12 +30,12 @@ class CustomAssetPicker {
     // Navigate to camera preview screen
     final capturedFile = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => CameraPreviewScreen(cameraController),
+        builder: (_) => WhatsevrCameraSurfacePage(cameraController),
       ),
     );
     if (capturedFile == null) throw Exception('No image captured');
     // If image is captured, crop it
-    return await _cropImage(capturedFile as File);
+    return await showWhatsevrImageCropper(capturedFile as File);
   }
 
   // Pick images from the gallery and optionally crop them
@@ -58,7 +63,7 @@ class CustomAssetPicker {
     // Convert the selected assets to files and crop them if needed
     final File? imageFile = await pickedAssets.first.file;
     if (imageFile == null) throw Exception('File does not exist');
-    return await _cropImage(imageFile);
+    return await showWhatsevrImageCropper(imageFile);
   }
 
   // Pick videos from the gallery, trim and crop them
@@ -86,16 +91,14 @@ class CustomAssetPicker {
     // Convert assets to files, trim and crop the videos
     final File? videoFile = await pickedAssets.first.file;
     if (videoFile == null) throw Exception('File does not exist');
-    final File? editedVideo = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => VideoEditor(file: videoFile),
-      ),
-    );
+    final File? editedVideo = await AppNavigationService.newRoute(
+        RoutesName.editVideo,
+        extras: VideoEditorPageArgument(videoFile: videoFile));
+    if (editedVideo == null) return videoFile;
+    return editedVideo;
   }
 
-  // Pick any type of document from the file system
   static Future<List<File>?> pickDocuments({bool singleFile = false}) async {
-    // Use file picker to allow any file type
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: !singleFile,
       type: FileType.any,
@@ -103,85 +106,6 @@ class CustomAssetPicker {
 
     if (result == null) throw Exception('No documents picked');
 
-    // Convert paths to files
     return result.paths.map((String? path) => File(path!)).toList();
   }
-
-  // Crop the image using ImageCropper
-  static Future<File?> _cropImage(File imageFile) async {
-    try {
-      // Check if the file exists before cropping
-      if (!(await imageFile.exists())) throw Exception('File does not exist');
-      final CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: imageFile.path,
-        uiSettings: <PlatformUiSettings>[
-          AndroidUiSettings(
-            toolbarTitle: 'Crop Image',
-            toolbarColor: Colors.black,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false,
-          ),
-          IOSUiSettings(
-            minimumAspectRatio: 1.0,
-          ),
-        ],
-      );
-
-      if (croppedFile != null) {
-        return File(croppedFile.path);
-      }
-    } catch (e) {
-      print('Error cropping image: $e');
-    }
-    return null;
-  }
 }
-
-// Camera preview screen with a floating action button for taking pictures
-class CameraPreviewScreen extends StatefulWidget {
-  final CameraController controller;
-
-  const CameraPreviewScreen(this.controller, {Key? key}) : super(key: key);
-
-  @override
-  _CameraPreviewScreenState createState() => _CameraPreviewScreenState();
-}
-
-class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
-  @override
-  void dispose() {
-    widget.controller.dispose(); // Dispose the controller when done
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<void>(
-        future: widget.controller.initialize(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(widget.controller);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.camera),
-        onPressed: () async {
-          try {
-            XFile file = await widget.controller.takePicture();
-            Navigator.pop(context, File(file.path));
-          } catch (e) {
-            print(e);
-          }
-        },
-      ),
-    );
-  }
-}
-
-// Video trimming screen using Trimmer package
