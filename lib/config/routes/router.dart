@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/talker.dart';
+import 'package:whatsevr_app/dev/routes/routes.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/widgets/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
@@ -114,6 +116,8 @@ class AppNavigationService {
       debugLogDiagnostics: true,
       observers: <NavigatorObserver>[
         FlutterSmartDialog.observer,
+        TalkerService.takerRouteObserver(),
+
         // TalkerRouteObserver(talker),
       ],
       routes: <RouteBase>[
@@ -127,6 +131,7 @@ class AppNavigationService {
             );
           },
           routes: <RouteBase>[
+            if (kDebugMode) ...getDevRoutes(),
             GoRoute(
               name: RoutesName.takerDebug,
               path: RoutesName.takerDebug,

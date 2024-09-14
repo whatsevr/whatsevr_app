@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:whatsevr_app/config/talker.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 import 'package:whatsevr_app/config/api/interceptors/cache.dart';
 import 'package:whatsevr_app/config/api/interceptors/retry.dart';
