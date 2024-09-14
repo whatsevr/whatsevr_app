@@ -16,4 +16,6 @@ class RoutesName {
   static const String updateProfile = 'update-profile';
 
   static const String editVideo = 'edit-video';
+
+  static const String cameraView = 'camera-view';
 }

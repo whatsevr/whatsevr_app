@@ -2,12 +2,20 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
-class WhatsevrCameraSurfacePage extends StatefulWidget {
+class WhatsevrCameraSurfacePageArgument {
   final CameraController controller;
 
-  const WhatsevrCameraSurfacePage(this.controller, {Key? key})
-      : super(key: key);
+  WhatsevrCameraSurfacePageArgument({
+    required this.controller,
+  });
+}
+
+class WhatsevrCameraSurfacePage extends StatefulWidget {
+  final WhatsevrCameraSurfacePageArgument pageArgument;
+
+  const WhatsevrCameraSurfacePage({super.key, required this.pageArgument});
 
   @override
   _WhatsevrCameraSurfacePageState createState() =>
@@ -15,9 +23,16 @@ class WhatsevrCameraSurfacePage extends StatefulWidget {
 }
 
 class _WhatsevrCameraSurfacePageState extends State<WhatsevrCameraSurfacePage> {
+  late CameraController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.pageArgument.controller;
+  }
+
   @override
   void dispose() {
-    widget.controller.dispose(); // Dispose the controller when done
+    controller.dispose(); // Dispose the controller when done
     super.dispose();
   }
 
@@ -25,10 +40,10 @@ class _WhatsevrCameraSurfacePageState extends State<WhatsevrCameraSurfacePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<void>(
-        future: widget.controller.initialize(),
+        future: controller.initialize(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(widget.controller);
+            return CameraPreview(controller);
           } else {
             return const Center(child: CircularProgressIndicator());
           }
@@ -39,8 +54,8 @@ class _WhatsevrCameraSurfacePageState extends State<WhatsevrCameraSurfacePage> {
         child: const Icon(Icons.camera),
         onPressed: () async {
           try {
-            XFile file = await widget.controller.takePicture();
-            Navigator.pop(context, File(file.path));
+            XFile file = await controller.takePicture();
+            AppNavigationService.goBack(result: File(file.path));
           } catch (e) {
             print(e);
           }

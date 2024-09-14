@@ -158,7 +158,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                         title: ValueListenableBuilder(
                           valueListenable: _exportingProgress,
                           builder: (_, double value, __) => Text(
-                            "Exporting video ${(value * 100).ceil()}%",
+                            "Processing video ${(value * 100).ceil()}%",
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
@@ -184,7 +184,6 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                 onPressed: () =>
                     _controller.rotate90Degrees(RotateDirection.left),
                 icon: const Icon(Icons.rotate_left),
-                tooltip: 'Rotate unclockwise',
               ),
             ),
             Expanded(
@@ -192,7 +191,6 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                 onPressed: () =>
                     _controller.rotate90Degrees(RotateDirection.right),
                 icon: const Icon(Icons.rotate_right),
-                tooltip: 'Rotate clockwise',
               ),
             ),
             Expanded(
@@ -205,7 +203,6 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                   ),
                 ),
                 icon: const Icon(Icons.crop),
-                tooltip: 'Open crop screen',
               ),
             ),
           ],
