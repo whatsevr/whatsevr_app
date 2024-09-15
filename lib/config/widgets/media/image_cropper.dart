@@ -6,14 +6,19 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/file.dart';
 
 class ImageCropperPageArgument {
   final File imageProvider;
-
+  final List<WhatsevrAspectRatio> aspectRatios;
+  final bool withCircleCropperUi;
   ImageCropperPageArgument({
     required this.imageProvider,
+    this.aspectRatios = WhatsevrAspectRatio.values,
+    this.withCircleCropperUi = false,
   });
 }
 
@@ -26,7 +31,7 @@ class ImageCropperPage extends StatefulWidget {
 }
 
 class _ImageCropperPageState extends State<ImageCropperPage> {
-  final _controller = CropController();
+  final CropController _controller = CropController();
   @override
   void initState() {
     super.initState();
@@ -41,8 +46,8 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Crop Image'),
+      appBar: CustomAppBar(
+        title: 'Crop',
         actions: [
           IconButton(
             icon: Icon(Icons.check),
@@ -63,53 +68,52 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
             children: [
               Expanded(
                 child: Crop(
-                    image: image!,
-                    controller: _controller,
-                    onCropped: (image) async {
-                      final File file = await uint8BytesToFile(image);
-                      AppNavigationService.goBack(result: file);
-                    }),
+                  image: image!,
+                  controller: _controller,
+                  onCropped: (image) async {
+                    final File file = await uint8BytesToFile(image);
+                    AppNavigationService.goBack(result: file);
+                  },
+                  interactive: true,
+                  withCircleUi: widget.pageArgument.withCircleCropperUi,
+                  aspectRatio: widget.pageArgument.aspectRatios.length == 1
+                      ? widget.pageArgument.aspectRatios.first.ratio
+                      : null,
+                  fixCropRect: true,
+                  baseColor: Colors.white,
+                  initialSize: 0.9, //rect size
+                  maskColor: Colors.white.withAlpha(120),
+                  progressIndicator: const CupertinoActivityIndicator(),
+                  radius: 20,
+                  willUpdateScale: (newScale) {
+                    //max zoom level
+                    return newScale < 8;
+                  },
+                  cornerDotBuilder: (size, edgeAlignment) => const DotControl(
+                    color: Colors.black,
+                    padding: 10,
+                  ),
+                  clipBehavior: Clip.none,
+                ),
               ),
               Container(
                 padding: EdgeInsets.all(8),
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Text('16:9'),
-                        onPressed: () {
-                          _controller.aspectRatio = 16 / 9;
-                        },
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey,
-                        width: 20,
-                        thickness: 2,
-                        endIndent: 14,
-                        indent: 14,
-                      ),
-                      IconButton(
-                        icon: Text('4:3'),
-                        onPressed: () {
-                          _controller.aspectRatio = 4 / 3;
-                        },
-                      ),
-                      VerticalDivider(
-                        color: Colors.grey,
-                        width: 20,
-                        thickness: 2,
-                        endIndent: 14,
-                        indent: 14,
-                      ),
-                      IconButton(
-                        icon: Text('1:1'),
-                        onPressed: () {
-                          _controller.aspectRatio = 1;
-                        },
-                      ),
-                    ],
-                  ),
+                height: 50,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.pageArgument.aspectRatios.length,
+                  separatorBuilder: (context, index) => VerticalDivider(),
+                  itemBuilder: (context, index) {
+                    final WhatsevrAspectRatio aspectRatio =
+                        widget.pageArgument.aspectRatios[index];
+                    return IconButton(
+                      icon: Text(
+                          '${aspectRatio.label}(${aspectRatio.valueLabel})'),
+                      onPressed: () {
+                        _controller.aspectRatio = aspectRatio.ratio;
+                      },
+                    );
+                  },
                 ),
               )
             ],

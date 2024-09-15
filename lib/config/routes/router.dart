@@ -61,9 +61,12 @@ class AppNavigationService {
     }
   }
 
+  static GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  static BuildContext? get currentContext => _navigatorKey.currentContext;
   static GoRouter allRoutes() => _router;
 
   static final GoRouter _router = GoRouter(
+    navigatorKey: _navigatorKey,
     initialLocation: RoutesName.splash,
     debugLogDiagnostics: true,
     observers: <NavigatorObserver>[

@@ -11,16 +11,16 @@ import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 
-import 'image_editor.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 
 class CustomAssetPicker {
   CustomAssetPicker._();
 
-  static Future<File?> captureImage(
-    BuildContext context, {
+  static Future<File?> captureImage({
     bool cropImage = true,
     bool editImage = true,
-    List<double> cropRatio = const <double>[1 / 1],
+    required List<WhatsevrAspectRatio> aspectRatios,
   }) async {
     final List<CameraDescription> cameraDescriptions = await availableCameras();
     if (cameraDescriptions.isEmpty) throw Exception('No cameras available');
@@ -39,7 +39,8 @@ class CustomAssetPicker {
     if (!cropImage) return capturedFile;
     File? croppedImage = await AppNavigationService.newRoute(
       RoutesName.imageCropper,
-      extras: ImageCropperPageArgument(imageProvider: capturedFile),
+      extras: ImageCropperPageArgument(
+          imageProvider: capturedFile, aspectRatios: aspectRatios),
     );
     if (croppedImage == null) throw Exception('No image cropped');
     if (!editImage) return croppedImage;
@@ -49,15 +50,22 @@ class CustomAssetPicker {
     return editedImage ?? croppedImage;
   }
 
-  static Future<File?> pickImageFromGallery(
-    BuildContext context, {
+  static Future<File?> pickImageFromGallery({
     bool editImage = true,
+    required List<WhatsevrAspectRatio> aspectRatios,
   }) async {
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
-      context,
+      AppNavigationService.currentContext!,
       pickerConfig: AssetPickerConfig(
         maxAssets: 1,
         requestType: RequestType.image,
+        gridCount: 2,
+        pageSize: 20,
+        pickerTheme: AssetPicker.themeData(
+          Colors.black,
+          light: true,
+        ),
+        shouldAutoplayPreview: true,
       ),
     );
 
@@ -68,7 +76,8 @@ class CustomAssetPicker {
     if (pickedFile == null) throw Exception('File does not exist');
     File? editableImage = await AppNavigationService.newRoute(
       RoutesName.imageCropper,
-      extras: ImageCropperPageArgument(imageProvider: pickedFile),
+      extras: ImageCropperPageArgument(
+          imageProvider: pickedFile, aspectRatios: aspectRatios),
     );
     if (editableImage == null) {
       throw Exception('No image cropped');
@@ -83,15 +92,23 @@ class CustomAssetPicker {
     return editedImage ?? editableImage;
   }
 
-  static Future<File?> pickVideoFromGallery(
-    BuildContext context, {
+  static Future<File?> pickVideoFromGallery({
     bool editVideo = true,
   }) async {
+    ;
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
-      context,
+      AppNavigationService.currentContext!,
       pickerConfig: AssetPickerConfig(
         maxAssets: 1,
         requestType: RequestType.video,
+        gridCount: 2,
+        pageSize: 20,
+        pickerTheme: ThemeData.light().copyWith(
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.blue,
+            textTheme: ButtonTextTheme.primary,
+          ),
+        ),
       ),
     );
 

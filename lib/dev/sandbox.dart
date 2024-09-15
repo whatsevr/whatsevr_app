@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart'; // Assuming this is where CustomAssetPicker is
 import 'package:video_player/video_player.dart';
 
+import '../config/widgets/media/aspect_ratio.dart';
+
 class DeveloperPage extends StatefulWidget {
   const DeveloperPage({super.key});
 
@@ -19,7 +21,9 @@ class _DeveloperPageState extends State<DeveloperPage> {
   // Method to pick/capture image
   Future<void> _captureImage() async {
     try {
-      final File? image = await CustomAssetPicker.captureImage(context);
+      final File? image = await CustomAssetPicker.captureImage(
+        aspectRatios: imagePostAspectRatio,
+      );
       if (image != null) {
         setState(() {
           _capturedImage = image;
@@ -27,17 +31,14 @@ class _DeveloperPageState extends State<DeveloperPage> {
       }
     } catch (e) {
       print('Error capturing image: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to capture image: $e')),
-      );
     }
   }
 
   // Method to pick videos and initialize the video player
   Future<void> _pickVideos() async {
     try {
-      final File? videos = await CustomAssetPicker.pickVideoFromGallery(context,
-          editVideo: true);
+      final File? videos =
+          await CustomAssetPicker.pickVideoFromGallery(editVideo: true);
       if (videos != null) {
         setState(() {
           _pickedVideos = videos;
@@ -50,9 +51,6 @@ class _DeveloperPageState extends State<DeveloperPage> {
       }
     } catch (e) {
       print('Error picking videos: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick videos: $e')),
-      );
     }
   }
 
@@ -67,9 +65,6 @@ class _DeveloperPageState extends State<DeveloperPage> {
       }
     } catch (e) {
       print('Error picking documents: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick documents: $e')),
-      );
     }
   }
 
@@ -94,7 +89,9 @@ class _DeveloperPageState extends State<DeveloperPage> {
             (
               'Pick Images',
               () {
-                CustomAssetPicker.pickImageFromGallery(context).then((images) {
+                CustomAssetPicker.pickImageFromGallery(
+                        aspectRatios: videoPostAspectRatio)
+                    .then((images) {
                   if (images != null) {
                     setState(() {
                       _capturedImage = images;
