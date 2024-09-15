@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
+import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
@@ -195,6 +196,17 @@ class AppNavigationService {
               ImageEditorPageArgument pageArgument =
                   state.extra as ImageEditorPageArgument;
               return ImageEditorPage(
+                pageArgument: pageArgument,
+              );
+            },
+          ),
+          GoRoute(
+            name: RoutesName.imageCropper,
+            path: RoutesName.imageCropper,
+            builder: (BuildContext context, GoRouterState state) {
+              ImageCropperPageArgument pageArgument =
+                  state.extra as ImageCropperPageArgument;
+              return ImageCropperPage(
                 pageArgument: pageArgument,
               );
             },

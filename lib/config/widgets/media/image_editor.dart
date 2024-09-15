@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,8 +28,7 @@ class ImageEditorPage extends StatelessWidget {
         pageArgument.file,
         callbacks: ProImageEditorCallbacks(
           onImageEditingComplete: (Uint8List bytes) async {
-            File? fileFromBytes = await uint8BytesToFile(
-                bytes, '${DateTime.now().millisecondsSinceEpoch}.jpg');
+            File? fileFromBytes = await uint8BytesToFile(bytes);
             AppNavigationService.goBack(result: fileFromBytes);
           },
         ),

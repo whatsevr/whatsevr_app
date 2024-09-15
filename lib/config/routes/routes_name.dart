@@ -19,4 +19,5 @@ class RoutesName {
 
   static const String cameraView = 'camera-view';
   static const String imageEditor = 'image-editor';
+  static const String imageCropper = 'image-cropper';
 }

@@ -37,14 +37,16 @@ class CustomAssetPicker {
     );
     if (capturedFile == null) throw Exception('No image captured');
     if (!cropImage) return capturedFile;
-    File? croppedImage =
-        await showWhatsevrImageCropper(imageFile: capturedFile);
+    File? croppedImage = await AppNavigationService.newRoute(
+      RoutesName.imageCropper,
+      extras: ImageCropperPageArgument(imageProvider: capturedFile),
+    );
     if (croppedImage == null) throw Exception('No image cropped');
     if (!editImage) return croppedImage;
     File? editedImage = await AppNavigationService.newRoute(
         RoutesName.imageEditor,
         extras: ImageEditorPageArgument(file: croppedImage));
-    return editedImage ?? capturedFile;
+    return editedImage ?? croppedImage;
   }
 
   static Future<File?> pickImageFromGallery(
@@ -62,15 +64,23 @@ class CustomAssetPicker {
     if (pickedAssets == null || pickedAssets.isEmpty) {
       throw Exception('No images picked');
     }
-    if (!editImage) {
-      final File? file = await pickedAssets.first.file;
-      if (file == null) throw Exception('File does not exist');
-      return file;
+    File? pickedFile = await pickedAssets.first.file;
+    if (pickedFile == null) throw Exception('File does not exist');
+    File? editableImage = await AppNavigationService.newRoute(
+      RoutesName.imageCropper,
+      extras: ImageCropperPageArgument(imageProvider: pickedFile),
+    );
+    if (editableImage == null) {
+      throw Exception('No image cropped');
     }
 
-    final File? imageFile = await pickedAssets.first.file;
-    if (imageFile == null) throw Exception('File does not exist');
-    return await showWhatsevrImageCropper(imageFile: imageFile);
+    if (!editImage) {
+      return editableImage;
+    }
+    final File? editedImage = await AppNavigationService.newRoute(
+        RoutesName.imageEditor,
+        extras: ImageEditorPageArgument(file: editableImage));
+    return editedImage ?? editableImage;
   }
 
   static Future<File?> pickVideoFromGallery(

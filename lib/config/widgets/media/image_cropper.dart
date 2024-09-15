@@ -1,50 +1,121 @@
 import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:crop_your_image/crop_your_image.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
-import 'aspect_ratio.dart';
+import 'package:whatsevr_app/utils/file.dart';
 
-Future<File?> showWhatsevrImageCropper({
-  required File imageFile,
-}) async {
-  try {
-// Check if the file exists before cropping
-    if (!(await imageFile.exists())) throw Exception('File does not exist');
-    List<CropAspectRatioPreset> aspectRatioPresets = [
-      CropAspectRatioPreset.square,
-      CropAspectRatioPreset.ratio16x9,
-      CropAspectRatioPreset.ratio4x3,
-    ];
-    final CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: imageFile.path,
-      compressQuality: 100,
-      compressFormat: ImageCompressFormat.jpg,
-      uiSettings: <PlatformUiSettings>[
-        AndroidUiSettings(
-          toolbarTitle: 'Crop Image',
-          toolbarColor: Colors.black,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: aspectRatioPresets.first,
-          aspectRatioPresets: aspectRatioPresets,
-          lockAspectRatio: false,
-          statusBarColor: Colors.white,
-          backgroundColor: Colors.white,
-        ),
-        IOSUiSettings(
-          aspectRatioLockDimensionSwapEnabled: false,
-          aspectRatioPresets: aspectRatioPresets,
-          aspectRatioLockEnabled: false,
-          resetAspectRatioEnabled: false,
-        ),
-      ],
-    );
+class ImageCropperPageArgument {
+  final File imageProvider;
 
-    if (croppedFile != null) {
-      return File(croppedFile.path);
-    }
-  } catch (e) {
-    print('Error cropping image: $e');
+  ImageCropperPageArgument({
+    required this.imageProvider,
+  });
+}
+
+class ImageCropperPage extends StatefulWidget {
+  const ImageCropperPage({super.key, required this.pageArgument});
+  final ImageCropperPageArgument pageArgument;
+
+  @override
+  State<ImageCropperPage> createState() => _ImageCropperPageState();
+}
+
+class _ImageCropperPageState extends State<ImageCropperPage> {
+  final _controller = CropController();
+  @override
+  void initState() {
+    super.initState();
+    fileToUint8List(widget.pageArgument.imageProvider).then((value) {
+      setState(() {
+        image = value;
+      });
+    });
   }
-  return null;
+
+  Uint8List? image;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Crop Image'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () {
+              _controller.crop();
+            },
+          )
+        ],
+      ),
+      body: Builder(
+        builder: (context) {
+          if (image == null) {
+            return Center(
+              child: CupertinoActivityIndicator(),
+            );
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: Crop(
+                    image: image!,
+                    controller: _controller,
+                    onCropped: (image) async {
+                      final File file = await uint8BytesToFile(image);
+                      AppNavigationService.goBack(result: file);
+                    }),
+              ),
+              Container(
+                padding: EdgeInsets.all(8),
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Text('16:9'),
+                        onPressed: () {
+                          _controller.aspectRatio = 16 / 9;
+                        },
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey,
+                        width: 20,
+                        thickness: 2,
+                        endIndent: 14,
+                        indent: 14,
+                      ),
+                      IconButton(
+                        icon: Text('4:3'),
+                        onPressed: () {
+                          _controller.aspectRatio = 4 / 3;
+                        },
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey,
+                        width: 20,
+                        thickness: 2,
+                        endIndent: 14,
+                        indent: 14,
+                      ),
+                      IconButton(
+                        icon: Text('1:1'),
+                        onPressed: () {
+                          _controller.aspectRatio = 1;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

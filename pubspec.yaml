@@ -64,7 +64,7 @@ dependencies:
   wechat_assets_picker: ^9.2.1
   camera: ^0.11.0+2
   pro_image_editor: ^5.2.2
-  image_cropper: ^8.0.2
+  crop_your_image: ^1.1.0
   video_trimmer: ^3.0.1
   video_editor: ^3.0.0
   ffmpeg_kit_flutter: ^6.0.3
