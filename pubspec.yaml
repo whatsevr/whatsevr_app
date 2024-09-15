@@ -19,13 +19,13 @@ dependencies:
   rxdart: ^0.28.0
   equatable: ^2.0.5
   gap: ^3.0.1
-  extended_image: ^8.2.1
+  extended_image: ^8.2.3
   carousel_slider: ^5.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   animated_hint_textfield: ^1.0.3
   timeago: ^3.7.0
-  flutter_smart_dialog: ^4.9.8
+  flutter_smart_dialog: ^4.9.8+1
   rotated_corner_decoration: ^2.1.0+1
   google_fonts: ^6.2.1
   share_plus: ^10.0.2
@@ -35,7 +35,7 @@ dependencies:
   animated_read_more_text: ^0.0.6
   file_picker: ^8.1.2
   flutter_native_splash: any
-  dio: ^5.6.0
+  dio: ^5.7.0
   dio_smart_retry: ^6.0.0
   dio_cache_interceptor: ^3.5.0
   dio_cache_interceptor_hive_store: ^3.2.2
@@ -44,9 +44,9 @@ dependencies:
   video_player: ^2.9.1
   wakelock_plus: ^1.2.8
   smooth_page_indicator: ^1.2.0+3
-  chewie: ^1.8.3
+  chewie: ^1.8.5
   like_button: ^2.0.5
-  otpless_flutter: ^2.1.7
+  otpless_flutter: ^2.1.8
   skeletonizer: ^1.4.2
   detectable_text_field: ^3.0.2
   supabase: ^2.3.0
@@ -61,7 +61,7 @@ dependencies:
   talker_bloc_logger: ^4.4.1
   image_picker: ^1.1.2
   flutter_svg: any
-  wechat_assets_picker: ^9.2.1
+  wechat_assets_picker: ^9.2.2
   camera: ^0.11.0+2
   pro_image_editor: ^5.2.2
   crop_your_image: ^1.1.0
