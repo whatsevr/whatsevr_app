@@ -12,7 +12,7 @@ enum WhatsevrAspectRatio {
   final String label;
 
   const WhatsevrAspectRatio(
-      {required this.ratio, required this.valueLabel, required this.label});
+      {required this.ratio, required this.valueLabel, required this.label,});
 }
 
 List<WhatsevrAspectRatio> videoPostAspectRatio = <WhatsevrAspectRatio>[

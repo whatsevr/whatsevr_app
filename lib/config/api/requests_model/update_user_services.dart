@@ -20,7 +20,7 @@ class UpdateUserServicesRequest {
         userServices: json['user_services'] == null
             ? <UserService>[]
             : List<UserService>.from(
-                json['user_services']!.map((x) => UserService.fromMap(x))),
+                json['user_services']!.map((x) => UserService.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -28,7 +28,7 @@ class UpdateUserServicesRequest {
         'user_services': userServices == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userServices!.map((UserService x) => x.toMap())),
+                userServices!.map((UserService x) => x.toMap()),),
       };
 }
 

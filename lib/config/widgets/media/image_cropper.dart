@@ -35,7 +35,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
   @override
   void initState() {
     super.initState();
-    fileToUint8List(widget.pageArgument.imageProvider).then((value) {
+    fileToUint8List(widget.pageArgument.imageProvider).then((Uint8List value) {
       setState(() {
         image = value;
       });
@@ -48,29 +48,29 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Crop',
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
             onPressed: () {
               _controller.crop();
             },
-          )
+          ),
         ],
       ),
       body: Builder(
-        builder: (context) {
+        builder: (BuildContext context) {
           if (image == null) {
             return Center(
               child: CupertinoActivityIndicator(),
             );
           }
           return Column(
-            children: [
+            children: <Widget>[
               Expanded(
                 child: Crop(
                   image: image!,
                   controller: _controller,
-                  onCropped: (image) async {
+                  onCropped: (Uint8List image) async {
                     final File file = await uint8BytesToFile(image);
                     AppNavigationService.goBack(result: file);
                   },
@@ -85,11 +85,11 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   maskColor: Colors.white.withAlpha(120),
                   progressIndicator: const CupertinoActivityIndicator(),
                   radius: 20,
-                  willUpdateScale: (newScale) {
+                  willUpdateScale: (double newScale) {
                     //max zoom level
                     return newScale < 8;
                   },
-                  cornerDotBuilder: (size, edgeAlignment) => const DotControl(
+                  cornerDotBuilder: (double size, EdgeAlignment edgeAlignment) => const DotControl(
                     color: Colors.black,
                     padding: 10,
                   ),
@@ -102,20 +102,20 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.pageArgument.aspectRatios.length,
-                  separatorBuilder: (context, index) => VerticalDivider(),
-                  itemBuilder: (context, index) {
+                  separatorBuilder: (BuildContext context, int index) => VerticalDivider(),
+                  itemBuilder: (BuildContext context, int index) {
                     final WhatsevrAspectRatio aspectRatio =
                         widget.pageArgument.aspectRatios[index];
                     return IconButton(
                       icon: Text(
-                          '${aspectRatio.label}(${aspectRatio.valueLabel})'),
+                          '${aspectRatio.label}(${aspectRatio.valueLabel})',),
                       onPressed: () {
                         _controller.aspectRatio = aspectRatio.ratio;
                       },
                     );
                   },
                 ),
-              )
+              ),
             ],
           );
         },

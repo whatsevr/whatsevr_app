@@ -132,7 +132,7 @@ class AccountPageAboutView extends StatelessWidget {
                 (
                   'Join On',
                   (DateFormat('hh:mm a, dd MMM,yyyy').format(
-                      state.profileDetailsResponse!.userInfo!.registeredOn!))
+                      state.profileDetailsResponse!.userInfo!.registeredOn!,))
                 ),
               (
                 state.profileDetailsResponse?.userInfo?.isPortfolio == true
@@ -145,7 +145,7 @@ class AccountPageAboutView extends StatelessWidget {
                 (
                   'Portfolio Created On',
                   (DateFormat('hh:mm a, dd MMM,yyyy').format(state
-                      .profileDetailsResponse!.userInfo!.portfolioCreatedAt!))
+                      .profileDetailsResponse!.userInfo!.portfolioCreatedAt!,))
                 ),
               (
                 'Description',

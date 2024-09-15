@@ -30,7 +30,7 @@ class UpdateUserWorkExperiencesRequest {
         'user_work_experiences': userWorkExperiences == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userWorkExperiences!.map((UserWorkExperience x) => x.toMap())),
+                userWorkExperiences!.map((UserWorkExperience x) => x.toMap()),),
       };
 }
 

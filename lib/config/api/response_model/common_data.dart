@@ -49,14 +49,14 @@ class CommonDataResponse {
         'education_degrees': educationDegrees == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                educationDegrees!.map((EducationDegree x) => x.toMap())),
+                educationDegrees!.map((EducationDegree x) => x.toMap()),),
         'genders': genders == null
             ? <dynamic>[]
             : List<dynamic>.from(genders!.map((Gender x) => x.toMap())),
         'working_modes': workingModes == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                workingModes!.map((WorkingMode x) => x.toMap())),
+                workingModes!.map((WorkingMode x) => x.toMap()),),
         'interests': interests == null
             ? <dynamic>[]
             : List<dynamic>.from(interests!.map((Interest x) => x.toMap())),

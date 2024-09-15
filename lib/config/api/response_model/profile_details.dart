@@ -71,26 +71,26 @@ class ProfileDetailsResponse {
         'user_video_posts': userVideoPosts == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userVideoPosts!.map((UserVideoPost x) => x.toMap())),
+                userVideoPosts!.map((UserVideoPost x) => x.toMap()),),
         'user_educations': userEducations == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userEducations!.map((UserEducation x) => x.toMap())),
+                userEducations!.map((UserEducation x) => x.toMap()),),
         'user_cover_media': userCoverMedia == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userCoverMedia!.map((UserCoverMedia x) => x.toMap())),
+                userCoverMedia!.map((UserCoverMedia x) => x.toMap()),),
         'user_pdfs': userPdfs == null
             ? <dynamic>[]
             : List<dynamic>.from(userPdfs!.map((UserPdf x) => x.toMap())),
         'user_services': userServices == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userServices!.map((UserService x) => x.toMap())),
+                userServices!.map((UserService x) => x.toMap()),),
         'user_work_experiences': userWorkExperiences == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userWorkExperiences!.map((UserWorkExperience x) => x.toMap())),
+                userWorkExperiences!.map((UserWorkExperience x) => x.toMap()),),
       };
 }
 

@@ -12,14 +12,14 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../button.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 
 Future<File?> showWhatsevrThumbnailSelectionPage(
-    {required File videoFile, Function(File)? onThumbnailSelected}) async {
+    {required File videoFile, Function(File)? onThumbnailSelected,}) async {
   File? file;
   await SmartDialog.show(
       alignment: Alignment.bottomCenter,
-      builder: (context) {
+      builder: (BuildContext context) {
         return _Ui(
           videoFile: videoFile,
           onThumbnailSelected: (File file0) {
@@ -28,7 +28,7 @@ Future<File?> showWhatsevrThumbnailSelectionPage(
             SmartDialog.dismiss();
           },
         );
-      });
+      },);
 
   return file;
 }
@@ -38,7 +38,7 @@ class _Ui extends StatefulWidget {
   final Function(File) onThumbnailSelected;
 
   const _Ui(
-      {super.key, required this.videoFile, required this.onThumbnailSelected});
+      {required this.videoFile, required this.onThumbnailSelected,});
 
   @override
   State<_Ui> createState() => _UiState();
@@ -47,7 +47,7 @@ class _Ui extends StatefulWidget {
 class _UiState extends State<_Ui> {
   VideoPlayerController? _controller;
   int videoDurationInMs = 0;
-  List<MemoryImage> thumbnails = [];
+  List<MemoryImage> thumbnails = <MemoryImage>[];
   MemoryImage? selectedThumbnail;
 
   @override
@@ -68,7 +68,7 @@ class _UiState extends State<_Ui> {
   void generateThumbnails() async {
     if (videoDurationInMs <= 0) {
       // Check if video duration is invalid
-      print("Invalid video duration");
+      print('Invalid video duration');
       return;
     }
 
@@ -80,7 +80,7 @@ class _UiState extends State<_Ui> {
       // Ensure distinct time points for each thumbnail
       final int forDuration = interval * i;
       final MemoryImage? thumbnailFile = await getThumbnailMemoryImage(
-          videoFile: widget.videoFile, forDuration: forDuration);
+          videoFile: widget.videoFile, forDuration: forDuration,);
 
       if (thumbnailFile != null) {
         thumbnails.add(thumbnailFile);
@@ -105,7 +105,7 @@ class _UiState extends State<_Ui> {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Select Thumbnail',
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.close),
             onPressed: () {
@@ -116,10 +116,10 @@ class _UiState extends State<_Ui> {
       ),
       body: PadHorizontal(
         child: Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: Builder(
-                builder: (context) {
+                builder: (BuildContext context) {
                   if (selectedThumbnail == null) {
                     return const CupertinoActivityIndicator();
                   }
@@ -200,7 +200,7 @@ class _UiState extends State<_Ui> {
 }
 
 Future<MemoryImage?> getThumbnailMemoryImage(
-    {required File videoFile, int forDuration = 5000}) async {
+    {required File videoFile, int forDuration = 5000,}) async {
   try {
     // Generate a thumbnail at the specified time in milliseconds
     final String? tempPath = await VideoThumbnail.thumbnailFile(
@@ -234,7 +234,7 @@ Future<MemoryImage?> getThumbnailMemoryImage(
 }
 
 Future<File?> getThumbnailFile(
-    {required File videoFile, int forDuration = 5000}) async {
+    {required File videoFile, int forDuration = 5000,}) async {
   try {
     // Generate a thumbnail at the specified time in milliseconds
     final String? tempPath = await VideoThumbnail.thumbnailFile(
@@ -274,7 +274,7 @@ Future<File?> saveImageAsFile(Uint8List bytes) async {
     await Directory(directoryPath).create(recursive: true);
     String filePath =
         '$directoryPath/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    final file = await File(filePath).writeAsBytes(bytes);
+    final File file = await File(filePath).writeAsBytes(bytes);
     return file;
   } catch (e) {
     debugPrint(e.toString());

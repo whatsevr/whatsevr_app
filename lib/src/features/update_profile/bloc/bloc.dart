@@ -27,7 +27,6 @@ import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 
-import '../../../../utils/video.dart';
 part 'event.dart';
 part 'state.dart';
 
@@ -118,7 +117,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               ?.userCoverMedia?[index].isVideo,
         ),
       ),
-    ));
+    ),);
 
     // Set the initial values of the text controllers
     nameController.text =
@@ -206,7 +205,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             return;
           }
           SmartDialog.showLoading(msg: 'Uploading cover media');
-          imageUrl = await FileUploadService.uploadFilesToSST(thumbnail!);
+          imageUrl = await FileUploadService.uploadFilesToSST(thumbnail);
           videoUrl = await FileUploadService.uploadFilesToSST(file);
         }
 

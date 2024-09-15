@@ -14,7 +14,6 @@ import 'package:fraction/fraction.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/media/video_player.dart';
 
 class VideoEditorPageArgument {
   final File videoFile;
@@ -50,7 +49,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
         .catchError((error) {
       // handle minumum duration bigger than video duration error
       AppNavigationService.goBack();
-    }, test: (Object e) => e is VideoMinDurationError);
+    }, test: (Object e) => e is VideoMinDurationError,);
   }
 
   @override
@@ -77,7 +76,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
             config.getFFmpegProgress(stats.getTime().toInt());
       },
       onError: (Object e, StackTrace s) =>
-          SmartDialog.showToast("Error on export video :("),
+          SmartDialog.showToast('Error on export video :('),
       onCompleted: (File file) async {
         _isExporting.value = false;
         AppNavigationService.goBack<File>(result: file);
@@ -158,12 +157,12 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                         title: ValueListenableBuilder(
                           valueListenable: _exportingProgress,
                           builder: (_, double value, __) => Text(
-                            "Processing video ${(value * 100).ceil()}%",
+                            'Processing video ${(value * 100).ceil()}%',
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               )
@@ -213,8 +212,8 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
 
   String formatter(Duration duration) => <String>[
         duration.inMinutes.remainder(60).toString().padLeft(2, '0'),
-        duration.inSeconds.remainder(60).toString().padLeft(2, '0')
-      ].join(":");
+        duration.inSeconds.remainder(60).toString().padLeft(2, '0'),
+      ].join(':');
 
   List<Widget> _trimSlider() {
     return <Widget>[
@@ -239,9 +238,9 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                   Text(formatter(_controller.startTrim)),
                   const SizedBox(width: 10),
                   Text(formatter(_controller.endTrim)),
-                ]),
+                ],),
               ),
-            ]),
+            ],),
           );
         },
       ),
@@ -257,7 +256,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
             padding: const EdgeInsets.only(top: 10),
           ),
         ),
-      )
+      ),
     ];
   }
 }
@@ -289,8 +288,8 @@ class CropPage extends StatelessWidget {
                       controller.rotate90Degrees(RotateDirection.right),
                   icon: const Icon(Icons.rotate_right),
                 ),
-              )
-            ]),
+              ),
+            ],),
             const SizedBox(height: 15),
             Expanded(
               child: CropGridViewer.edit(
@@ -307,7 +306,7 @@ class CropPage extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   icon: const Center(
                     child: Text(
-                      "cancel",
+                      'cancel',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -332,7 +331,7 @@ class CropPage extends StatelessWidget {
                             icon: controller.preferredCropAspectRatio != null &&
                                     controller.preferredCropAspectRatio! < 1
                                 ? const Icon(
-                                    Icons.panorama_vertical_select_rounded)
+                                    Icons.panorama_vertical_select_rounded,)
                                 : const Icon(Icons.panorama_vertical_rounded),
                           ),
                           IconButton(
@@ -345,7 +344,7 @@ class CropPage extends StatelessWidget {
                             icon: controller.preferredCropAspectRatio != null &&
                                     controller.preferredCropAspectRatio! > 1
                                 ? const Icon(
-                                    Icons.panorama_horizontal_select_rounded)
+                                    Icons.panorama_horizontal_select_rounded,)
                                 : const Icon(Icons.panorama_horizontal_rounded),
                           ),
                         ],
@@ -355,10 +354,10 @@ class CropPage extends StatelessWidget {
                           _buildCropButton(context, null),
                           _buildCropButton(context, 1.toFraction()),
                           _buildCropButton(
-                              context, Fraction.fromString("9/16")),
-                          _buildCropButton(context, Fraction.fromString("3/4")),
+                              context, Fraction.fromString('9/16'),),
+                          _buildCropButton(context, Fraction.fromString('3/4')),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -375,7 +374,7 @@ class CropPage extends StatelessWidget {
                   },
                   icon: Center(
                     child: Text(
-                      "done",
+                      'done',
                       style: TextStyle(
                         color: const CropGridStyle().selectedBoundariesColor,
                         fontWeight: FontWeight.bold,
@@ -384,8 +383,8 @@ class CropPage extends StatelessWidget {
                   ),
                 ),
               ),
-            ]),
-          ]),
+            ],),
+          ],),
         ),
       ),
     );
@@ -440,7 +439,7 @@ class ExportService {
           if (onError != null) {
             onError(
               Exception(
-                  'FFmpeg process exited with state $state and return code $code.\n${await session.getOutput()}'),
+                  'FFmpeg process exited with state $state and return code $code.\n${await session.getOutput()}',),
               StackTrace.current,
             );
           }

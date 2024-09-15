@@ -30,7 +30,7 @@ class RecommendationVideosResponse {
         'recommended_videos': recommendedVideos == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                recommendedVideos!.map((RecommendedVideo x) => x.toMap())),
+                recommendedVideos!.map((RecommendedVideo x) => x.toMap()),),
       };
 }
 

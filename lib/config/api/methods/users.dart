@@ -21,7 +21,7 @@ class UsersApi {
   }) async {
     try {
       Response response = await ApiClient.client.get('/v1/user-details',
-          queryParameters: <String, dynamic>{'user_uid': userUid});
+          queryParameters: <String, dynamic>{'user_uid': userUid},);
       if (response.statusCode == HttpStatus.ok) {
         return UserDetailsResponse.fromMap(response.data);
       }

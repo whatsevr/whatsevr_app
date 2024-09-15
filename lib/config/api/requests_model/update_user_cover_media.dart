@@ -16,18 +16,21 @@ class UpdateUserCoverMediaRequest {
 
   factory UpdateUserCoverMediaRequest.fromMap(Map<String, dynamic> json) =>
       UpdateUserCoverMediaRequest(
-        userUid: json["user_uid"],
-        userCoverMedia: json["user_cover_media"] == null
-            ? []
-            : List<UserCoverMedia>.from(json["user_cover_media"]!
-                .map((x) => UserCoverMedia.fromMap(x))),
+        userUid: json['user_uid'],
+        userCoverMedia: json['user_cover_media'] == null
+            ? <UserCoverMedia>[]
+            : List<UserCoverMedia>.from(
+                json['user_cover_media']!.map((x) => UserCoverMedia.fromMap(x)),
+              ),
       );
 
-  Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "user_cover_media": userCoverMedia == null
-            ? []
-            : List<dynamic>.from(userCoverMedia!.map((x) => x.toMap())),
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'user_uid': userUid,
+        'user_cover_media': userCoverMedia == null
+            ? <dynamic>[]
+            : List<dynamic>.from(
+                userCoverMedia!.map((UserCoverMedia x) => x.toMap()),
+              ),
       };
 }
 
@@ -50,16 +53,16 @@ class UserCoverMedia {
   String toJson() => json.encode(toMap());
 
   factory UserCoverMedia.fromMap(Map<String, dynamic> json) => UserCoverMedia(
-        imageUrl: json["image_url"],
-        isVideo: json["is_video"],
-        userUid: json["user_uid"],
-        videoUrl: json["video_url"],
+        imageUrl: json['image_url'],
+        isVideo: json['is_video'],
+        userUid: json['user_uid'],
+        videoUrl: json['video_url'],
       );
 
-  Map<String, dynamic> toMap() => {
-        "image_url": imageUrl,
-        "is_video": isVideo,
-        "user_uid": userUid,
-        "video_url": videoUrl,
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'image_url': imageUrl,
+        'is_video': isVideo,
+        'user_uid': userUid,
+        'video_url': videoUrl,
       };
 }

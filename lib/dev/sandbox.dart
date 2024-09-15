@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart'; // Assuming this is where CustomAssetPicker is
 import 'package:video_player/video_player.dart';
 
-import '../config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class DeveloperPage extends StatefulWidget {
   const DeveloperPage({super.key});
@@ -82,22 +82,23 @@ class _DeveloperPageState extends State<DeveloperPage> {
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: [
+        children: <Widget>[
           // Buttons for different actions
-          for (var itm in [
+          for ((String, Future<void>? Function()) itm in <(String, Future<void>? Function())>[
             ('Open Camera', _captureImage),
             (
               'Pick Images',
               () {
                 CustomAssetPicker.pickImageFromGallery(
-                        aspectRatios: videoPostAspectRatio)
-                    .then((images) {
+                        aspectRatios: videoPostAspectRatio,)
+                    .then((File? images) {
                   if (images != null) {
                     setState(() {
                       _capturedImage = images;
                     });
                   }
                 });
+                return null;
               }
             ),
             ('Pick Videos', _pickVideos),
@@ -109,18 +110,18 @@ class _DeveloperPageState extends State<DeveloperPage> {
             ),
 
           // Display captured image
-          if (_capturedImage != null) ...[
+          if (_capturedImage != null) ...<Widget>[
             const SizedBox(height: 20),
             const Text('Captured Image:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.bold),),
             Image.file(_capturedImage!, height: 200),
           ],
 
           // Display picked video and video player
-          if (_pickedVideos != null) ...[
+          if (_pickedVideos != null) ...<Widget>[
             const SizedBox(height: 20),
             const Text('Picked Video:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.bold),),
             if (_videoPlayerController != null &&
                 _videoPlayerController!.value.isInitialized)
               AspectRatio(
@@ -131,11 +132,11 @@ class _DeveloperPageState extends State<DeveloperPage> {
           ],
 
           // Display picked documents
-          if (_pickedDocs != null && _pickedDocs!.isNotEmpty) ...[
+          if (_pickedDocs != null && _pickedDocs!.isNotEmpty) ...<Widget>[
             const SizedBox(height: 20),
             const Text('Picked Documents:',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            for (var doc in _pickedDocs!) Text(doc.path),
+                style: TextStyle(fontWeight: FontWeight.bold),),
+            for (File doc in _pickedDocs!) Text(doc.path),
           ],
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:whatsevr_app/dev/routes/routes_name.dart';
 import 'package:whatsevr_app/dev/sandbox.dart';
 
 List<GoRoute> getDevRoutes() {
-  return [
+  return <GoRoute>[
     GoRoute(
       name: DeveloperRoutes.developerPage,
       path: DeveloperRoutes.developerPage,

@@ -88,9 +88,9 @@ class WhatsevrButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Colors are fixed based on the button's style (filled/outlined) and color scheme (black/white)
-    final buttonColor = isFilled ? Colors.black : Colors.white;
-    final textColor = isFilled ? Colors.white : Colors.black;
-    final borderColor = isFilled ? Colors.white : Colors.black;
+    final Color buttonColor = isFilled ? Colors.black : Colors.white;
+    final Color textColor = isFilled ? Colors.white : Colors.black;
+    final Color borderColor = isFilled ? Colors.white : Colors.black;
 
     return MaterialButton(
       minWidth: shrink ? 0 : double.infinity,
@@ -105,7 +105,7 @@ class WhatsevrButton extends StatelessWidget {
       child: hasIcon
           ? Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 Icon(icon, size: 20),
                 const SizedBox(width: 8),
                 Text(

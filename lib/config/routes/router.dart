@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
-import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';

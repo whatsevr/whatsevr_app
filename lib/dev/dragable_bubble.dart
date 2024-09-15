@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/dev/routes/routes_name.dart';
-import 'package:whatsevr_app/dev/sandbox.dart';
 
 enum AnchoringPosition {
   topLeft,
@@ -160,7 +159,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
     ).animate(CurvedAnimation(
       parent: animationController,
       curve: Curves.easeInOut,
-    ));
+    ),);
 
     widget.dragController?._addState(this);
 
@@ -175,7 +174,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
 
       await Future.delayed(Duration(
         milliseconds: 100,
-      ));
+      ),);
       setState(() {
         offstage = false;
         boundary = MediaQuery.of(context).size.height - widget.bottomMargin;

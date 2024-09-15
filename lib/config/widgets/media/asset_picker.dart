@@ -40,13 +40,13 @@ class CustomAssetPicker {
     File? croppedImage = await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-          imageProvider: capturedFile, aspectRatios: aspectRatios),
+          imageProvider: capturedFile, aspectRatios: aspectRatios,),
     );
     if (croppedImage == null) throw Exception('No image cropped');
     if (!editImage) return croppedImage;
     File? editedImage = await AppNavigationService.newRoute(
         RoutesName.imageEditor,
-        extras: ImageEditorPageArgument(file: croppedImage));
+        extras: ImageEditorPageArgument(file: croppedImage),);
     return editedImage ?? croppedImage;
   }
 
@@ -77,7 +77,7 @@ class CustomAssetPicker {
     File? editableImage = await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-          imageProvider: pickedFile, aspectRatios: aspectRatios),
+          imageProvider: pickedFile, aspectRatios: aspectRatios,),
     );
     if (editableImage == null) {
       throw Exception('No image cropped');
@@ -88,7 +88,7 @@ class CustomAssetPicker {
     }
     final File? editedImage = await AppNavigationService.newRoute(
         RoutesName.imageEditor,
-        extras: ImageEditorPageArgument(file: editableImage));
+        extras: ImageEditorPageArgument(file: editableImage),);
     return editedImage ?? editableImage;
   }
 
@@ -125,7 +125,7 @@ class CustomAssetPicker {
     if (videoFile == null) throw Exception('File does not exist');
     final File? editedVideo = await AppNavigationService.newRoute(
         RoutesName.videoEditor,
-        extras: VideoEditorPageArgument(videoFile: videoFile));
+        extras: VideoEditorPageArgument(videoFile: videoFile),);
     if (editedVideo == null) return videoFile;
     return editedVideo;
   }

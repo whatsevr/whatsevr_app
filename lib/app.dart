@@ -8,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 
-import 'dev/dragable_bubble.dart';
-import 'dev/talker.dart';
+import 'package:whatsevr_app/dev/dragable_bubble.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
@@ -65,7 +65,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: Stack(
-              children: [
+              children: <Widget>[
                 SafeArea(
                   child: WhatsevrTalkerWrapper(child: child!),
                 ),

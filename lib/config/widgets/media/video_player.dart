@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:fraction/fraction.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
@@ -21,9 +22,9 @@ class FileDescription extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: description.entries
               .map(
-                (entry) => Text.rich(
+                (MapEntry<String, String> entry) => Text.rich(
                   TextSpan(
-                    children: [
+                    children: <InlineSpan>[
                       TextSpan(
                         text: '${entry.key}: ',
                         style: const TextStyle(fontSize: 11),
@@ -62,13 +63,16 @@ class _WhatsevrVideoViewerWithInfoState
   FileImage? _fileImage;
   Size _fileDimension = Size.zero;
   late final bool _isGif =
-      path.extension(widget.video.path).toLowerCase() == ".gif";
+      path.extension(widget.video.path).toLowerCase() == '.gif';
   late String _fileMbSize;
-  Future<void> _getImageDimension(File file,
-      {required Function(Size) onResult}) async {
+  Future<void> _getImageDimension(
+    File file, {
+    required Function(Size) onResult,
+  }) async {
     var decodedImage = await decodeImageFromList(file.readAsBytesSync());
     onResult(
-        Size(decodedImage.width.toDouble(), decodedImage.height.toDouble()));
+      Size(decodedImage.width.toDouble(), decodedImage.height.toDouble()),
+    );
   }
 
   String _fileMBSize(File file) =>
@@ -80,7 +84,7 @@ class _WhatsevrVideoViewerWithInfoState
     if (_isGif) {
       _getImageDimension(
         widget.video,
-        onResult: (d) => setState(() => _fileDimension = d),
+        onResult: (Size d) => setState(() => _fileDimension = d),
       );
     } else {
       _controller = VideoPlayerController.file(widget.video);
@@ -112,7 +116,7 @@ class _WhatsevrVideoViewerWithInfoState
       child: Center(
         child: Stack(
           alignment: Alignment.bottomLeft,
-          children: [
+          children: <Widget>[
             AspectRatio(
               aspectRatio: _fileDimension.aspectRatio == 0
                   ? 1
@@ -123,7 +127,7 @@ class _WhatsevrVideoViewerWithInfoState
             Positioned(
               bottom: 0,
               child: FileDescription(
-                description: {
+                description: <String, String>{
                   'Video path': widget.video.path,
                   if (!_isGif)
                     'Video duration':

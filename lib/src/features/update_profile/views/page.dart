@@ -151,7 +151,7 @@ class ProfileUpdatePage extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                          )),
+                          ),),
                       initiallyExpanded: true,
                       visualDensity: VisualDensity.compact,
                       backgroundColor: Colors.white,
@@ -163,20 +163,20 @@ class ProfileUpdatePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       children: <Widget>[
-                        for (UiCoverMedia coverMedia in state.coverMedia ?? [])
+                        for (UiCoverMedia coverMedia in state.coverMedia ?? <UiCoverMedia>[])
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,
                             ),
                             child: Builder(
-                              builder: (context) {
+                              builder: (BuildContext context) {
                                 return Stack(
                                   alignment: Alignment.center,
-                                  children: [
+                                  children: <Widget>[
                                     ExtendedImage.network(
                                       coverMedia.imageUrl ??
                                           MockData.imagePlaceholder(
-                                              'Cover Media'),
+                                              'Cover Media',),
                                       width: double.infinity,
                                       height: 200,
                                       fit: BoxFit.cover,
@@ -240,7 +240,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     .read<ProfileBloc>()
                                     .add(AddOrRemoveCoverMedia(
                                       isImage: true,
-                                    ));
+                                    ),);
                               },
                               child: Text(
                                 'Add Cover Image',
@@ -262,7 +262,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     .read<ProfileBloc>()
                                     .add(AddOrRemoveCoverMedia(
                                       isVideo: true,
-                                    ));
+                                    ),);
                               },
                               child: Text(
                                 'Add Cover Video',

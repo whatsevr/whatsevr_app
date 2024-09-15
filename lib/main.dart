@@ -27,7 +27,7 @@ Future<void> main() async {
     };
 
     runApp(const WhatsevrApp());
-  }, catchUnhandledExceptions);
+  }, catchUnhandledExceptions,);
 }
 
 void catchUnhandledExceptions(Object error, StackTrace? stack) {
