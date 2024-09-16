@@ -41,9 +41,15 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
           .setUserIdentifier(loggedAuthorisedUserResponse!.data!.userId!);
       FirebaseAnalytics.instance
           .setUserId(id: loggedAuthorisedUserResponse.data!.userId!);
+      FirebaseAnalytics.instance.logLogin(loginMethod: 'Auto Login From Local');
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'user_uid',
+        value: loggedAuthorisedUserResponse.data?.userId,
+      );
     } else {
       add(const LoginOrSignupEvent());
     }
+    FirebaseAnalytics.instance.logAppOpen();
   }
 
   FutureOr<void> _onLoginOrSignup(
@@ -91,7 +97,22 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
           .setUserIdentifier(authServiceUserResponse.data!.userId!);
       FirebaseAnalytics.instance
           .setUserId(id: authServiceUserResponse.data!.userId!);
-
+      FirebaseAnalytics.instance.logLogin(loginMethod: 'OTP');
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'mobile_number',
+        value: userStatusResponse?.data?.mobileNumber,
+      );
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'email_id',
+        value: userStatusResponse?.data?.emailId,
+      );
+      FirebaseAnalytics.instance.setDefaultEventParameters(
+        <String, dynamic>{
+          'user_uid': authServiceUserResponse.data?.userId,
+          'mobile_number': userStatusResponse?.data?.mobileNumber,
+          'email_id': userStatusResponse?.data?.emailId,
+        },
+      );
       SmartDialog.showToast('${userStatusResponse!.message}');
 
       AppNavigationService.newRoute(RoutesName.dashboard);

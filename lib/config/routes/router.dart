@@ -80,7 +80,7 @@ class AppNavigationService {
     debugLogDiagnostics: true,
     observers: <NavigatorObserver>[
       NavigationObserver(),
-      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      // FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       FlutterSmartDialog.observer,
       TalkerService.takerRouteObserver(),
     ],
