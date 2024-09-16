@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +8,15 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/label_container.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
+import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
+import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -61,9 +69,27 @@ class ProfileUpdatePage extends StatelessWidget {
                           Gap(25),
                           GestureDetector(
                             onTap: () async {
-                              context
-                                  .read<ProfileBloc>()
-                                  .add(ChangeProfilePictureEvent());
+                              showWhatsevrMediaPickerChoice(
+                                onChoosingCamera: () async {
+                                  CustomAssetPicker.captureImage(
+                                    withCircleCropperUi: true,
+                                    aspectRatios: [
+                                      WhatsevrAspectRatio.square,
+                                    ],
+                                    onCompleted: (file) {
+                                      context.read<ProfileBloc>().add(
+                                            ChangeProfilePictureEvent(
+                                              profileImage: file,
+                                            ),
+                                          );
+                                    },
+                                  );
+                                },
+                                onChoosingGallery: () {},
+                              );
+                              // context
+                              //     .read<ProfileBloc>()
+                              //     .add(ChangeProfilePictureEvent());
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -147,11 +173,13 @@ class ProfileUpdatePage extends StatelessWidget {
                     Gap(12),
                     ExpansionTile(
                       dense: true,
-                      title: Text('Cover Media',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),),
+                      title: Text(
+                        'Cover Media',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       initiallyExpanded: true,
                       visualDensity: VisualDensity.compact,
                       backgroundColor: Colors.white,
@@ -163,7 +191,8 @@ class ProfileUpdatePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       children: <Widget>[
-                        for (UiCoverMedia coverMedia in state.coverMedia ?? <UiCoverMedia>[])
+                        for (UiCoverMedia coverMedia
+                            in state.coverMedia ?? <UiCoverMedia>[])
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,
@@ -176,7 +205,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ExtendedImage.network(
                                       coverMedia.imageUrl ??
                                           MockData.imagePlaceholder(
-                                              'Cover Media',),
+                                            'Cover Media',
+                                          ),
                                       width: double.infinity,
                                       height: 200,
                                       fit: BoxFit.cover,
@@ -236,11 +266,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                context
-                                    .read<ProfileBloc>()
-                                    .add(AddOrRemoveCoverMedia(
-                                      isImage: true,
-                                    ),);
+                                context.read<ProfileBloc>().add(
+                                      AddOrRemoveCoverMedia(
+                                        isImage: true,
+                                      ),
+                                    );
                               },
                               child: Text(
                                 'Add Cover Image',
@@ -258,11 +288,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                context
-                                    .read<ProfileBloc>()
-                                    .add(AddOrRemoveCoverMedia(
-                                      isVideo: true,
-                                    ),);
+                                context.read<ProfileBloc>().add(
+                                      AddOrRemoveCoverMedia(
+                                        isVideo: true,
+                                      ),
+                                    );
                               },
                               child: Text(
                                 'Add Cover Video',

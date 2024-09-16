@@ -12,8 +12,10 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
-void showContentUploadBottomSheet(BuildContext context,
-    {required EnumPostCreatorType postCreatorType,}) {
+void showContentUploadBottomSheet(
+  BuildContext context, {
+  required EnumPostCreatorType postCreatorType,
+}) {
   showModalBottomSheet(
     useRootNavigator: true,
     barrierColor: Colors.white.withOpacity(0.5),
@@ -101,9 +103,12 @@ class _Ui extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             onPressed: () async {
-              AppNavigationService.newRoute(RoutesName.createVideoPost,
-                  extras: CreateVideoPostPageArgument(
-                      postCreatorType: postCreatorType,),);
+              AppNavigationService.newRoute(
+                RoutesName.createVideoPost,
+                extras: CreateVideoPostPageArgument(
+                  postCreatorType: postCreatorType,
+                ),
+              );
             },
             child: const Row(
               children: <Widget>[

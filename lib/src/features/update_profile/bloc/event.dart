@@ -17,10 +17,11 @@ class InitialEvent extends ProfileEvent {
 }
 
 class ChangeProfilePictureEvent extends ProfileEvent {
-  const ChangeProfilePictureEvent();
+  final File? profileImage;
+  const ChangeProfilePictureEvent({this.profileImage});
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[profileImage];
 }
 
 class AddOrRemoveCoverMedia extends ProfileEvent {
@@ -28,8 +29,11 @@ class AddOrRemoveCoverMedia extends ProfileEvent {
   final bool? isVideo;
   final UiCoverMedia? removableCoverMedia;
 
-  const AddOrRemoveCoverMedia(
-      {this.isImage, this.isVideo, this.removableCoverMedia,});
+  const AddOrRemoveCoverMedia({
+    this.isImage,
+    this.isVideo,
+    this.removableCoverMedia,
+  });
 
   @override
   List<Object?> get props => <Object?>[isImage, isVideo, removableCoverMedia];

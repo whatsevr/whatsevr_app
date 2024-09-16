@@ -10,8 +10,10 @@ import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/utils/file.dart';
 
 class ImageEditorPageArgument {
-  final File file;
-  ImageEditorPageArgument({required this.file});
+  final File imageFileToEdit;
+  final Function(File file) onCompleted;
+  ImageEditorPageArgument(
+      {required this.imageFileToEdit, required this.onCompleted});
 }
 
 class ImageEditorPage extends StatelessWidget {
@@ -23,11 +25,12 @@ class ImageEditorPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: 'Edit Image'),
       body: ProImageEditor.file(
-        pageArgument.file,
+        pageArgument.imageFileToEdit,
         callbacks: ProImageEditorCallbacks(
           onImageEditingComplete: (Uint8List bytes) async {
             File? fileFromBytes = await uint8BytesToFile(bytes);
-            AppNavigationService.goBack(result: fileFromBytes);
+            pageArgument.onCompleted(fileFromBytes);
+            AppNavigationService.goBack();
           },
         ),
         configs: ProImageEditorConfigs(

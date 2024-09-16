@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -27,19 +28,29 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Spacer(),
+            const Gap(30),
             ExtendedImage.asset(
               'assets/images/whatsevr_app_logo.jpg',
               width: 100,
             ),
-            const Text('WhatsEvr', style: TextStyle(fontSize: 24)),
-            const Gap(15),
-            const SizedBox(
-              width: 24,
-              height: 24,
-              child: CircularProgressIndicator(
-                color: Colors.blue,
+            Spacer(),
+            CupertinoActivityIndicator(),
+            const Gap(30),
+            const Text(
+              'WhatsEvr',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            const Text(
+              'Ver 1.0.0',
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            const Gap(30),
           ],
         ),
       ),

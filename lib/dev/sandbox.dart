@@ -19,20 +19,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
   VideoPlayerController? _videoPlayerController;
 
   // Method to pick/capture image
-  Future<void> _captureImage() async {
-    try {
-      final File? image = await CustomAssetPicker.captureImage(
-        aspectRatios: imagePostAspectRatio,
-      );
-      if (image != null) {
-        setState(() {
-          _capturedImage = image;
-        });
-      }
-    } catch (e) {
-      print('Error capturing image: $e');
-    }
-  }
+  Future<void> _captureImage() async {}
 
   // Method to pick videos and initialize the video player
   Future<void> _pickVideos() async {
@@ -84,23 +71,10 @@ class _DeveloperPageState extends State<DeveloperPage> {
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           // Buttons for different actions
-          for ((String, Future<void>? Function()) itm in <(String, Future<void>? Function())>[
+          for ((String, Future<void>? Function()) itm
+              in <(String, Future<void>? Function())>[
             ('Open Camera', _captureImage),
-            (
-              'Pick Images',
-              () {
-                CustomAssetPicker.pickImageFromGallery(
-                        aspectRatios: videoPostAspectRatio,)
-                    .then((File? images) {
-                  if (images != null) {
-                    setState(() {
-                      _capturedImage = images;
-                    });
-                  }
-                });
-                return null;
-              }
-            ),
+            ('Pick Images', () {}),
             ('Pick Videos', _pickVideos),
             ('Pick Documents', _pickDocuments),
           ])
@@ -112,16 +86,20 @@ class _DeveloperPageState extends State<DeveloperPage> {
           // Display captured image
           if (_capturedImage != null) ...<Widget>[
             const SizedBox(height: 20),
-            const Text('Captured Image:',
-                style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text(
+              'Captured Image:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             Image.file(_capturedImage!, height: 200),
           ],
 
           // Display picked video and video player
           if (_pickedVideos != null) ...<Widget>[
             const SizedBox(height: 20),
-            const Text('Picked Video:',
-                style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text(
+              'Picked Video:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             if (_videoPlayerController != null &&
                 _videoPlayerController!.value.isInitialized)
               AspectRatio(
@@ -134,8 +112,10 @@ class _DeveloperPageState extends State<DeveloperPage> {
           // Display picked documents
           if (_pickedDocs != null && _pickedDocs!.isNotEmpty) ...<Widget>[
             const SizedBox(height: 20),
-            const Text('Picked Documents:',
-                style: TextStyle(fontWeight: FontWeight.bold),),
+            const Text(
+              'Picked Documents:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             for (File doc in _pickedDocs!) Text(doc.path),
           ],
         ],

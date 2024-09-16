@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-showAppModalSheet({required BuildContext context, required Widget? child}) {
+import '../routes/router.dart';
+
+showAppModalSheet(
+    {BuildContext? context,
+    required Widget? child,
+    bool draggableScrollable = true}) {
+  context ??= AppNavigationService.currentContext!;
   showModalBottomSheet(
     useRootNavigator: true,
     constraints: BoxConstraints(
@@ -16,9 +22,12 @@ showAppModalSheet({required BuildContext context, required Widget? child}) {
         topRight: Radius.circular(20),
       ),
     ),
-    isScrollControlled: true,
+    isScrollControlled: draggableScrollable ? true : false,
     showDragHandle: true,
     builder: (BuildContext context) {
+      if (!draggableScrollable) {
+        return PadHorizontal(child: child ?? const SizedBox.shrink());
+      }
       return Padding(
         padding: EdgeInsets.only(
           bottom:
@@ -29,8 +38,9 @@ showAppModalSheet({required BuildContext context, required Widget? child}) {
           initialChildSize: 0.7,
           builder: (BuildContext context, ScrollController scrollController) {
             return SingleChildScrollView(
-                controller: scrollController,
-                child: PadHorizontal(child: child ?? const SizedBox.shrink()),);
+              controller: scrollController,
+              child: PadHorizontal(child: child ?? const SizedBox.shrink()),
+            );
           },
         ),
       );

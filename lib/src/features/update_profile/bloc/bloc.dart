@@ -57,67 +57,72 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     InitialEvent event,
     Emitter<ProfileState> emit,
   ) {
-    emit(state.copyWith(
-      currentProfileDetailsResponse: event.pageArgument.profileDetailsResponse,
-      dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
-      gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
-      educations: List.generate(
-        event.pageArgument.profileDetailsResponse?.userEducations?.length ?? 0,
-        (int index) => UiEducation(
-          degreeName: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].title,
-          degreeType: event
-              .pageArgument.profileDetailsResponse?.userEducations?[index].type,
-          startDate: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].startDate,
-          endDate: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].endDate,
-          isOngoingEducation: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].isOngoingEducation,
-          institute: event.pageArgument.profileDetailsResponse
-              ?.userEducations?[index].institute,
+    emit(
+      state.copyWith(
+        currentProfileDetailsResponse:
+            event.pageArgument.profileDetailsResponse,
+        dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
+        gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
+        educations: List.generate(
+          event.pageArgument.profileDetailsResponse?.userEducations?.length ??
+              0,
+          (int index) => UiEducation(
+            degreeName: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].title,
+            degreeType: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].type,
+            startDate: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].startDate,
+            endDate: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].endDate,
+            isOngoingEducation: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].isOngoingEducation,
+            institute: event.pageArgument.profileDetailsResponse
+                ?.userEducations?[index].institute,
+          ),
+        ),
+        workExperiences: List.generate(
+          event.pageArgument.profileDetailsResponse?.userWorkExperiences
+                  ?.length ??
+              0,
+          (int index) => UiWorkExperience(
+            designation: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].designation,
+            startDate: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].startDate,
+            endDate: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].endDate,
+            isCurrentlyWorking: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].isCurrentlyWorking,
+            workingMode: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].workingMode,
+            companyName: event.pageArgument.profileDetailsResponse
+                ?.userWorkExperiences?[index].companyName,
+          ),
+        ),
+        services: List.generate(
+          event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
+          (int index) => UiService(
+            serviceName: event.pageArgument.profileDetailsResponse
+                ?.userServices?[index].title,
+            serviceDescription: event.pageArgument.profileDetailsResponse
+                ?.userServices?[index].description,
+          ),
+        ),
+        coverMedia: List.generate(
+          event.pageArgument.profileDetailsResponse?.userCoverMedia?.length ??
+              0,
+          (int index) => UiCoverMedia(
+            imageUrl: event.pageArgument.profileDetailsResponse
+                ?.userCoverMedia?[index].imageUrl,
+            videoUrl: event.pageArgument.profileDetailsResponse
+                ?.userCoverMedia?[index].videoUrl,
+            isVideo: event.pageArgument.profileDetailsResponse
+                ?.userCoverMedia?[index].isVideo,
+          ),
         ),
       ),
-      workExperiences: List.generate(
-        event.pageArgument.profileDetailsResponse?.userWorkExperiences
-                ?.length ??
-            0,
-        (int index) => UiWorkExperience(
-          designation: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].designation,
-          startDate: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].startDate,
-          endDate: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].endDate,
-          isCurrentlyWorking: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].isCurrentlyWorking,
-          workingMode: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].workingMode,
-          companyName: event.pageArgument.profileDetailsResponse
-              ?.userWorkExperiences?[index].companyName,
-        ),
-      ),
-      services: List.generate(
-        event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
-        (int index) => UiService(
-          serviceName: event
-              .pageArgument.profileDetailsResponse?.userServices?[index].title,
-          serviceDescription: event.pageArgument.profileDetailsResponse
-              ?.userServices?[index].description,
-        ),
-      ),
-      coverMedia: List.generate(
-        event.pageArgument.profileDetailsResponse?.userCoverMedia?.length ?? 0,
-        (int index) => UiCoverMedia(
-          imageUrl: event.pageArgument.profileDetailsResponse
-              ?.userCoverMedia?[index].imageUrl,
-          videoUrl: event.pageArgument.profileDetailsResponse
-              ?.userCoverMedia?[index].videoUrl,
-          isVideo: event.pageArgument.profileDetailsResponse
-              ?.userCoverMedia?[index].isVideo,
-        ),
-      ),
-    ),);
+    );
 
     // Set the initial values of the text controllers
     nameController.text =
@@ -147,21 +152,22 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ChangeProfilePictureEvent event,
     Emitter<ProfileState> emit,
   ) async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
-    if (pickedFile == null) return;
-    emit(state.copyWith(profileImage: File(pickedFile.path)));
-    String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
-      state.profileImage!,
-    );
-    await UsersApi.updateProfilePicture(
-      ProfilePictureUpdateRequest(
-        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-        profilePictureUrl: profilePictureUrl,
-      ),
-    );
+    try {
+      if (event.profileImage == null) throw Exception('No image picked');
+      emit(state.copyWith(profileImage: event.profileImage));
+      String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
+        event.profileImage!,
+      );
+      await UsersApi.updateProfilePicture(
+        ProfilePictureUpdateRequest(
+          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          profilePictureUrl: profilePictureUrl,
+        ),
+      );
+    } catch (e) {
+      SmartDialog.showToast(e.toString());
+      if (kDebugMode) rethrow;
+    }
   }
 
   void _onAddOrRemoveCoverMedia(

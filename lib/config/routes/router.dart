@@ -185,9 +185,9 @@ class AppNavigationService {
             name: RoutesName.cameraView,
             path: RoutesName.cameraView,
             builder: (BuildContext context, GoRouterState state) {
-              WhatsevrCameraSurfacePageArgument pageArgument =
-                  state.extra as WhatsevrCameraSurfacePageArgument;
-              return WhatsevrCameraSurfacePage(
+              CameraViewPageArgument pageArgument =
+                  state.extra as CameraViewPageArgument;
+              return CameraViewPage(
                 pageArgument: pageArgument,
               );
             },

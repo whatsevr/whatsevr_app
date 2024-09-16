@@ -1,63 +1,80 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 
-class WhatsevrCameraSurfacePageArgument {
-  final CameraController controller;
-
-  WhatsevrCameraSurfacePageArgument({
-    required this.controller,
+class CameraViewPageArgument {
+  final Function(File file) onCapture;
+  CameraViewPageArgument({
+    required this.onCapture,
   });
 }
 
-class WhatsevrCameraSurfacePage extends StatefulWidget {
-  final WhatsevrCameraSurfacePageArgument pageArgument;
+class CameraViewPage extends StatefulWidget {
+  final CameraViewPageArgument pageArgument;
 
-  const WhatsevrCameraSurfacePage({super.key, required this.pageArgument});
+  const CameraViewPage({super.key, required this.pageArgument});
 
   @override
-  _WhatsevrCameraSurfacePageState createState() =>
-      _WhatsevrCameraSurfacePageState();
+  _CameraViewPageState createState() => _CameraViewPageState();
 }
 
-class _WhatsevrCameraSurfacePageState extends State<WhatsevrCameraSurfacePage> {
-  late CameraController controller;
+class _CameraViewPageState extends State<CameraViewPage> {
+  CameraController? controller;
   @override
   void initState() {
     super.initState();
-    controller = widget.pageArgument.controller;
+    availableCameras().then((List<CameraDescription> cameraDescriptions) async {
+      if (cameraDescriptions.isEmpty) throw Exception('No cameras available');
+
+      controller = CameraController(
+        cameraDescriptions.last,
+        ResolutionPreset.veryHigh,
+      );
+      await controller!.initialize();
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
-    controller.dispose(); // Dispose the controller when done
+    controller?.dispose(); // Dispose the controller when done
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: FutureBuilder<void>(
-        future: controller.initialize(),
+        future: controller?.initialize(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return CameraPreview(controller);
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                CameraPreview(controller!),
+                Positioned(
+                  bottom: 20,
+                  child: FloatingActionButton(
+                    child: const Icon(Icons.camera),
+                    onPressed: () async {
+                      try {
+                        XFile file = await controller!.takePicture();
+                        widget.pageArgument.onCapture(File(file.path));
+                        AppNavigationService.goBack();
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            );
           } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.camera),
-        onPressed: () async {
-          try {
-            XFile file = await controller.takePicture();
-            AppNavigationService.goBack(result: File(file.path));
-          } catch (e) {
-            print(e);
+            return const Center(child: CupertinoActivityIndicator());
           }
         },
       ),

@@ -17,42 +17,59 @@ import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 class CustomAssetPicker {
   CustomAssetPicker._();
 
-  static Future<File?> captureImage({
+  static Future<void> captureImage({
+    required Function(File file)? onCompleted,
     bool cropImage = true,
     bool editImage = true,
     required List<WhatsevrAspectRatio> aspectRatios,
+    bool withCircleCropperUi = false,
   }) async {
-    final List<CameraDescription> cameraDescriptions = await availableCameras();
-    if (cameraDescriptions.isEmpty) throw Exception('No cameras available');
-
-    final CameraController cameraController = CameraController(
-      cameraDescriptions.first,
-      ResolutionPreset.ultraHigh,
-    );
-    await cameraController.initialize();
-
-    final File? capturedFile = await AppNavigationService.newRoute(
+    File? capturedFile;
+    await AppNavigationService.newRoute(
       RoutesName.cameraView,
-      extras: WhatsevrCameraSurfacePageArgument(controller: cameraController),
+      extras: CameraViewPageArgument(onCapture: (File file) {
+        capturedFile = file;
+      }),
     );
-    if (capturedFile == null) throw Exception('No image captured');
-    if (!cropImage) return capturedFile;
-    File? croppedImage = await AppNavigationService.newRoute(
+    if (capturedFile == null) return;
+    if (!cropImage) {
+      onCompleted?.call(capturedFile!);
+      return;
+    }
+    File? croppedImage;
+    await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-          imageProvider: capturedFile, aspectRatios: aspectRatios,),
+        imageFileToCrop: capturedFile!,
+        aspectRatios: aspectRatios,
+        withCircleCropperUi: withCircleCropperUi,
+        onCompleted: (File file) {
+          croppedImage = file;
+        },
+      ),
     );
     if (croppedImage == null) throw Exception('No image cropped');
-    if (!editImage) return croppedImage;
-    File? editedImage = await AppNavigationService.newRoute(
-        RoutesName.imageEditor,
-        extras: ImageEditorPageArgument(file: croppedImage),);
-    return editedImage ?? croppedImage;
+    if (!editImage) {
+      onCompleted?.call(croppedImage!);
+      return;
+    }
+    File? editedImage;
+    await AppNavigationService.newRoute(
+      RoutesName.imageEditor,
+      extras: ImageEditorPageArgument(
+          imageFileToEdit: croppedImage!,
+          onCompleted: (File file) {
+            editedImage = file;
+          }),
+    );
+    onCompleted?.call(editedImage ?? croppedImage!);
   }
 
-  static Future<File?> pickImageFromGallery({
+  static Future<void> pickImageFromGallery({
     bool editImage = true,
     required List<WhatsevrAspectRatio> aspectRatios,
+    required bool withCircleCropperUi,
+    required Function(File file) onCompleted,
   }) async {
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
       AppNavigationService.currentContext!,
@@ -70,32 +87,44 @@ class CustomAssetPicker {
     );
 
     if (pickedAssets == null || pickedAssets.isEmpty) {
-      throw Exception('No images picked');
+      return;
     }
     File? pickedFile = await pickedAssets.first.file;
     if (pickedFile == null) throw Exception('File does not exist');
-    File? editableImage = await AppNavigationService.newRoute(
+    File? croppedImage;
+    await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-          imageProvider: pickedFile, aspectRatios: aspectRatios,),
+        imageFileToCrop: pickedFile,
+        aspectRatios: aspectRatios,
+        onCompleted: (File file) {
+          croppedImage = file;
+        },
+      ),
     );
-    if (editableImage == null) {
+    if (croppedImage == null) {
       throw Exception('No image cropped');
     }
 
     if (!editImage) {
-      return editableImage;
+      onCompleted.call(croppedImage!);
+      return;
     }
-    final File? editedImage = await AppNavigationService.newRoute(
-        RoutesName.imageEditor,
-        extras: ImageEditorPageArgument(file: editableImage),);
-    return editedImage ?? editableImage;
+    File? editedImage;
+    await AppNavigationService.newRoute(
+      RoutesName.imageEditor,
+      extras: ImageEditorPageArgument(
+          imageFileToEdit: croppedImage!,
+          onCompleted: (File file) {
+            editedImage = file;
+          }),
+    );
+    onCompleted.call(editedImage ?? croppedImage!);
   }
 
   static Future<File?> pickVideoFromGallery({
     bool editVideo = true,
   }) async {
-    ;
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
       AppNavigationService.currentContext!,
       pickerConfig: AssetPickerConfig(
@@ -124,8 +153,9 @@ class CustomAssetPicker {
     final File? videoFile = await pickedAssets.first.file;
     if (videoFile == null) throw Exception('File does not exist');
     final File? editedVideo = await AppNavigationService.newRoute(
-        RoutesName.videoEditor,
-        extras: VideoEditorPageArgument(videoFile: videoFile),);
+      RoutesName.videoEditor,
+      extras: VideoEditorPageArgument(videoFile: videoFile),
+    );
     if (editedVideo == null) return videoFile;
     return editedVideo;
   }

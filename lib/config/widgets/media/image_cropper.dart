@@ -12,13 +12,15 @@ import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/utils/file.dart';
 
 class ImageCropperPageArgument {
-  final File imageProvider;
+  final File imageFileToCrop;
   final List<WhatsevrAspectRatio> aspectRatios;
   final bool withCircleCropperUi;
+  final Function(File file) onCompleted;
   ImageCropperPageArgument({
-    required this.imageProvider,
+    required this.imageFileToCrop,
     this.aspectRatios = WhatsevrAspectRatio.values,
     this.withCircleCropperUi = false,
+    required this.onCompleted,
   });
 }
 
@@ -35,14 +37,15 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
   @override
   void initState() {
     super.initState();
-    fileToUint8List(widget.pageArgument.imageProvider).then((Uint8List value) {
+    fileToUint8List(widget.pageArgument.imageFileToCrop)
+        .then((Uint8List value) {
       setState(() {
-        image = value;
+        imageBytes = value;
       });
     });
   }
 
-  Uint8List? image;
+  Uint8List? imageBytes;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +62,8 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
       ),
       body: Builder(
         builder: (BuildContext context) {
-          if (image == null) {
-            return Center(
+          if (imageBytes == null) {
+            return const Center(
               child: CupertinoActivityIndicator(),
             );
           }
@@ -68,11 +71,12 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
             children: <Widget>[
               Expanded(
                 child: Crop(
-                  image: image!,
+                  image: imageBytes!,
                   controller: _controller,
                   onCropped: (Uint8List image) async {
                     final File file = await uint8BytesToFile(image);
-                    AppNavigationService.goBack(result: file);
+                    widget.pageArgument.onCompleted(file);
+                    AppNavigationService.goBack();
                   },
                   interactive: true,
                   withCircleUi: widget.pageArgument.withCircleCropperUi,
@@ -89,7 +93,9 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                     //max zoom level
                     return newScale < 8;
                   },
-                  cornerDotBuilder: (double size, EdgeAlignment edgeAlignment) => const DotControl(
+                  cornerDotBuilder:
+                      (double size, EdgeAlignment edgeAlignment) =>
+                          const DotControl(
                     color: Colors.black,
                     padding: 10,
                   ),
@@ -102,13 +108,15 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.pageArgument.aspectRatios.length,
-                  separatorBuilder: (BuildContext context, int index) => VerticalDivider(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      VerticalDivider(),
                   itemBuilder: (BuildContext context, int index) {
                     final WhatsevrAspectRatio aspectRatio =
                         widget.pageArgument.aspectRatios[index];
                     return IconButton(
                       icon: Text(
-                          '${aspectRatio.label}(${aspectRatio.valueLabel})',),
+                        '${aspectRatio.label}(${aspectRatio.valueLabel})',
+                      ),
                       onPressed: () {
                         _controller.aspectRatio = aspectRatio.ratio;
                       },

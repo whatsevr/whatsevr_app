@@ -32,7 +32,7 @@ Future<void> main() async {
         return true;
       };
       WakelockPlus.enable();
-      AuthUserDb.initDB();
+      await AuthUserDb.initDB();
       await ApiClient.init();
       FileUploadService.init();
       DownloadService.init();
