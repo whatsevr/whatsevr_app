@@ -59,6 +59,8 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
       builder: FlutterSmartDialog.init(
+        toastBuilder: (msg) => _toastUi(msg),
+        loadingBuilder: (String msg) => _loaderUi(msg),
         builder: (BuildContext context, Widget? child) {
           return GestureDetector(
             onTap: () {
@@ -77,4 +79,34 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       ),
     );
   }
+}
+
+Center _loaderUi(String msg) {
+  return Center(
+    child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(msg)),
+  );
+}
+
+Container _toastUi(String msg) {
+  return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Text(msg));
 }

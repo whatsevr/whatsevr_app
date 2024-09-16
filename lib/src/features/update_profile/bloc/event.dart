@@ -25,18 +25,19 @@ class ChangeProfilePictureEvent extends ProfileEvent {
 }
 
 class AddOrRemoveCoverMedia extends ProfileEvent {
-  final bool? isImage;
-  final bool? isVideo;
+  final File? coverImage;
+  final File? coverVideo;
   final UiCoverMedia? removableCoverMedia;
 
   const AddOrRemoveCoverMedia({
-    this.isImage,
-    this.isVideo,
+    this.coverImage,
+    this.coverVideo,
     this.removableCoverMedia,
   });
 
   @override
-  List<Object?> get props => <Object?>[isImage, isVideo, removableCoverMedia];
+  List<Object?> get props =>
+      <Object?>[coverImage, coverVideo, removableCoverMedia];
 }
 
 class UpdateGender extends ProfileEvent {

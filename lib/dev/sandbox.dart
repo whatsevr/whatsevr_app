@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart'; // Assuming this is where CustomAssetPicker is
 import 'package:video_player/video_player.dart';
 
@@ -13,51 +14,8 @@ class DeveloperPage extends StatefulWidget {
 }
 
 class _DeveloperPageState extends State<DeveloperPage> {
-  File? _capturedImage;
-  File? _pickedVideos;
-  List<File>? _pickedDocs;
-  VideoPlayerController? _videoPlayerController;
-
-  // Method to pick/capture image
-  Future<void> _captureImage() async {}
-
-  // Method to pick videos and initialize the video player
-  Future<void> _pickVideos() async {
-    try {
-      final File? videos =
-          await CustomAssetPicker.pickVideoFromGallery(editVideo: true);
-      if (videos != null) {
-        setState(() {
-          _pickedVideos = videos;
-          _videoPlayerController = VideoPlayerController.file(videos)
-            ..initialize().then((_) {
-              setState(() {}); // Rebuild UI after initializing the controller
-              _videoPlayerController?.play(); // Auto-play the video
-            });
-        });
-      }
-    } catch (e) {
-      print('Error picking videos: $e');
-    }
-  }
-
-  // Method to pick documents
-  Future<void> _pickDocuments() async {
-    try {
-      final List<File>? docs = await CustomAssetPicker.pickDocuments();
-      if (docs != null) {
-        setState(() {
-          _pickedDocs = docs;
-        });
-      }
-    } catch (e) {
-      print('Error picking documents: $e');
-    }
-  }
-
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
     super.dispose();
   }
 
@@ -73,51 +31,20 @@ class _DeveloperPageState extends State<DeveloperPage> {
           // Buttons for different actions
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
-            ('Open Camera', _captureImage),
+            (
+              'Test',
+              () {
+                SmartDialog.showToast('Test');
+              }
+            ),
             ('Pick Images', () {}),
-            ('Pick Videos', _pickVideos),
-            ('Pick Documents', _pickDocuments),
+            ('Pick Videos', () {}),
+            ('Pick Documents', () {}),
           ])
             TextButton(
               onPressed: itm.$2,
               child: Text(itm.$1),
             ),
-
-          // Display captured image
-          if (_capturedImage != null) ...<Widget>[
-            const SizedBox(height: 20),
-            const Text(
-              'Captured Image:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Image.file(_capturedImage!, height: 200),
-          ],
-
-          // Display picked video and video player
-          if (_pickedVideos != null) ...<Widget>[
-            const SizedBox(height: 20),
-            const Text(
-              'Picked Video:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            if (_videoPlayerController != null &&
-                _videoPlayerController!.value.isInitialized)
-              AspectRatio(
-                aspectRatio: _videoPlayerController!.value.aspectRatio,
-                child: VideoPlayer(_videoPlayerController!),
-              ),
-            Text(_pickedVideos!.path),
-          ],
-
-          // Display picked documents
-          if (_pickedDocs != null && _pickedDocs!.isNotEmpty) ...<Widget>[
-            const SizedBox(height: 20),
-            const Text(
-              'Picked Documents:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            for (File doc in _pickedDocs!) Text(doc.path),
-          ],
         ],
       ),
     );

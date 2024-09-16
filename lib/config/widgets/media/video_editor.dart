@@ -17,7 +17,8 @@ import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
 class VideoEditorPageArgument {
   final File videoFile;
-  VideoEditorPageArgument({required this.videoFile});
+  final Function(File? file) onCompleted;
+  VideoEditorPageArgument({required this.videoFile, required this.onCompleted});
 }
 
 class VideoEditorPage extends StatefulWidget {
@@ -46,10 +47,17 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
     _controller
         .initialize(aspectRatio: 9 / 16)
         .then((_) => setState(() {}))
-        .catchError((error) {
-      // handle minumum duration bigger than video duration error
-      AppNavigationService.goBack();
-    }, test: (Object e) => e is VideoMinDurationError,);
+        .catchError(
+      (error) {
+        // handle minumum duration bigger than video duration error
+        if (error is VideoMinDurationError) {
+          throw Exception('Video is too short to be edited');
+        }
+        widget.pageArgument.onCompleted(null);
+        AppNavigationService.goBack();
+      },
+      test: (Object e) => e is VideoMinDurationError,
+    );
   }
 
   @override
@@ -79,7 +87,8 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
           SmartDialog.showToast('Error on export video :('),
       onCompleted: (File file) async {
         _isExporting.value = false;
-        AppNavigationService.goBack<File>(result: file);
+        widget.pageArgument.onCompleted(file);
+        AppNavigationService.goBack();
       },
     );
   }
@@ -228,19 +237,24 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
 
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: baseHeight / 4),
-            child: Row(children: <Widget>[
-              Text(formatter(Duration(seconds: pos.toInt()))),
-              const Expanded(child: SizedBox()),
-              AnimatedOpacity(
-                opacity: _controller.isTrimming ? 1 : 0,
-                duration: kThemeAnimationDuration,
-                child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                  Text(formatter(_controller.startTrim)),
-                  const SizedBox(width: 10),
-                  Text(formatter(_controller.endTrim)),
-                ],),
-              ),
-            ],),
+            child: Row(
+              children: <Widget>[
+                Text(formatter(Duration(seconds: pos.toInt()))),
+                const Expanded(child: SizedBox()),
+                AnimatedOpacity(
+                  opacity: _controller.isTrimming ? 1 : 0,
+                  duration: kThemeAnimationDuration,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(formatter(_controller.startTrim)),
+                      const SizedBox(width: 10),
+                      Text(formatter(_controller.endTrim)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -273,118 +287,136 @@ class CropPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
-          child: Column(children: <Widget>[
-            Row(children: <Widget>[
-              Expanded(
-                child: IconButton(
-                  onPressed: () =>
-                      controller.rotate90Degrees(RotateDirection.left),
-                  icon: const Icon(Icons.rotate_left),
-                ),
-              ),
-              Expanded(
-                child: IconButton(
-                  onPressed: () =>
-                      controller.rotate90Degrees(RotateDirection.right),
-                  icon: const Icon(Icons.rotate_right),
-                ),
-              ),
-            ],),
-            const SizedBox(height: 15),
-            Expanded(
-              child: CropGridViewer.edit(
-                controller: controller,
-                rotateCropArea: false,
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Row(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Center(
-                    child: Text(
-                      'cancel',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: IconButton(
+                      onPressed: () =>
+                          controller.rotate90Degrees(RotateDirection.left),
+                      icon: const Icon(Icons.rotate_left),
                     ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: AnimatedBuilder(
-                  animation: controller,
-                  builder: (_, __) => Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          IconButton(
-                            onPressed: () =>
-                                controller.preferredCropAspectRatio = controller
-                                    .preferredCropAspectRatio
-                                    ?.toFraction()
-                                    .inverse()
-                                    .toDouble(),
-                            icon: controller.preferredCropAspectRatio != null &&
-                                    controller.preferredCropAspectRatio! < 1
-                                ? const Icon(
-                                    Icons.panorama_vertical_select_rounded,)
-                                : const Icon(Icons.panorama_vertical_rounded),
-                          ),
-                          IconButton(
-                            onPressed: () =>
-                                controller.preferredCropAspectRatio = controller
-                                    .preferredCropAspectRatio
-                                    ?.toFraction()
-                                    .inverse()
-                                    .toDouble(),
-                            icon: controller.preferredCropAspectRatio != null &&
-                                    controller.preferredCropAspectRatio! > 1
-                                ? const Icon(
-                                    Icons.panorama_horizontal_select_rounded,)
-                                : const Icon(Icons.panorama_horizontal_rounded),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          _buildCropButton(context, null),
-                          _buildCropButton(context, 1.toFraction()),
-                          _buildCropButton(
-                              context, Fraction.fromString('9/16'),),
-                          _buildCropButton(context, Fraction.fromString('3/4')),
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    child: IconButton(
+                      onPressed: () =>
+                          controller.rotate90Degrees(RotateDirection.right),
+                      icon: const Icon(Icons.rotate_right),
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Expanded(
+                child: CropGridViewer.edit(
+                  controller: controller,
+                  rotateCropArea: false,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: IconButton(
-                  onPressed: () {
-                    // WAY 1: validate crop parameters set in the crop view
-                    controller.applyCacheCrop();
-                    // WAY 2: update manually with Offset values
-                    // controller.updateCrop(const Offset(0.2, 0.2), const Offset(0.8, 0.8));
-                    Navigator.pop(context);
-                  },
-                  icon: Center(
-                    child: Text(
-                      'done',
-                      style: TextStyle(
-                        color: const CropGridStyle().selectedBoundariesColor,
-                        fontWeight: FontWeight.bold,
+              const SizedBox(height: 15),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Center(
+                        child: Text(
+                          'cancel',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    flex: 4,
+                    child: AnimatedBuilder(
+                      animation: controller,
+                      builder: (_, __) => Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                onPressed: () =>
+                                    controller.preferredCropAspectRatio =
+                                        controller.preferredCropAspectRatio
+                                            ?.toFraction()
+                                            .inverse()
+                                            .toDouble(),
+                                icon: controller.preferredCropAspectRatio !=
+                                            null &&
+                                        controller.preferredCropAspectRatio! < 1
+                                    ? const Icon(
+                                        Icons.panorama_vertical_select_rounded,
+                                      )
+                                    : const Icon(
+                                        Icons.panorama_vertical_rounded),
+                              ),
+                              IconButton(
+                                onPressed: () =>
+                                    controller.preferredCropAspectRatio =
+                                        controller.preferredCropAspectRatio
+                                            ?.toFraction()
+                                            .inverse()
+                                            .toDouble(),
+                                icon: controller.preferredCropAspectRatio !=
+                                            null &&
+                                        controller.preferredCropAspectRatio! > 1
+                                    ? const Icon(
+                                        Icons
+                                            .panorama_horizontal_select_rounded,
+                                      )
+                                    : const Icon(
+                                        Icons.panorama_horizontal_rounded),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              _buildCropButton(context, null),
+                              _buildCropButton(context, 1.toFraction()),
+                              _buildCropButton(
+                                context,
+                                Fraction.fromString('9/16'),
+                              ),
+                              _buildCropButton(
+                                  context, Fraction.fromString('3/4')),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: IconButton(
+                      onPressed: () {
+                        // WAY 1: validate crop parameters set in the crop view
+                        controller.applyCacheCrop();
+                        // WAY 2: update manually with Offset values
+                        // controller.updateCrop(const Offset(0.2, 0.2), const Offset(0.8, 0.8));
+                        Navigator.pop(context);
+                      },
+                      icon: Center(
+                        child: Text(
+                          'done',
+                          style: TextStyle(
+                            color:
+                                const CropGridStyle().selectedBoundariesColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],),
-          ],),
+            ],
+          ),
         ),
       ),
     );
@@ -439,7 +471,8 @@ class ExportService {
           if (onError != null) {
             onError(
               Exception(
-                  'FFmpeg process exited with state $state and return code $code.\n${await session.getOutput()}',),
+                'FFmpeg process exited with state $state and return code $code.\n${await session.getOutput()}',
+              ),
               StackTrace.current,
             );
           }

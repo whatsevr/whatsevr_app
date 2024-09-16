@@ -68,7 +68,7 @@ class CustomAssetPicker {
   static Future<void> pickImageFromGallery({
     bool editImage = true,
     required List<WhatsevrAspectRatio> aspectRatios,
-    required bool withCircleCropperUi,
+    bool withCircleCropperUi = false,
     required Function(File file) onCompleted,
   }) async {
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
@@ -78,9 +78,11 @@ class CustomAssetPicker {
         requestType: RequestType.image,
         gridCount: 2,
         pageSize: 20,
-        pickerTheme: AssetPicker.themeData(
-          Colors.black,
-          light: true,
+        pickerTheme: ThemeData.light().copyWith(
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.blue,
+            textTheme: ButtonTextTheme.primary,
+          ),
         ),
         shouldAutoplayPreview: true,
       ),
@@ -103,7 +105,7 @@ class CustomAssetPicker {
       ),
     );
     if (croppedImage == null) {
-      throw Exception('No image cropped');
+      return;
     }
 
     if (!editImage) {
@@ -122,12 +124,16 @@ class CustomAssetPicker {
     onCompleted.call(editedImage ?? croppedImage!);
   }
 
-  static Future<File?> pickVideoFromGallery({
+  static Future<void> pickVideoFromGallery({
     bool editVideo = true,
+    Function(File file)? onCompleted,
   }) async {
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
       AppNavigationService.currentContext!,
       pickerConfig: AssetPickerConfig(
+        limitedPermissionOverlayPredicate: (permissionState) {
+          return permissionState != PermissionState.authorized;
+        },
         maxAssets: 1,
         requestType: RequestType.video,
         gridCount: 2,
@@ -141,23 +147,24 @@ class CustomAssetPicker {
       ),
     );
 
-    if (pickedAssets == null || pickedAssets.isEmpty) {
-      throw Exception('No videos picked');
-    }
+    if (pickedAssets == null || pickedAssets.isEmpty) return;
+    final File? pickedVideo = await pickedAssets.first.file;
+    if (pickedVideo == null) return;
     if (!editVideo) {
-      final File? file = await pickedAssets.first.file;
-      if (file == null) throw Exception('File does not exist');
-      return file;
+      onCompleted?.call(pickedVideo);
+      return;
     }
-
-    final File? videoFile = await pickedAssets.first.file;
-    if (videoFile == null) throw Exception('File does not exist');
-    final File? editedVideo = await AppNavigationService.newRoute(
+    File? editedVideo;
+    await AppNavigationService.newRoute(
       RoutesName.videoEditor,
-      extras: VideoEditorPageArgument(videoFile: videoFile),
+      extras: VideoEditorPageArgument(
+          videoFile: pickedVideo,
+          onCompleted: (File? file) {
+            editedVideo = file;
+          }),
     );
-    if (editedVideo == null) return videoFile;
-    return editedVideo;
+    if (editedVideo == null) onCompleted?.call(pickedVideo);
+    onCompleted?.call(editedVideo!);
   }
 
   static Future<List<File>?> pickDocuments({bool singleFile = false}) async {
@@ -166,7 +173,7 @@ class CustomAssetPicker {
       type: FileType.any,
     );
 
-    if (result == null) throw Exception('No documents picked');
+    if (result == null) return null;
 
     return result.paths.map((String? path) => File(path!)).toList();
   }

@@ -183,66 +183,45 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             }).toList(),
           ),
         );
-      } else {
-        //only allow 4
-        if (state.coverMedia?.length == 4) {
-          SmartDialog.showToast('You can only add 4 cover media');
-          return;
-        }
-        final FilePickerResult? pickedFile = event.isImage == true
-            ? await FilePicker.platform.pickFiles(
-                type: FileType.image,
-                allowMultiple: false,
-              )
-            : await FilePicker.platform.pickFiles(
-                type: FileType.video,
-                allowMultiple: false,
-              );
-        if (pickedFile == null) return;
-        final File file = File(pickedFile.files.single.path!);
+      }
+      if (state.coverMedia?.length == 4) {
+        SmartDialog.showToast('You can only add 4 cover media');
+        return;
+      }
 
-        File? thumbnail;
-        String? imageUrl;
+      if (event.coverImage != null || event.coverVideo != null) {
+        SmartDialog.showLoading();
+        File? imageFile = event.coverImage;
+        File? videoFile = event.coverVideo;
+        String? imageUrl = await FileUploadService.uploadFilesToSST(imageFile!);
         String? videoUrl;
-        if (event.isVideo == true) {
-          thumbnail = await showWhatsevrThumbnailSelectionPage(videoFile: file);
-          if (thumbnail == null) {
-            SmartDialog.showToast('Thumbnail not generated');
-            return;
-          }
-          SmartDialog.showLoading(msg: 'Uploading cover media');
-          imageUrl = await FileUploadService.uploadFilesToSST(thumbnail);
-          videoUrl = await FileUploadService.uploadFilesToSST(file);
-        }
-
-        if (event.isImage == true) {
-          SmartDialog.showLoading(msg: 'Uploading cover media');
-          imageUrl = await FileUploadService.uploadFilesToSST(file);
+        if (videoFile != null) {
+          videoUrl = await FileUploadService.uploadFilesToSST(videoFile);
         }
 
         emit(
           state.copyWith(
             coverMedia: <UiCoverMedia>[
-              ...state.coverMedia ?? <UiCoverMedia>[],
+              ...state.coverMedia ?? [],
               UiCoverMedia(
                 imageUrl: imageUrl,
                 videoUrl: videoUrl,
-                isVideo: event.isVideo,
+                isVideo: videoUrl?.isNotEmpty ?? false,
               ),
             ],
           ),
         );
       }
-      List<UiCoverMedia> coverMedia = state.coverMedia ?? <UiCoverMedia>[];
+
       await UsersApi.updateCoverMedia(
         UpdateUserCoverMediaRequest(
           userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-          userCoverMedia: coverMedia
-              .map(
+          userCoverMedia: state.coverMedia
+              ?.map(
                 (UiCoverMedia e) => UserCoverMedia(
                   imageUrl: e.imageUrl,
                   videoUrl: e.videoUrl,
-                  isVideo: e.isVideo ?? false,
+                  isVideo: e.videoUrl?.isNotEmpty ?? false,
                   userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
                 ),
               )

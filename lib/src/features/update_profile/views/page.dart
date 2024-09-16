@@ -17,6 +17,7 @@ import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
+import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -85,11 +86,22 @@ class ProfileUpdatePage extends StatelessWidget {
                                     },
                                   );
                                 },
-                                onChoosingGallery: () {},
+                                onChoosingGallery: () {
+                                  CustomAssetPicker.pickImageFromGallery(
+                                    withCircleCropperUi: true,
+                                    aspectRatios: [
+                                      WhatsevrAspectRatio.square,
+                                    ],
+                                    onCompleted: (file) {
+                                      context.read<ProfileBloc>().add(
+                                            ChangeProfilePictureEvent(
+                                              profileImage: file,
+                                            ),
+                                          );
+                                    },
+                                  );
+                                },
                               );
-                              // context
-                              //     .read<ProfileBloc>()
-                              //     .add(ChangeProfilePictureEvent());
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -266,11 +278,38 @@ class ProfileUpdatePage extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                context.read<ProfileBloc>().add(
-                                      AddOrRemoveCoverMedia(
-                                        isImage: true,
-                                      ),
+                                showWhatsevrMediaPickerChoice(
+                                  onChoosingCamera: () async {
+                                    CustomAssetPicker.captureImage(
+                                      aspectRatios: [
+                                        WhatsevrAspectRatio.landscape,
+                                        WhatsevrAspectRatio.widescreen16by9,
+                                      ],
+                                      onCompleted: (file) {
+                                        context.read<ProfileBloc>().add(
+                                              AddOrRemoveCoverMedia(
+                                                coverImage: file,
+                                              ),
+                                            );
+                                      },
                                     );
+                                  },
+                                  onChoosingGallery: () {
+                                    CustomAssetPicker.pickImageFromGallery(
+                                      aspectRatios: [
+                                        WhatsevrAspectRatio.landscape,
+                                        WhatsevrAspectRatio.widescreen16by9,
+                                      ],
+                                      onCompleted: (file) {
+                                        context.read<ProfileBloc>().add(
+                                              AddOrRemoveCoverMedia(
+                                                coverImage: file,
+                                              ),
+                                            );
+                                      },
+                                    );
+                                  },
+                                );
                               },
                               child: Text(
                                 'Add Cover Image',
@@ -288,11 +327,26 @@ class ProfileUpdatePage extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                context.read<ProfileBloc>().add(
-                                      AddOrRemoveCoverMedia(
-                                        isVideo: true,
-                                      ),
+                                showWhatsevrMediaPickerChoice(
+                                  onChoosingGallery: () {
+                                    CustomAssetPicker.pickVideoFromGallery(
+                                      onCompleted: (file) async {
+                                        File? thumbnail =
+                                            await getThumbnailFile(
+                                                videoFile: file);
+                                        thumbnail =
+                                            await showWhatsevrThumbnailSelectionPage(
+                                                videoFile: file);
+                                        context.read<ProfileBloc>().add(
+                                              AddOrRemoveCoverMedia(
+                                                coverImage: thumbnail,
+                                                coverVideo: file,
+                                              ),
+                                            );
+                                      },
                                     );
+                                  },
+                                );
                               },
                               child: Text(
                                 'Add Cover Video',
