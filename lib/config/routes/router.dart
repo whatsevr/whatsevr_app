@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,15 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 import 'package:whatsevr_app/src/features/wtv_details/views/page.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+
+class NavigationObserver extends NavigatorObserver {
+  NavigationObserver();
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    FirebaseAnalytics.instance.logScreenView(screenName: route.settings.name);
+  }
+}
 
 class AppNavigationService {
   static Future<dynamic> newRoute(
@@ -59,7 +69,8 @@ class AppNavigationService {
     }
   }
 
-  static GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _navigatorKey =
+      GlobalKey<NavigatorState>();
   static BuildContext? get currentContext => _navigatorKey.currentContext;
   static GoRouter allRoutes() => _router;
 
@@ -68,6 +79,8 @@ class AppNavigationService {
     initialLocation: RoutesName.splash,
     debugLogDiagnostics: true,
     observers: <NavigatorObserver>[
+      NavigationObserver(),
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
       FlutterSmartDialog.observer,
       TalkerService.takerRouteObserver(),
     ],

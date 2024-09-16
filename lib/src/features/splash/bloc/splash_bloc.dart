@@ -3,6 +3,8 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/response_model/user_profile.dart';
@@ -31,17 +33,23 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   ) async {
     await Future.delayed(const Duration(seconds: 3));
 
-    AuthorisedUserResponse? loggedAuthorisedUserResponse =
+    AuthServiceUserResponse? loggedAuthorisedUserResponse =
         await AuthUserDb.getLastLoggedAuthorisedUser();
-    if (loggedAuthorisedUserResponse != null) {
+    if (loggedAuthorisedUserResponse?.data?.userId != null) {
       AppNavigationService.newRoute(RoutesName.dashboard);
+      FirebaseCrashlytics.instance
+          .setUserIdentifier(loggedAuthorisedUserResponse!.data!.userId!);
+      FirebaseAnalytics.instance
+          .setUserId(id: loggedAuthorisedUserResponse.data!.userId!);
     } else {
-      add(LoginOrSignupEvent());
+      add(const LoginOrSignupEvent());
     }
   }
 
   FutureOr<void> _onLoginOrSignup(
-      LoginOrSignupEvent event, Emitter<SplashState> emit,) async {
+    LoginOrSignupEvent event,
+    Emitter<SplashState> emit,
+  ) async {
     final Otpless otplessFlutterPlugin = Otpless();
     Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
@@ -62,15 +70,28 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   }
 
   FutureOr<void> _onCheckUserStatus(
-      CheckUserStatus event, Emitter<SplashState> emit,) async {
+    CheckUserStatus event,
+    Emitter<SplashState> emit,
+  ) async {
     try {
-      AuthorisedUserResponse? authorisedUserResponse =
-          AuthorisedUserResponse.fromMap(event.authUserData!);
+      AuthServiceUserResponse? authServiceUserResponse =
+          AuthServiceUserResponse.fromMap(event.authUserData!);
+      if (authServiceUserResponse.data?.userId == null ||
+          authServiceUserResponse.data!.userId!.isEmpty) {
+        throw Exception(
+            'Unable to get user details from auth service provider');
+      }
       UserDetailsResponse? userStatusResponse = await UsersApi.getUserDetails(
-        userUid: authorisedUserResponse.data!.userId!,
+        userUid: authServiceUserResponse.data!.userId!,
       );
-      await AuthUserDb.saveAuthorisedUser(authorisedUserResponse);
-      await AuthUserDb.saveLastLoggedUserId(authorisedUserResponse);
+      await AuthUserDb.saveAuthorisedUser(authServiceUserResponse);
+      await AuthUserDb.saveLastLoggedUserId(authServiceUserResponse);
+
+      FirebaseCrashlytics.instance
+          .setUserIdentifier(authServiceUserResponse.data!.userId!);
+      FirebaseAnalytics.instance
+          .setUserId(id: authServiceUserResponse.data!.userId!);
+
       SmartDialog.showToast('${userStatusResponse!.message}');
 
       AppNavigationService.newRoute(RoutesName.dashboard);

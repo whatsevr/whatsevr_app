@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "728320078708",
+    "project_id": "whatsevr-live",
+    "storage_bucket": "whatsevr-live.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728320078708:android:cf40fbfbefbcf31da63221",
+        "android_client_info": {
+          "package_name": "com.whatsevr.social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXthA1XeYd_fH6935aFlRmLf__nrJqdJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

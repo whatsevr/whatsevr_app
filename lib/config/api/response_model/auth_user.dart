@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-class AuthorisedUserResponse {
+class AuthServiceUserResponse {
   final Data? data;
 
-  AuthorisedUserResponse({
+  AuthServiceUserResponse({
     this.data,
   });
 
-  factory AuthorisedUserResponse.fromJson(String str) =>
-      AuthorisedUserResponse.fromMap(json.decode(str));
+  factory AuthServiceUserResponse.fromJson(String str) =>
+      AuthServiceUserResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AuthorisedUserResponse.fromMap(Map<String, dynamic> json) =>
-      AuthorisedUserResponse(
+  factory AuthServiceUserResponse.fromMap(Map<String, dynamic> json) =>
+      AuthServiceUserResponse(
         data: json['data'] == null ? null : Data.fromMap(json['data']),
       );
 

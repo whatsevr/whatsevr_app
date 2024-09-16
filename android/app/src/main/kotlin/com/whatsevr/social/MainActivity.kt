@@ -1,4 +1,4 @@
-package com.whatsevr.whatsevr_app
+package com.whatsevr.social
 
 import io.flutter.embedding.android.FlutterActivity
 import com.otpless.otplessflutter.OtplessFlutterPlugin;

@@ -22,7 +22,7 @@ class AuthUserDb {
   }
 
   ///[saveAuthorisedUser]
-  static Future<void> saveAuthorisedUser(AuthorisedUserResponse? user) async {
+  static Future<void> saveAuthorisedUser(AuthServiceUserResponse? user) async {
     if (user == null) return;
     log('hiveDb.saveLoggedUser: ${user.toMap()}');
     List<dynamic> allLoggedUsers =
@@ -40,7 +40,7 @@ class AuthUserDb {
     await saveLastLoggedUserId(user);
   }
 
-  static Future<AuthorisedUserResponse?> getLastLoggedAuthorisedUser() async {
+  static Future<AuthServiceUserResponse?> getLastLoggedAuthorisedUser() async {
     List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
     if (users == null) return null;
     String? lastLoggedUserId = await getLastLoggedUserUid();
@@ -49,14 +49,14 @@ class AuthUserDb {
       (element) => element['data']['userId'] == lastLoggedUserId,
     );
     if (user == null) return null;
-    return AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(user)));
+    return AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(user)));
   }
 
-  static Future<List<AuthorisedUserResponse>> getAllAuthorisedUser() async {
+  static Future<List<AuthServiceUserResponse>> getAllAuthorisedUser() async {
     List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-    if (users == null) return <AuthorisedUserResponse>[];
+    if (users == null) return <AuthServiceUserResponse>[];
     return users
-        .map((e) => AuthorisedUserResponse.fromMap(jsonDecode(jsonEncode(e))))
+        .map((e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
         .toList();
   }
 
@@ -68,7 +68,7 @@ class AuthUserDb {
   }
 
   ///[saveLastLoggedUserId]
-  static Future<void> saveLastLoggedUserId(AuthorisedUserResponse user) async {
+  static Future<void> saveLastLoggedUserId(AuthServiceUserResponse user) async {
     await _authorisedCustomersBox.put(_lastLoggedUserId, user.data!.userId);
   }
 

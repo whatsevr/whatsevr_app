@@ -67,7 +67,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
             child: Stack(
               children: <Widget>[
                 SafeArea(
-                  child: WhatsevrTalkerWrapper(child: child!),
+                  child: child!,
                 ),
                 DraggableWidget(),
               ],
