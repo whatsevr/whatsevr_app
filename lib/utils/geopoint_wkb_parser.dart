@@ -24,15 +24,20 @@ class WKBUtil {
     if (wkbString == null) {
       return null;
     }
-    final Uint8List wkbBytes = Uint8List.fromList(_hexStringToBytes(wkbString));
+    try {
+      final Uint8List wkbBytes =
+          Uint8List.fromList(_hexStringToBytes(wkbString));
 
-    final point = Point.decode(wkbBytes, format: WKB.geometry);
+      final point = Point.decode(wkbBytes, format: WKB.geometry);
 
-    final coords = point.position;
-    final long = coords[0];
-    final lat = coords[1];
+      final coords = point.position;
+      final long = coords[0];
+      final lat = coords[1];
 
-    return (lat, long);
+      return (lat, long);
+    } catch (e) {
+      return null;
+    }
   }
 
   static String _bytesToHexString(List<int> bytes) {
