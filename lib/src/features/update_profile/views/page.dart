@@ -367,21 +367,21 @@ class ProfileUpdatePage extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            SuperFormField.generalTextField(
+                            WhatsevrFormField.generalTextField(
                               controller:
                                   context.read<ProfileBloc>().nameController,
                               headingTitle: 'Name',
                               maxLength: 40,
                             ),
                             Gap(8),
-                            SuperFormField.email(
+                            WhatsevrFormField.email(
                               controller:
                                   context.read<ProfileBloc>().emailController,
                               headingTitle: 'Email',
                               maxLength: 60,
                             ),
                             Gap(8),
-                            SuperFormField.multilineTextField(
+                            WhatsevrFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().bioController,
                               headingTitle: 'Bio',
@@ -389,14 +389,14 @@ class ProfileUpdatePage extends StatelessWidget {
                               maxLength: 300,
                             ),
                             Gap(8),
-                            SuperFormField.multilineTextField(
+                            WhatsevrFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
                             ),
                             Gap(8),
-                            SuperFormField.datePicker(
+                            WhatsevrFormField.datePicker(
                               context: context,
                               controller: TextEditingController(
                                 text: state.dob == null
@@ -425,19 +425,19 @@ class ProfileUpdatePage extends StatelessWidget {
                                 TextEditingController endDateController =
                                     TextEditingController();
 
-                                return SuperFormField.showModalSheetOnTap(
+                                return WhatsevrFormField.showModalSheetOnTap(
                                   context: context,
                                   headingTitle: 'Educations',
                                   hintText: 'Add Education',
                                   modalSheetUi: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      SuperFormField.generalTextField(
+                                      WhatsevrFormField.generalTextField(
                                         headingTitle: 'Enter School',
                                         controller: schoolController,
                                       ),
                                       Gap(12),
-                                      SuperFormField.invokeCustomFunction(
+                                      WhatsevrFormField.invokeCustomFunction(
                                         context: context,
                                         headingTitle: 'Select Degree',
                                         controller: degreeController,
@@ -459,13 +459,13 @@ class ProfileUpdatePage extends StatelessWidget {
                                         },
                                       ),
                                       Gap(12),
-                                      SuperFormField.generalTextField(
+                                      WhatsevrFormField.generalTextField(
                                         readOnly: true,
                                         controller: degreeTypeController,
                                         headingTitle: 'Degree Type',
                                       ),
                                       Gap(12),
-                                      SuperFormField.datePicker(
+                                      WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
                                         headingTitle: 'Select Start Date',
@@ -476,7 +476,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         },
                                       ),
                                       Gap(12),
-                                      SuperFormField.datePicker(
+                                      WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: endDateController,
                                         headingTitle: 'Select End Date',
@@ -597,24 +597,24 @@ class ProfileUpdatePage extends StatelessWidget {
                                 TextEditingController endDateController =
                                     TextEditingController();
 
-                                return SuperFormField.showModalSheetOnTap(
+                                return WhatsevrFormField.showModalSheetOnTap(
                                   context: context,
                                   headingTitle: 'Work Experience',
                                   hintText: 'Add Work Experience',
                                   modalSheetUi: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      SuperFormField.generalTextField(
+                                      WhatsevrFormField.generalTextField(
                                         headingTitle: 'Enter Company Name',
                                         controller: companyNameController,
                                       ),
                                       Gap(12),
-                                      SuperFormField.generalTextField(
+                                      WhatsevrFormField.generalTextField(
                                         headingTitle: 'Enter Designation',
                                         controller: designationController,
                                       ),
                                       Gap(12),
-                                      SuperFormField.invokeCustomFunction(
+                                      WhatsevrFormField.invokeCustomFunction(
                                         context: context,
                                         headingTitle: 'Select Mode of Work',
                                         controller: workingModeController,
@@ -633,7 +633,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         },
                                       ),
                                       Gap(12),
-                                      SuperFormField.datePicker(
+                                      WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
                                         headingTitle: 'Start Start Date',
@@ -644,7 +644,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         },
                                       ),
                                       Gap(12),
-                                      SuperFormField.datePicker(
+                                      WhatsevrFormField.datePicker(
                                         context: context,
                                         headingTitle: 'End Date',
                                         controller: endDateController,
@@ -755,7 +755,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               ),
                               Gap(8),
                             ],
-                            SuperFormField.showModalSheetOnTap(
+                            WhatsevrFormField.showModalSheetOnTap(
                               context: context,
                               controller:
                                   TextEditingController(text: state.gender),
@@ -784,14 +784,14 @@ class ProfileUpdatePage extends StatelessWidget {
                         labelText: 'Portfolio Info',
                         child: Column(
                           children: <Widget>[
-                            SuperFormField.generalTextField(
+                            WhatsevrFormField.generalTextField(
                               headingTitle: 'Title',
                               hintText: 'Enter Portfolio Title',
                               controller:
                                   context.read<ProfileBloc>().portfolioTitle,
                             ),
                             Gap(12),
-                            SuperFormField.generalTextField(
+                            WhatsevrFormField.generalTextField(
                               headingTitle: 'Status',
                               hintText: 'Add Status on Portfolio',
                               controller:
@@ -806,7 +806,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                 TextEditingController descriptionController =
                                     TextEditingController();
 
-                                return SuperFormField.invokeCustomFunction(
+                                return WhatsevrFormField.invokeCustomFunction(
                                   context: context,
                                   headingTitle: 'Services',
                                   hintText: 'Add Service you provide',
@@ -817,12 +817,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
-                                          SuperFormField.generalTextField(
+                                          WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter Title',
                                             controller: titleController,
                                           ),
                                           Gap(12),
-                                          SuperFormField.multilineTextField(
+                                          WhatsevrFormField.multilineTextField(
                                             headingTitle: 'Enter Description',
                                             controller: descriptionController,
                                           ),
@@ -910,7 +910,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             ],
                             // Portfolio Info Section
 
-                            SuperFormField.multilineTextField(
+                            WhatsevrFormField.multilineTextField(
                               controller: context
                                   .read<ProfileBloc>()
                                   .portfolioDescriptionController,

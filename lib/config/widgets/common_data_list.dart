@@ -178,7 +178,7 @@ class _CommonDataSearchSelectPageState
         if (widget.showSearchBar)
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: SuperFormField.textFieldWithClearIcon(
+            child: WhatsevrFormField.textFieldWithClearIcon(
               controller: _searchController,
               hintText: 'Search...',
             ),

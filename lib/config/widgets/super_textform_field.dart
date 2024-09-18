@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
-class SuperFormField extends StatefulWidget {
+class WhatsevrFormField extends StatefulWidget {
   final String? headingTitle;
   final TextEditingController? controller;
 
@@ -23,7 +23,7 @@ class SuperFormField extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
 
-  const SuperFormField._internal({
+  const WhatsevrFormField._internal({
     this.headingTitle,
     this.controller,
     this.onTap,
@@ -42,7 +42,7 @@ class SuperFormField extends StatefulWidget {
   });
 
   // General text input factory with maxLength support
-  factory SuperFormField.generalTextField({
+  factory WhatsevrFormField.generalTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -58,7 +58,7 @@ class SuperFormField extends StatefulWidget {
     int? maxLines,
     int? maxLength,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -80,14 +80,14 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Factory: Date Picker
-  factory SuperFormField.datePicker({
+  factory WhatsevrFormField.datePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(DateTime)? onDateSelected,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -109,14 +109,14 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Factory: DateTime Picker
-  factory SuperFormField.dateTimePicker({
+  factory WhatsevrFormField.dateTimePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(DateTime)? onDateTimeSelected,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -153,14 +153,14 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Factory: Time Picker
-  factory SuperFormField.timePicker({
+  factory WhatsevrFormField.timePicker({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     Function(TimeOfDay)? onTimeSelected,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -178,7 +178,7 @@ class SuperFormField extends StatefulWidget {
       },
     );
   }
-  factory SuperFormField.invokeCustomFunction({
+  factory WhatsevrFormField.invokeCustomFunction({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
@@ -188,7 +188,7 @@ class SuperFormField extends StatefulWidget {
     bool readOnly = true,
     required Function() customFunction,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -199,7 +199,7 @@ class SuperFormField extends StatefulWidget {
     );
   }
   // Factory: Dropdown with Arrow Down
-  factory SuperFormField.showModalSheetOnTap({
+  factory WhatsevrFormField.showModalSheetOnTap({
     required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
@@ -209,7 +209,7 @@ class SuperFormField extends StatefulWidget {
     bool readOnly = true, // TextField is read-only by default
     Widget? modalSheetUi, // Function to be invoked on tap
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -226,7 +226,7 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Factory: TextField with Clear Icon
-  factory SuperFormField.textFieldWithClearIcon({
+  factory WhatsevrFormField.textFieldWithClearIcon({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -235,7 +235,7 @@ class SuperFormField extends StatefulWidget {
     String? Function(String?)? validator,
     TextInputType? keyboardType,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -260,7 +260,7 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Password input with visibility toggle and maxLength support
-  factory SuperFormField.secretTextField({
+  factory WhatsevrFormField.secretTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -268,7 +268,7 @@ class SuperFormField extends StatefulWidget {
     List<TextInputFormatter>? inputFormatters,
     int? maxLength,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       obscureText: true,
       headingTitle: headingTitle,
       controller: controller,
@@ -283,13 +283,13 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Email input with maxLength support
-  factory SuperFormField.email({
+  factory WhatsevrFormField.email({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     int? maxLength,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -303,13 +303,13 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Phone number input with maxLength support
-  factory SuperFormField.phoneTextField({
+  factory WhatsevrFormField.phoneTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
     int? maxLength = 10,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -324,7 +324,7 @@ class SuperFormField extends StatefulWidget {
   }
 
   // Multiline input with maxLength support
-  factory SuperFormField.multilineTextField({
+  factory WhatsevrFormField.multilineTextField({
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -332,7 +332,7 @@ class SuperFormField extends StatefulWidget {
     int? maxLines,
     int? maxLength,
   }) {
-    return SuperFormField._internal(
+    return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
@@ -347,10 +347,10 @@ class SuperFormField extends StatefulWidget {
   }
 
   @override
-  _SuperFormFieldState createState() => _SuperFormFieldState();
+  _WhatsevrFormFieldState createState() => _WhatsevrFormFieldState();
 }
 
-class _SuperFormFieldState extends State<SuperFormField> {
+class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
   late ValueNotifier<bool> _obscureTextNotifier;
 
   @override

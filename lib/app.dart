@@ -1,15 +1,16 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/dev/dragable_bubble.dart';
-import 'package:whatsevr_app/dev/talker.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
@@ -89,7 +90,15 @@ Center _loaderUi(String msg) {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(msg)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CupertinoActivityIndicator(),
+            Gap(12),
+            Text(msg),
+          ],
+        )),
   );
 }
 

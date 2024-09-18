@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class WhatsevrButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
-  final bool isFilled;
+  final bool miniButton;
   final bool hasIcon;
   final IconData? icon;
   final bool isOutlined;
@@ -12,7 +12,7 @@ class WhatsevrButton extends StatelessWidget {
     Key? key,
     required this.label,
     required this.onPressed,
-    this.isFilled = true,
+    this.miniButton = false,
     this.hasIcon = false,
     this.icon,
     this.isOutlined = false,
@@ -23,12 +23,13 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.filled({
     required String label,
     required VoidCallback onPressed,
+    bool miniButton = false,
     bool shrink = false,
   }) {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
-      isFilled: true,
+      miniButton: miniButton,
       isOutlined: false,
       shrink: shrink,
     );
@@ -38,12 +39,13 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.outlined({
     required String label,
     required VoidCallback onPressed,
+    bool miniButton = false,
     bool shrink = false,
   }) {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
-      isFilled: false,
+      miniButton: miniButton,
       isOutlined: true,
       shrink: shrink,
     );
@@ -53,13 +55,14 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.filledWithIcon({
     required String label,
     required VoidCallback onPressed,
+    bool miniButton = false,
     required IconData icon,
     bool shrink = false,
   }) {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
-      isFilled: true,
+      miniButton: miniButton,
       hasIcon: true,
       icon: icon,
       isOutlined: false,
@@ -71,13 +74,14 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.outlinedWithIcon({
     required String label,
     required VoidCallback onPressed,
+    bool miniButton = false,
     required IconData icon,
     bool shrink = false,
   }) {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
-      isFilled: false,
+      miniButton: miniButton,
       hasIcon: true,
       icon: icon,
       isOutlined: true,
@@ -88,35 +92,49 @@ class WhatsevrButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Colors are fixed based on the button's style (filled/outlined) and color scheme (black/white)
-    final Color buttonColor = isFilled ? Colors.black : Colors.white;
-    final Color textColor = isFilled ? Colors.white : Colors.black;
-    final Color borderColor = isFilled ? Colors.white : Colors.black;
+    final Color buttonColor = isOutlined ? Colors.white : Colors.black;
+    final Color textColor = isOutlined ? Colors.black : Colors.white;
+    final Color? borderColor = isOutlined ? Colors.black : null;
 
     return MaterialButton(
-      minWidth: shrink ? 0 : double.infinity,
+      elevation: 0,
+      minWidth: shrink ? null : double.infinity,
+      visualDensity: miniButton ? VisualDensity.compact : null,
       onPressed: onPressed,
       color: buttonColor,
-      textColor: textColor,
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+      padding: EdgeInsets.symmetric(
+          vertical: miniButton ? 8 : 10.0, horizontal: miniButton ? 14 : 22.0),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4.0),
-        side: isOutlined ? BorderSide(color: borderColor) : BorderSide.none,
+        borderRadius: BorderRadius.circular(miniButton ? 4 : 8.0),
+        side: borderColor == null
+            ? BorderSide.none
+            : BorderSide(color: borderColor),
       ),
       child: hasIcon
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(icon, size: 20),
+                Icon(icon, size: 20, color: textColor),
                 const SizedBox(width: 8),
                 Text(
                   label,
-                  style: const TextStyle(fontSize: 16),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.5,
+                    color: textColor,
+                  ),
                 ),
               ],
             )
           : Text(
               label,
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.5,
+                color: textColor,
+              ),
             ),
     );
   }

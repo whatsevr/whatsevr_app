@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
@@ -52,13 +54,14 @@ class CreateVideoPost extends StatelessWidget {
                 children: <Widget>[
                   Builder(
                     builder: (BuildContext context) {
+                      double baseHeight = 200;
                       if (state.thumbnailFile != null) {
                         return Stack(
                           children: <Widget>[
                             ExtendedImage.file(
                               state.thumbnailFile!,
                               width: double.infinity,
-                              height: 200,
+                              height: baseHeight,
                               fit: BoxFit.cover,
                               shape: BoxShape.rectangle,
                               borderRadius:
@@ -92,31 +95,38 @@ class CreateVideoPost extends StatelessWidget {
                                 .add(const PickThumbnailEvent());
                           },
                           minWidth: double.infinity,
-                          height: 200,
-                          color: Colors.black12,
+                          height: baseHeight,
+                          color: Colors.white10,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         );
                       }
-                      return MaterialButton(
-                        onPressed: () {
+                      return GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
                           context
                               .read<CreateVideoPostBloc>()
                               .add(const PickVideoEvent());
                         },
-                        minWidth: double.infinity,
-                        height: 200,
-                        color: Colors.black12,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const <Widget>[
-                            Icon(Icons.video_file_rounded),
-                            Text('Add a video'),
-                          ],
+                        child: Container(
+                          width: double.infinity,
+                          height: baseHeight,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const <Widget>[
+                              Icon(Icons.video_file_rounded,
+                                  color: Colors.white, size: 50),
+                              Text('Add a video',
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -127,14 +137,18 @@ class CreateVideoPost extends StatelessWidget {
                         if (state.videoFile != null)
                           FutureBuilder<String?>(
                             future: getFileSize(state.videoFile!),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<dynamic> snapshot,) {
+                            builder: (
+                              BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot,
+                            ) {
                               if (snapshot.connectionState ==
                                   ConnectionState.done) {
                                 return Text(
-                                  'Video size: ${snapshot.data}',
+                                  '${snapshot.data}',
                                   style: const TextStyle(
-                                      fontSize: 12, color: Colors.grey,),
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
                                 );
                               }
                               return CircularProgressIndicator();
@@ -143,88 +157,58 @@ class CreateVideoPost extends StatelessWidget {
                         Spacer(),
                         if (state.videoFile != null &&
                             state.thumbnailFile != null)
-                          MaterialButton(
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () {
-                                context
-                                    .read<CreateVideoPostBloc>()
-                                    .add(const PickThumbnailEvent());
-                              },
-                              child: Text('Update Thumbnail',
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 12,),),),
-                        if (state.videoFile != null)
-                          MaterialButton(
-                              visualDensity: VisualDensity.compact,
-                              onPressed: () {
-                                context
-                                    .read<CreateVideoPostBloc>()
-                                    .add(const PickVideoEvent());
-                              },
-                              child: Text('Update Video',
-                                  style: TextStyle(
-                                      color: Colors.blue, fontSize: 12,),),),
+                          WhatsevrButton.outlined(
+                            shrink: true,
+                            miniButton: true,
+                            onPressed: () {
+                              context
+                                  .read<CreateVideoPostBloc>()
+                                  .add(const PickThumbnailEvent());
+                            },
+                            label: 'Update Thumb',
+                          ),
+                        if (state.videoFile != null) ...[
+                          Gap(6),
+                          WhatsevrButton.outlined(
+                            miniButton: true,
+                            shrink: true,
+                            onPressed: () {
+                              context
+                                  .read<CreateVideoPostBloc>()
+                                  .add(const PickVideoEvent());
+                            },
+                            label: 'Change Video',
+                          )
+                        ],
                       ],
                     ),
                 ],
               ),
               Gap(12),
-              TextField(
+              WhatsevrFormField.generalTextField(
                 maxLength: 100,
                 controller: context.read<CreateVideoPostBloc>().titleController,
-                decoration: InputDecoration(
-                  hintText: 'Title',
-                  helperStyle: TextStyle(fontSize: 10),
-                  filled: true,
-                  fillColor: Colors.black12,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                hintText: 'Title',
               ),
               Gap(12),
-              TextField(
+              WhatsevrFormField.multilineTextField(
                 maxLength: 5000,
-                minLines: 3,
+                minLines: 5,
                 maxLines: 10,
-                decoration: const InputDecoration(
-                  hintText: 'Description',
-                  filled: true,
-                  helperStyle: TextStyle(fontSize: 10),
-                  fillColor: Colors.black12,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+                hintText: 'Description',
               ),
               Gap(12),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Hashtags',
-                  filled: true,
-                  helperText: 'Max 30 hashtags',
-                  helperStyle: TextStyle(fontSize: 10),
-                  fillColor: Colors.black12,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
+              WhatsevrFormField.multilineTextField(
+                hintText: 'Tags (comma separated, max 30)',
               ),
               Gap(12),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Location',
-                  filled: true,
-                  fillColor: Colors.black12,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide.none,
-                  ),
-                  suffixIcon: Icon(Icons.location_on),
-                ),
+              WhatsevrFormField.invokeCustomFunction(
+                context: context,
+                controller:
+                    context.read<CreateVideoPostBloc>().locationController,
+                suffixWidget: Icon(Icons.location_on),
+                hintText: 'Location',
+                customFunction: () {},
               ),
               Gap(12),
             ],
@@ -232,20 +216,13 @@ class CreateVideoPost extends StatelessWidget {
           bottomNavigationBar: Container(
             padding: const EdgeInsets.all(8),
             color: Colors.white,
-            child: MaterialButton(
-              color: Colors.blue,
+            child: WhatsevrButton.filled(
               onPressed: () {
                 context
                     .read<CreateVideoPostBloc>()
                     .add(const SubmitPostEvent());
               },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                'Create Post',
-                style: TextStyle(color: Colors.white),
-              ),
+              label: 'Create Post',
             ),
           ),
         );
