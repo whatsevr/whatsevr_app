@@ -15,7 +15,6 @@ import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
-
 part 'create_post_event.dart';
 part 'create_post_state.dart';
 
@@ -88,7 +87,7 @@ class CreateVideoPostBloc
       allowMultiple: false,
       type: FileType.video,
     );
-
+    if (result?.files.single.path == null) return;
     emit(state.copyWith(videoFile: File(result!.files.single.path!)));
 
     emit(

@@ -11,6 +11,8 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/place_search_list.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
@@ -208,7 +210,9 @@ class CreateVideoPost extends StatelessWidget {
                     context.read<CreateVideoPostBloc>().locationController,
                 suffixWidget: Icon(Icons.location_on),
                 hintText: 'Location',
-                customFunction: () {},
+                customFunction: () {
+                  showAppModalSheet(child: PlaceSearchPage());
+                },
               ),
               Gap(12),
             ],

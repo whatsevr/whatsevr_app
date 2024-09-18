@@ -76,6 +76,7 @@ dependencies:
   geobase: ^1.3.0
   geolocator: ^13.0.1 #current location
   geocoding: ^3.0.0 #placeId to lat long for wkb
+  easy_debounce: ^2.0.3
 
 
 

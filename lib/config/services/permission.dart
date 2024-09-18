@@ -8,6 +8,7 @@ class PermissionService {
       Permission.storage,
       Permission.camera,
       Permission.mediaLibrary,
+      Permission.location,
     ].request();
     debugPrint('$statuses');
   }
