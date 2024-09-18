@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/external/models/place_by_query.dart'
+import 'package:whatsevr_app/config/api/external/models/similar_place_by_query.dart'
     hide PlaceName;
 import 'package:whatsevr_app/config/services/location.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart'; // Assuming this is where CustomAssetPicker is

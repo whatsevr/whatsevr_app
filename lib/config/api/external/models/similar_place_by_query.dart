@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-class PlacesByQueryResponse {
+class SimilarPlacesByQueryResponse {
   final List<Suggestion>? suggestions;
 
-  PlacesByQueryResponse({
+  SimilarPlacesByQueryResponse({
     this.suggestions,
   });
 
-  factory PlacesByQueryResponse.fromJson(String str) =>
-      PlacesByQueryResponse.fromMap(json.decode(str));
+  factory SimilarPlacesByQueryResponse.fromJson(String str) =>
+      SimilarPlacesByQueryResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PlacesByQueryResponse.fromMap(Map<String, dynamic> json) =>
-      PlacesByQueryResponse(
+  factory SimilarPlacesByQueryResponse.fromMap(Map<String, dynamic> json) =>
+      SimilarPlacesByQueryResponse(
         suggestions: json["suggestions"] == null
             ? []
             : List<Suggestion>.from(
@@ -52,13 +52,12 @@ class Suggestion {
 
 class PlacePrediction {
   final String? placeId;
-  final PlaceName? text;
-
+  final StructuredFormat? structuredFormat;
   final List<String>? types;
 
   PlacePrediction({
     this.placeId,
-    this.text,
+    this.structuredFormat,
     this.types,
   });
 
@@ -69,7 +68,9 @@ class PlacePrediction {
 
   factory PlacePrediction.fromMap(Map<String, dynamic> json) => PlacePrediction(
         placeId: json["placeId"],
-        text: json["text"] == null ? null : PlaceName.fromMap(json["text"]),
+        structuredFormat: json["structuredFormat"] == null
+            ? null
+            : StructuredFormat.fromMap(json["structuredFormat"]),
         types: json["types"] == null
             ? []
             : List<String>.from(json["types"]!.map((x) => x)),
@@ -77,23 +78,53 @@ class PlacePrediction {
 
   Map<String, dynamic> toMap() => {
         "placeId": placeId,
-        "text": text?.toMap(),
+        "structuredFormat": structuredFormat?.toMap(),
         "types": types == null ? [] : List<dynamic>.from(types!.map((x) => x)),
       };
 }
 
-class PlaceName {
-  final String? text;
+class StructuredFormat {
+  final MainText? mainText;
+  final MainText? secondaryText;
 
-  PlaceName({
-    this.text,
+  StructuredFormat({
+    this.mainText,
+    this.secondaryText,
   });
 
-  factory PlaceName.fromJson(String str) => PlaceName.fromMap(json.decode(str));
+  factory StructuredFormat.fromJson(String str) =>
+      StructuredFormat.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PlaceName.fromMap(Map<String, dynamic> json) => PlaceName(
+  factory StructuredFormat.fromMap(Map<String, dynamic> json) =>
+      StructuredFormat(
+        mainText: json["mainText"] == null
+            ? null
+            : MainText.fromMap(json["mainText"]),
+        secondaryText: json["secondaryText"] == null
+            ? null
+            : MainText.fromMap(json["secondaryText"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "mainText": mainText?.toMap(),
+        "secondaryText": secondaryText?.toMap(),
+      };
+}
+
+class MainText {
+  final String? text;
+
+  MainText({
+    this.text,
+  });
+
+  factory MainText.fromJson(String str) => MainText.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory MainText.fromMap(Map<String, dynamic> json) => MainText(
         text: json["text"],
       );
 

@@ -15,7 +15,7 @@ class WhatsevrFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final String? labelText;
-
+  final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final bool readOnly;
@@ -33,6 +33,7 @@ class WhatsevrFormField extends StatefulWidget {
     this.keyboardType,
     this.obscureText = false,
     this.labelText,
+    this.onChanged,
     this.validator,
     this.inputFormatters,
     this.readOnly = false,
@@ -51,6 +52,7 @@ class WhatsevrFormField extends StatefulWidget {
     Widget? suffixIcon,
     Widget? prefixIcon,
     Function()? onTap,
+    Function(String)? onChanged,
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
     bool readOnly = false,
@@ -75,6 +77,7 @@ class WhatsevrFormField extends StatefulWidget {
       readOnly: readOnly,
       minLines: minLines,
       maxLines: maxLines,
+      onChanged: onChanged,
       maxLength: maxLength,
     );
   }
@@ -83,6 +86,7 @@ class WhatsevrFormField extends StatefulWidget {
   factory WhatsevrFormField.datePicker({
     required BuildContext context,
     String? headingTitle,
+    Function(String)? onChanged,
     TextEditingController? controller,
     String? hintText,
     Function(DateTime)? onDateSelected,
@@ -91,6 +95,7 @@ class WhatsevrFormField extends StatefulWidget {
       headingTitle: headingTitle,
       controller: controller,
       hintText: hintText,
+      onChanged: onChanged,
       suffixIcon: const Icon(Icons.calendar_today),
       readOnly: true,
       onTap: () async {
@@ -114,11 +119,13 @@ class WhatsevrFormField extends StatefulWidget {
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
+    Function(String)? onChanged,
     Function(DateTime)? onDateTimeSelected,
   }) {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
+      onChanged: onChanged,
       hintText: hintText,
       suffixIcon: const Icon(Icons.calendar_today),
       readOnly: true,
@@ -156,6 +163,7 @@ class WhatsevrFormField extends StatefulWidget {
   factory WhatsevrFormField.timePicker({
     required BuildContext context,
     String? headingTitle,
+    Function(String)? onChanged,
     TextEditingController? controller,
     String? hintText,
     Function(TimeOfDay)? onTimeSelected,
@@ -163,6 +171,7 @@ class WhatsevrFormField extends StatefulWidget {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
+      onChanged: onChanged,
       hintText: hintText,
       suffixIcon: const Icon(Icons.access_time),
       readOnly: true,
@@ -184,6 +193,7 @@ class WhatsevrFormField extends StatefulWidget {
     TextEditingController? controller,
     String? hintText,
     String? labelText,
+    Function(String)? onChanged,
     Widget? suffixWidget, // List of icons or widgets to display
     bool readOnly = true,
     required Function() customFunction,
@@ -194,6 +204,7 @@ class WhatsevrFormField extends StatefulWidget {
       hintText: hintText,
       labelText: labelText,
       readOnly: readOnly,
+      onChanged: onChanged,
       onTap: customFunction,
       suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
     );
@@ -229,6 +240,7 @@ class WhatsevrFormField extends StatefulWidget {
   factory WhatsevrFormField.textFieldWithClearIcon({
     String? headingTitle,
     TextEditingController? controller,
+    Function(String)? onChanged,
     String? hintText,
     String? labelText,
     Function()? onTap,
@@ -238,8 +250,10 @@ class WhatsevrFormField extends StatefulWidget {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
+      onChanged: onChanged,
       hintText: hintText,
       labelText: labelText,
+      prefixIcon: const Icon(Icons.search),
       suffixIcon: ValueListenableBuilder(
         valueListenable: controller!,
         builder: (BuildContext context, TextEditingValue value, __) {
@@ -263,6 +277,7 @@ class WhatsevrFormField extends StatefulWidget {
   factory WhatsevrFormField.secretTextField({
     String? headingTitle,
     TextEditingController? controller,
+    Function(String)? onChanged,
     String? hintText,
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
@@ -274,6 +289,7 @@ class WhatsevrFormField extends StatefulWidget {
       controller: controller,
       hintText: hintText,
       validator: validator,
+      onChanged: onChanged,
       inputFormatters: <TextInputFormatter>[
         ...?inputFormatters,
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
@@ -287,11 +303,13 @@ class WhatsevrFormField extends StatefulWidget {
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
+    Function(String)? onChanged,
     int? maxLength,
   }) {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
+      onChanged: onChanged,
       hintText: hintText,
       keyboardType: TextInputType.emailAddress,
       prefixIcon: const Icon(Icons.email),
@@ -307,6 +325,7 @@ class WhatsevrFormField extends StatefulWidget {
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
+    Function(String)? onChanged,
     int? maxLength = 10,
   }) {
     return WhatsevrFormField._internal(
@@ -314,6 +333,7 @@ class WhatsevrFormField extends StatefulWidget {
       controller: controller,
       hintText: hintText,
       keyboardType: TextInputType.phone,
+      onChanged: onChanged,
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(maxLength),
@@ -328,6 +348,7 @@ class WhatsevrFormField extends StatefulWidget {
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
+    Function(String)? onChanged,
     int minLines = 3,
     int? maxLines,
     int? maxLength,
@@ -335,6 +356,7 @@ class WhatsevrFormField extends StatefulWidget {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
       controller: controller,
+      onChanged: onChanged,
       hintText: hintText,
       minLines: minLines,
       maxLines: maxLines ?? minLines + 5,
@@ -395,6 +417,7 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
               obscureText: obscureText,
               inputFormatters: widget.inputFormatters,
               readOnly: widget.readOnly,
+              onChanged: widget.onChanged,
               minLines: widget.minLines,
               maxLines: widget.maxLines ?? 1,
               decoration: InputDecoration(

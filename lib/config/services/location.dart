@@ -3,19 +3,19 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:geolocator/geolocator.dart';
-
-import '../api/external/models/nearby_search.dart';
-import '../api/external/models/place_by_query.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+import '../api/external/models/places_nearby.dart';
+import '../api/external/models/similar_place_by_query.dart';
 
 class LocationService {
-  static String googlePlaceAndGeoCodingApiKey =
+  static const String _googlePlaceAndGeoCodingApiKey =
       "AIzaSyBO4o78fH_94mh2JHYjiq3WAa9Sue6G5EE";
   LocationService._();
 
   static Future<void> getNearByPlacesFromLatLong({
     double? lat,
     double? long,
-    required Function(NearbySearchResponse? nearbyPlacesResponse, double? lat,
+    required Function(PlacesNearbyResponse? nearbyPlacesResponse, double? lat,
             double? long, bool isDeviceGpsEnabled, bool isPermissionAllowed)
         onCompleted,
   }) async {
@@ -43,31 +43,31 @@ class LocationService {
       Response response = await Dio().post(
         'https://places.googleapis.com/v1/places:searchNearby',
         data: {
-          "maxResultCount": 10,
+          "maxResultCount": 20,
           "locationRestriction": {
             "circle": {
               "center": {
                 "latitude": lat,
                 "longitude": long,
               },
-              "radius": 4000.0
+              "radius": 1000.0
             }
           }
         },
         options: Options(
           headers: {
             "Content-Type": "application/json",
-            "X-Goog-Api-Key": googlePlaceAndGeoCodingApiKey,
+            "X-Goog-Api-Key": _googlePlaceAndGeoCodingApiKey,
             "X-Goog-FieldMask":
-                "places.displayName,places.primaryType,places.name,places.userRatingCount"
+                "places.displayName,places.location,places.primaryType,places.name,places.userRatingCount",
           },
         ),
       );
       if (response.statusCode != 200) {
         onCompleted(null, lat, long, true, true);
       }
-      NearbySearchResponse nearbyPlacesResponse =
-          NearbySearchResponse.fromMap(response.data);
+      PlacesNearbyResponse nearbyPlacesResponse =
+          PlacesNearbyResponse.fromMap(response.data);
       onCompleted(nearbyPlacesResponse, lat, long, true, true);
     } catch (e) {
       if (e is SocketException) {
@@ -82,7 +82,7 @@ class LocationService {
 
   static void getSearchPredictedPlacesNames(
       {required String searchQuery,
-      required Function(PlacesByQueryResponse?) onCompleted}) async {
+      required Function(SimilarPlacesByQueryResponse?) onCompleted}) async {
     if (searchQuery.length < 4) {
       return;
     }
@@ -97,14 +97,14 @@ class LocationService {
           },
           options: Options(headers: {
             "Content-Type": "application/json",
-            "X-Goog-Api-Key": googlePlaceAndGeoCodingApiKey,
+            "X-Goog-Api-Key": _googlePlaceAndGeoCodingApiKey,
           }),
         );
         if (response.statusCode != 200) {
           return;
         }
-        PlacesByQueryResponse placesByQueryResponse =
-            PlacesByQueryResponse.fromMap(response.data);
+        SimilarPlacesByQueryResponse placesByQueryResponse =
+            SimilarPlacesByQueryResponse.fromMap(response.data);
         onCompleted(placesByQueryResponse);
       } catch (e) {
         if (e is SocketException) {
@@ -120,5 +120,11 @@ class LocationService {
 
   static Future<void> getLatLongFromPlaceId(
       {required String googlePlaceId,
-      Function(double? lat, double? long)? onCompleted}) async {}
+      Function(double? lat, double? long)? onCompleted}) async {
+    try {
+      //reverse geocoding package
+      List<geocoding.Location> locations =
+          await geocoding.locationFromAddress(googlePlaceId);
+    } catch (e) {}
+  }
 }

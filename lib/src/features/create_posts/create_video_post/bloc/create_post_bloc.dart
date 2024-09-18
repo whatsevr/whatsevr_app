@@ -6,12 +6,14 @@ import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/config/services/location.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 
@@ -37,6 +39,14 @@ class CreateVideoPostBloc
   ) async {
     emit(state.copyWith(pageArgument: event.pageArgument));
     add(PickVideoEvent());
+    PlacesNearbyResponse? placesNearbyResponse;
+    await LocationService.getNearByPlacesFromLatLong(
+      onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
+          isPermissionAllowed) {
+        placesNearbyResponse = nearbyPlacesResponse;
+      },
+    );
+    emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
   }
 
   FutureOr<void> _onSubmit(

@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-class NearbySearchResponse {
+class PlacesNearbyResponse {
   final List<Place>? places;
 
-  NearbySearchResponse({
+  PlacesNearbyResponse({
     this.places,
   });
 
-  factory NearbySearchResponse.fromJson(String str) =>
-      NearbySearchResponse.fromMap(json.decode(str));
+  factory PlacesNearbyResponse.fromJson(String str) =>
+      PlacesNearbyResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory NearbySearchResponse.fromMap(Map<String, dynamic> json) =>
-      NearbySearchResponse(
+  factory PlacesNearbyResponse.fromMap(Map<String, dynamic> json) =>
+      PlacesNearbyResponse(
         places: json["places"] == null
             ? []
             : List<Place>.from(json["places"]!.map((x) => Place.fromMap(x))),
@@ -28,15 +28,15 @@ class NearbySearchResponse {
 
 class Place {
   final String? name;
+  final Location? location;
   final int? userRatingCount;
   final DisplayName? displayName;
-  final String? primaryType;
 
   Place({
     this.name,
+    this.location,
     this.userRatingCount,
     this.displayName,
-    this.primaryType,
   });
 
   factory Place.fromJson(String str) => Place.fromMap(json.decode(str));
@@ -45,28 +45,28 @@ class Place {
 
   factory Place.fromMap(Map<String, dynamic> json) => Place(
         name: json["name"],
+        location: json["location"] == null
+            ? null
+            : Location.fromMap(json["location"]),
         userRatingCount: json["userRatingCount"],
         displayName: json["displayName"] == null
             ? null
             : DisplayName.fromMap(json["displayName"]),
-        primaryType: json["primaryType"],
       );
 
   Map<String, dynamic> toMap() => {
         "name": name,
+        "location": location?.toMap(),
         "userRatingCount": userRatingCount,
         "displayName": displayName?.toMap(),
-        "primaryType": primaryType,
       };
 }
 
 class DisplayName {
   final String? text;
-  final String? languageCode;
 
   DisplayName({
     this.text,
-    this.languageCode,
   });
 
   factory DisplayName.fromJson(String str) =>
@@ -76,11 +76,33 @@ class DisplayName {
 
   factory DisplayName.fromMap(Map<String, dynamic> json) => DisplayName(
         text: json["text"],
-        languageCode: json["languageCode"],
       );
 
   Map<String, dynamic> toMap() => {
         "text": text,
-        "languageCode": languageCode,
+      };
+}
+
+class Location {
+  final double? latitude;
+  final double? longitude;
+
+  Location({
+    this.latitude,
+    this.longitude,
+  });
+
+  factory Location.fromJson(String str) => Location.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Location.fromMap(Map<String, dynamic> json) => Location(
+        latitude: json["latitude"]?.toDouble(),
+        longitude: json["longitude"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }

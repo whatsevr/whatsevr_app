@@ -211,9 +211,40 @@ class CreateVideoPost extends StatelessWidget {
                 suffixWidget: Icon(Icons.location_on),
                 hintText: 'Location',
                 customFunction: () {
-                  showAppModalSheet(child: PlaceSearchPage());
+                  showAppModalSheet(child: PlaceSearchByNamePage());
                 },
               ),
+              if (state.placesNearbyResponse?.places?.isNotEmpty ?? false) ...[
+                Gap(8),
+                SizedBox(
+                  height: 22,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black45,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Gap(4);
+                    },
+                    itemCount: state.placesNearbyResponse?.places?.length ?? 0,
+                  ),
+                ),
+              ],
               Gap(12),
             ],
           ),
