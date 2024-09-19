@@ -74,9 +74,10 @@ dependencies:
   firebase_crashlytics: ^4.1.1
   firebase_analytics: ^11.3.1
   geobase: ^1.3.0
-  geolocator: ^13.0.1 #current location
-  geocoding: ^3.0.0 #placeId to lat long for wkb
+  geolocator: ^13.0.1 #current location gapi
+  geocoding: ^3.0.0 #place name to lat long for wkb without gapi
   easy_debounce: ^2.0.3
+
 
 
 

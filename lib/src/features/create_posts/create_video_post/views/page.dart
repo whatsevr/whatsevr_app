@@ -12,6 +12,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/place_search_list.dart';
+import 'package:whatsevr_app/config/widgets/search_and_tag.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
@@ -159,7 +160,7 @@ class CreateVideoPost extends StatelessWidget {
                         Spacer(),
                         if (state.videoFile != null &&
                             state.thumbnailFile != null)
-                          WhatsevrButton.outlined(
+                          WhatsevrButton.filled(
                             shrink: true,
                             miniButton: true,
                             onPressed: () {
@@ -171,7 +172,7 @@ class CreateVideoPost extends StatelessWidget {
                           ),
                         if (state.videoFile != null) ...[
                           Gap(6),
-                          WhatsevrButton.outlined(
+                          WhatsevrButton.filled(
                             miniButton: true,
                             shrink: true,
                             onPressed: () {
@@ -201,17 +202,28 @@ class CreateVideoPost extends StatelessWidget {
               ),
               Gap(12),
               WhatsevrFormField.multilineTextField(
-                hintText: 'Tags (comma separated, max 30)',
+                hintText: 'Hashtags (start with #, max 30)',
               ),
               Gap(12),
               WhatsevrFormField.invokeCustomFunction(
                 context: context,
-                controller:
-                    context.read<CreateVideoPostBloc>().locationController,
+                controller: TextEditingController(
+                  text: state.selectedAddress ?? '',
+                ),
                 suffixWidget: Icon(Icons.location_on),
                 hintText: 'Location',
                 customFunction: () {
-                  showAppModalSheet(child: PlaceSearchByNamePage());
+                  showAppModalSheet(child: PlaceSearchByNamePage(
+                    onPlaceSelected: (placeName, lat, long) {
+                      context
+                          .read<CreateVideoPostBloc>()
+                          .add(UpdatePostAddressEvent(
+                            address: placeName,
+                            addressLatitude: lat,
+                            addressLongitude: long,
+                          ));
+                    },
+                  ));
                 },
               ),
               if (state.placesNearbyResponse?.places?.isNotEmpty ?? false) ...[
@@ -222,18 +234,32 @@ class CreateVideoPost extends StatelessWidget {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.black45,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          '${state.placesNearbyResponse?.places?[index].displayName?.text}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
+                      return GestureDetector(
+                        onTap: () {
+                          context
+                              .read<CreateVideoPostBloc>()
+                              .add(UpdatePostAddressEvent(
+                                address: state.placesNearbyResponse
+                                    ?.places?[index].displayName?.text,
+                                addressLatitude: state.placesNearbyResponse
+                                    ?.places?[index].location?.latitude,
+                                addressLongitude: state.placesNearbyResponse
+                                    ?.places?[index].location?.longitude,
+                              ));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
                       );
@@ -250,14 +276,37 @@ class CreateVideoPost extends StatelessWidget {
           ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.all(8),
-            color: Colors.white,
-            child: WhatsevrButton.filled(
-              onPressed: () {
-                context
-                    .read<CreateVideoPostBloc>()
-                    .add(const SubmitPostEvent());
-              },
-              label: 'Create Post',
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                WhatsevrButton.outlinedWithIcon(
+                  miniButton: true,
+                  label: 'Tag users and communities',
+                  onPressed: () {
+                    showAppModalSheet(
+                        child: SearchAndTagUsersAndCommunityPage());
+                  },
+                  icon: Icons.person,
+                ),
+                WhatsevrButton.filled(
+                  onPressed: () {
+                    context
+                        .read<CreateVideoPostBloc>()
+                        .add(const SubmitPostEvent());
+                  },
+                  label: 'Create Post',
+                ),
+              ],
             ),
           ),
         );

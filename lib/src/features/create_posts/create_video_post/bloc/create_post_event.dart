@@ -32,3 +32,15 @@ class PickThumbnailEvent extends CreateVideoPostEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class UpdatePostAddressEvent extends CreateVideoPostEvent {
+  final String? address;
+  final double? addressLatitude;
+  final double? addressLongitude;
+  const UpdatePostAddressEvent(
+      {this.address, this.addressLatitude, this.addressLongitude});
+
+  @override
+  List<Object?> get props =>
+      <Object?>[address, addressLatitude, addressLongitude];
+}

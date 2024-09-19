@@ -10,6 +10,8 @@ class CreateVideoPostRequest {
   final String? postCreatorType;
   final String? videoUrl;
 
+  final String? addressLatLongWkb;
+  final String? creatorLatLongWkb;
   CreateVideoPostRequest({
     this.title,
     this.description,
@@ -19,6 +21,8 @@ class CreateVideoPostRequest {
     this.hashtags,
     this.postCreatorType,
     this.videoUrl,
+    this.addressLatLongWkb,
+    this.creatorLatLongWkb,
   });
 
   factory CreateVideoPostRequest.fromJson(String str) =>
@@ -38,6 +42,8 @@ class CreateVideoPostRequest {
             : List<String>.from(json['hashtags']!.map((x) => x)),
         postCreatorType: json['post_creator_type'],
         videoUrl: json['video_url'],
+        addressLatLongWkb: json['address_lat_long_wkb'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -51,5 +57,7 @@ class CreateVideoPostRequest {
             : List<dynamic>.from(hashtags!.map((String x) => x)),
         'post_creator_type': postCreatorType,
         'video_url': videoUrl,
+        'address_lat_long_wkb': addressLatLongWkb,
+        'creator_lat_long_wkb': creatorLatLongWkb,
       };
 }

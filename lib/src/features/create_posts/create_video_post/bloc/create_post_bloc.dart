@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/services/location.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
+import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 
 part 'create_post_event.dart';
 part 'create_post_state.dart';
@@ -24,7 +27,7 @@ class CreateVideoPostBloc
     extends Bloc<CreateVideoPostEvent, CreateVideoPostState> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+
   final TextEditingController hashtagsController = TextEditingController();
 
   CreateVideoPostBloc() : super(CreateVideoPostState()) {
@@ -32,6 +35,7 @@ class CreateVideoPostBloc
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
     on<PickThumbnailEvent>(_onPickThumbnail);
+    on<UpdatePostAddressEvent>(_onUpdatePostAddress);
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
@@ -44,6 +48,13 @@ class CreateVideoPostBloc
       onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
           isPermissionAllowed) {
         placesNearbyResponse = nearbyPlacesResponse;
+        if (lat != null && long != null) {
+          emit(state.copyWith(
+            userCurrentLocationLatLongWkb:
+                WKBUtil.getWkbString(lat: lat, long: long) ??
+                    'POINT($lat $long)',
+          ));
+        }
       },
     );
     emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
@@ -56,29 +67,46 @@ class CreateVideoPostBloc
     try {
       titleController.text = titleController.text.trim();
       descriptionController.text = descriptionController.text.trim();
-      locationController.text = locationController.text.trim();
-      hashtagsController.text = hashtagsController.text.trim();
-
+      String hashtagsArea =
+          '${titleController.text} ${hashtagsController.text}';
+      List<String> hashtags = [];
+      if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp))
+        hashtags = TextPatternDetector.extractDetections(
+          hashtagsArea,
+          hashTagRegExp,
+        );
+      if (hashtags.length > 30) {
+        SmartDialog.showToast('You can only add 30 hashtags');
+        return;
+      }
       if (titleController.text.isEmpty) {
         SmartDialog.showToast('Title is required');
         return;
       }
 
       SmartDialog.showLoading();
-      final String? videoUrl =
-          await FileUploadService.uploadFilesToSST(state.videoFile!);
-      final String? thumbnailUrl =
-          await FileUploadService.uploadFilesToSST(state.thumbnailFile!);
+      final String? videoUrl = await FileUploadService.uploadFilesToSST(
+        state.videoFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'video-post',
+      );
+      final String? thumbnailUrl = await FileUploadService.uploadFilesToSST(
+        state.thumbnailFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'video-post-thumbnail',
+      );
       CreateVideoPostResponse? response = await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: <String>['hashtag1', 'hashtag2'],
-          location: 'Location',
+          hashtags: hashtags.isEmpty ? null : hashtags,
+          location: state.selectedAddress,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           thumbnail: thumbnailUrl,
           videoUrl: videoUrl,
+          addressLatLongWkb: state.selectedAddressLatLongWkb,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
         ),
       );
       SmartDialog.dismiss();
@@ -116,6 +144,18 @@ class CreateVideoPostBloc
       onThumbnailSelected: (File thumbnailFile) {
         emit(state.copyWith(thumbnailFile: thumbnailFile));
       },
+    );
+  }
+
+  Future<void> _onUpdatePostAddress(
+      UpdatePostAddressEvent event, Emitter<CreateVideoPostState> emit) async {
+    emit(
+      state.copyWith(
+        selectedAddress: event.address,
+        selectedAddressLatLongWkb: WKBUtil.getWkbString(
+                lat: event.addressLatitude, long: event.addressLongitude) ??
+            'POINT(${event.addressLatitude} ${event.addressLongitude})',
+      ),
     );
   }
 }

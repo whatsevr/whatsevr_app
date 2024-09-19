@@ -27,6 +27,8 @@ import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 
+import '../../../../config/services/auth_db.dart';
+
 part 'event.dart';
 part 'state.dart';
 
@@ -157,6 +159,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(profileImage: event.profileImage));
       String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
         event.profileImage!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'profile-picture',
+        fileExtension: 'jpg',
       );
       await UsersApi.updateProfilePicture(
         ProfilePictureUpdateRequest(
@@ -193,10 +198,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         SmartDialog.showLoading();
         File? imageFile = event.coverImage;
         File? videoFile = event.coverVideo;
-        String? imageUrl = await FileUploadService.uploadFilesToSST(imageFile!);
+        String? imageUrl = await FileUploadService.uploadFilesToSST(
+          imageFile!,
+          userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+          fileType: 'cover-image',
+          fileExtension: 'jpg',
+        );
         String? videoUrl;
         if (videoFile != null) {
-          videoUrl = await FileUploadService.uploadFilesToSST(videoFile);
+          videoUrl = await FileUploadService.uploadFilesToSST(
+            videoFile,
+            userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+            fileType: 'cover-video',
+          );
         }
 
         emit(

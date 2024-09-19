@@ -39,6 +39,9 @@ class ApiClient {
   }
 
   static void apiMethodException(Object e) {
+    if (e is SocketException) {
+      throw ('Unable to connect to the server.');
+    }
     if (e is DioException) {
       if (e.response?.statusCode == 500) {
         throw ('Server response: Internal Server Error');

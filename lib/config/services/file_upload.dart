@@ -14,14 +14,19 @@ class FileUploadService {
     ).storage;
   }
 
-  static Future<String?> uploadFilesToSST(File file) async {
+  static Future<String?> uploadFilesToSST(
+    File file, {
+    required String userUid,
+    required fileType,
+    String? fileExtension,
+  }) async {
     try {
       if (file.lengthSync() > kMaxMediaFileUploadSizeInMb * 1000000) {
         throw Exception(
             'File size too large (Max $kMaxMediaFileUploadSizeInMb MB)');
       }
       final String fileName =
-          '${DateTime.now().microsecondsSinceEpoch}.${file.path.split('.').last}';
+          '${userUid}_${fileType}_${DateTime.now().microsecondsSinceEpoch}.${fileExtension ?? file.path.split('.').last}';
 
       final String uploadStorageResponse = await _supabaseStorageClient
           .from('files') // Replace with your storage bucket name

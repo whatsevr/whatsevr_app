@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import '../api/external/models/places_nearby.dart';
@@ -23,7 +24,7 @@ class LocationService {
       if (lat == null || long == null) {
         bool deviceGpsEnabled = await Geolocator.isLocationServiceEnabled();
         if (!deviceGpsEnabled) {
-          onCompleted!(null, null, null, false, false);
+          onCompleted(null, null, null, false, false);
           return;
         }
         LocationPermission permission = await Geolocator.checkPermission();
@@ -31,7 +32,7 @@ class LocationService {
           permission = await Geolocator.requestPermission();
         }
         if (permission == LocationPermission.deniedForever) {
-          onCompleted!(null, null, null, true, false);
+          onCompleted(null, null, null, true, false);
           return;
         }
         Position position = await Geolocator.getCurrentPosition(
@@ -76,7 +77,8 @@ class LocationService {
       if (e is DioException) {
         throw Exception('Server client error');
       }
-      rethrow;
+      if (kDebugMode) rethrow;
+      return;
     }
   }
 
@@ -113,18 +115,30 @@ class LocationService {
         if (e is DioException) {
           throw Exception('Server client error');
         }
-        rethrow;
+        if (kDebugMode) rethrow;
+        return;
       }
     });
   }
 
-  static Future<void> getLatLongFromPlaceId(
-      {required String googlePlaceId,
-      Function(double? lat, double? long)? onCompleted}) async {
+  static Future<void> getLatLongFromGooglePlaceName(
+      {required String? placeName,
+      Function(double lat, double long)? onCompleted}) async {
+    if (placeName == null) return;
     try {
-      //reverse geocoding package
       List<geocoding.Location> locations =
-          await geocoding.locationFromAddress(googlePlaceId);
-    } catch (e) {}
+          await geocoding.locationFromAddress(placeName);
+      if (locations.isEmpty) {
+        return;
+      }
+      print(locations.length);
+      onCompleted?.call(locations.first.latitude, locations.first.longitude);
+    } catch (e) {
+      if (e is SocketException) {
+        throw Exception('Unable to connect to the internet');
+      }
+      if (kDebugMode) rethrow;
+      return;
+    }
   }
 }

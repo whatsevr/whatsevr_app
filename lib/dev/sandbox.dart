@@ -34,28 +34,7 @@ class _DeveloperPageState extends State<DeveloperPage> {
         children: <Widget>[
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
-            (
-              'Test1',
-              () async {
-                LocationService.getNearByPlacesFromLatLong(
-                  onCompleted: (nearbyPlacesResponse, lat, long,
-                      isDeviceGpsEnabled, isPermissionAllowed) {
-                    if (nearbyPlacesResponse == null) {
-                      if (!isDeviceGpsEnabled) {
-                        SmartDialog.showToast('Please enable GPS');
-                      } else if (!isPermissionAllowed) {
-                        SmartDialog.showToast(
-                            'Please allow location permission');
-                      }
-                      return;
-                    } else {
-                      SmartDialog.showToast(
-                          '${nearbyPlacesResponse.places!.length}');
-                    }
-                  },
-                );
-              }
-            ),
+            ('Test1', () async {}),
             ('Test2', () async {}),
           ])
             TextButton(
