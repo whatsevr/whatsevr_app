@@ -132,20 +132,22 @@ class AccountPageAboutView extends StatelessWidget {
                 (
                   'Join On',
                   (DateFormat('hh:mm a, dd MMM,yyyy').format(
-                      state.profileDetailsResponse!.userInfo!.registeredOn!,))
+                    state.profileDetailsResponse!.userInfo!.registeredOn!,
+                  ))
                 ),
               (
                 state.profileDetailsResponse?.userInfo?.isPortfolio == true
                     ? 'Portfolio link'
                     : 'Account link',
-                'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.userName}'
+                'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.username}'
               ),
               if (state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
                   null)
                 (
                   'Portfolio Created On',
-                  (DateFormat('hh:mm a, dd MMM,yyyy').format(state
-                      .profileDetailsResponse!.userInfo!.portfolioCreatedAt!,))
+                  (DateFormat('hh:mm a, dd MMM,yyyy').format(
+                    state.profileDetailsResponse!.userInfo!.portfolioCreatedAt!,
+                  ))
                 ),
               (
                 'Description',

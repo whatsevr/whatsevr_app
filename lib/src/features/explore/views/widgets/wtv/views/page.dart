@@ -83,7 +83,7 @@ class ExplorePageWtvPage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return WtvVideoPostFrame(
                   avatarUrl: data?[index].user?.profilePicture,
-                  username: data?[index].user?.userName,
+                  username: data?[index].user?.username,
                   title: data?[index].title,
                   description: data?[index].description,
                   videoUrl: data?[index].videoUrl,

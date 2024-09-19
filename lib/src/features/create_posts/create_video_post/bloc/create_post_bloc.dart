@@ -102,7 +102,9 @@ class CreateVideoPostBloc
           title: titleController.text,
           description: descriptionController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: hashtags.isEmpty ? null : hashtags,
+          hashtags: hashtags.isEmpty
+              ? null
+              : hashtags.map((e) => e.replaceAll("#", '')).toList(),
           location: state.selectedAddress,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           thumbnail: thumbnailUrl,

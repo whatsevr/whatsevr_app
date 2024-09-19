@@ -7,14 +7,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/response_model/user_profile.dart';
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 
 import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/auth_user.dart';
+import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'splash_event.dart';

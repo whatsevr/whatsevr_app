@@ -141,7 +141,7 @@ class AccountPage extends StatelessWidget {
                                         style: TextStyle(fontSize: 14),
                                       ),
                                       Text(
-                                        ' @${state.profileDetailsResponse?.userInfo?.userName}',
+                                        ' @${state.profileDetailsResponse?.userInfo?.username}',
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,

@@ -13,7 +13,7 @@ import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
-import 'package:whatsevr_app/config/api/response_model/user_profile.dart';
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 
 class UsersApi {
   static Future<UserDetailsResponse?> getUserDetails({

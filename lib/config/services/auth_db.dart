@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:hive_flutter/adapters.dart';
 
-import 'package:whatsevr_app/config/api/response_model/auth_user.dart';
+import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
 
 class AuthUserDb {
   AuthUserDb._();

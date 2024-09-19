@@ -1,138 +1,39 @@
 import 'dart:convert';
 
-class TextSearchUsersAndCommunitiesResponse {
+class UserDetailsResponse {
   final String? message;
-  final List<User>? users;
-  final List<Community>? communities;
+  final Data? data;
 
-  TextSearchUsersAndCommunitiesResponse({
+  UserDetailsResponse({
     this.message,
-    this.users,
-    this.communities,
+    this.data,
   });
 
-  TextSearchUsersAndCommunitiesResponse copyWith({
+  UserDetailsResponse copyWith({
     String? message,
-    List<User>? users,
-    List<Community>? communities,
+    Data? data,
   }) =>
-      TextSearchUsersAndCommunitiesResponse(
+      UserDetailsResponse(
         message: message ?? this.message,
-        users: users ?? this.users,
-        communities: communities ?? this.communities,
+        data: data ?? this.data,
       );
 
-  factory TextSearchUsersAndCommunitiesResponse.fromJson(String str) => TextSearchUsersAndCommunitiesResponse.fromMap(json.decode(str));
+  factory UserDetailsResponse.fromJson(String str) => UserDetailsResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory TextSearchUsersAndCommunitiesResponse.fromMap(Map<String, dynamic> json) => TextSearchUsersAndCommunitiesResponse(
+  factory UserDetailsResponse.fromMap(Map<String, dynamic> json) => UserDetailsResponse(
     message: json["message"],
-    users: json["users"] == null ? [] : List<User>.from(json["users"]!.map((x) => User.fromMap(x))),
-    communities: json["communities"] == null ? [] : List<Community>.from(json["communities"]!.map((x) => Community.fromMap(x))),
+    data: json["data"] == null ? null : Data.fromMap(json["data"]),
   );
 
   Map<String, dynamic> toMap() => {
     "message": message,
-    "users": users == null ? [] : List<dynamic>.from(users!.map((x) => x.toMap())),
-    "communities": communities == null ? [] : List<dynamic>.from(communities!.map((x) => x.toMap())),
+    "data": data?.toMap(),
   };
 }
 
-class Community {
-  final int? id;
-  final DateTime? createdAt;
-  final String? userUid;
-  final String? status;
-  final dynamic services;
-  final String? bio;
-  final String? address;
-  final String? description;
-  final String? title;
-  final String? profilePicture;
-  final String? uid;
-  final String? username;
-
-  Community({
-    this.id,
-    this.createdAt,
-    this.userUid,
-    this.status,
-    this.services,
-    this.bio,
-    this.address,
-    this.description,
-    this.title,
-    this.profilePicture,
-    this.uid,
-    this.username,
-  });
-
-  Community copyWith({
-    int? id,
-    DateTime? createdAt,
-    String? userUid,
-    String? status,
-    dynamic services,
-    String? bio,
-    String? address,
-    String? description,
-    String? title,
-    String? profilePicture,
-    String? uid,
-    String? username,
-  }) =>
-      Community(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        userUid: userUid ?? this.userUid,
-        status: status ?? this.status,
-        services: services ?? this.services,
-        bio: bio ?? this.bio,
-        address: address ?? this.address,
-        description: description ?? this.description,
-        title: title ?? this.title,
-        profilePicture: profilePicture ?? this.profilePicture,
-        uid: uid ?? this.uid,
-        username: username ?? this.username,
-      );
-
-  factory Community.fromJson(String str) => Community.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory Community.fromMap(Map<String, dynamic> json) => Community(
-    id: json["id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    userUid: json["user_uid"],
-    status: json["status"],
-    services: json["services"],
-    bio: json["bio"],
-    address: json["address"],
-    description: json["description"],
-    title: json["title"],
-    profilePicture: json["profile_picture"],
-    uid: json["uid"],
-    username: json["username"],
-  );
-
-  Map<String, dynamic> toMap() => {
-    "id": id,
-    "created_at": createdAt?.toIso8601String(),
-    "user_uid": userUid,
-    "status": status,
-    "services": services,
-    "bio": bio,
-    "address": address,
-    "description": description,
-    "title": title,
-    "profile_picture": profilePicture,
-    "uid": uid,
-    "username": username,
-  };
-}
-
-class User {
+class Data {
   final int? id;
   final DateTime? registeredOn;
   final bool? isActive;
@@ -161,7 +62,7 @@ class User {
   final DateTime? lastActiveAt;
   final String? userLastLatLongWkb;
 
-  User({
+  Data({
     this.id,
     this.registeredOn,
     this.isActive,
@@ -191,7 +92,7 @@ class User {
     this.userLastLatLongWkb,
   });
 
-  User copyWith({
+  Data copyWith({
     int? id,
     DateTime? registeredOn,
     bool? isActive,
@@ -220,7 +121,7 @@ class User {
     DateTime? lastActiveAt,
     String? userLastLatLongWkb,
   }) =>
-      User(
+      Data(
         id: id ?? this.id,
         registeredOn: registeredOn ?? this.registeredOn,
         isActive: isActive ?? this.isActive,
@@ -250,11 +151,11 @@ class User {
         userLastLatLongWkb: userLastLatLongWkb ?? this.userLastLatLongWkb,
       );
 
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
+  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory Data.fromMap(Map<String, dynamic> json) => Data(
     id: json["id"],
     registeredOn: json["registered_on"] == null ? null : DateTime.parse(json["registered_on"]),
     isActive: json["is_active"],

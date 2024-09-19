@@ -202,6 +202,8 @@ class CreateVideoPost extends StatelessWidget {
               ),
               Gap(12),
               WhatsevrFormField.multilineTextField(
+                controller:
+                    context.read<CreateVideoPostBloc>().hashtagsController,
                 hintText: 'Hashtags (start with #, max 30)',
               ),
               Gap(12),
