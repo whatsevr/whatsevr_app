@@ -8,6 +8,8 @@ class CreateVideoPostState extends Equatable {
   final String? userCurrentLocationLatLongWkb;
   final String? selectedAddress;
   final String? selectedAddressLatLongWkb;
+  final List<String> taggedUsersUid;
+  final List<String> taggedCommunitiesUid;
 
   const CreateVideoPostState({
     this.pageArgument,
@@ -17,6 +19,8 @@ class CreateVideoPostState extends Equatable {
     this.userCurrentLocationLatLongWkb,
     this.selectedAddress,
     this.selectedAddressLatLongWkb,
+    this.taggedUsersUid = const [],
+    this.taggedCommunitiesUid = const [],
   });
 
   @override
@@ -28,6 +32,8 @@ class CreateVideoPostState extends Equatable {
         userCurrentLocationLatLongWkb,
         selectedAddress,
         selectedAddressLatLongWkb,
+        taggedUsersUid,
+        taggedCommunitiesUid,
       ];
 
   CreateVideoPostState copyWith({
@@ -38,6 +44,8 @@ class CreateVideoPostState extends Equatable {
     String? userCurrentLocationLatLongWkb,
     String? selectedAddress,
     String? selectedAddressLatLongWkb,
+    List<String>? taggedUsersUid,
+    List<String>? taggedCommunitiesUid,
   }) {
     return CreateVideoPostState(
       pageArgument: pageArgument ?? this.pageArgument,
@@ -49,6 +57,8 @@ class CreateVideoPostState extends Equatable {
       selectedAddress: selectedAddress ?? this.selectedAddress,
       selectedAddressLatLongWkb:
           selectedAddressLatLongWkb ?? this.selectedAddressLatLongWkb,
+      taggedUsersUid: taggedUsersUid ?? this.taggedUsersUid,
+      taggedCommunitiesUid: taggedCommunitiesUid ?? this.taggedCommunitiesUid,
     );
   }
 }

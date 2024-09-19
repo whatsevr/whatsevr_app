@@ -6,12 +6,19 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/text_search.dart';
 import 'package:whatsevr_app/config/api/response_model/text_search_users_communities.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 
 class SearchAndTagUsersAndCommunityPage extends StatefulWidget {
   final bool scaffoldView;
-  const SearchAndTagUsersAndCommunityPage(
-      {super.key, this.scaffoldView = false});
+  final Function(
+          List<String> selectedUsersUid, List<String> selectedCommunitiesUid)?
+      onDone;
+  const SearchAndTagUsersAndCommunityPage({
+    super.key,
+    this.scaffoldView = false,
+    required this.onDone,
+  });
 
   @override
   State<SearchAndTagUsersAndCommunityPage> createState() =>
@@ -57,7 +64,7 @@ class _SearchAndTagUsersAndCommunityPageState
       children: [
         WhatsevrFormField.textFieldWithClearIcon(
           controller: controller,
-          hintText: 'Search for a user or community',
+          hintText: 'Search for users or communities',
           onChanged: (String value) {
             _fetchData(value);
           },
@@ -120,10 +127,10 @@ class _SearchAndTagUsersAndCommunityPageState
                 dense: true,
                 visualDensity: VisualDensity.compact,
                 onTap: () {
-                  if (selectedCommunitiesUid.contains(community?.title)) {
-                    selectedCommunitiesUid.remove(community?.title);
+                  if (selectedCommunitiesUid.contains(community?.uid)) {
+                    selectedCommunitiesUid.remove(community?.uid);
                   } else {
-                    selectedCommunitiesUid.add(community?.title ?? '');
+                    selectedCommunitiesUid.add(community?.uid ?? '');
                   }
                   setState(() {});
                 },
@@ -135,8 +142,8 @@ class _SearchAndTagUsersAndCommunityPageState
                   '${community?.title}',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text('${community?.address}'),
-                trailing: selectedCommunitiesUid.contains(community?.title)
+                subtitle: Text('@${community?.username}'),
+                trailing: selectedCommunitiesUid.contains(community?.uid)
                     ? Icon(Icons.check_circle, color: Colors.green)
                     : Icon(Icons.circle_outlined),
               );
@@ -144,24 +151,44 @@ class _SearchAndTagUsersAndCommunityPageState
           ),
         ],
         Gap(8),
-        if (selectedUsersUid.isNotEmpty) ...[
-          Text('Selected'),
+        if (selectedUsersUid.isNotEmpty ||
+            selectedCommunitiesUid.isNotEmpty) ...[
+          Gap(50),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Selected ',
+                  style: TextStyle(color: Colors.black),
+                ),
+                if (selectedUsersUid.isNotEmpty) ...[
+                  TextSpan(
+                    text: '${selectedUsersUid.length} users',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ],
+                if (selectedUsersUid.isNotEmpty &&
+                    selectedCommunitiesUid.isNotEmpty)
+                  TextSpan(
+                    text: ' and ',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                if (selectedCommunitiesUid.isNotEmpty) ...[
+                  TextSpan(
+                    text: '${selectedCommunitiesUid.length} communities',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ],
+              ],
+            ),
+          ),
           Gap(8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (String user in selectedUsersUid)
-                Chip(
-                  label: Text('${user}'),
-                  onDeleted: () {},
-                ),
-              for (String community in selectedCommunitiesUid)
-                Chip(
-                  label: Text('${community}'),
-                  onDeleted: () {},
-                ),
-            ],
+          WhatsevrButton.filled(
+            label: 'Done',
+            onPressed: () {
+              widget.onDone?.call(selectedUsersUid, selectedCommunitiesUid);
+              Navigator.pop(context);
+            },
           ),
         ],
       ],

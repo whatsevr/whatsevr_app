@@ -51,6 +51,8 @@ class Community {
   final dynamic description;
   final String? title;
   final String? profilePicture;
+  final String? uid;
+  final String? username;
 
   Community({
     this.id,
@@ -63,6 +65,8 @@ class Community {
     this.description,
     this.title,
     this.profilePicture,
+    this.uid,
+    this.username,
   });
 
   factory Community.fromJson(String str) => Community.fromMap(json.decode(str));
@@ -82,6 +86,8 @@ class Community {
         description: json["description"],
         title: json["title"],
         profilePicture: json["profile_picture"],
+        uid: json["uid"],
+        username: json["username"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -95,6 +101,8 @@ class Community {
         "description": description,
         "title": title,
         "profile_picture": profilePicture,
+        "uid": uid,
+        "username": username,
       };
 }
 

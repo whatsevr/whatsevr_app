@@ -44,3 +44,15 @@ class UpdatePostAddressEvent extends CreateVideoPostEvent {
   List<Object?> get props =>
       <Object?>[address, addressLatitude, addressLongitude];
 }
+
+class UpdateTaggedUsersAndCommunitiesEvent extends CreateVideoPostEvent {
+  final bool? clearAll;
+  final List<String>? taggedUsersUid;
+  final List<String>? taggedCommunitiesUid;
+  const UpdateTaggedUsersAndCommunitiesEvent(
+      {this.taggedUsersUid, this.taggedCommunitiesUid, this.clearAll});
+
+  @override
+  List<Object?> get props =>
+      <Object?>[taggedUsersUid, taggedCommunitiesUid, clearAll];
+}

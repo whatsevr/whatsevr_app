@@ -12,9 +12,9 @@ class TextSearchApi {
       return null;
     }
     try {
-      Response response = await ApiClient.client.post(
+      Response response = await ApiClient.client.get(
         '/v1/search/users_communities',
-        data: {'input_text': query},
+        queryParameters: {'input_text': query},
       );
 
       if (response.data != null) {

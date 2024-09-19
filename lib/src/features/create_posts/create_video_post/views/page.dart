@@ -271,7 +271,86 @@ class CreateVideoPost extends StatelessWidget {
                   ),
                 ),
               ],
-              Gap(12),
+              Gap(18),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  showAppModalSheet(
+                    child: SearchAndTagUsersAndCommunityPage(
+                      onDone: (selectedUsersUid, selectedCommunitiesUid) {
+                        context
+                            .read<CreateVideoPostBloc>()
+                            .add(UpdateTaggedUsersAndCommunitiesEvent(
+                              taggedUsersUid: selectedUsersUid,
+                              taggedCommunitiesUid: selectedCommunitiesUid,
+                            ));
+                      },
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.person, color: Colors.black),
+                    Gap(4),
+                    Text('Tag People', style: TextStyle(color: Colors.black)),
+                    Spacer(),
+                    Icon(Icons.arrow_right_rounded, color: Colors.black),
+                  ],
+                ),
+              ),
+              if (state.taggedUsersUid.isNotEmpty ||
+                  state.taggedCommunitiesUid.isNotEmpty) ...[
+                Gap(12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Selected ',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            if (state.taggedUsersUid.isNotEmpty) ...[
+                              TextSpan(
+                                text: '${state.taggedUsersUid.length} users',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ],
+                            if (state.taggedUsersUid.isNotEmpty &&
+                                state.taggedCommunitiesUid.isNotEmpty)
+                              TextSpan(
+                                text: ' and ',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            if (state.taggedCommunitiesUid.isNotEmpty) ...[
+                              TextSpan(
+                                text:
+                                    '${state.taggedCommunitiesUid.length} communities',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        context.read<CreateVideoPostBloc>().add(
+                            UpdateTaggedUsersAndCommunitiesEvent(
+                                clearAll: true));
+                      },
+                      child: const Icon(
+                        Icons.clear_rounded,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              Gap(50),
             ],
           ),
           bottomNavigationBar: Container(
@@ -286,27 +365,13 @@ class CreateVideoPost extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                WhatsevrButton.outlinedWithIcon(
-                  miniButton: true,
-                  label: 'Tag users and communities',
-                  onPressed: () {
-                    showAppModalSheet(
-                        child: SearchAndTagUsersAndCommunityPage());
-                  },
-                  icon: Icons.person,
-                ),
-                WhatsevrButton.filled(
-                  onPressed: () {
-                    context
-                        .read<CreateVideoPostBloc>()
-                        .add(const SubmitPostEvent());
-                  },
-                  label: 'Create Post',
-                ),
-              ],
+            child: WhatsevrButton.filled(
+              onPressed: () {
+                context
+                    .read<CreateVideoPostBloc>()
+                    .add(const SubmitPostEvent());
+              },
+              label: 'Create Post',
             ),
           ),
         );

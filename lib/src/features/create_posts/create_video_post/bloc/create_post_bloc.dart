@@ -36,6 +36,8 @@ class CreateVideoPostBloc
     on<PickVideoEvent>(_onPickVideo);
     on<PickThumbnailEvent>(_onPickThumbnail);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
+    on<UpdateTaggedUsersAndCommunitiesEvent>(
+        _onUpdateTaggedUsersAndCommunities);
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
@@ -107,6 +109,8 @@ class CreateVideoPostBloc
           videoUrl: videoUrl,
           addressLatLongWkb: state.selectedAddressLatLongWkb,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
         ),
       );
       SmartDialog.dismiss();
@@ -157,5 +161,31 @@ class CreateVideoPostBloc
             'POINT(${event.addressLatitude} ${event.addressLongitude})',
       ),
     );
+  }
+
+  FutureOr<void> _onUpdateTaggedUsersAndCommunities(
+      UpdateTaggedUsersAndCommunitiesEvent event,
+      Emitter<CreateVideoPostState> emit) {
+    if (event.clearAll == true) {
+      emit(state.copyWith(
+        taggedUsersUid: [],
+        taggedCommunitiesUid: [],
+      ));
+    } else {
+      List<String> taggedUsersUid = [
+        ...state.taggedUsersUid,
+        ...?event.taggedUsersUid
+      ];
+      List<String> taggedCommunitiesUid = [
+        ...state.taggedCommunitiesUid,
+        ...?event.taggedCommunitiesUid
+      ];
+      taggedUsersUid = taggedUsersUid.toSet().toList();
+      taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
+      emit(state.copyWith(
+        taggedUsersUid: taggedUsersUid,
+        taggedCommunitiesUid: taggedCommunitiesUid,
+      ));
+    }
   }
 }

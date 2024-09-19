@@ -7,6 +7,8 @@ class CreateVideoPostRequest {
   final String? thumbnail;
   final String? location;
   final List<String>? hashtags;
+  final List<String>? taggedUserUids;
+  final List<String>? taggedCommunityUids;
   final String? postCreatorType;
   final String? videoUrl;
 
@@ -23,6 +25,8 @@ class CreateVideoPostRequest {
     this.videoUrl,
     this.addressLatLongWkb,
     this.creatorLatLongWkb,
+    this.taggedUserUids,
+    this.taggedCommunityUids,
   });
 
   factory CreateVideoPostRequest.fromJson(String str) =>
@@ -44,6 +48,12 @@ class CreateVideoPostRequest {
         videoUrl: json['video_url'],
         addressLatLongWkb: json['address_lat_long_wkb'],
         creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedUserUids: json['tagged_user_uids'] == null
+            ? <String>[]
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        taggedCommunityUids: json['tagged_community_uids'] == null
+            ? <String>[]
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -59,5 +69,11 @@ class CreateVideoPostRequest {
         'video_url': videoUrl,
         'address_lat_long_wkb': addressLatLongWkb,
         'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_user_uids': taggedUserUids == null
+            ? <String>[]
+            : List<dynamic>.from(taggedUserUids!.map((String x) => x)),
+        'tagged_community_uids': taggedCommunityUids == null
+            ? <String>[]
+            : List<dynamic>.from(taggedCommunityUids!.map((String x) => x)),
       };
 }
