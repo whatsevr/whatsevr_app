@@ -4,8 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/charm.dart';
 import 'package:iconify_flutter/icons/ion.dart';
-import 'package:iconify_flutter/icons/material_symbols.dart';
+import 'package:iconify_flutter/icons/majesticons.dart';
+
 import 'package:iconify_flutter/icons/ph.dart';
+import 'package:iconify_flutter/icons/ri.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
@@ -135,13 +137,13 @@ class WtvVideoPostFrame extends StatelessWidget {
                     const AnimatedLikeIconButton(),
                     const Text('2.5M'),
                     IconButton(
-                      icon: const Iconify(Ph.chat_centered_dots),
-                      onPressed: () {},
+                      icon: Iconify(Majesticons.comment_2_line),
+                        onPressed: () {},
                     ),
                     const Text('2.5M'),
                     IconButton(
-                      icon: const Iconify(MaterialSymbols.ios_share),
-                      onPressed: () {},
+                      icon: const Iconify(Ri.share_forward_line),
+                        onPressed: () {},
                     ),
                     const Spacer(),
                     IconButton(
