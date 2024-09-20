@@ -8,7 +8,8 @@ import '../services/location.dart';
 
 class PlaceSearchByNamePage extends StatefulWidget {
   final bool scaffoldView;
-  final Function(String placeName, double? lat, double? long) onPlaceSelected;
+  final Function(String placeName, double? latitude, double? longitude)
+      onPlaceSelected;
   const PlaceSearchByNamePage(
       {super.key, this.scaffoldView = false, required this.onPlaceSelected});
 
@@ -52,8 +53,8 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
               dense: true,
               visualDensity: VisualDensity.compact,
               onTap: () async {
-                double? lat;
-                double? long;
+                double? latitude;
+                double? longitude;
                 String? placeName = searchedItems[index]
                         .placePrediction
                         ?.structuredFormat
@@ -69,10 +70,14 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
                   await LocationService.getLatLongFromGooglePlaceName(
                     placeName: placeName,
                     onCompleted: (lat, long) {
-                      lat = lat;
-                      long = long;
+                      latitude = lat;
+                      longitude = long;
                     },
                   );
+                  if (latitude == null || longitude == null) {
+                    SmartDialog.dismiss();
+                    return;
+                  }
                   SmartDialog.dismiss();
                   widget.onPlaceSelected(
                       searchedItems[index]
@@ -80,8 +85,8 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
                           .structuredFormat!
                           .mainText!
                           .text!,
-                      lat,
-                      long);
+                      latitude,
+                      longitude);
                   Navigator.of(context).pop();
                 }
               },

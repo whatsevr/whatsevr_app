@@ -14,11 +14,14 @@ import 'package:fraction/fraction.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class VideoEditorPageArgument {
   final File videoFile;
+  final WhatsevrAspectRatio? aspectRatio;
   final Function(File? file) onCompleted;
-  VideoEditorPageArgument({required this.videoFile, required this.onCompleted});
+  VideoEditorPageArgument(
+      {required this.videoFile, required this.onCompleted, this.aspectRatio});
 }
 
 class VideoEditorPage extends StatefulWidget {
@@ -37,15 +40,15 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
 
   late final VideoEditorController _controller = VideoEditorController.file(
     widget.pageArgument.videoFile,
-    minDuration: const Duration(seconds: 1),
-    maxDuration: const Duration(seconds: 10),
+    minDuration: const Duration(seconds: 15),
+    maxDuration: const Duration(hours: 8),
   );
 
   @override
   void initState() {
     super.initState();
     _controller
-        .initialize(aspectRatio: 9 / 16)
+        .initialize(aspectRatio: widget.pageArgument.aspectRatio?.ratio)
         .then((_) => setState(() {}))
         .catchError(
       (error) {
@@ -53,7 +56,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
         if (error is VideoMinDurationError) {
           throw Exception('Video is too short to be edited');
         }
-        widget.pageArgument.onCompleted(null);
+
         AppNavigationService.goBack();
       },
       test: (Object e) => e is VideoMinDurationError,
@@ -84,7 +87,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
             config.getFFmpegProgress(stats.getTime().toInt());
       },
       onError: (Object e, StackTrace s) =>
-          SmartDialog.showToast('Error on export video :('),
+          SmartDialog.showToast('Error on processing video :('),
       onCompleted: (File file) async {
         _isExporting.value = false;
         widget.pageArgument.onCompleted(file);

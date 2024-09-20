@@ -14,21 +14,24 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/widgets/button.dart';
 
-Future<File?> showWhatsevrThumbnailSelectionPage(
-    {required File videoFile, Function(File)? onThumbnailSelected,}) async {
+Future<File?> showWhatsevrThumbnailSelectionPage({
+  required File videoFile,
+  Function(File)? onThumbnailSelected,
+}) async {
   File? file;
   await SmartDialog.show(
-      alignment: Alignment.bottomCenter,
-      builder: (BuildContext context) {
-        return _Ui(
-          videoFile: videoFile,
-          onThumbnailSelected: (File file0) {
-            onThumbnailSelected?.call(file0);
-            file = file0;
-            SmartDialog.dismiss();
-          },
-        );
-      },);
+    alignment: Alignment.bottomCenter,
+    builder: (BuildContext context) {
+      return _Ui(
+        videoFile: videoFile,
+        onThumbnailSelected: (File file0) {
+          onThumbnailSelected?.call(file0);
+          file = file0;
+          SmartDialog.dismiss();
+        },
+      );
+    },
+  );
 
   return file;
 }
@@ -37,8 +40,10 @@ class _Ui extends StatefulWidget {
   final File videoFile;
   final Function(File) onThumbnailSelected;
 
-  const _Ui(
-      {required this.videoFile, required this.onThumbnailSelected,});
+  const _Ui({
+    required this.videoFile,
+    required this.onThumbnailSelected,
+  });
 
   @override
   State<_Ui> createState() => _UiState();
@@ -80,7 +85,9 @@ class _UiState extends State<_Ui> {
       // Ensure distinct time points for each thumbnail
       final int forDuration = interval * i;
       final MemoryImage? thumbnailFile = await getThumbnailMemoryImage(
-          videoFile: widget.videoFile, forDuration: forDuration,);
+        videoFile: widget.videoFile,
+        forDuration: forDuration,
+      );
 
       if (thumbnailFile != null) {
         thumbnails.add(thumbnailFile);
@@ -186,6 +193,10 @@ class _UiState extends State<_Ui> {
             WhatsevrButton.filled(
               label: 'Done',
               onPressed: () async {
+                if (selectedThumbnail == null) {
+                  SmartDialog.showToast('Please select a thumbnail');
+                  return;
+                }
                 File? file = await saveImageAsFile(selectedThumbnail!.bytes);
                 if (file != null) {
                   widget.onThumbnailSelected(file);
@@ -199,8 +210,10 @@ class _UiState extends State<_Ui> {
   }
 }
 
-Future<MemoryImage?> getThumbnailMemoryImage(
-    {required File videoFile, int forDuration = 5000,}) async {
+Future<MemoryImage?> getThumbnailMemoryImage({
+  required File videoFile,
+  int forDuration = 5000,
+}) async {
   try {
     // Generate a thumbnail at the specified time in milliseconds
     final String? tempPath = await VideoThumbnail.thumbnailFile(
@@ -233,8 +246,11 @@ Future<MemoryImage?> getThumbnailMemoryImage(
   }
 }
 
-Future<File?> getThumbnailFile(
-    {required File videoFile, int forDuration = 5000,}) async {
+Future<File?> getThumbnailFile({
+  required File? videoFile,
+  int forDuration = 5000,
+}) async {
+  if (videoFile == null) return null;
   try {
     // Generate a thumbnail at the specified time in milliseconds
     final String? tempPath = await VideoThumbnail.thumbnailFile(

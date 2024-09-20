@@ -163,7 +163,13 @@ class CustomAssetPicker {
             editedVideo = file;
           }),
     );
-    if (editedVideo == null) onCompleted?.call(pickedVideo);
+    if (editedVideo == null) {
+      if (!(await pickedVideo.exists())) {
+        throw Exception('Picked Video File does not exist');
+      }
+      onCompleted?.call(pickedVideo);
+      return;
+    }
     onCompleted?.call(editedVideo!);
   }
 

@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/services/location.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
@@ -53,8 +54,7 @@ class CreateVideoPostBloc
         if (lat != null && long != null) {
           emit(state.copyWith(
             userCurrentLocationLatLongWkb:
-                WKBUtil.getWkbString(lat: lat, long: long) ??
-                    'POINT($lat $long)',
+                WKBUtil.getWkbString(lat: lat, long: long),
           ));
         }
       },
@@ -127,13 +127,11 @@ class CreateVideoPostBloc
     PickVideoEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.video,
+    await CustomAssetPicker.pickVideoFromGallery(
+      onCompleted: (File file) {
+        emit(state.copyWith(videoFile: file));
+      },
     );
-    if (result?.files.single.path == null) return;
-    emit(state.copyWith(videoFile: File(result!.files.single.path!)));
-
     emit(
       state.copyWith(
         thumbnailFile: await getThumbnailFile(videoFile: state.videoFile!),
@@ -159,8 +157,7 @@ class CreateVideoPostBloc
       state.copyWith(
         selectedAddress: event.address,
         selectedAddressLatLongWkb: WKBUtil.getWkbString(
-                lat: event.addressLatitude, long: event.addressLongitude) ??
-            'POINT(${event.addressLatitude} ${event.addressLongitude})',
+            lat: event.addressLatitude, long: event.addressLongitude),
       ),
     );
   }
