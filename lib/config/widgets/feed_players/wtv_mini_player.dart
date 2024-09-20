@@ -1,10 +1,13 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
+
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import '../../../src/features/full_video_player/views/page.dart';
 
@@ -15,7 +18,7 @@ class WTVMiniPlayer extends StatefulWidget {
   final String? thumbnail;
   final Function()? onTapFreeArea;
   final bool? loopVideo;
-  final bool showFullScreenButton;
+  final double? thumbnailHeightAspectRatio;
   const WTVMiniPlayer({
     super.key,
     this.autoPlay = false,
@@ -23,7 +26,7 @@ class WTVMiniPlayer extends StatefulWidget {
     this.thumbnail,
     this.onTapFreeArea,
     this.loopVideo,
-    this.showFullScreenButton = true,
+    this.thumbnailHeightAspectRatio,
   });
 
   @override
@@ -31,7 +34,7 @@ class WTVMiniPlayer extends StatefulWidget {
 }
 
 class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
-  VideoPlayerController? controller;
+  CachedVideoPlayerController? videoPlayerController;
   @override
   void initState() {
     super.initState();
@@ -41,31 +44,33 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   }
 
   Future<void> initiateVideoPlayer() async {
-    controller ??=
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            controller?.play();
+    videoPlayerController ??= CachedVideoPlayerController.networkUrl(
+      Uri.parse('${widget.videoUrl}'),
+      videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
+    )..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        videoPlayerController?.play();
+        setState(() {});
+        videoPlayerController?.addListener(() async {
+          if (videoPlayerController?.value.position ==
+              videoPlayerController?.value.duration) {
+            // await Future<void>.delayed(const Duration(seconds: 1));
+
+            if (widget.loopVideo == true) {
+              videoPlayerController?.seekTo(Duration.zero);
+              videoPlayerController?.play();
+            } else {
+              videoPlayerController?.pause();
+            }
             setState(() {});
-            controller?.addListener(() async {
-              if (controller?.value.position == controller?.value.duration) {
-                await Future<void>.delayed(const Duration(seconds: 1));
-                controller?.seekTo(Duration.zero);
-                if (widget.loopVideo == true) {
-                  controller?.play();
-                } else {
-                  controller?.pause();
-                  controller = null;
-                }
-                setState(() {});
-              }
-            });
-          });
+          }
+        });
+      });
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    videoPlayerController?.dispose();
     super.dispose();
   }
 
@@ -77,33 +82,43 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
         GestureDetector(
           onTap: () {
             if (widget.onTapFreeArea != null) {
-              widget.onTapFreeArea?.call();
-              if (controller != null) {
-                controller?.pause();
-                controller = null;
+              if (videoPlayerController?.value.isInitialized == true &&
+                  videoPlayerController!.value.isPlaying) {
+                videoPlayerController?.pause();
                 setState(() {});
               }
+
+              widget.onTapFreeArea?.call();
             }
           },
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Builder(
-              builder: (BuildContext context) {
-                if (controller == null) {
-                  return ExtendedImage.network(
+          child: Builder(
+            builder: (BuildContext context) {
+              if (videoPlayerController?.value.isInitialized != true ||
+                  videoPlayerController?.value.isPlaying != true) {
+                return AspectRatio(
+                  aspectRatio: widget.thumbnailHeightAspectRatio ??
+                      WhatsevrAspectRatio.landscape.ratio,
+                  child: ExtendedImage.network(
                     widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
                     width: double.infinity,
-                    height: 300,
                     fit: BoxFit.cover,
                     enableLoadState: false,
-                  );
-                }
-                return VideoPlayer(controller!);
-              },
-            ),
+                  ),
+                );
+              }
+              return AspectRatio(
+                  aspectRatio: videoPlayerController?.value.aspectRatio ??
+                      WhatsevrAspectRatio.landscape.ratio,
+                  child: CachedVideoPlayer(videoPlayerController!));
+            },
           ),
         ),
-        if (controller?.value.isPlaying != true)
+        if (videoPlayerController?.value.isInitialized == true &&
+            videoPlayerController?.value.isBuffering == true)
+          const CupertinoActivityIndicator(
+            radius: 15,
+          ),
+        if (videoPlayerController?.value.isPlaying != true)
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(
@@ -118,15 +133,15 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
             onPressed: () async {
               await initiateVideoPlayer();
               setState(() {
-                if (controller?.value.isPlaying == true) {
-                  controller?.pause();
+                if (videoPlayerController?.value.isPlaying == true) {
+                  videoPlayerController?.pause();
                 } else {
-                  controller?.play();
+                  videoPlayerController?.play();
                 }
               });
             },
           ),
-        if (controller?.value.isPlaying == true) ...<Widget>[
+        if (videoPlayerController?.value.isPlaying == true) ...<Widget>[
           Positioned(
             top: 2,
             right: 2,
@@ -135,15 +150,15 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                 IconButton(
                   onPressed: () {
                     setState(() {
-                      if (controller!.value.volume == 0) {
-                        controller!.setVolume(1);
+                      if (videoPlayerController!.value.volume == 0) {
+                        videoPlayerController!.setVolume(1);
                       } else {
-                        controller!.setVolume(0);
+                        videoPlayerController!.setVolume(0);
                       }
                     });
                   },
                   icon: Icon(
-                    controller?.value.volume == 0
+                    videoPlayerController?.value.volume == 0
                         ? Icons.volume_off
                         : Icons.volume_up,
                     color: Colors.white,
@@ -153,24 +168,6 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
               ],
             ),
           ),
-          if (widget.showFullScreenButton)
-            Positioned(
-              bottom: 2,
-              right: 2,
-              child: IconButton(
-                icon: const Icon(Icons.fullscreen),
-                color: Colors.white,
-                onPressed: () {
-                  AppNavigationService.newRoute(
-                    RoutesName.fullVideoPlayer,
-                    extras: FullVideoPlayerPageArguments(
-                      videoPlayerController: controller!,
-                      videoUrl: widget.videoUrl!,
-                    ),
-                  );
-                },
-              ),
-            ),
         ],
       ],
     );

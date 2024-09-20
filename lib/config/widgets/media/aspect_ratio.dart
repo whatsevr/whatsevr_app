@@ -11,15 +11,17 @@ enum WhatsevrAspectRatio {
   final String valueLabel;
   final String label;
 
-  const WhatsevrAspectRatio(
-      {required this.ratio, required this.valueLabel, required this.label,});
+  const WhatsevrAspectRatio({
+    required this.ratio,
+    required this.valueLabel,
+    required this.label,
+  });
 }
 
 List<WhatsevrAspectRatio> videoPostAspectRatio = <WhatsevrAspectRatio>[
-  WhatsevrAspectRatio.square,
+  WhatsevrAspectRatio.landscape,
   WhatsevrAspectRatio.widescreen16by9,
   WhatsevrAspectRatio.ultraWide21by9,
-  WhatsevrAspectRatio.landscape,
 ];
 
 List<WhatsevrAspectRatio> imagePostAspectRatio = <WhatsevrAspectRatio>[

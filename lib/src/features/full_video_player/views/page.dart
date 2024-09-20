@@ -1,10 +1,9 @@
-import 'package:chewie/chewie.dart';
+import 'package:cached_chewie_plus/cached_chewie_plus.dart';
+
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
-import 'package:video_player/video_player.dart';
 
 class FullVideoPlayerPageArguments {
-  final VideoPlayerController videoPlayerController;
+  final CachedVideoPlayerController videoPlayerController;
   final String videoUrl;
   const FullVideoPlayerPageArguments({
     required this.videoUrl,

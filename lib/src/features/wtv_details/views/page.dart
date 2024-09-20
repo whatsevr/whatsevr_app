@@ -32,7 +32,6 @@ class WtvDetailsPage extends StatelessWidget {
             videoUrl: pageArgument.videoUrl,
             thumbnail: pageArgument.thumbnail,
             loopVideo: false,
-            showFullScreenButton: true,
             autoPlay: true,
           ),
           // Video title
@@ -70,7 +69,7 @@ class WtvDetailsPage extends StatelessWidget {
                         shape: StadiumBorder(),
                         color: Colors.red,
                         textColor: Colors.white,
-                        child: Text('Subscribe'),
+                        child: Text('Follow'),
                       ),
                     ],
                   ),

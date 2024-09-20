@@ -37,6 +37,7 @@ class WtvVideoPostFrame extends StatelessWidget {
   final int? totalTags;
   final Function()? onTapTags;
   final Function()? onRequestOfVideoDetails;
+  final double? thumbnailHeightAspectRatio;
 
   const WtvVideoPostFrame({
     super.key,
@@ -54,6 +55,7 @@ class WtvVideoPostFrame extends StatelessWidget {
     this.totalTags,
     this.onTapTags,
     this.onRequestOfVideoDetails,
+    this.thumbnailHeightAspectRatio,
   });
 
   @override
@@ -70,10 +72,10 @@ class WtvVideoPostFrame extends StatelessWidget {
               WTVMiniPlayer(
                 videoUrl: videoUrl,
                 thumbnail: thumbnail,
+                thumbnailHeightAspectRatio: thumbnailHeightAspectRatio,
                 onTapFreeArea: () {
                   onRequestOfVideoDetails?.call();
                 },
-                showFullScreenButton: false,
                 loopVideo: true,
               ),
               if (totalTags != null && totalTags! > 0)
