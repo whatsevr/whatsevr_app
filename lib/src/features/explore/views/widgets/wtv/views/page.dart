@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
@@ -11,6 +12,8 @@ import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../../../../wtv_details/views/page.dart';
 
 class ExplorePageWtvPage extends StatelessWidget {
   const ExplorePageWtvPage({super.key, this.scrollController});
@@ -107,7 +110,12 @@ class ExplorePageWtvPage extends StatelessWidget {
                   shares: data[index].totalShares,
                   views: data[index].totalViews,
                   onRequestOfVideoDetails: () {
-                    AppNavigationService.newRoute(RoutesName.wtvDetails);
+                    AppNavigationService.newRoute(RoutesName.wtvDetails,
+                        extras: WtvDetailsPageArgument(
+                          videoPostUid: data[index].uid,
+                          thumbnail: data[index].thumbnail,
+                          videoUrl: data[index].videoUrl,
+                        ));
                   },
                 );
               },

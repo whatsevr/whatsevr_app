@@ -17,7 +17,7 @@ import 'package:iconify_flutter/icons/system_uicons.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_player.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
@@ -67,7 +67,7 @@ class WtvVideoPostFrame extends StatelessWidget {
         children: <Widget>[
           Stack(
             children: <Widget>[
-              WTVFeedPlayer(
+              WTVMiniPlayer(
                 videoUrl: videoUrl,
                 thumbnail: thumbnail,
                 onTapFreeArea: () {

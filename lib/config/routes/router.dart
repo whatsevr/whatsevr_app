@@ -91,14 +91,7 @@ class AppNavigationService {
           return const SplashPage();
         },
         routes: <RouteBase>[
-          if (kDebugMode) ...getDevRoutes(),
-          GoRoute(
-            name: RoutesName.takerDebug,
-            path: RoutesName.takerDebug,
-            builder: (BuildContext context, GoRouterState state) {
-              return TalkerScreen(talker: TalkerService.instance);
-            },
-          ),
+          ...getDevRoutes(),
           GoRoute(
             name: RoutesName.dashboard,
             path: RoutesName.dashboard,
@@ -110,9 +103,10 @@ class AppNavigationService {
             name: RoutesName.fullVideoPlayer,
             path: RoutesName.fullVideoPlayer,
             builder: (BuildContext context, GoRouterState state) {
-              List<String> videoSrcs = state.extra as List<String>;
+              FullVideoPlayerPageArguments argument =
+                  state.extra as FullVideoPlayerPageArguments;
               return FullVideoPlayerPage(
-                videoSrcs: videoSrcs,
+                pageArguments: argument,
               );
             },
           ),
@@ -156,7 +150,11 @@ class AppNavigationService {
             name: RoutesName.wtvDetails,
             path: RoutesName.wtvDetails,
             builder: (BuildContext context, GoRouterState state) {
-              return const WtvDetailsPage();
+              WtvDetailsPageArgument pageArgument =
+                  state.extra as WtvDetailsPageArgument;
+              return WtvDetailsPage(
+                pageArgument: pageArgument,
+              );
             },
           ),
           GoRoute(

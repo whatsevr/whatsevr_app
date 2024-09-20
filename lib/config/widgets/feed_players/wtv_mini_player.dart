@@ -6,14 +6,19 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 
-class WTVFeedPlayer extends StatefulWidget {
+import '../../../src/features/full_video_player/views/page.dart';
+
+class WTVMiniPlayer extends StatefulWidget {
+  final bool autoPlay;
+
   final String? videoUrl;
   final String? thumbnail;
   final Function()? onTapFreeArea;
   final bool? loopVideo;
   final bool showFullScreenButton;
-  const WTVFeedPlayer({
+  const WTVMiniPlayer({
     super.key,
+    this.autoPlay = false,
     required this.videoUrl,
     this.thumbnail,
     this.onTapFreeArea,
@@ -22,14 +27,17 @@ class WTVFeedPlayer extends StatefulWidget {
   });
 
   @override
-  State<WTVFeedPlayer> createState() => _WTVFeedPlayerState();
+  State<WTVMiniPlayer> createState() => _WTVMiniPlayerState();
 }
 
-class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
+class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   VideoPlayerController? controller;
   @override
   void initState() {
     super.initState();
+    if (widget.autoPlay) {
+      initiateVideoPlayer();
+    }
   }
 
   Future<void> initiateVideoPlayer() async {
@@ -68,11 +76,13 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            widget.onTapFreeArea?.call();
-            if (controller != null) {
-              controller?.pause();
-              controller = null;
-              setState(() {});
+            if (widget.onTapFreeArea != null) {
+              widget.onTapFreeArea?.call();
+              if (controller != null) {
+                controller?.pause();
+                controller = null;
+                setState(() {});
+              }
             }
           },
           child: AspectRatio(
@@ -153,7 +163,10 @@ class _WTVFeedPlayerState extends State<WTVFeedPlayer> {
                 onPressed: () {
                   AppNavigationService.newRoute(
                     RoutesName.fullVideoPlayer,
-                    extras: <String>[widget.videoUrl as String],
+                    extras: FullVideoPlayerPageArguments(
+                      videoPlayerController: controller!,
+                      videoUrl: widget.videoUrl!,
+                    ),
                   );
                 },
               ),

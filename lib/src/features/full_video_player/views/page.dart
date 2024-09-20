@@ -3,11 +3,21 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:video_player/video_player.dart';
 
+class FullVideoPlayerPageArguments {
+  final VideoPlayerController videoPlayerController;
+  final String videoUrl;
+  const FullVideoPlayerPageArguments({
+    required this.videoUrl,
+    required this.videoPlayerController,
+  });
+}
+
 class FullVideoPlayerPage extends StatefulWidget {
-  final List<String> videoSrcs;
+  final FullVideoPlayerPageArguments pageArguments;
+
   const FullVideoPlayerPage({
     super.key,
-    required this.videoSrcs,
+    required this.pageArguments,
   });
 
   @override
@@ -17,8 +27,6 @@ class FullVideoPlayerPage extends StatefulWidget {
 }
 
 class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
-  late VideoPlayerController _videoPlayerController1;
-  late VideoPlayerController _videoPlayerController2;
   ChewieController? _chewieController;
   int? bufferDelay;
 
@@ -30,18 +38,11 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
 
   @override
   void dispose() {
-    _videoPlayerController1.dispose();
-    _videoPlayerController2.dispose();
     _chewieController?.dispose();
     super.dispose();
   }
 
   Future<void> initializePlayer() async {
-    _videoPlayerController1 =
-        VideoPlayerController.networkUrl(Uri.parse(widget.videoSrcs[currPlayIndex]));
-    _videoPlayerController2 =
-        VideoPlayerController.networkUrl(Uri.parse(widget.videoSrcs[currPlayIndex]));
-    await Future.wait(<Future<void>>[_videoPlayerController1.initialize(), _videoPlayerController2.initialize()]);
     _createChewieController();
     setState(() {});
   }
@@ -51,17 +52,26 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
 
     _chewieController = ChewieController(
       useRootNavigator: true,
-      videoPlayerController: _videoPlayerController1,
+      videoPlayerController: widget.pageArguments.videoPlayerController,
       autoPlay: true,
       looping: false,
-      progressIndicatorDelay: bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
+      showControlsOnInitialize: true,
+      allowFullScreen: true,
+      allowMuting: true,
+      allowPlaybackSpeedChanging: true,
+      zoomAndPan: true,
+      showOptions: true,
+      draggableProgressBar: true,
+      startAt: const Duration(seconds: 0),
+      progressIndicatorDelay:
+          bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
 
       additionalOptions: (BuildContext context) {
         return <OptionItem>[
           OptionItem(
-            onTap: toggleVideo,
+            onTap: () {},
             iconData: Icons.live_tv_sharp,
-            title: 'Toggle Video Src',
+            title: 'Option 1',
           ),
         ];
       },
@@ -96,17 +106,6 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
     );
   }
 
-  int currPlayIndex = 0;
-
-  Future<void> toggleVideo() async {
-    await _videoPlayerController1.pause();
-    currPlayIndex += 1;
-    if (currPlayIndex >= widget.videoSrcs.length) {
-      currPlayIndex = 0;
-    }
-    await initializePlayer();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +115,8 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
           Expanded(
             child: Center(
               child: _chewieController != null &&
-                      _chewieController!.videoPlayerController.value.isInitialized
+                      _chewieController!
+                          .videoPlayerController.value.isInitialized
                   ? Chewie(
                       controller: _chewieController!,
                     )
