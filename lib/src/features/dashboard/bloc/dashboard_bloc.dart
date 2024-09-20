@@ -11,13 +11,14 @@ part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-  DashboardBloc()
-      : super(const DashboardState(currentDashboardView: ExplorePage())) {
+  DashboardBloc() : super(DashboardState(currentDashboardView: ExplorePage())) {
     on<DashboardInitialEvent>(_onInitialEvent);
     on<TabChanged>(tabChanged);
   }
   FutureOr<void> _onInitialEvent(
-      DashboardInitialEvent event, Emitter<DashboardState> emit,) {
+    DashboardInitialEvent event,
+    Emitter<DashboardState> emit,
+  ) {
     PermissionService.requestAllPermissions();
   }
 

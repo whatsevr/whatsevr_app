@@ -4,12 +4,14 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
-  const ExplorePageMemoriesPage({super.key});
+  final ScrollController? scrollController;
+  const ExplorePageMemoriesPage({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return PadHorizontal(
       child: GridView.builder(
+        controller: scrollController,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 5.0,

@@ -11,26 +11,33 @@ import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
 import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 
 class ExplorePageMediaPage extends StatelessWidget {
-  const ExplorePageMediaPage({super.key});
-
+  const ExplorePageMediaPage({super.key, this.scrollController});
+  final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
-    return const WhatsevrTabBarWithViews(
+    return WhatsevrTabBarWithViews(
       tabViews: [
-        ('Explore', _ExploreView()),
-        ('Flicks', _FlicksView()),
-        ('Posts', _PostsView()),
+        ('Explore', _ExploreView(scrollController: scrollController)),
+        ('Flicks', _FlicksView(scrollController: scrollController)),
+        (
+          'Posts',
+          _PostsView(
+            scrollController: scrollController,
+          )
+        ),
       ],
     );
   }
 }
 
 class _PostsView extends StatelessWidget {
-  const _PostsView();
+  final ScrollController? scrollController;
+  const _PostsView({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      controller: scrollController,
       shrinkWrap: true,
       itemCount: 20,
       separatorBuilder: (BuildContext context, int index) => const Gap(8),
@@ -42,11 +49,13 @@ class _PostsView extends StatelessWidget {
 }
 
 class _FlicksView extends StatelessWidget {
-  const _FlicksView();
+  final ScrollController? scrollController;
+  const _FlicksView({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+      controller: scrollController,
       shrinkWrap: true,
       itemCount: 20,
       separatorBuilder: (BuildContext context, int index) => const Gap(8),
@@ -58,12 +67,14 @@ class _FlicksView extends StatelessWidget {
 }
 
 class _ExploreView extends StatelessWidget {
-  const _ExploreView();
+  final ScrollController? scrollController;
+  const _ExploreView({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return PadHorizontal(
       child: GridView.custom(
+        controller: scrollController,
         gridDelegate: SliverQuiltedGridDelegate(
           crossAxisCount: 3,
           mainAxisSpacing: 2,

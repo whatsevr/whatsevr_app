@@ -20,13 +20,97 @@ import 'package:whatsevr_app/src/features/home/views/page.dart';
 
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
-class DashboardPageBottomNavigationBar extends StatelessWidget {
+class DashboardPageBottomNavigationBar extends StatefulWidget {
   const DashboardPageBottomNavigationBar({
     super.key,
   });
 
   @override
+  State<DashboardPageBottomNavigationBar> createState() =>
+      _DashboardPageBottomNavigationBarState();
+}
+
+class _DashboardPageBottomNavigationBarState
+    extends State<DashboardPageBottomNavigationBar> {
+  int selectedIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
+    List<(Widget, VoidCallback)> items = [
+      (
+        Iconify(MaterialSymbols.explore, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                TabChanged(
+                  newView: ExplorePage(),
+                ),
+              );
+        }
+      ),
+      (
+        Iconify(GameIcons.nest_eggs, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                const TabChanged(
+                  newView: HomePage(),
+                ),
+              );
+        }
+      ),
+      (
+        Iconify(Ri.heart_add_fill, size: 30),
+        () {
+          showContentUploadBottomSheet(
+            context,
+            postCreatorType: EnumPostCreatorType.ACCOUNT,
+          );
+        }
+      ),
+      (
+        Iconify(Pepicons.play_print, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                const TabChanged(
+                  newView: FlicksPage(),
+                ),
+              );
+        }
+      ),
+      (
+        Iconify(Ph.chat_circle_text_fill, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                const TabChanged(
+                  newView: ChatsPage(),
+                ),
+              );
+        }
+      ),
+      (
+        Iconify(Ic.twotone_notifications_none, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                const TabChanged(
+                  newView: NotificationsPage(),
+                ),
+              );
+        }
+      ),
+      (
+        Iconify(Ic.sharp_account_circle, size: 30),
+        () {
+          context.read<DashboardBloc>().add(
+                TabChanged(
+                  newView: AccountPage(
+                    pageArgument: AccountPageArgument(
+                      isEditMode: true,
+                    ),
+                  ),
+                ),
+              );
+        }
+      ),
+    ];
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -42,10 +126,29 @@ class DashboardPageBottomNavigationBar extends StatelessWidget {
       child: Builder(
         builder: (BuildContext context) {
           List<Widget> children = <Widget>[
-            for ((Widget, VoidCallback) itm in _navigationItems(context))
-              IconButton(
-                icon: itm.$1,
-                onPressed: itm.$2,
+            for ((Widget, VoidCallback) itm in items)
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  IconButton(
+                    icon: itm.$1,
+                    onPressed: () {
+                      itm.$2();
+                      setState(() {
+                        selectedIndex = items.indexOf(itm);
+                      });
+                    },
+                  ),
+                  if (selectedIndex == items.indexOf(itm))
+                    Positioned(
+                      bottom: 0,
+                      child: Icon(
+                        Icons.circle,
+                        color: Colors.black,
+                        size: 8,
+                      ),
+                    ),
+                ],
               ),
           ];
           return SizedBox(
@@ -65,101 +168,4 @@ class DashboardPageBottomNavigationBar extends StatelessWidget {
       ),
     );
   }
-}
-
-List<(Widget, VoidCallback)> _navigationItems(BuildContext context) {
-  return <(Widget, VoidCallback)>[
-    (
-      Iconify(
-        MaterialSymbols.explore,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              const TabChanged(
-                newView: ExplorePage(),
-              ),
-            );
-      },
-    ),
-    (
-      Iconify(
-        GameIcons.nest_eggs,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              const TabChanged(
-                newView: HomePage(),
-              ),
-            );
-      },
-    ),
-    (
-      Iconify(
-        Ri.heart_add_fill,
-        size: 30,
-      ),
-      () {
-        showContentUploadBottomSheet(context,
-            postCreatorType: EnumPostCreatorType.ACCOUNT,);
-      },
-    ),
-    (
-      Iconify(
-        Pepicons.play_print,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              const TabChanged(
-                newView: FlicksPage(),
-              ),
-            );
-      },
-    ),
-    (
-      Iconify(
-        Ph.chat_circle_text_fill,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              const TabChanged(
-                newView: ChatsPage(),
-              ),
-            );
-      },
-    ),
-    (
-      Iconify(
-        Ic.twotone_notifications_none,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              const TabChanged(
-                newView: NotificationsPage(),
-              ),
-            );
-      },
-    ),
-    (
-      Iconify(
-        Ic.sharp_account_circle,
-        size: 30,
-      ),
-      () {
-        context.read<DashboardBloc>().add(
-              TabChanged(
-                newView: AccountPage(
-                  pageArgument: AccountPageArgument(
-                    isEditMode: true,
-                  ),
-                ),
-              ),
-            );
-      },
-    ),
-  ];
 }

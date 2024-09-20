@@ -13,8 +13,8 @@ import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ExplorePageWtvPage extends StatelessWidget {
-  const ExplorePageWtvPage({super.key});
-
+  const ExplorePageWtvPage({super.key, this.scrollController});
+  final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
     return BlocSelector<ExploreBloc, ExploreState, List<RecommendedVideo>?>(
@@ -78,6 +78,7 @@ class ExplorePageWtvPage extends StatelessWidget {
               ),
             ),
             child: ListView.separated(
+              controller: scrollController,
               shrinkWrap: data == null || data.isEmpty,
               itemCount: data?.length ?? 3,
               separatorBuilder: (BuildContext context, int index) =>

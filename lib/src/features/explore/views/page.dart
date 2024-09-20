@@ -9,14 +9,15 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class ExplorePage extends StatelessWidget {
-  const ExplorePage({super.key});
-
+  ExplorePage({super.key});
+  final ScrollController searchBoxHideController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         PadHorizontal(
           child: WhatsevrAnimatedSearchField(
+            hideOnScrollController: searchBoxHideController,
             hintTexts: const <String>[
               'Search for Wtv',
               'Search for Media',
@@ -25,14 +26,29 @@ class ExplorePage extends StatelessWidget {
             ],
           ),
         ),
-        const Expanded(
+        Expanded(
           child: WhatsevrTabBarWithViews(
             isTabsScrollable: true,
             tabViews: [
-              ('Wtv', ExplorePageWtvPage()),
-              ('Media', ExplorePageMediaPage()),
+              (
+                'Wtv',
+                ExplorePageWtvPage(
+                  scrollController: searchBoxHideController,
+                )
+              ),
+              (
+                'Media',
+                ExplorePageMediaPage(
+                  scrollController: searchBoxHideController,
+                )
+              ),
               ('Offers', Text('Offers')),
-              ('Memories', ExplorePageMemoriesPage()),
+              (
+                'Memories',
+                ExplorePageMemoriesPage(
+                  scrollController: searchBoxHideController,
+                )
+              ),
             ],
           ),
         ),
