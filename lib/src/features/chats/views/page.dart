@@ -27,17 +27,11 @@ class ChatsPage extends StatelessWidget {
         ),
         const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: <String>[
-              'Chats',
-              'Communities',
-              'Contacts',
-              'Requests',
-            ],
-            tabViews: <Widget>[
-              ChatsPageChatsView(),
-              ChatsPageGroupsView(),
-              ChatsPageCallsView(),
-              ChatsPageRequestsView(),
+            tabViews: [
+              ('Chats', ChatsPageChatsView()),
+              ('Communities', ChatsPageGroupsView()),
+              ('Contacts', ChatsPageCallsView()),
+              ('Requests', ChatsPageRequestsView()),
             ],
           ),
         ),

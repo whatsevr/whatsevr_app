@@ -27,17 +27,12 @@ class ExplorePage extends StatelessWidget {
         ),
         const Expanded(
           child: WhatsevrTabBarWithViews(
-            tabs: <String>[
-              'Wtv',
-              'Media',
-              'Offers',
-              'Memories',
-            ],
-            tabViews: <Widget>[
-              ExplorePageWtvPage(),
-              ExplorePageMediaPage(),
-              Text('Offers'),
-              ExplorePageMemoriesPage(),
+            isTabsScrollable: true,
+            tabViews: [
+              ('Wtv', ExplorePageWtvPage()),
+              ('Media', ExplorePageMediaPage()),
+              ('Offers', Text('Offers')),
+              ('Memories', ExplorePageMemoriesPage()),
             ],
           ),
         ),

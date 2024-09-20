@@ -10,13 +10,9 @@ class HomePageActivitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const WhatsevrTabBarWithViews(
-      tabs: <String>[
-        'History',
-        'Saved',
-      ],
-      tabViews: <Widget>[
-        Text('History'),
-        Text('Saved'),
+      tabViews: [
+        ('History', Text('History')),
+        ('Saved', Text('Saved')),
       ],
     );
   }

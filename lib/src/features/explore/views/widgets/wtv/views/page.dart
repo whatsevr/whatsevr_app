@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
@@ -91,12 +93,20 @@ class ExplorePageWtvPage extends StatelessWidget {
                   timeAgo: timeago.format(
                     data![index].createdAt!,
                   ),
-                  taggedUserUids: data[index].taggedUserUids,
-                  onTapTaggedUser: () {
+                  totalTags: (data[index].taggedUserUids?.length ?? 0) +
+                      (data[index].taggedCommunityUids?.length ?? 0),
+                  onTapTags: () {
                     showTaggedUsersBottomSheet(
                       context,
                       taggedUserUids: data[index].taggedUserUids,
                     );
+                  },
+                  comments: data[index].totalComments,
+                  likes: data[index].totalLikes,
+                  shares: data[index].totalShares,
+                  views: data[index].totalViews,
+                  onRequestOfVideoDetails: () {
+                    AppNavigationService.newRoute(RoutesName.wtvDetails);
                   },
                 );
               },

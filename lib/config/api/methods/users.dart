@@ -20,9 +20,11 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get('/v1/user-details',
-          queryParameters: <String, dynamic>{'user_uid': userUid},);
-      if (response.statusCode == HttpStatus.ok) {
+      Response response = await ApiClient.client.get(
+        '/v1/user-details',
+        queryParameters: <String, dynamic>{'user_uid': userUid},
+      );
+      if (response.data != null) {
         return UserDetailsResponse.fromMap(response.data);
       }
     } catch (e) {
@@ -39,7 +41,7 @@ class UsersApi {
         '/v1/user-profile-details',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
-      if (response.statusCode == HttpStatus.ok) {
+      if (response.data != null) {
         return ProfileDetailsResponse.fromMap(response.data);
       }
     } catch (e) {
@@ -56,7 +58,7 @@ class UsersApi {
         '/v1/multiple-user-details',
         queryParameters: <String, dynamic>{'user_uids': jsonEncode(userUids)},
       );
-      if (response.statusCode == HttpStatus.ok) {
+      if (response.data != null) {
         return MultipleUserDetailsResponse.fromMap(response.data);
       }
     } catch (e) {

@@ -4,12 +4,11 @@ import 'package:gap/gap.dart';
 class WhatsevrTabBarWithViews extends StatefulWidget {
   final bool? shrinkViews;
   final bool? isTabsScrollable;
-  final List<String> tabs;
-  final List<Widget> tabViews;
+
+  final List<(String tabName, Widget view)> tabViews;
   final TabAlignment? tabAlignment;
   const WhatsevrTabBarWithViews({
     super.key,
-    required this.tabs,
     this.shrinkViews,
     required this.tabViews,
     this.isTabsScrollable,
@@ -29,13 +28,13 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: widget.tabs.length,
+      length: widget.tabViews.length,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           WhatsevrTabBar(
             onTabChange: onTabChange,
-            tabs: widget.tabs,
+            tabs: widget.tabViews.map((e) => e.$1).toList(),
             isScrollable: widget.isTabsScrollable,
             tabAlignment: widget.tabAlignment,
           ),
@@ -43,12 +42,13 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
           Builder(
             builder: (BuildContext context) {
               if (widget.shrinkViews == true) {
-                return widget.tabViews[DefaultTabController.of(context).index];
+                return widget
+                    .tabViews[DefaultTabController.of(context).index].$2;
               }
               return Expanded(
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
-                  children: widget.tabViews,
+                  children: widget.tabViews.map((e) => e.$2).toList(),
                 ),
               );
             },

@@ -15,15 +15,13 @@ class ExplorePageMediaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const WhatsevrTabBarWithViews(tabs: <String>[
-      'Explore',
-      'Flicks',
-      'Posts',
-    ], tabViews: <Widget>[
-      _ExploreView(),
-      _FlicksView(),
-      _PostsView(),
-    ],);
+    return const WhatsevrTabBarWithViews(
+      tabViews: [
+        ('Explore', _ExploreView()),
+        ('Flicks', _FlicksView()),
+        ('Posts', _PostsView()),
+      ],
+    );
   }
 }
 

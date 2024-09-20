@@ -151,19 +151,12 @@ class AccountSearchPage extends StatelessWidget {
             child: WhatsevrTabBarWithViews(
               tabAlignment: TabAlignment.start,
               isTabsScrollable: true,
-              tabs: <String>[
-                'Recents',
-                'Accounts',
-                'Portfolio',
-                'Community',
-                'Offers',
-              ],
-              tabViews: <Widget>[
-                _RecentView(),
-                _AccountsView(),
-                _PortfolioView(),
-                _CommunityView(),
-                _OffersView(),
+              tabViews: [
+                ('Recents', const _RecentView()),
+                ('Accounts', const _AccountsView()),
+                ('Portfolio', const _PortfolioView()),
+                ('Community', const _CommunityView()),
+                ('Offers', const _OffersView()),
               ],
             ),
           ),
@@ -411,8 +404,10 @@ class _PortfolioView extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return InkWell(
           onTap: () {
-            AppNavigationService.newRoute(RoutesName.account,
-                extras: AccountPageArgument(isEditMode: false),);
+            AppNavigationService.newRoute(
+              RoutesName.account,
+              extras: AccountPageArgument(isEditMode: false),
+            );
           },
           child: Column(
             children: <Widget>[

@@ -2,12 +2,18 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/charm.dart';
 import 'package:iconify_flutter/icons/ion.dart';
+import 'package:iconify_flutter/icons/la.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
+import 'package:iconify_flutter/icons/material_symbols.dart';
+import 'package:iconify_flutter/icons/mingcute.dart';
+import 'package:iconify_flutter/icons/octicon.dart';
 
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:iconify_flutter/icons/system_uicons.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
@@ -20,14 +26,17 @@ class WtvVideoPostFrame extends StatelessWidget {
   final String? title;
   final String? description;
   final String? videoUrl;
-  final String? views;
+  final int? views;
   final String? timeAgo;
   final String? avatarUrl;
-  final String? likes;
+  final int? likes;
+  final int? shares;
+  final int? comments;
   final String? username;
   final String? thumbnail;
-  final List<String>? taggedUserUids;
-  final Function()? onTapTaggedUser;
+  final int? totalTags;
+  final Function()? onTapTags;
+  final Function()? onRequestOfVideoDetails;
 
   const WtvVideoPostFrame({
     super.key,
@@ -38,10 +47,13 @@ class WtvVideoPostFrame extends StatelessWidget {
     this.timeAgo,
     this.avatarUrl,
     this.likes,
+    this.shares,
+    this.comments,
     this.username,
     this.thumbnail,
-    this.taggedUserUids,
-    this.onTapTaggedUser,
+    this.totalTags,
+    this.onTapTags,
+    this.onRequestOfVideoDetails,
   });
 
   @override
@@ -49,7 +61,7 @@ class WtvVideoPostFrame extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        AppNavigationService.newRoute(RoutesName.wtvDetails);
+        onRequestOfVideoDetails?.call();
       },
       child: Column(
         children: <Widget>[
@@ -59,20 +71,19 @@ class WtvVideoPostFrame extends StatelessWidget {
                 videoUrl: videoUrl,
                 thumbnail: thumbnail,
                 onTapFreeArea: () {
-                  AppNavigationService.newRoute(RoutesName.wtvDetails);
+                  onRequestOfVideoDetails?.call();
                 },
                 showFullScreenButton: false,
                 loopVideo: true,
               ),
-              if (taggedUserUids != null && taggedUserUids!.isNotEmpty)
+              if (totalTags != null && totalTags! > 0)
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: GestureDetector(
                     onTap: () {
-                      if (taggedUserUids != null &&
-                          taggedUserUids!.isNotEmpty) {
-                        onTapTaggedUser?.call();
+                      if (totalTags != null && totalTags! > 0) {
+                        onTapTags?.call();
                       }
                     },
                     child: Container(
@@ -90,7 +101,9 @@ class WtvVideoPostFrame extends StatelessWidget {
                           ),
                           const Gap(4),
                           Text(
-                            '${taggedUserUids!.length}',
+                            totalTags == null || totalTags == 0
+                                ? ''
+                                : totalTags.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -123,8 +136,30 @@ class WtvVideoPostFrame extends StatelessWidget {
                             '$title',
                           ),
                           Gap(4),
-                          Text(
-                            '$username  • $timeAgo',
+                          Row(
+                            children: [
+                              Text(
+                                '$username',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                ' • $timeAgo',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              if (views != null && views! > 0)
+                                Text(
+                                  ' • $views views',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                            ],
                           ),
                         ],
                       ),
@@ -135,23 +170,27 @@ class WtvVideoPostFrame extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     const AnimatedLikeIconButton(),
-                    const Text('2.5M'),
+                    Text(likes == null || likes == 0 ? '' : likes.toString()),
                     IconButton(
-                      icon: Iconify(Majesticons.comment_2_line),
-                        onPressed: () {},
+                      icon: Iconify(Octicon.comment_24),
+                      onPressed: () {},
                     ),
-                    const Text('2.5M'),
+                    Text(comments == null || comments == 0
+                        ? ''
+                        : comments.toString()),
                     IconButton(
-                      icon: const Iconify(Ri.share_forward_line),
-                        onPressed: () {},
+                      icon: const Iconify(La.share),
+                      onPressed: () {},
                     ),
+                    Text(
+                        shares == null || shares == 0 ? '' : shares.toString()),
                     const Spacer(),
                     IconButton(
-                      icon: const Iconify(Ion.bookmark),
+                      icon: Iconify(Ph.bookmark_simple_thin),
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: const Iconify(Charm.menu_kebab),
+                      icon: const Iconify(SystemUicons.menu_vertical),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
