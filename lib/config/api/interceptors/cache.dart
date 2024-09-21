@@ -5,19 +5,21 @@ import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_stor
 
 class ApiCacheInterceptor extends DioCacheInterceptor {
   ApiCacheInterceptor({
-    required String cacheDirectoryPath,
+    required String? cacheDirectoryPath,
+    required int? maxMinuteOnDevice, // 7 days
   }) : super(
-            options: CacheOptions(
-          store: HiveCacheStore(cacheDirectoryPath),
-          policy: CachePolicy.request,
-          hitCacheOnErrorExcept: <int>[
-            HttpStatus.unauthorized,
-            HttpStatus.forbidden,
-          ],
-          maxStale: const Duration(minutes: 3),
-          priority: CachePriority.normal,
-          cipher: null,
-          keyBuilder: CacheOptions.defaultCacheKeyBuilder,
-          allowPostMethod: false,
-        ),);
+          options: CacheOptions(
+            store: HiveCacheStore(cacheDirectoryPath),
+            policy: CachePolicy.request,
+            hitCacheOnErrorExcept: <int>[
+              HttpStatus.unauthorized,
+              HttpStatus.forbidden,
+            ],
+            maxStale: Duration(minutes: maxMinuteOnDevice ?? 1),
+            priority: CachePriority.normal,
+            cipher: null,
+            keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+            allowPostMethod: false,
+          ),
+        );
 }

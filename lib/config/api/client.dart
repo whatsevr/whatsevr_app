@@ -14,6 +14,7 @@ class ApiClient {
   // static const String BASE_URL = "https://www.whatsevr.com"; cannot use this for now for follow redirect 300+ code use
   static const String BASE_URL = 'https://whatsevr-server-dev.onrender.com/';
   static late Dio client;
+  static Directory? dioCacheDirectory;
   static Future<void> init() async {
     client = Dio(
       BaseOptions(
@@ -30,12 +31,33 @@ class ApiClient {
         },
       ),
     );
-    Directory deviceTemporaryDirectory = await getTemporaryDirectory();
+    dioCacheDirectory = await getTemporaryDirectory();
     client.interceptors.addAll(<Interceptor>[
       ApiRetryInterceptor(dio: client),
-      ApiCacheInterceptor(cacheDirectoryPath: deviceTemporaryDirectory.path),
+      ApiCacheInterceptor(
+          cacheDirectoryPath: dioCacheDirectory?.path,
+          maxMinuteOnDevice: 60 * 24 * 7),
       TalkerService.dioLogger,
     ]);
+  }
+
+  static Dio generalPurposeClient([int? cacheMaxAgeInMin]) {
+    Dio dio = Dio(
+      BaseOptions(
+        connectTimeout: Duration(seconds: 30),
+        receiveTimeout: Duration(seconds: 30),
+        sendTimeout: Duration(seconds: 30),
+      ),
+    );
+    dio.interceptors.addAll(<Interceptor>[
+      ApiRetryInterceptor(dio: dio),
+      ApiCacheInterceptor(
+        cacheDirectoryPath: dioCacheDirectory?.path,
+        maxMinuteOnDevice: cacheMaxAgeInMin,
+      ),
+      TalkerService.dioLogger,
+    ]);
+    return dio;
   }
 
   static void apiMethodException(Object e) {

@@ -48,8 +48,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
           if (videoPlayerController?.value.position ==
               videoPlayerController?.value.duration) {
             if (widget.loopVideo == true) {
-              // await Future<void>.delayed(const Duration(seconds: 2));
-              // videoPlayerController?.seekTo(Duration.zero);
+              videoPlayerController?.seekTo(Duration.zero);
               videoPlayerController?.play();
             } else {
               videoPlayerController?.pause();

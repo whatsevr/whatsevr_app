@@ -1,5 +1,6 @@
 import 'package:cached_chewie_plus/cached_chewie_plus.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -37,11 +38,9 @@ class _WtvExtendedVideoPlayerViewState
     videoPlayerController = CachedVideoPlayerController.networkUrl(
       Uri.parse('${widget.videoUrl}'),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
-    )..initialize().then((_) {
-        if (mounted) {
-          _createChewieController();
-        }
-      });
+    );
+    await videoPlayerController?.initialize();
+    _createChewieController();
   }
 
   @override
@@ -116,11 +115,19 @@ class _WtvExtendedVideoPlayerViewState
           )
         : AspectRatio(
             aspectRatio: WhatsevrAspectRatio.landscape.ratio,
-            child: ExtendedImage.network(
-              widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
-              width: double.infinity,
-              fit: BoxFit.cover,
-              enableLoadState: false,
+            child: Stack(
+              children: [
+                ExtendedImage.network(
+                  widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                  enableLoadState: false,
+                ),
+                if (_chewieController
+                        ?.videoPlayerController.value.isBuffering ==
+                    true)
+                  CupertinoActivityIndicator(),
+              ],
             ),
           );
   }
