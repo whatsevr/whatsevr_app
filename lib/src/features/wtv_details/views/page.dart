@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:gap/gap.dart';
-import 'package:video_player/video_player.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
+
 import 'package:whatsevr_app/src/features/wtv_details/views/widgets/related_videos.dart';
 
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+
+import '../../../../config/widgets/feed_players/full_video_player.dart';
+import '../../full_video_player/views/page.dart';
 
 class WtvDetailsPageArgument {
   final String? videoPostUid;
@@ -27,13 +30,17 @@ class WtvDetailsPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          // Video player
-          WTVMiniPlayer(
+          FullVideoPlayer(
             videoUrl: pageArgument.videoUrl,
             thumbnail: pageArgument.thumbnail,
-            loopVideo: false,
-            autoPlay: true,
           ),
+          if (false)
+            WTVMiniPlayer(
+              videoUrl: pageArgument.videoUrl,
+              thumbnail: pageArgument.thumbnail,
+              loopVideo: false,
+              autoPlay: true,
+            ),
           // Video title
           Expanded(
             child: ListView(

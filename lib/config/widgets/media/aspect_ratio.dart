@@ -49,3 +49,8 @@ List<WhatsevrAspectRatio> coverMediaAspectRatio = <WhatsevrAspectRatio>[
   WhatsevrAspectRatio.ultraWide21by9,
   WhatsevrAspectRatio.landscape,
 ];
+
+extension AspectRatioExtension on double? {
+  bool get isAspectRatioLandscape => this != null && this! > 1;
+  bool get isAspectRatioPortrait => this != null && this! < 1;
+}

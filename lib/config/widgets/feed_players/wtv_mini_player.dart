@@ -1,15 +1,8 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
-
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-
-import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-
-import '../../../src/features/full_video_player/views/page.dart';
 
 class WTVMiniPlayer extends StatefulWidget {
   final bool autoPlay;
@@ -54,9 +47,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
         videoPlayerController?.addListener(() async {
           if (videoPlayerController?.value.position ==
               videoPlayerController?.value.duration) {
-            // await Future<void>.delayed(const Duration(seconds: 1));
-
             if (widget.loopVideo == true) {
+              await Future<void>.delayed(const Duration(seconds: 2));
               videoPlayerController?.seekTo(Duration.zero);
               videoPlayerController?.play();
             } else {
@@ -113,11 +105,6 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
             },
           ),
         ),
-        if (videoPlayerController?.value.isInitialized == true &&
-            videoPlayerController?.value.isBuffering == true)
-          const CupertinoActivityIndicator(
-            radius: 15,
-          ),
         if (videoPlayerController?.value.isPlaying != true)
           IconButton(
             padding: const EdgeInsets.all(0.0),
