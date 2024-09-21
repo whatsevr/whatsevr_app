@@ -6,10 +6,10 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../media/aspect_ratio.dart';
 
-class FullVideoPlayer extends StatefulWidget {
+class WtvExtendedVideoPlayerView extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
-  const FullVideoPlayer({
+  const WtvExtendedVideoPlayerView({
     super.key,
     this.videoUrl,
     this.thumbnail,
@@ -17,11 +17,12 @@ class FullVideoPlayer extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _FullVideoPlayerState();
+    return _WtvExtendedVideoPlayerViewState();
   }
 }
 
-class _FullVideoPlayerState extends State<FullVideoPlayer> {
+class _WtvExtendedVideoPlayerViewState
+    extends State<WtvExtendedVideoPlayerView> {
   CachedVideoPlayerController? videoPlayerController;
   ChewieController? _chewieController;
   int? bufferDelay;
@@ -59,7 +60,7 @@ class _FullVideoPlayerState extends State<FullVideoPlayer> {
       videoPlayerController: videoPlayerController!,
       autoPlay: true,
       looping: false,
-      showControlsOnInitialize: true,
+      showControlsOnInitialize: false,
       allowFullScreen: true,
       allowMuting: true,
       allowPlaybackSpeedChanging: true,
@@ -69,16 +70,7 @@ class _FullVideoPlayerState extends State<FullVideoPlayer> {
       startAt: const Duration(seconds: 0),
       progressIndicatorDelay:
           bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
-
-      additionalOptions: (BuildContext context) {
-        return <OptionItem>[
-          OptionItem(
-            onTap: () {},
-            iconData: Icons.live_tv_sharp,
-            title: 'Option 1',
-          ),
-        ];
-      },
+      aspectRatio: videoPlayerController!.value.aspectRatio,
       subtitle: Subtitles(subtitles),
       subtitleBuilder: (BuildContext context, dynamic subtitle) => Container(
         padding: const EdgeInsets.all(10.0),
@@ -91,15 +83,13 @@ class _FullVideoPlayerState extends State<FullVideoPlayer> {
                 style: const TextStyle(color: Colors.black),
               ),
       ),
-
       hideControlsTimer: const Duration(seconds: 3),
-
-      // Try playing around with some of these other options:
-      allowedScreenSleep: false, fullScreenByDefault: false,
+      allowedScreenSleep: false,
+      fullScreenByDefault: false,
       showControls: true,
       materialProgressColors: ChewieProgressColors(
-        playedColor: Colors.black,
-        handleColor: Colors.grey,
+        playedColor: Colors.red,
+        handleColor: Colors.red,
         backgroundColor: Colors.white,
         bufferedColor: Colors.blueGrey.withOpacity(0.5),
       ),
@@ -115,11 +105,11 @@ class _FullVideoPlayerState extends State<FullVideoPlayer> {
   Widget build(BuildContext context) {
     return _chewieController?.videoPlayerController.value.isInitialized == true
         ? AspectRatio(
-            aspectRatio: _chewieController?.videoPlayerController.value
-                        .aspectRatio.isAspectRatioLandscape ==
-                    true
-                ? _chewieController!.videoPlayerController.value.aspectRatio
-                : WhatsevrAspectRatio.square.ratio,
+            aspectRatio:
+                _chewieController?.aspectRatio.isAspectRatioLandscape == true
+                    ? _chewieController?.aspectRatio ??
+                        WhatsevrAspectRatio.landscape.ratio
+                    : WhatsevrAspectRatio.square.ratio,
             child: Chewie(
               controller: _chewieController!,
             ),

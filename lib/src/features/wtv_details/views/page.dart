@@ -30,18 +30,10 @@ class WtvDetailsPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          FullVideoPlayer(
+          WtvExtendedVideoPlayerView(
             videoUrl: pageArgument.videoUrl,
             thumbnail: pageArgument.thumbnail,
           ),
-          if (false)
-            WTVMiniPlayer(
-              videoUrl: pageArgument.videoUrl,
-              thumbnail: pageArgument.thumbnail,
-              loopVideo: false,
-              autoPlay: true,
-            ),
-          // Video title
           Expanded(
             child: ListView(
               children: <Widget>[

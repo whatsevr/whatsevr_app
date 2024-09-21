@@ -48,8 +48,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
           if (videoPlayerController?.value.position ==
               videoPlayerController?.value.duration) {
             if (widget.loopVideo == true) {
-              await Future<void>.delayed(const Duration(seconds: 2));
-              videoPlayerController?.seekTo(Duration.zero);
+              // await Future<void>.delayed(const Duration(seconds: 2));
+              // videoPlayerController?.seekTo(Duration.zero);
               videoPlayerController?.play();
             } else {
               videoPlayerController?.pause();
@@ -105,7 +105,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
             },
           ),
         ),
-        if (videoPlayerController?.value.isPlaying != true)
+        if (videoPlayerController == null ||
+            videoPlayerController?.value.isPlaying != true)
           IconButton(
             padding: const EdgeInsets.all(0.0),
             style: ButtonStyle(

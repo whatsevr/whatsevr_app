@@ -16,6 +16,8 @@ import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
+import '../../../utils/conversion.dart';
+
 class WtvVideoPostFrame extends StatelessWidget {
   final String? title;
   final String? description;
@@ -149,7 +151,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                               ),
                               if (views != null && views! > 0)
                                 Text(
-                                  ' • $views views',
+                                  ' • ${formatCountToKMBTQ(views)} views',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
@@ -166,20 +168,23 @@ class WtvVideoPostFrame extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     const AnimatedLikeIconButton(),
-                    Text(likes == null || likes == 0 ? '' : likes.toString()),
+                    Text(likes == null || likes == 0
+                        ? ''
+                        : formatCountToKMBTQ(likes)),
                     IconButton(
                       icon: Iconify(Octicon.comment_24),
                       onPressed: () {},
                     ),
                     Text(comments == null || comments == 0
                         ? ''
-                        : comments.toString()),
+                        : formatCountToKMBTQ(comments)),
                     IconButton(
                       icon: const Iconify(La.share),
                       onPressed: () {},
                     ),
-                    Text(
-                        shares == null || shares == 0 ? '' : shares.toString()),
+                    Text(shares == null || shares == 0
+                        ? ''
+                        : formatCountToKMBTQ(shares)),
                     const Spacer(),
                     TwoStateWidget(
                       firstStateUi: Iconify(Ph.bookmark_simple_thin),
