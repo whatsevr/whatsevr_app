@@ -25,6 +25,8 @@ import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/mask_text.dart';
 
+import '../../full_video_player/views/page.dart';
+
 // Adjust the import
 class ProfileUpdatePageArgument {
   final ProfileDetailsResponse? profileDetailsResponse;
@@ -121,7 +123,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                     ),
                                     image: DecorationImage(
                                       image: state.profileImage != null
-                                          ? FileImage(state.profileImage!)
+                                          ? ExtendedFileImageProvider(
+                                              state.profileImage!)
                                           : state.currentProfileDetailsResponse
                                                       ?.userInfo?.profilePicture !=
                                                   null
@@ -131,9 +134,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                                           ?.userInfo
                                                           ?.profilePicture ??
                                                       MockData.imageAvatar,
+                                                  cache: true,
                                                 )
                                               : ExtendedNetworkImageProvider(
                                                   MockData.imageAvatar,
+                                                  cache: true,
                                                 ),
                                       fit: BoxFit.cover,
                                     ),
@@ -222,6 +227,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       width: double.infinity,
                                       height: 200,
                                       fit: BoxFit.cover,
+                                      cache: true,
                                       enableLoadState: false,
                                     ),
                                     if (coverMedia.isVideo == true)
@@ -235,7 +241,14 @@ class ProfileUpdatePage extends StatelessWidget {
                                             ),
                                           ),
                                           onPressed: () {
-                                            // Play video
+                                            AppNavigationService.newRoute(
+                                              RoutesName.fullVideoPlayer,
+                                              extras:
+                                                  VideoPreviewPlayerPageArguments(
+                                                videoUrl:
+                                                    coverMedia.videoUrl ?? '',
+                                              ),
+                                            );
                                           },
                                           icon: Icon(
                                             Icons.play_arrow,

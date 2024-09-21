@@ -62,15 +62,19 @@ class ApiClient {
 
   static void apiMethodException(Object e) {
     if (e is SocketException) {
+      TalkerService.instance.error('Unable to connect to the server.');
       throw ('Unable to connect to the server.');
     }
     if (e is DioException) {
       if (e.response?.statusCode == 500) {
+        TalkerService.instance.error('Server response: Internal Server Error');
         throw ('Server response: Internal Server Error');
       }
+      TalkerService.instance
+          .error('Server response: ${e.response?.data['message']}');
       throw ('Server response: ${e.response?.data['message']}');
     }
-
+    TalkerService.instance.error('App Error: ${e.toString()}');
     throw ('App Error: ${e.toString()}');
   }
 }

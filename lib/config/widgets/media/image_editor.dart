@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pro_image_editor/models/editor_callbacks/pro_image_editor_callbacks.dart';
 import 'package:pro_image_editor/models/editor_configs/pro_image_editor_configs.dart';
 import 'package:pro_image_editor/modules/main_editor/main_editor.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/file.dart';
 
 class ImageEditorPageArgument {
@@ -29,6 +31,12 @@ class ImageEditorPage extends StatelessWidget {
         callbacks: ProImageEditorCallbacks(
           onImageEditingComplete: (Uint8List bytes) async {
             File? fileFromBytes = await uint8BytesToFile(bytes);
+            if (fileFromBytes == null) {
+              TalkerService.instance
+                  .error('Error converting bytes to file in ImageEditorPage');
+              SmartDialog.showToast('Error editing image');
+              return;
+            }
             pageArgument.onCompleted(fileFromBytes);
             AppNavigationService.goBack();
           },

@@ -5,11 +5,14 @@ import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/file.dart';
+
+import '../../../dev/talker.dart';
 
 class ImageCropperPageArgument {
   final File imageFileToCrop;
@@ -38,7 +41,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
   void initState() {
     super.initState();
     fileToUint8List(widget.pageArgument.imageFileToCrop)
-        .then((Uint8List value) {
+        .then((Uint8List? value) {
       setState(() {
         imageBytes = value;
       });
@@ -74,7 +77,13 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   image: imageBytes!,
                   controller: _controller,
                   onCropped: (Uint8List image) async {
-                    final File file = await uint8BytesToFile(image);
+                    final File? file = await uint8BytesToFile(image);
+                    if (file == null) {
+                      TalkerService.instance
+                          .error('Error converting bytes to file');
+                      SmartDialog.showToast('Error cropping image');
+                      return;
+                    }
                     widget.pageArgument.onCompleted(file);
                     AppNavigationService.goBack();
                   },

@@ -78,7 +78,7 @@ class CreateVideoPost extends StatelessWidget {
                                   onPressed: () {
                                     AppNavigationService.newRoute(
                                       RoutesName.fullVideoPlayer,
-                                      extras: FullVideoPlayerPageArguments(
+                                      extras: VideoPreviewPlayerPageArguments(
                                         videoUrl: state.videoFile!.path,
                                       ),
                                     );

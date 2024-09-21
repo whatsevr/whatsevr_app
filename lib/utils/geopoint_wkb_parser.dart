@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:geobase/geobase.dart';
 
+import '../dev/talker.dart';
+
 class WKBUtil {
   WKBUtil._();
 
@@ -16,6 +18,7 @@ class WKBUtil {
 
       return _bytesToHexString(wkbBytes);
     } catch (e) {
+      TalkerService.instance.error('Error getting WKB string: $e');
       return null;
     }
   }
@@ -36,6 +39,8 @@ class WKBUtil {
 
       return (lat, long);
     } catch (e) {
+      TalkerService.instance
+          .error('Error getting lat long from WKB string: $e');
       return null;
     }
   }

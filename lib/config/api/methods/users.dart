@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_work_experiences.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';

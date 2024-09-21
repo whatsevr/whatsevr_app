@@ -123,6 +123,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                     CircleAvatar(
                       backgroundImage: ExtendedNetworkImageProvider(
                         avatarUrl ?? MockData.imageAvatar,
+                        cache: true,
                       ),
                     ),
                     const Gap(8),
@@ -170,21 +171,21 @@ class WtvVideoPostFrame extends StatelessWidget {
                     const AnimatedLikeIconButton(),
                     Text(likes == null || likes == 0
                         ? ''
-                        : formatCountToKMBTQ(likes)),
+                        : formatCountToKMBTQ(likes) ?? ''),
                     IconButton(
                       icon: Iconify(Octicon.comment_24),
                       onPressed: () {},
                     ),
                     Text(comments == null || comments == 0
                         ? ''
-                        : formatCountToKMBTQ(comments)),
+                        : formatCountToKMBTQ(comments) ?? ''),
                     IconButton(
                       icon: const Iconify(La.share),
                       onPressed: () {},
                     ),
                     Text(shares == null || shares == 0
                         ? ''
-                        : formatCountToKMBTQ(shares)),
+                        : formatCountToKMBTQ(shares) ?? ''),
                     const Spacer(),
                     TwoStateWidget(
                       firstStateUi: Iconify(Ph.bookmark_simple_thin),

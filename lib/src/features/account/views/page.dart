@@ -122,13 +122,10 @@ class AccountPage extends StatelessWidget {
                               children: <Widget>[
                                 CircleAvatar(
                                   radius: 30,
-                                  backgroundImage: ExtendedImage.network(
+                                  backgroundImage: ExtendedNetworkImageProvider(
                                     '${state.profileDetailsResponse?.userInfo?.profilePicture}',
-                                    width: 80,
-                                    height: 80,
-                                    fit: BoxFit.cover,
-                                    enableLoadState: false,
-                                  ).image,
+                                    cache: true,
+                                  ),
                                 ),
                                 Gap(8),
                                 Expanded(

@@ -103,9 +103,9 @@ class AppNavigationService {
             name: RoutesName.fullVideoPlayer,
             path: RoutesName.fullVideoPlayer,
             builder: (BuildContext context, GoRouterState state) {
-              FullVideoPlayerPageArguments argument =
-                  state.extra as FullVideoPlayerPageArguments;
-              return FullVideoPlayerPage(
+              VideoPreviewPlayerPageArguments argument =
+                  state.extra as VideoPreviewPlayerPageArguments;
+              return VideoPreviewPlayerPage(
                 pageArguments: argument,
               );
             },

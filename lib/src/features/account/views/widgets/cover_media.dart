@@ -1,8 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
@@ -20,7 +20,10 @@ class AccountPageCoverVideoView extends StatelessWidget {
             height: 120,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(MockData.imagePlaceholder('Cover Media')),
+                image: ExtendedNetworkImageProvider(
+                  MockData.imagePlaceholder('Cover Media'),
+                  cache: true,
+                ),
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,6 +52,7 @@ class AccountPageCoverVideoView extends StatelessWidget {
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
+                    cache: true,
                     enableLoadState: false,
                   );
                 },
@@ -90,12 +94,12 @@ class _CoverVideoUi extends StatefulWidget {
 }
 
 class _CoverVideoUiState extends State<_CoverVideoUi> {
-  late VideoPlayerController controller;
+  late CachedVideoPlayerController controller;
   @override
   void initState() {
     super.initState();
     controller =
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+        CachedVideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
@@ -141,10 +145,11 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
                     width: double.infinity,
                     height: 300,
                     fit: BoxFit.cover,
+                    cache: true,
                     enableLoadState: false,
                   );
                 }
-                return VideoPlayer(controller);
+                return CachedVideoPlayer(controller);
               },
             ),
           ),

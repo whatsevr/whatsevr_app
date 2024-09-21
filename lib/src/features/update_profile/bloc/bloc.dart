@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/upadate_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_work_experiences.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';

@@ -1,17 +1,22 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:media_info/media_info.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 class FileMetaData {
-  final String? name;
-  final String? path;
-  final String? extension;
+  final String name;
+  final String path;
+  final String extension;
   final String? mimeType;
-  final int? size;
-  final String? sizeInText;
-
+  final int size;
+  final String sizeInText;
+  final bool isImage;
+  final bool isVideo;
+  final bool isAudio;
+  final bool isGif;
+  final bool isOrientationPortrait;
+  final bool isOrientationLandscape;
+  final bool isOrientationSquare;
   final int? width;
   final int? height;
   final double? aspectRatio;
@@ -20,12 +25,19 @@ class FileMetaData {
   final String? durationInText;
 
   FileMetaData({
-    this.name,
-    this.path,
-    this.extension,
+    required this.name,
+    required this.path,
+    required this.extension,
     this.mimeType,
-    this.size,
-    this.sizeInText,
+    required this.size,
+    required this.sizeInText,
+    required this.isImage,
+    required this.isVideo,
+    required this.isAudio,
+    required this.isGif,
+    required this.isOrientationPortrait,
+    required this.isOrientationLandscape,
+    required this.isOrientationSquare,
     this.width,
     this.height,
     this.aspectRatio,
@@ -35,74 +47,88 @@ class FileMetaData {
   });
 
   static Future<FileMetaData?> fromFile(File? file) async {
-    if (file == null) {
-      return null;
-    }
+    if (file == null) return null;
+
     try {
-      final Map<String, dynamic> mediaInfo =
-          await MediaInfo().getMediaInfo(file.path);
+      final mediaInfo = await MediaInfo().getMediaInfo(file.path);
+
+      final width = mediaInfo['width'] as int?;
+      final height = mediaInfo['height'] as int?;
+      final aspectRatio = getAspectRatio(width: width, height: height);
+      final mimeType = mediaInfo['mimeType'] as String?;
+      final isImage = mimeType?.startsWith('image') ?? false;
+      final isVideo = mimeType?.startsWith('video') ?? false;
+      final isAudio = mimeType?.startsWith('audio') ?? false;
+      final isGif = mimeType == 'image/gif';
+
+      // Calculating file size and hash
+      final size = await file.length();
+      final sizeInText = getFileSize(size);
+
       return FileMetaData(
         name: file.path.split('/').last,
-        extension: file.path.split('.').last,
-        width: mediaInfo['width'],
-        height: mediaInfo['height'],
-        aspectRatio: getAspectRatio(
-          width: mediaInfo['width'],
-          height: mediaInfo['height'],
-        ),
-        frameRate: mediaInfo['frameRate'],
-        duration: mediaInfo['durationMs'],
-        mimeType: mediaInfo['mimeType'],
-        size: file.lengthSync(),
-        sizeInText: await getFileSize(file),
         path: file.path,
-        durationInText: await getDurationInText(mediaInfo['durationMs']),
+        extension: file.path.split('.').last,
+        mimeType: mimeType,
+        size: size,
+        sizeInText: sizeInText,
+        isImage: isImage,
+        isVideo: isVideo,
+        isAudio: isAudio,
+        isGif: isGif,
+        width: width,
+        height: height,
+        aspectRatio: aspectRatio,
+        frameRate: mediaInfo['frameRate'] as double?,
+        duration: mediaInfo['durationMs'] as int?,
+        durationInText:
+            await getDurationInText(mediaInfo['durationMs'] as int?),
+        isOrientationPortrait:
+            width != null && height != null && width < height,
+        isOrientationLandscape:
+            width != null && height != null && width > height,
+        isOrientationSquare: width != null && height != null && width == height,
       );
     } catch (e) {
+      TalkerService.instance.error('Error getting file metadata: $e');
       return null;
     }
   }
 
   static double? getAspectRatio({required int? width, required int? height}) {
-    try {
-      if (width == null || height == null) return null;
-      return width / height;
-    } catch (e) {
-      return null;
-    }
+    if (width == null || height == null || height == 0) return null;
+    return width / height;
   }
 
   static Future<String?> getDurationInText(int? duration) async {
+    if (duration == null) return null;
     try {
-      if (duration == null) return null;
       final int hours = duration ~/ 3600000;
       final int minutes = (duration % 3600000) ~/ 60000;
       final int seconds = ((duration % 3600000) % 60000) ~/ 1000;
-      return '$hours:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      return '${hours.toString().padLeft(2, '0')}:'
+          '${minutes.toString().padLeft(2, '0')}:'
+          '${seconds.toString().padLeft(2, '0')}';
     } catch (e) {
+      print("Error formatting duration: $e");
       return null;
     }
   }
 
-  static Future<String?> getFileSize(File file) async {
-    try {
-      int bytes = await file.length();
-      if (bytes <= 0) return '0 B';
-      const List<String> suffixes = <String>[
-        'B',
-        'KB',
-        'MB',
-        'GB',
-        'TB',
-        'PB',
-        'EB',
-        'ZB',
-        'YB'
-      ];
-      int i = (log(bytes) / log(1024)).floor();
-      return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
-    } catch (e) {
-      return null;
-    }
+  static String getFileSize(int bytes) {
+    if (bytes <= 0) return '0 B';
+    const suffixes = <String>[
+      'B',
+      'KB',
+      'MB',
+      'GB',
+      'TB',
+      'PB',
+      'EB',
+      'ZB',
+      'YB'
+    ];
+    int i = (log(bytes) / log(1024)).floor();
+    return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
 }
