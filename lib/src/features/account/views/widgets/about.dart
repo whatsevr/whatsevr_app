@@ -126,7 +126,7 @@ class AccountPageAboutView extends StatelessWidget {
               if (state.profileDetailsResponse?.userInfo?.dob != null)
                 (
                   'Birthday',
-                  '${DateFormat('dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.dob!)} (Age: ${calculateAge(state.profileDetailsResponse!.userInfo!.dob!)})',
+                  '${DateFormat('dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.dob!)} (Age: ${calculateAgeInYearsAndMonth(state.profileDetailsResponse!.userInfo!.dob!)})',
                 ),
               if (state.profileDetailsResponse?.userInfo?.registeredOn != null)
                 (

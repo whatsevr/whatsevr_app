@@ -3,11 +3,9 @@ import 'package:cached_chewie_plus/cached_chewie_plus.dart';
 import 'package:flutter/material.dart';
 
 class FullVideoPlayerPageArguments {
-  final CachedVideoPlayerController videoPlayerController;
   final String videoUrl;
   const FullVideoPlayerPageArguments({
     required this.videoUrl,
-    required this.videoPlayerController,
   });
 }
 
@@ -26,6 +24,7 @@ class FullVideoPlayerPage extends StatefulWidget {
 }
 
 class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
+  CachedVideoPlayerController? videoPlayerController;
   ChewieController? _chewieController;
   int? bufferDelay;
 
@@ -38,43 +37,38 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
   @override
   void dispose() {
     _chewieController?.dispose();
+    videoPlayerController?.dispose();
     super.dispose();
   }
 
   Future<void> initializePlayer() async {
+    videoPlayerController = CachedVideoPlayerController.networkUrl(
+      Uri.parse(widget.pageArguments.videoUrl),
+    );
+    await videoPlayerController!.initialize();
     _createChewieController();
     setState(() {});
   }
 
   void _createChewieController() {
-    final List<Subtitle> subtitles = <Subtitle>[];
-
     _chewieController = ChewieController(
       useRootNavigator: true,
-      videoPlayerController: widget.pageArguments.videoPlayerController,
+      videoPlayerController: videoPlayerController!,
       autoPlay: true,
       looping: false,
-      showControlsOnInitialize: true,
+      showControlsOnInitialize: false,
+      aspectRatio: videoPlayerController!.value.aspectRatio,
       allowFullScreen: true,
       allowMuting: true,
       allowPlaybackSpeedChanging: true,
       zoomAndPan: true,
+
       showOptions: true,
       draggableProgressBar: true,
       startAt: const Duration(seconds: 0),
       progressIndicatorDelay:
           bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
 
-      additionalOptions: (BuildContext context) {
-        return <OptionItem>[
-          OptionItem(
-            onTap: () {},
-            iconData: Icons.live_tv_sharp,
-            title: 'Option 1',
-          ),
-        ];
-      },
-      subtitle: Subtitles(subtitles),
       subtitleBuilder: (BuildContext context, dynamic subtitle) => Container(
         padding: const EdgeInsets.all(10.0),
         child: subtitle is InlineSpan
@@ -90,7 +84,8 @@ class _FullVideoPlayerPageState extends State<FullVideoPlayerPage> {
       hideControlsTimer: const Duration(seconds: 3),
 
       // Try playing around with some of these other options:
-      allowedScreenSleep: false, fullScreenByDefault: true,
+      allowedScreenSleep: false,
+      fullScreenByDefault: videoPlayerController!.value.aspectRatio >= 1.0,
       showControls: true,
       materialProgressColors: ChewieProgressColors(
         playedColor: Colors.black,

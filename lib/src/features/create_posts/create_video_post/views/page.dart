@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
@@ -16,6 +17,7 @@ import 'package:whatsevr_app/config/widgets/search_and_tag.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
+import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
 class CreateVideoPostPageArgument {
@@ -76,7 +78,9 @@ class CreateVideoPost extends StatelessWidget {
                                   onPressed: () {
                                     AppNavigationService.newRoute(
                                       RoutesName.fullVideoPlayer,
-                                      extras: <String>[state.videoFile!.path],
+                                      extras: FullVideoPlayerPageArguments(
+                                        videoUrl: state.videoFile!.path,
+                                      ),
                                     );
                                   },
                                   icon: const Icon(
@@ -87,6 +91,24 @@ class CreateVideoPost extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            if (state.videoMetaData != null)
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5),
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                           ],
                         );
                       }
@@ -137,26 +159,6 @@ class CreateVideoPost extends StatelessWidget {
                   if (state.videoFile != null || state.thumbnailFile != null)
                     Row(
                       children: <Widget>[
-                        if (state.videoFile != null)
-                          FutureBuilder<String?>(
-                            future: getFileSize(state.videoFile!),
-                            builder: (
-                              BuildContext context,
-                              AsyncSnapshot<dynamic> snapshot,
-                            ) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return Text(
-                                  '${snapshot.data}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
-                                );
-                              }
-                              return CircularProgressIndicator();
-                            },
-                          ),
                         Spacer(),
                         if (state.videoFile != null &&
                             state.thumbnailFile != null)

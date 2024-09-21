@@ -21,6 +21,8 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 
+import '../../../../../config/widgets/media/meta_data.dart';
+
 part 'create_post_event.dart';
 part 'create_post_state.dart';
 
@@ -132,11 +134,20 @@ class CreateVideoPostBloc
         emit(state.copyWith(videoFile: file));
       },
     );
-    emit(
-      state.copyWith(
-        thumbnailFile: await getThumbnailFile(videoFile: state.videoFile!),
-      ),
-    );
+    if (state.videoFile != null) {
+      emit(
+        state.copyWith(
+          thumbnailFile: await getThumbnailFile(videoFile: state.videoFile),
+          videoMetaData: await FileMetaData.fromFile(state.videoFile),
+        ),
+      );
+      emit(
+        state.copyWith(
+          videoMetaData: await FileMetaData.fromFile(state.videoFile),
+          thumbnailMetaData: await FileMetaData.fromFile(state.thumbnailFile),
+        ),
+      );
+    }
   }
 
   FutureOr<void> _onPickThumbnail(
@@ -145,8 +156,10 @@ class CreateVideoPostBloc
   ) async {
     await showWhatsevrThumbnailSelectionPage(
       videoFile: state.videoFile!,
-      onThumbnailSelected: (File thumbnailFile) {
-        emit(state.copyWith(thumbnailFile: thumbnailFile));
+      onThumbnailSelected: (File thumbnailFile) async {
+        emit(state.copyWith(
+            thumbnailFile: thumbnailFile,
+            thumbnailMetaData: await FileMetaData.fromFile(thumbnailFile)));
       },
     );
   }

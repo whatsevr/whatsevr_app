@@ -40,7 +40,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
 
   late final VideoEditorController _controller = VideoEditorController.file(
     widget.pageArgument.videoFile,
-    minDuration: const Duration(seconds: 15),
+    minDuration: const Duration(seconds: 0),
     maxDuration: const Duration(hours: 8),
   );
 
