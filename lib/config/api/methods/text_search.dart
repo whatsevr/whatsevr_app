@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 
 import '../response_model/text_search_users_communities.dart';
 

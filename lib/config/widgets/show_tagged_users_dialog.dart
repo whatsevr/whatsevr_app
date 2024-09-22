@@ -88,7 +88,7 @@ class _UiState extends State<_Ui> {
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return Gap(8);
+                  return const Gap(8);
                 },
                 itemCount: _multipleUserDetailsResponse?.users?.length ?? 0,
               );

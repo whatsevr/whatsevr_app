@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MaskText extends StatefulWidget {
+  @override
   final Key key;
   final String text;
   final int maskLength;

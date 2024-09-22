@@ -6,9 +6,9 @@ import 'app_guide_view.dart';
 class ProductGuides {
   static showWtvPostCreationGuide() {
     List<Widget> guides = [
-      Text('Select landscape/ horizontal video to create a wtv post.'),
-      Text('Vertical video are not allowed.'),
-      Text('Maximum video duration is 1 hour now.'),
+      const Text('Select landscape/ horizontal video to create a wtv post.'),
+      const Text('Vertical video are not allowed.'),
+      const Text('Maximum video duration is 1 hour now.'),
     ];
     showAppModalSheet(
         child: AppGuideView(

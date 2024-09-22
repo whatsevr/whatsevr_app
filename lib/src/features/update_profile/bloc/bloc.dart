@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +20,6 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
         UserCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
@@ -44,7 +42,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       TextEditingController();
   TextEditingController portfolioStatus = TextEditingController();
 
-  ProfileBloc() : super(ProfileState()) {
+  ProfileBloc() : super(const ProfileState()) {
     on<InitialEvent>(_onInitialEvent);
     on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
     on<AddOrRemoveCoverMedia>(_onAddOrRemoveCoverMedia);

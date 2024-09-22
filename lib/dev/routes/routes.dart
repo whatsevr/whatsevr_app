@@ -5,7 +5,6 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/dev/routes/routes_name.dart';
 import 'package:whatsevr_app/dev/developer_console_page.dart';
 
-import '../../constants.dart';
 import '../talker.dart';
 
 List<GoRoute> getDevRoutes() {
@@ -14,7 +13,7 @@ List<GoRoute> getDevRoutes() {
       name: DeveloperRoutes.developerPage,
       path: DeveloperRoutes.developerPage,
       builder: (BuildContext context, GoRouterState state) {
-        return DeveloperConsolePage();
+        return const DeveloperConsolePage();
       },
     ),
     GoRoute(

@@ -19,9 +19,9 @@ class ApiClient {
     client = Dio(
       BaseOptions(
         baseUrl: BASE_URL,
-        connectTimeout: Duration(seconds: 30),
-        receiveTimeout: Duration(seconds: 30),
-        sendTimeout: Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
         validateStatus: (int? status) {
           /// this client will only accept status code 200 and 204 as success
           return status == HttpStatus.ok || status == HttpStatus.noContent;
@@ -44,9 +44,9 @@ class ApiClient {
   static Dio generalPurposeClient([int? cacheMaxAgeInMin]) {
     Dio dio = Dio(
       BaseOptions(
-        connectTimeout: Duration(seconds: 30),
-        receiveTimeout: Duration(seconds: 30),
-        sendTimeout: Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
       ),
     );
     dio.interceptors.addAll(<Interceptor>[

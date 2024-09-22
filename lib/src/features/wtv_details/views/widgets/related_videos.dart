@@ -13,7 +13,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
     return ListView.separated(
       padding: PadHorizontal.padding,
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (BuildContext context, int index) {
         return Row(
           children: <Widget>[
@@ -36,7 +36,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
                       color: Colors.black.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Text(
+                    child: const Text(
                       '10:00',
                       style: TextStyle(
                         color: Colors.white,
@@ -48,10 +48,10 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
               ],
             ),
             const Gap(8),
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <StatelessWidget>[
+                children: <StatelessWidget>[
                   Text(
                     'Title XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
                     maxLines: 2,
@@ -71,7 +71,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
         );
       },
       separatorBuilder: (BuildContext context, int index) {
-        return Gap(8);
+        return const Gap(8);
       },
       itemCount: 10,
     );

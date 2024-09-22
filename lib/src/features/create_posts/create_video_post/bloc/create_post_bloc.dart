@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
@@ -15,7 +14,6 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/services/location.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
@@ -33,7 +31,7 @@ class CreateVideoPostBloc
 
   final TextEditingController hashtagsController = TextEditingController();
 
-  CreateVideoPostBloc() : super(CreateVideoPostState()) {
+  CreateVideoPostBloc() : super(const CreateVideoPostState()) {
     on<CreatePostInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
@@ -74,11 +72,12 @@ class CreateVideoPostBloc
       String hashtagsArea =
           '${titleController.text} ${hashtagsController.text}';
       List<String> hashtags = [];
-      if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp))
+      if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
           hashtagsArea,
           hashTagRegExp,
         );
+      }
       if (hashtags.length > 30) {
         SmartDialog.showToast('You can only add 30 hashtags');
         return;

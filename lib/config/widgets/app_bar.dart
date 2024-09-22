@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: <Widget>[
           ...?actions,
-          if (showAiAction) AiButton(),
+          if (showAiAction) const AiButton(),
         ],
         leading: leading,
 

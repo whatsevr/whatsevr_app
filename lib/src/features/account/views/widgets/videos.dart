@@ -15,7 +15,7 @@ class AccountPageVideosView extends StatelessWidget {
       builder: (BuildContext context, AccountState state) {
         return ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             UserVideoPost? userVideoPost =
                 state.profileDetailsResponse?.userVideoPosts?[index];
@@ -40,7 +40,7 @@ class AccountPageVideosView extends StatelessWidget {
                           color: Colors.black.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Text(
+                        child: const Text(
                           '10:00',
                           style: TextStyle(
                             color: Colors.white,
@@ -59,11 +59,11 @@ class AccountPageVideosView extends StatelessWidget {
                       Text(
                         '${userVideoPost?.title}',
                         maxLines: 2,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold,),
                       ),
-                      Gap(8),
-                      Text(
+                      const Gap(8),
+                      const Text(
                         '2M views . 2 days ago . 122k likes',
                         style: TextStyle(
                           fontSize: 12,
@@ -76,7 +76,7 @@ class AccountPageVideosView extends StatelessWidget {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Gap(8);
+            return const Gap(8);
           },
           itemCount: state.profileDetailsResponse?.userVideoPosts?.length ?? 0,
         );

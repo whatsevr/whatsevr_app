@@ -21,7 +21,7 @@ part 'splash_event.dart';
 part 'splash_state.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  SplashBloc() : super(SplashState()) {
+  SplashBloc() : super(const SplashState()) {
     on<InitialEvent>(_onInitial);
     on<LoginOrSignupEvent>(_onLoginOrSignup);
     on<CheckUserStatus>(_onCheckUserStatus);

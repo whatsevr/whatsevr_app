@@ -18,7 +18,7 @@ class AccountPagePdfsView extends StatelessWidget {
       builder: (BuildContext context, AccountState state) {
         return ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
             return Column(
@@ -29,10 +29,10 @@ class AccountPagePdfsView extends StatelessWidget {
                   height: 200,
                   fit: BoxFit.cover,
                 ),
-                Gap(8),
+                const Gap(8),
                 Row(
                   children: <Widget>[
-                    Iconify(
+                    const Iconify(
                       VscodeIcons.file_type_pdf2,
                       size: 45,
                     ),
@@ -44,26 +44,26 @@ class AccountPagePdfsView extends StatelessWidget {
                           Text(
                             '${userPdf?.title}',
                             maxLines: 2,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold,),
                           ),
-                          Gap(8),
+                          const Gap(8),
                           Text(
                             'Updated on ${DateFormat('dd MMM yyyy').format(userPdf!.createdAt!)}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Gap(8),
+                    const Gap(8),
                     IconButton(
                       onPressed: () {
                         DownloadService.downloadFile(
                             '${userPdf.fileUrl}', '${userPdf.title}.pdf',);
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.download,
                         size: 30,
                       ),
@@ -74,7 +74,7 @@ class AccountPagePdfsView extends StatelessWidget {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Gap(8);
+            return const Gap(8);
           },
           itemCount: state.profileDetailsResponse?.userPdfs?.length ?? 0,
         );

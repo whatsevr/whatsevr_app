@@ -232,9 +232,9 @@ class CommunityPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                     horizontal: PadHorizontal.paddingValue,
                   ),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(12)),
+                        BorderRadius.vertical(top: Radius.circular(12)),
                   ),
                   child: const DefaultTabController(
                     length: 7,
@@ -391,7 +391,7 @@ class _AboutView extends StatelessWidget {
             onChanged: (bool? value) {},
             title: Text(
               '${item.$1}',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
               item.$2,

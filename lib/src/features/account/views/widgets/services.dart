@@ -13,7 +13,7 @@ class AccountPageServicesView extends StatelessWidget {
       builder: (BuildContext context, AccountState state) {
         return ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             UserService? userService =
                 state.profileDetailsResponse?.userServices?[index];
@@ -26,13 +26,13 @@ class AccountPageServicesView extends StatelessWidget {
                       Text(
                         '${userService?.title}',
                         maxLines: 2,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold,),
                       ),
-                      Gap(8),
+                      const Gap(8),
                       Text(
                         '${userService?.description}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),
@@ -43,7 +43,7 @@ class AccountPageServicesView extends StatelessWidget {
             );
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Divider();
+            return const Divider();
           },
           itemCount: state.profileDetailsResponse?.userServices?.length ?? 0,
         );

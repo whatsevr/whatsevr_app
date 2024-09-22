@@ -40,13 +40,13 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
             );
           },
         ),
-        Gap(8),
+        const Gap(8),
         ListView.separated(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: searchedItems.length ?? 0,
           separatorBuilder: (BuildContext context, int index) {
-            return Gap(4);
+            return const Gap(4);
           },
           itemBuilder: (BuildContext context, int index) {
             return ListTile(
@@ -90,7 +90,7 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
                   Navigator.of(context).pop();
                 }
               },
-              leading: Icon(Icons.location_on),
+              leading: const Icon(Icons.location_on),
               title: Text(
                   '${searchedItems[index].placePrediction?.structuredFormat?.mainText?.text}'),
               subtitle: Text(

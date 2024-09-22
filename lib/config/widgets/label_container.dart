@@ -30,13 +30,13 @@ class LabelContainer extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     labelText,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                     ),
                   ),
-                  Gap(8),
-                  Icon(
+                  const Gap(8),
+                  const Icon(
                     Icons.arrow_drop_down_rounded,
                     color: Colors.white,
                     size: 18,

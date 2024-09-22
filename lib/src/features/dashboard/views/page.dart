@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
         BlocProvider(
           lazy: false,
           create: (BuildContext context) =>
-              DashboardBloc()..add(DashboardInitialEvent()),
+              DashboardBloc()..add(const DashboardInitialEvent()),
         ),
         BlocProvider(
           lazy: false,
@@ -38,7 +38,7 @@ class DashboardPage extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.white,
           body: state.currentDashboardView,
-          bottomNavigationBar: DashboardPageBottomNavigationBar(),
+          bottomNavigationBar: const DashboardPageBottomNavigationBar(),
         );
       },
     );

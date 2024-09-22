@@ -38,7 +38,7 @@ class _DashboardPageBottomNavigationBarState
   Widget build(BuildContext context) {
     List<(Widget, VoidCallback)> items = [
       (
-        Iconify(MaterialSymbols.explore, size: 30),
+        const Iconify(MaterialSymbols.explore, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -48,7 +48,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(GameIcons.nest_eggs, size: 30),
+        const Iconify(GameIcons.nest_eggs, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -58,7 +58,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(Ri.heart_add_fill, size: 30),
+        const Iconify(Ri.heart_add_fill, size: 30),
         () {
           showContentUploadBottomSheet(
             context,
@@ -67,7 +67,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(Pepicons.play_print, size: 30),
+        const Iconify(Pepicons.play_print, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -77,7 +77,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(Ph.chat_circle_text_fill, size: 30),
+        const Iconify(Ph.chat_circle_text_fill, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -87,7 +87,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(Ic.twotone_notifications_none, size: 30),
+        const Iconify(Ic.twotone_notifications_none, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -97,7 +97,7 @@ class _DashboardPageBottomNavigationBarState
         }
       ),
       (
-        Iconify(Ic.sharp_account_circle, size: 30),
+        const Iconify(Ic.sharp_account_circle, size: 30),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -140,7 +140,7 @@ class _DashboardPageBottomNavigationBarState
                     },
                   ),
                   if (selectedIndex == items.indexOf(itm))
-                    Positioned(
+                    const Positioned(
                       bottom: 0,
                       child: Icon(
                         Icons.circle,

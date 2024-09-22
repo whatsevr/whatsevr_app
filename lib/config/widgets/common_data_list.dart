@@ -209,7 +209,7 @@ class _CommonDataSearchSelectPageState
   // ListView builder that handles different data types
   Widget _buildListView(List<dynamic> items) {
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: items.length,
       itemBuilder: (_, int index) {

@@ -12,7 +12,7 @@ part 'explore_event.dart';
 part 'explore_state.dart';
 
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
-  ExploreBloc() : super(ExploreState()) {
+  ExploreBloc() : super(const ExploreState()) {
     on<ExploreInitialEvent>(_onInitial);
   }
 

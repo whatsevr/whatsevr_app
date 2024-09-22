@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:hidable/hidable.dart';
 
 class WhatsevrTabBarWithViews extends StatefulWidget {
   final bool? shrinkViews;

@@ -126,7 +126,7 @@ class _WtvExtendedVideoPlayerViewState
                 if (_chewieController
                         ?.videoPlayerController.value.isBuffering ==
                     true)
-                  CupertinoActivityIndicator(),
+                  const CupertinoActivityIndicator(),
               ],
             ),
           );

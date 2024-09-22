@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
@@ -63,10 +62,10 @@ class ExplorePageWtvPage extends StatelessWidget {
                             ),
                           ),
                           const Gap(8),
-                          Expanded(
+                          const Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const <StatelessWidget>[
+                              children: <StatelessWidget>[
                                 Gap(8),
                                 Text('XXXXXXXXXXXXXX'),
                                 Text('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'),

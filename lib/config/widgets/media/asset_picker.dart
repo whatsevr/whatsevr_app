@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -79,7 +78,7 @@ class CustomAssetPicker {
         gridCount: 2,
         pageSize: 20,
         pickerTheme: ThemeData.light().copyWith(
-          buttonTheme: ButtonThemeData(
+          buttonTheme: const ButtonThemeData(
             buttonColor: Colors.blue,
             textTheme: ButtonTextTheme.primary,
           ),
@@ -139,7 +138,7 @@ class CustomAssetPicker {
         gridCount: 2,
         pageSize: 20,
         pickerTheme: ThemeData.light().copyWith(
-          buttonTheme: ButtonThemeData(
+          buttonTheme: const ButtonThemeData(
             buttonColor: Colors.blue,
             textTheme: ButtonTextTheme.primary,
           ),

@@ -137,7 +137,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
     animationController = AnimationController(
       value: 1,
       vsync: this,
-      duration: Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 150),
     )
       ..addListener(() {
         if (currentDocker != null) {
@@ -172,7 +172,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
         });
       }
 
-      await Future.delayed(Duration(
+      await Future.delayed(const Duration(
         milliseconds: 100,
       ),);
       setState(() {
@@ -228,7 +228,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
       top: top,
       left: left,
       child: AnimatedSwitcher(
-        duration: Duration(
+        duration: const Duration(
           milliseconds: 150,
         ),
         transitionBuilder: (Widget child, Animation<double> animation) {
@@ -293,7 +293,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
                       vertical: widget.verticalSpace,
                     ),
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 150),
+                      duration: const Duration(milliseconds: 150),
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.circular(widget.shadowBorderRadius),
@@ -313,7 +313,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
                                 DeveloperRoutes.developerPage,
                               );
                             },
-                            icon: Icon(Icons.developer_mode),
+                            icon: const Icon(Icons.developer_mode),
                           ),
                         ),
                       ),
@@ -447,8 +447,8 @@ class _DraggableWidgetState extends State<DraggableWidget>
 
 class DragController {
   _DraggableWidgetState? _widgetState;
-  void _addState(_DraggableWidgetState _widgetState) {
-    this._widgetState = _widgetState;
+  void _addState(_DraggableWidgetState widgetState) {
+    _widgetState = widgetState;
   }
 
   /// Jump to any [AnchoringPosition] programatically

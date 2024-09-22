@@ -36,7 +36,7 @@ class _SearchAndTagUsersAndCommunityPageState
     try {
       EasyDebounce.debounce(
         'search-users-community-6425254',
-        Duration(milliseconds: 600),
+        const Duration(milliseconds: 600),
         () async {
           TextSearchUsersAndCommunitiesResponse? response =
               await TextSearchApi.searchUsersAndCommunities(query: inputText);
@@ -69,17 +69,17 @@ class _SearchAndTagUsersAndCommunityPageState
             _fetchData(value);
           },
         ),
-        Gap(8),
+        const Gap(8),
         if (searchedItems?.users?.isNotEmpty ?? false) ...[
-          Gap(8),
-          Text('Users'),
-          Gap(8),
+          const Gap(8),
+          const Text('Users'),
+          const Gap(8),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: searchedItems?.users?.length ?? 0,
             separatorBuilder: (BuildContext context, int index) {
-              return Gap(4);
+              return const Gap(4);
             },
             itemBuilder: (BuildContext context, int index) {
               User? user = searchedItems?.users?[index];
@@ -100,26 +100,26 @@ class _SearchAndTagUsersAndCommunityPageState
                 ),
                 title: Text(
                   '${user?.name}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('@${user?.username}'),
                 trailing: selectedUsersUid.contains(user?.uid)
-                    ? Icon(Icons.check_circle, color: Colors.green)
-                    : Icon(Icons.circle_outlined),
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : const Icon(Icons.circle_outlined),
               );
             },
           )
         ],
         if (searchedItems?.communities?.isNotEmpty ?? false) ...[
-          Gap(8),
-          Text('Communities'),
-          Gap(8),
+          const Gap(8),
+          const Text('Communities'),
+          const Gap(8),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: searchedItems?.communities?.length ?? 0,
             separatorBuilder: (BuildContext context, int index) {
-              return Gap(4);
+              return const Gap(4);
             },
             itemBuilder: (BuildContext context, int index) {
               Community? community = searchedItems?.communities?[index];
@@ -140,49 +140,49 @@ class _SearchAndTagUsersAndCommunityPageState
                 ),
                 title: Text(
                   '${community?.title}',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('@${community?.username}'),
                 trailing: selectedCommunitiesUid.contains(community?.uid)
-                    ? Icon(Icons.check_circle, color: Colors.green)
-                    : Icon(Icons.circle_outlined),
+                    ? const Icon(Icons.check_circle, color: Colors.green)
+                    : const Icon(Icons.circle_outlined),
               );
             },
           ),
         ],
-        Gap(8),
+        const Gap(8),
         if (selectedUsersUid.isNotEmpty ||
             selectedCommunitiesUid.isNotEmpty) ...[
-          Gap(50),
+          const Gap(50),
           RichText(
             text: TextSpan(
               children: [
-                TextSpan(
+                const TextSpan(
                   text: 'Selected ',
                   style: TextStyle(color: Colors.black),
                 ),
                 if (selectedUsersUid.isNotEmpty) ...[
                   TextSpan(
                     text: '${selectedUsersUid.length} users',
-                    style: TextStyle(color: Colors.blue),
+                    style: const TextStyle(color: Colors.blue),
                   ),
                 ],
                 if (selectedUsersUid.isNotEmpty &&
                     selectedCommunitiesUid.isNotEmpty)
-                  TextSpan(
+                  const TextSpan(
                     text: ' and ',
                     style: TextStyle(color: Colors.black),
                   ),
                 if (selectedCommunitiesUid.isNotEmpty) ...[
                   TextSpan(
                     text: '${selectedCommunitiesUid.length} communities',
-                    style: TextStyle(color: Colors.blue),
+                    style: const TextStyle(color: Colors.blue),
                   ),
                 ],
               ],
             ),
           ),
-          Gap(8),
+          const Gap(8),
           WhatsevrButton.filled(
             label: 'Done',
             onPressed: () {

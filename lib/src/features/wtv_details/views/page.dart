@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/src/features/wtv_details/views/widgets/related_videos.dart';
 
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../config/widgets/feed_players/full_video_player.dart';
-import '../../full_video_player/views/page.dart';
 
 class WtvDetailsPageArgument {
   final String? videoPostUid;
@@ -53,7 +50,7 @@ class WtvDetailsPage extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       // Channel name
-                      Expanded(
+                      const Expanded(
                         child: Text(
                           'Channel name XXXXXXXXXXXXXXXXXXXXXXXXXXX',
                           maxLines: 2,
@@ -65,10 +62,10 @@ class WtvDetailsPage extends StatelessWidget {
                       // Subscribe button
                       MaterialButton(
                         onPressed: () {},
-                        shape: StadiumBorder(),
+                        shape: const StadiumBorder(),
                         color: Colors.red,
                         textColor: Colors.white,
-                        child: Text('Follow'),
+                        child: const Text('Follow'),
                       ),
                     ],
                   ),
@@ -91,7 +88,7 @@ class WtvDetailsPage extends StatelessWidget {
                             child: Row(
                               children: <Widget>[
                                 Icon(record.$2),
-                                Gap(5),
+                                const Gap(5),
                                 Text(record.$1),
                               ],
                             ),
@@ -104,9 +101,9 @@ class WtvDetailsPage extends StatelessWidget {
                 ),
                 //comments
 
-                Gap(10),
-                WtvVideoDetailsRelatedVideosView(),
-                Gap(10),
+                const Gap(10),
+                const WtvVideoDetailsRelatedVideosView(),
+                const Gap(10),
               ],
             ),
           ),

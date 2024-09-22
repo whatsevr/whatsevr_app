@@ -134,18 +134,18 @@ class WtvVideoPostFrame extends StatelessWidget {
                           Text(
                             '$title',
                           ),
-                          Gap(4),
+                          const Gap(4),
                           Row(
                             children: [
                               Text(
                                 '$username',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                 ),
                               ),
                               Text(
                                 ' • $timeAgo',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,
                                 ),
@@ -153,7 +153,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                               if (views != null && views! > 0)
                                 Text(
                                   ' • ${formatCountToKMBTQ(views)} views',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.grey,
                                   ),
@@ -173,7 +173,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                         ? ''
                         : formatCountToKMBTQ(likes) ?? ''),
                     IconButton(
-                      icon: Iconify(Octicon.comment_24),
+                      icon: const Iconify(Octicon.comment_24),
                       onPressed: () {},
                     ),
                     Text(comments == null || comments == 0
@@ -187,7 +187,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                         ? ''
                         : formatCountToKMBTQ(shares) ?? ''),
                     const Spacer(),
-                    TwoStateWidget(
+                    const TwoStateWidget(
                       firstStateUi: Iconify(Ph.bookmark_simple_thin),
                       secondStateUi: Iconify(Ph.bookmark_fill),
                     ),
@@ -197,9 +197,9 @@ class WtvVideoPostFrame extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return Column(
+                            return const Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const <ListTile>[
+                              children: <ListTile>[
                                 ListTile(
                                   title: Text('View Account'),
                                   leading: Icon(Icons.account_box_rounded),
@@ -252,8 +252,8 @@ class _TwoStateWidgetState extends State<TwoStateWidget> {
   Widget build(BuildContext context) {
     return IconButton(
       icon: _firstState
-          ? widget.firstStateUi ?? Icon(Icons.circle_outlined)
-          : widget.secondStateUi ?? Icon(Icons.check_circle),
+          ? widget.firstStateUi ?? const Icon(Icons.circle_outlined)
+          : widget.secondStateUi ?? const Icon(Icons.check_circle),
       onPressed: () {
         setState(() {
           _firstState = !_firstState;

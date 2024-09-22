@@ -194,14 +194,14 @@ class FileMetaData {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'File Metadata',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Gap(12),
+          const Gap(12),
           Table(
             border: TableBorder.all(),
             children: [

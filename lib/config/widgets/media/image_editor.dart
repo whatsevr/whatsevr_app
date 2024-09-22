@@ -25,7 +25,7 @@ class ImageEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Image'),
+      appBar: const CustomAppBar(title: 'Edit Image'),
       body: ProImageEditor.file(
         pageArgument.imageFileToEdit,
         callbacks: ProImageEditorCallbacks(
@@ -41,7 +41,7 @@ class ImageEditorPage extends StatelessWidget {
             AppNavigationService.goBack();
           },
         ),
-        configs: ProImageEditorConfigs(
+        configs: const ProImageEditorConfigs(
           designMode: ImageEditorDesignModeE.cupertino,
           cropRotateEditorConfigs: CropRotateEditorConfigs(
             enabled: false,

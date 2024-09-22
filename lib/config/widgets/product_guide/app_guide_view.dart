@@ -12,12 +12,12 @@ class AppGuideView extends StatelessWidget {
       children: [
         Text(
           headingTitle ?? 'Guides',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        Gap(12),
+        const Gap(12),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -31,7 +31,7 @@ class AppGuideView extends StatelessWidget {
                 child: guides![index]);
           },
           separatorBuilder: (BuildContext context, int index) {
-            return Gap(10);
+            return const Gap(10);
           },
           itemCount: guides!.length,
         ),

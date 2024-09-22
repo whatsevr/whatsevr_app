@@ -9,7 +9,6 @@ class WhatsevrButton extends StatelessWidget {
   final bool isOutlined;
   final bool shrink;
   const WhatsevrButton._({
-    Key? key,
     required this.label,
     required this.onPressed,
     this.miniButton = false,
@@ -17,7 +16,7 @@ class WhatsevrButton extends StatelessWidget {
     this.icon,
     this.isOutlined = false,
     this.shrink = false,
-  }) : super(key: key);
+  });
 
   // Factory for filled button with fixed color
   factory WhatsevrButton.filled({

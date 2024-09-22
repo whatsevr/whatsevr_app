@@ -28,14 +28,14 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Spacer(),
+            const Spacer(),
             const Gap(30),
             ExtendedImage.asset(
               'assets/images/whatsevr_app_logo.jpg',
               width: 100,
             ),
-            Spacer(),
-            CupertinoActivityIndicator(),
+            const Spacer(),
+            const CupertinoActivityIndicator(),
             const Gap(30),
             const Text(
               'WhatsEvr',

@@ -13,13 +13,13 @@ class AiButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        showAppModalSheet(context: context, child: _Ui());
+        showAppModalSheet(context: context, child: const _Ui());
       },
       icon: Row(
         children: <Widget>[
           if (showLabel) ...<Widget>[
             const Text('AI'),
-            Gap(3),
+            const Gap(3),
           ],
           ExtendedImage.asset(
             Assets.imagesGeminiSparkleRed,

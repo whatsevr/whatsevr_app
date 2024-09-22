@@ -30,12 +30,12 @@ class AccountPageAboutView extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Gap(8),
-                        Text(
+                        const Gap(8),
+                        const Text(
                           'Status',
                           style: TextStyle(
                             fontSize: 14,
@@ -45,12 +45,12 @@ class AccountPageAboutView extends StatelessWidget {
                         ),
                         Text(
                           '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Gap(8),
+                        const Gap(8),
                       ],
                     ),
                   ),
@@ -65,12 +65,12 @@ class AccountPageAboutView extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Gap(8),
-                        Row(
+                        const Gap(8),
+                        const Row(
                           children: <StatelessWidget>[
                             Text(
                               'Serve',
@@ -104,7 +104,7 @@ class AccountPageAboutView extends StatelessWidget {
                               ),
                           ],
                         ),
-                        Gap(8),
+                        const Gap(8),
                       ],
                     ),
                   ),

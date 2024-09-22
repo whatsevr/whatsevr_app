@@ -32,7 +32,7 @@ class ExplorePageMediaPage extends StatelessWidget {
 
 class _PostsView extends StatelessWidget {
   final ScrollController? scrollController;
-  const _PostsView({super.key, this.scrollController});
+  const _PostsView({this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _PostsView extends StatelessWidget {
 
 class _FlicksView extends StatelessWidget {
   final ScrollController? scrollController;
-  const _FlicksView({super.key, this.scrollController});
+  const _FlicksView({this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _FlicksView extends StatelessWidget {
 
 class _ExploreView extends StatelessWidget {
   final ScrollController? scrollController;
-  const _ExploreView({super.key, this.scrollController});
+  const _ExploreView({this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +81,11 @@ class _ExploreView extends StatelessWidget {
           crossAxisSpacing: 2,
           repeatPattern: QuiltedGridRepeatPattern.inverted,
           pattern: <QuiltedGridTile>[
-            QuiltedGridTile(2, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
-            QuiltedGridTile(1, 1),
+            const QuiltedGridTile(2, 1),
+            const QuiltedGridTile(1, 1),
+            const QuiltedGridTile(1, 1),
+            const QuiltedGridTile(1, 1),
+            const QuiltedGridTile(1, 1),
           ],
         ),
         childrenDelegate: SliverChildBuilderDelegate(

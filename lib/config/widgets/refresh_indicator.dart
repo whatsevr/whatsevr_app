@@ -17,8 +17,8 @@ class MyRefreshIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EasyRefresh(
-      header: MaterialHeader(),
-      footer: ClassicFooter(
+      header: const MaterialHeader(),
+      footer: const ClassicFooter(
         showMessage: false,
         showText: false,
       ),

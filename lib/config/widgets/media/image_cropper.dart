@@ -56,7 +56,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
         title: 'Crop',
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
             onPressed: () {
               _controller.crop();
             },
@@ -112,13 +112,13 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 height: 50,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.pageArgument.aspectRatios.length,
                   separatorBuilder: (BuildContext context, int index) =>
-                      VerticalDivider(),
+                      const VerticalDivider(),
                   itemBuilder: (BuildContext context, int index) {
                     final WhatsevrAspectRatio aspectRatio =
                         widget.pageArgument.aspectRatios[index];

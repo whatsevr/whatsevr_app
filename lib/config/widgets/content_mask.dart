@@ -18,7 +18,7 @@ class ContentMask extends StatelessWidget {
         enabled: showMask,
         ignorePointers: true,
         child: customMask ??
-            Center(
+            const Center(
               child: CupertinoActivityIndicator(),
             ),
       );

@@ -3,7 +3,7 @@ import 'package:background_downloader/background_downloader.dart';
 class DownloadService {
   static void init() {
     FileDownloader().configureNotification(
-      running: TaskNotification('Downloading', 'file: {filename}'),
+      running: const TaskNotification('Downloading', 'file: {filename}'),
       progressBar: true,
       tapOpensFile: true,
     );

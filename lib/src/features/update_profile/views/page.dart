@@ -15,7 +15,6 @@ import 'package:whatsevr_app/config/widgets/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/label_container.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -51,7 +50,7 @@ class ProfileUpdatePage extends StatelessWidget {
         builder: (BuildContext context) {
           return Scaffold(
             backgroundColor: Colors.blueGrey[50],
-            appBar: CustomAppBar(
+            appBar: const CustomAppBar(
               title: 'Update Profile',
               showAiAction: true,
             ),
@@ -60,7 +59,7 @@ class ProfileUpdatePage extends StatelessWidget {
                 return ListView(
                   padding: PadHorizontal.padding,
                   children: <Widget>[
-                    Gap(12),
+                    const Gap(12),
                     Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -69,7 +68,7 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       child: Column(
                         children: <Widget>[
-                          Gap(25),
+                          const Gap(25),
                           GestureDetector(
                             onTap: () async {
                               showWhatsevrMediaPickerChoice(
@@ -151,11 +150,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                   left: 0,
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.black,
                                     ),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.camera_alt,
                                       color: Colors.white,
                                       size: 20,
@@ -165,7 +164,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Gap(22),
+                          const Gap(22),
                           MaskText(
                             key: ValueKey(
                               state.currentProfileDetailsResponse?.userInfo
@@ -177,20 +176,20 @@ class ProfileUpdatePage extends StatelessWidget {
                                 '',
                             maskLength: 5,
                             maskFirstDigits: false,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
-                          Gap(25),
+                          const Gap(25),
                         ],
                       ),
                     ),
-                    Gap(12),
+                    const Gap(12),
                     ExpansionTile(
                       dense: true,
-                      title: Text(
+                      title: const Text(
                         'Cover Media',
                         style: TextStyle(
                           color: Colors.black,
@@ -250,7 +249,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                               ),
                                             );
                                           },
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.play_arrow,
                                             color: Colors.white,
                                             size: 30,
@@ -269,7 +268,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 ),
                                               );
                                         },
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.close_rounded,
                                           color: Colors.red,
                                         ),
@@ -286,7 +285,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             MaterialButton(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
+                                side: const BorderSide(
                                   color: Colors.black,
                                 ),
                               ),
@@ -324,18 +323,18 @@ class ProfileUpdatePage extends StatelessWidget {
                                   },
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 'Add Cover Image',
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
                               ),
                             ),
-                            Gap(12),
+                            const Gap(12),
                             MaterialButton(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
+                                side: const BorderSide(
                                   color: Colors.black,
                                 ),
                               ),
@@ -361,7 +360,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                   },
                                 );
                               },
-                              child: Text(
+                              child: const Text(
                                 'Add Cover Video',
                                 style: TextStyle(
                                   color: Colors.black,
@@ -370,10 +369,10 @@ class ProfileUpdatePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Gap(12),
+                        const Gap(12),
                       ],
                     ),
-                    Gap(12),
+                    const Gap(12),
                     ...<Widget>[
                       LabelContainer(
                         labelText: 'Personal Info',
@@ -386,14 +385,14 @@ class ProfileUpdatePage extends StatelessWidget {
                               headingTitle: 'Name',
                               maxLength: 40,
                             ),
-                            Gap(8),
+                            const Gap(8),
                             WhatsevrFormField.email(
                               controller:
                                   context.read<ProfileBloc>().emailController,
                               headingTitle: 'Email',
                               maxLength: 60,
                             ),
-                            Gap(8),
+                            const Gap(8),
                             WhatsevrFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().bioController,
@@ -401,14 +400,14 @@ class ProfileUpdatePage extends StatelessWidget {
                               minLines: 3,
                               maxLength: 300,
                             ),
-                            Gap(8),
+                            const Gap(8),
                             WhatsevrFormField.multilineTextField(
                               controller:
                                   context.read<ProfileBloc>().addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
                             ),
-                            Gap(8),
+                            const Gap(8),
                             WhatsevrFormField.datePicker(
                               context: context,
                               controller: TextEditingController(
@@ -424,7 +423,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     .emit(state.copyWith(dob: date));
                               },
                             ),
-                            Gap(8),
+                            const Gap(8),
                             Builder(
                               builder: (BuildContext context) {
                                 TextEditingController schoolController =
@@ -449,7 +448,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         headingTitle: 'Enter School',
                                         controller: schoolController,
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.invokeCustomFunction(
                                         context: context,
                                         headingTitle: 'Select Degree',
@@ -471,13 +470,13 @@ class ProfileUpdatePage extends StatelessWidget {
                                           );
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.generalTextField(
                                         readOnly: true,
                                         controller: degreeTypeController,
                                         headingTitle: 'Degree Type',
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
@@ -488,7 +487,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                   .format(date);
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: endDateController,
@@ -499,7 +498,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                   .format(date);
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       MaterialButton(
                                         minWidth: double.infinity,
                                         shape: RoundedRectangleBorder(
@@ -543,7 +542,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             Navigator.pop(context);
                                           }
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Add',
                                           style: TextStyle(
                                             color: Colors.white,
@@ -555,12 +554,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            Gap(8),
+                            const Gap(8),
                             //show eduction as list
                             if (state.educations != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.educations?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Row(
@@ -580,7 +579,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 ),
                                               );
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.close_rounded,
                                           color: Colors.red,
                                           size: 16,
@@ -591,10 +590,10 @@ class ProfileUpdatePage extends StatelessWidget {
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {
-                                  return Gap(2);
+                                  return const Gap(2);
                                 },
                               ),
-                              Gap(8),
+                              const Gap(8),
                             ],
 
                             Builder(
@@ -621,12 +620,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                         headingTitle: 'Enter Company Name',
                                         controller: companyNameController,
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.generalTextField(
                                         headingTitle: 'Enter Designation',
                                         controller: designationController,
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.invokeCustomFunction(
                                         context: context,
                                         headingTitle: 'Select Mode of Work',
@@ -645,7 +644,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                           );
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.datePicker(
                                         context: context,
                                         controller: startDateController,
@@ -656,7 +655,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                   .format(date);
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       WhatsevrFormField.datePicker(
                                         context: context,
                                         headingTitle: 'End Date',
@@ -667,7 +666,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                   .format(date);
                                         },
                                       ),
-                                      Gap(12),
+                                      const Gap(12),
                                       MaterialButton(
                                         minWidth: double.infinity,
                                         shape: RoundedRectangleBorder(
@@ -716,7 +715,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             Navigator.pop(context);
                                           }
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Add',
                                           style: TextStyle(
                                             color: Colors.white,
@@ -728,11 +727,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            Gap(8),
+                            const Gap(8),
                             if (state.workExperiences != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.workExperiences?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Row(
@@ -752,7 +751,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 ),
                                               );
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.close_rounded,
                                           color: Colors.red,
                                           size: 16,
@@ -763,10 +762,10 @@ class ProfileUpdatePage extends StatelessWidget {
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {
-                                  return Gap(2);
+                                  return const Gap(2);
                                 },
                               ),
-                              Gap(8),
+                              const Gap(8),
                             ],
                             WhatsevrFormField.showModalSheetOnTap(
                               context: context,
@@ -786,7 +785,7 @@ class ProfileUpdatePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Gap(12),
+                      const Gap(12),
                     ],
 
                     // Service Info Section
@@ -803,7 +802,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               controller:
                                   context.read<ProfileBloc>().portfolioTitle,
                             ),
-                            Gap(12),
+                            const Gap(12),
                             WhatsevrFormField.generalTextField(
                               headingTitle: 'Status',
                               hintText: 'Add Status on Portfolio',
@@ -811,7 +810,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                   context.read<ProfileBloc>().portfolioStatus,
                             ),
 
-                            Gap(12),
+                            const Gap(12),
                             Builder(
                               builder: (BuildContext context) {
                                 TextEditingController titleController =
@@ -823,7 +822,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                   context: context,
                                   headingTitle: 'Services',
                                   hintText: 'Add Service you provide',
-                                  suffixWidget: Icon(Icons.add_circle_rounded),
+                                  suffixWidget: const Icon(Icons.add_circle_rounded),
                                   customFunction: () {
                                     showAppModalSheet(
                                       context: context,
@@ -834,12 +833,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                             headingTitle: 'Enter Title',
                                             controller: titleController,
                                           ),
-                                          Gap(12),
+                                          const Gap(12),
                                           WhatsevrFormField.multilineTextField(
                                             headingTitle: 'Enter Description',
                                             controller: descriptionController,
                                           ),
-                                          Gap(12),
+                                          const Gap(12),
                                           MaterialButton(
                                             minWidth: double.infinity,
                                             shape: RoundedRectangleBorder(
@@ -867,7 +866,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 Navigator.pop(context);
                                               }
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               'Add',
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -881,11 +880,11 @@ class ProfileUpdatePage extends StatelessWidget {
                                 );
                               },
                             ),
-                            Gap(12),
+                            const Gap(12),
                             if (state.services != null) ...<Widget>[
                               ListView.separated(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.services?.length ?? 0,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Row(
@@ -905,7 +904,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                 ),
                                               );
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.close_rounded,
                                           color: Colors.red,
                                           size: 16,
@@ -916,10 +915,10 @@ class ProfileUpdatePage extends StatelessWidget {
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {
-                                  return Gap(2);
+                                  return const Gap(2);
                                 },
                               ),
-                              Gap(8),
+                              const Gap(8),
                             ],
                             // Portfolio Info Section
 
@@ -933,7 +932,7 @@ class ProfileUpdatePage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Gap(12),
+                      const Gap(12),
                     ],
                     MaterialButton(
                       shape: RoundedRectangleBorder(
@@ -941,10 +940,10 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       color: Colors.blueAccent,
                       onPressed: () {
-                        context.read<ProfileBloc>().add(SubmitProfile());
+                        context.read<ProfileBloc>().add(const SubmitProfile());
                       },
                       child:
-                          Text('SAVE', style: TextStyle(color: Colors.white)),
+                          const Text('SAVE', style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 );

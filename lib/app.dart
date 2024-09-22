@@ -74,7 +74,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
                 SafeArea(
                   child: child!,
                 ),
-                if (kTestingMode) DraggableWidget(),
+                if (kTestingMode) const DraggableWidget(),
               ],
             ),
           );
@@ -96,8 +96,8 @@ Center _loaderUi(String msg) {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CupertinoActivityIndicator(),
-            Gap(12),
+            const CupertinoActivityIndicator(),
+            const Gap(12),
             Text(msg),
           ],
         )),

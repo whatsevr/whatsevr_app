@@ -42,7 +42,7 @@ class ExplorePage extends StatelessWidget {
                   scrollController: searchBoxHideController,
                 )
               ),
-              ('Offers', Text('Offers')),
+              ('Offers', const Text('Offers')),
               (
                 'Memories',
                 ExplorePageMemoriesPage(

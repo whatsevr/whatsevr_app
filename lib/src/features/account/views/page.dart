@@ -88,17 +88,17 @@ class AccountPage extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                                Gap(8),
+                                const Gap(8),
                                 if (pageArgument?.isEditMode ==
                                     true) ...<Widget>[
                                   IconButton(
-                                    icon: Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit),
                                     onPressed: () async {
                                       await AppNavigationService.newRoute(
                                         RoutesName.updateProfile,
@@ -127,7 +127,7 @@ class AccountPage extends StatelessWidget {
                                     cache: true,
                                   ),
                                 ),
-                                Gap(8),
+                                const Gap(8),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -135,23 +135,23 @@ class AccountPage extends StatelessWidget {
                                     children: <Widget>[
                                       Text(
                                         '${state.profileDetailsResponse?.userInfo?.name}',
-                                        style: TextStyle(fontSize: 14),
+                                        style: const TextStyle(fontSize: 14),
                                       ),
                                       Text(
                                         ' @${state.profileDetailsResponse?.userInfo?.username}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,
                                         ),
                                       ),
-                                      Gap(8),
+                                      const Gap(8),
                                     ],
                                   ),
                                 ),
                                 if (pageArgument?.isEditMode ==
                                     true) ...<Widget>[
                                   IconButton(
-                                    icon: Iconify(
+                                    icon: const Iconify(
                                       Ri.heart_add_fill,
                                       size: 30,
                                     ),
@@ -181,8 +181,8 @@ class AccountPage extends StatelessWidget {
                             ),
                           ),
                           const Gap(28),
-                          PadHorizontal(
-                            child: const Row(
+                          const PadHorizontal(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Expanded(
@@ -322,13 +322,13 @@ class AccountPage extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                               horizontal: PadHorizontal.paddingValue,
                             ),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(12),
                               ),
                             ),
-                            child: Column(
-                              children: const <Widget>[
+                            child: const Column(
+                              children: <Widget>[
                                 Gap(12),
                                 WhatsevrTabBarWithViews(
                                   shrinkViews: true,

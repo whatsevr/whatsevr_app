@@ -12,7 +12,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Settings',
       ),
       body: PadHorizontal(
@@ -34,8 +34,8 @@ class SettingsPage extends StatelessWidget {
                 builder: (BuildContext context) {
                   List<Widget> children = <Widget>[
                     //create community
-                    Column(
-                      children: const <CircleAvatar>[
+                    const Column(
+                      children: <CircleAvatar>[
                         CircleAvatar(
                           radius: 30,
                           child: Icon(Icons.add),
@@ -81,8 +81,8 @@ class SettingsPage extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Expanded(
-                        child: const Text(
+                      const Expanded(
+                        child: Text(
                           'Show rating when someone views your profile',
                           style: TextStyle(
                             fontSize: 16,
