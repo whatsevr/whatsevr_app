@@ -14,11 +14,14 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/services/location.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/full_video_player.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 
+import '../../../../../config/api/requests_model/sanity_check_new_video_post.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 
 part 'create_post_event.dart';
@@ -88,6 +91,25 @@ class CreateVideoPostBloc
       }
 
       SmartDialog.showLoading();
+      //Sanity check
+      (String?, int?)? itm = await PostApi.sanityCheckNewVideoPost(
+          request: SanityCheckNewVideoPostRequest(
+              mediaMetaData: MediaMetaData(
+                aspectRatio: state.videoMetaData?.aspectRatio,
+                durationSec: state.videoMetaData?.durationInSec,
+                sizeBytes: state.videoMetaData?.sizeInBytes,
+              ),
+              postData: PostData(
+                title: titleController.text,
+                userUid: await AuthUserDb.getLastLoggedUserUid(),
+                postCreatorType: state.pageArgument?.postCreatorType.value,
+              )));
+      if (itm?.$2 != 200) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('Error: ${itm?.$1}');
+        return;
+      }
+      //Then run below code
       final String? videoUrl = await FileUploadService.uploadFilesToSST(
         state.videoFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
@@ -134,8 +156,7 @@ class CreateVideoPostBloc
     // Validate video metadata
     if (videoMetaData == null ||
         videoMetaData.isVideo != true ||
-        (videoMetaData.durationInMin ?? 0) < 1 ||
-        videoMetaData.isOrientationLandscape != true) {
+        videoMetaData.aspectRatio?.isAspectRatioLandscape != true) {
       SmartDialog.showToast('Video is not under the required conditions');
       return;
     }

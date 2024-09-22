@@ -36,12 +36,14 @@ class ApiClient {
       ApiRetryInterceptor(dio: client),
       ApiCacheInterceptor(
           cacheDirectoryPath: dioCacheDirectory?.path,
-          maxMinuteOnDevice: 60 * 24 * 7),
+          maxMinuteOnDevice: 60 * 24 * 7,
+          cachePostRequest: false),
       TalkerService.dioLogger,
     ]);
   }
 
-  static Dio generalPurposeClient([int? cacheMaxAgeInMin]) {
+  static Dio generalPurposeClient(
+      [int? cacheMaxAgeInMin, bool? cachePostRequest]) {
     Dio dio = Dio(
       BaseOptions(
         connectTimeout: const Duration(seconds: 30),
@@ -54,6 +56,7 @@ class ApiClient {
       ApiCacheInterceptor(
         cacheDirectoryPath: dioCacheDirectory?.path,
         maxMinuteOnDevice: cacheMaxAgeInMin,
+        cachePostRequest: cachePostRequest,
       ),
       TalkerService.dioLogger,
     ]);

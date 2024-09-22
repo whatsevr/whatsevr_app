@@ -6,7 +6,8 @@ import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_stor
 class ApiCacheInterceptor extends DioCacheInterceptor {
   ApiCacheInterceptor({
     required String? cacheDirectoryPath,
-    required int? maxMinuteOnDevice, // 7 days
+    required int? maxMinuteOnDevice,
+    required bool? cachePostRequest,
   }) : super(
           options: CacheOptions(
             store: HiveCacheStore(cacheDirectoryPath),
@@ -19,7 +20,7 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
             priority: CachePriority.normal,
             cipher: null,
             keyBuilder: CacheOptions.defaultCacheKeyBuilder,
-            allowPostMethod: false,
+            allowPostMethod: cachePostRequest ?? false,
           ),
         );
 }

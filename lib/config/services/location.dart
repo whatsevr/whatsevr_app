@@ -5,6 +5,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:whatsevr_app/config/api/client.dart';
 import '../api/external/models/places_nearby.dart';
 import '../api/external/models/similar_place_by_query.dart';
 
@@ -41,7 +42,7 @@ class LocationService {
         lat = position.latitude;
         long = position.longitude;
       }
-      Response response = await Dio().post(
+      Response response = await ApiClient.generalPurposeClient().post(
         'https://places.googleapis.com/v1/places:searchNearby',
         data: {
           "maxResultCount": 20,
@@ -64,7 +65,7 @@ class LocationService {
           },
         ),
       );
-      if (response.statusCode != 200) {
+      if (response.data == null) {
         onCompleted(null, lat, long, true, true);
       }
       PlacesNearbyResponse nearbyPlacesResponse =
@@ -91,7 +92,8 @@ class LocationService {
     EasyDebounce.debounce(
         'easy-debounce-32623', const Duration(milliseconds: 700), () async {
       try {
-        Response response = await Dio().post(
+        Response response =
+            await ApiClient.generalPurposeClient(30 * 24 * 60, true).post(
           'https://places.googleapis.com/v1/places:autocomplete',
           data: {
             "input": searchQuery,

@@ -14,7 +14,7 @@ class FileMetaData {
   final String path;
   final String extension;
   final String? mimeType;
-  final int? size;
+  final int? sizeInBytes;
   final String? sizeInText;
   final bool? isImage;
   final bool? isVideo;
@@ -38,7 +38,7 @@ class FileMetaData {
     required this.path,
     required this.extension,
     this.mimeType,
-    required this.size,
+    required this.sizeInBytes,
     required this.sizeInText,
     required this.isImage,
     required this.isVideo,
@@ -63,7 +63,7 @@ class FileMetaData {
       'path': path,
       'extension': extension,
       'mimeType': mimeType,
-      'size': size,
+      'sizeInBytes': sizeInBytes,
       'sizeInText': sizeInText,
       'isImage': isImage,
       'isVideo': isVideo,
@@ -112,7 +112,7 @@ class FileMetaData {
         path: file.path,
         extension: file.path.split('.').last,
         mimeType: mimeType,
-        size: size,
+        sizeInBytes: size,
         sizeInText: sizeInText,
         isImage: isImage,
         isVideo: isVideo,

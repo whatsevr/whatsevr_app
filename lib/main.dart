@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'package:whatsevr_app/app.dart';
@@ -15,6 +16,7 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
+import 'config/services/forground_task.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -37,6 +39,7 @@ Future<void> main() async {
       FileUploadService.init();
       DownloadService.init();
       TalkerService.init();
+      FlutterForegroundTask.initCommunicationPort();
       runApp(const WhatsevrApp());
     },
     catchUnhandledExceptions,
@@ -47,4 +50,8 @@ void catchUnhandledExceptions(Object error, StackTrace? stack) {
   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   debugPrintStack(stackTrace: stack, label: error.toString());
   TalkerService.instance.error(error.toString(), stack);
+}
+
+void afterLoginServices() {
+  WhatsevrForegroundService.registerNotificationChannel();
 }
