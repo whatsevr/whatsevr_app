@@ -3,6 +3,7 @@ import 'package:whatsevr_app/config/widgets/ai_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final VoidCallback? onTapTitle;
   final List<Widget>? actions;
   final Widget? leading;
   final Color? backgroundColor;
@@ -10,6 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
+    this.onTapTitle,
     this.actions,
     this.leading,
     this.backgroundColor,
@@ -29,12 +31,27 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       child: AppBar(
-        title: Text(title,
-            style: const TextStyle(
-              color: Colors.black, // Black title text
-              fontSize: 17.0,
-              fontWeight: FontWeight.w600,
-            ),),
+        title: GestureDetector(
+          onTap: onTapTitle,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.black, // Black title text
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (onTapTitle != null)
+                const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                ),
+            ],
+          ),
+        ),
         actions: <Widget>[
           ...?actions,
           if (showAiAction) AiButton(),
@@ -46,7 +63,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: true,
         surfaceTintColor: Colors.white, // Center the title like iOS
         iconTheme: const IconThemeData(
-            color: Colors.black,), // Black icon color for iOS style
+          color: Colors.black,
+        ), // Black icon color for iOS style
       ),
     );
   }

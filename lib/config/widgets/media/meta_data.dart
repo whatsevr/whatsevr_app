@@ -1,27 +1,36 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:media_info/media_info.dart';
+
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
+
+import '../../../constants.dart';
 
 class FileMetaData {
   final String name;
   final String path;
   final String extension;
   final String? mimeType;
-  final int size;
-  final String sizeInText;
-  final bool isImage;
-  final bool isVideo;
-  final bool isAudio;
-  final bool isGif;
-  final bool isOrientationPortrait;
-  final bool isOrientationLandscape;
-  final bool isOrientationSquare;
+  final int? size;
+  final String? sizeInText;
+  final bool? isImage;
+  final bool? isVideo;
+  final bool? isAudio;
+  final bool? isGif;
+  final bool? isOrientationPortrait;
+  final bool? isOrientationLandscape;
+  final bool? isOrientationSquare;
   final int? width;
   final int? height;
   final double? aspectRatio;
   final double? frameRate;
-  final int? duration;
+  final int? durationInMs;
+  final int? durationInSec;
+  final int? durationInMin;
+  final int? durationInHour;
   final String? durationInText;
 
   FileMetaData({
@@ -42,9 +51,38 @@ class FileMetaData {
     this.height,
     this.aspectRatio,
     this.frameRate,
-    this.duration,
+    this.durationInMs,
+    this.durationInSec,
+    this.durationInMin,
+    this.durationInHour,
     this.durationInText,
   });
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'path': path,
+      'extension': extension,
+      'mimeType': mimeType,
+      'size': size,
+      'sizeInText': sizeInText,
+      'isImage': isImage,
+      'isVideo': isVideo,
+      'isAudio': isAudio,
+      'isGif': isGif,
+      'isOrientationPortrait': isOrientationPortrait,
+      'isOrientationLandscape': isOrientationLandscape,
+      'isOrientationSquare': isOrientationSquare,
+      'width': width,
+      'height': height,
+      'aspectRatio': aspectRatio,
+      'frameRate': frameRate,
+      'durationInMs': durationInMs,
+      'durationInSec': durationInSec,
+      'durationInMin': durationInMin,
+      'durationInHour': durationInHour,
+      'durationInText': durationInText,
+    };
+  }
 
   static Future<FileMetaData?> fromFile(File? file) async {
     if (file == null) return null;
@@ -64,7 +102,11 @@ class FileMetaData {
       // Calculating file size and hash
       final size = await file.length();
       final sizeInText = getFileSize(size);
-
+      final (sec, min, hour) =
+          getDurationInSecMinHour(mediaInfo['durationMs'] as int?);
+      final int? durationInSec = sec;
+      final int? durationInMin = min;
+      final int? durationInHour = hour;
       return FileMetaData(
         name: file.path.split('/').last,
         path: file.path,
@@ -80,7 +122,10 @@ class FileMetaData {
         height: height,
         aspectRatio: aspectRatio,
         frameRate: mediaInfo['frameRate'] as double?,
-        duration: mediaInfo['durationMs'] as int?,
+        durationInMs: mediaInfo['durationMs'] as int?,
+        durationInSec: durationInSec,
+        durationInMin: durationInMin,
+        durationInHour: durationInHour,
         durationInText:
             await getDurationInText(mediaInfo['durationMs'] as int?),
         isOrientationPortrait:
@@ -93,6 +138,15 @@ class FileMetaData {
       TalkerService.instance.error('Error getting file metadata: $e');
       return null;
     }
+  }
+
+  static (int? sec, int? min, int? hour) getDurationInSecMinHour(
+      int? duration) {
+    if (duration == null) return (null, null, null);
+    final int sec = duration ~/ 1000;
+    final int min = sec ~/ 60;
+    final int hour = min ~/ 60;
+    return (sec, min, hour);
   }
 
   static double? getAspectRatio({required int? width, required int? height}) {
@@ -130,5 +184,44 @@ class FileMetaData {
     ];
     int i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
+  }
+
+  static showMetaData(FileMetaData? metaData) {
+    if (!kTestingMode) return;
+    if (metaData == null) return;
+    Map<String, dynamic> data = metaData.toMap();
+    showAppModalSheet(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'File Metadata',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Gap(12),
+          Table(
+            border: TableBorder.all(),
+            children: [
+              for (var entry in data.entries)
+                TableRow(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(entry.key),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(entry.value.toString()),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -10,6 +10,7 @@ import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
+import 'package:whatsevr_app/constants.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
@@ -91,7 +92,7 @@ class AppNavigationService {
           return const SplashPage();
         },
         routes: <RouteBase>[
-          ...getDevRoutes(),
+          if (kTestingMode) ...getDevRoutes(),
           GoRoute(
             name: RoutesName.dashboard,
             path: RoutesName.dashboard,

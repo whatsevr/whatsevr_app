@@ -12,6 +12,8 @@ import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/dev/dragable_bubble.dart';
 
+import 'constants.dart';
+
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
 
@@ -72,7 +74,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
                 SafeArea(
                   child: child!,
                 ),
-                DraggableWidget(),
+                if (kTestingMode) DraggableWidget(),
               ],
             ),
           );

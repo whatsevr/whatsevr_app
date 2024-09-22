@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/place_search_list.dart';
+import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
 import 'package:whatsevr_app/config/widgets/search_and_tag.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -50,6 +51,9 @@ class CreateVideoPost extends StatelessWidget {
           appBar: CustomAppBar(
             title: 'Create Video Post',
             showAiAction: true,
+            onTapTitle: () {
+              ProductGuides.showWtvPostCreationGuide();
+            },
           ),
           body: ListView(
             padding: PadHorizontal.padding,
@@ -92,20 +96,26 @@ class CreateVideoPost extends StatelessWidget {
                               ),
                             ),
                             if (state.videoMetaData != null)
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
+                              GestureDetector(
+                                onTap: () {
+                                  FileMetaData.showMetaData(
+                                      state.videoMetaData);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.5),
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white,
+                                  child: Text(
+                                    '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),

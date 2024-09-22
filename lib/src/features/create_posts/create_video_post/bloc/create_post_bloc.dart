@@ -129,39 +129,74 @@ class CreateVideoPostBloc
     PickVideoEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
+    File? pickedFile; // Declare 'pickedFile' as nullable
+
+    // Await the async video picker, and handle file inside the main event handler.
     await CustomAssetPicker.pickVideoFromGallery(
-      onCompleted: (File file) {
-        emit(state.copyWith(videoFile: file));
+      onCompleted: (File file) async {
+        FileMetaData? videoMetaData = await FileMetaData.fromFile(file);
+        // Validate video metadata
+        if (videoMetaData == null ||
+            videoMetaData.isVideo != true ||
+            (videoMetaData.durationInMin ?? 0) < 1 ||
+            videoMetaData.isOrientationLandscape != true) {
+          SmartDialog.showToast('Video is not under the required conditions');
+          return;
+        }
+        pickedFile = file; // Assign the file if it's valid
       },
     );
-    if (state.videoFile != null) {
-      emit(
-        state.copyWith(
-          thumbnailFile: await getThumbnailFile(videoFile: state.videoFile),
-          videoMetaData: await FileMetaData.fromFile(state.videoFile),
-        ),
-      );
-      emit(
-        state.copyWith(
-          videoMetaData: await FileMetaData.fromFile(state.videoFile),
-          thumbnailMetaData: await FileMetaData.fromFile(state.thumbnailFile),
-        ),
-      );
-    }
+
+    // If no valid video file was picked, exit early
+    if (pickedFile == null) return;
+
+    // Emit state changes after video file is selected and validated
+    emit(state.copyWith(videoFile: pickedFile));
+
+    // Generate thumbnail and metadata and update the state
+    final thumbnailFile = await getThumbnailFile(
+        videoFile: pickedFile!); // Use pickedFile! since it's non-null here
+    final videoMetaData = await FileMetaData.fromFile(pickedFile);
+    final thumbnailMetaData = await FileMetaData.fromFile(thumbnailFile);
+
+    emit(
+      state.copyWith(
+        thumbnailFile: thumbnailFile,
+        videoMetaData: videoMetaData,
+        thumbnailMetaData: thumbnailMetaData,
+      ),
+    );
   }
 
-  FutureOr<void> _onPickThumbnail(
+  Future<void> _onPickThumbnail(
     PickThumbnailEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
+    // Check if videoFile is null, return early if it is
+    if (state.videoFile == null) {
+      // Handle the null case (e.g., show a toast or log an error)
+      SmartDialog.showToast('Video file is not available');
+      return;
+    }
+
+    File? selectedThumbnail;
+
+    // Await for the thumbnail selection process
     await showWhatsevrThumbnailSelectionPage(
-      videoFile: state.videoFile!,
+      videoFile: state.videoFile!, // Safe to use `!` after null check
       onThumbnailSelected: (File thumbnailFile) async {
-        emit(state.copyWith(
-            thumbnailFile: thumbnailFile,
-            thumbnailMetaData: await FileMetaData.fromFile(thumbnailFile)));
+        selectedThumbnail = thumbnailFile; // Capture the selected thumbnail
       },
     );
+
+    // If no thumbnail was selected, return early
+    if (selectedThumbnail == null) return;
+
+    // Emit state changes after the thumbnail has been selected
+    emit(state.copyWith(
+      thumbnailFile: selectedThumbnail,
+      thumbnailMetaData: await FileMetaData.fromFile(selectedThumbnail!),
+    ));
   }
 
   Future<void> _onUpdatePostAddress(
