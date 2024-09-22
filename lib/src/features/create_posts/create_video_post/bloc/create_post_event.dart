@@ -20,17 +20,19 @@ class SubmitPostEvent extends CreateVideoPostEvent {
 }
 
 class PickVideoEvent extends CreateVideoPostEvent {
-  const PickVideoEvent();
+  final File? pickVideoFile;
+  const PickVideoEvent({required this.pickVideoFile});
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[pickVideoFile];
 }
 
 class PickThumbnailEvent extends CreateVideoPostEvent {
-  const PickThumbnailEvent();
+  final File? pickedThumbnailFile;
+  const PickThumbnailEvent({required this.pickedThumbnailFile});
 
   @override
-  List<Object?> get props => <Object?>[];
+  List<Object?> get props => <Object?>[pickedThumbnailFile];
 }
 
 class UpdatePostAddressEvent extends CreateVideoPostEvent {

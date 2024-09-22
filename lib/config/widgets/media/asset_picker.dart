@@ -17,7 +17,7 @@ import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 class CustomAssetPicker {
   CustomAssetPicker._();
 
-  static Future<void> captureImage({
+  static void captureImage({
     required Function(File file)? onCompleted,
     bool cropImage = true,
     bool editImage = true,
@@ -65,7 +65,7 @@ class CustomAssetPicker {
     onCompleted?.call(editedImage ?? croppedImage!);
   }
 
-  static Future<void> pickImageFromGallery({
+  static void pickImageFromGallery({
     bool editImage = true,
     required List<WhatsevrAspectRatio> aspectRatios,
     bool withCircleCropperUi = false,
@@ -124,7 +124,7 @@ class CustomAssetPicker {
     onCompleted.call(editedImage ?? croppedImage!);
   }
 
-  static Future<void> pickVideoFromGallery({
+  static void pickVideoFromGallery({
     bool editVideo = true,
     Function(File file)? onCompleted,
   }) async {

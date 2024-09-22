@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -20,6 +21,8 @@ import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
+
+import '../../../../../config/widgets/media/thumbnail_selection.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -125,9 +128,17 @@ class CreateVideoPost extends StatelessWidget {
                       if (state.videoFile != null) {
                         return MaterialButton(
                           onPressed: () {
-                            context
-                                .read<CreateVideoPostBloc>()
-                                .add(const PickThumbnailEvent());
+                            showWhatsevrThumbnailSelectionPage(
+                              videoFile: state.videoFile!,
+                            ).then((value) {
+                              if (value != null) {
+                                context
+                                    .read<CreateVideoPostBloc>()
+                                    .add(PickThumbnailEvent(
+                                      pickedThumbnailFile: value,
+                                    ));
+                              }
+                            });
                           },
                           minWidth: double.infinity,
                           height: baseHeight,
@@ -140,9 +151,13 @@ class CreateVideoPost extends StatelessWidget {
                       return GestureDetector(
                         behavior: HitTestBehavior.translucent,
                         onTap: () {
-                          context
-                              .read<CreateVideoPostBloc>()
-                              .add(const PickVideoEvent());
+                          CustomAssetPicker.pickVideoFromGallery(
+                            onCompleted: (file) {
+                              context
+                                  .read<CreateVideoPostBloc>()
+                                  .add(PickVideoEvent(pickVideoFile: file));
+                            },
+                          );
                         },
                         child: Container(
                           width: double.infinity,
@@ -176,9 +191,17 @@ class CreateVideoPost extends StatelessWidget {
                             shrink: true,
                             miniButton: true,
                             onPressed: () {
-                              context
-                                  .read<CreateVideoPostBloc>()
-                                  .add(const PickThumbnailEvent());
+                              showWhatsevrThumbnailSelectionPage(
+                                videoFile: state.videoFile!,
+                              ).then((value) {
+                                if (value != null) {
+                                  context
+                                      .read<CreateVideoPostBloc>()
+                                      .add(PickThumbnailEvent(
+                                        pickedThumbnailFile: value,
+                                      ));
+                                }
+                              });
                             },
                             label: 'Update Thumb',
                           ),
@@ -188,9 +211,13 @@ class CreateVideoPost extends StatelessWidget {
                             miniButton: true,
                             shrink: true,
                             onPressed: () {
-                              context
-                                  .read<CreateVideoPostBloc>()
-                                  .add(const PickVideoEvent());
+                              CustomAssetPicker.pickVideoFromGallery(
+                                onCompleted: (file) {
+                                  context
+                                      .read<CreateVideoPostBloc>()
+                                      .add(PickVideoEvent(pickVideoFile: file));
+                                },
+                              );
                             },
                             label: 'Change Video',
                           )
