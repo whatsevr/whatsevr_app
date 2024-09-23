@@ -8,11 +8,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+
 import 'package:whatsevr_app/config/services/location.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/full_video_player.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
@@ -22,6 +24,8 @@ import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 
 import '../../../../../config/api/requests_model/sanity_check_new_video_post.dart';
+import '../../../../../config/services/long_running_task/controller.dart';
+import '../../../../../config/services/long_running_task/task_models/posts.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 
 part 'create_post_event.dart';
@@ -109,37 +113,66 @@ class CreateVideoPostBloc
         SmartDialog.showToast('Error: ${itm?.$1}');
         return;
       }
-      //Then run below code
-      final String? videoUrl = await FileUploadService.uploadFilesToSST(
-        state.videoFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'video-post',
-      );
-      final String? thumbnailUrl = await FileUploadService.uploadFilesToSST(
-        state.thumbnailFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'video-post-thumbnail',
-      );
-      CreateVideoPostResponse? response = await PostApi.createVideoPost(
-        post: CreateVideoPostRequest(
-          title: titleController.text,
-          description: descriptionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: hashtags.isEmpty
-              ? null
-              : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-          location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-          thumbnail: thumbnailUrl,
-          videoUrl: videoUrl,
-          addressLatLongWkb: state.selectedAddressLatLongWkb,
-          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-          taggedUserUids: state.taggedUsersUid,
-          taggedCommunityUids: state.taggedCommunitiesUid,
-        ),
-      );
-      SmartDialog.dismiss();
-      SmartDialog.showToast('${response?.message}');
+
+      WhatsevrLongTaskController.startServiceWithTaskData(
+          taskData: VideoPostTaskDataForLRT(
+            videoFilePath: state.videoFile!.path,
+            thumbnailFilePath: state.thumbnailFile!.path,
+            title: titleController.text,
+            description: descriptionController.text,
+            userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+            hashtags: hashtags.isEmpty
+                ? null
+                : hashtags.map((e) => e.replaceAll("#", '')).toList(),
+            location: state.selectedAddress,
+            postCreatorType: state.pageArgument?.postCreatorType.value,
+            addressLatLongWkb: state.selectedAddressLatLongWkb,
+            creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+            taggedUserUids: state.taggedUsersUid,
+            taggedCommunityUids: state.taggedCommunitiesUid,
+          ),
+          onTaskAssignFail: () async {
+            SmartDialog.showLoading();
+            final String? videoUrl = await FileUploadService.uploadFilesToSST(
+              state.videoFile!,
+              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+              fileType: 'video-post',
+            );
+            final String? thumbnailUrl =
+                await FileUploadService.uploadFilesToSST(
+              state.thumbnailFile!,
+              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+              fileType: 'video-post-thumbnail',
+            );
+            CreateVideoPostResponse? response = await PostApi.createVideoPost(
+              post: CreateVideoPostRequest(
+                title: titleController.text,
+                description: descriptionController.text,
+                userUid: await AuthUserDb.getLastLoggedUserUid(),
+                hashtags: hashtags.isEmpty
+                    ? null
+                    : hashtags.map((e) => e.replaceAll("#", '')).toList(),
+                location: state.selectedAddress,
+                postCreatorType: state.pageArgument?.postCreatorType.value,
+                thumbnail: thumbnailUrl,
+                videoUrl: videoUrl,
+                addressLatLongWkb: state.selectedAddressLatLongWkb,
+                creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+                taggedUserUids: state.taggedUsersUid,
+                taggedCommunityUids: state.taggedCommunitiesUid,
+              ),
+            );
+            if (response != null) {
+              SmartDialog.dismiss();
+              SmartDialog.showToast('Creating post, do not close the app');
+              AppNavigationService.goBack();
+            }
+          },
+          onTaskAssigned: () {
+            SmartDialog.dismiss();
+            SmartDialog.showToast('Creating post, do not close the app');
+            AppNavigationService.goBack();
+          });
     } catch (e) {
       SmartDialog.dismiss();
       SmartDialog.showToast('Error: $e');

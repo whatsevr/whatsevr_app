@@ -42,14 +42,14 @@ class AppNavigationService {
     );
   }
 
-  static void clearAllAndNewRoute(
+  static Future<dynamic> clearAllAndNewRoute(
     String routeName, {
     Object? extra,
-  }) {
+  }) async {
     while (_router.canPop()) {
       _router.pop();
     }
-    newRoute(
+    return await newRoute(
       routeName,
       extras: extra,
     );

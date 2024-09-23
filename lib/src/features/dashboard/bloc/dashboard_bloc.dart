@@ -7,6 +7,8 @@ import 'package:whatsevr_app/config/services/permission.dart';
 
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 
+import '../../../../main.dart';
+
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
@@ -20,6 +22,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     Emitter<DashboardState> emit,
   ) {
     PermissionService.requestAllPermissions();
+    afterLoginServices();
   }
 
   FutureOr<void> tabChanged(TabChanged event, Emitter<DashboardState> emit) {

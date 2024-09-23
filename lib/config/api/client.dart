@@ -24,7 +24,9 @@ class ApiClient {
         sendTimeout: const Duration(seconds: 30),
         validateStatus: (int? status) {
           /// this client will only accept status code 200 and 204 as success
-          return status == HttpStatus.ok || status == HttpStatus.noContent;
+          return status == HttpStatus.ok ||
+              status == HttpStatus.noContent ||
+              status == HttpStatus.badRequest;
         },
         headers: <String, dynamic>{
           'secret': 'your_secret_key',

@@ -9,7 +9,7 @@ class TalkerService {
   static Talker instance = Talker(
     settings: TalkerSettings(
       enabled: true,
-      useConsoleLogs: false,
+      useConsoleLogs: true,
     ),
   );
   static TalkerBlocObserver blocObserver = TalkerBlocObserver(talker: instance);
@@ -22,21 +22,5 @@ class TalkerService {
 
   static void init() {
     Bloc.observer = TalkerService.blocObserver;
-  }
-}
-
-class WhatsevrTalkerWrapper extends StatelessWidget {
-  final Widget child;
-  const WhatsevrTalkerWrapper({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return TalkerWrapper(
-      talker: TalkerService.instance,
-      options: const TalkerWrapperOptions(
-        enableErrorAlerts: true,
-      ),
-      child: child,
-    );
   }
 }

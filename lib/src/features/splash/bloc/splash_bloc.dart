@@ -36,7 +36,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     AuthServiceUserResponse? loggedAuthorisedUserResponse =
         await AuthUserDb.getLastLoggedAuthorisedUser();
     if (loggedAuthorisedUserResponse?.data?.userId != null) {
-      AppNavigationService.newRoute(RoutesName.dashboard);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
       FirebaseCrashlytics.instance
           .setUserIdentifier(loggedAuthorisedUserResponse!.data!.userId!);
       FirebaseAnalytics.instance
