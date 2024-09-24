@@ -19,7 +19,7 @@ void startCallback() {
 
 class WhatsevrLongTaskController extends TaskHandler {
   @override
-  Future<void> onStart(DateTime timestamp) async {
+  Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
     TalkerService.instance.info('Foreground service started.');
   }
 

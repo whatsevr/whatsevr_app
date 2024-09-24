@@ -115,7 +115,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       );
       SmartDialog.showToast('${userStatusResponse!.message}');
 
-      AppNavigationService.newRoute(RoutesName.dashboard);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
     } catch (e) {
       SmartDialog.showToast('Error: $e');
       if (kDebugMode) rethrow;
