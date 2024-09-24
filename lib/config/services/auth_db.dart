@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
+
+import '../api/external/models/business_validation_exception.dart';
 
 class AuthUserDb {
   AuthUserDb._();
@@ -52,19 +55,36 @@ class AuthUserDb {
     return AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(user)));
   }
 
-  static Future<List<AuthServiceUserResponse>> getAllAuthorisedUser() async {
-    List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-    if (users == null) return <AuthServiceUserResponse>[];
-    return users
-        .map((e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
-        .toList();
+  static Future<List<AuthServiceUserResponse>?> getAllAuthorisedUser() async {
+    try {
+      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+      if (users == null) throw BusinessValidationException('No user found');
+      return users
+          .map(
+              (e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
+          .toList();
+    } catch (e) {
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return null;
+      }
+      rethrow;
+    }
   }
 
   static Future<void> removeAuthorisedUser(String userId) async {
-    List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-    if (users == null) return;
-    users.removeWhere((element) => element['data']['userId'] == userId);
-    await _authorisedCustomersBox.put(_allLoggedUsers, users);
+    try {
+      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+      if (users == null) throw BusinessValidationException('No user found');
+      users.removeWhere((element) => element['data']['userId'] == userId);
+      await _authorisedCustomersBox.put(_allLoggedUsers, users);
+    } catch (e) {
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return;
+      }
+      rethrow;
+    }
   }
 
   ///[saveLastLoggedUserId]
@@ -73,7 +93,20 @@ class AuthUserDb {
   }
 
   static Future<String?> getLastLoggedUserUid() async {
-    return _authorisedCustomersBox.get(_lastLoggedUserId);
+    try {
+      String? lastLoggedUserId =
+          await _authorisedCustomersBox.get(_lastLoggedUserId);
+      if (lastLoggedUserId == null) {
+        throw BusinessValidationException('No user found');
+      }
+      return lastLoggedUserId;
+    } catch (e) {
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return null;
+      }
+      rethrow;
+    }
   }
 
   ///[clearAllAuthorisedUser]

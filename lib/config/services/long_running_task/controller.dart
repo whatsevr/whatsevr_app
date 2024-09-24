@@ -36,13 +36,14 @@ class WhatsevrLongTaskController extends TaskHandler {
             break;
 
           default:
-            throw Exception('Unknown task type received.');
+            throw Exception('Foreground service Unknown task type received.');
         }
       } catch (e) {
-        TalkerService.instance.error('Failed to handle task data: $e');
+        TalkerService.instance
+            .error('Foreground service Failed to handle task data: $e');
       }
     } else {
-      TalkerService.instance.error('Invalid data received.');
+      TalkerService.instance.error('Foreground service Invalid data received.');
     }
     stop();
   }

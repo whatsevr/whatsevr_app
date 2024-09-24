@@ -1,11 +1,11 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import '../api/external/models/places_nearby.dart';
 import '../api/external/models/similar_place_by_query.dart';
 
@@ -72,14 +72,11 @@ class LocationService {
           PlacesNearbyResponse.fromMap(response.data);
       onCompleted(nearbyPlacesResponse, lat, long, true, true);
     } catch (e) {
-      if (e is SocketException) {
-        throw Exception('Unable to connect to the internet');
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return;
       }
-      if (e is DioException) {
-        throw Exception('Server client error');
-      }
-      if (kDebugMode) rethrow;
-      return;
+      rethrow;
     }
   }
 
@@ -104,21 +101,19 @@ class LocationService {
             "X-Goog-Api-Key": _googlePlaceAndGeoCodingApiKey,
           }),
         );
-        if (response.statusCode != 200) {
-          return;
+        if (response.data == null) {
+          throw BusinessValidationException(
+              'Failed to get search predicted places names');
         }
         SimilarPlacesByQueryResponse placesByQueryResponse =
             SimilarPlacesByQueryResponse.fromMap(response.data);
         onCompleted(placesByQueryResponse);
       } catch (e) {
-        if (e is SocketException) {
-          throw Exception('Unable to connect to the internet');
+        if (e is! BusinessValidationException) {
+          if (kDebugMode) rethrow;
+          return;
         }
-        if (e is DioException) {
-          throw Exception('Server client error');
-        }
-        if (kDebugMode) rethrow;
-        return;
+        rethrow;
       }
     });
   }
@@ -133,14 +128,14 @@ class LocationService {
       if (locations.isEmpty) {
         return;
       }
-      print(locations.length);
+
       onCompleted?.call(locations.first.latitude, locations.first.longitude);
     } catch (e) {
-      if (e is SocketException) {
-        throw Exception('Unable to connect to the internet');
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return;
       }
-      if (kDebugMode) rethrow;
-      return;
+      rethrow;
     }
   }
 }

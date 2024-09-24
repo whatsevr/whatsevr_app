@@ -1,9 +1,13 @@
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 
 import 'package:whatsevr_app/constants.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+
+import '../api/external/models/business_validation_exception.dart';
 
 class FileUploadService {
   static late final SupabaseStorageClient _supabaseStorageClient;
@@ -21,9 +25,9 @@ class FileUploadService {
     String? fileExtension,
   }) async {
     try {
-      if (file.lengthSync() > kMaxMediaFileUploadSizeInMb * 1000000) {
-        throw Exception(
-            'File size too large (Max $kMaxMediaFileUploadSizeInMb MB)');
+      if (file.lengthSync() > kMaxMediaFileUploadSizeInGB * 1024 * 1000000) {
+        throw BusinessValidationException(
+            'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)');
       }
       final String fileName =
           '${userUid}_${fileType}_${DateTime.now().microsecondsSinceEpoch}.${fileExtension ?? file.path.split('.').last}';
@@ -33,14 +37,18 @@ class FileUploadService {
           .upload(
             fileName,
             file,
+            retryAttempts: 3,
           );
       final String supabaseImageUrl =
           '${_supabaseStorageClient.url}/object/public/$uploadStorageResponse';
-      debugPrint('File URL: $supabaseImageUrl');
+      TalkerService.instance.info('File uploaded to SST: $supabaseImageUrl');
       return supabaseImageUrl;
     } catch (e) {
-      if (kDebugMode) rethrow;
-      throw ('Error uploading file: $e');
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return null;
+      }
+      rethrow;
     }
   }
 }

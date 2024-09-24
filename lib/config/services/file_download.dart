@@ -1,4 +1,7 @@
 import 'package:background_downloader/background_downloader.dart';
+import 'package:flutter/foundation.dart';
+
+import '../api/external/models/business_validation_exception.dart';
 
 class DownloadService {
   static void init() {
@@ -10,18 +13,31 @@ class DownloadService {
   }
 
   static Future<void> downloadFile(String url, String filename) async {
-    final DownloadTask task = DownloadTask(
-      url: url,
-      filename: filename,
-      baseDirectory: BaseDirectory.applicationDocuments,
-      updates: Updates.statusAndProgress,
-      requiresWiFi: false,
-      retries: 3,
-      allowPause: true,
-    );
-    await FileDownloader().download(task,
+    try {
+      final DownloadTask task = DownloadTask(
+        url: url,
+        filename: filename,
+        baseDirectory: BaseDirectory.applicationDocuments,
+        updates: Updates.statusAndProgress,
+        requiresWiFi: false,
+        retries: 3,
+        allowPause: true,
+      );
+      var taskStatus = await FileDownloader().download(
+        task,
         onProgress: (double progress) => print('Progress: ${progress * 100}%'),
-        onStatus: (TaskStatus status) => print('Status: $status'),);
-    await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
+        onStatus: (TaskStatus status) => print('Status: $status'),
+      );
+      if (taskStatus.status != TaskStatus.complete) {
+        throw BusinessValidationException('Failed to download file');
+      }
+      await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
+    } catch (e) {
+      if (e is! BusinessValidationException) {
+        if (kDebugMode) rethrow;
+        return;
+      }
+      rethrow;
+    }
   }
 }
