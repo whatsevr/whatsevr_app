@@ -17,6 +17,7 @@ import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 import 'config/services/long_running_task/controller.dart';
+import 'config/services/notification.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -55,4 +56,5 @@ void catchUnhandledExceptions(Object error, StackTrace? stack) {
 void afterLoginServices() {
   TalkerService.instance.info('Executing after login services.');
   WhatsevrLongTaskController.registerNotificationChannel();
+  NotificationService().init();
 }

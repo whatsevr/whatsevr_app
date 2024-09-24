@@ -1,20 +1,7 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-
-@pragma('vm:entry-point')
-void notificationTapWhenAppBackground(
-    NotificationResponse notificationResponse) {
-  // handle action
-}
 
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _plugin =
-      FlutterLocalNotificationsPlugin();
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
   static final NotificationService _instance = NotificationService._internal();
 
   factory NotificationService() {
@@ -23,374 +10,211 @@ class NotificationService {
 
   NotificationService._internal();
 
-  Future<void> initialize(BuildContext context) async {
-    // Initialize local notifications
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    final DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-
-    await _plugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: _handleNotificationClick,
-      onDidReceiveBackgroundNotificationResponse:
-          notificationTapWhenAppBackground,
-    );
-
-    // Initialize Firebase Messaging
-    await _firebaseMessaging.requestPermission();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _showRemoteNotification(message);
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
-
-    // Setup timezone
-    tz.initializeTimeZones();
-  }
-
-  // Show Firebase Push Notification
-  Future<void> _showRemoteNotification(RemoteMessage message) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'chat_channel_id',
-      'Notifications for chat messages',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      message.notification.hashCode,
-      message.notification?.title ?? '',
-      message.notification?.body ?? '',
-      platformChannelSpecifics,
-      payload: message.data['payload'],
-    );
-  }
-
-  // Show Local Chat Notification
-  Future<void> showLocalNotification(
-      String messageContent, String senderName) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'chat_channel_id',
-      'Notifications for chat messages',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      0,
-      'Message from $senderName',
-      messageContent,
-      platformChannelSpecifics,
-      payload: 'chat',
-    );
-  }
-
-  // Handle Notification Click
-  void _handleNotificationClick(NotificationResponse? payload) {
-    if (payload == 'chat') {
-      // Navigate to chat screen or handle notification click action
-      // Navigator.of(context).push(MaterialPageRoute(
-      //   builder: (context) => ChatScreen(), // Replace with your chat screen
-      // ));
-    }
-  }
-
-  /// Show Custom Notification based on type
-  Future<void> showCustomNotification(
-      String title, String body, String type) async {
-    AndroidNotificationDetails androidDetails;
-
-    switch (type) {
-      case 'comment':
-        androidDetails = AndroidNotificationDetails(
-          'comments_channel',
-          'Notifications for comments',
-          importance: Importance.max,
-          priority: Priority.high,
-        );
-        break;
-      case 'like':
-        androidDetails = AndroidNotificationDetails(
-          'likes_channel',
-          'Notifications for likes',
-          importance: Importance.defaultImportance,
-          priority: Priority.defaultPriority,
-        );
-        break;
-      case 'new_video':
-        androidDetails = AndroidNotificationDetails(
-          'video_channel',
-          'Notifications for new video uploads',
-          importance: Importance.high,
-          priority: Priority.high,
-        );
-        break;
-      default:
-        androidDetails = AndroidNotificationDetails(
-          'general_channel',
-          'General notifications',
-          importance: Importance.defaultImportance,
-          priority: Priority.defaultPriority,
-        );
-        break;
-    }
-
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidDetails,
-    );
-
-    await _plugin.show(
-      0,
-      title,
-      body,
-      platformChannelSpecifics,
-      payload: type,
-    );
-  }
-
-  /// Show Rich Media Notification (e.g., image)
-  Future<void> showRichMediaNotification(
-      String title, String body, String imageUrl) async {
-    final BigPictureStyleInformation bigPictureStyleInformation =
-        BigPictureStyleInformation(
-      FilePathAndroidBitmap(imageUrl),
-      contentTitle: title,
-      summaryText: body,
-    );
-
-    final AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'rich_media_channel',
-      'Notifications with media (images, videos)',
-      importance: Importance.high,
-      priority: Priority.high,
-      styleInformation: bigPictureStyleInformation,
-    );
-
-    final NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      0,
-      title,
-      body,
-      platformChannelSpecifics,
-    );
-  }
-
-  /// Show Sticky Progress Notification
-  Future<void> showStickyProgressNotification(
-      String title, String description) async {
-    const int progressMax = 100;
-    int currentProgress = 0;
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'progress_channel_id',
-
-      'Notifications with a progress bar',
-      importance: Importance.low,
-      priority: Priority.low,
-      ongoing: true, // Sticky notification
-      showProgress: true,
-      maxProgress: progressMax,
-    );
-
-    for (currentProgress;
-        currentProgress <= progressMax;
-        currentProgress += 10) {
-      final NotificationDetails platformChannelSpecifics =
-          const NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-      );
-
-      await _plugin.show(
-        1, // notification id
-        title,
-        '$description: $currentProgress%',
-        platformChannelSpecifics,
-        payload: 'progress',
-      );
-
-      // Simulate progress update
-      await Future.delayed(const Duration(seconds: 1));
-    }
-
-    // Remove the notification after completion
-    await _plugin.cancel(1);
-  }
-
-  /// Show Grouped Notifications (e.g., multiple likes or comments)
-  Future<void> showGroupedNotification(
-      String title, String body, int notificationId, String groupKey) async {
-    AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'grouped_channel',
-      'Grouped Notifications',
-
-      importance: Importance.high,
-      priority: Priority.high,
-      groupKey: groupKey, // Unique key for this group
-    );
-
-    NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      notificationId,
-      title,
-      body,
-      platformChannelSpecifics,
-    );
-  }
-
-  /// Show Notification with Action Buttons (e.g., Like, Reply)
-  Future<void> showNotificationWithAction(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'action_channel',
-      'Notifications with action buttons',
-      importance: Importance.high,
-      priority: Priority.high,
-      actions: <AndroidNotificationAction>[
-        AndroidNotificationAction('reply_action', 'Reply'),
-        AndroidNotificationAction('like_action', 'Like'),
+  Future<void> init() async {
+    await AwesomeNotifications().initialize(
+      'resource://drawable/res_app_icon', // Replace with your app icon path
+      [
+        NotificationChannel(
+          channelKey: 'basic_channel',
+          channelName: 'Basic Notifications',
+          channelDescription: 'Notification channel for basic tests',
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white,
+        ),
+        NotificationChannel(
+          channelKey: 'media_channel',
+          channelName: 'Media Notifications',
+          channelDescription: 'Notification channel for media tests',
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          playSound: true,
+          enableVibration: true,
+          importance: NotificationImportance.High,
+        ),
+        NotificationChannel(
+          channelKey: 'scheduled_channel',
+          channelName: 'Scheduled Notifications',
+          channelDescription: 'Channel for scheduled notifications',
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.Max,
+          enableVibration: true,
+          playSound: true,
+        ),
+        NotificationChannel(
+          channelKey: 'big_picture_channel',
+          channelName: 'Big Picture Notifications',
+          channelDescription: 'Channel for big picture notifications',
+          defaultColor: Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.High,
+        ),
       ],
     );
+  }
 
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      0,
-      title,
-      body,
-      platformChannelSpecifics,
+  Future<void> showBasicNotification(String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.Default,
+      ),
     );
   }
 
-  /// Show Silent Notification (no sound or alert)
-  Future<void> showSilentNotification(String title, String body) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'silent_channel',
-      'Silent background notifications',
-      importance: Importance.min,
-      priority: Priority.min,
-    );
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.show(
-      0,
-      title,
-      body,
-      platformChannelSpecifics,
+  Future<void> showBigPictureNotification(
+      String title, String body, String imageUrl) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'big_picture_channel',
+        title: title,
+        body: body,
+        bigPicture: imageUrl,
+        notificationLayout: NotificationLayout.BigPicture,
+      ),
     );
   }
 
-  /// Schedule a Notification for a specific time (e.g., live stream reminders)
-  Future<void> scheduleNotification(
-      String title, String body, DateTime scheduledTime) async {
-    final AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'scheduled_channel',
-      'Notifications for scheduled events',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    final NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await _plugin.zonedSchedule(
-      0,
-      title,
-      body,
-      tz.TZDateTime.from(scheduledTime, tz.local),
-      platformChannelSpecifics,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+  Future<void> showMediaNotification(
+      String title, String body, String imageUrl) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'media_channel',
+        title: title,
+        body: body,
+        bigPicture: imageUrl,
+        notificationLayout: NotificationLayout.MediaPlayer,
+      ),
+      actionButtons: [
+        NotificationActionButton(
+          key: 'PLAY',
+          label: 'Play',
+        ),
+        NotificationActionButton(
+          key: 'PAUSE',
+          label: 'Pause',
+        ),
+      ],
     );
   }
 
-  /// Subscribe to a Firebase topic
-  Future<void> subscribeToTopic(String topic) async {
-    try {
-      await _firebaseMessaging.subscribeToTopic(topic);
-      print('Subscribed to topic: $topic');
-    } catch (e) {
-      print('Failed to subscribe to topic: $e');
-    }
+  Future<void> showBigTextNotification(String title, String bigText) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: title,
+        body: bigText,
+        notificationLayout: NotificationLayout.BigText,
+      ),
+    );
   }
 
-  /// Unsubscribe from a Firebase topic
-  Future<void> unsubscribeFromTopic(String topic) async {
-    try {
-      await _firebaseMessaging.unsubscribeFromTopic(topic);
-      print('Unsubscribed from topic: $topic');
-    } catch (e) {
-      print('Failed to unsubscribe from topic: $e');
-    }
+  Future<void> showInboxNotification(
+      String title, List<String> messages) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: title,
+        body: messages.join('\n'),
+        notificationLayout: NotificationLayout.Inbox,
+        payload: {"messages": messages.join(', ')},
+      ),
+    );
   }
 
-  /// Get current Firebase Cloud Messaging (FCM) token
-  Future<String?> getCurrentFcmToken() async {
-    try {
-      String? token = await _firebaseMessaging.getToken();
-      print('FCM Token: $token');
-      return token;
-    } catch (e) {
-      print('Failed to get FCM token: $e');
-      return null;
-    }
+  Future<void> showMessagingNotification(String groupKey, String chatTitle,
+      List<Map<String, String>> messages) async {
+    // Formatting the messages as a string for the payload
+    String formattedMessages =
+        messages.map((msg) => '${msg['sender']}: ${msg['message']}').join('\n');
+
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: chatTitle,
+        body: 'You have new messages',
+        groupKey: groupKey,
+        notificationLayout: NotificationLayout.Messaging,
+        payload: {"messages": formattedMessages},
+      ),
+      actionButtons: [
+        NotificationActionButton(
+          key: 'REPLY',
+          label: 'Reply',
+          requireInputText: true,
+        ),
+      ],
+    );
   }
 
-  /// Update Badge Count (for unread notifications)
-  // Future<void> updateBadgeCount(int count) async {
-  //   await _localNotificationsPlugin
-  //       .resolvePlatformSpecificImplementation<
-  //           AndroidFlutterLocalNotificationsPlugin>()
-  //       ?.setBadgeCount(count);
-  //
-  //   await _localNotificationsPlugin
-  //       .resolvePlatformSpecificImplementation<
-  //           IOSFlutterLocalNotificationsPlugin>()
-  //       ?.setBadgeCount(count);
-  // }
+  Future<void> showNotificationWithActionButtons(
+      String title, String body) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.Default,
+      ),
+      actionButtons: [
+        NotificationActionButton(
+          key: 'OPEN',
+          label: 'Open',
+        ),
+        NotificationActionButton(
+          key: 'DISMISS',
+          label: 'Dismiss',
+        ),
+      ],
+    );
+  }
 
-  /// Reset Badge Count
-  // Future<void> resetBadgeCount() async {
-  //   await updateBadgeCount(0); // Reset badge count to zero
-  // }
+  Future<void> showScheduledNotification(
+      String title, String body, DateTime scheduledDate) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'scheduled_channel',
+        title: title,
+        body: body,
+      ),
+      schedule: NotificationCalendar.fromDate(date: scheduledDate),
+    );
+  }
+
+  Future<void> showProgressNotification(
+      String title, String body, int progress) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: createUniqueId(),
+        channelKey: 'basic_channel',
+        title: title,
+        body: body,
+        notificationLayout: NotificationLayout.ProgressBar,
+        progress: progress,
+        locked: true,
+      ),
+    );
+  }
+
+  Future<void> cancelAllNotifications() async {
+    await AwesomeNotifications().cancelAll();
+  }
+
+  Future<void> resetBadgeCount() async {
+    await AwesomeNotifications().resetGlobalBadge();
+  }
+
+  int createUniqueId() {
+    return DateTime.now().millisecondsSinceEpoch.remainder(100000);
+  }
 }

@@ -105,7 +105,7 @@ class WhatsevrLongTaskController extends TaskHandler {
   }
 
   @override
-  void onDestroy(DateTime timestamp) {
+  Future<void> onDestroy(DateTime timestamp) async {
     TalkerService.instance.info('Foreground service destroyed.');
   }
 

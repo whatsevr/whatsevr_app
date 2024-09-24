@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
+import '../config/services/notification.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -36,6 +37,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               }
             ),
             ('Test2', () async {}),
+            ('Cancel', () async {}),
           ])
             TextButton(
               onPressed: itm.$2,

@@ -65,6 +65,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  awesome_notifications:
+    dependency: "direct main"
+    description:
+      name: awesome_notifications
+      sha256: "327162c36a1476978f89638741da618cac42356aabc39a5035b6c206d8fca978"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.7"
+  awesome_notifications_core:
+    dependency: "direct main"
+    description:
+      name: awesome_notifications_core
+      sha256: "38c9f9d2618c0c2abe0cea267dc161aa8c4a0a239ca2263400900b9610f33e6f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.3"
   background_downloader:
     dependency: "direct main"
     description:
@@ -349,10 +365,10 @@ packages:
     dependency: "direct main"
     description:
       name: extended_image
-      sha256: "75235b2cf90de7663640c2da43b0549fc1f373340b7ee925696e92e8ec55c4db"
+      sha256: "8ad4917eaae7271ce6d975d5c0040c7903010262908fbdb49ff2798fca754d3b"
       url: "https://pub.dev"
     source: hosted
-    version: "8.2.4"
+    version: "8.3.0"
   extended_image_library:
     dependency: transitive
     description:
@@ -429,10 +445,10 @@ packages:
     dependency: transitive
     description:
       name: file_selector_macos
-      sha256: f42eacb83b318e183b1ae24eead1373ab1334084404c8c16e0354f9a3e55d385
+      sha256: cb284e267f8e2a45a904b5c094d2ba51d0aabfc20b1538ab786d9ef7dc2bf75c
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4"
+    version: "0.9.4+1"
   file_selector_platform_interface:
     dependency: transitive
     description:
@@ -570,10 +586,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_foreground_task
-      sha256: "7026a70a10e69e83c9f1d9dbca4528952d8221e59c6007a8b34cce7379278561"
+      sha256: "2dc789446398606e7977acda63eaa05f347c175f0d19200d3dbf2b3383532ed4"
       url: "https://pub.dev"
     source: hosted
-    version: "8.9.0"
+    version: "8.10.0"
   flutter_hooks:
     dependency: transitive
     description:
@@ -586,10 +602,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_launcher_icons
-      sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
+      sha256: "619817c4b65b322b5104b6bb6dfe6cda62d9729bd7ad4303ecc8b4e690a67a77"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.1"
+    version: "0.14.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -598,30 +614,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      sha256: "49eeef364fddb71515bc78d5a8c51435a68bccd6e4d68e25a942c5e47761ae71"
-      url: "https://pub.dev"
-    source: hosted
-    version: "17.2.3"
-  flutter_local_notifications_linux:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_linux
-      sha256: c49bd06165cad9beeb79090b18cd1eb0296f4bf4b23b84426e37dd7c027fc3af
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.1"
-  flutter_local_notifications_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_local_notifications_platform_interface
-      sha256: "85f8d07fe708c1bdcf45037f2c0109753b26ae077e9d9e899d55971711a4ea66"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.0"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -1260,10 +1252,10 @@ packages:
     dependency: transitive
     description:
       name: photo_manager_image_provider
-      sha256: "38ef1023dc11de3a8669f16e7c981673b3c5cfee715d17120f4b87daa2cdd0af"
+      sha256: b0a6d59f34e48c2b9aa52a4a655308c29b0fc4b3931607f9e0e252bc49aef974
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   platform:
     dependency: transitive
     description:
@@ -1420,10 +1412,10 @@ packages:
     dependency: "direct main"
     description:
       name: shorebird_code_push
-      sha256: "62064dde5155e2cabef07dbc717a2ab95e9069fea2058da9cb32403fdf05038f"
+      sha256: a19dc019e0b7025e904e498311b5bca4fca98d2bc87edc09b1faea6f1fd1b263
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.4"
+    version: "1.1.5"
   skeletonizer:
     dependency: "direct main"
     description:
@@ -1573,14 +1565,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.0"
-  timezone:
-    dependency: transitive
-    description:
-      name: timezone
-      sha256: "2236ec079a174ce07434e89fcd3fcda430025eb7692244139a9cf54fdcf1fc7d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.4"
   transparent_image:
     dependency: transitive
     description:
@@ -1741,6 +1725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:
@@ -1801,18 +1793,18 @@ packages:
     dependency: "direct main"
     description:
       name: wechat_assets_picker
-      sha256: aea82a6b523e118197187c6371301de5d15ce5572f353b575b5dcdeb2d17d44a
+      sha256: e97f0402c5cd5fc75c90f3395874f8c94a60a59e4f206ad5d3f005d48d54e976
       url: "https://pub.dev"
     source: hosted
-    version: "9.2.2"
+    version: "9.3.0"
   wechat_picker_library:
     dependency: transitive
     description:
       name: wechat_picker_library
-      sha256: "0c2c4befeb472fc64f65903a96767a25cd8c312f0d34022873a0bccc593980a7"
+      sha256: a42e09cb85b15fc9410f6a69671371cc60aa99c4a1f7967f6593a7f665f6f47a
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.3"
+    version: "1.0.5"
   win32:
     dependency: transitive
     description:
