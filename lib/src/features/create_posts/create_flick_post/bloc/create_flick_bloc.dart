@@ -14,7 +14,6 @@ import '../../../../../config/api/external/models/business_validation_exception.
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 import '../../../../../config/api/requests_model/create_flick_post.dart';
-import '../../../../../config/api/requests_model/create_video_post.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_flick_post.dart';
 
 import '../../../../../config/routes/router.dart';
@@ -142,6 +141,7 @@ class CreateFlickPostBloc
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
+          videoDurationInSec: state.videoMetaData?.durationInSec,
         ),
       );
       if (response != null) {

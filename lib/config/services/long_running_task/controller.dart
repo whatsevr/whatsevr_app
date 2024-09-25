@@ -86,6 +86,7 @@ class WhatsevrLongTaskController extends TaskHandler {
           creatorLatLongWkb: taskData.creatorLatLongWkb,
           addressLatLongWkb: taskData.addressLatLongWkb,
           taggedCommunityUids: taskData.taggedCommunityUids,
+          videoDurationInSec: taskData.videoDurationInSec,
         ),
       );
 

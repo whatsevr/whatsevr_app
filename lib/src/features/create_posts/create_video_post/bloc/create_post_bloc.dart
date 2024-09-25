@@ -132,6 +132,8 @@ class CreateVideoPostBloc
             creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
             taggedUserUids: state.taggedUsersUid,
             taggedCommunityUids: state.taggedCommunitiesUid,
+            videoDurationInSec: state.videoMetaData?.durationInSec,
+            thumbnailAspectRatio: state.thumbnailMetaData?.aspectRatio,
           ),
           onTaskAssignFail: () async {
             SmartDialog.showLoading();
@@ -163,6 +165,7 @@ class CreateVideoPostBloc
                 creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
                 taggedUserUids: state.taggedUsersUid,
                 taggedCommunityUids: state.taggedCommunitiesUid,
+                videoDurationInSec: state.videoMetaData?.durationInSec,
               ),
             );
             if (response?.$2 == 200) {

@@ -6,7 +6,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class FlicksPlayer extends StatefulWidget {
   final String? videoUrl;
-  const FlicksPlayer({super.key, required this.videoUrl});
+  final String? thumbnail;
+  const FlicksPlayer({super.key, required this.videoUrl, this.thumbnail});
 
   @override
   State<FlicksPlayer> createState() => _FlicksPlayerState();
@@ -19,11 +20,12 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
+    controller =
+        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+          ..initialize().then((_) {
+            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+            setState(() {});
+          });
     controller.play();
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {
@@ -58,7 +60,9 @@ class _FlicksPlayerState extends State<FlicksPlayer> {
             builder: (BuildContext context) {
               if (controller.value.isPlaying) {
                 return AspectRatio(
-                    aspectRatio: controller.value.aspectRatio, child: VideoPlayer(controller),);
+                  aspectRatio: controller.value.aspectRatio,
+                  child: VideoPlayer(controller),
+                );
               }
               return ExtendedImage.network(
                 MockData.randomImage(),

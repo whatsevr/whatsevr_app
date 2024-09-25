@@ -14,6 +14,8 @@ class CreateVideoPostRequest {
 
   final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
+  final int? videoDurationInSec;
+  final double? thumbnailAspectRatio;
   CreateVideoPostRequest({
     this.title,
     this.description,
@@ -27,6 +29,8 @@ class CreateVideoPostRequest {
     this.creatorLatLongWkb,
     this.taggedUserUids,
     this.taggedCommunityUids,
+    this.videoDurationInSec,
+    this.thumbnailAspectRatio,
   });
 
   factory CreateVideoPostRequest.fromJson(String str) =>
@@ -54,6 +58,8 @@ class CreateVideoPostRequest {
         taggedCommunityUids: json['tagged_community_uids'] == null
             ? <String>[]
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        videoDurationInSec: json['video_duration_in_sec'],
+        thumbnailAspectRatio: json['thumbnail_aspect_ratio'],
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -75,5 +81,7 @@ class CreateVideoPostRequest {
         'tagged_community_uids': taggedCommunityUids == null
             ? <String>[]
             : List<dynamic>.from(taggedCommunityUids!.map((String x) => x)),
+        'video_duration_in_sec': videoDurationInSec,
+        'thumbnail_aspect_ratio': thumbnailAspectRatio,
       };
 }

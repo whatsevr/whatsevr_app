@@ -238,6 +238,8 @@ class CreateFlickPostPage extends StatelessWidget {
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
+                controller:
+                    context.read<CreateFlickPostBloc>().descriptionController,
                 maxLength: 5000,
                 minLines: 5,
                 maxLines: 10,

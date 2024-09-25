@@ -37,7 +37,7 @@ class _WtvExtendedVideoPlayerViewState
   Future<void> initializePlayer() async {
     videoPlayerController = CachedVideoPlayerController.networkUrl(
       Uri.parse('${widget.videoUrl}'),
-      videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
+      videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true),
     );
     await videoPlayerController?.initialize();
     _createChewieController();
