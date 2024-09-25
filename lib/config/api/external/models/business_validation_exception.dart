@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 class BusinessException implements Exception {
@@ -10,7 +11,7 @@ class BusinessException implements Exception {
   BusinessException(this.message);
 
   @override
-  String toString() => message;
+  String toString() => message ?? 'BusinessException';
 
   @override
   bool operator ==(Object other) {
@@ -23,7 +24,8 @@ class BusinessException implements Exception {
   int get hashCode => message.hashCode;
 }
 
-void productionSafetyCatch(dynamic e, StackTrace stackTrace) {
+// low level function to handle production errors
+void lowLevelCatch(dynamic e, StackTrace stackTrace) {
   // Log the error to TalkerService with the stack trace
   TalkerService.instance.error(e.toString(), stackTrace);
 
@@ -67,5 +69,17 @@ void productionSafetyCatch(dynamic e, StackTrace stackTrace) {
   } else {
     // Log any unexpected error silently to Firebase Crashlytics
     FirebaseCrashlytics.instance.recordError(e, stackTrace);
+  }
+}
+
+// High level function to handle and show error messages
+void highLevelCatch(dynamic e, stackTrace) {
+  SmartDialog.dismiss();
+  if (e is BusinessException) {
+    SmartDialog.showToast(e.message);
+  } else {
+    if (kDebugMode) throw e;
+    SmartDialog.showToast('Something went wrong');
+    TalkerService.instance.error(e.toString(), stackTrace);
   }
 }

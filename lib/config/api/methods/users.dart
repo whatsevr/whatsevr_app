@@ -29,7 +29,7 @@ class UsersApi {
         return UserDetailsResponse.fromMap(response.data);
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -46,7 +46,7 @@ class UsersApi {
         return ProfileDetailsResponse.fromMap(response.data);
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -63,7 +63,7 @@ class UsersApi {
         return MultipleUserDetailsResponse.fromMap(response.data);
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -79,7 +79,7 @@ class UsersApi {
 
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -92,7 +92,7 @@ class UsersApi {
       );
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -107,7 +107,7 @@ class UsersApi {
       );
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -122,7 +122,7 @@ class UsersApi {
       );
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -137,7 +137,7 @@ class UsersApi {
       );
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -152,7 +152,7 @@ class UsersApi {
       );
       return response.data['message'];
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }

@@ -14,7 +14,7 @@ class CommonDataApi {
         return CommonDataResponse.fromMap(response.data);
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }

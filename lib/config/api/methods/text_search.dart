@@ -21,7 +21,7 @@ class TextSearchApi {
         return TextSearchUsersAndCommunitiesResponse.fromMap(response.data);
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }

@@ -5,7 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
@@ -27,6 +29,7 @@ import '../../../../../config/api/requests_model/sanity_check_new_video_post.dar
 import '../../../../../config/services/long_running_task/controller.dart';
 import '../../../../../config/services/long_running_task/task_models/posts.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
+import '../../../../../dev/talker.dart';
 
 part 'create_post_event.dart';
 part 'create_post_state.dart';
@@ -51,22 +54,26 @@ class CreateVideoPostBloc
     CreatePostInitialEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    emit(state.copyWith(pageArgument: event.pageArgument));
+    try {
+      emit(state.copyWith(pageArgument: event.pageArgument));
 
-    PlacesNearbyResponse? placesNearbyResponse;
-    await LocationService.getNearByPlacesFromLatLong(
-      onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-          isPermissionAllowed) {
-        placesNearbyResponse = nearbyPlacesResponse;
-        if (lat != null && long != null) {
-          emit(state.copyWith(
-            userCurrentLocationLatLongWkb:
-                WKBUtil.getWkbString(lat: lat, long: long),
-          ));
-        }
-      },
-    );
-    emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
+      PlacesNearbyResponse? placesNearbyResponse;
+      await LocationService.getNearByPlacesFromLatLong(
+        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
+            isPermissionAllowed) {
+          placesNearbyResponse = nearbyPlacesResponse;
+          if (lat != null && long != null) {
+            emit(state.copyWith(
+              userCurrentLocationLatLongWkb:
+                  WKBUtil.getWkbString(lat: lat, long: long),
+            ));
+          }
+        },
+      );
+      emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
   }
 
   FutureOr<void> _onSubmit(
@@ -86,11 +93,10 @@ class CreateVideoPostBloc
         );
       }
       if (hashtags.length > 30) {
-        SmartDialog.showToast('You can only add 30 hashtags');
-        return;
+        throw BusinessException('Hashtags should not exceed 30');
       }
       if (titleController.text.isEmpty) {
-        SmartDialog.showToast('Title is required');
+        throw BusinessException('Title is required');
         return;
       }
 
@@ -110,8 +116,7 @@ class CreateVideoPostBloc
               )));
       if (itm?.$2 != 200) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('Error: ${itm?.$1}');
-        return;
+        throw BusinessException(itm!.$1!);
       }
 
       WhatsevrLongTaskController.startServiceWithTaskData(
@@ -173,9 +178,8 @@ class CreateVideoPostBloc
             SmartDialog.showToast('Creating post, do not close the app');
             AppNavigationService.goBack();
           });
-    } catch (e) {
-      SmartDialog.dismiss();
-      SmartDialog.showToast('Error: $e');
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
   }
 
@@ -183,90 +187,106 @@ class CreateVideoPostBloc
     PickVideoEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    if (event.pickVideoFile == null) return;
-    FileMetaData? videoMetaData =
-        await FileMetaData.fromFile(event.pickVideoFile);
-    // Validate video metadata
-    if (videoMetaData == null ||
-        videoMetaData.isVideo != true ||
-        videoMetaData.aspectRatio?.isAspectRatioLandscape != true) {
-      SmartDialog.showToast('Video is not under the required conditions');
-      return;
+    try {
+      if (event.pickVideoFile == null) return;
+      FileMetaData? videoMetaData =
+          await FileMetaData.fromFile(event.pickVideoFile);
+      // Validate video metadata
+      if (videoMetaData == null ||
+          videoMetaData.isVideo != true ||
+          videoMetaData.aspectRatio?.isAspectRatioLandscape != true) {
+        SmartDialog.showToast('Video is not under the required conditions');
+        return;
+      }
+
+      emit(state.copyWith(videoFile: event.pickVideoFile));
+
+      final File? thumbnailFile =
+          await getThumbnailFile(videoFile: event.pickVideoFile!);
+
+      final FileMetaData? thumbnailMetaData =
+          await FileMetaData.fromFile(thumbnailFile);
+
+      emit(
+        state.copyWith(
+          thumbnailFile: thumbnailFile,
+          videoMetaData: videoMetaData,
+          thumbnailMetaData: thumbnailMetaData,
+        ),
+      );
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
-
-    emit(state.copyWith(videoFile: event.pickVideoFile));
-
-    final File? thumbnailFile =
-        await getThumbnailFile(videoFile: event.pickVideoFile!);
-
-    final FileMetaData? thumbnailMetaData =
-        await FileMetaData.fromFile(thumbnailFile);
-
-    emit(
-      state.copyWith(
-        thumbnailFile: thumbnailFile,
-        videoMetaData: videoMetaData,
-        thumbnailMetaData: thumbnailMetaData,
-      ),
-    );
   }
 
   Future<void> _onPickThumbnail(
     PickThumbnailEvent event,
     Emitter<CreateVideoPostState> emit,
   ) async {
-    // Check if videoFile is null, return early if it is
-    if (state.videoFile == null) {
-      // Handle the null case (e.g., show a toast or log an error)
-      SmartDialog.showToast('Video file is not available');
-      return;
+    try {
+      // Check if videoFile is null, return early if it is
+      if (state.videoFile == null) {
+        // Handle the null case (e.g., show a toast or log an error)
+        SmartDialog.showToast('Video file is not available');
+        return;
+      }
+
+      // If no thumbnail was selected, return early
+      if (event.pickedThumbnailFile == null) return;
+
+      // Emit state changes after the thumbnail has been selected
+      emit(state.copyWith(
+        thumbnailFile: event.pickedThumbnailFile,
+        thumbnailMetaData:
+            await FileMetaData.fromFile(event.pickedThumbnailFile!),
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
-
-    // If no thumbnail was selected, return early
-    if (event.pickedThumbnailFile == null) return;
-
-    // Emit state changes after the thumbnail has been selected
-    emit(state.copyWith(
-      thumbnailFile: event.pickedThumbnailFile,
-      thumbnailMetaData:
-          await FileMetaData.fromFile(event.pickedThumbnailFile!),
-    ));
   }
 
   Future<void> _onUpdatePostAddress(
       UpdatePostAddressEvent event, Emitter<CreateVideoPostState> emit) async {
-    emit(
-      state.copyWith(
-        selectedAddress: event.address,
-        selectedAddressLatLongWkb: WKBUtil.getWkbString(
-            lat: event.addressLatitude, long: event.addressLongitude),
-      ),
-    );
+    try {
+      emit(
+        state.copyWith(
+          selectedAddress: event.address,
+          selectedAddressLatLongWkb: WKBUtil.getWkbString(
+              lat: event.addressLatitude, long: event.addressLongitude),
+        ),
+      );
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
   }
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
       Emitter<CreateVideoPostState> emit) {
-    if (event.clearAll == true) {
-      emit(state.copyWith(
-        taggedUsersUid: [],
-        taggedCommunitiesUid: [],
-      ));
-    } else {
-      List<String> taggedUsersUid = [
-        ...state.taggedUsersUid,
-        ...?event.taggedUsersUid
-      ];
-      List<String> taggedCommunitiesUid = [
-        ...state.taggedCommunitiesUid,
-        ...?event.taggedCommunitiesUid
-      ];
-      taggedUsersUid = taggedUsersUid.toSet().toList();
-      taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
-      emit(state.copyWith(
-        taggedUsersUid: taggedUsersUid,
-        taggedCommunitiesUid: taggedCommunitiesUid,
-      ));
+    try {
+      if (event.clearAll == true) {
+        emit(state.copyWith(
+          taggedUsersUid: [],
+          taggedCommunitiesUid: [],
+        ));
+      } else {
+        List<String> taggedUsersUid = [
+          ...state.taggedUsersUid,
+          ...?event.taggedUsersUid
+        ];
+        List<String> taggedCommunitiesUid = [
+          ...state.taggedCommunitiesUid,
+          ...?event.taggedCommunitiesUid
+        ];
+        taggedUsersUid = taggedUsersUid.toSet().toList();
+        taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
+        emit(state.copyWith(
+          taggedUsersUid: taggedUsersUid,
+          taggedCommunitiesUid: taggedCommunitiesUid,
+        ));
+      }
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
   }
 }

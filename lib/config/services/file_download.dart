@@ -34,7 +34,7 @@ class DownloadService {
       }
       await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
     } catch (e) {
-      productionSafetyCatch(e, StackTrace.current);
+      lowLevelCatch(e, StackTrace.current);
     }
   }
 }

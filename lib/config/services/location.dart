@@ -72,7 +72,7 @@ class LocationService {
           PlacesNearbyResponse.fromMap(response.data);
       onCompleted(nearbyPlacesResponse, lat, long, true, true);
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 
@@ -105,7 +105,7 @@ class LocationService {
             SimilarPlacesByQueryResponse.fromMap(response.data);
         onCompleted(placesByQueryResponse);
       } catch (e, s) {
-        productionSafetyCatch(e, s);
+        lowLevelCatch(e, s);
       }
     });
   }
@@ -123,7 +123,7 @@ class LocationService {
 
       onCompleted?.call(locations.first.latitude, locations.first.longitude);
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 }

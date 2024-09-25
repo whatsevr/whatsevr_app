@@ -19,7 +19,7 @@ class PostApi {
 
       return (response.data['message'] as String?, response.statusCode);
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }
@@ -35,7 +35,7 @@ class PostApi {
 
       return CreateVideoPostResponse.fromMap(response.data);
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
     return null;
   }

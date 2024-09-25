@@ -44,7 +44,7 @@ class FileUploadService {
       TalkerService.instance.info('File uploaded to SST: $supabaseImageUrl');
       return supabaseImageUrl;
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
       return null;
     }
   }

@@ -64,7 +64,7 @@ class AuthUserDb {
               (e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
           .toList();
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 
@@ -75,7 +75,7 @@ class AuthUserDb {
       users.removeWhere((element) => element['data']['userId'] == userId);
       await _authorisedCustomersBox.put(_allLoggedUsers, users);
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 
@@ -93,7 +93,7 @@ class AuthUserDb {
       }
       return lastLoggedUserId;
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 

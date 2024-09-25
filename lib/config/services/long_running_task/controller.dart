@@ -40,7 +40,7 @@ class WhatsevrLongTaskController extends TaskHandler {
             throw Exception('Foreground service Unknown task type received.');
         }
       } catch (e, s) {
-        productionSafetyCatch(e, s);
+        lowLevelCatch(e, s);
       }
     } else {
       TalkerService.instance.error('Foreground service Invalid data received.');
@@ -100,7 +100,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         TalkerService.instance.error('Failed to create video post.');
       }
     } catch (e, s) {
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 
@@ -166,13 +166,16 @@ class WhatsevrLongTaskController extends TaskHandler {
           callback: startCallback,
         );
       }
-
+      if (await FlutterForegroundTask.isRunningService) {
+        FlutterForegroundTask.sendDataToTask(taskData.toMap());
+        onTaskAssigned();
+      } else {
+        onTaskAssignFail();
+      }
       // Send the serialized task data to the foreground service.
-      FlutterForegroundTask.sendDataToTask(taskData.toMap());
-      onTaskAssigned();
     } catch (e, s) {
       onTaskAssignFail();
-      productionSafetyCatch(e, s);
+      lowLevelCatch(e, s);
     }
   }
 
