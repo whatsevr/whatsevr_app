@@ -95,7 +95,7 @@ class CreateFlickPostBloc
         throw BusinessException('Title is required');
       }
 
-      SmartDialog.showLoading();
+      SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewVideoPost(
           request: SanityCheckNewVideoPostRequest(
@@ -113,65 +113,41 @@ class CreateFlickPostBloc
         throw BusinessException(itm!.$1!);
       }
 
-      WhatsevrLongTaskController.startServiceWithTaskData(
-          taskData: VideoPostTaskDataForLRT(
-            videoFilePath: state.videoFile!.path,
-            thumbnailFilePath: state.thumbnailFile!.path,
-            title: titleController.text,
-            description: descriptionController.text,
-            userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-            hashtags: hashtags.isEmpty
-                ? null
-                : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-            location: state.selectedAddress,
-            postCreatorType: state.pageArgument?.postCreatorType.value,
-            addressLatLongWkb: state.selectedAddressLatLongWkb,
-            creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-            taggedUserUids: state.taggedUsersUid,
-            taggedCommunityUids: state.taggedCommunitiesUid,
-          ),
-          onTaskAssignFail: () async {
-            SmartDialog.showLoading();
-            final String? videoUrl = await FileUploadService.uploadFilesToSST(
-              state.videoFile!,
-              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileType: 'video-post',
-            );
-            final String? thumbnailUrl =
-                await FileUploadService.uploadFilesToSST(
-              state.thumbnailFile!,
-              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileType: 'video-post-thumbnail',
-            );
-            CreateVideoPostResponse? response = await PostApi.createVideoPost(
-              post: CreateVideoPostRequest(
-                title: titleController.text,
-                description: descriptionController.text,
-                userUid: await AuthUserDb.getLastLoggedUserUid(),
-                hashtags: hashtags.isEmpty
-                    ? null
-                    : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-                location: state.selectedAddress,
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-                thumbnail: thumbnailUrl,
-                videoUrl: videoUrl,
-                addressLatLongWkb: state.selectedAddressLatLongWkb,
-                creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-                taggedUserUids: state.taggedUsersUid,
-                taggedCommunityUids: state.taggedCommunitiesUid,
-              ),
-            );
-            if (response != null) {
-              SmartDialog.dismiss();
-              SmartDialog.showToast('Creating post, do not close the app');
-              AppNavigationService.goBack();
-            }
-          },
-          onTaskAssigned: () {
-            SmartDialog.dismiss();
-            SmartDialog.showToast('Creating post, do not close the app');
-            AppNavigationService.goBack();
-          });
+      SmartDialog.showLoading(msg: 'Uploading video...');
+      final String? videoUrl = await FileUploadService.uploadFilesToSST(
+        state.videoFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'video-post',
+      );
+      final String? thumbnailUrl = await FileUploadService.uploadFilesToSST(
+        state.thumbnailFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'video-post-thumbnail',
+      );
+      SmartDialog.showLoading(msg: 'Creating post...');
+      CreateVideoPostResponse? response = await PostApi.createVideoPost(
+        post: CreateVideoPostRequest(
+          title: titleController.text,
+          description: descriptionController.text,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          hashtags: hashtags.isEmpty
+              ? null
+              : hashtags.map((e) => e.replaceAll("#", '')).toList(),
+          location: state.selectedAddress,
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          thumbnail: thumbnailUrl,
+          videoUrl: videoUrl,
+          addressLatLongWkb: state.selectedAddressLatLongWkb,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
+        ),
+      );
+      if (response != null) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('${response.message}');
+        AppNavigationService.goBack();
+      }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -188,8 +164,8 @@ class CreateFlickPostBloc
       // Validate video metadata
       if (videoMetaData == null ||
           videoMetaData.isVideo != true ||
-          videoMetaData.aspectRatio?.isAspectRatioLandscape != true) {
-        throw BusinessException('Video is not under the required conditions');
+          videoMetaData.aspectRatio?.isAspectRatioPortrait != true) {
+        throw BusinessException('Video should be a portrait/vertical video');
       }
 
       emit(state.copyWith(videoFile: event.pickVideoFile));

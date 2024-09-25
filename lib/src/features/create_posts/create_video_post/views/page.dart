@@ -63,122 +63,125 @@ class CreateVideoPostPage extends StatelessWidget {
               const Gap(12),
               Column(
                 children: <Widget>[
-                  Builder(
-                    builder: (BuildContext context) {
-                      double baseHeight = 200;
-                      if (state.thumbnailFile != null) {
-                        return Stack(
-                          children: <Widget>[
-                            ExtendedImage.file(
-                              state.thumbnailFile!,
-                              width: double.infinity,
-                              height: baseHeight,
-                              fit: BoxFit.cover,
-                              shape: BoxShape.rectangle,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            Positioned.fill(
-                              child: Center(
-                                child: IconButton(
-                                  onPressed: () {
-                                    AppNavigationService.newRoute(
-                                      RoutesName.fullVideoPlayer,
-                                      extras: VideoPreviewPlayerPageArguments(
-                                        videoUrl: state.videoFile!.path,
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.play_circle_fill_rounded,
-                                    color: Colors.white,
-                                    size: 50,
-                                  ),
-                                ),
+                  AspectRatio(
+                    aspectRatio: state.thumbnailMetaData?.aspectRatio ?? 16 / 9,
+                    child: Builder(
+                      builder: (BuildContext context) {
+                        double baseHeight = double.infinity;
+                        if (state.thumbnailFile != null) {
+                          return Stack(
+                            children: <Widget>[
+                              ExtendedImage.file(
+                                state.thumbnailFile!,
+                                width: double.infinity,
+                                height: baseHeight,
+                                fit: BoxFit.cover,
+                                shape: BoxShape.rectangle,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
                               ),
-                            ),
-                            if (state.videoMetaData != null)
-                              GestureDetector(
-                                onTap: () {
-                                  FileMetaData.showMetaData(
-                                      state.videoMetaData);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.5),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
+                              Positioned.fill(
+                                child: Center(
+                                  child: IconButton(
+                                    onPressed: () {
+                                      AppNavigationService.newRoute(
+                                        RoutesName.fullVideoPlayer,
+                                        extras: VideoPreviewPlayerPageArguments(
+                                          videoUrl: state.videoFile!.path,
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.play_circle_fill_rounded,
                                       color: Colors.white,
+                                      size: 50,
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        );
-                      }
-                      if (state.videoFile != null) {
-                        return MaterialButton(
-                          onPressed: () {
-                            showWhatsevrThumbnailSelectionPage(
-                              videoFile: state.videoFile!,
-                            ).then((value) {
-                              if (value != null) {
+                              if (state.videoMetaData != null)
+                                GestureDetector(
+                                  onTap: () {
+                                    FileMetaData.showMetaData(
+                                        state.videoMetaData);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.5),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        }
+                        if (state.videoFile != null) {
+                          return MaterialButton(
+                            onPressed: () {
+                              showWhatsevrThumbnailSelectionPage(
+                                videoFile: state.videoFile!,
+                              ).then((value) {
+                                if (value != null) {
+                                  context
+                                      .read<CreateVideoPostBloc>()
+                                      .add(PickThumbnailEvent(
+                                        pickedThumbnailFile: value,
+                                      ));
+                                }
+                              });
+                            },
+                            minWidth: double.infinity,
+                            height: baseHeight,
+                            color: Colors.white10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        }
+                        return GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () {
+                            CustomAssetPicker.pickVideoFromGallery(
+                              onCompleted: (file) {
                                 context
                                     .read<CreateVideoPostBloc>()
-                                    .add(PickThumbnailEvent(
-                                      pickedThumbnailFile: value,
-                                    ));
-                              }
-                            });
+                                    .add(PickVideoEvent(pickVideoFile: file));
+                              },
+                            );
                           },
-                          minWidth: double.infinity,
-                          height: baseHeight,
-                          color: Colors.white10,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        );
-                      }
-                      return GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          CustomAssetPicker.pickVideoFromGallery(
-                            onCompleted: (file) {
-                              context
-                                  .read<CreateVideoPostBloc>()
-                                  .add(PickVideoEvent(pickVideoFile: file));
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: baseHeight,
-                          decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                          child: Container(
+                            width: double.infinity,
+                            height: baseHeight,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.video_file_rounded,
+                                    color: Colors.white, size: 50),
+                                Text('Add a video',
+                                    style: TextStyle(color: Colors.white)),
+                              ],
                             ),
                           ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.video_file_rounded,
-                                  color: Colors.white, size: 50),
-                              Text('Add a video',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   if (state.videoFile != null || state.thumbnailFile != null)
                     Row(

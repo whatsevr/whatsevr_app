@@ -17,6 +17,7 @@ import 'package:whatsevr_app/config/widgets/button.dart';
 Future<File?> showWhatsevrThumbnailSelectionPage({
   required File videoFile,
   Function(File)? onThumbnailSelected,
+  bool allowPickFromGallery = true,
 }) async {
   File? file;
   await SmartDialog.show(
@@ -29,6 +30,7 @@ Future<File?> showWhatsevrThumbnailSelectionPage({
           file = file0;
           SmartDialog.dismiss();
         },
+        allowPickFromGallery: allowPickFromGallery,
       );
     },
   );
@@ -39,10 +41,12 @@ Future<File?> showWhatsevrThumbnailSelectionPage({
 class _Ui extends StatefulWidget {
   final File videoFile;
   final Function(File) onThumbnailSelected;
+  final bool allowPickFromGallery;
 
   const _Ui({
     required this.videoFile,
     required this.onThumbnailSelected,
+    this.allowPickFromGallery = true,
   });
 
   @override
@@ -177,19 +181,21 @@ class _UiState extends State<_Ui> {
                 },
               ),
             ),
-            WhatsevrButton.outlined(
-              label: 'Pick From Gallery',
-              onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  allowMultiple: false,
-                  type: FileType.image,
-                );
-                if (result == null) {
-                  return;
-                }
-                widget.onThumbnailSelected(File(result.files.single.path!));
-              },
-            ),
+            if (widget.allowPickFromGallery)
+              WhatsevrButton.outlined(
+                label: 'Pick From Gallery',
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    allowMultiple: false,
+                    type: FileType.image,
+                  );
+                  if (result == null) {
+                    return;
+                  }
+                  widget.onThumbnailSelected(File(result.files.single.path!));
+                },
+              ),
             WhatsevrButton.filled(
               label: 'Done',
               onPressed: () async {

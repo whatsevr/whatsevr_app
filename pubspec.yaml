@@ -97,6 +97,13 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/images/whatsevr_app_logo.jpg"
 
+flutter_native_splash:
+#dart run flutter_native_splash:create
+  color: "#ffffff"
+  image: "assets/images/whatsevr_app_logo.jpg"
+  android: true
+  ios: true
+
 flutter:
 
   uses-material-design: true
