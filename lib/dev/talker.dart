@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
@@ -21,6 +22,8 @@ class TalkerService {
   }
 
   static void init() {
-    Bloc.observer = TalkerService.blocObserver;
+    if (kReleaseMode) {
+      Bloc.observer = TalkerService.blocObserver;
+    }
   }
 }

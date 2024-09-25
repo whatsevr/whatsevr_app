@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
-import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -147,7 +146,8 @@ class CreateVideoPostBloc
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
               fileType: 'video-post-thumbnail',
             );
-            CreateVideoPostResponse? response = await PostApi.createVideoPost(
+            (String? message, int? statusCode)? response =
+                await PostApi.createVideoPost(
               post: CreateVideoPostRequest(
                 title: titleController.text,
                 description: descriptionController.text,
@@ -165,9 +165,9 @@ class CreateVideoPostBloc
                 taggedCommunityUids: state.taggedCommunitiesUid,
               ),
             );
-            if (response != null) {
+            if (response?.$2 == 200) {
               SmartDialog.dismiss();
-              SmartDialog.showToast('Creating post, do not close the app');
+              SmartDialog.showToast('${response?.$1}');
               AppNavigationService.goBack();
             }
           },
@@ -187,12 +187,13 @@ class CreateVideoPostBloc
   ) async {
     try {
       if (event.pickVideoFile == null) return;
+      SmartDialog.showLoading(msg: 'Validating video...');
       FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickVideoFile);
       // Validate video metadata
       if (videoMetaData == null ||
           videoMetaData.isVideo != true ||
-          videoMetaData.aspectRatio?.isAspectRatioLandscape != true) {
+          videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
         throw BusinessException('Video is not under the required conditions');
       }
 
@@ -211,6 +212,7 @@ class CreateVideoPostBloc
           thumbnailMetaData: thumbnailMetaData,
         ),
       );
+      SmartDialog.dismiss();
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

@@ -13,18 +13,18 @@ import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import '../../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
+import '../../../../../config/api/requests_model/create_flick_post.dart';
 import '../../../../../config/api/requests_model/create_video_post.dart';
-import '../../../../../config/api/requests_model/sanity_check_new_video_post.dart';
-import '../../../../../config/api/response_model/create_video_post.dart';
+import '../../../../../config/api/requests_model/sanity_check_new_flick_post.dart';
+
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
-import '../../../../../config/services/long_running_task/controller.dart';
-import '../../../../../config/services/long_running_task/task_models/posts.dart';
+
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../create_video_post/views/page.dart';
+
 import '../views/page.dart';
 
 part 'create_flick_event.dart';
@@ -97,8 +97,8 @@ class CreateFlickPostBloc
 
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewVideoPost(
-          request: SanityCheckNewVideoPostRequest(
+      (String?, int?)? itm = await PostApi.sanityCheckNewFlickPost(
+          request: SanityCheckNewFlickPostRequest(
               mediaMetaData: MediaMetaData(
                 aspectRatio: state.videoMetaData?.aspectRatio,
                 durationSec: state.videoMetaData?.durationInSec,
@@ -125,8 +125,9 @@ class CreateFlickPostBloc
         fileType: 'video-post-thumbnail',
       );
       SmartDialog.showLoading(msg: 'Creating post...');
-      CreateVideoPostResponse? response = await PostApi.createVideoPost(
-        post: CreateVideoPostRequest(
+      (String? message, int? statusCode)? response =
+          await PostApi.createFlickPost(
+        post: CreateFlickPostRequest(
           title: titleController.text,
           description: descriptionController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
@@ -145,7 +146,7 @@ class CreateFlickPostBloc
       );
       if (response != null) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response.message}');
+        SmartDialog.showToast('${response.$1}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {
@@ -159,6 +160,7 @@ class CreateFlickPostBloc
   ) async {
     try {
       if (event.pickVideoFile == null) return;
+      SmartDialog.showLoading(msg: 'Validating video...');
       FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickVideoFile);
       // Validate video metadata
@@ -183,6 +185,7 @@ class CreateFlickPostBloc
           thumbnailMetaData: thumbnailMetaData,
         ),
       );
+      SmartDialog.dismiss();
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

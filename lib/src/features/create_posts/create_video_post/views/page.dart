@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
@@ -53,7 +54,7 @@ class CreateVideoPostPage extends StatelessWidget {
           appBar: CustomAppBar(
             title: 'Create Video Post',
             showAiAction: true,
-            onTapTitle: () {
+            showInfo: () {
               ProductGuides.showWtvPostCreationGuide();
             },
           ),
@@ -131,6 +132,7 @@ class CreateVideoPostPage extends StatelessWidget {
                             onPressed: () {
                               showWhatsevrThumbnailSelectionPage(
                                 videoFile: state.videoFile!,
+                                aspectRatios: videoPostAspectRatio,
                               ).then((value) {
                                 if (value != null) {
                                   context
@@ -195,6 +197,7 @@ class CreateVideoPostPage extends StatelessWidget {
                             onPressed: () {
                               showWhatsevrThumbnailSelectionPage(
                                 videoFile: state.videoFile!,
+                                aspectRatios: videoPostAspectRatio,
                               ).then((value) {
                                 if (value != null) {
                                   context

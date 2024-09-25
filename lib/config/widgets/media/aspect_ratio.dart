@@ -59,6 +59,7 @@ List<WhatsevrAspectRatio> coverMediaAspectRatio = <WhatsevrAspectRatio>[
 ];
 
 extension AspectRatioExtension on double? {
-  bool get isAspectRatioLandscape => this != null && this! > 1 || this == 1;
-  bool get isAspectRatioPortrait => this != null && this! < 1 || this == 1;
+  bool get isAspectRatioLandscapeOrSquare =>
+      this != null && this! > 1 || this == 1;
+  bool get isAspectRatioPortrait => this != null && this! < 1;
 }

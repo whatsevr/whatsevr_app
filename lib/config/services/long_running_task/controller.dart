@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:whatsevr_app/config/services/long_running_task/task_models/posts.dart';
 import 'package:whatsevr_app/dev/talker.dart';
@@ -72,7 +71,8 @@ class WhatsevrLongTaskController extends TaskHandler {
         return;
       }
 
-      CreateVideoPostResponse? response = await PostApi.createVideoPost(
+      (String? message, int? statusCode)? response =
+          await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: taskData.title,
           description: taskData.description,
@@ -89,7 +89,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         ),
       );
 
-      if (response != null) {
+      if (response?.$2 == 200) {
         TalkerService.instance.info('Video post created successfully.');
         FlutterForegroundTask.wakeUpScreen();
         FlutterForegroundTask.updateService(

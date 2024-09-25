@@ -100,7 +100,7 @@ flutter_launcher_icons:
 flutter_native_splash:
 #dart run flutter_native_splash:create
   color: "#ffffff"
-  image: "assets/images/whatsevr_app_logo.jpg"
+  image: assets/images/whatsevr_app_logo.jpg
   android: true
   ios: true
 

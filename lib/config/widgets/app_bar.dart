@@ -3,7 +3,7 @@ import 'package:whatsevr_app/config/widgets/ai_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final VoidCallback? onTapTitle;
+  final VoidCallback? showInfo;
   final List<Widget>? actions;
   final Widget? leading;
   final Color? backgroundColor;
@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     required this.title,
-    this.onTapTitle,
+    this.showInfo,
     this.actions,
     this.leading,
     this.backgroundColor,
@@ -31,30 +31,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       child: AppBar(
-        title: GestureDetector(
-          onTap: onTapTitle,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.black, // Black title text
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (onTapTitle != null)
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black,
-                ),
-            ],
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black, // Black title text
+            fontSize: 17.0,
+            fontWeight: FontWeight.w600,
           ),
         ),
         actions: <Widget>[
           ...?actions,
           if (showAiAction) const AiButton(),
+          if (showInfo != null)
+            IconButton(
+              icon: const Icon(Icons.info_outline),
+              onPressed: showInfo,
+            ),
         ],
         leading: leading,
 

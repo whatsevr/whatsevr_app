@@ -105,7 +105,8 @@ class _WtvExtendedVideoPlayerViewState
     return _chewieController?.videoPlayerController.value.isInitialized == true
         ? AspectRatio(
             aspectRatio:
-                _chewieController?.aspectRatio.isAspectRatioLandscape == true
+                _chewieController?.aspectRatio.isAspectRatioLandscapeOrSquare ==
+                        true
                     ? _chewieController?.aspectRatio ??
                         WhatsevrAspectRatio.landscape.ratio
                     : WhatsevrAspectRatio.square.ratio,

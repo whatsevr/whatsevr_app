@@ -10,14 +10,17 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/widgets/button.dart';
 
 Future<File?> showWhatsevrThumbnailSelectionPage({
   required File videoFile,
-  Function(File)? onThumbnailSelected,
+  Function? onThumbnailSelected,
   bool allowPickFromGallery = true,
+  List<WhatsevrAspectRatio> aspectRatios = WhatsevrAspectRatio.values,
 }) async {
   File? file;
   await SmartDialog.show(
@@ -26,11 +29,12 @@ Future<File?> showWhatsevrThumbnailSelectionPage({
       return _Ui(
         videoFile: videoFile,
         onThumbnailSelected: (File file0) {
-          onThumbnailSelected?.call(file0);
+          onThumbnailSelected?.call();
           file = file0;
           SmartDialog.dismiss();
         },
         allowPickFromGallery: allowPickFromGallery,
+        aspectRatios: aspectRatios,
       );
     },
   );
@@ -42,11 +46,13 @@ class _Ui extends StatefulWidget {
   final File videoFile;
   final Function(File) onThumbnailSelected;
   final bool allowPickFromGallery;
+  final List<WhatsevrAspectRatio> aspectRatios;
 
   const _Ui({
     required this.videoFile,
     required this.onThumbnailSelected,
     this.allowPickFromGallery = true,
+    this.aspectRatios = const <WhatsevrAspectRatio>[WhatsevrAspectRatio.square],
   });
 
   @override
@@ -148,7 +154,7 @@ class _UiState extends State<_Ui> {
             ),
             const Gap(8.0),
             SizedBox(
-              height: 150,
+              height: 120,
               child: ListView.separated(
                 separatorBuilder: (BuildContext context, int index) =>
                     const Gap(8.0),
@@ -162,20 +168,22 @@ class _UiState extends State<_Ui> {
                         selectedThumbnail = thumbnail;
                       });
                     },
-                    child: Container(
-                      width: 150,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: selectedThumbnail == thumbnail
-                              ? Colors.black
-                              : Colors.transparent,
-                          width: 2,
+                    child: Stack(
+                      children: [
+                        ExtendedImage.memory(
+                          thumbnail.bytes,
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      child: ExtendedImage.memory(
-                        thumbnail.bytes,
-                        fit: BoxFit.cover,
-                      ),
+                        if (selectedThumbnail == thumbnail)
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Colors.white,
+                            ),
+                          ),
+                      ],
                     ),
                   );
                 },
@@ -185,15 +193,12 @@ class _UiState extends State<_Ui> {
               WhatsevrButton.outlined(
                 label: 'Pick From Gallery',
                 onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(
-                    allowMultiple: false,
-                    type: FileType.image,
+                  CustomAssetPicker.pickImageFromGallery(
+                    aspectRatios: widget.aspectRatios,
+                    onCompleted: (file) {
+                      widget.onThumbnailSelected(file);
+                    },
                   );
-                  if (result == null) {
-                    return;
-                  }
-                  widget.onThumbnailSelected(File(result.files.single.path!));
                 },
               ),
             WhatsevrButton.filled(

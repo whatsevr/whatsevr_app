@@ -22,12 +22,12 @@ class ProductGuides {
     List<Widget> guides = [
       const Text('Select portrait/ video video to create a flick post.'),
       const Text('Horizontal video are not allowed.'),
-      const Text('Minimum video duration is 10 sec now.'),
-      const Text('Maximum video duration is 6 min now.'),
+      const Text('Minimum video duration is 5 sec now.'),
+      const Text('Maximum video duration is 2 min now.'),
     ];
     showAppModalSheet(
         child: AppGuideView(
-      headingTitle: 'WTV Post Creation Guide',
+      headingTitle: 'Flick Creation Guide',
       guides: guides,
     ));
   }

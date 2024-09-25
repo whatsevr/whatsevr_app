@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
 import '../../../../../config/routes/router.dart';
@@ -51,7 +52,7 @@ class CreateFlickPostPage extends StatelessWidget {
           appBar: CustomAppBar(
             title: 'Create Flick',
             showAiAction: true,
-            onTapTitle: () {
+            showInfo: () {
               ProductGuides.showFlickPostCreationGuide();
             },
           ),
@@ -130,6 +131,7 @@ class CreateFlickPostPage extends StatelessWidget {
                               showWhatsevrThumbnailSelectionPage(
                                 videoFile: state.videoFile!,
                                 allowPickFromGallery: false,
+                                aspectRatios: flicksAspectRatio,
                               ).then((value) {
                                 if (value != null) {
                                   context
@@ -194,6 +196,7 @@ class CreateFlickPostPage extends StatelessWidget {
                             onPressed: () {
                               showWhatsevrThumbnailSelectionPage(
                                 videoFile: state.videoFile!,
+                                aspectRatios: flicksAspectRatio,
                               ).then((value) {
                                 if (value != null) {
                                   context
