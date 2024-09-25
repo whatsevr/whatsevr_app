@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 
+import '../external/models/business_validation_exception.dart';
 import '../response_model/text_search_users_communities.dart';
 
 class TextSearchApi {
@@ -19,8 +20,8 @@ class TextSearchApi {
       if (response.data != null) {
         return TextSearchUsersAndCommunitiesResponse.fromMap(response.data);
       }
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }

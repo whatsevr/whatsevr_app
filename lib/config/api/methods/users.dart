@@ -14,6 +14,8 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 
+import '../external/models/business_validation_exception.dart';
+
 class UsersApi {
   static Future<UserDetailsResponse?> getUserDetails({
     required String userUid,
@@ -26,8 +28,8 @@ class UsersApi {
       if (response.data != null) {
         return UserDetailsResponse.fromMap(response.data);
       }
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -43,8 +45,8 @@ class UsersApi {
       if (response.data != null) {
         return ProfileDetailsResponse.fromMap(response.data);
       }
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -60,8 +62,8 @@ class UsersApi {
       if (response.data != null) {
         return MultipleUserDetailsResponse.fromMap(response.data);
       }
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -76,8 +78,8 @@ class UsersApi {
       );
 
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -89,8 +91,8 @@ class UsersApi {
         data: request.toMap(),
       );
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -104,8 +106,8 @@ class UsersApi {
         data: request.toMap(),
       );
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -119,8 +121,8 @@ class UsersApi {
         data: request.toMap(),
       );
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -134,8 +136,8 @@ class UsersApi {
         data: request.toMap(),
       );
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -149,8 +151,8 @@ class UsersApi {
         data: request.toMap(),
       );
       return response.data['message'];
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }

@@ -1,4 +1,5 @@
 import 'package:background_downloader/background_downloader.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 import '../api/external/models/business_validation_exception.dart';
@@ -29,15 +30,11 @@ class DownloadService {
         onStatus: (TaskStatus status) => print('Status: $status'),
       );
       if (taskStatus.status != TaskStatus.complete) {
-        throw BusinessValidationException('Failed to download file');
+        throw BusinessException('Failed to download file');
       }
       await FileDownloader().moveToSharedStorage(task, SharedStorage.downloads);
     } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return;
-      }
-      rethrow;
+      productionSafetyCatch(e, StackTrace.current);
     }
   }
 }

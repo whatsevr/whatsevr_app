@@ -6,9 +6,10 @@ import 'package:whatsevr_app/config/services/long_running_task/task_models/posts
 import 'package:whatsevr_app/dev/talker.dart';
 
 import '../../api/client.dart';
+import '../../api/external/models/business_validation_exception.dart';
 import '../../api/methods/posts.dart';
 import '../../api/requests_model/create_video_post.dart';
-import '../../api/response_model/create_video_post.dart';
+
 import '../file_upload.dart';
 
 @pragma('vm:entry-point')
@@ -38,9 +39,8 @@ class WhatsevrLongTaskController extends TaskHandler {
           default:
             throw Exception('Foreground service Unknown task type received.');
         }
-      } catch (e) {
-        TalkerService.instance
-            .error('Foreground service Failed to handle task data: $e');
+      } catch (e, s) {
+        productionSafetyCatch(e, s);
       }
     } else {
       TalkerService.instance.error('Foreground service Invalid data received.');
@@ -99,8 +99,8 @@ class WhatsevrLongTaskController extends TaskHandler {
       } else {
         TalkerService.instance.error('Failed to create video post.');
       }
-    } catch (e) {
-      TalkerService.instance.error('Error handling video post task: $e');
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 
@@ -170,8 +170,9 @@ class WhatsevrLongTaskController extends TaskHandler {
       // Send the serialized task data to the foreground service.
       FlutterForegroundTask.sendDataToTask(taskData.toMap());
       onTaskAssigned();
-    } catch (e) {
+    } catch (e, s) {
       onTaskAssignFail();
+      productionSafetyCatch(e, s);
     }
   }
 

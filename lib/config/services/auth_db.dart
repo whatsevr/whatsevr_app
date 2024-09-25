@@ -58,32 +58,24 @@ class AuthUserDb {
   static Future<List<AuthServiceUserResponse>?> getAllAuthorisedUser() async {
     try {
       List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-      if (users == null) throw BusinessValidationException('No user found');
+      if (users == null) throw BusinessException('No user found');
       return users
           .map(
               (e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
           .toList();
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return null;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 
   static Future<void> removeAuthorisedUser(String userId) async {
     try {
       List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-      if (users == null) throw BusinessValidationException('No user found');
+      if (users == null) throw BusinessException('No user found');
       users.removeWhere((element) => element['data']['userId'] == userId);
       await _authorisedCustomersBox.put(_allLoggedUsers, users);
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 
@@ -97,15 +89,11 @@ class AuthUserDb {
       String? lastLoggedUserId =
           await _authorisedCustomersBox.get(_lastLoggedUserId);
       if (lastLoggedUserId == null) {
-        throw BusinessValidationException('No user found');
+        throw BusinessException('No user found');
       }
       return lastLoggedUserId;
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return null;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 

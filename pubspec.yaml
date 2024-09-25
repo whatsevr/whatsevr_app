@@ -84,10 +84,6 @@ dependencies:
   awesome_notifications_core: ^0.9.3
   awesome_notifications: any
 
-
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

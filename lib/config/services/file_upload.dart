@@ -26,7 +26,7 @@ class FileUploadService {
   }) async {
     try {
       if (file.lengthSync() > kMaxMediaFileUploadSizeInGB * 1024 * 1000000) {
-        throw BusinessValidationException(
+        throw BusinessException(
             'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)');
       }
       final String fileName =
@@ -43,12 +43,9 @@ class FileUploadService {
           '${_supabaseStorageClient.url}/object/public/$uploadStorageResponse';
       TalkerService.instance.info('File uploaded to SST: $supabaseImageUrl');
       return supabaseImageUrl;
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return null;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
+      return null;
     }
   }
 }

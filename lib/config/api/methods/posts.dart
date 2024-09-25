@@ -4,6 +4,7 @@ import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
 
+import '../external/models/business_validation_exception.dart';
 import '../requests_model/sanity_check_new_video_post.dart';
 
 class PostApi {
@@ -17,8 +18,8 @@ class PostApi {
       );
 
       return (response.data['message'] as String?, response.statusCode);
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }
@@ -33,8 +34,8 @@ class PostApi {
       );
 
       return CreateVideoPostResponse.fromMap(response.data);
-    } catch (e) {
-      ApiClient.apiMethodException(e);
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
     return null;
   }

@@ -71,12 +71,8 @@ class LocationService {
       PlacesNearbyResponse nearbyPlacesResponse =
           PlacesNearbyResponse.fromMap(response.data);
       onCompleted(nearbyPlacesResponse, lat, long, true, true);
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 
@@ -102,18 +98,14 @@ class LocationService {
           }),
         );
         if (response.data == null) {
-          throw BusinessValidationException(
+          throw BusinessException(
               'Failed to get search predicted places names');
         }
         SimilarPlacesByQueryResponse placesByQueryResponse =
             SimilarPlacesByQueryResponse.fromMap(response.data);
         onCompleted(placesByQueryResponse);
-      } catch (e) {
-        if (e is! BusinessValidationException) {
-          if (kDebugMode) rethrow;
-          return;
-        }
-        rethrow;
+      } catch (e, s) {
+        productionSafetyCatch(e, s);
       }
     });
   }
@@ -130,12 +122,8 @@ class LocationService {
       }
 
       onCompleted?.call(locations.first.latitude, locations.first.longitude);
-    } catch (e) {
-      if (e is! BusinessValidationException) {
-        if (kDebugMode) rethrow;
-        return;
-      }
-      rethrow;
+    } catch (e, s) {
+      productionSafetyCatch(e, s);
     }
   }
 }
