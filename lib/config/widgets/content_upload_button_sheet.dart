@@ -12,6 +12,8 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
+import '../../src/features/create_posts/create_flick_post/views/page.dart';
+
 void showContentUploadBottomSheet(
   BuildContext context, {
   required EnumPostCreatorType postCreatorType,
@@ -127,16 +129,18 @@ class _Ui extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
             ),
             onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                allowMultiple: true,
-                type: FileType.video,
+              AppNavigationService.newRoute(
+                RoutesName.createFlickPost,
+                extras: CreateFlickPostPageArgument(
+                  postCreatorType: postCreatorType,
+                ),
               );
             },
             child: const Row(
               children: <Widget>[
                 Iconify(Pepicons.play_print),
                 Gap(8),
-                Text('Upload Flick Video'),
+                Text('Upload Flick'),
               ],
             ),
           ),

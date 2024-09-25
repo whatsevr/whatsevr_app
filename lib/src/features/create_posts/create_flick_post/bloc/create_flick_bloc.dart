@@ -2,46 +2,42 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
-import 'package:whatsevr_app/config/api/response_model/create_video_post.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-
-import 'package:whatsevr_app/config/api/methods/posts.dart';
-import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
-
-import 'package:whatsevr_app/config/services/location.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/full_video_player.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 
+import '../../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../../config/api/external/models/places_nearby.dart';
+import '../../../../../config/api/methods/posts.dart';
+import '../../../../../config/api/requests_model/create_video_post.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_video_post.dart';
+import '../../../../../config/api/response_model/create_video_post.dart';
+import '../../../../../config/routes/router.dart';
+import '../../../../../config/services/auth_db.dart';
+import '../../../../../config/services/file_upload.dart';
+import '../../../../../config/services/location.dart';
 import '../../../../../config/services/long_running_task/controller.dart';
 import '../../../../../config/services/long_running_task/task_models/posts.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../dev/talker.dart';
+import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../create_video_post/views/page.dart';
+import '../views/page.dart';
 
-part 'create_post_event.dart';
-part 'create_post_state.dart';
+part 'create_flick_event.dart';
+part 'create_flick_state.dart';
 
-class CreateVideoPostBloc
-    extends Bloc<CreateVideoPostEvent, CreateVideoPostState> {
+class CreateFlickPostBloc
+    extends Bloc<CreateFlickPostEvent, CreateFlickPostState> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
   final TextEditingController hashtagsController = TextEditingController();
 
-  CreateVideoPostBloc() : super(const CreateVideoPostState()) {
+  CreateFlickPostBloc() : super(const CreateFlickPostState()) {
     on<CreatePostInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
@@ -52,7 +48,7 @@ class CreateVideoPostBloc
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
-    Emitter<CreateVideoPostState> emit,
+    Emitter<CreateFlickPostState> emit,
   ) async {
     try {
       emit(state.copyWith(pageArgument: event.pageArgument));
@@ -78,7 +74,7 @@ class CreateVideoPostBloc
 
   FutureOr<void> _onSubmit(
     SubmitPostEvent event,
-    Emitter<CreateVideoPostState> emit,
+    Emitter<CreateFlickPostState> emit,
   ) async {
     try {
       titleController.text = titleController.text.trim();
@@ -183,7 +179,7 @@ class CreateVideoPostBloc
 
   FutureOr<void> _onPickVideo(
     PickVideoEvent event,
-    Emitter<CreateVideoPostState> emit,
+    Emitter<CreateFlickPostState> emit,
   ) async {
     try {
       if (event.pickVideoFile == null) return;
@@ -218,7 +214,7 @@ class CreateVideoPostBloc
 
   Future<void> _onPickThumbnail(
     PickThumbnailEvent event,
-    Emitter<CreateVideoPostState> emit,
+    Emitter<CreateFlickPostState> emit,
   ) async {
     try {
       // Check if videoFile is null, return early if it is
@@ -246,7 +242,7 @@ class CreateVideoPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateVideoPostState> emit) async {
+      UpdatePostAddressEvent event, Emitter<CreateFlickPostState> emit) async {
     try {
       emit(
         state.copyWith(
@@ -262,7 +258,7 @@ class CreateVideoPostBloc
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateVideoPostState> emit) {
+      Emitter<CreateFlickPostState> emit) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(

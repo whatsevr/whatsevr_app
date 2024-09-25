@@ -12,7 +12,8 @@ class RoutesName {
   static const String community = 'community';
   static const String settings = 'settings';
   static const String wtvDetails = 'wtv-details';
-  static const String createVideoPost = 'create-post';
+  static const String createVideoPost = 'create-video-post';
+  static const String createFlickPost = 'create-flick-post';
   static const String updateProfile = 'update-profile';
 
   static const String videoEditor = 'video-editor';

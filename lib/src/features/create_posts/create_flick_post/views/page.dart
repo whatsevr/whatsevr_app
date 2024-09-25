@@ -1,42 +1,40 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/enums/post_creator_type.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/place_search_list.dart';
-import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
-import 'package:whatsevr_app/config/widgets/search_and_tag.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
-import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
-
+import '../../../../../config/enums/post_creator_type.dart';
+import '../../../../../config/routes/router.dart';
+import '../../../../../config/routes/routes_name.dart';
+import '../../../../../config/widgets/app_bar.dart';
+import '../../../../../config/widgets/button.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/place_search_list.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
+import '../../../../../config/widgets/search_and_tag.dart';
+import '../../../../../config/widgets/showAppModalSheet.dart';
+import '../../../../../config/widgets/super_textform_field.dart';
+import '../../../full_video_player/views/page.dart';
+import '../bloc/create_flick_bloc.dart';
 
-class CreateVideoPostPageArgument {
+class CreateFlickPostPageArgument {
   final EnumPostCreatorType postCreatorType;
-  const CreateVideoPostPageArgument({required this.postCreatorType});
+
+  CreateFlickPostPageArgument({required this.postCreatorType});
 }
 
-class CreateVideoPostPage extends StatelessWidget {
-  final CreateVideoPostPageArgument pageArgument;
-  const CreateVideoPostPage({super.key, required this.pageArgument});
+class CreateFlickPostPage extends StatelessWidget {
+  final CreateFlickPostPageArgument pageArgument;
+  const CreateFlickPostPage({super.key, required this.pageArgument});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (BuildContext context) => CreateVideoPostBloc()
+      create: (BuildContext context) => CreateFlickPostBloc()
         ..add(CreatePostInitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (BuildContext context) {
@@ -47,11 +45,11 @@ class CreateVideoPostPage extends StatelessWidget {
   }
 
   Widget buildPage(BuildContext context) {
-    return BlocBuilder<CreateVideoPostBloc, CreateVideoPostState>(
-      builder: (BuildContext context, CreateVideoPostState state) {
+    return BlocBuilder<CreateFlickPostBloc, CreateFlickPostState>(
+      builder: (BuildContext context, CreateFlickPostState state) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: 'Create Video Post',
+            title: 'Create Flick',
             showAiAction: true,
             onTapTitle: () {
               ProductGuides.showWtvPostCreationGuide();
@@ -132,7 +130,7 @@ class CreateVideoPostPage extends StatelessWidget {
                             ).then((value) {
                               if (value != null) {
                                 context
-                                    .read<CreateVideoPostBloc>()
+                                    .read<CreateFlickPostBloc>()
                                     .add(PickThumbnailEvent(
                                       pickedThumbnailFile: value,
                                     ));
@@ -153,7 +151,7 @@ class CreateVideoPostPage extends StatelessWidget {
                           CustomAssetPicker.pickVideoFromGallery(
                             onCompleted: (file) {
                               context
-                                  .read<CreateVideoPostBloc>()
+                                  .read<CreateFlickPostBloc>()
                                   .add(PickVideoEvent(pickVideoFile: file));
                             },
                           );
@@ -195,7 +193,7 @@ class CreateVideoPostPage extends StatelessWidget {
                               ).then((value) {
                                 if (value != null) {
                                   context
-                                      .read<CreateVideoPostBloc>()
+                                      .read<CreateFlickPostBloc>()
                                       .add(PickThumbnailEvent(
                                         pickedThumbnailFile: value,
                                       ));
@@ -213,7 +211,7 @@ class CreateVideoPostPage extends StatelessWidget {
                               CustomAssetPicker.pickVideoFromGallery(
                                 onCompleted: (file) {
                                   context
-                                      .read<CreateVideoPostBloc>()
+                                      .read<CreateFlickPostBloc>()
                                       .add(PickVideoEvent(pickVideoFile: file));
                                 },
                               );
@@ -228,7 +226,7 @@ class CreateVideoPostPage extends StatelessWidget {
               const Gap(12),
               WhatsevrFormField.generalTextField(
                 maxLength: 100,
-                controller: context.read<CreateVideoPostBloc>().titleController,
+                controller: context.read<CreateFlickPostBloc>().titleController,
                 hintText: 'Title',
               ),
               const Gap(12),
@@ -241,7 +239,7 @@ class CreateVideoPostPage extends StatelessWidget {
               const Gap(12),
               WhatsevrFormField.multilineTextField(
                 controller:
-                    context.read<CreateVideoPostBloc>().hashtagsController,
+                    context.read<CreateFlickPostBloc>().hashtagsController,
                 hintText: 'Hashtags (start with #, max 30)',
               ),
               const Gap(12),
@@ -256,7 +254,7 @@ class CreateVideoPostPage extends StatelessWidget {
                   showAppModalSheet(child: PlaceSearchByNamePage(
                     onPlaceSelected: (placeName, lat, long) {
                       context
-                          .read<CreateVideoPostBloc>()
+                          .read<CreateFlickPostBloc>()
                           .add(UpdatePostAddressEvent(
                             address: placeName,
                             addressLatitude: lat,
@@ -277,7 +275,7 @@ class CreateVideoPostPage extends StatelessWidget {
                       return GestureDetector(
                         onTap: () {
                           context
-                              .read<CreateVideoPostBloc>()
+                              .read<CreateFlickPostBloc>()
                               .add(UpdatePostAddressEvent(
                                 address: state.placesNearbyResponse
                                     ?.places?[index].displayName?.text,
@@ -319,7 +317,7 @@ class CreateVideoPostPage extends StatelessWidget {
                     child: SearchAndTagUsersAndCommunityPage(
                       onDone: (selectedUsersUid, selectedCommunitiesUid) {
                         context
-                            .read<CreateVideoPostBloc>()
+                            .read<CreateFlickPostBloc>()
                             .add(UpdateTaggedUsersAndCommunitiesEvent(
                               taggedUsersUid: selectedUsersUid,
                               taggedCommunitiesUid: selectedCommunitiesUid,
@@ -377,7 +375,7 @@ class CreateVideoPostPage extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        context.read<CreateVideoPostBloc>().add(
+                        context.read<CreateFlickPostBloc>().add(
                             const UpdateTaggedUsersAndCommunitiesEvent(
                                 clearAll: true));
                       },
@@ -408,7 +406,7 @@ class CreateVideoPostPage extends StatelessWidget {
             child: WhatsevrButton.filled(
               onPressed: () {
                 context
-                    .read<CreateVideoPostBloc>()
+                    .read<CreateFlickPostBloc>()
                     .add(const SubmitPostEvent());
               },
               label: 'Create Post',
