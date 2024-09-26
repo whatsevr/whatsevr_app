@@ -1,3 +1,5 @@
+import 'package:cached_chewie_plus/cached_chewie_plus.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,14 +11,22 @@ import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
 import '../../../../config/widgets/feed_players/flick_full_player.dart';
 import '../bloc/flicks_bloc.dart';
 
-class FlicksPage extends StatelessWidget {
-  const FlicksPage({super.key});
+class FlicksPage extends StatefulWidget {
+  FlicksPage({super.key});
 
+  @override
+  State<FlicksPage> createState() => _FlicksPageState();
+}
+
+class _FlicksPageState extends State<FlicksPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -26,6 +36,8 @@ class FlicksPage extends StatelessWidget {
       }),
     );
   }
+
+  CachedVideoPlayerController? currentController;
 
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<FlicksBloc, FlicksState>(
@@ -49,6 +61,15 @@ class FlicksPage extends StatelessWidget {
                     FlicksFullPlayer(
                       videoUrl: flick?.videoUrl,
                       thumbnail: flick?.thumbnail,
+                      onPlayerInitialized: (controller) {
+                        currentController = controller;
+                        setState(() {});
+                        currentController?.addListener(() {
+                          if (currentController?.value.isPlaying == true) {
+                            setState(() {});
+                          }
+                        });
+                      },
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -93,20 +114,22 @@ class FlicksPage extends StatelessWidget {
                                                   MockData.imageAvatar),
                                     ),
                                     const SizedBox(width: 8),
-                                    const Expanded(
+                                    Expanded(
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            'Username',
+                                            '${flick?.user?.username}',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.white,
                                             ),
                                           ),
                                           Text(
-                                            'Caption',
+                                            '${flick?.title} ${flick?.description}',
                                             style: const TextStyle(
                                               color: Colors.white,
                                             ),
@@ -114,6 +137,28 @@ class FlicksPage extends StatelessWidget {
                                         ],
                                       ),
                                     ),
+                                    Gap(8),
+                                    //follow
+                                    TwoStateWidget(
+                                      firstStateUi: AbsorbPointer(
+                                        child: WhatsevrButton.outlined(
+                                          miniButton: true,
+                                          shrink: true,
+                                          label: 'Follow',
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                      secondStateUi: AbsorbPointer(
+                                        child: WhatsevrButton.outlined(
+                                          miniButton: true,
+                                          shrink: true,
+                                          label: 'Following',
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                    ),
+
+                                    Gap(12),
                                     const Icon(
                                       Icons.more_vert,
                                       color: Colors.white,
@@ -121,30 +166,51 @@ class FlicksPage extends StatelessWidget {
                                   ],
                                 ),
                                 const Gap(8),
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(8),
+                                CarouselSlider.builder(
+                                  itemCount: 15,
+                                  options: CarouselOptions(
+                                    height: 40,
+                                    viewportFraction: 1,
+                                    enableInfiniteScroll: true,
+                                    enlargeCenterPage: false,
+                                    autoPlay: true,
+                                    scrollDirection: Axis.horizontal,
                                   ),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Gap(8),
-                                      CircleAvatar(
-                                        radius: 10,
-                                        backgroundImage:
-                                            NetworkImage(MockData.imageAvatar),
+                                  itemBuilder: (BuildContext context,
+                                          int itemIndex, int pageViewIndex) =>
+                                      GestureDetector(
+                                    onTap: () {
+                                      showAppModalSheet(child: Container());
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 4,
                                       ),
-                                      const Gap(8),
-                                      const Expanded(
-                                        child: Text(
-                                          'Top Comments',
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.6),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        children: <Widget>[
+                                          const Gap(8),
+                                          CircleAvatar(
+                                            radius: 10,
+                                            backgroundImage: NetworkImage(
+                                                MockData.imageAvatar),
                                           ),
-                                        ),
+                                          const Gap(8),
+                                          const Expanded(
+                                            child: Text(
+                                              'Top Comments',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -157,6 +223,19 @@ class FlicksPage extends StatelessWidget {
                   ],
                 );
               },
+            );
+          }),
+          //show video progress
+          bottomNavigationBar: Builder(builder: (context) {
+            if (currentController == null) return const SizedBox();
+            return SizedBox(
+              height: 2,
+              child: LinearProgressIndicator(
+                value: currentController!.value.position.inMilliseconds /
+                    currentController!.value.duration.inMilliseconds,
+                backgroundColor: Colors.white,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+              ),
             );
           }),
         );

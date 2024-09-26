@@ -70,7 +70,7 @@ class _DashboardPageBottomNavigationBarState
         const Iconify(Pepicons.play_print, size: 30),
         () {
           context.read<DashboardBloc>().add(
-                const TabChanged(
+                TabChanged(
                   newView: FlicksPage(),
                 ),
               );

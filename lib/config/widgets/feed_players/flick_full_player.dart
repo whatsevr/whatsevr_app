@@ -11,7 +11,12 @@ import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 class FlicksFullPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
-  const FlicksFullPlayer({super.key, required this.videoUrl, this.thumbnail});
+  final Function(CachedVideoPlayerController?)? onPlayerInitialized;
+  const FlicksFullPlayer(
+      {super.key,
+      required this.videoUrl,
+      this.thumbnail,
+      this.onPlayerInitialized});
 
   @override
   State<FlicksFullPlayer> createState() => _FlicksFullPlayerState();
@@ -35,13 +40,14 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
+            controller?.play();
+            controller?.addListener(() {
+              if (controller?.value.position == controller?.value.duration) {
+                controller?.play();
+              }
+            });
+            widget.onPlayerInitialized?.call(controller);
           });
-    controller?.play();
-    controller?.addListener(() {
-      if (controller?.value.position == controller?.value.duration) {
-        controller?.play();
-      }
-    });
   }
 
   @override
@@ -86,7 +92,19 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
                   return AspectRatio(
                     aspectRatio: controller?.value.aspectRatio ??
                         WhatsevrAspectRatio.vertical9by16.ratio,
-                    child: CachedVideoPlayer(controller!),
+                    child: Stack(
+                      children: [
+                        CachedVideoPlayer(controller!),
+                        if (controller?.value.volume == 0)
+                          const Center(
+                            child: Icon(
+                              Icons.volume_off,
+                              color: Colors.white54,
+                              size: 48,
+                            ),
+                          ),
+                      ],
+                    ),
                   );
                 }
                 return Stack(
