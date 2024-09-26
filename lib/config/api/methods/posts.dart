@@ -72,4 +72,36 @@ class PostApi {
     }
     return null;
   }
+
+  static Future<(String? message, int? statusCode)?> sanityCheckNewMemory({
+    required SanityCheckNewFlickPostRequest request,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/sanity-check-new-memory',
+        data: request.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> createMemory({
+    required CreateFlickPostRequest post,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/create-memory',
+        data: post.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
 }
