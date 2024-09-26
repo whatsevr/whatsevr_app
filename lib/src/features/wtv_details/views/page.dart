@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 
 import 'package:whatsevr_app/src/features/wtv_details/views/widgets/related_videos.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
-import '../../../../config/widgets/feed_players/full_video_player.dart';
 
 class WtvDetailsPageArgument {
   final String? videoPostUid;
@@ -27,7 +26,7 @@ class WtvDetailsPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          WtvExtendedVideoPlayerView(
+          WtvFullPlayer(
             videoUrl: pageArgument.videoUrl,
             thumbnail: pageArgument.thumbnail,
           ),

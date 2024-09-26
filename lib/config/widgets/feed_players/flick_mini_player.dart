@@ -4,20 +4,20 @@ import 'package:gap/gap.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
-class FlickFeedPlayer extends StatefulWidget {
+class FlickMiniPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
-  const FlickFeedPlayer({
+  const FlickMiniPlayer({
     super.key,
     required this.videoUrl,
     this.thumbnail,
   });
 
   @override
-  State<FlickFeedPlayer> createState() => _FlickFeedPlayerState();
+  State<FlickMiniPlayer> createState() => _FlickMiniPlayerState();
 }
 
-class _FlickFeedPlayerState extends State<FlickFeedPlayer> {
+class _FlickMiniPlayerState extends State<FlickMiniPlayer> {
   late VideoPlayerController controller;
   @override
   void initState() {

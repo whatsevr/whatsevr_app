@@ -7,10 +7,10 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../media/aspect_ratio.dart';
 
-class WtvExtendedVideoPlayerView extends StatefulWidget {
+class WtvFullPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
-  const WtvExtendedVideoPlayerView({
+  const WtvFullPlayer({
     super.key,
     this.videoUrl,
     this.thumbnail,
@@ -18,12 +18,11 @@ class WtvExtendedVideoPlayerView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _WtvExtendedVideoPlayerViewState();
+    return _WtvFullPlayerState();
   }
 }
 
-class _WtvExtendedVideoPlayerViewState
-    extends State<WtvExtendedVideoPlayerView> {
+class _WtvFullPlayerState extends State<WtvFullPlayer> {
   CachedVideoPlayerController? videoPlayerController;
   ChewieController? _chewieController;
   int? bufferDelay;

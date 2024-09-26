@@ -17,7 +17,7 @@ import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 
 import 'package:whatsevr_app/config/services/location.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/full_video_player.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';

@@ -8,7 +8,7 @@ import 'package:iconify_flutter/icons/ph.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/flick_player.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/flick_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 class FlickFrame extends StatelessWidget {
@@ -51,7 +51,7 @@ class FlickFrame extends StatelessWidget {
             ],
           ),
         ),
-        FlickFeedPlayer(
+        FlickMiniPlayer(
           videoUrl: MockData.portraitVideos.first,
         ),
         const Gap(8),
