@@ -2,19 +2,27 @@ import 'dart:convert';
 
 class RecommendationMemoriesResponse {
   final String? message;
+  final int? page;
+  final bool? lastPage;
   final List<RecommendedMemory>? recommendedMemories;
 
   RecommendationMemoriesResponse({
     this.message,
+    this.page,
+    this.lastPage,
     this.recommendedMemories,
   });
 
   RecommendationMemoriesResponse copyWith({
     String? message,
+    int? page,
+    bool? lastPage,
     List<RecommendedMemory>? recommendedMemories,
   }) =>
       RecommendationMemoriesResponse(
         message: message ?? this.message,
+        page: page ?? this.page,
+        lastPage: lastPage ?? this.lastPage,
         recommendedMemories: recommendedMemories ?? this.recommendedMemories,
       );
 
@@ -26,6 +34,8 @@ class RecommendationMemoriesResponse {
   factory RecommendationMemoriesResponse.fromMap(Map<String, dynamic> json) =>
       RecommendationMemoriesResponse(
         message: json["message"],
+        page: json["page"],
+        lastPage: json["last_page"],
         recommendedMemories: json["recommended_memories"] == null
             ? []
             : List<RecommendedMemory>.from(json["recommended_memories"]!
@@ -34,6 +44,8 @@ class RecommendationMemoriesResponse {
 
   Map<String, dynamic> toMap() => {
         "message": message,
+        "page": page,
+        "last_page": lastPage,
         "recommended_memories": recommendedMemories == null
             ? []
             : List<dynamic>.from(recommendedMemories!.map((x) => x.toMap())),

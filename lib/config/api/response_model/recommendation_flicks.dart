@@ -2,19 +2,27 @@ import 'dart:convert';
 
 class RecommendationFlicksResponse {
   final String? message;
+  final int? page;
+  final bool? lastPage;
   final List<RecommendedFlick>? recommendedFlicks;
 
   RecommendationFlicksResponse({
     this.message,
+    this.page,
+    this.lastPage,
     this.recommendedFlicks,
   });
 
   RecommendationFlicksResponse copyWith({
     String? message,
+    int? page,
+    bool? lastPage,
     List<RecommendedFlick>? recommendedFlicks,
   }) =>
       RecommendationFlicksResponse(
         message: message ?? this.message,
+        page: page ?? this.page,
+        lastPage: lastPage ?? this.lastPage,
         recommendedFlicks: recommendedFlicks ?? this.recommendedFlicks,
       );
 
@@ -26,6 +34,8 @@ class RecommendationFlicksResponse {
   factory RecommendationFlicksResponse.fromMap(Map<String, dynamic> json) =>
       RecommendationFlicksResponse(
         message: json["message"],
+        page: json["page"],
+        lastPage: json["last_page"],
         recommendedFlicks: json["recommended_flicks"] == null
             ? []
             : List<RecommendedFlick>.from(json["recommended_flicks"]!
@@ -34,6 +44,8 @@ class RecommendationFlicksResponse {
 
   Map<String, dynamic> toMap() => {
         "message": message,
+        "page": page,
+        "last_page": lastPage,
         "recommended_flicks": recommendedFlicks == null
             ? []
             : List<dynamic>.from(recommendedFlicks!.map((x) => x.toMap())),
@@ -46,8 +58,8 @@ class RecommendedFlick {
   final String? uid;
   final String? title;
   final String? description;
-  final List<dynamic>? hashtags;
-  final List<dynamic>? taggedUserUids;
+  final List<String>? hashtags;
+  final List<String>? taggedUserUids;
   final bool? isDeleted;
   final bool? isArchived;
   final bool? isActive;
@@ -63,10 +75,10 @@ class RecommendedFlick {
   final String? internalAiDescription;
   final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
-  final List<dynamic>? taggedCommunityUids;
+  final List<String>? taggedCommunityUids;
   final int? totalShares;
-  final int? retentionPercent;
-  final dynamic thumbnailAspectRatio;
+  final int? cumulativeScore;
+  final double? thumbnailAspectRatio;
   final int? videoDurationInSec;
   final User? user;
 
@@ -95,7 +107,7 @@ class RecommendedFlick {
     this.creatorLatLongWkb,
     this.taggedCommunityUids,
     this.totalShares,
-    this.retentionPercent,
+    this.cumulativeScore,
     this.thumbnailAspectRatio,
     this.videoDurationInSec,
     this.user,
@@ -107,8 +119,8 @@ class RecommendedFlick {
     String? uid,
     String? title,
     String? description,
-    List<dynamic>? hashtags,
-    List<dynamic>? taggedUserUids,
+    List<String>? hashtags,
+    List<String>? taggedUserUids,
     bool? isDeleted,
     bool? isArchived,
     bool? isActive,
@@ -124,10 +136,10 @@ class RecommendedFlick {
     String? internalAiDescription,
     String? addressLatLongWkb,
     String? creatorLatLongWkb,
-    List<dynamic>? taggedCommunityUids,
+    List<String>? taggedCommunityUids,
     int? totalShares,
-    int? retentionPercent,
-    dynamic thumbnailAspectRatio,
+    int? cumulativeScore,
+    double? thumbnailAspectRatio,
     int? videoDurationInSec,
     User? user,
   }) =>
@@ -157,7 +169,7 @@ class RecommendedFlick {
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
-        retentionPercent: retentionPercent ?? this.retentionPercent,
+        cumulativeScore: cumulativeScore ?? this.cumulativeScore,
         thumbnailAspectRatio: thumbnailAspectRatio ?? this.thumbnailAspectRatio,
         videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
         user: user ?? this.user,
@@ -179,10 +191,10 @@ class RecommendedFlick {
         description: json["description"],
         hashtags: json["hashtags"] == null
             ? []
-            : List<dynamic>.from(json["hashtags"]!.map((x) => x)),
+            : List<String>.from(json["hashtags"]!.map((x) => x)),
         taggedUserUids: json["tagged_user_uids"] == null
             ? []
-            : List<dynamic>.from(json["tagged_user_uids"]!.map((x) => x)),
+            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
         isDeleted: json["is_deleted"],
         isArchived: json["is_archived"],
         isActive: json["is_active"],
@@ -202,10 +214,10 @@ class RecommendedFlick {
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedCommunityUids: json["tagged_community_uids"] == null
             ? []
-            : List<dynamic>.from(json["tagged_community_uids"]!.map((x) => x)),
+            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
-        retentionPercent: json["retention_percent"],
-        thumbnailAspectRatio: json["thumbnail_aspect_ratio"],
+        cumulativeScore: json["cumulative_score"],
+        thumbnailAspectRatio: json["thumbnail_aspect_ratio"]?.toDouble(),
         videoDurationInSec: json["video_duration_in_sec"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
@@ -240,7 +252,7 @@ class RecommendedFlick {
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
-        "retention_percent": retentionPercent,
+        "cumulative_score": cumulativeScore,
         "thumbnail_aspect_ratio": thumbnailAspectRatio,
         "video_duration_in_sec": videoDurationInSec,
         "user": user?.toMap(),
