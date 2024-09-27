@@ -10,11 +10,13 @@ import '../response_model/recommendation_memories.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> publicVideoPosts({
-    int? page = 1,
+    required int page,
+    int pageSize = 5,
   }) async {
     try {
-      Response response =
-          await ApiClient.client.get('/v1/recommendations/video-posts');
+      Response response = await ApiClient.client.get(
+          '/v1/recommendations/video-posts',
+          queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationVideosResponse.fromMap(response.data);
       }
@@ -25,11 +27,14 @@ class RecommendationApi {
   }
 
   static Future<RecommendationFlicksResponse?> publicFlickPosts({
-    int? page = 1,
+    required int page,
+    int pageSize = 5,
   }) async {
     try {
-      Response response =
-          await ApiClient.client.get('/v1/recommendations/flick-posts');
+      Response response = await ApiClient.client.get(
+        '/v1/recommendations/flick-posts',
+        queryParameters: {'page': page, 'page_size': pageSize},
+      );
       if (response.data != null) {
         return RecommendationFlicksResponse.fromMap(response.data);
       }
@@ -40,11 +45,13 @@ class RecommendationApi {
   }
 
   static Future<RecommendationMemoriesResponse?> publicMemories({
-    int? page = 1,
+    required int page,
+    int pageSize = 5,
   }) async {
     try {
-      Response response =
-          await ApiClient.client.get('/v1/recommendations/memories');
+      Response response = await ApiClient.client.get(
+          '/v1/recommendations/memories',
+          queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationMemoriesResponse.fromMap(response.data);
       }

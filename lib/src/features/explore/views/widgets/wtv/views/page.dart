@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
@@ -24,10 +26,7 @@ class ExplorePageWtvPage extends StatelessWidget {
       builder: (BuildContext context, List<RecommendedVideo>? data) {
         return MyRefreshIndicator(
           onPullDown: () async {
-            context.read<ExploreBloc>().add(ExploreInitialEvent());
-            await Future<void>.delayed(const Duration(seconds: 2));
-          },
-          onScrollFinished: () async {
+            context.read<ExploreBloc>().add(LoadVideosEvent());
             await Future<void>.delayed(const Duration(seconds: 2));
           },
           child: ContentMask(
@@ -86,36 +85,69 @@ class ExplorePageWtvPage extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
               itemBuilder: (BuildContext context, int index) {
-                return WtvVideoPostFrame(
-                  avatarUrl: data?[index].user?.profilePicture,
-                  username: data?[index].user?.username,
-                  title: data?[index].title,
-                  description: data?[index].description,
-                  videoUrl: data?[index].videoUrl,
-                  thumbnail: data?[index].thumbnail,
-                  timeAgo: timeago.format(
-                    data![index].createdAt!,
+                return VisibilityDetector(
+                  key: Key(data![index].uid!),
+                  onVisibilityChanged: (VisibilityInfo info) {
+                    if (index == data.length - 1) {
+                      if (info.visibleFraction == 1) {
+                        context.read<ExploreBloc>().add(
+                              LoadMoreVideosEvent(
+                                page: context
+                                        .read<ExploreBloc>()
+                                        .state
+                                        .videoPaginationData!
+                                        .currentVideoPage +
+                                    1,
+                              ),
+                            );
+                      }
+                    }
+                  },
+                  child: Column(
+                    children: [
+                      WtvVideoPostFrame(
+                        avatarUrl: data?[index].user?.profilePicture,
+                        username: data?[index].user?.username,
+                        title: data?[index].title,
+                        description: data?[index].description,
+                        videoUrl: data?[index].videoUrl,
+                        thumbnail: data?[index].thumbnail,
+                        timeAgo: timeago.format(
+                          data![index].createdAt!,
+                        ),
+                        totalTags: (data[index].taggedUserUids?.length ?? 0) +
+                            (data[index].taggedCommunityUids?.length ?? 0),
+                        onTapTags: () {
+                          showTaggedUsersBottomSheet(
+                            context,
+                            taggedUserUids: data[index].taggedUserUids,
+                          );
+                        },
+                        comments: data[index].totalComments,
+                        likes: data[index].totalLikes,
+                        shares: data[index].totalShares,
+                        views: data[index].totalViews,
+                        onRequestOfVideoDetails: () {
+                          AppNavigationService.newRoute(RoutesName.wtvDetails,
+                              extras: WtvDetailsPageArgument(
+                                videoPostUid: data[index].uid,
+                                thumbnail: data[index].thumbnail,
+                                videoUrl: data[index].videoUrl,
+                              ));
+                        },
+                      ),
+                      if (index == data.length - 1 &&
+                          context
+                              .read<ExploreBloc>()
+                              .state
+                              .videoPaginationData!
+                              .isLoading) ...[
+                        const Gap(8),
+                        CupertinoActivityIndicator(),
+                        const Gap(8),
+                      ],
+                    ],
                   ),
-                  totalTags: (data[index].taggedUserUids?.length ?? 0) +
-                      (data[index].taggedCommunityUids?.length ?? 0),
-                  onTapTags: () {
-                    showTaggedUsersBottomSheet(
-                      context,
-                      taggedUserUids: data[index].taggedUserUids,
-                    );
-                  },
-                  comments: data[index].totalComments,
-                  likes: data[index].totalLikes,
-                  shares: data[index].totalShares,
-                  views: data[index].totalViews,
-                  onRequestOfVideoDetails: () {
-                    AppNavigationService.newRoute(RoutesName.wtvDetails,
-                        extras: WtvDetailsPageArgument(
-                          videoPostUid: data[index].uid,
-                          thumbnail: data[index].thumbnail,
-                          videoUrl: data[index].videoUrl,
-                        ));
-                  },
                 );
               },
             ),

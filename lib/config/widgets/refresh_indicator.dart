@@ -6,25 +6,19 @@ import 'package:flutter/cupertino.dart';
 class MyRefreshIndicator extends StatelessWidget {
   final Widget child;
   final FutureOr<dynamic> Function()? onPullDown;
-  final FutureOr<dynamic> Function()? onScrollFinished;
-  const MyRefreshIndicator({
+
+  MyRefreshIndicator({
     super.key,
     required this.child,
     this.onPullDown,
-    this.onScrollFinished,
   });
-
+  final EasyRefreshController _controller = EasyRefreshController();
   @override
   Widget build(BuildContext context) {
     return EasyRefresh(
       header: const MaterialHeader(),
-      footer: const ClassicFooter(
-        showMessage: false,
-        showText: false,
-      ),
       simultaneously: false,
       onRefresh: onPullDown,
-      onLoad: onScrollFinished,
       triggerAxis: Axis.vertical,
       child: child,
     );

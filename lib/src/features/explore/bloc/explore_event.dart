@@ -8,3 +8,15 @@ class ExploreInitialEvent extends ExploreEvent {
   @override
   List<Object> get props => <Object>[];
 }
+
+class LoadVideosEvent extends ExploreEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreVideosEvent extends ExploreEvent {
+  final int? page;
+  const LoadMoreVideosEvent({this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

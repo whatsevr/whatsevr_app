@@ -8,3 +8,15 @@ class FlicksInitialEvent extends FlicksEvent {
   @override
   List<Object> get props => <Object>[];
 }
+
+class LoadFlicksEvent extends FlicksEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreFlicksEvent extends FlicksEvent {
+  final int? page;
+  const LoadMoreFlicksEvent({this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

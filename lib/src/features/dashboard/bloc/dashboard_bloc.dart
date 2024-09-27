@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/common_data.dart';
 import 'package:whatsevr_app/config/api/methods/recommendations.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
@@ -24,8 +25,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   FutureOr<void> _onInitialEvent(
     DashboardInitialEvent event,
     Emitter<DashboardState> emit,
-  ) {
-    PermissionService.requestAllPermissions();
+  ) async {
+    await PermissionService.requestAllPermissions();
     afterLoginServices();
     _preloadApiIntoCache();
   }
@@ -38,15 +39,16 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     try {
       final userUid = await AuthUserDb.getLastLoggedUserUid();
 
-      // Execute multiple independent API calls simultaneously
+      // Fetch some data from the API and cache it
       await Future.wait([
+        CommonDataApi.getAllCommonData(),
         RecommendationApi.publicVideoPosts(page: 1),
-        // RecommendationApi.publicVideoPosts(page: 2),
-        // RecommendationApi.publicVideoPosts(page: 3),
+        RecommendationApi.publicVideoPosts(page: 2),
+        RecommendationApi.publicVideoPosts(page: 3),
         RecommendationApi.publicFlickPosts(page: 1),
-        // RecommendationApi.publicFlickPosts(page: 2),
-        // RecommendationApi.publicFlickPosts(page: 3),
-        UsersApi.getProfileDetails(userUid: userUid!)
+        RecommendationApi.publicFlickPosts(page: 2),
+        RecommendationApi.publicFlickPosts(page: 3),
+        UsersApi.getProfileDetails(userUid: userUid!),
       ]);
 
       // Optional: Perform further operations after the preloading
