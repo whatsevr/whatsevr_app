@@ -21,6 +21,19 @@ class ExplorePageWtvPage extends StatelessWidget {
   final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
+    scrollController?.addListener(() {
+      if (scrollController?.position.pixels ==
+          scrollController?.position.maxScrollExtent) {
+        context.read<ExploreBloc>().add(LoadMoreVideosEvent(
+              page: context
+                      .read<ExploreBloc>()
+                      .state
+                      .videoPaginationData!
+                      .currentPage +
+                  1,
+            ));
+      }
+    });
     return BlocSelector<ExploreBloc, ExploreState, List<RecommendedVideo>?>(
       selector: (ExploreState state) => state.recommendationVideos,
       builder: (BuildContext context, List<RecommendedVideo>? data) {
@@ -79,75 +92,59 @@ class ExplorePageWtvPage extends StatelessWidget {
               ),
             ),
             child: ListView.separated(
+              cacheExtent: MediaQuery.of(context).size.height * 2,
               controller: scrollController,
               shrinkWrap: data == null || data.isEmpty,
               itemCount: data?.length ?? 3,
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
               itemBuilder: (BuildContext context, int index) {
-                return VisibilityDetector(
-                  key: Key(data![index].uid!),
-                  onVisibilityChanged: (VisibilityInfo info) {
-                    if (index == data.length - 1) {
-                      if (info.visibleFraction == 1) {
-                        context.read<ExploreBloc>().add(
-                              LoadMoreVideosEvent(
-                                page: context
-                                        .read<ExploreBloc>()
-                                        .state
-                                        .videoPaginationData!
-                                        .currentPage +
-                                    1,
-                              ),
-                            );
-                      }
-                    }
-                  },
-                  child: Column(
-                    children: [
-                      WtvVideoPostFrame(
-                        avatarUrl: data[index].user?.profilePicture,
-                        username: data[index].user?.username,
-                        title: data[index].title,
-                        description: data[index].description,
-                        videoUrl: data[index].videoUrl,
-                        thumbnail: data[index].thumbnail,
-                        timeAgo: timeago.format(
-                          data![index].createdAt!,
-                        ),
-                        totalTags: (data[index].taggedUserUids?.length ?? 0) +
-                            (data[index].taggedCommunityUids?.length ?? 0),
-                        onTapTags: () {
-                          showTaggedUsersBottomSheet(
-                            context,
-                            taggedUserUids: data[index].taggedUserUids,
-                          );
-                        },
-                        comments: data[index].totalComments,
-                        likes: data[index].totalLikes,
-                        shares: data[index].totalShares,
-                        views: data[index].totalViews,
-                        onRequestOfVideoDetails: () {
-                          AppNavigationService.newRoute(RoutesName.wtvDetails,
-                              extras: WtvDetailsPageArgument(
-                                videoPostUid: data[index].uid,
-                                thumbnail: data[index].thumbnail,
-                                videoUrl: data[index].videoUrl,
-                              ));
-                        },
+                RecommendedVideo video = data![index];
+
+                return Column(
+                  children: [
+                    WtvVideoPostFrame(
+                      avatarUrl: video.user?.profilePicture,
+                      username: data[index].user?.username,
+                      title: data[index].title,
+                      description: data[index].description,
+                      videoUrl: data[index].videoUrl,
+                      thumbnail: data[index].thumbnail,
+                      timeAgo: timeago.format(
+                        data![index].createdAt!,
                       ),
-                      if (index == data.length - 1 &&
-                          context
-                              .read<ExploreBloc>()
-                              .state
-                              .videoPaginationData!
-                              .isLoading) ...[
-                        const Gap(8),
-                        CupertinoActivityIndicator(),
-                        const Gap(8),
-                      ],
+                      totalTags: (data[index].taggedUserUids?.length ?? 0) +
+                          (data[index].taggedCommunityUids?.length ?? 0),
+                      onTapTags: () {
+                        showTaggedUsersBottomSheet(
+                          context,
+                          taggedUserUids: data[index].taggedUserUids,
+                        );
+                      },
+                      comments: data[index].totalComments,
+                      likes: data[index].totalLikes,
+                      shares: data[index].totalShares,
+                      views: data[index].totalViews,
+                      onRequestOfVideoDetails: () {
+                        AppNavigationService.newRoute(RoutesName.wtvDetails,
+                            extras: WtvDetailsPageArgument(
+                              videoPostUid: data[index].uid,
+                              thumbnail: data[index].thumbnail,
+                              videoUrl: data[index].videoUrl,
+                            ));
+                      },
+                    ),
+                    if (index == data.length - 1 &&
+                        context
+                            .read<ExploreBloc>()
+                            .state
+                            .videoPaginationData!
+                            .isLoading) ...[
+                      const Gap(8),
+                      CupertinoActivityIndicator(),
+                      const Gap(8),
                     ],
-                  ),
+                  ],
                 );
               },
             ),

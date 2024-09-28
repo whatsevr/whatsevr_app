@@ -16,7 +16,7 @@ class LoadVideosEvent extends ExploreEvent {
 
 class LoadMoreVideosEvent extends ExploreEvent {
   final int? page;
-  const LoadMoreVideosEvent({this.page});
+  const LoadMoreVideosEvent({required this.page});
   @override
   List<Object?> get props => <Object?>[page];
 }

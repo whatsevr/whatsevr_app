@@ -31,6 +31,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
   @override
   void initState() {
     super.initState();
+    initializePlayer();
   }
 
   void initializePlayer() {
@@ -45,7 +46,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
-            controller?.play();
+            // controller?.play();
             controller?.addListener(() {
               if (controller?.value.position == controller?.value.duration) {
                 controller?.play();
@@ -68,12 +69,12 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
       onVisibilityChanged: (VisibilityInfo info) {
         final visibleFraction = info.visibleFraction;
 
-        if (visibleFraction == 1.0) {
+        if (visibleFraction > 0.6) {
           // Play the video when 100% visible
-          initializePlayer();
+          controller?.play();
         } else {
           // Pause the video when 60% or more is hidden
-          if (mounted) controller?.pause();
+          controller?.pause();
         }
       },
       child: Stack(
@@ -92,8 +93,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
             child: Builder(
               builder: (BuildContext context) {
                 if (controller != null &&
-                    controller?.value.isInitialized == true &&
-                    controller?.value.isPlaying == true) {
+                    controller?.value.isInitialized == true) {
                   return AspectRatio(
                     aspectRatio: controller?.value.aspectRatio ??
                         WhatsevrAspectRatio.vertical9by16.ratio,

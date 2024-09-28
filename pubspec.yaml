@@ -85,13 +85,16 @@ dependencies:
   awesome_notifications_core: ^0.9.3
   awesome_notifications: any
   visibility_detector: ^0.4.0+2
+  preload_page_view: ^0.2.0
+  vs_story_designer: ^2.2.0 #for memories
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.1
 
 flutter_launcher_icons:
