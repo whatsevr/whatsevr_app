@@ -4,6 +4,8 @@ import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plu
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
+import '../../services/file_upload.dart';
+
 class WTVMiniPlayer extends StatefulWidget {
   final bool autoPlay;
 
@@ -37,8 +39,14 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   }
 
   Future<void> initiateVideoPlayer() async {
+    if (videoPlayerController?.value.isPlaying == true) {
+      return;
+    }
+    String adaptiveVideoUrl = optimizedCloudinaryVideoUrl(
+      widget.videoUrl!,
+    );
     videoPlayerController ??= CachedVideoPlayerController.networkUrl(
-      Uri.parse('${widget.videoUrl}'),
+      Uri.parse(adaptiveVideoUrl),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
     )..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.

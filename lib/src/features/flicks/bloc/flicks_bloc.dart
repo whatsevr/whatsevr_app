@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
+import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/recommendations.dart';
 import '../../../../config/api/response_model/recommendation_flicks.dart';
 
@@ -13,7 +15,11 @@ part 'flicks_state.dart';
 class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   FlicksBloc()
       : super(const FlicksState(
-          currentFlickPage: 1,
+          flicksPaginationData: PaginationData(
+            currentPage: 1,
+            isLoading: false,
+            noMoreData: false,
+          ),
           recommendationFlicks: [],
         )) {
     on<FlicksInitialEvent>(_onInitial);
@@ -38,6 +44,10 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
       emit(
         state.copyWith(
           recommendationFlicks: recommendationVideos?.recommendedFlicks,
+          flicksPaginationData: state.flicksPaginationData?.copyWith(
+            isLoading: false,
+            noMoreData: recommendationVideos?.lastPage,
+          ),
         ),
       );
     } catch (e, s) {
@@ -47,22 +57,33 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
 
   FutureOr<void> _onLoadMoreFlicks(
       LoadMoreFlicksEvent event, Emitter<FlicksState> emit) async {
+    if (state.flicksPaginationData?.isLoading == true) return;
     try {
+      emit(
+        state.copyWith(
+          flicksPaginationData: state.flicksPaginationData?.copyWith(
+            isLoading: true,
+          ),
+        ),
+      );
       RecommendationFlicksResponse? recommendationVideos =
           await RecommendationApi.publicFlickPosts(
         page: event.page!,
       );
-      if (recommendationVideos?.recommendedFlicks == null ||
-          recommendationVideos!.recommendedFlicks!.isEmpty) {
-        throw BusinessException('${recommendationVideos?.message}');
+      if (recommendationVideos?.lastPage == true) {
+        SmartDialog.showToast('No more flicks to load');
       }
       emit(
         state.copyWith(
           recommendationFlicks: [
-            ...state.recommendationFlicks!,
-            ...recommendationVideos.recommendedFlicks!,
+            ...state.recommendationFlicks ?? [],
+            ...recommendationVideos?.recommendedFlicks ?? [],
           ],
-          currentFlickPage: event.page,
+          flicksPaginationData: state.flicksPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: recommendationVideos?.lastPage,
+          ),
         ),
       );
     } catch (e, s) {

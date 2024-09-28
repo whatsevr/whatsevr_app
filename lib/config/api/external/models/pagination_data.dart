@@ -1,28 +1,28 @@
 import 'package:equatable/equatable.dart';
 
 class PaginationData extends Equatable {
-  final int currentVideoPage;
+  final int currentPage;
   final bool isLoading;
-  final bool isLastPage;
+  final bool noMoreData;
 
   const PaginationData({
-    required this.currentVideoPage,
+    required this.currentPage,
     required this.isLoading,
-    required this.isLastPage,
+    required this.noMoreData,
   });
 
   @override
-  List<Object?> get props => <Object?>[currentVideoPage, isLoading, isLastPage];
+  List<Object?> get props => <Object?>[currentPage, isLoading, noMoreData];
 
   PaginationData copyWith({
-    int? currentVideoPage,
+    int? currentPage,
     bool? isLoading,
-    bool? isLastPage,
+    bool? noMoreData,
   }) {
     return PaginationData(
-      currentVideoPage: currentVideoPage ?? this.currentVideoPage,
+      currentPage: currentPage ?? this.currentPage,
       isLoading: isLoading ?? this.isLoading,
-      isLastPage: isLastPage ?? this.isLastPage,
+      noMoreData: noMoreData ?? this.noMoreData,
     );
   }
 }

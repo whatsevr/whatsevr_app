@@ -8,6 +8,8 @@ import 'package:visibility_detector/visibility_detector.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
+import '../../services/file_upload.dart';
+
 class FlicksFullPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
@@ -35,8 +37,11 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
     if (controller?.value.isPlaying == true) {
       return;
     }
+    String adaptiveVideoUrl = optimizedCloudinaryVideoUrl(
+      widget.videoUrl!,
+    );
     controller =
-        CachedVideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+        CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl))
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
@@ -68,7 +73,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
           initializePlayer();
         } else {
           // Pause the video when 60% or more is hidden
-          controller?.pause();
+          if (mounted) controller?.pause();
         }
       },
       child: Stack(

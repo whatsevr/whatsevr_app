@@ -96,7 +96,7 @@ class ExplorePageWtvPage extends StatelessWidget {
                                         .read<ExploreBloc>()
                                         .state
                                         .videoPaginationData!
-                                        .currentVideoPage +
+                                        .currentPage +
                                     1,
                               ),
                             );
@@ -106,12 +106,12 @@ class ExplorePageWtvPage extends StatelessWidget {
                   child: Column(
                     children: [
                       WtvVideoPostFrame(
-                        avatarUrl: data?[index].user?.profilePicture,
-                        username: data?[index].user?.username,
-                        title: data?[index].title,
-                        description: data?[index].description,
-                        videoUrl: data?[index].videoUrl,
-                        thumbnail: data?[index].thumbnail,
+                        avatarUrl: data[index].user?.profilePicture,
+                        username: data[index].user?.username,
+                        title: data[index].title,
+                        description: data[index].description,
+                        videoUrl: data[index].videoUrl,
+                        thumbnail: data[index].thumbnail,
                         timeAgo: timeago.format(
                           data![index].createdAt!,
                         ),

@@ -1,23 +1,24 @@
 part of 'flicks_bloc.dart';
 
 class FlicksState extends Equatable {
-  final int? currentFlickPage;
+  final PaginationData? flicksPaginationData;
   final List<RecommendedFlick>? recommendationFlicks;
   const FlicksState({
     this.recommendationFlicks,
-    this.currentFlickPage,
+    this.flicksPaginationData,
   });
 
   @override
-  List<Object?> get props => <Object?>[recommendationFlicks, currentFlickPage];
+  List<Object?> get props =>
+      <Object?>[recommendationFlicks, flicksPaginationData];
 
   FlicksState copyWith({
     List<RecommendedFlick>? recommendationFlicks,
-    int? currentFlickPage,
+    PaginationData? flicksPaginationData,
   }) {
     return FlicksState(
       recommendationFlicks: recommendationFlicks ?? this.recommendationFlicks,
-      currentFlickPage: currentFlickPage ?? this.currentFlickPage,
+      flicksPaginationData: flicksPaginationData ?? this.flicksPaginationData,
     );
   }
 }

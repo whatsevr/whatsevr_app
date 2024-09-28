@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
-import '../config/services/notification.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -36,8 +36,22 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 );
               }
             ),
-            ('Test2', () async {}),
-            ('Cancel', () async {}),
+            (
+              'Cloudinary Video',
+              () async {
+                CustomAssetPicker.pickVideoFromGallery(
+                  onCompleted: (file) async {},
+                );
+              }
+            ),
+            (
+              'Cloudinary Image',
+              () async {
+                CustomAssetPicker.pickImageFromGallery(
+                  onCompleted: (file) {},
+                );
+              }
+            ),
           ])
             TextButton(
               onPressed: itm.$2,

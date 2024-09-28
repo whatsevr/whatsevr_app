@@ -113,12 +113,13 @@ class CreateFlickPostBloc
       }
 
       SmartDialog.showLoading(msg: 'Uploading video...');
-      final String? videoUrl = await FileUploadService.uploadFilesToSST(
+      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
         state.videoFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
         fileType: 'video-post',
       );
-      final String? thumbnailUrl = await FileUploadService.uploadFilesToSST(
+      final String? thumbnailUrl =
+          await FileUploadService.uploadFilesToSupabase(
         state.thumbnailFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
         fileType: 'video-post-thumbnail',

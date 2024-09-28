@@ -155,7 +155,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       if (event.profileImage == null) throw Exception('No image picked');
       emit(state.copyWith(profileImage: event.profileImage));
-      String? profilePictureUrl = await FileUploadService.uploadFilesToSST(
+      String? profilePictureUrl = await FileUploadService.uploadFilesToSupabase(
         event.profileImage!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
         fileType: 'profile-picture',
@@ -196,7 +196,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         SmartDialog.showLoading();
         File? imageFile = event.coverImage;
         File? videoFile = event.coverVideo;
-        String? imageUrl = await FileUploadService.uploadFilesToSST(
+        String? imageUrl = await FileUploadService.uploadFilesToSupabase(
           imageFile!,
           userUid: (await AuthUserDb.getLastLoggedUserUid())!,
           fileType: 'cover-image',
@@ -204,7 +204,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         );
         String? videoUrl;
         if (videoFile != null) {
-          videoUrl = await FileUploadService.uploadFilesToSST(
+          videoUrl = await FileUploadService.uploadFilesToSupabase(
             videoFile,
             userUid: (await AuthUserDb.getLastLoggedUserUid())!,
             fileType: 'cover-video',

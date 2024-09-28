@@ -17,9 +17,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   ExploreBloc()
       : super(const ExploreState(
           videoPaginationData: PaginationData(
-            currentVideoPage: 1,
+            currentPage: 1,
             isLoading: false,
-            isLastPage: false,
+            noMoreData: false,
           ),
           recommendationVideos: [],
         )) {
@@ -41,22 +41,22 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           videoPaginationData: state.videoPaginationData?.copyWith(
-            currentVideoPage: 1,
-            isLastPage: false,
+            currentPage: 1,
+            noMoreData: false,
             isLoading: true,
           ),
         ),
       );
       RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
-        page: state.videoPaginationData?.currentVideoPage ?? 1,
+        page: state.videoPaginationData?.currentPage ?? 1,
       );
       emit(
         state.copyWith(
           recommendationVideos: recommendationVideos?.recommendedVideos,
           videoPaginationData: state.videoPaginationData?.copyWith(
             isLoading: false,
-            isLastPage: recommendationVideos?.lastPage,
+            noMoreData: recommendationVideos?.lastPage,
           ),
         ),
       );
@@ -86,9 +86,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         recommendationVideos: state.recommendationVideos! +
             (recommendationVideos?.recommendedVideos ?? []),
         videoPaginationData: state.videoPaginationData?.copyWith(
-          currentVideoPage: event.page,
+          currentPage: event.page,
           isLoading: false,
-          isLastPage: recommendationVideos?.lastPage,
+          noMoreData: recommendationVideos?.lastPage,
         ),
       ));
     } catch (e, s) {

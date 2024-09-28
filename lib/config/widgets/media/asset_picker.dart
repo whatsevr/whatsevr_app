@@ -66,7 +66,7 @@ class CustomAssetPicker {
 
   static void pickImageFromGallery({
     bool editImage = true,
-    required List<WhatsevrAspectRatio> aspectRatios,
+    List<WhatsevrAspectRatio> aspectRatios = const [],
     bool withCircleCropperUi = false,
     required Function(File file) onCompleted,
   }) async {

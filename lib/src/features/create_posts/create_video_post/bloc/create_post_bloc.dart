@@ -137,13 +137,14 @@ class CreateVideoPostBloc
           ),
           onTaskAssignFail: () async {
             SmartDialog.showLoading();
-            final String? videoUrl = await FileUploadService.uploadFilesToSST(
+            final String? videoUrl =
+                await FileUploadService.uploadFileToCloudinary(
               state.videoFile!,
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
               fileType: 'video-post',
             );
             final String? thumbnailUrl =
-                await FileUploadService.uploadFilesToSST(
+                await FileUploadService.uploadFilesToSupabase(
               state.thumbnailFile!,
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
               fileType: 'video-post-thumbnail',
