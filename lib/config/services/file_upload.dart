@@ -88,24 +88,60 @@ class FileUploadService {
   }
 }
 
-String optimizedCloudinaryVideoUrl(String originalUrl) {
-  // Check if the URL contains 'res.cloudinary.com' to ensure it's a Cloudinary URL
+String generateOptimizedCloudinaryVideoUrl({
+  required String originalUrl, // Original Cloudinary URL
+
+  // Custom Streaming Profile (e.g., sp_hd)
+  int? quality, // Manual Quality Control (e.g., q_50)
+  bool autoFormat = true, // f_auto for device-specific format
+  bool originalQuality = false, // q_auto for network-based quality
+  bool dprAuto = true, // Auto-adjust based on device pixel density
+  String cacheControl =
+      'public,max-age=${Duration.secondsPerDay * 90}', // Custom cache control (e.g., max-age=3600)
+}) {
   if (!originalUrl.contains('res.cloudinary.com')) {
     return originalUrl;
   }
-
-  // Find the index of '/upload/' and '/v' (version identifier)
+  if (originalQuality) {
+    return originalUrl;
+  }
+  // Split URL at "/upload/" for transformation insertion
   final uploadIndex = originalUrl.indexOf('/upload/');
   final versionIndex = originalUrl.indexOf('/v');
 
-  // Validate that both '/upload/' and '/v' are present in the URL
   if (uploadIndex == -1 || versionIndex == -1) {
     throw ArgumentError('Invalid Cloudinary URL format');
   }
 
-  // Insert the transformation parameters (f_auto:video, q_auto)
-  final optimizedUrl =
-      '${originalUrl.substring(0, uploadIndex + 8)}f_auto:video,q_auto/${originalUrl.substring(uploadIndex + 8)}';
+  // List to hold the transformations
+  List<String> transformations = [];
 
+  // Manual Quality Control
+  if (quality != null) {
+    transformations.add('q_$quality');
+  } else {
+    transformations.add('q_auto');
+  }
+
+  // Auto-format for device-specific format
+  if (autoFormat) {
+    transformations.add('f_auto:video');
+  }
+
+  // Device Pixel Ratio auto-adjustment
+  if (dprAuto) {
+    transformations.add('dpr_auto');
+  }
+
+  // Insert the transformations in the URL
+  String optimizedUrl = originalUrl.substring(0, uploadIndex + 8);
+  if (transformations.isNotEmpty) {
+    optimizedUrl += '${transformations.join(',')}/';
+  }
+  optimizedUrl += originalUrl.substring(uploadIndex + 8);
+
+  // Append CDN-level caching as a query parameter, if provided
+  optimizedUrl += '?_cache_control=$cacheControl';
+  debugPrint('Optimized Cloudinary URL: $optimizedUrl');
   return optimizedUrl;
 }

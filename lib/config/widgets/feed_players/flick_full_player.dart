@@ -37,8 +37,8 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
     if (controller?.value.isPlaying == true) {
       return;
     }
-    String adaptiveVideoUrl = optimizedCloudinaryVideoUrl(
-      widget.videoUrl!,
+    String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
+      originalUrl: widget.videoUrl!,
     );
     controller =
         CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl))

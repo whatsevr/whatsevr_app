@@ -45,7 +45,7 @@ class _FlicksPageState extends State<FlicksPage> {
       selector: (FlicksState state) => state.recommendationFlicks,
       builder: (context, data) {
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           body: Builder(builder: (context) {
             if (data == null || data.isEmpty) {
               return const Center(child: CupertinoActivityIndicator());
@@ -245,21 +245,35 @@ class _FlicksPageState extends State<FlicksPage> {
             );
           }),
           //show video progress
-          bottomNavigationBar: Builder(builder: (context) {
-            if (currentController == null &&
-                currentController?.value.duration.inMilliseconds != 0) {
-              return const SizedBox();
-            }
-            return SizedBox(
-              height: 2,
-              child: LinearProgressIndicator(
-                value: currentController!.value.position.inMilliseconds /
-                    currentController!.value.duration.inMilliseconds,
-                backgroundColor: Colors.white,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
-              ),
-            );
-          }),
+          bottomNavigationBar: Builder(
+            builder: (context) {
+              // Ensure currentController is not null and that the duration is valid
+              if (currentController == null ||
+                  currentController?.value.duration == null ||
+                  currentController?.value.duration.inMilliseconds == 0) {
+                return const SizedBox();
+              }
+
+              final duration = currentController!.value.duration.inMilliseconds;
+              final position = currentController!.value.position.inMilliseconds;
+
+              // Check for a valid position and prevent division by zero
+              final progress =
+                  (duration > 0) ? (position / duration).clamp(0.0, 1.0) : 0.0;
+
+              // Display LinearProgressIndicator when controller is available and valid
+              return SizedBox(
+                height: 3,
+                child: LinearProgressIndicator(
+                  value: progress.isFinite
+                      ? progress
+                      : 0.0, // Check for finite progress value
+                  backgroundColor: Colors.white,
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+                ),
+              );
+            },
+          ),
         );
       },
     );

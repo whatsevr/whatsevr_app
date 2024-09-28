@@ -1,10 +1,10 @@
 import 'package:cached_chewie_plus/cached_chewie_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import '../../services/file_upload.dart';
 import '../media/aspect_ratio.dart';
 
 class WtvFullPlayer extends StatefulWidget {
@@ -25,7 +25,8 @@ class WtvFullPlayer extends StatefulWidget {
 class _WtvFullPlayerState extends State<WtvFullPlayer> {
   CachedVideoPlayerController? videoPlayerController;
   ChewieController? _chewieController;
-  int? bufferDelay;
+
+  int? selectedQuality;
 
   @override
   void initState() {
@@ -33,9 +34,19 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     initializePlayer();
   }
 
-  Future<void> initializePlayer() async {
+  Future<void> initializePlayer({int? quality}) async {
+    // if (videoPlayerController?.value.isPlaying == true) {
+    //   return;
+    // }
+
+    // Generate optimized video URL based on selected quality
+    String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
+      originalUrl: widget.videoUrl!,
+      quality: quality,
+    );
+
     videoPlayerController = CachedVideoPlayerController.networkUrl(
-      Uri.parse('${widget.videoUrl}'),
+      Uri.parse(adaptiveVideoUrl),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true),
     );
     await videoPlayerController?.initialize();
@@ -46,13 +57,10 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
   void dispose() {
     _chewieController?.dispose();
     videoPlayerController?.dispose();
-
     super.dispose();
   }
 
   void _createChewieController() {
-    final List<Subtitle> subtitles = <Subtitle>[];
-
     _chewieController = ChewieController(
       useRootNavigator: true,
       videoPlayerController: videoPlayerController!,
@@ -66,21 +74,50 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
       showOptions: true,
       draggableProgressBar: true,
       startAt: const Duration(seconds: 0),
-      progressIndicatorDelay:
-          bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
+      additionalOptions: (context) {
+        return [
+          if (false)
+            OptionItem(
+              title: 'Quality',
+              iconData: Icons.settings,
+              onTap: () {
+                showAppModalSheet(
+                    draggableScrollable: false,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Select Video Quality',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        for ((String label, int? quality) record in [
+                          ('Auto', null),
+                          ('Low', 20),
+                          ('Normal', 60),
+                          ('Max', 100),
+                        ])
+                          ListTile(
+                            visualDensity: VisualDensity.compact,
+                            title: Text(record.$1),
+                            leading: selectedQuality == record.$2
+                                ? const Icon(Icons.check)
+                                : null,
+                            onTap: () {
+                              selectedQuality = record.$2;
+                              Navigator.pop(context);
+                              initializePlayer(quality: selectedQuality);
+                            },
+                          ),
+                      ],
+                    ));
+              },
+            ),
+        ];
+      },
+      progressIndicatorDelay: const Duration(milliseconds: 2000),
       aspectRatio: videoPlayerController!.value.aspectRatio,
-      subtitle: Subtitles(subtitles),
-      subtitleBuilder: (BuildContext context, dynamic subtitle) => Container(
-        padding: const EdgeInsets.all(10.0),
-        child: subtitle is InlineSpan
-            ? RichText(
-                text: subtitle,
-              )
-            : Text(
-                subtitle.toString(),
-                style: const TextStyle(color: Colors.black),
-              ),
-      ),
       hideControlsTimer: const Duration(seconds: 3),
       allowedScreenSleep: false,
       fullScreenByDefault: false,

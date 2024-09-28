@@ -42,8 +42,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
     if (videoPlayerController?.value.isPlaying == true) {
       return;
     }
-    String adaptiveVideoUrl = optimizedCloudinaryVideoUrl(
-      widget.videoUrl!,
+    String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
+      originalUrl: widget.videoUrl!,
     );
     videoPlayerController ??= CachedVideoPlayerController.networkUrl(
       Uri.parse(adaptiveVideoUrl),
