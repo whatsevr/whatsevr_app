@@ -19,6 +19,7 @@ import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
 import '../../../../config/widgets/feed_players/flick_full_player.dart';
+import '../../../../config/widgets/two_state_ui.dart';
 import '../bloc/flicks_bloc.dart';
 
 class FlicksPage extends StatefulWidget {
@@ -177,9 +178,12 @@ class _FlicksPageState extends State<FlicksPage> {
                                     ),
 
                                     Gap(12),
-                                    const Icon(
-                                      Icons.more_vert,
-                                      color: Colors.white,
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.more_vert,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -244,37 +248,18 @@ class _FlicksPageState extends State<FlicksPage> {
             );
           }),
           //show video progress
-          bottomNavigationBar: Builder(
-            builder: (context) {
-              // Ensure currentController is not null and that the duration is valid
-              if (currentVideoController == null ||
-                  currentVideoController?.value.duration == null ||
-                  currentVideoController?.value.duration.inMilliseconds == 0) {
-                return const SizedBox();
-              }
-
-              final duration =
-                  currentVideoController!.value.duration.inMilliseconds;
-              final position =
-                  currentVideoController!.value.position.inMilliseconds;
-
-              // Check for a valid position and prevent division by zero
-              final progress =
-                  (duration > 0) ? (position / duration).clamp(0.0, 1.0) : 0.0;
-
-              // Display LinearProgressIndicator when controller is available and valid
-              return SizedBox(
-                height: 4,
-                child: LinearProgressIndicator(
-                  value: progress.isFinite
-                      ? progress
-                      : 0.0, // Check for finite progress value
-                  backgroundColor: Colors.white,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
+          bottomNavigationBar: currentVideoController == null
+              ? null
+              : VideoProgressIndicator(
+                  currentVideoController!,
+                  allowScrubbing: true,
+                  padding: const EdgeInsets.all(0),
+                  colors: VideoProgressColors(
+                    playedColor: Colors.red,
+                    bufferedColor: Colors.red.withOpacity(0.5),
+                    backgroundColor: Colors.white.withOpacity(0.2),
+                  ),
                 ),
-              );
-            },
-          ),
         );
       },
     );

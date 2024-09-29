@@ -12,6 +12,7 @@ import '../../services/file_upload.dart';
 class FlicksFullPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
+
   final Function(CachedVideoPlayerController?)? onPlayerInitialized;
   const FlicksFullPlayer(
       {super.key,
@@ -33,7 +34,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
     initializePlayer();
   }
 
-  void initializePlayer() {
+  void initializePlayer() async {
     if (controller?.value.isPlaying == true) {
       return;
     }
@@ -41,18 +42,10 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
       originalUrl: widget.videoUrl!,
     );
     controller =
-        CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-            // controller?.play();
-            controller?.addListener(() {
-              if (controller?.value.position == controller?.value.duration) {
-                controller?.play();
-              }
-              widget.onPlayerInitialized?.call(controller);
-            });
-          });
+        CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl));
+    await controller?.initialize();
+    setState(() {});
+    // controller?.setLooping(true);
   }
 
   @override
@@ -70,6 +63,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
 
         if (visibleFraction > 0.7) {
           controller?.play();
+          widget.onPlayerInitialized?.call(controller);
         } else {
           controller?.pause();
         }

@@ -31,35 +31,20 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   @override
   void initState() {
     super.initState();
+    initiateVideoPlayer();
   }
 
   Future<void> initiateVideoPlayer() async {
-    if (videoPlayerController?.value.isPlaying == true) {
-      return;
-    }
     String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
+      quality: 30,
     );
     videoPlayerController ??= CachedVideoPlayerController.networkUrl(
       Uri.parse(adaptiveVideoUrl),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
-    )..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        videoPlayerController?.play();
-        setState(() {});
-        videoPlayerController?.addListener(() async {
-          if (videoPlayerController?.value.position ==
-              videoPlayerController?.value.duration) {
-            if (widget.loopVideo == true) {
-              videoPlayerController?.seekTo(Duration.zero);
-              videoPlayerController?.play();
-            } else {
-              videoPlayerController?.pause();
-            }
-            setState(() {});
-          }
-        });
-      });
+    );
+    await videoPlayerController!.initialize();
+    videoPlayerController!.setLooping(widget.loopVideo ?? false);
   }
 
   @override
@@ -78,97 +63,145 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
         if (visibleFraction < 0.1 &&
             videoPlayerController?.value.isPlaying == true) {
           videoPlayerController?.pause();
+          setState(() {});
         }
       },
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              if (widget.onTapFreeArea != null) {
-                if (videoPlayerController?.value.isInitialized == true &&
-                    videoPlayerController!.value.isPlaying) {
-                  videoPlayerController?.pause();
-                  setState(() {});
-                }
-
-                widget.onTapFreeArea?.call();
-              }
-            },
-            child: Builder(
-              builder: (BuildContext context) {
-                if (videoPlayerController?.value.isInitialized != true ||
-                    videoPlayerController?.value.isPlaying != true) {
-                  return AspectRatio(
-                    aspectRatio: widget.thumbnailHeightAspectRatio ??
-                        WhatsevrAspectRatio.landscape.ratio,
-                    child: ExtendedImage.network(
-                      widget.thumbnail ??
-                          MockData.imagePlaceholder('Thumbnail'),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      enableLoadState: false,
-                    ),
-                  );
-                }
-                return AspectRatio(
-                    aspectRatio: videoPlayerController?.value.aspectRatio ??
-                        WhatsevrAspectRatio.landscape.ratio,
-                    child: CachedVideoPlayer(videoPlayerController!));
-              },
-            ),
-          ),
-          if (videoPlayerController?.value.isPlaying != true)
-            IconButton(
-              padding: const EdgeInsets.all(0.0),
-              style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
-              ),
-              icon: const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 45,
-              ),
-              onPressed: () async {
-                await initiateVideoPlayer();
-                setState(() {
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
                   if (videoPlayerController?.value.isPlaying == true) {
                     videoPlayerController?.pause();
+                    setState(() {});
                   } else {
-                    videoPlayerController?.play();
+                    videoPlayerController?.pause();
+                    setState(() {});
+                    widget.onTapFreeArea?.call();
                   }
-                });
-              },
-            ),
-          if (videoPlayerController?.value.isPlaying == true) ...<Widget>[
-            Positioned(
-              top: 2,
-              right: 2,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        if (videoPlayerController!.value.volume == 0) {
-                          videoPlayerController!.setVolume(1);
-                        } else {
-                          videoPlayerController!.setVolume(0);
-                        }
-                      });
-                    },
-                    icon: Icon(
-                      videoPlayerController?.value.volume == 0
-                          ? Icons.volume_off
-                          : Icons.volume_up,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                },
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if (videoPlayerController?.value.isInitialized != true ||
+                        videoPlayerController?.value.isPlaying != true) {
+                      return AspectRatio(
+                        aspectRatio: widget.thumbnailHeightAspectRatio ??
+                            WhatsevrAspectRatio.landscape.ratio,
+                        child: ExtendedImage.network(
+                          widget.thumbnail ??
+                              MockData.imagePlaceholder('Thumbnail'),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          enableLoadState: false,
+                        ),
+                      );
+                    }
+                    return AspectRatio(
+                        aspectRatio: videoPlayerController?.value.aspectRatio ??
+                            WhatsevrAspectRatio.landscape.ratio,
+                        child: CachedVideoPlayer(videoPlayerController!));
+                  },
+                ),
+              ),
+              if (videoPlayerController?.value.isPlaying != true)
+                IconButton(
+                  padding: const EdgeInsets.all(0.0),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
                   ),
-                ],
+                  icon: const Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 45,
+                  ),
+                  onPressed: () async {
+                    setState(() {
+                      if (videoPlayerController?.value.isPlaying == true) {
+                        videoPlayerController?.pause();
+                        setState(() {});
+                      } else {
+                        videoPlayerController?.play();
+                        setState(() {});
+                      }
+                    });
+                  },
+                ),
+              if (videoPlayerController?.value.isPlaying == true) ...<Widget>[
+                Positioned(
+                  bottom: 2,
+                  right: 2,
+                  child: Row(
+                    children: <Widget>[
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () {
+                          videoPlayerController!.seekTo(
+                            videoPlayerController!.value.position -
+                                const Duration(seconds: 20),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.fast_rewind,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                      //fast forward
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () {
+                          videoPlayerController!.seekTo(
+                            videoPlayerController!.value.position +
+                                const Duration(seconds: 20),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.fast_forward,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () {
+                          setState(() {
+                            if (videoPlayerController!.value.volume == 0) {
+                              videoPlayerController!.setVolume(1);
+                            } else {
+                              videoPlayerController!.setVolume(0);
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          videoPlayerController?.value.volume == 0
+                              ? Icons.volume_off
+                              : Icons.volume_up,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+          //linear progress bar
+          if (videoPlayerController?.value.isPlaying == true)
+            VideoProgressIndicator(
+              videoPlayerController!,
+              allowScrubbing: true,
+              padding: EdgeInsets.zero,
+              colors: VideoProgressColors(
+                playedColor: Colors.red,
+                bufferedColor: Colors.red.withOpacity(0.5),
+                backgroundColor: Colors.white,
               ),
             ),
-          ],
         ],
       ),
     );

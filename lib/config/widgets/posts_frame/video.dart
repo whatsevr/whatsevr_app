@@ -17,6 +17,7 @@ import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../utils/conversion.dart';
+import '../two_state_ui.dart';
 
 class WtvVideoPostFrame extends StatelessWidget {
   final String? title;
@@ -76,7 +77,7 @@ class WtvVideoPostFrame extends StatelessWidget {
               ),
               if (totalTags != null && totalTags! > 0)
                 Positioned(
-                  bottom: 8,
+                  top: 8,
                   right: 8,
                   child: GestureDetector(
                     onTap: () {
@@ -221,44 +222,6 @@ class WtvVideoPostFrame extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class TwoStateWidget extends StatefulWidget {
-  final bool? isFirstState;
-  final Widget? firstStateUi;
-  final Widget? secondStateUi;
-  const TwoStateWidget({
-    super.key,
-    this.isFirstState,
-    this.firstStateUi,
-    this.secondStateUi,
-  });
-
-  @override
-  State<TwoStateWidget> createState() => _TwoStateWidgetState();
-}
-
-class _TwoStateWidgetState extends State<TwoStateWidget> {
-  @override
-  void initState() {
-    super.initState();
-    _firstState = widget.isFirstState ?? true;
-  }
-
-  late bool _firstState;
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: _firstState
-          ? widget.firstStateUi ?? const Icon(Icons.circle_outlined)
-          : widget.secondStateUi ?? const Icon(Icons.check_circle),
-      onPressed: () {
-        setState(() {
-          _firstState = !_firstState;
-        });
-      },
     );
   }
 }
