@@ -39,7 +39,7 @@ class _FlicksPageState extends State<FlicksPage> {
     );
   }
 
-  CachedVideoPlayerController? currentController;
+  CachedVideoPlayerController? currentVideoController;
   final PreloadPageController scrollController = PreloadPageController();
   Widget _buildBody(BuildContext context) {
     scrollController.addListener(() {
@@ -79,15 +79,15 @@ class _FlicksPageState extends State<FlicksPage> {
                     FlicksFullPlayer(
                       videoUrl: flick.videoUrl,
                       thumbnail: flick.thumbnail,
-                      // onPlayerInitialized: (controller) {
-                      //   currentController = controller;
-                      //   setState(() {});
-                      //   currentController?.addListener(() {
-                      //     if (currentController?.value.isPlaying == true) {
-                      //       setState(() {});
-                      //     }
-                      //   });
-                      // },
+                      onPlayerInitialized: (controller) {
+                        currentVideoController = controller;
+                        setState(() {});
+                        currentVideoController?.addListener(() {
+                          if (currentVideoController?.value.isPlaying == true) {
+                            setState(() {});
+                          }
+                        });
+                      },
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -247,14 +247,16 @@ class _FlicksPageState extends State<FlicksPage> {
           bottomNavigationBar: Builder(
             builder: (context) {
               // Ensure currentController is not null and that the duration is valid
-              if (currentController == null ||
-                  currentController?.value.duration == null ||
-                  currentController?.value.duration.inMilliseconds == 0) {
+              if (currentVideoController == null ||
+                  currentVideoController?.value.duration == null ||
+                  currentVideoController?.value.duration.inMilliseconds == 0) {
                 return const SizedBox();
               }
 
-              final duration = currentController!.value.duration.inMilliseconds;
-              final position = currentController!.value.position.inMilliseconds;
+              final duration =
+                  currentVideoController!.value.duration.inMilliseconds;
+              final position =
+                  currentVideoController!.value.position.inMilliseconds;
 
               // Check for a valid position and prevent division by zero
               final progress =
@@ -262,7 +264,7 @@ class _FlicksPageState extends State<FlicksPage> {
 
               // Display LinearProgressIndicator when controller is available and valid
               return SizedBox(
-                height: 3,
+                height: 4,
                 child: LinearProgressIndicator(
                   value: progress.isFinite
                       ? progress

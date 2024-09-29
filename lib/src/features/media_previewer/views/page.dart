@@ -2,28 +2,28 @@ import 'package:cached_chewie_plus/cached_chewie_plus.dart';
 
 import 'package:flutter/material.dart';
 
-class VideoPreviewPlayerPageArguments {
+class MediaPreviewerPageArguments {
   final String videoUrl;
-  const VideoPreviewPlayerPageArguments({
+  const MediaPreviewerPageArguments({
     required this.videoUrl,
   });
 }
 
-class VideoPreviewPlayerPage extends StatefulWidget {
-  final VideoPreviewPlayerPageArguments pageArguments;
+class MediaPreviewerPage extends StatefulWidget {
+  final MediaPreviewerPageArguments pageArguments;
 
-  const VideoPreviewPlayerPage({
+  const MediaPreviewerPage({
     super.key,
     required this.pageArguments,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _VideoPreviewPlayerPageState();
+    return _MediaPreviewerPageState();
   }
 }
 
-class _VideoPreviewPlayerPageState extends State<VideoPreviewPlayerPage> {
+class _MediaPreviewerPageState extends State<MediaPreviewerPage> {
   CachedVideoPlayerController? videoPlayerController;
   ChewieController? _chewieController;
   int? bufferDelay;

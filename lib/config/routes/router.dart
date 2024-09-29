@@ -13,7 +13,8 @@ import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
-import 'package:whatsevr_app/src/features/full_video_player/views/page.dart';
+
+import 'package:whatsevr_app/src/features/media_previewer/views/page.dart';
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/splash/views/page.dart';
@@ -104,9 +105,9 @@ class AppNavigationService {
             name: RoutesName.fullVideoPlayer,
             path: RoutesName.fullVideoPlayer,
             builder: (BuildContext context, GoRouterState state) {
-              VideoPreviewPlayerPageArguments argument =
-                  state.extra as VideoPreviewPlayerPageArguments;
-              return VideoPreviewPlayerPage(
+              MediaPreviewerPageArguments argument =
+                  state.extra as MediaPreviewerPageArguments;
+              return MediaPreviewerPage(
                 pageArguments: argument,
               );
             },

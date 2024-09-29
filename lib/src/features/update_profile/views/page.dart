@@ -24,7 +24,7 @@ import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/mask_text.dart';
 
-import '../../full_video_player/views/page.dart';
+import '../../media_previewer/views/page.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {
@@ -243,7 +243,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             AppNavigationService.newRoute(
                                               RoutesName.fullVideoPlayer,
                                               extras:
-                                                  VideoPreviewPlayerPageArguments(
+                                                  MediaPreviewerPageArguments(
                                                 videoUrl:
                                                     coverMedia.videoUrl ?? '',
                                               ),
@@ -822,7 +822,8 @@ class ProfileUpdatePage extends StatelessWidget {
                                   context: context,
                                   headingTitle: 'Services',
                                   hintText: 'Add Service you provide',
-                                  suffixWidget: const Icon(Icons.add_circle_rounded),
+                                  suffixWidget:
+                                      const Icon(Icons.add_circle_rounded),
                                   customFunction: () {
                                     showAppModalSheet(
                                       context: context,
@@ -942,8 +943,8 @@ class ProfileUpdatePage extends StatelessWidget {
                       onPressed: () {
                         context.read<ProfileBloc>().add(const SubmitProfile());
                       },
-                      child:
-                          const Text('SAVE', style: TextStyle(color: Colors.white)),
+                      child: const Text('SAVE',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 );

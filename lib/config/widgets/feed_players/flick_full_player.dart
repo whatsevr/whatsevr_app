@@ -2,10 +2,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
-import 'package:video_player/video_player.dart';
+
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import '../../services/file_upload.dart';
@@ -51,8 +50,8 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
               if (controller?.value.position == controller?.value.duration) {
                 controller?.play();
               }
+              widget.onPlayerInitialized?.call(controller);
             });
-            widget.onPlayerInitialized?.call(controller);
           });
   }
 
@@ -69,11 +68,9 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
       onVisibilityChanged: (VisibilityInfo info) {
         final visibleFraction = info.visibleFraction;
 
-        if (visibleFraction > 0.6) {
-          // Play the video when 100% visible
+        if (visibleFraction > 0.7) {
           controller?.play();
         } else {
-          // Pause the video when 60% or more is hidden
           controller?.pause();
         }
       },
