@@ -45,7 +45,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
         CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl));
     await controller?.initialize();
     setState(() {});
-    // controller?.setLooping(true);
+    controller?.setLooping(true);
   }
 
   @override

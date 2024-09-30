@@ -26,9 +26,9 @@ class WtvDetailsPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          VideoPlayerWithControls(
+          WtvFullPlayer(
             videoUrl: pageArgument.videoUrl!,
-            // thumbnail: pageArgument.thumbnail,
+            thumbnail: pageArgument.thumbnail,
           ),
           Expanded(
             child: ListView(
