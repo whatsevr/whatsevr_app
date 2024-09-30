@@ -8,6 +8,7 @@ import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 import '../../../constants.dart';
+import '../../../utils/conversion.dart';
 
 class FileMetaData {
   final String name;
@@ -126,8 +127,7 @@ class FileMetaData {
         durationInSec: durationInSec,
         durationInMin: durationInMin,
         durationInHour: durationInHour,
-        durationInText:
-            await getDurationInText(mediaInfo['durationMs'] as int?),
+        durationInText: getDurationInText(durationInSec),
         isOrientationPortrait:
             width != null && height != null && width < height,
         isOrientationLandscape:
@@ -152,21 +152,6 @@ class FileMetaData {
   static double? getAspectRatio({required int? width, required int? height}) {
     if (width == null || height == null || height == 0) return null;
     return width / height;
-  }
-
-  static Future<String?> getDurationInText(int? duration) async {
-    if (duration == null) return null;
-    try {
-      final int hours = duration ~/ 3600000;
-      final int minutes = (duration % 3600000) ~/ 60000;
-      final int seconds = ((duration % 3600000) % 60000) ~/ 1000;
-      return '${hours.toString().padLeft(2, '0')}:'
-          '${minutes.toString().padLeft(2, '0')}:'
-          '${seconds.toString().padLeft(2, '0')}';
-    } catch (e) {
-      print("Error formatting duration: $e");
-      return null;
-    }
   }
 
   static String getFileSize(int bytes) {

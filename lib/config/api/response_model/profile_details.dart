@@ -3,7 +3,7 @@ import 'dart:convert';
 class ProfileDetailsResponse {
   final String? message;
   final UserInfo? userInfo;
-  final List<UserVideoPost>? userVideoPosts;
+
   final List<UserEducation>? userEducations;
   final List<UserCoverMedia>? userCoverMedia;
   final List<UserPdf>? userPdfs;
@@ -13,7 +13,6 @@ class ProfileDetailsResponse {
   ProfileDetailsResponse({
     this.message,
     this.userInfo,
-    this.userVideoPosts,
     this.userEducations,
     this.userCoverMedia,
     this.userPdfs,
@@ -24,7 +23,6 @@ class ProfileDetailsResponse {
   ProfileDetailsResponse copyWith({
     String? message,
     UserInfo? userInfo,
-    List<UserVideoPost>? userVideoPosts,
     List<UserEducation>? userEducations,
     List<UserCoverMedia>? userCoverMedia,
     List<UserPdf>? userPdfs,
@@ -34,7 +32,6 @@ class ProfileDetailsResponse {
       ProfileDetailsResponse(
         message: message ?? this.message,
         userInfo: userInfo ?? this.userInfo,
-        userVideoPosts: userVideoPosts ?? this.userVideoPosts,
         userEducations: userEducations ?? this.userEducations,
         userCoverMedia: userCoverMedia ?? this.userCoverMedia,
         userPdfs: userPdfs ?? this.userPdfs,
@@ -53,10 +50,6 @@ class ProfileDetailsResponse {
         userInfo: json["user_info"] == null
             ? null
             : UserInfo.fromMap(json["user_info"]),
-        userVideoPosts: json["user_video_posts"] == null
-            ? []
-            : List<UserVideoPost>.from(
-                json["user_video_posts"]!.map((x) => UserVideoPost.fromMap(x))),
         userEducations: json["user_educations"] == null
             ? []
             : List<UserEducation>.from(
@@ -82,9 +75,6 @@ class ProfileDetailsResponse {
   Map<String, dynamic> toMap() => {
         "message": message,
         "user_info": userInfo?.toMap(),
-        "user_video_posts": userVideoPosts == null
-            ? []
-            : List<dynamic>.from(userVideoPosts!.map((x) => x.toMap())),
         "user_educations": userEducations == null
             ? []
             : List<dynamic>.from(userEducations!.map((x) => x.toMap())),

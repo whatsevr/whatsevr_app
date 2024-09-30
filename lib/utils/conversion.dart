@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../dev/talker.dart';
 
 String? calculateAgeInYearsAndMonth(DateTime birthDate) {
@@ -60,4 +62,33 @@ String? formatCountToKMBTQ(int? count) {
     TalkerService.instance.error('Error formatting count: $e');
     return null;
   }
+}
+
+String? getDurationInText(int? duration) {
+  if (duration == null) return null;
+  try {
+    final int hours = duration ~/ 3600;
+    final int minutes = (duration % 3600) ~/ 60;
+    final int seconds = duration % 60;
+    if (hours > 0) {
+      return '$hours h ${minutes > 0 ? '$minutes m' : ''} ${seconds > 0 ? '$seconds sec' : ''}';
+    } else if (minutes > 0) {
+      return '$minutes m ${seconds > 0 ? '$seconds s' : ''}';
+    } else {
+      return '$seconds s';
+    }
+  } catch (e) {
+    TalkerService.instance.error('Error formatting duration: $e');
+    return null;
+  }
+}
+
+String? ddMMyyyy(DateTime? date) {
+  if (date == null) return null;
+  return DateFormat('dd/MM/yyyy').format(date);
+}
+
+String? ddMonthyy(DateTime? date) {
+  if (date == null) return null;
+  return DateFormat('dd MMM yyyy').format(date);
 }
