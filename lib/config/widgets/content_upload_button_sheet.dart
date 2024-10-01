@@ -14,6 +14,7 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/p
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
 import '../../src/features/create_posts/create_flick_post/views/page.dart';
+import '../../src/features/create_posts/create_memory/views/page.dart';
 
 void showContentUploadBottomSheet(
   BuildContext context, {
@@ -55,7 +56,7 @@ class _Ui extends StatelessWidget {
             Navigator.pop(context);
             AppNavigationService.newRoute(
               RoutesName.createMemory,
-              extras: CreateFlickPostPageArgument(
+              extras: CreateMemoryPageArgument(
                 postCreatorType: postCreatorType,
               ),
             );

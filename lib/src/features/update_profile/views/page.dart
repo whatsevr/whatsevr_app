@@ -72,7 +72,7 @@ class ProfileUpdatePage extends StatelessWidget {
                           GestureDetector(
                             onTap: () async {
                               showWhatsevrMediaPickerChoice(
-                                onChoosingCamera: () async {
+                                onChoosingImageFromCamera: () async {
                                   CustomAssetPicker.captureImage(
                                     withCircleCropperUi: true,
                                     aspectRatios: [
@@ -87,7 +87,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     },
                                   );
                                 },
-                                onChoosingGallery: () {
+                                onChoosingImageFromGallery: () {
                                   CustomAssetPicker.pickImageFromGallery(
                                     withCircleCropperUi: true,
                                     aspectRatios: [
@@ -291,7 +291,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               ),
                               onPressed: () {
                                 showWhatsevrMediaPickerChoice(
-                                  onChoosingCamera: () async {
+                                  onChoosingImageFromCamera: () async {
                                     CustomAssetPicker.captureImage(
                                       aspectRatios: [
                                         WhatsevrAspectRatio.landscape,
@@ -306,7 +306,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       },
                                     );
                                   },
-                                  onChoosingGallery: () {
+                                  onChoosingImageFromGallery: () {
                                     CustomAssetPicker.pickImageFromGallery(
                                       aspectRatios: [
                                         WhatsevrAspectRatio.landscape,
@@ -340,7 +340,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               ),
                               onPressed: () {
                                 showWhatsevrMediaPickerChoice(
-                                  onChoosingGallery: () {
+                                  onChoosingImageFromGallery: () {
                                     CustomAssetPicker.pickVideoFromGallery(
                                       onCompleted: (file) async {
                                         File? thumbnail =

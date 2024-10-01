@@ -53,18 +53,21 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     String? optimizedUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
-    _controller =
-        CachedVideoPlayerController.networkUrl(Uri.parse(optimizedUrl))
-          ..initialize().then((_) {
-            setState(() {
-              isVideoLoading = false;
-              if (widget.autoPlay) {
-                _controller.play();
-                showPlayButton = false;
-                showControls = true;
-              }
-            });
-          });
+    _controller = CachedVideoPlayerController.networkUrl(
+      Uri.parse(optimizedUrl),
+      videoPlayerOptions: VideoPlayerOptions(
+        allowBackgroundPlayback: true,
+      ),
+    )..initialize().then((_) {
+        setState(() {
+          isVideoLoading = false;
+          if (widget.autoPlay) {
+            _controller.play();
+            showPlayButton = false;
+            showControls = true;
+          }
+        });
+      });
   }
 
   void hideControls() {
