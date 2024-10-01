@@ -54,7 +54,7 @@ class _Ui extends StatelessWidget {
           onPressed: () async {
             Navigator.pop(context);
             AppNavigationService.newRoute(
-              RoutesName.createFlickPost,
+              RoutesName.createMemory,
               extras: CreateFlickPostPageArgument(
                 postCreatorType: postCreatorType,
               ),
@@ -123,7 +123,7 @@ class _Ui extends StatelessWidget {
           onPressed: () async {
             Navigator.pop(context);
             AppNavigationService.newRoute(
-              RoutesName.createFlickPost,
+              RoutesName.createFlick,
               extras: CreateFlickPostPageArgument(
                 postCreatorType: postCreatorType,
               ),

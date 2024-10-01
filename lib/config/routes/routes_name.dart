@@ -13,7 +13,8 @@ class RoutesName {
   static const String settings = 'settings';
   static const String wtvDetails = 'wtv-details';
   static const String createVideoPost = 'create-video-post';
-  static const String createFlickPost = 'create-flick-post';
+  static const String createFlick = 'create-flick';
+  static const String createMemory = 'create-memory';
   static const String updateProfile = 'update-profile';
 
   static const String videoEditor = 'video-editor';
