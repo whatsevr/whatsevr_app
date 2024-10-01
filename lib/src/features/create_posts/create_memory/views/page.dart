@@ -420,7 +420,7 @@ class CreateMemoryPage extends StatelessWidget {
                     );
                   }
                   return AspectRatio(
-                    aspectRatio: WhatsevrAspectRatio.square.ratio,
+                    aspectRatio: WhatsevrAspectRatio.portrait2by3.ratio,
                     child: MaterialButton(
                       onPressed: () {
                         showWhatsevrMediaPickerChoice(
@@ -439,8 +439,9 @@ class CreateMemoryPage extends StatelessWidget {
                 },
               ),
               const Gap(12),
-              WhatsevrFormField.generalTextField(
+              WhatsevrFormField.multilineTextField(
                 maxLength: 100,
+                minLines: 3,
                 controller: context.read<CreateMemoryBloc>().titleController,
                 hintText: 'Caption',
               ),
@@ -524,6 +525,80 @@ class CreateMemoryPage extends StatelessWidget {
                 ),
               ],
               const Gap(12),
+              Column(
+                children: [
+                  WhatsevrFormField.invokeCustomFunction(
+                    context: context,
+                    controller: TextEditingController(
+                      text: state.selectedAddress ?? '',
+                    ),
+                    suffixWidget: const Icon(Icons.location_on),
+                    hintText: 'Location',
+                    customFunction: () {
+                      showAppModalSheet(child: PlaceSearchByNamePage(
+                        onPlaceSelected: (placeName, lat, long) {
+                          context
+                              .read<CreateMemoryBloc>()
+                              .add(UpdatePostAddressEvent(
+                                address: placeName,
+                                addressLatitude: lat,
+                                addressLongitude: long,
+                              ));
+                        },
+                      ));
+                    },
+                  ),
+                  if (state.placesNearbyResponse?.places?.isNotEmpty ??
+                      false) ...[
+                    const Gap(8),
+                    SizedBox(
+                      height: 22,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CreateMemoryBloc>()
+                                  .add(UpdatePostAddressEvent(
+                                    address: state.placesNearbyResponse
+                                        ?.places?[index].displayName?.text,
+                                    addressLatitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.latitude,
+                                    addressLongitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.longitude,
+                                  ));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Gap(4);
+                        },
+                        itemCount:
+                            state.placesNearbyResponse?.places?.length ?? 0,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const Gap(12),
               Theme(
                 data: ThemeData(
                   dividerColor: Colors.transparent,
@@ -541,90 +616,6 @@ class CreateMemoryPage extends StatelessWidget {
                     const Gap(12),
                     WhatsevrFormField.generalTextField(
                       hintText: 'CTA Action URL',
-                    ),
-                    const Gap(12),
-                    Column(
-                      children: [
-                        WhatsevrFormField.invokeCustomFunction(
-                          context: context,
-                          controller: TextEditingController(
-                            text: state.selectedAddress ?? '',
-                          ),
-                          suffixWidget: const Icon(Icons.location_on),
-                          hintText: 'Location',
-                          customFunction: () {
-                            showAppModalSheet(child: PlaceSearchByNamePage(
-                              onPlaceSelected: (placeName, lat, long) {
-                                context
-                                    .read<CreateMemoryBloc>()
-                                    .add(UpdatePostAddressEvent(
-                                      address: placeName,
-                                      addressLatitude: lat,
-                                      addressLongitude: long,
-                                    ));
-                              },
-                            ));
-                          },
-                        ),
-                        if (state.placesNearbyResponse?.places?.isNotEmpty ??
-                            false) ...[
-                          const Gap(8),
-                          SizedBox(
-                            height: 22,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    context
-                                        .read<CreateMemoryBloc>()
-                                        .add(UpdatePostAddressEvent(
-                                          address: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .displayName
-                                              ?.text,
-                                          addressLatitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.latitude,
-                                          addressLongitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.longitude,
-                                        ));
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black45,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      '${state.placesNearbyResponse?.places?[index].displayName?.text}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const Gap(4);
-                              },
-                              itemCount:
-                                  state.placesNearbyResponse?.places?.length ??
-                                      0,
-                            ),
-                          ),
-                        ],
-                      ],
                     ),
                   ],
                 ),
