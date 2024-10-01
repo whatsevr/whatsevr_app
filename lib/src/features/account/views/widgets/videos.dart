@@ -107,7 +107,7 @@ class AccountPageVideosView extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        '${userVideoPost?.totalLikes} likes • ${userVideoPost?.totalComments} comments',
+                        '${formatCountToKMBTQ(userVideoPost?.totalLikes)} likes • ${formatCountToKMBTQ(userVideoPost?.totalComments)} comments',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

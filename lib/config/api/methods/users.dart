@@ -75,7 +75,7 @@ class UsersApi {
   }) async {
     try {
       Response response = await ApiClient.client.get(
-        '/v1/user-profile-details',
+        '/v1/user-flicks',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {

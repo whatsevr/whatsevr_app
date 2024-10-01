@@ -10,6 +10,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/flicks.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/pdfs.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/services.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
@@ -339,7 +340,7 @@ class AccountPage extends StatelessWidget {
                                     ('Services', AccountPageServicesView()),
                                     ('Media', Text('Media')),
                                     ('Videos', AccountPageVideosView()),
-                                    ('Flicks', Text('Flicks')),
+                                    ('Flicks', AccountPageFlicksView()),
                                     ('Offerings', Text('Offerings')),
                                     ('Tags', Text('Tags')),
                                     ('Pdf', AccountPagePdfsView()),

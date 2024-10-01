@@ -7,6 +7,7 @@ import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
+import '../../../../config/api/response_model/user_flicks.dart';
 import '../../../../config/api/response_model/user_video_posts.dart';
 
 part 'account_event.dart';
@@ -33,9 +34,12 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       );
       UserVideoPostsResponse? userVideoPostsResponse =
           await UsersApi.getVideoPosts(userUid: userUid);
+      UserFlicksResponse? userFlicksResponse =
+          await UsersApi.getFLicks(userUid: userUid);
       emit(
         state.copyWith(
           userVideoPosts: userVideoPostsResponse?.videoPosts ?? [],
+          userFlicks: userFlicksResponse?.flicks ?? [],
         ),
       );
     } catch (e) {

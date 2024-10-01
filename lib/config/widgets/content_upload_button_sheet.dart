@@ -53,12 +53,18 @@ class _Ui extends StatelessWidget {
           ),
           onPressed: () async {
             Navigator.pop(context);
+            AppNavigationService.newRoute(
+              RoutesName.createFlickPost,
+              extras: CreateFlickPostPageArgument(
+                postCreatorType: postCreatorType,
+              ),
+            );
           },
           child: const Row(
             children: <Widget>[
               Iconify(Ic.round_history_toggle_off),
               Gap(8),
-              Text('Upload Memories'),
+              Text('Post Memories'),
             ],
           ),
         ),
@@ -102,7 +108,7 @@ class _Ui extends StatelessWidget {
             children: <Widget>[
               Iconify(Ic.sharp_slow_motion_video),
               Gap(8),
-              Text('Upload Wtv Video'),
+              Text('Create Wtv Video'),
             ],
           ),
         ),
@@ -127,7 +133,7 @@ class _Ui extends StatelessWidget {
             children: <Widget>[
               Iconify(Pepicons.play_print),
               Gap(8),
-              Text('Upload Flick'),
+              Text('Create Flick'),
             ],
           ),
         ),
