@@ -1,7 +1,8 @@
-import 'package:cached_chewie_plus/cached_chewie_plus.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
