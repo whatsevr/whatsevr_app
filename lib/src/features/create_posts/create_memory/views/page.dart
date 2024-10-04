@@ -539,6 +539,7 @@ class CreateMemoryPage extends StatelessWidget {
                     const Gap(12),
                     WhatsevrFormField.invokeCustomFunction(
                       context: context,
+                      hintText: 'User Action',
                       customFunction: () {
                         showAppModalSheet(
                             child: CommonDataSearchSelectPage(
@@ -549,7 +550,7 @@ class CreateMemoryPage extends StatelessWidget {
                     ),
                     const Gap(12),
                     WhatsevrFormField.generalTextField(
-                      hintText: 'CTA Action URL',
+                      hintText: 'Action URL',
                     ),
                     Gap(12),
                     Row(
@@ -558,7 +559,7 @@ class CreateMemoryPage extends StatelessWidget {
                         WhatsevrStepper(
                           initNumber: 1,
                           minNumber: 1,
-                          maxNumber: 3,
+                          maxNumber: 7,
                           counterCallback: (number) {},
                           stickySuffix: 'day',
                         ),
