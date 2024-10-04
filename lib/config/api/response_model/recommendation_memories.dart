@@ -78,9 +78,9 @@ class RecommendedMemory {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final double? cumulativeScore;
-  final double? imageAspectRatio;
   final int? videoDurationInSec;
-  final List<String>? ctaActions;
+  final String? ctaAction;
+  final String? ctaActionUrl;
   final User? user;
 
   RecommendedMemory({
@@ -109,9 +109,9 @@ class RecommendedMemory {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.imageAspectRatio,
     this.videoDurationInSec,
-    this.ctaActions,
+    this.ctaAction,
+    this.ctaActionUrl,
     this.user,
   });
 
@@ -141,9 +141,9 @@ class RecommendedMemory {
     List<String>? taggedCommunityUids,
     int? totalShares,
     double? cumulativeScore,
-    double? imageAspectRatio,
     int? videoDurationInSec,
-    List<String>? ctaActions,
+    String? ctaAction,
+    String? ctaActionUrl,
     User? user,
   }) =>
       RecommendedMemory(
@@ -173,9 +173,9 @@ class RecommendedMemory {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        imageAspectRatio: imageAspectRatio ?? this.imageAspectRatio,
         videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
-        ctaActions: ctaActions ?? this.ctaActions,
+        ctaAction: ctaAction ?? this.ctaAction,
+        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
         user: user ?? this.user,
       );
 
@@ -221,11 +221,9 @@ class RecommendedMemory {
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"]?.toDouble(),
-        imageAspectRatio: json["image_aspect_ratio"]?.toDouble(),
         videoDurationInSec: json["video_duration_in_sec"],
-        ctaActions: json["cta_actions"] == null
-            ? []
-            : List<String>.from(json["cta_actions"]!.map((x) => x)),
+        ctaAction: json["cta_action"],
+        ctaActionUrl: json["cta_action_url"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
 
@@ -260,11 +258,9 @@ class RecommendedMemory {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "image_aspect_ratio": imageAspectRatio,
         "video_duration_in_sec": videoDurationInSec,
-        "cta_actions": ctaActions == null
-            ? []
-            : List<dynamic>.from(ctaActions!.map((x) => x)),
+        "cta_action": ctaAction,
+        "cta_action_url": ctaActionUrl,
         "user": user?.toMap(),
       };
 }

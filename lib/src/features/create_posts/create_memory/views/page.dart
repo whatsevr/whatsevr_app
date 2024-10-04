@@ -11,6 +11,7 @@ import '../../../../../config/routes/router.dart';
 import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/button.dart';
+import '../../../../../config/widgets/common_data_list.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
@@ -19,6 +20,7 @@ import '../../../../../config/widgets/place_search_list.dart';
 import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
+import '../../../../../config/widgets/stepper.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
 import '../../../media_previewer/views/page.dart';
@@ -537,11 +539,30 @@ class CreateMemoryPage extends StatelessWidget {
                     const Gap(12),
                     WhatsevrFormField.invokeCustomFunction(
                       context: context,
-                      customFunction: () {},
+                      customFunction: () {
+                        showAppModalSheet(
+                            child: CommonDataSearchSelectPage(
+                          showCtaActions: true,
+                          onCtaActionSelected: (p0) {},
+                        ));
+                      },
                     ),
                     const Gap(12),
                     WhatsevrFormField.generalTextField(
                       hintText: 'CTA Action URL',
+                    ),
+                    Gap(12),
+                    Row(
+                      children: [
+                        Expanded(child: const Text('Expiry after')),
+                        WhatsevrStepper(
+                          initNumber: 1,
+                          minNumber: 1,
+                          maxNumber: 3,
+                          counterCallback: (number) {},
+                          stickySuffix: 'day',
+                        ),
+                      ],
                     ),
                   ],
                 ),

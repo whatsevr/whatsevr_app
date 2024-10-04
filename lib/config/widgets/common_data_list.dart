@@ -15,6 +15,8 @@ class CommonDataSearchSelectPage extends StatefulWidget {
   final Function(Gender)? onGenderSelected;
   final bool showWorkingModes;
   final Function(WorkingMode)? onWorkingModeSelected;
+  final bool showCtaActions;
+  final Function(CtaAction)? onCtaActionSelected;
 
   // Multi-select items for Interests
   final bool showInterests;
@@ -34,6 +36,8 @@ class CommonDataSearchSelectPage extends StatefulWidget {
     this.onGenderSelected,
     this.onWorkingModeSelected,
     this.onPersonalInterestsSelected,
+    this.showCtaActions = false,
+    this.onCtaActionSelected,
   });
 
   @override
@@ -101,6 +105,8 @@ class _CommonDataSearchSelectPageState
       _filteredItems = _commonData!.workingModes!;
     } else if (widget.showInterests && _commonData?.interests != null) {
       _filteredItems = _commonData!.interests!;
+    } else if (widget.showCtaActions && _commonData?.ctaActions != null) {
+      _filteredItems = _commonData!.ctaActions!;
     }
   }
 
@@ -144,6 +150,14 @@ class _CommonDataSearchSelectPageState
                 (Interest item) =>
                     item.name != null &&
                     item.name!.toLowerCase().contains(query),
+              )
+              .toList();
+        } else if (widget.showCtaActions) {
+          _filteredItems = _commonData!.ctaActions!
+              .where(
+                (CtaAction item) =>
+                    item.action != null &&
+                    item.action!.toLowerCase().contains(query),
               )
               .toList();
         }
@@ -261,6 +275,16 @@ class _CommonDataSearchSelectPageState
                   _selectedInterests.remove(item);
                 }
               });
+            },
+          );
+        } else if (item is CtaAction) {
+          return ListTile(
+            title: Text(item.action!),
+            onTap: () {
+              if (widget.onCtaActionSelected != null) {
+                widget.onCtaActionSelected!(item);
+              }
+              Navigator.pop(context);
             },
           );
         }
