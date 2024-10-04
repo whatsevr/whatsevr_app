@@ -419,7 +419,7 @@ class CreateVideoPostPage extends StatelessWidget {
                     .read<CreateVideoPostBloc>()
                     .add(const SubmitPostEvent());
               },
-              label: 'Create Post',
+              label: 'Done',
             ),
           ),
         );

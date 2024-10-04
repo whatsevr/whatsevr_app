@@ -43,7 +43,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
       originalUrl: widget.videoUrl!,
     );
     controller =
-        CachedVideoPlayerPlusController.networkUrl(Uri.parse(adaptiveVideoUrl));
+        CachedVideoPlayerPlusController.networkUrl(Uri.parse(adaptiveVideoUrl),invalidateCacheIfOlderThan: const Duration(days: 90),);
     await controller?.initialize();
     setState(() {});
     controller?.setLooping(true);

@@ -419,7 +419,7 @@ class CreateFlickPostPage extends StatelessWidget {
                     .read<CreateFlickPostBloc>()
                     .add(const SubmitPostEvent());
               },
-              label: 'Create Post',
+              label: 'Done',
             ),
           ),
         );

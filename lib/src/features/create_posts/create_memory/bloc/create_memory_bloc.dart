@@ -26,8 +26,8 @@ import '../../../../../config/widgets/media/thumbnail_selection.dart';
 
 import '../views/page.dart';
 
-part 'create_flick_event.dart';
-part 'create_flick_state.dart';
+part 'create_memory_event.dart';
+part 'create_memory_state.dart';
 
 class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   final TextEditingController titleController = TextEditingController();
@@ -40,9 +40,11 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
     on<PickThumbnailEvent>(_onPickThumbnail);
+    on<PickImageEvent>(_onPickImage);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
+    on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
   }
   FutureOr<void> _onInitial(
     CreateMemoryInitialEvent event,
@@ -164,13 +166,15 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickVideoFile);
       // Validate video metadata
-      if (videoMetaData == null ||
-          videoMetaData.isVideo != true ||
-          videoMetaData.aspectRatio?.isAspectRatioPortrait != true) {
-        throw BusinessException('Video should be a portrait/vertical video');
+      if (videoMetaData == null || videoMetaData.isVideo != true) {
+        throw BusinessException('Invalid video file');
       }
 
-      emit(state.copyWith(videoFile: event.pickVideoFile));
+      emit(state.copyWith(
+        videoFile: event.pickVideoFile,
+        isVideoMemory: true,
+        isImageMemory: false,
+      ));
 
       final File? thumbnailFile =
           await getThumbnailFile(videoFile: event.pickVideoFile!);
@@ -263,5 +267,34 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
+  }
+
+  FutureOr<void> _onPickImage(
+      PickImageEvent event, Emitter<CreateMemoryState> emit) async {
+    try {
+      if (event.pickedImageFile == null) return;
+      emit(state.copyWith(
+        imageFile: event.pickedImageFile,
+        isImageMemory: true,
+        isVideoMemory: false,
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onRemoveVideoOrImage(
+      RemoveVideoOrImageEvent event, Emitter<CreateMemoryState> emit) {
+    emit(CreateMemoryState(
+      pageArgument: state.pageArgument,
+      userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
+      selectedAddress: state.selectedAddress,
+      selectedAddressLatLongWkb: state.selectedAddressLatLongWkb,
+      taggedUsersUid: state.taggedUsersUid,
+      taggedCommunitiesUid: state.taggedCommunitiesUid,
+      ctaAction: state.ctaAction,
+      ctaActionUrl: state.ctaActionUrl,
+      placesNearbyResponse: state.placesNearbyResponse,
+    ));
   }
 }

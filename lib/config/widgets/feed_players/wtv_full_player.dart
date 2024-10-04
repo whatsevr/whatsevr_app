@@ -55,7 +55,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
       originalUrl: widget.videoUrl!,
     );
     _controller = CachedVideoPlayerPlusController.networkUrl(
-      Uri.parse(optimizedUrl),
+      Uri.parse(optimizedUrl),invalidateCacheIfOlderThan: const Duration(days: 90),
       videoPlayerOptions: VideoPlayerOptions(
         allowBackgroundPlayback: true,
       ),

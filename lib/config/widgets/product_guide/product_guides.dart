@@ -20,7 +20,7 @@ class ProductGuides {
 
   static showFlickPostCreationGuide() {
     List<Widget> guides = [
-      const Text('Select portrait/ video video to create a flick post.'),
+      const Text('Select portrait video video to create a flick post.'),
       const Text('Horizontal video are not allowed.'),
       const Text('Minimum video duration is 5 sec now.'),
       const Text('Maximum video duration is 2 min now.'),
@@ -30,5 +30,19 @@ class ProductGuides {
       headingTitle: 'Flick Creation Guide',
       guides: guides,
     ));
+  }
+
+  static showMemoryCreationGuide() {
+    List<Widget> guides = [
+      const Text('Select portrait or landscape video to create a flick post.'),
+
+      const Text('Minimum video duration is 5 sec now.'),
+      const Text('Maximum video duration is 30 sec now.'),
+    ];
+    showAppModalSheet(
+        child: AppGuideView(
+          headingTitle: 'Memory Creation Guide',
+          guides: guides,
+        ));
   }
 }

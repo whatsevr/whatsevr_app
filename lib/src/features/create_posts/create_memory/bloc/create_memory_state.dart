@@ -1,4 +1,4 @@
-part of 'create_flick_bloc.dart';
+part of 'create_memory_bloc.dart';
 
 class CreateMemoryState extends Equatable {
   final CreateMemoryPageArgument? pageArgument;

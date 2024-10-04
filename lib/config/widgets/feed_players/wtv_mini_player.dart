@@ -40,7 +40,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
       quality: 30,
     );
     videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
-      Uri.parse(adaptiveVideoUrl),
+      Uri.parse(adaptiveVideoUrl),invalidateCacheIfOlderThan: const Duration(days: 90),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
     );
     await videoPlayerController!.initialize();

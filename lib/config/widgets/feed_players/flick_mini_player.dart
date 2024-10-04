@@ -1,3 +1,4 @@
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -18,12 +19,12 @@ class FlickMiniPlayer extends StatefulWidget {
 }
 
 class _FlickMiniPlayerState extends State<FlickMiniPlayer> {
-  late VideoPlayerController controller;
+  late CachedVideoPlayerPlusController controller;
   @override
   void initState() {
     super.initState();
     controller =
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+    CachedVideoPlayerPlusController.networkUrl(Uri.parse('${widget.videoUrl}',),invalidateCacheIfOlderThan: const Duration(days: 90),)
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
@@ -72,7 +73,7 @@ class _FlickMiniPlayerState extends State<FlickMiniPlayer> {
                     enableLoadState: false,
                   );
                 }
-                return VideoPlayer(controller);
+                return CachedVideoPlayerPlus(controller);
               },
             ),
           ),

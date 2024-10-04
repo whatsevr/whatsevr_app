@@ -1,4 +1,4 @@
-part of 'create_flick_bloc.dart';
+part of 'create_memory_bloc.dart';
 
 sealed class CreateMemoryEvent extends Equatable {
   const CreateMemoryEvent();
@@ -35,6 +35,14 @@ class PickThumbnailEvent extends CreateMemoryEvent {
   List<Object?> get props => <Object?>[pickedThumbnailFile];
 }
 
+class PickImageEvent extends CreateMemoryEvent {
+  final File? pickedImageFile;
+  const PickImageEvent({required this.pickedImageFile});
+
+  @override
+  List<Object?> get props => <Object?>[pickedImageFile];
+}
+
 class UpdatePostAddressEvent extends CreateMemoryEvent {
   final String? address;
   final double? addressLatitude;
@@ -57,4 +65,11 @@ class UpdateTaggedUsersAndCommunitiesEvent extends CreateMemoryEvent {
   @override
   List<Object?> get props =>
       <Object?>[taggedUsersUid, taggedCommunitiesUid, clearAll];
+}
+
+class RemoveVideoOrImageEvent extends CreateMemoryEvent {
+  const RemoveVideoOrImageEvent();
+
+  @override
+  List<Object?> get props => <Object?>[];
 }

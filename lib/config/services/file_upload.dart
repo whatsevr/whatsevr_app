@@ -97,7 +97,7 @@ String generateOptimizedCloudinaryVideoUrl({
   bool originalQuality = false, // q_auto for network-based quality
   bool dprAuto = true, // Auto-adjust based on device pixel density
   String cacheControl =
-      'public,max-age=${Duration.secondsPerDay * 90}', // Custom cache control (e.g., max-age=3600)
+      'max-age=${Duration.secondsPerDay * 365}', // Custom cache control (e.g., max-age=3600)
 }) {
   if (!originalUrl.contains('res.cloudinary.com')) {
     return originalUrl;
