@@ -1,7 +1,7 @@
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -94,12 +94,12 @@ class _CoverVideoUi extends StatefulWidget {
 }
 
 class _CoverVideoUiState extends State<_CoverVideoUi> {
-  late CachedVideoPlayerController controller;
+  late CachedVideoPlayerPlusController controller;
   @override
   void initState() {
     super.initState();
     controller =
-        CachedVideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
+    CachedVideoPlayerPlusController.networkUrl(Uri.parse('${widget.videoUrl}'))
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
@@ -149,7 +149,7 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
                     enableLoadState: false,
                   );
                 }
-                return CachedVideoPlayer(controller);
+                return CachedVideoPlayerPlus(controller);
               },
             ),
           ),

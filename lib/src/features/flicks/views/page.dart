@@ -1,10 +1,10 @@
 
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
@@ -41,7 +41,7 @@ class _FlicksPageState extends State<FlicksPage> {
     );
   }
 
-  CachedVideoPlayerController? currentVideoController;
+  CachedVideoPlayerPlusController? currentVideoController;
   final PreloadPageController scrollController = PreloadPageController();
   Widget _buildBody(BuildContext context) {
     scrollController.addListener(() {

@@ -51,6 +51,10 @@ android {
         release {
             signingConfig signingConfigs.release
         }
+        compileOptions {
+            // Flag to enable support for the new language APIs
+            coreLibraryDesugaringEnabled true
+        }
     }
 }
 
@@ -59,3 +63,7 @@ flutter {
 }
 
 
+dependencies {
+    // Flag to enable support for the new language APIs
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
+}

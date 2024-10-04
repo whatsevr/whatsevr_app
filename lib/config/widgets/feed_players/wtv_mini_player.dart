@@ -1,6 +1,6 @@
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
@@ -27,7 +27,7 @@ class WTVMiniPlayer extends StatefulWidget {
 }
 
 class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
-  CachedVideoPlayerController? videoPlayerController;
+  CachedVideoPlayerPlusController? videoPlayerController;
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
       originalUrl: widget.videoUrl!,
       quality: 30,
     );
-    videoPlayerController ??= CachedVideoPlayerController.networkUrl(
+    videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
       Uri.parse(adaptiveVideoUrl),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
     );
@@ -101,7 +101,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                     return AspectRatio(
                         aspectRatio: videoPlayerController?.value.aspectRatio ??
                             WhatsevrAspectRatio.landscape.ratio,
-                        child: CachedVideoPlayer(videoPlayerController!));
+                        child: CachedVideoPlayerPlus(videoPlayerController!));
                   },
                 ),
               ),

@@ -1,8 +1,8 @@
 
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
@@ -39,7 +39,7 @@ class WtvFullPlayer extends StatefulWidget {
 }
 
 class _WtvFullPlayerState extends State<WtvFullPlayer> {
-  late CachedVideoPlayerController _controller;
+  late CachedVideoPlayerPlusController _controller;
   bool isVideoLoading = true;
   bool showControls = false;
   bool showPlayButton = true;
@@ -54,7 +54,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     String? optimizedUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
-    _controller = CachedVideoPlayerController.networkUrl(
+    _controller = CachedVideoPlayerPlusController.networkUrl(
       Uri.parse(optimizedUrl),
       videoPlayerOptions: VideoPlayerOptions(
         allowBackgroundPlayback: true,
@@ -105,7 +105,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       ),
                       AspectRatio(
                           aspectRatio: _controller.value.aspectRatio,
-                          child: CachedVideoPlayer(_controller)),
+                          child: CachedVideoPlayerPlus(_controller)),
                       skipSeconds(context),
                       showInitialPlayButton(),
                       Column(
@@ -303,7 +303,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       child: Center(
                         child: AspectRatio(
                             aspectRatio: _controller.value.aspectRatio,
-                            child: CachedVideoPlayer(_controller)),
+                            child: CachedVideoPlayerPlus(_controller)),
                       ),
                     ),
                     //back buttton and title

@@ -1,7 +1,7 @@
 
 
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
 
 class MediaPreviewerPageArguments {
   final String videoUrl;
@@ -25,7 +25,7 @@ class MediaPreviewerPage extends StatefulWidget {
 }
 
 class _MediaPreviewerPageState extends State<MediaPreviewerPage> {
-  CachedVideoPlayerController? videoPlayerController;
+  CachedVideoPlayerPlusController? videoPlayerController;
 
   int? bufferDelay;
 
@@ -43,7 +43,7 @@ class _MediaPreviewerPageState extends State<MediaPreviewerPage> {
   }
 
   Future<void> initializePlayer() async {
-    videoPlayerController = CachedVideoPlayerController.networkUrl(
+    videoPlayerController = CachedVideoPlayerPlusController.networkUrl(
       Uri.parse(widget.pageArguments.videoUrl),
     );
     await videoPlayerController!.initialize();

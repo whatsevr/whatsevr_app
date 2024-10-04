@@ -1,7 +1,8 @@
+import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_video_player_plus/flutter_cached_video_player_plus.dart';
+
 
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -13,7 +14,7 @@ class FlicksFullPlayer extends StatefulWidget {
   final String? videoUrl;
   final String? thumbnail;
 
-  final Function(CachedVideoPlayerController?)? onPlayerInitialized;
+  final Function(CachedVideoPlayerPlusController?)? onPlayerInitialized;
   const FlicksFullPlayer(
       {super.key,
       required this.videoUrl,
@@ -27,7 +28,7 @@ class FlicksFullPlayer extends StatefulWidget {
 class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
   // Create a [VideoController] to handle video output from [Player].
 
-  CachedVideoPlayerController? controller;
+  CachedVideoPlayerPlusController? controller;
   @override
   void initState() {
     super.initState();
@@ -42,7 +43,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
       originalUrl: widget.videoUrl!,
     );
     controller =
-        CachedVideoPlayerController.networkUrl(Uri.parse(adaptiveVideoUrl));
+        CachedVideoPlayerPlusController.networkUrl(Uri.parse(adaptiveVideoUrl));
     await controller?.initialize();
     setState(() {});
     controller?.setLooping(true);
@@ -90,7 +91,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
                         WhatsevrAspectRatio.vertical9by16.ratio,
                     child: Stack(
                       children: [
-                        CachedVideoPlayer(controller!),
+                        CachedVideoPlayerPlus(controller!),
                         if (controller?.value.volume == 0)
                           const Center(
                             child: Icon(
