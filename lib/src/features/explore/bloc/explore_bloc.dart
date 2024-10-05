@@ -9,6 +9,7 @@ import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dar
 
 import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/recommendations.dart';
+import '../../../../config/api/response_model/recommendation_memories.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';
@@ -25,7 +26,10 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         )) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
+
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
+    on<LoadMemoriesEvent>(_loadMemories);
+    on<LoadMoreMemoriesEvent>(_onLoadMoreMemories);
   }
 
   Future<void> _onInitial(
@@ -33,6 +37,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     add(LoadVideosEvent());
+    add(LoadMemoriesEvent());
   }
 
   FutureOr<void> _loadVideos(
@@ -79,9 +84,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
         page: event.page!,
       );
 
-      if (recommendationVideos?.lastPage == true) {
-        SmartDialog.showToast('No more videos to load');
-      }
       emit(state.copyWith(
         recommendationVideos: state.recommendationVideos! +
             (recommendationVideos?.recommendedVideos ?? []),
@@ -95,6 +97,71 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           videoPaginationData: state.videoPaginationData?.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadMemories(
+      LoadMemoriesEvent event, Emitter<ExploreState> emit) async {
+    try {
+      emit(
+        state.copyWith(
+          memoryPaginationData: state.memoryPaginationData?.copyWith(
+            currentPage: 1,
+            noMoreData: false,
+            isLoading: true,
+          ),
+        ),
+      );
+      RecommendationMemoriesResponse? recommendationMemories =
+          await RecommendationApi.publicMemories(
+        page: state.memoryPaginationData?.currentPage ?? 1,
+      );
+      emit(
+        state.copyWith(
+          recommendationMemories: recommendationMemories?.recommendedMemories,
+          memoryPaginationData: state.memoryPaginationData?.copyWith(
+            isLoading: false,
+            noMoreData: recommendationMemories?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMoreMemories(
+      LoadMoreMemoriesEvent event, Emitter<ExploreState> emit) async {
+    if (state.memoryPaginationData?.isLoading == true) return;
+    try {
+      emit(
+        state.copyWith(
+            memoryPaginationData:
+                state.memoryPaginationData?.copyWith(isLoading: true)),
+      );
+      RecommendationMemoriesResponse? recommendationMemories =
+          await RecommendationApi.publicMemories(
+        page: event.page!,
+      );
+
+      emit(state.copyWith(
+        recommendationMemories: state.recommendationMemories! +
+            (recommendationMemories?.recommendedMemories ?? []),
+        memoryPaginationData: state.memoryPaginationData?.copyWith(
+          currentPage: event.page,
+          isLoading: false,
+          noMoreData: recommendationMemories?.lastPage,
+        ),
+      ));
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          memoryPaginationData: state.memoryPaginationData?.copyWith(
             isLoading: false,
           ),
         ),

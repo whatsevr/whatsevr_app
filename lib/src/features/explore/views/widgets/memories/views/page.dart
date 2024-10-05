@@ -1,85 +1,244 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_story_presenter/flutter_story_presenter.dart';
+import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
+import '../../../../../../../config/api/response_model/recommendation_memories.dart';
+import '../../../../bloc/explore_bloc.dart';
+
 class ExplorePageMemoriesPage extends StatelessWidget {
   final ScrollController? scrollController;
+
   const ExplorePageMemoriesPage({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
     return PadHorizontal(
-      child: GridView.builder(
-        controller: scrollController,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-          childAspectRatio: 3 / 5,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.primaries[index % Colors.primaries.length],
-                  borderRadius: BorderRadius.circular(18.0),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      MockData.randomImage(),
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                alignment: Alignment.center,
-              ),
+      child: BlocSelector<ExploreBloc, ExploreState, List<RecommendedMemory>?>(
+        selector: (ExploreState state) => state.recommendationMemories,
+        builder: (context, data) {
+          return GridView.builder(
+            controller: scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 5.0,
+              childAspectRatio: 3 / 5,
+            ),
+            itemCount: data?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                  onTap: () {
+                    showGeneralDialog(
+                      context: context,
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return _MemoriesPlayer(
+                          memories: data,
+                          index: index,
+                        );
+                      },
+                    );
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.primaries[index % Colors.primaries.length],
+                          borderRadius: BorderRadius.circular(18.0),
+                          image: DecorationImage(
+                            image: ExtendedNetworkImageProvider(
+                              '${data?[index].userMemories?.first.imageUrl}',
+                              cache: true,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                      ),
 
-              /// profile avatar
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.all(3.0),
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                    shape: BoxShape.circle,
-                  ),
-                  child: CircleAvatar(
-                    radius: 24.0,
-                    backgroundImage: NetworkImage(
-                      MockData.randomImageAvatar(),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0.0,
-                left: 0.0,
-                right: 0.0,
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(18.0),
-                      bottomRight: Radius.circular(18.0),
-                    ),
-                  ),
-                  child: Text(
-                    'User $index',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                      /// profile avatar
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(3.0),
+                          decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 24.0,
+                            backgroundImage: ExtendedNetworkImageProvider(
+                              data?[index].user?.profilePicture ??
+                                  MockData.imageAvatar,
+                              cache: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: <Color>[
+                                    Colors.black.withOpacity(0.0),
+                                    Colors.black,
+                                  ],
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Gap(22),
+                                  Text(
+                                    data?[index].userMemories?.first.caption ??
+                                        '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(18.0),
+                                  bottomRight: Radius.circular(18.0),
+                                ),
+                              ),
+                              child: Text(
+                                data?[index].user?.username ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ));
+            },
           );
         },
       ),
+    );
+  }
+}
+
+class _MemoriesPlayer extends StatelessWidget {
+  final List<RecommendedMemory>? memories;
+  final int index;
+  _MemoriesPlayer({
+    this.memories,
+    required this.index,
+  }) : controller = PageController(initialPage: index);
+  PageController? controller;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView.builder(
+          controller: controller,
+          itemCount: memories?.length ?? 0,
+          itemBuilder: (context, index) {
+            List<UserMemory> userMemories = memories?[index].userMemories ?? [];
+            return FlutterStoryView(
+                flutterStoryController: FlutterStoryController(),
+                footerWidget: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: Colors.black,
+                  child: Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 24.0,
+                        backgroundImage: ExtendedNetworkImageProvider(
+                          MockData.imageAvatar,
+                          cache: true,
+                        ),
+                      ),
+                      const Gap(8),
+                      const Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'XXXXXXXXXXXXXX',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onCompleted: () async {
+                  if (index < (memories?.length ?? 0) - 1) {
+                    controller?.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                items: [
+                  for (int i = 0; i < (userMemories.length ?? 0); i++)
+                    userMemories[i].isImage == true
+                        ? StoryItem(
+                            url:
+                                '${memories?[index].userMemories?[i].imageUrl}',
+                            storyItemType: StoryItemType.image,
+                          )
+                        : userMemories[i].isVideo == true
+                            ? StoryItem(
+                                url:
+                                    '${memories?[index].userMemories?[i].videoUrl}',
+                                storyItemType: StoryItemType.video,
+                              )
+                            : StoryItem(
+                                url:
+                                    '${memories?[index].userMemories?[i].caption}',
+                                storyItemType: StoryItemType.text,
+                              ),
+                ]);
+          }),
     );
   }
 }

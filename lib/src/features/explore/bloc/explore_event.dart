@@ -20,3 +20,15 @@ class LoadMoreVideosEvent extends ExploreEvent {
   @override
   List<Object?> get props => <Object?>[page];
 }
+
+class LoadMemoriesEvent extends ExploreEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreMemoriesEvent extends ExploreEvent {
+  final int? page;
+  const LoadMoreMemoriesEvent({required this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

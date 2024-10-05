@@ -70,9 +70,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
           await RecommendationApi.publicFlickPosts(
         page: event.page!,
       );
-      if (recommendationVideos?.lastPage == true) {
-        SmartDialog.showToast('No more flicks to load');
-      }
+
       emit(
         state.copyWith(
           recommendationFlicks: [
