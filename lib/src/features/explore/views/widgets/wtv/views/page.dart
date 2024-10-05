@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
@@ -12,7 +13,6 @@ import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../../wtv_details/views/page.dart';
 
@@ -110,8 +110,8 @@ class ExplorePageWtvPage extends StatelessWidget {
                       description: data[index].description,
                       videoUrl: data[index].videoUrl,
                       thumbnail: data[index].thumbnail,
-                      timeAgo: timeago.format(
-                        data![index].createdAt!,
+                      timeAgo: GetTimeAgo.parse(
+                        data[index].createdAt!,
                       ),
                       totalTags: (data[index].taggedUserUids?.length ?? 0) +
                           (data[index].taggedCommunityUids?.length ?? 0),

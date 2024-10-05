@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_story_presenter/flutter_story_presenter.dart';
 import 'package:gap/gap.dart';
+import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../../../../../../../config/api/response_model/recommendation_memories.dart';
+import '../../../../../../../config/services/launch_url.dart';
 import '../../../../bloc/explore_bloc.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
@@ -153,66 +156,86 @@ class ExplorePageMemoriesPage extends StatelessWidget {
   }
 }
 
-class _MemoriesPlayer extends StatelessWidget {
+class _MemoriesPlayer extends StatefulWidget {
   final List<RecommendedMemory>? memories;
   final int index;
   _MemoriesPlayer({
     this.memories,
     required this.index,
-  }) : controller = PageController(initialPage: index);
-  PageController? controller;
+  });
+
+  @override
+  State<_MemoriesPlayer> createState() => _MemoriesPlayerState();
+}
+
+class _MemoriesPlayerState extends State<_MemoriesPlayer> {
+  PageController? pageViewController;
+  FlutterStoryController? flutterStoryController = FlutterStoryController();
+
+  int currentPageIndex = 0;
+  int currentMemoryIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    currentPageIndex = widget.index;
+    pageViewController = PageController(initialPage: widget.index);
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leadingWidth: 22,
+        title: Row(
+          children: [
+            CircleAvatar(
+              radius: 16.0,
+              backgroundImage: ExtendedNetworkImageProvider(
+                widget.memories?[currentPageIndex].user?.profilePicture ??
+                    MockData.imageAvatar,
+                cache: true,
+              ),
+            ),
+            Gap(8),
+            Text(
+              widget.memories?[currentPageIndex].user?.username ?? '',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
       body: PageView.builder(
-          controller: controller,
-          itemCount: memories?.length ?? 0,
+          controller: pageViewController,
+          itemCount: widget.memories?.length ?? 0,
+          onPageChanged: (index) {
+            currentPageIndex = index;
+            setState(() {});
+          },
           itemBuilder: (context, index) {
-            List<UserMemory> userMemories = memories?[index].userMemories ?? [];
+            List<UserMemory> userMemories =
+                widget.memories?[index].userMemories ?? [];
             return FlutterStoryView(
-                flutterStoryController: FlutterStoryController(),
-                footerWidget: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.black,
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 24.0,
-                        backgroundImage: ExtendedNetworkImageProvider(
-                          MockData.imageAvatar,
-                          cache: true,
-                        ),
-                      ),
-                      const Gap(8),
-                      const Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'XXXXXXXXXXXXXX',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                flutterStoryController: flutterStoryController,
+                storyViewIndicatorConfig: StoryViewIndicatorConfig(
+                  activeColor: Colors.white,
                 ),
+                onStoryChanged: (index) {
+                  currentMemoryIndex = index;
+                  Future.delayed(const Duration(seconds: 1), () {
+                    setState(() {});
+                  });
+                },
                 onCompleted: () async {
-                  if (index < (memories?.length ?? 0) - 1) {
-                    controller?.nextPage(
+                  if (index < (widget.memories?.length ?? 0) - 1) {
+                    pageViewController?.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
                     );
@@ -223,22 +246,55 @@ class _MemoriesPlayer extends StatelessWidget {
                     userMemories[i].isImage == true
                         ? StoryItem(
                             url:
-                                '${memories?[index].userMemories?[i].imageUrl}',
+                                '${widget.memories?[index].userMemories?[i].imageUrl}',
                             storyItemType: StoryItemType.image,
+                            imageConfig: StoryViewImageConfig(
+                              fit: BoxFit.contain,
+                            ),
                           )
                         : userMemories[i].isVideo == true
                             ? StoryItem(
                                 url:
-                                    '${memories?[index].userMemories?[i].videoUrl}',
+                                    '${widget.memories?[index].userMemories?[i].videoUrl}',
                                 storyItemType: StoryItemType.video,
+                                videoConfig: StoryViewVideoConfig(
+                                  fit: BoxFit.contain,
+                                  cacheVideo: true,
+                                  useVideoAspectRatio: true,
+                                ),
                               )
-                            : StoryItem(
-                                url:
-                                    '${memories?[index].userMemories?[i].caption}',
-                                storyItemType: StoryItemType.text,
-                              ),
+                            : userMemories[i].isWebsite == true
+                                ? StoryItem(
+                                    url:
+                                        '${widget.memories?[index].userMemories?[i].websiteUrl}',
+                                    storyItemType: StoryItemType.web,
+                                    duration: const Duration(seconds: 60),
+                                  )
+                                : StoryItem(
+                                    url:
+                                        '${widget.memories?[index].userMemories?[i].imageUrl}',
+                                    storyItemType: StoryItemType.image,
+                                  ),
                 ]);
           }),
+      bottomNavigationBar: widget.memories?[currentPageIndex]
+                  .userMemories?[currentMemoryIndex].ctaAction ==
+              null
+          ? null
+          : Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(8.0),
+              child: WhatsevrButton.filled(
+                label:
+                    '${widget.memories?[currentPageIndex].userMemories?[currentMemoryIndex].ctaAction}',
+                onPressed: () {
+                  launchWebURL(context,
+                      url: widget.memories?[currentPageIndex]
+                              .userMemories?[currentMemoryIndex].ctaActionUrl ??
+                          '');
+                },
+              ),
+            ),
     );
   }
 }
