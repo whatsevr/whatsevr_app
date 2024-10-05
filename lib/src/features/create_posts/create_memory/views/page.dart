@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
 import '../../../../../config/routes/router.dart';
@@ -354,7 +355,7 @@ class CreateMemoryPage extends StatelessWidget {
               WhatsevrFormField.multilineTextField(
                 maxLength: 100,
                 minLines: 3,
-                controller: context.read<CreateMemoryBloc>().titleController,
+                controller: context.read<CreateMemoryBloc>().captionController,
                 hintText: 'Caption',
               ),
               const Gap(12),
@@ -550,17 +551,29 @@ class CreateMemoryPage extends StatelessWidget {
                     ),
                     const Gap(12),
                     WhatsevrFormField.generalTextField(
+                      controller: context
+                          .read<CreateMemoryBloc>()
+                          .ctaActionUrlController,
                       hintText: 'Action URL',
                     ),
                     Gap(12),
                     Row(
                       children: [
-                        Expanded(child: const Text('Expiry after')),
+                        Expanded(
+                            child: Text('Keep upto ${ddMMMTime(
+                          DateTime.now().add(
+                            Duration(days: state.noOfDays ?? 1),
+                          ),
+                        )}')),
                         WhatsevrStepper(
-                          initNumber: 1,
+                          initNumber: state.noOfDays ?? 1,
                           minNumber: 1,
-                          maxNumber: 7,
-                          counterCallback: (number) {},
+                          maxNumber: 3,
+                          counterCallback: (number) {
+                            context
+                                .read<CreateMemoryBloc>()
+                                .emit(state.copyWith(noOfDays: number));
+                          },
                           stickySuffix: 'day',
                         ),
                       ],

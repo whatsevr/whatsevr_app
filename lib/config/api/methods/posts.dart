@@ -5,7 +5,9 @@ import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 
 import '../external/models/business_validation_exception.dart';
 import '../requests_model/create_flick_post.dart';
+import '../requests_model/create_memory.dart';
 import '../requests_model/sanity_check_new_flick_post.dart';
+import '../requests_model/sanity_check_new_memory.dart';
 import '../requests_model/sanity_check_new_video_post.dart';
 
 class PostApi {
@@ -74,7 +76,7 @@ class PostApi {
   }
 
   static Future<(String? message, int? statusCode)?> sanityCheckNewMemory({
-    required SanityCheckNewFlickPostRequest request,
+    required SanityCheckNewMemoryRequest request,
   }) async {
     try {
       Response response = await ApiClient.client.post(
@@ -90,7 +92,7 @@ class PostApi {
   }
 
   static Future<(String? message, int? statusCode)?> createMemory({
-    required CreateFlickPostRequest post,
+    required CreateMemoryRequest post,
   }) async {
     try {
       Response response = await ApiClient.client.post(

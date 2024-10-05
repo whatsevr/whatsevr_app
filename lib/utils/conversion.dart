@@ -92,3 +92,7 @@ String? ddMonthyy(DateTime? date) {
   if (date == null) return null;
   return DateFormat('dd MMM yyyy').format(date);
 }
+
+String ddMMMTime(DateTime date) {
+  return DateFormat('dd MMM, hh:mm a').format(date);
+}

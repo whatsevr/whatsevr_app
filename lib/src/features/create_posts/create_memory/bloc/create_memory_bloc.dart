@@ -7,15 +7,16 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 
 import '../../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
-import '../../../../../config/api/requests_model/create_flick_post.dart';
-import '../../../../../config/api/requests_model/sanity_check_new_flick_post.dart';
 
+import '../../../../../config/api/requests_model/create_memory.dart';
+
+import '../../../../../config/api/requests_model/sanity_check_new_memory.dart';
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
@@ -30,10 +31,8 @@ part 'create_memory_event.dart';
 part 'create_memory_state.dart';
 
 class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-
-  final TextEditingController hashtagsController = TextEditingController();
+  final TextEditingController captionController = TextEditingController();
+  final TextEditingController ctaActionUrlController = TextEditingController();
 
   CreateMemoryBloc() : super(const CreateMemoryState()) {
     on<CreateMemoryInitialEvent>(_onInitial);
@@ -45,6 +44,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
+    on<CreateVideoMemoryEvent>(_onCreateVideoMemory);
+    on<CreateImageMemoryEvent>(_onCreateImageMemory);
   }
   FutureOr<void> _onInitial(
     CreateMemoryInitialEvent event,
@@ -77,10 +78,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     Emitter<CreateMemoryState> emit,
   ) async {
     try {
-      titleController.text = titleController.text.trim();
-      descriptionController.text = descriptionController.text.trim();
-      String hashtagsArea =
-          '${titleController.text} ${hashtagsController.text}';
+      captionController.text = captionController.text.trim();
+      String hashtagsArea = captionController.text;
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
@@ -91,65 +90,36 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       if (hashtags.length > 30) {
         throw BusinessException('Hashtags should not exceed 30');
       }
-      if (titleController.text.isEmpty) {
+      if (captionController.text.isEmpty) {
         throw BusinessException('Title is required');
       }
-
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewFlickPost(
-          request: SanityCheckNewFlickPostRequest(
-              mediaMetaData: MediaMetaData(
-                aspectRatio: state.videoMetaData?.aspectRatio,
-                durationSec: state.videoMetaData?.durationInSec,
-                sizeBytes: state.videoMetaData?.sizeInBytes,
-              ),
-              postData: PostData(
-                title: titleController.text,
-                userUid: await AuthUserDb.getLastLoggedUserUid(),
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-              )));
+      (String?, int?)? itm = await PostApi.sanityCheckNewMemory(
+          request: SanityCheckNewMemoryRequest(
+        mediaMetaData: MediaMetaData(
+          videoDurationSec: state.videoMetaData?.durationInSec,
+          sizeBytes: state.videoMetaData?.sizeInBytes,
+        ),
+        postData: PostData(
+          caption: captionController.text,
+          isVideo: state.isVideoMemory,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+        ),
+      ));
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
-
-      SmartDialog.showLoading(msg: 'Uploading video...');
-      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
-        state.videoFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'video-post',
-      );
-      final String? thumbnailUrl =
-          await FileUploadService.uploadFilesToSupabase(
-        state.thumbnailFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'video-post-thumbnail',
-      );
-      SmartDialog.showLoading(msg: 'Creating post...');
-      (String? message, int? statusCode)? response =
-          await PostApi.createFlickPost(
-        post: CreateFlickPostRequest(
-          title: titleController.text,
-          description: descriptionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: hashtags.isEmpty
-              ? null
-              : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-          location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-          thumbnail: thumbnailUrl,
-          videoUrl: videoUrl,
-          addressLatLongWkb: state.selectedAddressLatLongWkb,
-          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-          taggedUserUids: state.taggedUsersUid,
-          taggedCommunityUids: state.taggedCommunitiesUid,
-          videoDurationInSec: state.videoMetaData?.durationInSec,
-        ),
-      );
-      if (response != null) {
-        SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
-        AppNavigationService.goBack();
+      //create video memory
+      if (state.isVideoMemory == true) {
+        add(CreateVideoMemoryEvent(
+          hashtags: hashtags,
+        ));
+      } else if (state.isImageMemory == true) {
+        add(CreateImageMemoryEvent(
+          hashtags: hashtags,
+        ));
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -293,8 +263,63 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       taggedUsersUid: state.taggedUsersUid,
       taggedCommunitiesUid: state.taggedCommunitiesUid,
       ctaAction: state.ctaAction,
-      ctaActionUrl: state.ctaActionUrl,
       placesNearbyResponse: state.placesNearbyResponse,
     ));
   }
+
+  FutureOr<void> _onCreateVideoMemory(
+      CreateVideoMemoryEvent event, Emitter<CreateMemoryState> emit) async {
+    try {
+      if (state.videoFile == null) {
+        throw BusinessException('Please select a video first');
+      }
+      if (state.thumbnailFile == null) {
+        throw BusinessException('Please select a thumbnail for video');
+      }
+      SmartDialog.showLoading(msg: 'Uploading video...');
+      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
+        state.videoFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'memory-video',
+      );
+      final String? thumbnailUrl =
+          await FileUploadService.uploadFilesToSupabase(
+        state.thumbnailFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'memory-image',
+      );
+      SmartDialog.showLoading(msg: 'Creating post...');
+      (String? message, int? statusCode)? response = await PostApi.createMemory(
+        post: CreateMemoryRequest(
+          isVideo: true,
+          caption: captionController.text,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          hashtags: event.hashtags.isEmpty
+              ? null
+              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
+          location: state.selectedAddress,
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          imageUrl: thumbnailUrl,
+          videoUrl: videoUrl,
+          ctaActionUrl: ctaActionUrlController.text,
+          ctaAction: state.ctaAction,
+          expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
+          addressLatLongWkb: state.selectedAddressLatLongWkb,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
+        ),
+      );
+      if (response != null) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('${response.$1}');
+        AppNavigationService.goBack();
+      }
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onCreateImageMemory(
+      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit) async {}
 }

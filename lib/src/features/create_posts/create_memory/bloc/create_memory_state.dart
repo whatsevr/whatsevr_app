@@ -18,7 +18,7 @@ class CreateMemoryState extends Equatable {
   final List<String> taggedUsersUid;
   final List<String> taggedCommunitiesUid;
   final String? ctaAction;
-  final String? ctaActionUrl;
+  final int? noOfDays;
   const CreateMemoryState({
     this.pageArgument,
     this.isVideoMemory,
@@ -36,7 +36,7 @@ class CreateMemoryState extends Equatable {
     this.taggedUsersUid = const [],
     this.taggedCommunitiesUid = const [],
     this.ctaAction,
-    this.ctaActionUrl,
+    this.noOfDays = 1,
   });
 
   @override
@@ -57,7 +57,7 @@ class CreateMemoryState extends Equatable {
         taggedUsersUid,
         taggedCommunitiesUid,
         ctaAction,
-        ctaActionUrl,
+        noOfDays,
       ];
 
   CreateMemoryState copyWith({
@@ -77,7 +77,7 @@ class CreateMemoryState extends Equatable {
     List<String>? taggedUsersUid,
     List<String>? taggedCommunitiesUid,
     String? ctaAction,
-    String? ctaActionUrl,
+    int? noOfDays,
   }) {
     return CreateMemoryState(
       pageArgument: pageArgument ?? this.pageArgument,
@@ -98,7 +98,7 @@ class CreateMemoryState extends Equatable {
       taggedUsersUid: taggedUsersUid ?? this.taggedUsersUid,
       taggedCommunitiesUid: taggedCommunitiesUid ?? this.taggedCommunitiesUid,
       ctaAction: ctaAction ?? this.ctaAction,
-      ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+      noOfDays: noOfDays ?? this.noOfDays,
     );
   }
 }

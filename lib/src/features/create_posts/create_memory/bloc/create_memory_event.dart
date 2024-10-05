@@ -73,3 +73,19 @@ class RemoveVideoOrImageEvent extends CreateMemoryEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
+
+class CreateVideoMemoryEvent extends CreateMemoryEvent {
+  final List<String> hashtags;
+  const CreateVideoMemoryEvent({required this.hashtags});
+
+  @override
+  List<Object?> get props => <Object?>[hashtags];
+}
+
+class CreateImageMemoryEvent extends CreateMemoryEvent {
+  final List<String> hashtags;
+  const CreateImageMemoryEvent({required this.hashtags});
+
+  @override
+  List<Object?> get props => <Object?>[hashtags];
+}

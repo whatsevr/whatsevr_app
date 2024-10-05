@@ -40,25 +40,21 @@ class SanityCheckNewMemoryRequest {
 }
 
 class MediaMetaData {
-  final int? durationSec;
+  final int? videoDurationSec;
   final int? sizeBytes;
-  final double? aspectRatio;
 
   MediaMetaData({
-    this.durationSec,
+    this.videoDurationSec,
     this.sizeBytes,
-    this.aspectRatio,
   });
 
   MediaMetaData copyWith({
-    int? durationSec,
+    int? videoDurationSec,
     int? sizeBytes,
-    double? aspectRatio,
   }) =>
       MediaMetaData(
-        durationSec: durationSec ?? this.durationSec,
+        videoDurationSec: videoDurationSec ?? this.videoDurationSec,
         sizeBytes: sizeBytes ?? this.sizeBytes,
-        aspectRatio: aspectRatio ?? this.aspectRatio,
       );
 
   factory MediaMetaData.fromJson(String str) =>
@@ -67,15 +63,13 @@ class MediaMetaData {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaData.fromMap(Map<String, dynamic> json) => MediaMetaData(
-        durationSec: json["duration_sec"],
+        videoDurationSec: json["video_duration_sec"],
         sizeBytes: json["size_bytes"],
-        aspectRatio: json["aspect_ratio"]?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
-        "duration_sec": durationSec,
+        "video_duration_sec": videoDurationSec,
         "size_bytes": sizeBytes,
-        "aspect_ratio": aspectRatio,
       };
 }
 
