@@ -22,7 +22,13 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
             isLoading: false,
             noMoreData: false,
           ),
+          memoryPaginationData: PaginationData(
+            currentPage: 1,
+            isLoading: false,
+            noMoreData: false,
+          ),
           recommendationVideos: [],
+          recommendationMemories: [],
         )) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);

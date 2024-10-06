@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_story_presenter/flutter_story_presenter.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
@@ -11,6 +12,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../../../../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../../../../config/services/launch_url.dart';
+import '../../../../../../../config/widgets/refresh_indicator.dart';
 import '../../../../bloc/explore_bloc.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
@@ -20,135 +22,157 @@ class ExplorePageMemoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    scrollController?.addListener(() {
+      if (scrollController?.position.pixels ==
+          scrollController?.position.maxScrollExtent) {
+        context.read<ExploreBloc>().add(LoadMoreMemoriesEvent(
+              page: context
+                      .read<ExploreBloc>()
+                      .state
+                      .memoryPaginationData!
+                      .currentPage +
+                  1,
+            ));
+      }
+    });
     return PadHorizontal(
       child: BlocSelector<ExploreBloc, ExploreState, List<RecommendedMemory>?>(
         selector: (ExploreState state) => state.recommendationMemories,
         builder: (context, data) {
-          return GridView.builder(
-            controller: scrollController,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 5.0,
-              childAspectRatio: 3 / 5,
-            ),
-            itemCount: data?.length ?? 0,
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                  onTap: () {
-                    showGeneralDialog(
-                      context: context,
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return _MemoriesPlayer(
-                          memories: data,
-                          index: index,
-                        );
-                      },
-                    );
-                  },
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                          color:
-                              Colors.primaries[index % Colors.primaries.length],
-                          borderRadius: BorderRadius.circular(18.0),
-                          image: DecorationImage(
-                            image: ExtendedNetworkImageProvider(
-                              '${data?[index].userMemories?.first.imageUrl}',
-                              cache: true,
+          return MyRefreshIndicator(
+            onPullDown: () async {
+              context.read<ExploreBloc>().add(LoadMemoriesEvent());
+              await Future<void>.delayed(const Duration(seconds: 2));
+            },
+            child: GridView.builder(
+              controller: scrollController,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 5.0,
+                mainAxisSpacing: 5.0,
+                childAspectRatio: 3 / 5,
+              ),
+              itemCount: data?.length ?? 0,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                    onTap: () {
+                      showGeneralDialog(
+                        context: context,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return _MemoriesPlayer(
+                            memories: data,
+                            index: index,
+                          );
+                        },
+                      );
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .primaries[index % Colors.primaries.length],
+                            borderRadius: BorderRadius.circular(18.0),
+                            image: DecorationImage(
+                              image: ExtendedNetworkImageProvider(
+                                '${data?[index].userMemories?.first.imageUrl}',
+                                cache: true,
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
+                          alignment: Alignment.center,
                         ),
-                        alignment: Alignment.center,
-                      ),
 
-                      /// profile avatar
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: Container(
-                          padding: const EdgeInsets.all(3.0),
-                          decoration: const BoxDecoration(
-                            color: Colors.blue,
-                            shape: BoxShape.circle,
-                          ),
-                          child: CircleAvatar(
-                            radius: 24.0,
-                            backgroundImage: ExtendedNetworkImageProvider(
-                              data?[index].user?.profilePicture ??
-                                  MockData.imageAvatar,
-                              cache: true,
+                        /// profile avatar
+                        Positioned(
+                          top: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(3.0),
+                            decoration: const BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: CircleAvatar(
+                              radius: 24.0,
+                              backgroundImage: ExtendedNetworkImageProvider(
+                                data?[index].user?.profilePicture ??
+                                    MockData.imageAvatar,
+                                cache: true,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0.0,
-                        left: 0.0,
-                        right: 0.0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: <Color>[
-                                    Colors.black.withOpacity(0.0),
-                                    Colors.black,
+                        Positioned(
+                          bottom: 0.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: <Color>[
+                                      Colors.black.withOpacity(0.0),
+                                      Colors.black,
+                                    ],
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Gap(22),
+                                    Text(
+                                      data?[index]
+                                              .userMemories
+                                              ?.first
+                                              .caption ??
+                                          '',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Gap(22),
-                                  Text(
-                                    data?[index].userMemories?.first.caption ??
-                                        '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 4.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(18.0),
+                                    bottomRight: Radius.circular(18.0),
                                   ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 4.0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(18.0),
-                                  bottomRight: Radius.circular(18.0),
+                                ),
+                                child: Text(
+                                  data?[index].user?.username ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.fade,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.0,
+                                  ),
                                 ),
                               ),
-                              child: Text(
-                                data?[index].user?.username ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ));
-            },
+                      ],
+                    ));
+              },
+            ),
           );
         },
       ),
@@ -242,7 +266,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                   }
                 },
                 items: [
-                  for (int i = 0; i < (userMemories.length ?? 0); i++)
+                  for (int i = 0; i < (userMemories.length); i++)
                     userMemories[i].isImage == true
                         ? StoryItem(
                             url:
@@ -254,8 +278,9 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                           )
                         : userMemories[i].isVideo == true
                             ? StoryItem(
-                                url:
-                                    '${widget.memories?[index].userMemories?[i].videoUrl}',
+                                url: generateOptimizedCloudinaryVideoUrl(
+                                    originalUrl:
+                                        '${widget.memories?[index].userMemories?[i].videoUrl}'),
                                 storyItemType: StoryItemType.video,
                                 videoConfig: StoryViewVideoConfig(
                                   fit: BoxFit.contain,
