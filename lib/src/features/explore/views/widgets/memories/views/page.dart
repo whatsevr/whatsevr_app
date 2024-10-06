@@ -14,9 +14,11 @@ import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
 import '../../../../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../../../../config/services/launch_url.dart';
+import '../../../../../../../config/widgets/lisk_preview_list.dart';
 import '../../../../../../../config/widgets/refresh_indicator.dart';
 import '../../../../bloc/explore_bloc.dart';
 
@@ -213,6 +215,14 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
   }
 
   @override
+  void dispose() {
+    pageViewController?.dispose();
+    flutterStoryController.dispose();
+    SmartDialog.dismiss();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -277,43 +287,58 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                                           .userMemories?[i].videoDurationMs ??
                                       0),
                             )
-                          : userMemories[i].isWebsite == true
-                              ? StoryItem(
-                                  SizedBox(),
-                                  duration: baseDuration,
-                                )
-                              : StoryItem.text(
-                                  title: '',
-                                  backgroundColor: Colors.black,
-                                  duration: baseDuration,
-                                ),
+                          : StoryItem.text(
+                              title:
+                                  'Unable to load content (Not an image or video)',
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              ),
+                              backgroundColor: Colors.black,
+                              duration: baseDuration,
+                            ),
               ],
               controller: flutterStoryController,
               onStoryShow: (storyItem, index) {
                 currentMemoryIndex = index;
-                if (userMemories[index].ctaActionUrl != null &&
-                    userMemories[index].ctaActionUrl!.isNotEmpty) {
+                if ((userMemories[index].ctaAction?.isNotEmpty ?? false) &&
+                    (userMemories[index].ctaActionUrl?.isNotEmpty ?? false)) {
                   SmartDialog.show(
-                    displayTime: baseDuration,
                     maskColor: Colors.transparent,
                     keepSingle: true,
+                    clickMaskDismiss: false,
                     usePenetrate: true,
                     alignment: Alignment.bottomCenter,
                     builder: (context) {
                       return Container(
                         color: Colors.white,
-                        padding: const EdgeInsets.all(8.0),
-                        child: WhatsevrButton.filled(
-                          label:
-                              '${widget.memories?[currentPageIndex].userMemories?[currentMemoryIndex].ctaAction}',
-                          onPressed: () {
-                            launchWebURL(context,
-                                url: widget
-                                        .memories?[currentPageIndex]
-                                        .userMemories?[currentMemoryIndex]
-                                        .ctaActionUrl ??
-                                    '');
-                          },
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: WhatsevrButton.filled(
+                                label:
+                                    '${userMemories[index].ctaAction ?? 'Open Link'}',
+                                onPressed: () {
+                                  launchWebURL(context,
+                                      url: userMemories[index].ctaActionUrl ??
+                                          '');
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                flutterStoryController.pause();
+                                showAppModalSheet(
+                                    child: LinksPreviewListView(
+                                  urls: [
+                                    userMemories[index].ctaActionUrl ?? ''
+                                  ],
+                                ));
+                              },
+                              icon: const Icon(Icons.info_outline),
+                            ),
+                          ],
                         ),
                       );
                     },

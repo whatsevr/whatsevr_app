@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
-
-import 'package:path/path.dart' as path;
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});

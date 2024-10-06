@@ -317,8 +317,7 @@ class UserMemory {
 
   final String? ctaAction;
   final String? ctaActionUrl;
-  final bool? isWebsite;
-  final String? websiteUrl;
+
   final bool? isImage;
   final bool? isText;
   final User? user;
@@ -351,8 +350,6 @@ class UserMemory {
     this.cumulativeScore,
     this.ctaAction,
     this.ctaActionUrl,
-    this.isWebsite,
-    this.websiteUrl,
     this.isImage,
     this.isText,
     this.user,
@@ -387,8 +384,6 @@ class UserMemory {
     double? cumulativeScore,
     String? ctaAction,
     String? ctaActionUrl,
-    bool? isWebsite,
-    String? websiteUrl,
     bool? isImage,
     bool? isText,
     User? user,
@@ -423,8 +418,6 @@ class UserMemory {
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
         ctaAction: ctaAction ?? this.ctaAction,
         ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
-        isWebsite: isWebsite ?? this.isWebsite,
-        websiteUrl: websiteUrl ?? this.websiteUrl,
         isImage: isImage ?? this.isImage,
         isText: isText ?? this.isText,
         user: user ?? this.user,
@@ -474,8 +467,6 @@ class UserMemory {
         cumulativeScore: json["cumulative_score"]?.toDouble(),
         ctaAction: json["cta_action"],
         ctaActionUrl: json["cta_action_url"],
-        isWebsite: json["is_website"],
-        websiteUrl: json["website_url"],
         isImage: json["is_image"],
         isText: json["is_text"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
@@ -515,8 +506,6 @@ class UserMemory {
         "cumulative_score": cumulativeScore,
         "cta_action": ctaAction,
         "cta_action_url": ctaActionUrl,
-        "is_website": isWebsite,
-        "website_url": websiteUrl,
         "is_image": isImage,
         "is_text": isText,
         "user": user?.toMap(),

@@ -19,6 +19,7 @@ void launchWebURL(
 
     await launchUrl(
       Uri.parse(url),
+      prefersDeepLink: true,
       customTabsOptions: CustomTabsOptions(
         colorSchemes: CustomTabsColorSchemes.defaults(
           toolbarColor: theme.colorScheme.surface,

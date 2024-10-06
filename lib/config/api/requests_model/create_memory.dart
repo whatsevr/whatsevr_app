@@ -9,8 +9,7 @@ class CreateMemoryRequest {
   final bool? isVideo;
   final String? ctaAction;
   final String? ctaActionUrl;
-  final bool? isWebsite;
-  final String? websiteUrl;
+
   final bool? isImage;
   final bool? isText;
   final String? location;
@@ -31,8 +30,6 @@ class CreateMemoryRequest {
     this.isVideo,
     this.ctaAction,
     this.ctaActionUrl,
-    this.isWebsite,
-    this.websiteUrl,
     this.isImage,
     this.isText,
     this.location,
@@ -54,8 +51,6 @@ class CreateMemoryRequest {
     bool? isVideo,
     String? ctaAction,
     String? ctaActionUrl,
-    bool? isWebsite,
-    String? websiteUrl,
     bool? isImage,
     bool? isText,
     String? location,
@@ -76,8 +71,6 @@ class CreateMemoryRequest {
         isVideo: isVideo ?? this.isVideo,
         ctaAction: ctaAction ?? this.ctaAction,
         ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
-        isWebsite: isWebsite ?? this.isWebsite,
-        websiteUrl: websiteUrl ?? this.websiteUrl,
         isImage: isImage ?? this.isImage,
         isText: isText ?? this.isText,
         location: location ?? this.location,
@@ -107,8 +100,6 @@ class CreateMemoryRequest {
         isVideo: json["is_video"],
         ctaAction: json["cta_action"],
         ctaActionUrl: json["cta_action_url"],
-        isWebsite: json["is_website"],
-        websiteUrl: json["website_url"],
         isImage: json["is_image"],
         isText: json["is_text"],
         location: json["location"],
@@ -136,8 +127,6 @@ class CreateMemoryRequest {
         "is_video": isVideo,
         "cta_action": ctaAction,
         "cta_action_url": ctaActionUrl,
-        "is_website": isWebsite,
-        "website_url": websiteUrl,
         "is_image": isImage,
         "is_text": isText,
         "location": location,
