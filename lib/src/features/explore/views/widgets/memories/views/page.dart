@@ -229,7 +229,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                 ),
                 onStoryChanged: (index) {
                   currentMemoryIndex = index;
-                  Future.delayed(const Duration(seconds: 1), () {
+                  Future.delayed(const Duration(milliseconds: 500), () {
                     setState(() {});
                   });
                 },

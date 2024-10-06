@@ -78,6 +78,9 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     Emitter<CreateMemoryState> emit,
   ) async {
     try {
+      if (state.imageFile == null && state.videoFile == null) {
+        throw BusinessException('Please select an image or video');
+      }
       captionController.text = captionController.text.trim();
       String hashtagsArea = captionController.text;
       List<String> hashtags = [];
@@ -91,7 +94,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         throw BusinessException('Hashtags should not exceed 30');
       }
       if (captionController.text.isEmpty) {
-        throw BusinessException('Title is required');
+        throw BusinessException('Caption is required');
       }
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
@@ -104,6 +107,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         postData: PostData(
           caption: captionController.text,
           isVideo: state.isVideoMemory,
+          isImage: state.isImageMemory,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
           postCreatorType: state.pageArgument?.postCreatorType.value,
         ),
@@ -111,6 +115,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
+
       //create video memory
       if (state.isVideoMemory == true) {
         add(CreateVideoMemoryEvent(
@@ -288,7 +293,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
         fileType: 'memory-image',
       );
-      SmartDialog.showLoading(msg: 'Creating post...');
+      SmartDialog.showLoading(msg: 'Creating memory...');
       (String? message, int? statusCode)? response = await PostApi.createMemory(
         post: CreateMemoryRequest(
           isVideo: true,
@@ -301,8 +306,11 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
           postCreatorType: state.pageArgument?.postCreatorType.value,
           imageUrl: thumbnailUrl,
           videoUrl: videoUrl,
-          ctaActionUrl: ctaActionUrlController.text,
-          ctaAction: state.ctaAction,
+          ctaAction:
+              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
+          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
+              ? ctaActionUrlController.text
+              : null,
           expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
           addressLatLongWkb: state.selectedAddressLatLongWkb,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
@@ -321,5 +329,48 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onCreateImageMemory(
-      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit) async {}
+      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit) async {
+    try {
+      if (state.imageFile == null) {
+        throw BusinessException('Please select an image first');
+      }
+      SmartDialog.showLoading(msg: 'Uploading image...');
+      final String? imageUrl = await FileUploadService.uploadFilesToSupabase(
+        state.imageFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileType: 'memory-image',
+      );
+      SmartDialog.showLoading(msg: 'Creating memory...');
+      (String? message, int? statusCode)? response = await PostApi.createMemory(
+        post: CreateMemoryRequest(
+          isImage: true,
+          caption: captionController.text,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          hashtags: event.hashtags.isEmpty
+              ? null
+              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
+          location: state.selectedAddress,
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          imageUrl: imageUrl,
+          ctaAction:
+              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
+          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
+              ? ctaActionUrlController.text
+              : null,
+          expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
+          addressLatLongWkb: state.selectedAddressLatLongWkb,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
+        ),
+      );
+      if (response != null) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('${response.$1}');
+        AppNavigationService.goBack();
+      }
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
 }

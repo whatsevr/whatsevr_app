@@ -40,7 +40,7 @@ class SanityCheckNewMemoryRequest {
 }
 
 class MediaMetaData {
-  final int? videoDurationSec;
+  final dynamic videoDurationSec;
   final int? sizeBytes;
 
   MediaMetaData({
@@ -49,7 +49,7 @@ class MediaMetaData {
   });
 
   MediaMetaData copyWith({
-    int? videoDurationSec,
+    dynamic videoDurationSec,
     int? sizeBytes,
   }) =>
       MediaMetaData(
@@ -74,26 +74,30 @@ class MediaMetaData {
 }
 
 class PostData {
-  final bool? isVideo;
+  final dynamic isVideo;
+  final bool? isImage;
   final String? userUid;
   final String? caption;
   final String? postCreatorType;
 
   PostData({
     this.isVideo,
+    this.isImage,
     this.userUid,
     this.caption,
     this.postCreatorType,
   });
 
   PostData copyWith({
-    bool? isVideo,
+    dynamic isVideo,
+    bool? isImage,
     String? userUid,
     String? caption,
     String? postCreatorType,
   }) =>
       PostData(
         isVideo: isVideo ?? this.isVideo,
+        isImage: isImage ?? this.isImage,
         userUid: userUid ?? this.userUid,
         caption: caption ?? this.caption,
         postCreatorType: postCreatorType ?? this.postCreatorType,
@@ -105,6 +109,7 @@ class PostData {
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
         isVideo: json["is_video"],
+        isImage: json["is_image"],
         userUid: json["user_uid"],
         caption: json["caption"],
         postCreatorType: json["post_creator_type"],
@@ -112,6 +117,7 @@ class PostData {
 
   Map<String, dynamic> toMap() => {
         "is_video": isVideo,
+        "is_image": isImage,
         "user_uid": userUid,
         "caption": caption,
         "post_creator_type": postCreatorType,

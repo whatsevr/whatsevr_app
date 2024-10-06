@@ -2,6 +2,7 @@ import 'package:expansion_tile_group/expansion_tile_group.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
@@ -539,13 +540,20 @@ class CreateMemoryPage extends StatelessWidget {
                     ),
                     const Gap(12),
                     WhatsevrFormField.invokeCustomFunction(
+                      controller: TextEditingController(
+                        text: state.ctaAction ?? '',
+                      ),
                       context: context,
                       hintText: 'User Action',
                       customFunction: () {
                         showAppModalSheet(
                             child: CommonDataSearchSelectPage(
                           showCtaActions: true,
-                          onCtaActionSelected: (p0) {},
+                          onCtaActionSelected: (p0) {
+                            context
+                                .read<CreateMemoryBloc>()
+                                .emit(state.copyWith(ctaAction: p0.action));
+                          },
                         ));
                       },
                     ),
@@ -555,12 +563,22 @@ class CreateMemoryPage extends StatelessWidget {
                           .read<CreateMemoryBloc>()
                           .ctaActionUrlController,
                       hintText: 'Action URL',
+                      onChanged: (value) {
+                        if (state.ctaAction == null) {
+                          SmartDialog.showToast(
+                              'Please select a User action first');
+                          context
+                              .read<CreateMemoryBloc>()
+                              .ctaActionUrlController
+                              .clear();
+                        }
+                      },
                     ),
                     Gap(12),
                     Row(
                       children: [
                         Expanded(
-                            child: Text('Keep upto ${ddMMMTime(
+                            child: Text('Keep up-to ${ddMMMTime(
                           DateTime.now().add(
                             Duration(days: state.noOfDays ?? 1),
                           ),

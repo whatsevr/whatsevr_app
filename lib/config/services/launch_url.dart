@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 void launchWebURL(
   BuildContext context, {
@@ -7,6 +8,15 @@ void launchWebURL(
 }) async {
   final theme = Theme.of(context);
   try {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://$url';
+    }
+
+    if (url.startsWith('http://')) {
+      url = url.replaceFirst('http://', 'https://');
+    }
+    TalkerService.instance.info('Launching URL: $url');
+
     await launchUrl(
       Uri.parse(url),
       customTabsOptions: CustomTabsOptions(
