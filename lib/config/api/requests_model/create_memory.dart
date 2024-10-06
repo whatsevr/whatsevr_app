@@ -20,6 +20,7 @@ class CreateMemoryRequest {
   final String? creatorLatLongWkb;
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
+  final int? videoDurationMs;
 
   CreateMemoryRequest({
     this.caption,
@@ -41,6 +42,7 @@ class CreateMemoryRequest {
     this.creatorLatLongWkb,
     this.taggedUserUids,
     this.taggedCommunityUids,
+    this.videoDurationMs,
   });
 
   CreateMemoryRequest copyWith({
@@ -63,6 +65,7 @@ class CreateMemoryRequest {
     String? creatorLatLongWkb,
     List<String>? taggedUserUids,
     List<String>? taggedCommunityUids,
+    int? videoDurationMs,
   }) =>
       CreateMemoryRequest(
         caption: caption ?? this.caption,
@@ -84,6 +87,7 @@ class CreateMemoryRequest {
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
+        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
       );
 
   factory CreateMemoryRequest.fromJson(String str) =>
@@ -120,6 +124,7 @@ class CreateMemoryRequest {
         taggedCommunityUids: json["tagged_community_uids"] == null
             ? []
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
+        videoDurationMs: json["video_duration_ms"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -147,5 +152,6 @@ class CreateMemoryRequest {
         "tagged_community_uids": taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
+        "video_duration_ms": videoDurationMs,
       };
 }

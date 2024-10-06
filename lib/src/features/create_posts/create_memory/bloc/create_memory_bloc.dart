@@ -306,6 +306,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
           postCreatorType: state.pageArgument?.postCreatorType.value,
           imageUrl: thumbnailUrl,
           videoUrl: videoUrl,
+          videoDurationMs: state.videoMetaData?.durationInMs,
           ctaAction:
               ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
           ctaActionUrl: state.ctaAction?.isNotEmpty ?? false

@@ -1,9 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_story_presenter/flutter_story_presenter.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:preload_page_view/preload_page_view.dart';
+import 'package:story_view_advance/controller/story_controller.dart';
+import 'package:story_view_advance/utils.dart';
+import 'package:story_view_advance/widgets/story_view_advance.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -194,8 +199,8 @@ class _MemoriesPlayer extends StatefulWidget {
 
 class _MemoriesPlayerState extends State<_MemoriesPlayer> {
   PageController? pageViewController;
-  FlutterStoryController? flutterStoryController = FlutterStoryController();
-
+  StoryController flutterStoryController = StoryController();
+  Duration baseDuration = const Duration(seconds: 5);
   int currentPageIndex = 0;
   int currentMemoryIndex = 0;
   @override
@@ -246,80 +251,88 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
           itemBuilder: (context, index) {
             List<UserMemory> userMemories =
                 widget.memories?[index].userMemories ?? [];
-            return FlutterStoryView(
-                flutterStoryController: flutterStoryController,
-                storyViewIndicatorConfig: StoryViewIndicatorConfig(
-                  activeColor: Colors.white,
-                ),
-                onStoryChanged: (index) {
-                  currentMemoryIndex = index;
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    setState(() {});
-                  });
-                },
-                onCompleted: () async {
-                  if (index < (widget.memories?.length ?? 0) - 1) {
-                    pageViewController?.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-                items: [
-                  for (int i = 0; i < (userMemories.length); i++)
-                    userMemories[i].isImage == true
-                        ? StoryItem(
-                            url:
-                                '${widget.memories?[index].userMemories?[i].imageUrl}',
-                            storyItemType: StoryItemType.image,
-                            imageConfig: StoryViewImageConfig(
-                              fit: BoxFit.contain,
-                            ),
-                          )
-                        : userMemories[i].isVideo == true
-                            ? StoryItem(
-                                url: generateOptimizedCloudinaryVideoUrl(
-                                    originalUrl:
-                                        '${widget.memories?[index].userMemories?[i].videoUrl}'),
-                                storyItemType: StoryItemType.video,
-                                videoConfig: StoryViewVideoConfig(
-                                  fit: BoxFit.contain,
-                                  cacheVideo: true,
-                                  useVideoAspectRatio: true,
+            return StoryView(
+              onVerticalSwipeComplete: (direction) {
+                if (direction == Direction.down || direction == Direction.up) {
+                  Navigator.pop(context);
+                }
+              },
+              storyItems: [
+                for (int i = 0; i < (userMemories.length); i++)
+                  userMemories[i].isImage == true
+                      ? StoryItem.pageImage(
+                          controller: flutterStoryController,
+                          url:
+                              '${widget.memories?[index].userMemories?[i].imageUrl}',
+                          duration: baseDuration,
+                        )
+                      : userMemories[i].isVideo == true
+                          ? StoryItem.pageVideo(
+                              generateOptimizedCloudinaryVideoUrl(
+                                  originalUrl:
+                                      '${widget.memories?[index].userMemories?[i].videoUrl}'),
+                              controller: flutterStoryController,
+                              duration: Duration(
+                                  milliseconds: widget.memories?[index]
+                                          .userMemories?[i].videoDurationMs ??
+                                      0),
+                            )
+                          : userMemories[i].isWebsite == true
+                              ? StoryItem(
+                                  SizedBox(),
+                                  duration: baseDuration,
+                                )
+                              : StoryItem.text(
+                                  title: '',
+                                  backgroundColor: Colors.black,
+                                  duration: baseDuration,
                                 ),
-                              )
-                            : userMemories[i].isWebsite == true
-                                ? StoryItem(
-                                    url:
-                                        '${widget.memories?[index].userMemories?[i].websiteUrl}',
-                                    storyItemType: StoryItemType.web,
-                                    duration: const Duration(seconds: 60),
-                                  )
-                                : StoryItem(
-                                    url:
-                                        '${widget.memories?[index].userMemories?[i].imageUrl}',
-                                    storyItemType: StoryItemType.image,
-                                  ),
-                ]);
+              ],
+              controller: flutterStoryController,
+              onStoryShow: (storyItem, index) {
+                currentMemoryIndex = index;
+                if (userMemories[index].ctaActionUrl != null &&
+                    userMemories[index].ctaActionUrl!.isNotEmpty) {
+                  SmartDialog.show(
+                    displayTime: baseDuration,
+                    maskColor: Colors.transparent,
+                    keepSingle: true,
+                    usePenetrate: true,
+                    alignment: Alignment.bottomCenter,
+                    builder: (context) {
+                      return Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(8.0),
+                        child: WhatsevrButton.filled(
+                          label:
+                              '${widget.memories?[currentPageIndex].userMemories?[currentMemoryIndex].ctaAction}',
+                          onPressed: () {
+                            launchWebURL(context,
+                                url: widget
+                                        .memories?[currentPageIndex]
+                                        .userMemories?[currentMemoryIndex]
+                                        .ctaActionUrl ??
+                                    '');
+                          },
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  SmartDialog.dismiss();
+                }
+              },
+              repeat: widget.memories?.length == 1,
+              onComplete: () async {
+                if (index < (widget.memories?.length ?? 0) - 1) {
+                  pageViewController?.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                }
+              },
+            );
           }),
-      bottomNavigationBar: widget.memories?[currentPageIndex]
-                  .userMemories?[currentMemoryIndex].ctaAction ==
-              null
-          ? null
-          : Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(8.0),
-              child: WhatsevrButton.filled(
-                label:
-                    '${widget.memories?[currentPageIndex].userMemories?[currentMemoryIndex].ctaAction}',
-                onPressed: () {
-                  launchWebURL(context,
-                      url: widget.memories?[currentPageIndex]
-                              .userMemories?[currentMemoryIndex].ctaActionUrl ??
-                          '');
-                },
-              ),
-            ),
     );
   }
 }

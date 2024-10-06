@@ -314,7 +314,7 @@ class UserMemory {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final double? cumulativeScore;
-  final int? videoDurationInSec;
+
   final String? ctaAction;
   final String? ctaActionUrl;
   final bool? isWebsite;
@@ -322,7 +322,7 @@ class UserMemory {
   final bool? isImage;
   final bool? isText;
   final User? user;
-
+  final int? videoDurationMs;
   UserMemory({
     this.id,
     this.createdAt,
@@ -349,7 +349,6 @@ class UserMemory {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.videoDurationInSec,
     this.ctaAction,
     this.ctaActionUrl,
     this.isWebsite,
@@ -357,6 +356,7 @@ class UserMemory {
     this.isImage,
     this.isText,
     this.user,
+    this.videoDurationMs,
   });
 
   UserMemory copyWith({
@@ -385,7 +385,6 @@ class UserMemory {
     List<String>? taggedCommunityUids,
     int? totalShares,
     double? cumulativeScore,
-    int? videoDurationInSec,
     String? ctaAction,
     String? ctaActionUrl,
     bool? isWebsite,
@@ -393,6 +392,7 @@ class UserMemory {
     bool? isImage,
     bool? isText,
     User? user,
+    int? videoDurationMs,
   }) =>
       UserMemory(
         id: id ?? this.id,
@@ -421,7 +421,6 @@ class UserMemory {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
         ctaAction: ctaAction ?? this.ctaAction,
         ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
         isWebsite: isWebsite ?? this.isWebsite,
@@ -429,6 +428,7 @@ class UserMemory {
         isImage: isImage ?? this.isImage,
         isText: isText ?? this.isText,
         user: user ?? this.user,
+        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
       );
 
   factory UserMemory.fromJson(String str) =>
@@ -472,7 +472,6 @@ class UserMemory {
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"]?.toDouble(),
-        videoDurationInSec: json["video_duration_in_sec"],
         ctaAction: json["cta_action"],
         ctaActionUrl: json["cta_action_url"],
         isWebsite: json["is_website"],
@@ -480,6 +479,7 @@ class UserMemory {
         isImage: json["is_image"],
         isText: json["is_text"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
+        videoDurationMs: json["video_duration_ms"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -513,7 +513,6 @@ class UserMemory {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "video_duration_in_sec": videoDurationInSec,
         "cta_action": ctaAction,
         "cta_action_url": ctaActionUrl,
         "is_website": isWebsite,
