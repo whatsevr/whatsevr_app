@@ -2,15 +2,7 @@ part of 'create_offer_bloc.dart';
 
 class CreateOfferState extends Equatable {
   final CreateOfferPageArgument? pageArgument;
-  final bool? isVideoMemory;
-  final bool? isImageMemory;
-  final File? videoFile;
-
-  final FileMetaData? videoMetaData;
-  final File? thumbnailFile;
-  final FileMetaData? thumbnailMetaData;
-  final File? imageFile;
-  final FileMetaData? imageMetaData;
+  final List<UiFileData> uiFilesData;
   final PlacesNearbyResponse? placesNearbyResponse;
   final String? userCurrentLocationLatLongWkb;
   final String? selectedAddress;
@@ -21,14 +13,7 @@ class CreateOfferState extends Equatable {
   final int? noOfDays;
   const CreateOfferState({
     this.pageArgument,
-    this.isVideoMemory,
-    this.isImageMemory,
-    this.videoFile,
-    this.videoMetaData,
-    this.thumbnailFile,
-    this.thumbnailMetaData,
-    this.imageFile,
-    this.imageMetaData,
+    this.uiFilesData = const [],
     this.placesNearbyResponse,
     this.userCurrentLocationLatLongWkb,
     this.selectedAddress,
@@ -41,15 +26,8 @@ class CreateOfferState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        videoFile,
-        videoMetaData,
-        thumbnailFile,
-        thumbnailMetaData,
-        imageFile,
-        imageMetaData,
         pageArgument,
-        isVideoMemory,
-        isImageMemory,
+        uiFilesData,
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedAddress,
@@ -62,14 +40,7 @@ class CreateOfferState extends Equatable {
 
   CreateOfferState copyWith({
     CreateOfferPageArgument? pageArgument,
-    bool? isVideoMemory,
-    bool? isImageMemory,
-    File? videoFile,
-    FileMetaData? videoMetaData,
-    File? thumbnailFile,
-    FileMetaData? thumbnailMetaData,
-    File? imageFile,
-    FileMetaData? imageMetaData,
+    List<UiFileData>? uiFilesData,
     PlacesNearbyResponse? placesNearbyResponse,
     String? userCurrentLocationLatLongWkb,
     String? selectedAddress,
@@ -81,14 +52,7 @@ class CreateOfferState extends Equatable {
   }) {
     return CreateOfferState(
       pageArgument: pageArgument ?? this.pageArgument,
-      isVideoMemory: isVideoMemory ?? this.isVideoMemory,
-      isImageMemory: isImageMemory ?? this.isImageMemory,
-      videoFile: videoFile ?? this.videoFile,
-      videoMetaData: videoMetaData ?? this.videoMetaData,
-      thumbnailFile: thumbnailFile ?? this.thumbnailFile,
-      thumbnailMetaData: thumbnailMetaData ?? this.thumbnailMetaData,
-      imageFile: imageFile ?? this.imageFile,
-      imageMetaData: imageMetaData ?? this.imageMetaData,
+      uiFilesData: uiFilesData ?? this.uiFilesData,
       placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
@@ -99,6 +63,40 @@ class CreateOfferState extends Equatable {
       taggedCommunitiesUid: taggedCommunitiesUid ?? this.taggedCommunitiesUid,
       ctaAction: ctaAction ?? this.ctaAction,
       noOfDays: noOfDays ?? this.noOfDays,
+    );
+  }
+}
+
+enum UiFileTypes { image, video }
+
+class UiFileData {
+  final UiFileTypes? type;
+  final File? file;
+  final FileMetaData? fileMetaData;
+  final File? thumbnailFile;
+  final FileMetaData? thumbnailMetaData;
+
+  UiFileData({
+    this.type,
+    this.file,
+    this.fileMetaData,
+    this.thumbnailFile,
+    this.thumbnailMetaData,
+  });
+
+  UiFileData copyWith({
+    UiFileTypes? type,
+    File? file,
+    FileMetaData? fileMetaData,
+    File? thumbnailFile,
+    FileMetaData? thumbnailMetaData,
+  }) {
+    return UiFileData(
+      type: type ?? this.type,
+      file: file ?? this.file,
+      fileMetaData: fileMetaData ?? this.fileMetaData,
+      thumbnailFile: thumbnailFile ?? this.thumbnailFile,
+      thumbnailMetaData: thumbnailMetaData ?? this.thumbnailMetaData,
     );
   }
 }

@@ -44,8 +44,6 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
-    on<CreateVideoMemoryEvent>(_onCreateVideoMemory);
-    on<CreateImageMemoryEvent>(_onCreateImageMemory);
   }
   FutureOr<void> _onInitial(
     CreateOfferInitialEvent event,
@@ -78,7 +76,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      if (state.imageFile == null && state.videoFile == null) {
+      if (state.uiFilesData.isEmpty) {
         throw BusinessException('Please select an image or video');
       }
       captionController.text = captionController.text.trim();
@@ -99,32 +97,9 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewMemory(
-          request: SanityCheckNewMemoryRequest(
-        mediaMetaData: MediaMetaData(
-          videoDurationSec: state.videoMetaData?.durationInSec,
-          sizeBytes: state.videoMetaData?.sizeInBytes,
-        ),
-        postData: PostData(
-          caption: captionController.text,
-          isVideo: state.isVideoMemory,
-          isImage: state.isImageMemory,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-        ),
-      ));
+          request: SanityCheckNewMemoryRequest());
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
-      }
-
-      //create video memory
-      if (state.isVideoMemory == true) {
-        add(CreateVideoMemoryEvent(
-          hashtags: hashtags,
-        ));
-      } else if (state.isImageMemory == true) {
-        add(CreateImageMemoryEvent(
-          hashtags: hashtags,
-        ));
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -135,37 +110,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     PickVideoEvent event,
     Emitter<CreateOfferState> emit,
   ) async {
-    try {
-      if (event.pickVideoFile == null) return;
-      SmartDialog.showLoading(msg: 'Validating video...');
-      FileMetaData? videoMetaData =
-          await FileMetaData.fromFile(event.pickVideoFile);
-      // Validate video metadata
-      if (videoMetaData == null || videoMetaData.isVideo != true) {
-        throw BusinessException('Invalid video file');
-      }
-
-      emit(state.copyWith(
-        videoFile: event.pickVideoFile,
-        isVideoMemory: true,
-        isImageMemory: false,
-      ));
-
-      final File? thumbnailFile =
-          await getThumbnailFile(videoFile: event.pickVideoFile!);
-
-      final FileMetaData? thumbnailMetaData =
-          await FileMetaData.fromFile(thumbnailFile);
-
-      emit(
-        state.copyWith(
-          thumbnailFile: thumbnailFile,
-          videoMetaData: videoMetaData,
-          thumbnailMetaData: thumbnailMetaData,
-        ),
-      );
-      SmartDialog.dismiss();
-    } catch (e, stackTrace) {
+    try {} catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
@@ -174,27 +119,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     PickThumbnailEvent event,
     Emitter<CreateOfferState> emit,
   ) async {
-    try {
-      // Check if videoFile is null, return early if it is
-      if (state.videoFile == null) {
-        // Handle the null case (e.g., show a toast or log an error)
-        throw BusinessException('Please select a video first');
-      }
-
-      // If no thumbnail was selected, return early
-      if (event.pickedThumbnailFile == null) {
-        throw BusinessException('No thumbnail selected');
-      }
-
-      // Emit state changes after the thumbnail has been selected
-      emit(
-        state.copyWith(
-          thumbnailFile: event.pickedThumbnailFile,
-          thumbnailMetaData:
-              await FileMetaData.fromFile(event.pickedThumbnailFile!),
-        ),
-      );
-    } catch (e, stackTrace) {
+    try {} catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
@@ -246,14 +171,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onPickImage(
       PickImageEvent event, Emitter<CreateOfferState> emit) async {
-    try {
-      if (event.pickedImageFile == null) return;
-      emit(state.copyWith(
-        imageFile: event.pickedImageFile,
-        isImageMemory: true,
-        isVideoMemory: false,
-      ));
-    } catch (e, stackTrace) {
+    try {} catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
@@ -272,106 +190,60 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     ));
   }
 
-  FutureOr<void> _onCreateVideoMemory(
-      CreateVideoMemoryEvent event, Emitter<CreateOfferState> emit) async {
-    try {
-      if (state.videoFile == null) {
-        throw BusinessException('Please select a video first');
-      }
-      if (state.thumbnailFile == null) {
-        throw BusinessException('Please select a thumbnail for video');
-      }
-      SmartDialog.showLoading(msg: 'Uploading video...');
-      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
-        state.videoFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-video',
-      );
-      final String? thumbnailUrl =
-          await FileUploadService.uploadFilesToSupabase(
-        state.thumbnailFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-image',
-      );
-      SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
-        post: CreateMemoryRequest(
-          isVideo: true,
-          caption: captionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: event.hashtags.isEmpty
-              ? null
-              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
-          location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-          imageUrl: thumbnailUrl,
-          videoUrl: videoUrl,
-          videoDurationMs: state.videoMetaData?.durationInMs,
-          ctaAction:
-              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
-          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
-              ? ctaActionUrlController.text
-              : null,
-          expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
-          addressLatLongWkb: state.selectedAddressLatLongWkb,
-          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-          taggedUserUids: state.taggedUsersUid,
-          taggedCommunityUids: state.taggedCommunitiesUid,
-        ),
-      );
-      if (response != null) {
-        SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
-        AppNavigationService.goBack();
-      }
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
-
-  FutureOr<void> _onCreateImageMemory(
-      CreateImageMemoryEvent event, Emitter<CreateOfferState> emit) async {
-    try {
-      if (state.imageFile == null) {
-        throw BusinessException('Please select an image first');
-      }
-      SmartDialog.showLoading(msg: 'Uploading image...');
-      final String? imageUrl = await FileUploadService.uploadFilesToSupabase(
-        state.imageFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-image',
-      );
-      SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
-        post: CreateMemoryRequest(
-          isImage: true,
-          caption: captionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
-          hashtags: event.hashtags.isEmpty
-              ? null
-              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
-          location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-          imageUrl: imageUrl,
-          ctaAction:
-              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
-          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
-              ? ctaActionUrlController.text
-              : null,
-          expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
-          addressLatLongWkb: state.selectedAddressLatLongWkb,
-          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-          taggedUserUids: state.taggedUsersUid,
-          taggedCommunityUids: state.taggedCommunitiesUid,
-        ),
-      );
-      if (response != null) {
-        SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
-        AppNavigationService.goBack();
-      }
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
+  // FutureOr<void> _onCreateVideoMemory(
+  //     CreateVideoMemoryEvent event, Emitter<CreateOfferState> emit) async {
+  //   try {
+  //     if (state.videoFile == null) {
+  //       throw BusinessException('Please select a video first');
+  //     }
+  //     if (state.thumbnailFile == null) {
+  //       throw BusinessException('Please select a thumbnail for video');
+  //     }
+  //     SmartDialog.showLoading(msg: 'Uploading video...');
+  //     final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
+  //       state.videoFile!,
+  //       userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+  //       fileType: 'memory-video',
+  //     );
+  //     final String? thumbnailUrl =
+  //         await FileUploadService.uploadFilesToSupabase(
+  //       state.thumbnailFile!,
+  //       userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+  //       fileType: 'memory-image',
+  //     );
+  //     SmartDialog.showLoading(msg: 'Creating memory...');
+  //     (String? message, int? statusCode)? response = await PostApi.createMemory(
+  //       post: CreateMemoryRequest(
+  //         isVideo: true,
+  //         caption: captionController.text,
+  //         userUid: await AuthUserDb.getLastLoggedUserUid(),
+  //         hashtags: event.hashtags.isEmpty
+  //             ? null
+  //             : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
+  //         location: state.selectedAddress,
+  //         postCreatorType: state.pageArgument?.postCreatorType.value,
+  //         imageUrl: thumbnailUrl,
+  //         videoUrl: videoUrl,
+  //         videoDurationMs: state.videoMetaData?.durationInMs,
+  //         ctaAction:
+  //             ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
+  //         ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
+  //             ? ctaActionUrlController.text
+  //             : null,
+  //         expiresAt: DateTime.now().add(Duration(days: state.noOfDays ?? 1)),
+  //         addressLatLongWkb: state.selectedAddressLatLongWkb,
+  //         creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+  //         taggedUserUids: state.taggedUsersUid,
+  //         taggedCommunityUids: state.taggedCommunitiesUid,
+  //       ),
+  //     );
+  //     if (response != null) {
+  //       SmartDialog.dismiss();
+  //       SmartDialog.showToast('${response.$1}');
+  //       AppNavigationService.goBack();
+  //     }
+  //   } catch (e, stackTrace) {
+  //     highLevelCatch(e, stackTrace);
+  //   }
+  // }
 }
