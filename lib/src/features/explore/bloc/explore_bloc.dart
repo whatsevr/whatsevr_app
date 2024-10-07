@@ -49,24 +49,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   FutureOr<void> _loadVideos(
       LoadVideosEvent event, Emitter<ExploreState> emit) async {
     try {
-      emit(
-        state.copyWith(
-          videoPaginationData: state.videoPaginationData?.copyWith(
-            currentPage: 1,
-            noMoreData: false,
-            isLoading: true,
-          ),
-        ),
-      );
       RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
-        page: state.videoPaginationData?.currentPage ?? 1,
+        page: 1,
       );
       emit(
         state.copyWith(
           recommendationVideos: recommendationVideos?.recommendedVideos,
           videoPaginationData: state.videoPaginationData?.copyWith(
             isLoading: false,
+            currentPage: 1,
             noMoreData: recommendationVideos?.lastPage,
           ),
         ),
@@ -78,7 +70,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreVideos(
       LoadMoreVideosEvent event, Emitter<ExploreState> emit) async {
-    if (state.videoPaginationData?.isLoading == true) return;
+    if (state.videoPaginationData?.isLoading == true ||
+        state.videoPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
@@ -114,24 +107,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   FutureOr<void> _loadMemories(
       LoadMemoriesEvent event, Emitter<ExploreState> emit) async {
     try {
-      emit(
-        state.copyWith(
-          memoryPaginationData: state.memoryPaginationData?.copyWith(
-            currentPage: 1,
-            noMoreData: false,
-            isLoading: true,
-          ),
-        ),
-      );
       RecommendationMemoriesResponse? recommendationMemories =
           await RecommendationApi.publicMemories(
-        page: state.memoryPaginationData?.currentPage ?? 1,
+        page: 1,
       );
       emit(
         state.copyWith(
           recommendationMemories: recommendationMemories?.recommendedMemories,
           memoryPaginationData: state.memoryPaginationData?.copyWith(
             isLoading: false,
+            currentPage: 1,
             noMoreData: recommendationMemories?.lastPage,
           ),
         ),
@@ -143,7 +128,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreMemories(
       LoadMoreMemoriesEvent event, Emitter<ExploreState> emit) async {
-    if (state.memoryPaginationData?.isLoading == true) return;
+    if (state.memoryPaginationData?.isLoading == true ||
+        state.memoryPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(

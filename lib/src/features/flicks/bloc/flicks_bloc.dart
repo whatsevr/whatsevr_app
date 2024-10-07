@@ -57,7 +57,8 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
 
   FutureOr<void> _onLoadMoreFlicks(
       LoadMoreFlicksEvent event, Emitter<FlicksState> emit) async {
-    if (state.flicksPaginationData?.isLoading == true) return;
+    if (state.flicksPaginationData?.isLoading == true ||
+        state.flicksPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(

@@ -46,7 +46,7 @@ class RecommendationApi {
 
   static Future<RecommendationMemoriesResponse?> publicMemories({
     required int page,
-    int pageSize = 5,
+    int pageSize = 8,
   }) async {
     try {
       Response response = await ApiClient.client.get(
