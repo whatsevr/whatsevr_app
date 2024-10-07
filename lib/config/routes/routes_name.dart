@@ -15,6 +15,7 @@ class RoutesName {
   static const String createVideoPost = 'create-video-post';
   static const String createFlick = 'create-flick';
   static const String createMemory = 'create-memory';
+  static const String createOffer = 'create-offer';
   static const String updateProfile = 'update-profile';
 
   static const String videoEditor = 'video-editor';

@@ -29,7 +29,9 @@ part 'create_offer_event.dart';
 part 'create_offer_state.dart';
 
 class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
-  final TextEditingController captionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
   final TextEditingController ctaActionUrlController = TextEditingController();
 
   CreateOfferBloc() : super(const CreateOfferState()) {
@@ -77,8 +79,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       if (state.uiFilesData.isEmpty) {
         throw BusinessException('Please select an image or video');
       }
-      captionController.text = captionController.text.trim();
-      String hashtagsArea = captionController.text;
+      titleController.text = titleController.text.trim();
+      String hashtagsArea = titleController.text;
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
@@ -89,7 +91,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       if (hashtags.length > 30) {
         throw BusinessException('Hashtags should not exceed 30');
       }
-      if (captionController.text.isEmpty) {
+      if (titleController.text.isEmpty) {
         throw BusinessException('Caption is required');
       }
       SmartDialog.showLoading(msg: 'Validating post...');

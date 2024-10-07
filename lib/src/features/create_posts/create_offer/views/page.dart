@@ -58,10 +58,10 @@ class CreateOfferPage extends StatelessWidget {
       builder: (BuildContext context, CreateOfferState state) {
         return Scaffold(
           appBar: CustomAppBar(
-            title: 'Create Memory',
+            title: 'Create Offer',
             showAiAction: true,
             showInfo: () {
-              ProductGuides.showMemoryCreationGuide();
+              ProductGuides.showOfferCreationGuide();
             },
           ),
           body: ListView(
@@ -70,255 +70,363 @@ class CreateOfferPage extends StatelessWidget {
               const Gap(12),
               Builder(
                 builder: (context) {
-                  if (state.isVideoMemory == true) {
-                    return Column(
-                      children: <Widget>[
-                        AspectRatio(
-                          aspectRatio:
-                              state.videoMetaData?.aspectRatio ?? 9 / 12,
-                          child: Builder(
-                            builder: (BuildContext context) {
-                              double baseHeight = double.infinity;
-                              if (state.thumbnailFile != null) {
-                                return Stack(
-                                  children: <Widget>[
-                                    ExtendedImage.file(
-                                      state.thumbnailFile!,
-                                      width: double.infinity,
-                                      height: baseHeight,
-                                      fit: BoxFit.cover,
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                    ),
-                                    Positioned.fill(
-                                      child: Center(
-                                        child: IconButton(
-                                          onPressed: () {
-                                            AppNavigationService.newRoute(
-                                              RoutesName.fullVideoPlayer,
-                                              extras:
-                                                  MediaPreviewerPageArguments(
-                                                videoUrl: state.videoFile!.path,
-                                              ),
-                                            );
-                                          },
-                                          icon: const Icon(
-                                            Icons.play_circle_fill_rounded,
-                                            color: Colors.white,
-                                            size: 50,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: IconButton(
-                                        onPressed: () {
-                                          context.read<CreateOfferBloc>().add(
-                                              const RemoveVideoOrImageEvent());
-                                        },
-                                        icon: const Icon(
-                                          Icons.clear_rounded,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ),
-                                    if (state.videoMetaData != null)
-                                      GestureDetector(
-                                        onTap: () {
-                                          FileMetaData.showMetaData(
-                                              state.videoMetaData);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              }
-                              if (state.videoFile != null) {
-                                return MaterialButton(
-                                  onPressed: () {
-                                    showWhatsevrThumbnailSelectionPage(
-                                      videoFile: state.videoFile!,
-                                      allowPickFromGallery: false,
-                                      aspectRatios: flicksAspectRatio,
-                                    ).then((value) {
-                                      if (value != null) {
-                                        context
-                                            .read<CreateOfferBloc>()
-                                            .add(PickThumbnailEvent(
-                                              pickedThumbnailFile: value,
-                                            ));
-                                      }
-                                    });
-                                  },
-                                  minWidth: double.infinity,
-                                  height: baseHeight,
-                                  color: Colors.white10,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                );
-                              }
-                              return GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () {
-                                  CustomAssetPicker.pickVideoFromGallery(
-                                    onCompleted: (file) {
-                                      context.read<CreateOfferBloc>().add(
-                                          PickVideoEvent(pickVideoFile: file));
-                                    },
-                                  );
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: baseHeight,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.all(
+                  if (state.uiFilesData.isNotEmpty) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (UiFileData fileData in state.uiFilesData) ...[
+                            if (fileData.type == UiFileTypes.image) ...[
+                              Stack(
+                                children: [
+                                  ExtendedImage.file(
+                                    fileData.file!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: const BorderRadius.all(
                                       Radius.circular(10),
                                     ),
                                   ),
-                                  child: const Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(Icons.video_file_rounded,
-                                          color: Colors.white, size: 50),
-                                      Text('Add a video',
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.clear_rounded,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                            if (fileData.type == UiFileTypes.video) ...[
+                              Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      ExtendedImage.file(
+                                        fileData.thumbnailFile!,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                        child: Center(
+                                          child: IconButton(
+                                            onPressed: () {
+                                              AppNavigationService.newRoute(
+                                                RoutesName.fullVideoPlayer,
+                                                extras:
+                                                    MediaPreviewerPageArguments(
+                                                  videoUrl: fileData.file!.path,
+                                                ),
+                                              );
+                                            },
+                                            icon: const Icon(
+                                              Icons.play_circle_fill_rounded,
+                                              color: Colors.white,
+                                              size: 50,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: IconButton(
+                                          onPressed: () {
+                                            context.read<CreateOfferBloc>().add(
+                                                const RemoveVideoOrImageEvent());
+                                          },
+                                          icon: const Icon(
+                                            Icons.clear_rounded,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        if (state.videoFile != null ||
-                            state.thumbnailFile != null)
-                          Row(
-                            children: <Widget>[
-                              const Spacer(),
-                              if (state.videoFile != null &&
-                                  state.thumbnailFile != null)
-                                WhatsevrButton.filled(
-                                  shrink: true,
-                                  miniButton: true,
-                                  onPressed: () {
-                                    showWhatsevrThumbnailSelectionPage(
-                                      videoFile: state.videoFile!,
-                                      aspectRatios: flicksAspectRatio,
-                                    ).then((value) {
-                                      if (value != null) {
-                                        context
-                                            .read<CreateOfferBloc>()
-                                            .add(PickThumbnailEvent(
-                                              pickedThumbnailFile: value,
-                                            ));
-                                      }
-                                    });
-                                  },
-                                  label: 'Update Thumb',
-                                ),
-                              if (state.videoFile != null) ...[
-                                const Gap(6),
-                                WhatsevrButton.filled(
-                                  miniButton: true,
-                                  shrink: true,
-                                  onPressed: () {
-                                    CustomAssetPicker.pickVideoFromGallery(
-                                      onCompleted: (file) {
-                                        context.read<CreateOfferBloc>().add(
-                                            PickVideoEvent(
-                                                pickVideoFile: file));
-                                      },
-                                    );
-                                  },
-                                  label: 'Change Video',
-                                )
-                              ],
-                            ],
-                          ),
-                      ],
-                    );
-                  }
-                  if (state.isImageMemory == true) {
-                    return Column(
-                      children: [
-                        Stack(
-                          children: [
-                            ExtendedImage.file(
-                              state.imageFile!,
-                              width: double.infinity,
-                              fit: BoxFit.contain,
-                              shape: BoxShape.rectangle,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                            ),
-                            //delete
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: IconButton(
-                                onPressed: () {
-                                  context
-                                      .read<CreateOfferBloc>()
-                                      .add(const RemoveVideoOrImageEvent());
-                                },
-                                icon: const Icon(
-                                  Icons.clear_rounded,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (state.imageFile != null)
-                          Row(
-                            children: <Widget>[
-                              const Spacer(),
-                              WhatsevrButton.filled(
-                                miniButton: true,
-                                shrink: true,
-                                onPressed: () {
-                                  CustomAssetPicker.pickImageFromGallery(
-                                    onCompleted: (file) {
-                                      context
-                                          .read<CreateOfferBloc>()
-                                          .add(PickImageEvent(
-                                            pickedImageFile: file,
-                                          ));
+                                  //change thumbnail
+
+                                  WhatsevrButton.filled(
+                                    shrink: true,
+                                    miniButton: true,
+                                    onPressed: () {
+                                      showWhatsevrThumbnailSelectionPage(
+                                        videoFile: fileData.file!,
+                                        allowPickFromGallery: false,
+                                        aspectRatios: flicksAspectRatio,
+                                      ).then((value) {
+                                        if (value != null) {}
+                                      });
                                     },
-                                  );
-                                },
-                                label: 'Change Image',
+                                    label: 'Update Thumb',
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                      ],
+                          ],
+                        ],
+                      ),
                     );
                   }
+                  // if (fileData.isVideoMemory == true) {
+                  //   return Column(
+                  //     children: <Widget>[
+                  //       AspectRatio(
+                  //         aspectRatio:
+                  //             state.videoMetaData?.aspectRatio ?? 9 / 12,
+                  //         child: Builder(
+                  //           builder: (BuildContext context) {
+                  //             double baseHeight = double.infinity;
+                  //             if (state.thumbnailFile != null) {
+                  //               return Stack(
+                  //                 children: <Widget>[
+                  //                   ExtendedImage.file(
+                  //                     state.thumbnailFile!,
+                  //                     width: double.infinity,
+                  //                     height: baseHeight,
+                  //                     fit: BoxFit.cover,
+                  //                     shape: BoxShape.rectangle,
+                  //                     borderRadius: const BorderRadius.all(
+                  //                         Radius.circular(10)),
+                  //                   ),
+                  //                   Positioned.fill(
+                  //                     child: Center(
+                  //                       child: IconButton(
+                  //                         onPressed: () {
+                  //                           AppNavigationService.newRoute(
+                  //                             RoutesName.fullVideoPlayer,
+                  //                             extras:
+                  //                                  MediaPreviewerPageArguments(
+                  //                               videoUrl: state.videoFile!.path,
+                  //                             ),
+                  //                           );
+                  //                          },
+                  //                         icon: const Icon(
+                  //                           Icons.play_circle_fill_rounded,
+                  //                            color: Colors.white,
+                  //                           size: 50,
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                   Positioned(
+                  //                     top: 0,
+                  //                     right: 0,
+                  //                     child: IconButton(
+                  //                       onPressed: () {
+                  //                           context.read<CreateOfferBloc>().add(
+                  //                             const RemoveVideoOrImageEvent());
+                  //                       },
+                  //                       icon: const Icon(
+                  //                         Icons.clear_rounded,
+                  //                         color: Colors.red,
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                   if (state.videoMetaData != null)
+                  //                     GestureDetector(
+                  //                       onTap: () {
+                  //                         FileMetaData.showMetaData(
+                  //                             state.videoMetaData);
+                  //                       },
+                  //                       child: Container(
+                  //                         padding: const EdgeInsets.all(4),
+                  //                         decoration: BoxDecoration(
+                  //                           color:
+                  //                               Colors.black.withOpacity(0.5),
+                  //                           borderRadius:
+                  //                               const BorderRadius.only(
+                  //                             topLeft: Radius.circular(10),
+                  //                             bottomRight: Radius.circular(10),
+                  //                           ),
+                  //                         ),
+                  //                         child: Text(
+                  //                           '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
+                  //                           style: const TextStyle(
+                  //                             fontSize: 10,
+                  //                             color: Colors.white,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                 ],
+                  //               );
+                  //             }
+                  //             if (fileData.videoFile != null) {
+                  //               return MaterialButton(
+                  //                 onPressed: () {
+                  //                   showWhatsevrThumbnailSelectionPage(
+                  //                     videoFile: state.videoFile!,
+                  //                     allowPickFromGallery: false,
+                  //                     aspectRatios: flicksAspectRatio,
+                  //                   ).then((value) {
+                  //                     if (value != null) {
+                  //                       context
+                  //                           .read<CreateOfferBloc>()
+                  //                           .add(PickThumbnailEvent(
+                  //                             pickedThumbnailFile: value,
+                  //                           ));
+                  //                     }
+                  //                   });
+                  //                 },
+                  //                 minWidth: double.infinity,
+                  //                 height: baseHeight,
+                  //                 color: Colors.white10,
+                  //                 shape: RoundedRectangleBorder(
+                  //                   borderRadius: BorderRadius.circular(10),
+                  //                 ),
+                  //               );
+                  //             }
+                  //             return GestureDetector(
+                  //               behavior: HitTestBehavior.translucent,
+                  //               onTap: () {
+                  //                 CustomAssetPicker.pickVideoFromGallery(
+                  //                   onCompleted: (file) {
+                  //                     context.read<CreateOfferBloc>().add(
+                  //                         PickVideoEvent(pickVideoFile: file));
+                  //                   },
+                  //                 );
+                  //               },
+                  //               child: Container(
+                  //                 width: double.infinity,
+                  //                 height: baseHeight,
+                  //                 decoration: const BoxDecoration(
+                  //                   color: Colors.black,
+                  //                   borderRadius: BorderRadius.all(
+                  //                     Radius.circular(10),
+                  //                   ),
+                  //                 ),
+                  //                 child: const Column(
+                  //                   mainAxisAlignment: MainAxisAlignment.center,
+                  //                   children: <Widget>[
+                  //                     Icon(Icons.video_file_rounded,
+                  //                         color: Colors.white, size: 50),
+                  //                     Text('Add a video',
+                  //                         style:
+                  //                             TextStyle(color: Colors.white)),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             );
+                  //           },
+                  //         ),
+                  //       ),
+                  //       if (fileData.videoFile != null ||
+                  //           fileData.thumbnailFile != null)
+                  //         Row(
+                  //           children: <Widget>[
+                  //             const Spacer(),
+                  //             if (state.videoFile != null &&
+                  //                 state.thumbnailFile != null)
+                  //               WhatsevrButton.filled(
+                  //                 shrink: true,
+                  //                 miniButton: true,
+                  //                 onPressed: () {
+                  //                   showWhatsevrThumbnailSelectionPage(
+                  //                     videoFile: state.videoFile!,
+                  //                     aspectRatios: flicksAspectRatio,
+                  //                   ).then((value) {
+                  //                     if (value != null) {
+                  //                       context
+                  //                           .read<CreateOfferBloc>()
+                  //                           .add(PickThumbnailEvent(
+                  //                             pickedThumbnailFile: value,
+                  //                           ));
+                  //                     }
+                  //                   });
+                  //                 },
+                  //                 label: 'Update Thumb',
+                  //               ),
+                  //             if (state.videoFile != null) ...[
+                  //               const Gap(6),
+                  //               WhatsevrButton.filled(
+                  //                 miniButton: true,
+                  //                 shrink: true,
+                  //                 onPressed: () {
+                  //                   CustomAssetPicker.pickVideoFromGallery(
+                  //                     onCompleted: (file) {
+                  //                       context.read<CreateOfferBloc>().add(
+                  //                           PickVideoEvent(
+                  //                               pickVideoFile: file));
+                  //                     },
+                  //                   );
+                  //                 },
+                  //                 label: 'Change Video',
+                  //               )
+                  //             ],
+                  //           ],
+                  //         ),
+                  //     ],
+                  //   );
+                  // }
+                  // if (fileData.isImageMemory == true) {
+                  //   return Column(
+                  //     children: [
+                  //       Stack(
+                  //         children: [
+                  //           ExtendedImage.file(
+                  //             state.imageFile!,
+                  //             width: double.infinity,
+                  //             fit: BoxFit.contain,
+                  //             shape: BoxShape.rectangle,
+                  //             borderRadius:
+                  //                 const BorderRadius.all(Radius.circular(10)),
+                  //           ),
+                  //           //delete
+                  //           Positioned(
+                  //             top: 0,
+                  //             right: 0,
+                  //             child: IconButton(
+                  //               onPressed: () {
+                  //                 context
+                  //                     .read<CreateOfferBloc>()
+                  //                     .add(const RemoveVideoOrImageEvent());
+                  //               },
+                  //               icon: const Icon(
+                  //                 Icons.clear_rounded,
+                  //                 color: Colors.red,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       if (state.imageFile != null)
+                  //         Row(
+                  //           children: <Widget>[
+                  //             const Spacer(),
+                  //             WhatsevrButton.filled(
+                  //               miniButton: true,
+                  //               shrink: true,
+                  //               onPressed: () {
+                  //                 CustomAssetPicker.pickImageFromGallery(
+                  //                   onCompleted: (file) {
+                  //                     context
+                  //                         .read<CreateOfferBloc>()
+                  //                         .add(PickImageEvent(
+                  //                           pickedImageFile: file,
+                  //                         ));
+                  //                   },
+                  //                 );
+                  //               },
+                  //               label: 'Change Image',
+                  //             ),
+                  //           ],
+                  //         ),
+                  //     ],
+                  //   );
+                  // }
                   return AspectRatio(
-                    aspectRatio: WhatsevrAspectRatio.portrait2by3.ratio,
+                    aspectRatio: WhatsevrAspectRatio.square.ratio,
                     child: MaterialButton(
                       onPressed: () {
                         showWhatsevrMediaPickerChoice(
@@ -353,11 +461,30 @@ class CreateOfferPage extends StatelessWidget {
                 },
               ),
               const Gap(12),
+              WhatsevrFormField.generalTextField(
+                maxLength: 150,
+                minLines: 1,
+                maxLines: 5,
+                controller: context.read<CreateOfferBloc>().titleController,
+                hintText: 'Title',
+              ),
+              const Gap(12),
               WhatsevrFormField.multilineTextField(
-                maxLength: 100,
-                minLines: 3,
-                controller: context.read<CreateOfferBloc>().captionController,
-                hintText: 'Caption',
+                maxLength: 5000,
+                minLines: 5,
+                maxLines: 20,
+                controller:
+                    context.read<CreateOfferBloc>().descriptionController,
+                hintText: 'Description',
+              ),
+              const Gap(12),
+              WhatsevrFormField.invokeCustomFunction(
+                context: context,
+                maxLength: 35,
+                readOnly: false,
+                controller: context.read<CreateOfferBloc>().statusController,
+                hintText: 'Status',
+                customFunction: () {},
               ),
               const Gap(12),
               Theme(
@@ -392,8 +519,7 @@ class CreateOfferPage extends StatelessWidget {
                         children: [
                           Icon(Icons.person, color: Colors.black),
                           Gap(4),
-                          Text('Mention',
-                              style: TextStyle(color: Colors.black)),
+                          Text('Tag', style: TextStyle(color: Colors.black)),
                           Spacer(),
                           Icon(Icons.arrow_right_rounded, color: Colors.black),
                         ],
@@ -573,28 +699,6 @@ class CreateOfferPage extends StatelessWidget {
                               .clear();
                         }
                       },
-                    ),
-                    Gap(12),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text('Keep up-to ${ddMMMTime(
-                          DateTime.now().add(
-                            Duration(days: state.noOfDays ?? 1),
-                          ),
-                        )}')),
-                        WhatsevrStepper(
-                          initNumber: state.noOfDays ?? 1,
-                          minNumber: 1,
-                          maxNumber: 3,
-                          counterCallback: (number) {
-                            context
-                                .read<CreateOfferBloc>()
-                                .emit(state.copyWith(noOfDays: number));
-                          },
-                          stickySuffix: 'day',
-                        ),
-                      ],
                     ),
                   ],
                 ),

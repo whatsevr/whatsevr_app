@@ -197,6 +197,7 @@ class WhatsevrFormField extends StatefulWidget {
     Widget? suffixWidget, // List of icons or widgets to display
     bool readOnly = true,
     required Function() customFunction,
+    int? maxLength,
   }) {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
@@ -206,6 +207,7 @@ class WhatsevrFormField extends StatefulWidget {
       readOnly: readOnly,
       onChanged: onChanged,
       onTap: customFunction,
+      maxLength: maxLength,
       suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
     );
   }

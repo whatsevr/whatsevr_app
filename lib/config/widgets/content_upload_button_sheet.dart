@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 
 import '../../src/features/create_posts/create_flick_post/views/page.dart';
 import '../../src/features/create_posts/create_memory/views/page.dart';
+import '../../src/features/create_posts/create_offer/views/page.dart';
 
 void showContentUploadBottomSheet(
   BuildContext context, {
@@ -138,6 +139,33 @@ class _Ui extends StatelessWidget {
             ],
           ),
         ),
+        if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...<Widget>[
+          const Gap(8),
+          MaterialButton(
+            elevation: 0,
+            color: Colors.blueGrey.withOpacity(0.2),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            onPressed: () async {
+              Navigator.pop(context);
+              AppNavigationService.newRoute(
+                RoutesName.createOffer,
+                extras: CreateOfferPageArgument(
+                  postCreatorType: postCreatorType,
+                ),
+              );
+            },
+            child: const Row(
+              children: <Widget>[
+                Iconify(Fa6Solid.signs_post),
+                Gap(8),
+                Text('Create Offer'),
+              ],
+            ),
+          ),
+        ],
         if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...<Widget>[
           const Gap(8),
           MaterialButton(
