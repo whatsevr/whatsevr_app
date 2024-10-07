@@ -6,8 +6,10 @@ import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 import '../external/models/business_validation_exception.dart';
 import '../requests_model/create_flick_post.dart';
 import '../requests_model/create_memory.dart';
+import '../requests_model/create_offer.dart';
 import '../requests_model/sanity_check_new_flick_post.dart';
 import '../requests_model/sanity_check_new_memory.dart';
+import '../requests_model/sanity_check_new_offer.dart';
 import '../requests_model/sanity_check_new_video_post.dart';
 
 class PostApi {
@@ -97,6 +99,38 @@ class PostApi {
     try {
       Response response = await ApiClient.client.post(
         '/v1/create-memory',
+        data: post.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> sanityCheckNewOffer({
+    required SanityCheckNewOfferRequest request,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/sanity-check-new-offer',
+        data: request.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> createOffer({
+    required CreateOfferRequest post,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/create-offer',
         data: post.toMap(),
       );
 

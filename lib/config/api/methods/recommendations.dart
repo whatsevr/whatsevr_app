@@ -7,6 +7,7 @@ import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dar
 import '../external/models/business_validation_exception.dart';
 import '../response_model/recommendation_flicks.dart';
 import '../response_model/recommendation_memories.dart';
+import '../response_model/recommendation_offers.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> publicVideoPosts({
@@ -54,6 +55,23 @@ class RecommendationApi {
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationMemoriesResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<RecommendationOffersResponse?> publicOffers({
+    required int page,
+    int pageSize = 5,
+  }) async {
+    try {
+      Response response = await ApiClient.client.get(
+          '/v1/recommendations/offers',
+          queryParameters: {'page': page, 'page_size': pageSize});
+      if (response.data != null) {
+        return RecommendationOffersResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

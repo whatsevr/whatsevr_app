@@ -14,9 +14,7 @@ import '../../../../../config/api/external/models/business_validation_exception.
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 
-import '../../../../../config/api/requests_model/create_memory.dart';
-
-import '../../../../../config/api/requests_model/sanity_check_new_memory.dart';
+import '../../../../../config/api/requests_model/sanity_check_new_offer.dart';
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
@@ -96,8 +94,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       }
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewMemory(
-          request: SanityCheckNewMemoryRequest());
+      (String?, int?)? itm = await PostApi.sanityCheckNewOffer(
+          request: SanityCheckNewOfferRequest());
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -212,8 +210,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   //       fileType: 'memory-image',
   //     );
   //     SmartDialog.showLoading(msg: 'Creating memory...');
-  //     (String? message, int? statusCode)? response = await PostApi.createMemory(
-  //       post: CreateMemoryRequest(
+  //     (String? message, int? statusCode)? response = await PostApi.createOffer(
+  //       post: CreateOfferRequest(
   //         isVideo: true,
   //         caption: captionController.text,
   //         userUid: await AuthUserDb.getLastLoggedUserUid(),
