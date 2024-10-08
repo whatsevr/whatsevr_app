@@ -74,16 +74,17 @@ class CreateOfferPage extends StatelessWidget {
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          for (UiFileData fileData in state.uiFilesData) ...[
-                            if (fileData.type == UiFileTypes.image) ...[
+                          for (UiFileData uiFileData in state.uiFilesData) ...[
+                            if (uiFileData.type == UiFileTypes.image) ...[
                               Stack(
                                 children: [
                                   ExtendedImage.file(
-                                    fileData.file!,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
+                                    uiFileData.file!,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    fit: BoxFit.contain,
                                     shape: BoxShape.rectangle,
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(10),
@@ -93,7 +94,13 @@ class CreateOfferPage extends StatelessWidget {
                                     top: 0,
                                     right: 0,
                                     child: IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context
+                                            .read<CreateOfferBloc>()
+                                            .add(RemoveVideoOrImageEvent(
+                                              uiFileData: uiFileData,
+                                            ));
+                                      },
                                       icon: const Icon(
                                         Icons.clear_rounded,
                                         color: Colors.red,
@@ -103,76 +110,77 @@ class CreateOfferPage extends StatelessWidget {
                                 ],
                               ),
                             ],
-                            if (fileData.type == UiFileTypes.video) ...[
-                              Column(
+                            if (uiFileData.type == UiFileTypes.video) ...[
+                              Stack(
                                 children: [
-                                  Stack(
-                                    children: [
-                                      ExtendedImage.file(
-                                        fileData.thumbnailFile!,
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                      ),
-                                      Positioned.fill(
-                                        child: Center(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              AppNavigationService.newRoute(
-                                                RoutesName.fullVideoPlayer,
-                                                extras:
-                                                    MediaPreviewerPageArguments(
-                                                  videoUrl: fileData.file!.path,
-                                                ),
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.play_circle_fill_rounded,
-                                              color: Colors.white,
-                                              size: 50,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            context.read<CreateOfferBloc>().add(
-                                                const RemoveVideoOrImageEvent());
-                                          },
-                                          icon: const Icon(
-                                            Icons.clear_rounded,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  ExtendedImage.file(
+                                    uiFileData.thumbnailFile!,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    fit: BoxFit.cover,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
                                   ),
-                                  //change thumbnail
-
-                                  WhatsevrButton.filled(
-                                    shrink: true,
-                                    miniButton: true,
-                                    onPressed: () {
-                                      showWhatsevrThumbnailSelectionPage(
-                                        videoFile: fileData.file!,
-                                        allowPickFromGallery: false,
-                                        aspectRatios: flicksAspectRatio,
-                                      ).then((value) {
-                                        if (value != null) {}
-                                      });
-                                    },
-                                    label: 'Update Thumb',
+                                  Positioned.fill(
+                                    child: Center(
+                                      child: IconButton(
+                                        onPressed: () {
+                                          AppNavigationService.newRoute(
+                                            RoutesName.fullVideoPlayer,
+                                            extras: MediaPreviewerPageArguments(
+                                              videoUrl: uiFileData.file!.path,
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.play_circle_fill_rounded,
+                                          color: Colors.white,
+                                          size: 50,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        context
+                                            .read<CreateOfferBloc>()
+                                            .add(RemoveVideoOrImageEvent(
+                                              uiFileData: uiFileData,
+                                            ));
+                                      },
+                                      icon: const Icon(
+                                        Icons.clear_rounded,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 6,
+                                    child: WhatsevrButton.filled(
+                                      shrink: true,
+                                      miniButton: true,
+                                      onPressed: () {
+                                        showWhatsevrThumbnailSelectionPage(
+                                          videoFile: uiFileData.file!,
+                                          allowPickFromGallery: false,
+                                          aspectRatios: flicksAspectRatio,
+                                        ).then((value) {
+                                          if (value != null) {}
+                                        });
+                                      },
+                                      label: 'Update Cover',
+                                    ),
                                   ),
                                 ],
                               ),
                             ],
+                            Gap(8),
                           ],
                         ],
                       ),
@@ -444,7 +452,7 @@ class CreateOfferPage extends StatelessWidget {
                               onCompleted: (file) {
                                 context
                                     .read<CreateOfferBloc>()
-                                    .add(PickVideoEvent(pickVideoFile: file));
+                                    .add(PickVideoEvent(pickedVideoFile: file));
                               },
                             );
                           },
@@ -460,6 +468,33 @@ class CreateOfferPage extends StatelessWidget {
                   );
                 },
               ),
+              const Gap(8),
+              if (state.uiFilesData.isNotEmpty)
+                WhatsevrButton.outlined(
+                  label: 'Pick image or video',
+                  onPressed: () {
+                    showWhatsevrMediaPickerChoice(
+                      onChoosingImageFromGallery: () {
+                        CustomAssetPicker.pickImageFromGallery(
+                          onCompleted: (file) {
+                            context
+                                .read<CreateOfferBloc>()
+                                .add(PickImageEvent(pickedImageFile: file));
+                          },
+                        );
+                      },
+                      onChoosingVideoFromGallery: () {
+                        CustomAssetPicker.pickVideoFromGallery(
+                          onCompleted: (file) {
+                            context
+                                .read<CreateOfferBloc>()
+                                .add(PickVideoEvent(pickedVideoFile: file));
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
               const Gap(12),
               WhatsevrFormField.generalTextField(
                 maxLength: 150,
@@ -487,221 +522,191 @@ class CreateOfferPage extends StatelessWidget {
                 customFunction: () {},
               ),
               const Gap(12),
-              Theme(
-                data: ThemeData(
-                  dividerColor: Colors.transparent,
-                ),
-                child: ExpansionTileItem.flat(
-                  childrenPadding: EdgeInsets.zero,
-                  tilePadding: EdgeInsets.zero,
-                  title: Text('More Options',
-                      style: TextStyle(color: Colors.black)),
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        showAppModalSheet(
-                          child: SearchAndTagUsersAndCommunityPage(
-                            onDone: (selectedUsersUid, selectedCommunitiesUid) {
-                              context
-                                  .read<CreateOfferBloc>()
-                                  .add(UpdateTaggedUsersAndCommunitiesEvent(
-                                    taggedUsersUid: selectedUsersUid,
-                                    taggedCommunitiesUid:
-                                        selectedCommunitiesUid,
-                                  ));
-                            },
-                          ),
-                        );
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.person, color: Colors.black),
-                          Gap(4),
-                          Text('Tag', style: TextStyle(color: Colors.black)),
-                          Spacer(),
-                          Icon(Icons.arrow_right_rounded, color: Colors.black),
-                        ],
-                      ),
-                    ),
-                    if (state.taggedUsersUid.isNotEmpty ||
-                        state.taggedCommunitiesUid.isNotEmpty) ...[
-                      const Gap(12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'Selected ',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  if (state.taggedUsersUid.isNotEmpty) ...[
-                                    TextSpan(
-                                      text:
-                                          '${state.taggedUsersUid.length} users',
-                                      style:
-                                          const TextStyle(color: Colors.blue),
-                                    ),
-                                  ],
-                                  if (state.taggedUsersUid.isNotEmpty &&
-                                      state.taggedCommunitiesUid.isNotEmpty)
-                                    const TextSpan(
-                                      text: ' and ',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  if (state
-                                      .taggedCommunitiesUid.isNotEmpty) ...[
-                                    TextSpan(
-                                      text:
-                                          '${state.taggedCommunitiesUid.length} communities',
-                                      style:
-                                          const TextStyle(color: Colors.blue),
-                                    ),
-                                  ],
-                                ],
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.read<CreateOfferBloc>().add(
-                                  const UpdateTaggedUsersAndCommunitiesEvent(
-                                      clearAll: true));
-                            },
-                            child: const Icon(
-                              Icons.clear_rounded,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                    const Gap(12),
-                    Column(
-                      children: [
-                        WhatsevrFormField.invokeCustomFunction(
-                          context: context,
-                          controller: TextEditingController(
-                            text: state.selectedAddress ?? '',
-                          ),
-                          suffixWidget: const Icon(Icons.location_on),
-                          hintText: 'Location',
-                          customFunction: () {
-                            showAppModalSheet(child: PlaceSearchByNamePage(
-                              onPlaceSelected: (placeName, lat, long) {
-                                context
-                                    .read<CreateOfferBloc>()
-                                    .add(UpdatePostAddressEvent(
-                                      address: placeName,
-                                      addressLatitude: lat,
-                                      addressLongitude: long,
-                                    ));
-                              },
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  showAppModalSheet(
+                    child: SearchAndTagUsersAndCommunityPage(
+                      onDone: (selectedUsersUid, selectedCommunitiesUid) {
+                        context
+                            .read<CreateOfferBloc>()
+                            .add(UpdateTaggedUsersAndCommunitiesEvent(
+                              taggedUsersUid: selectedUsersUid,
+                              taggedCommunitiesUid: selectedCommunitiesUid,
                             ));
-                          },
-                        ),
-                        if (state.placesNearbyResponse?.places?.isNotEmpty ??
-                            false) ...[
-                          const Gap(8),
-                          SizedBox(
-                            height: 22,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    context
-                                        .read<CreateOfferBloc>()
-                                        .add(UpdatePostAddressEvent(
-                                          address: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .displayName
-                                              ?.text,
-                                          addressLatitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.latitude,
-                                          addressLongitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.longitude,
-                                        ));
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black45,
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Text(
-                                      '${state.placesNearbyResponse?.places?[index].displayName?.text}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return const Gap(4);
-                              },
-                              itemCount:
-                                  state.placesNearbyResponse?.places?.length ??
-                                      0,
+                      },
+                    ),
+                  );
+                },
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.person, color: Colors.black),
+                    Gap(4),
+                    Text('Tag', style: TextStyle(color: Colors.black)),
+                    Spacer(),
+                    Icon(Icons.arrow_right_rounded, color: Colors.black),
+                  ],
+                ),
+              ),
+              if (state.taggedUsersUid.isNotEmpty ||
+                  state.taggedCommunitiesUid.isNotEmpty) ...[
+                const Gap(12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Selected ',
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const Gap(12),
-                    WhatsevrFormField.invokeCustomFunction(
-                      controller: TextEditingController(
-                        text: state.ctaAction ?? '',
+                            if (state.taggedUsersUid.isNotEmpty) ...[
+                              TextSpan(
+                                text: '${state.taggedUsersUid.length} users',
+                                style: const TextStyle(color: Colors.blue),
+                              ),
+                            ],
+                            if (state.taggedUsersUid.isNotEmpty &&
+                                state.taggedCommunitiesUid.isNotEmpty)
+                              const TextSpan(
+                                text: ' and ',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            if (state.taggedCommunitiesUid.isNotEmpty) ...[
+                              TextSpan(
+                                text:
+                                    '${state.taggedCommunitiesUid.length} communities',
+                                style: const TextStyle(color: Colors.blue),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                      context: context,
-                      hintText: 'User Action',
-                      customFunction: () {
-                        showAppModalSheet(
-                            child: CommonDataSearchSelectPage(
-                          showCtaActions: true,
-                          onCtaActionSelected: (p0) {
-                            context
-                                .read<CreateOfferBloc>()
-                                .emit(state.copyWith(ctaAction: p0.action));
-                          },
-                        ));
-                      },
                     ),
-                    const Gap(12),
-                    WhatsevrFormField.generalTextField(
-                      controller: context
-                          .read<CreateOfferBloc>()
-                          .ctaActionUrlController,
-                      hintText: 'Action URL',
-                      onChanged: (value) {
-                        if (state.ctaAction == null) {
-                          SmartDialog.showToast(
-                              'Please select a User action first');
-                          context
-                              .read<CreateOfferBloc>()
-                              .ctaActionUrlController
-                              .clear();
-                        }
+                    GestureDetector(
+                      onTap: () {
+                        context.read<CreateOfferBloc>().add(
+                            const UpdateTaggedUsersAndCommunitiesEvent(
+                                clearAll: true));
                       },
+                      child: const Icon(
+                        Icons.clear_rounded,
+                        color: Colors.red,
+                        size: 20,
+                      ),
                     ),
                   ],
                 ),
+              ],
+              const Gap(12),
+              Column(
+                children: [
+                  WhatsevrFormField.invokeCustomFunction(
+                    context: context,
+                    controller: TextEditingController(
+                      text: state.selectedAddress ?? '',
+                    ),
+                    suffixWidget: const Icon(Icons.location_on),
+                    hintText: 'Location',
+                    customFunction: () {
+                      showAppModalSheet(child: PlaceSearchByNamePage(
+                        onPlaceSelected: (placeName, lat, long) {
+                          context
+                              .read<CreateOfferBloc>()
+                              .add(UpdatePostAddressEvent(
+                                address: placeName,
+                                addressLatitude: lat,
+                                addressLongitude: long,
+                              ));
+                        },
+                      ));
+                    },
+                  ),
+                  if (state.placesNearbyResponse?.places?.isNotEmpty ??
+                      false) ...[
+                    const Gap(8),
+                    SizedBox(
+                      height: 22,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CreateOfferBloc>()
+                                  .add(UpdatePostAddressEvent(
+                                    address: state.placesNearbyResponse
+                                        ?.places?[index].displayName?.text,
+                                    addressLatitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.latitude,
+                                    addressLongitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.longitude,
+                                  ));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Gap(4);
+                        },
+                        itemCount:
+                            state.placesNearbyResponse?.places?.length ?? 0,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const Gap(12),
+              WhatsevrFormField.invokeCustomFunction(
+                controller: TextEditingController(
+                  text: state.ctaAction ?? '',
+                ),
+                context: context,
+                hintText: 'User Action',
+                customFunction: () {
+                  showAppModalSheet(
+                      child: CommonDataSearchSelectPage(
+                    showCtaActions: true,
+                    onCtaActionSelected: (p0) {
+                      context
+                          .read<CreateOfferBloc>()
+                          .emit(state.copyWith(ctaAction: p0.action));
+                    },
+                  ));
+                },
+              ),
+              const Gap(12),
+              WhatsevrFormField.generalTextField(
+                controller:
+                    context.read<CreateOfferBloc>().ctaActionUrlController,
+                hintText: 'Action URL',
+                onChanged: (value) {
+                  if (state.ctaAction == null) {
+                    SmartDialog.showToast('Please select a User action first');
+                    context
+                        .read<CreateOfferBloc>()
+                        .ctaActionUrlController
+                        .clear();
+                  }
+                },
               ),
               const Gap(50),
             ],

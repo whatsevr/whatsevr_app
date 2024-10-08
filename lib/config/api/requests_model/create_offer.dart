@@ -3,6 +3,7 @@ import 'dart:convert';
 class CreateOfferRequest {
   final String? title;
   final String? description;
+  final String? status;
   final String? userUid;
   final String? location;
   final List<String>? hashtags;
@@ -18,6 +19,7 @@ class CreateOfferRequest {
   CreateOfferRequest({
     this.title,
     this.description,
+    this.status,
     this.userUid,
     this.location,
     this.hashtags,
@@ -34,6 +36,7 @@ class CreateOfferRequest {
   CreateOfferRequest copyWith({
     String? title,
     String? description,
+    String? status,
     String? userUid,
     String? location,
     List<String>? hashtags,
@@ -49,6 +52,7 @@ class CreateOfferRequest {
       CreateOfferRequest(
         title: title ?? this.title,
         description: description ?? this.description,
+        status: status ?? this.status,
         userUid: userUid ?? this.userUid,
         location: location ?? this.location,
         hashtags: hashtags ?? this.hashtags,
@@ -71,6 +75,7 @@ class CreateOfferRequest {
       CreateOfferRequest(
         title: json["title"],
         description: json["description"],
+        status: json["status"],
         userUid: json["user_uid"],
         location: json["location"],
         hashtags: json["hashtags"] == null
@@ -96,6 +101,7 @@ class CreateOfferRequest {
   Map<String, dynamic> toMap() => {
         "title": title,
         "description": description,
+        "status": status,
         "user_uid": userUid,
         "location": location,
         "hashtags":

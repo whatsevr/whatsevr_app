@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/majesticons.dart';
-import 'package:iconify_flutter/icons/wpf.dart';
+import 'package:iconify_flutter/icons/ic.dart';
+
+import 'package:iconify_flutter/icons/material_symbols.dart';
+import 'package:iconify_flutter/icons/mdi.dart';
+
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
 showWhatsevrMediaPickerChoice({
@@ -51,7 +54,7 @@ class _Ui extends StatelessWidget {
               },
               title: const Text('Capture Image',
                   style: TextStyle(color: Colors.black)),
-              leading: const Iconify(Wpf.camera),
+              leading: const Iconify(Ic.baseline_camera),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -68,7 +71,7 @@ class _Ui extends StatelessWidget {
                           Icon(Icons.shield_moon_outlined,
                               color: Colors.white, size: 13),
                           Text(
-                            'Benifit: ShotOnLive tag',
+                            'Benefit: ShotOnLive tag',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -86,7 +89,7 @@ class _Ui extends StatelessWidget {
                 onChoosingImageFromGallery?.call();
               },
               title: const Text('Pick Image'),
-              leading: const Iconify(Majesticons.device_mobile),
+              leading: const Iconify(Mdi.image_search),
             ),
           if (onChoosingVideoFromCamera != null)
             ListTile(
@@ -96,7 +99,7 @@ class _Ui extends StatelessWidget {
               },
               title: const Text('Capture Video',
                   style: TextStyle(color: Colors.black)),
-              leading: const Iconify(Wpf.camera),
+              leading: const Iconify(Mdi.camcorder),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -113,7 +116,7 @@ class _Ui extends StatelessWidget {
                           Icon(Icons.shield_moon_outlined,
                               color: Colors.white, size: 13),
                           Text(
-                            'Benifit: ShotOnLive tag',
+                            'Benefit: ShotOnLive tag',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -131,7 +134,7 @@ class _Ui extends StatelessWidget {
                 onChoosingVideoFromGallery?.call();
               },
               title: const Text('Pick Video'),
-              leading: const Iconify(Majesticons.device_mobile),
+              leading: const Iconify(MaterialSymbols.video_library_rounded),
             ),
         ],
       ),

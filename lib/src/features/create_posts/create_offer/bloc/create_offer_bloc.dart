@@ -38,7 +38,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     on<CreateOfferInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
-    on<PickThumbnailEvent>(_onPickThumbnail);
+    on<ChangeVideoThumbnail>(_onChangeVideoThumbnail);
     on<PickImageEvent>(_onPickImage);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
@@ -80,7 +80,16 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
         throw BusinessException('Please select an image or video');
       }
       titleController.text = titleController.text.trim();
-      String hashtagsArea = titleController.text;
+      if (titleController.text.isEmpty) {
+        throw BusinessException('Caption is required');
+      }
+      if (titleController.text.isEmpty) {
+        throw BusinessException('Description is required');
+      }
+      if (statusController.text.isEmpty) {
+        throw BusinessException('Status is required');
+      }
+      String hashtagsArea = titleController.text + descriptionController.text;
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
@@ -91,9 +100,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       if (hashtags.length > 30) {
         throw BusinessException('Hashtags should not exceed 30');
       }
-      if (titleController.text.isEmpty) {
-        throw BusinessException('Caption is required');
-      }
+
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewOffer(
@@ -110,13 +117,32 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     PickVideoEvent event,
     Emitter<CreateOfferState> emit,
   ) async {
-    try {} catch (e, stackTrace) {
+    try {
+      FileMetaData? videoMetaData =
+          await FileMetaData.fromFile(event.pickedVideoFile);
+      final File? thumbnailFile =
+          await getThumbnailFile(videoFile: event.pickedVideoFile!);
+      FileMetaData? thumbnailMetaData =
+          await FileMetaData.fromFile(thumbnailFile);
+      emit(state.copyWith(
+        uiFilesData: [
+          ...state.uiFilesData,
+          UiFileData(
+            file: event.pickedVideoFile,
+            type: UiFileTypes.video,
+            fileMetaData: videoMetaData,
+            thumbnailFile: thumbnailFile,
+            thumbnailMetaData: thumbnailMetaData,
+          ),
+        ],
+      ));
+    } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
-  Future<void> _onPickThumbnail(
-    PickThumbnailEvent event,
+  Future<void> _onChangeVideoThumbnail(
+    ChangeVideoThumbnail event,
     Emitter<CreateOfferState> emit,
   ) async {
     try {} catch (e, stackTrace) {
@@ -171,23 +197,33 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onPickImage(
       PickImageEvent event, Emitter<CreateOfferState> emit) async {
-    try {} catch (e, stackTrace) {
+    try {
+      emit(state.copyWith(
+        uiFilesData: [
+          ...state.uiFilesData,
+          UiFileData(
+            file: event.pickedImageFile,
+            type: UiFileTypes.image,
+            fileMetaData: await FileMetaData.fromFile(event.pickedImageFile),
+          ),
+        ],
+      ));
+    } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
       RemoveVideoOrImageEvent event, Emitter<CreateOfferState> emit) {
-    emit(CreateOfferState(
-      pageArgument: state.pageArgument,
-      userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
-      selectedAddress: state.selectedAddress,
-      selectedAddressLatLongWkb: state.selectedAddressLatLongWkb,
-      taggedUsersUid: state.taggedUsersUid,
-      taggedCommunitiesUid: state.taggedCommunitiesUid,
-      ctaAction: state.ctaAction,
-      placesNearbyResponse: state.placesNearbyResponse,
-    ));
+    try {
+      emit(state.copyWith(
+        uiFilesData: state.uiFilesData
+            .where((element) => element != event.uiFileData)
+            .toList(),
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
   }
 
   // FutureOr<void> _onCreateVideoMemory(

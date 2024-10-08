@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
+import '../config/widgets/dynamic_height_views.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -41,6 +42,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               onPressed: itm.$2,
               child: Text(itm.$1),
             ),
+          SwipeAbleDynamicHeightViews(),
         ],
       ),
     );

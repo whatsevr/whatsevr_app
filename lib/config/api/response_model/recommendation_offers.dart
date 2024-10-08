@@ -58,6 +58,8 @@ class RecommendedOffer {
   final String? uid;
   final String? title;
   final String? description;
+  final String? status;
+
   final List<String>? hashtags;
   final List<String>? taggedUserUids;
   final bool? isDeleted;
@@ -86,6 +88,7 @@ class RecommendedOffer {
     this.uid,
     this.title,
     this.description,
+    this.status,
     this.hashtags,
     this.taggedUserUids,
     this.isDeleted,
@@ -115,6 +118,7 @@ class RecommendedOffer {
     String? uid,
     String? title,
     String? description,
+    String? status,
     List<String>? hashtags,
     List<String>? taggedUserUids,
     bool? isDeleted,
@@ -143,6 +147,7 @@ class RecommendedOffer {
         uid: uid ?? this.uid,
         title: title ?? this.title,
         description: description ?? this.description,
+        status: status ?? this.status,
         hashtags: hashtags ?? this.hashtags,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         isDeleted: isDeleted ?? this.isDeleted,
@@ -181,6 +186,7 @@ class RecommendedOffer {
         uid: json["uid"],
         title: json["title"],
         description: json["description"],
+        status: json["status"],
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
@@ -219,6 +225,7 @@ class RecommendedOffer {
         "uid": uid,
         "title": title,
         "description": description,
+        "status": status,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         "tagged_user_uids": taggedUserUids == null

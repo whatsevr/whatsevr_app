@@ -3,6 +3,7 @@ part of 'create_offer_bloc.dart';
 class CreateOfferState extends Equatable {
   final CreateOfferPageArgument? pageArgument;
   final List<UiFileData> uiFilesData;
+  final UiFileData? selectedUiFileData;
   final PlacesNearbyResponse? placesNearbyResponse;
   final String? userCurrentLocationLatLongWkb;
   final String? selectedAddress;
@@ -14,6 +15,7 @@ class CreateOfferState extends Equatable {
   const CreateOfferState({
     this.pageArgument,
     this.uiFilesData = const [],
+    this.selectedUiFileData,
     this.placesNearbyResponse,
     this.userCurrentLocationLatLongWkb,
     this.selectedAddress,
@@ -28,6 +30,7 @@ class CreateOfferState extends Equatable {
   List<Object?> get props => <Object?>[
         pageArgument,
         uiFilesData,
+        selectedUiFileData,
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedAddress,
@@ -41,6 +44,7 @@ class CreateOfferState extends Equatable {
   CreateOfferState copyWith({
     CreateOfferPageArgument? pageArgument,
     List<UiFileData>? uiFilesData,
+    UiFileData? selectedUiFileData,
     PlacesNearbyResponse? placesNearbyResponse,
     String? userCurrentLocationLatLongWkb,
     String? selectedAddress,
@@ -53,6 +57,7 @@ class CreateOfferState extends Equatable {
     return CreateOfferState(
       pageArgument: pageArgument ?? this.pageArgument,
       uiFilesData: uiFilesData ?? this.uiFilesData,
+      selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
       placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
@@ -69,7 +74,7 @@ class CreateOfferState extends Equatable {
 
 enum UiFileTypes { image, video }
 
-class UiFileData {
+class UiFileData extends Equatable {
   final UiFileTypes? type;
   final File? file;
   final FileMetaData? fileMetaData;
@@ -99,4 +104,8 @@ class UiFileData {
       thumbnailMetaData: thumbnailMetaData ?? this.thumbnailMetaData,
     );
   }
+
+  @override
+  List<Object?> get props =>
+      <Object?>[type, file, fileMetaData, thumbnailFile, thumbnailMetaData];
 }

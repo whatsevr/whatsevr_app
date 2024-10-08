@@ -91,6 +91,8 @@ dependencies:
   story_view_advance: ^0.2.0
   flutter_custom_tabs: ^2.1.0
   flutter_link_previewer: ^3.2.2
+  animate_do: ^3.3.4
+
 
 
 
