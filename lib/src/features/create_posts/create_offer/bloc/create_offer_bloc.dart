@@ -29,6 +29,8 @@ part 'create_offer_event.dart';
 part 'create_offer_state.dart';
 
 class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
+  final int maxVideoCount = 2;
+  final int maxImageCount = 5;
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
@@ -118,6 +120,13 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
+      int videoCount = state.uiFilesData
+          .where((element) => element.type == UiFileTypes.video)
+          .length;
+      if (videoCount >= maxVideoCount) {
+        throw BusinessException('You can only select $maxVideoCount videos');
+      }
+
       FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickedVideoFile);
       final File? thumbnailFile =

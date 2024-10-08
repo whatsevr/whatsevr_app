@@ -2,14 +2,16 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 class SwipeAbleDynamicHeightViews extends StatefulWidget {
+  ///PASS UniqueKey() TO REBUILD THE WIDGET WHENEVER NEEDED
   final List<Widget>? children;
   final Function(int)? onIndexChanged;
   final bool showDotIndicator;
-  const SwipeAbleDynamicHeightViews(
-      {super.key,
-      this.children,
-      this.onIndexChanged,
-      this.showDotIndicator = true});
+  const SwipeAbleDynamicHeightViews({
+    super.key,
+    this.children,
+    this.onIndexChanged,
+    this.showDotIndicator = true,
+  });
 
   @override
   State<SwipeAbleDynamicHeightViews> createState() =>
@@ -41,28 +43,33 @@ class _SwipeAbleDynamicHeightViewsState
   void initState() {
     super.initState();
     if (widget.children != null && widget.children!.isNotEmpty) {
-      _children = widget.children!;
+      setState(() {
+        _children = widget.children!;
+      });
     }
-    animateController.forward();
   }
 
-  late AnimationController animateController;
   @override
   Widget build(BuildContext context) {
     if (_children.isEmpty) {
       return SizedBox();
     }
+
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         //on left swipe increase index if can be increased vise versa
         if (details.velocity.pixelsPerSecond.dx < 0) {
           if (currentIndex < _children.length - 1) {
+            //if last index reached do nothing
+            if (currentIndex == _children.length - 1) return;
             setState(() {
               currentIndex++;
               widget.onIndexChanged?.call(currentIndex);
             });
           }
         } else {
+          //if first index reached do nothing
+          if (currentIndex == 0) return;
           if (currentIndex > 0) {
             setState(() {
               currentIndex--;
@@ -73,21 +80,21 @@ class _SwipeAbleDynamicHeightViewsState
       },
       child: Column(
         children: [
-          SlideInRight(
-            manualTrigger: true,
-            controller: (controller) => animateController = controller,
+          FadeIn(
+            key: UniqueKey(),
+            duration: const Duration(milliseconds: 200),
             child: _children[currentIndex],
           ),
           //dot indicator
-          if (widget.showDotIndicator)
+          if (widget.showDotIndicator && _children.length > 1)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _children.length,
                 (index) => Container(
                   margin: const EdgeInsets.all(4),
-                  width: 10,
-                  height: 10,
+                  width: 6,
+                  height: 6,
                   decoration: BoxDecoration(
                     color: currentIndex == index ? Colors.black : Colors.grey,
                     shape: BoxShape.circle,

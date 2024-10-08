@@ -14,6 +14,7 @@ import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/button.dart';
 import '../../../../../config/widgets/common_data_list.dart';
+import '../../../../../config/widgets/dynamic_height_views.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
@@ -71,368 +72,123 @@ class CreateOfferPage extends StatelessWidget {
               Builder(
                 builder: (context) {
                   if (state.uiFilesData.isNotEmpty) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          for (UiFileData uiFileData in state.uiFilesData) ...[
-                            if (uiFileData.type == UiFileTypes.image) ...[
-                              Stack(
-                                children: [
-                                  ExtendedImage.file(
-                                    uiFileData.file!,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    fit: BoxFit.contain,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
+                    return SwipeAbleDynamicHeightViews(
+                      key: UniqueKey(),
+                      children: [
+                        for (UiFileData uiFileData in state.uiFilesData) ...[
+                          if (uiFileData.type == UiFileTypes.image) ...[
+                            Stack(
+                              children: [
+                                ExtendedImage.file(
+                                  uiFileData.file!,
+                                  width: double.infinity,
+                                  fit: BoxFit.contain,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<CreateOfferBloc>()
+                                          .add(RemoveVideoOrImageEvent(
+                                            uiFileData: uiFileData,
+                                          ));
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear_rounded,
+                                      color: Colors.red,
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
+                                ),
+                              ],
+                            ),
+                          ],
+                          if (uiFileData.type == UiFileTypes.video) ...[
+                            Stack(
+                              children: [
+                                ExtendedImage.file(
+                                  uiFileData.thumbnailFile!,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: Center(
                                     child: IconButton(
                                       onPressed: () {
-                                        context
-                                            .read<CreateOfferBloc>()
-                                            .add(RemoveVideoOrImageEvent(
-                                              uiFileData: uiFileData,
-                                            ));
+                                        AppNavigationService.newRoute(
+                                          RoutesName.fullVideoPlayer,
+                                          extras: MediaPreviewerPageArguments(
+                                            videoUrl: uiFileData.file!.path,
+                                          ),
+                                        );
                                       },
                                       icon: const Icon(
-                                        Icons.clear_rounded,
-                                        color: Colors.red,
+                                        Icons.play_circle_fill_rounded,
+                                        color: Colors.white,
+                                        size: 50,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ],
-                            if (uiFileData.type == UiFileTypes.video) ...[
-                              Stack(
-                                children: [
-                                  ExtendedImage.file(
-                                    uiFileData.thumbnailFile!,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    fit: BoxFit.cover,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(10),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      context
+                                          .read<CreateOfferBloc>()
+                                          .add(RemoveVideoOrImageEvent(
+                                            uiFileData: uiFileData,
+                                          ));
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear_rounded,
+                                      color: Colors.red,
                                     ),
                                   ),
-                                  Positioned.fill(
-                                    child: Center(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          AppNavigationService.newRoute(
-                                            RoutesName.fullVideoPlayer,
-                                            extras: MediaPreviewerPageArguments(
-                                              videoUrl: uiFileData.file!.path,
-                                            ),
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Icons.play_circle_fill_rounded,
-                                          color: Colors.white,
-                                          size: 50,
-                                        ),
-                                      ),
-                                    ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 6,
+                                  child: WhatsevrButton.filled(
+                                    shrink: true,
+                                    miniButton: true,
+                                    onPressed: () {
+                                      showWhatsevrThumbnailSelectionPage(
+                                        videoFile: uiFileData.file!,
+                                        allowPickFromGallery: false,
+                                        aspectRatios: flicksAspectRatio,
+                                      ).then((value) {
+                                        if (value != null) {
+                                          context
+                                              .read<CreateOfferBloc>()
+                                              .add(ChangeVideoThumbnail(
+                                                pickedThumbnailFile: value,
+                                                uiFileData: uiFileData,
+                                              ));
+                                        }
+                                      });
+                                    },
+                                    label: 'Update Cover',
                                   ),
-                                  Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        context
-                                            .read<CreateOfferBloc>()
-                                            .add(RemoveVideoOrImageEvent(
-                                              uiFileData: uiFileData,
-                                            ));
-                                      },
-                                      icon: const Icon(
-                                        Icons.clear_rounded,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 6,
-                                    child: WhatsevrButton.filled(
-                                      shrink: true,
-                                      miniButton: true,
-                                      onPressed: () {
-                                        showWhatsevrThumbnailSelectionPage(
-                                          videoFile: uiFileData.file!,
-                                          allowPickFromGallery: false,
-                                          aspectRatios: flicksAspectRatio,
-                                        ).then((value) {
-                                          if (value != null) {}
-                                        });
-                                      },
-                                      label: 'Update Cover',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                            Gap(8),
+                                ),
+                              ],
+                            ),
                           ],
                         ],
-                      ),
+                      ],
                     );
                   }
-                  // if (fileData.isVideoMemory == true) {
-                  //   return Column(
-                  //     children: <Widget>[
-                  //       AspectRatio(
-                  //         aspectRatio:
-                  //             state.videoMetaData?.aspectRatio ?? 9 / 12,
-                  //         child: Builder(
-                  //           builder: (BuildContext context) {
-                  //             double baseHeight = double.infinity;
-                  //             if (state.thumbnailFile != null) {
-                  //               return Stack(
-                  //                 children: <Widget>[
-                  //                   ExtendedImage.file(
-                  //                     state.thumbnailFile!,
-                  //                     width: double.infinity,
-                  //                     height: baseHeight,
-                  //                     fit: BoxFit.cover,
-                  //                     shape: BoxShape.rectangle,
-                  //                     borderRadius: const BorderRadius.all(
-                  //                         Radius.circular(10)),
-                  //                   ),
-                  //                   Positioned.fill(
-                  //                     child: Center(
-                  //                       child: IconButton(
-                  //                         onPressed: () {
-                  //                           AppNavigationService.newRoute(
-                  //                             RoutesName.fullVideoPlayer,
-                  //                             extras:
-                  //                                  MediaPreviewerPageArguments(
-                  //                               videoUrl: state.videoFile!.path,
-                  //                             ),
-                  //                           );
-                  //                          },
-                  //                         icon: const Icon(
-                  //                           Icons.play_circle_fill_rounded,
-                  //                            color: Colors.white,
-                  //                           size: 50,
-                  //                         ),
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                   Positioned(
-                  //                     top: 0,
-                  //                     right: 0,
-                  //                     child: IconButton(
-                  //                       onPressed: () {
-                  //                           context.read<CreateOfferBloc>().add(
-                  //                             const RemoveVideoOrImageEvent());
-                  //                       },
-                  //                       icon: const Icon(
-                  //                         Icons.clear_rounded,
-                  //                         color: Colors.red,
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                   if (state.videoMetaData != null)
-                  //                     GestureDetector(
-                  //                       onTap: () {
-                  //                         FileMetaData.showMetaData(
-                  //                             state.videoMetaData);
-                  //                       },
-                  //                       child: Container(
-                  //                         padding: const EdgeInsets.all(4),
-                  //                         decoration: BoxDecoration(
-                  //                           color:
-                  //                               Colors.black.withOpacity(0.5),
-                  //                           borderRadius:
-                  //                               const BorderRadius.only(
-                  //                             topLeft: Radius.circular(10),
-                  //                             bottomRight: Radius.circular(10),
-                  //                           ),
-                  //                         ),
-                  //                         child: Text(
-                  //                           '${state.videoMetaData!.durationInText} | ${state.videoMetaData!.sizeInText} | ${state.videoMetaData!.width}x${state.videoMetaData!.height}',
-                  //                           style: const TextStyle(
-                  //                             fontSize: 10,
-                  //                             color: Colors.white,
-                  //                           ),
-                  //                         ),
-                  //                       ),
-                  //                     ),
-                  //                 ],
-                  //               );
-                  //             }
-                  //             if (fileData.videoFile != null) {
-                  //               return MaterialButton(
-                  //                 onPressed: () {
-                  //                   showWhatsevrThumbnailSelectionPage(
-                  //                     videoFile: state.videoFile!,
-                  //                     allowPickFromGallery: false,
-                  //                     aspectRatios: flicksAspectRatio,
-                  //                   ).then((value) {
-                  //                     if (value != null) {
-                  //                       context
-                  //                           .read<CreateOfferBloc>()
-                  //                           .add(PickThumbnailEvent(
-                  //                             pickedThumbnailFile: value,
-                  //                           ));
-                  //                     }
-                  //                   });
-                  //                 },
-                  //                 minWidth: double.infinity,
-                  //                 height: baseHeight,
-                  //                 color: Colors.white10,
-                  //                 shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(10),
-                  //                 ),
-                  //               );
-                  //             }
-                  //             return GestureDetector(
-                  //               behavior: HitTestBehavior.translucent,
-                  //               onTap: () {
-                  //                 CustomAssetPicker.pickVideoFromGallery(
-                  //                   onCompleted: (file) {
-                  //                     context.read<CreateOfferBloc>().add(
-                  //                         PickVideoEvent(pickVideoFile: file));
-                  //                   },
-                  //                 );
-                  //               },
-                  //               child: Container(
-                  //                 width: double.infinity,
-                  //                 height: baseHeight,
-                  //                 decoration: const BoxDecoration(
-                  //                   color: Colors.black,
-                  //                   borderRadius: BorderRadius.all(
-                  //                     Radius.circular(10),
-                  //                   ),
-                  //                 ),
-                  //                 child: const Column(
-                  //                   mainAxisAlignment: MainAxisAlignment.center,
-                  //                   children: <Widget>[
-                  //                     Icon(Icons.video_file_rounded,
-                  //                         color: Colors.white, size: 50),
-                  //                     Text('Add a video',
-                  //                         style:
-                  //                             TextStyle(color: Colors.white)),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           },
-                  //         ),
-                  //       ),
-                  //       if (fileData.videoFile != null ||
-                  //           fileData.thumbnailFile != null)
-                  //         Row(
-                  //           children: <Widget>[
-                  //             const Spacer(),
-                  //             if (state.videoFile != null &&
-                  //                 state.thumbnailFile != null)
-                  //               WhatsevrButton.filled(
-                  //                 shrink: true,
-                  //                 miniButton: true,
-                  //                 onPressed: () {
-                  //                   showWhatsevrThumbnailSelectionPage(
-                  //                     videoFile: state.videoFile!,
-                  //                     aspectRatios: flicksAspectRatio,
-                  //                   ).then((value) {
-                  //                     if (value != null) {
-                  //                       context
-                  //                           .read<CreateOfferBloc>()
-                  //                           .add(PickThumbnailEvent(
-                  //                             pickedThumbnailFile: value,
-                  //                           ));
-                  //                     }
-                  //                   });
-                  //                 },
-                  //                 label: 'Update Thumb',
-                  //               ),
-                  //             if (state.videoFile != null) ...[
-                  //               const Gap(6),
-                  //               WhatsevrButton.filled(
-                  //                 miniButton: true,
-                  //                 shrink: true,
-                  //                 onPressed: () {
-                  //                   CustomAssetPicker.pickVideoFromGallery(
-                  //                     onCompleted: (file) {
-                  //                       context.read<CreateOfferBloc>().add(
-                  //                           PickVideoEvent(
-                  //                               pickVideoFile: file));
-                  //                     },
-                  //                   );
-                  //                 },
-                  //                 label: 'Change Video',
-                  //               )
-                  //             ],
-                  //           ],
-                  //         ),
-                  //     ],
-                  //   );
-                  // }
-                  // if (fileData.isImageMemory == true) {
-                  //   return Column(
-                  //     children: [
-                  //       Stack(
-                  //         children: [
-                  //           ExtendedImage.file(
-                  //             state.imageFile!,
-                  //             width: double.infinity,
-                  //             fit: BoxFit.contain,
-                  //             shape: BoxShape.rectangle,
-                  //             borderRadius:
-                  //                 const BorderRadius.all(Radius.circular(10)),
-                  //           ),
-                  //           //delete
-                  //           Positioned(
-                  //             top: 0,
-                  //             right: 0,
-                  //             child: IconButton(
-                  //               onPressed: () {
-                  //                 context
-                  //                     .read<CreateOfferBloc>()
-                  //                     .add(const RemoveVideoOrImageEvent());
-                  //               },
-                  //               icon: const Icon(
-                  //                 Icons.clear_rounded,
-                  //                 color: Colors.red,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //       if (state.imageFile != null)
-                  //         Row(
-                  //           children: <Widget>[
-                  //             const Spacer(),
-                  //             WhatsevrButton.filled(
-                  //               miniButton: true,
-                  //               shrink: true,
-                  //               onPressed: () {
-                  //                 CustomAssetPicker.pickImageFromGallery(
-                  //                   onCompleted: (file) {
-                  //                     context
-                  //                         .read<CreateOfferBloc>()
-                  //                         .add(PickImageEvent(
-                  //                           pickedImageFile: file,
-                  //                         ));
-                  //                   },
-                  //                 );
-                  //               },
-                  //               label: 'Change Image',
-                  //             ),
-                  //           ],
-                  //         ),
-                  //     ],
-                  //   );
-                  // }
+
                   return AspectRatio(
                     aspectRatio: WhatsevrAspectRatio.square.ratio,
                     child: MaterialButton(
@@ -469,7 +225,10 @@ class CreateOfferPage extends StatelessWidget {
                 },
               ),
               const Gap(8),
-              if (state.uiFilesData.isNotEmpty)
+              if (state.uiFilesData.isNotEmpty &&
+                  state.uiFilesData.length !=
+                      context.read<CreateOfferBloc>().maxVideoCount +
+                          context.read<CreateOfferBloc>().maxImageCount)
                 WhatsevrButton.outlined(
                   label: 'Pick image or video',
                   onPressed: () {

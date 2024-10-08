@@ -28,11 +28,13 @@ class PickVideoEvent extends CreateOfferEvent {
 }
 
 class ChangeVideoThumbnail extends CreateOfferEvent {
+  final UiFileData uiFileData;
   final File? pickedThumbnailFile;
-  const ChangeVideoThumbnail({required this.pickedThumbnailFile});
+  const ChangeVideoThumbnail(
+      {required this.pickedThumbnailFile, required this.uiFileData});
 
   @override
-  List<Object?> get props => <Object?>[pickedThumbnailFile];
+  List<Object?> get props => <Object?>[pickedThumbnailFile, uiFileData];
 }
 
 class PickImageEvent extends CreateOfferEvent {
