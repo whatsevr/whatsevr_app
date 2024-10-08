@@ -154,7 +154,20 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     ChangeVideoThumbnail event,
     Emitter<CreateOfferState> emit,
   ) async {
-    try {} catch (e, stackTrace) {
+    try {
+      final FileMetaData? thumbnailMetaData =
+          await FileMetaData.fromFile(event.pickedThumbnailFile);
+      emit(state.copyWith(
+        uiFilesData: state.uiFilesData
+            .map((e) => e == event.uiFileData
+                ? e.copyWith(
+                    thumbnailFile: event.pickedThumbnailFile,
+                    thumbnailMetaData: thumbnailMetaData,
+                  )
+                : e)
+            .toList(),
+      ));
+    } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
