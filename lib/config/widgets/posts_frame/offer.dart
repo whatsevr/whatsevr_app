@@ -74,192 +74,217 @@ class OfferPostFrame extends StatelessWidget {
         children: <Widget>[
           PadHorizontal(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   '$title',
-                ),
-                Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                      backgroundImage: ExtendedNetworkImageProvider(
-                        avatarUrl ?? MockData.imageAvatar,
-                        cache: true,
-                      ),
-                    ),
-                    const Gap(8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            '$username',
-                          ),
-                          const Gap(4),
-                          Row(
-                            children: [
-                              Text(
-                                '$username',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Text(
-                                ' • $timeAgo',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              if (views != null && views! > 0)
-                                Text(
-                                  ' • ${formatCountToKMBTQ(views)} views',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
                 const Gap(8),
-                Row(
-                  children: <Widget>[
-                    const AnimatedLikeIconButton(),
-                    Text(likes == null || likes == 0
-                        ? ''
-                        : formatCountToKMBTQ(likes) ?? ''),
-                    IconButton(
-                      icon: const Iconify(Octicon.comment_24),
-                      onPressed: () {},
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Text(
+                    '$status',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
                     ),
-                    Text(comments == null || comments == 0
-                        ? ''
-                        : formatCountToKMBTQ(comments) ?? ''),
-                    IconButton(
-                      icon: const Iconify(La.share),
-                      onPressed: () {},
-                    ),
-                    Text(shares == null || shares == 0
-                        ? ''
-                        : formatCountToKMBTQ(shares) ?? ''),
-                    const Spacer(),
-                    const TwoStateWidget(
-                      firstStateUi: Iconify(Ph.bookmark_simple_thin),
-                      secondStateUi: Iconify(Ph.bookmark_fill),
-                    ),
-                    IconButton(
-                      icon: const Iconify(SystemUicons.menu_vertical),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <ListTile>[
-                                ListTile(
-                                  title: Text('View Account'),
-                                  leading: Icon(Icons.account_box_rounded),
-                                ),
-                                ListTile(
-                                  title: Text('Report'),
-                                  leading: Icon(Icons.report),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
+                  ),
+                ),
+                const Gap(8),
+                Text(
+                  '$description',
+                  maxLines: filesData?.isNotEmpty ?? false ? 2 : 12,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (filesData?.isNotEmpty ?? false) ...[
+            const Gap(8),
+            Stack(
+              children: <Widget>[
+                SwipeAbleDynamicHeightViews(
+                  children: [
+                    if (filesData != null && filesData!.isNotEmpty)
+                      for (final FilesDatum file in filesData!)
+                        if (file.type == 'image')
+                          ExtendedImage.network(
+                            file.imageUrl ?? MockData.imagePlaceholder("Offer"),
+                            width: double.infinity,
+                            fit: BoxFit.contain,
+                          )
+                        else if (file.type == 'video')
+                          WTVMiniPlayer(
+                            videoUrl: file.videoUrl,
+                            thumbnail: file.videoThumbnailUrl,
+                            thumbnailHeightAspectRatio:
+                                thumbnailHeightAspectRatio,
+                            onTapFreeArea: () {
+                              onRequestOfOfferDetails?.call();
+                            },
+                            loopVideo: true,
+                          ),
                   ],
+                ),
+                if (totalTags != null && totalTags! > 0)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (totalTags != null && totalTags! > 0) {
+                          onTapTags?.call();
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            const Icon(
+                              Icons.person,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                            const Gap(4),
+                            Text(
+                              totalTags == null || totalTags == 0
+                                  ? ''
+                                  : totalTags.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            )
+          ],
+          const Gap(8),
+          PadHorizontal(
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage: ExtendedNetworkImageProvider(
+                    avatarUrl ?? MockData.imageAvatar,
+                    cache: true,
+                  ),
+                ),
+                const Gap(8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Full Name',
+                      ),
+                      const Gap(4),
+                      Row(
+                        children: [
+                          Text(
+                            '$username',
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            ' • $timeAgo',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          if (views != null && views! > 0)
+                            Text(
+                              ' • ${formatCountToKMBTQ(views)} views',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
           const Gap(8),
-          Stack(
+          Row(
             children: <Widget>[
-              SwipeAbleDynamicHeightViews(
-                children: [
-                  if (filesData != null && filesData!.isNotEmpty)
-                    for (final FilesDatum file in filesData!)
-                      if (file.type == 'image')
-                        ExtendedImage.network(
-                          file.imageUrl ?? MockData.imagePlaceholder("Offer"),
-                          width: double.infinity,
-                          fit: BoxFit.contain,
-                        )
-                      else if (file.type == 'video')
-                        WTVMiniPlayer(
-                          videoUrl: file.videoUrl,
-                          thumbnail: file.videoThumbnailUrl,
-                          thumbnailHeightAspectRatio:
-                              thumbnailHeightAspectRatio,
-                          onTapFreeArea: () {
-                            onRequestOfOfferDetails?.call();
-                          },
-                          loopVideo: true,
-                        ),
-                  // ExtendedImage.network(
-                  //   thumbnail ?? MockData.imagePlaceholder("Offer"),
-                  //   width: double.infinity,
-                  //   fit: BoxFit.contain,
-                  // ),
-                  // WTVMiniPlayer(
-                  //   videoUrl: videoUrl,
-                  //   thumbnail: thumbnail,
-                  //   thumbnailHeightAspectRatio: thumbnailHeightAspectRatio,
-                  //   onTapFreeArea: () {
-                  //     onRequestOfOfferDetails?.call();
-                  //   },
-                  //   loopVideo: true,
-                  // ),
-                ],
+              Gap(8),
+              const AnimatedLikeIconButton(),
+              Text(likes == null || likes == 0
+                  ? ''
+                  : formatCountToKMBTQ(likes) ?? ''),
+              IconButton(
+                icon: const Iconify(Octicon.comment_24),
+                onPressed: () {},
               ),
-              if (totalTags != null && totalTags! > 0)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: () {
-                      if (totalTags != null && totalTags! > 0) {
-                        onTapTags?.call();
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 16,
+              Text(comments == null || comments == 0
+                  ? ''
+                  : formatCountToKMBTQ(comments) ?? ''),
+              IconButton(
+                icon: const Iconify(La.share),
+                onPressed: () {},
+              ),
+              Text(shares == null || shares == 0
+                  ? ''
+                  : formatCountToKMBTQ(shares) ?? ''),
+              const Spacer(),
+              const TwoStateWidget(
+                firstStateUi: Iconify(Ph.bookmark_simple_thin),
+                secondStateUi: Iconify(Ph.bookmark_fill),
+              ),
+              IconButton(
+                icon: const Iconify(SystemUicons.menu_vertical),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <ListTile>[
+                          ListTile(
+                            title: Text('View Account'),
+                            leading: Icon(Icons.account_box_rounded),
                           ),
-                          const Gap(4),
-                          Text(
-                            totalTags == null || totalTags == 0
-                                ? ''
-                                : totalTags.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          ListTile(
+                            title: Text('Report'),
+                            leading: Icon(Icons.report),
                           ),
                         ],
-                      ),
-                    ),
-                  ),
-                ),
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
-          const Gap(8),
         ],
       ),
     );

@@ -36,7 +36,7 @@ class ExplorePageOffersPage extends StatelessWidget {
       builder: (BuildContext context, List<RecommendedOffer>? data) {
         return MyRefreshIndicator(
           onPullDown: () async {
-            context.read<ExploreBloc>().add(LoadVideosEvent());
+            context.read<ExploreBloc>().add(LoadOffersEvent());
             await Future<void>.delayed(const Duration(seconds: 2));
           },
           child: ListView.separated(
@@ -44,7 +44,8 @@ class ExplorePageOffersPage extends StatelessWidget {
             controller: scrollController,
             shrinkWrap: data == null || data.isEmpty,
             itemCount: data?.length ?? 3,
-            separatorBuilder: (BuildContext context, int index) => const Gap(8),
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
             itemBuilder: (BuildContext context, int index) {
               RecommendedOffer offer = data![index];
 
