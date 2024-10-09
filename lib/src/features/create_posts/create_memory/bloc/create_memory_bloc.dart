@@ -105,7 +105,6 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
           sizeBytes: state.videoMetaData?.sizeInBytes,
         ),
         postData: PostData(
-          caption: captionController.text,
           isVideo: state.isVideoMemory,
           isImage: state.isImageMemory,
           userUid: await AuthUserDb.getLastLoggedUserUid(),

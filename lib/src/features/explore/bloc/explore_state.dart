@@ -5,11 +5,15 @@ class ExploreState extends Equatable {
   final List<RecommendedVideo>? recommendationVideos;
   final PaginationData? memoryPaginationData;
   final List<RecommendedMemory>? recommendationMemories;
+  final PaginationData? offersPaginationData;
+  final List<RecommendedOffer>? recommendationOffers;
   const ExploreState({
     this.recommendationVideos,
     this.videoPaginationData,
     this.recommendationMemories,
     this.memoryPaginationData,
+    this.offersPaginationData,
+    this.recommendationOffers,
   });
 
   @override
@@ -17,7 +21,9 @@ class ExploreState extends Equatable {
         recommendationVideos,
         videoPaginationData,
         recommendationMemories,
-        memoryPaginationData
+        memoryPaginationData,
+        offersPaginationData,
+        recommendationOffers,
       ];
 
   ExploreState copyWith({
@@ -25,6 +31,8 @@ class ExploreState extends Equatable {
     PaginationData? videoPaginationData,
     List<RecommendedMemory>? recommendationMemories,
     PaginationData? memoryPaginationData,
+    List<RecommendedOffer>? recommendationOffers,
+    PaginationData? offersPaginationData,
   }) {
     return ExploreState(
       recommendationVideos: recommendationVideos ?? this.recommendationVideos,
@@ -32,6 +40,8 @@ class ExploreState extends Equatable {
       recommendationMemories:
           recommendationMemories ?? this.recommendationMemories,
       memoryPaginationData: memoryPaginationData ?? this.memoryPaginationData,
+      recommendationOffers: recommendationOffers ?? this.recommendationOffers,
+      offersPaginationData: offersPaginationData ?? this.offersPaginationData,
     );
   }
 }

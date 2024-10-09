@@ -32,3 +32,15 @@ class LoadMoreMemoriesEvent extends ExploreEvent {
   @override
   List<Object?> get props => <Object?>[page];
 }
+
+class LoadOffersEvent extends ExploreEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreOffersEvent extends ExploreEvent {
+  final int? page;
+  const LoadMoreOffersEvent({required this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

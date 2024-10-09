@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class SanityCheckNewOfferRequest {
-  final MediaMetaData? mediaMetaData;
+  final List<MediaMetaDatum>? mediaMetaData;
   final PostData? postData;
 
   SanityCheckNewOfferRequest({
@@ -10,7 +10,7 @@ class SanityCheckNewOfferRequest {
   });
 
   SanityCheckNewOfferRequest copyWith({
-    MediaMetaData? mediaMetaData,
+    List<MediaMetaDatum>? mediaMetaData,
     PostData? postData,
   }) =>
       SanityCheckNewOfferRequest(
@@ -26,43 +26,46 @@ class SanityCheckNewOfferRequest {
   factory SanityCheckNewOfferRequest.fromMap(Map<String, dynamic> json) =>
       SanityCheckNewOfferRequest(
         mediaMetaData: json["media_meta_data"] == null
-            ? null
-            : MediaMetaData.fromMap(json["media_meta_data"]),
+            ? []
+            : List<MediaMetaDatum>.from(
+                json["media_meta_data"]!.map((x) => MediaMetaDatum.fromMap(x))),
         postData: json["post_data"] == null
             ? null
             : PostData.fromMap(json["post_data"]),
       );
 
   Map<String, dynamic> toMap() => {
-        "media_meta_data": mediaMetaData?.toMap(),
+        "media_meta_data": mediaMetaData == null
+            ? []
+            : List<dynamic>.from(mediaMetaData!.map((x) => x.toMap())),
         "post_data": postData?.toMap(),
       };
 }
 
-class MediaMetaData {
-  final dynamic videoDurationSec;
+class MediaMetaDatum {
+  final int? videoDurationSec;
   final int? sizeBytes;
 
-  MediaMetaData({
+  MediaMetaDatum({
     this.videoDurationSec,
     this.sizeBytes,
   });
 
-  MediaMetaData copyWith({
-    dynamic videoDurationSec,
+  MediaMetaDatum copyWith({
+    int? videoDurationSec,
     int? sizeBytes,
   }) =>
-      MediaMetaData(
+      MediaMetaDatum(
         videoDurationSec: videoDurationSec ?? this.videoDurationSec,
         sizeBytes: sizeBytes ?? this.sizeBytes,
       );
 
-  factory MediaMetaData.fromJson(String str) =>
-      MediaMetaData.fromMap(json.decode(str));
+  factory MediaMetaDatum.fromJson(String str) =>
+      MediaMetaDatum.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory MediaMetaData.fromMap(Map<String, dynamic> json) => MediaMetaData(
+  factory MediaMetaDatum.fromMap(Map<String, dynamic> json) => MediaMetaDatum(
         videoDurationSec: json["video_duration_sec"],
         sizeBytes: json["size_bytes"],
       );
@@ -74,32 +77,24 @@ class MediaMetaData {
 }
 
 class PostData {
-  final dynamic isVideo;
-  final bool? isImage;
   final String? userUid;
-  final String? caption;
+  final String? communityUid;
   final String? postCreatorType;
 
   PostData({
-    this.isVideo,
-    this.isImage,
     this.userUid,
-    this.caption,
+    this.communityUid,
     this.postCreatorType,
   });
 
   PostData copyWith({
-    dynamic isVideo,
-    bool? isImage,
     String? userUid,
-    String? caption,
+    String? communityUid,
     String? postCreatorType,
   }) =>
       PostData(
-        isVideo: isVideo ?? this.isVideo,
-        isImage: isImage ?? this.isImage,
         userUid: userUid ?? this.userUid,
-        caption: caption ?? this.caption,
+        communityUid: communityUid ?? this.communityUid,
         postCreatorType: postCreatorType ?? this.postCreatorType,
       );
 
@@ -108,18 +103,14 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
-        isVideo: json["is_video"],
-        isImage: json["is_image"],
         userUid: json["user_uid"],
-        caption: json["caption"],
+        communityUid: json["community_uid"],
         postCreatorType: json["post_creator_type"],
       );
 
   Map<String, dynamic> toMap() => {
-        "is_video": isVideo,
-        "is_image": isImage,
         "user_uid": userUid,
-        "caption": caption,
+        "community_uid": communityUid,
         "post_creator_type": postCreatorType,
       };
 }

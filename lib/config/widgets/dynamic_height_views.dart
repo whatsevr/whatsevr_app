@@ -18,6 +18,8 @@ class SwipeAbleDynamicHeightViews extends StatefulWidget {
       _SwipeAbleDynamicHeightViewsState();
 }
 
+bool currentSwipeIsLeft = false;
+
 class _SwipeAbleDynamicHeightViewsState
     extends State<SwipeAbleDynamicHeightViews> {
   List<Widget> _children = <Widget>[
@@ -63,6 +65,7 @@ class _SwipeAbleDynamicHeightViewsState
             //if last index reached do nothing
             if (currentIndex == _children.length - 1) return;
             setState(() {
+              currentSwipeIsLeft = true;
               currentIndex++;
               widget.onIndexChanged?.call(currentIndex);
             });
@@ -72,6 +75,7 @@ class _SwipeAbleDynamicHeightViewsState
           if (currentIndex == 0) return;
           if (currentIndex > 0) {
             setState(() {
+              currentSwipeIsLeft = false;
               currentIndex--;
               widget.onIndexChanged?.call(currentIndex);
             });
@@ -80,11 +84,18 @@ class _SwipeAbleDynamicHeightViewsState
       },
       child: Column(
         children: [
-          FadeIn(
-            key: UniqueKey(),
-            duration: const Duration(milliseconds: 200),
-            child: _children[currentIndex],
-          ),
+          if (currentSwipeIsLeft)
+            SlideInRight(
+              key: UniqueKey(),
+              duration: const Duration(milliseconds: 200),
+              child: _children[currentIndex],
+            )
+          else
+            SlideInLeft(
+              key: UniqueKey(),
+              duration: const Duration(milliseconds: 200),
+              child: _children[currentIndex],
+            ),
           //dot indicator
           if (widget.showDotIndicator && _children.length > 1)
             Row(

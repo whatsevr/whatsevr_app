@@ -82,23 +82,19 @@ class MediaMetaData {
 class PostData {
   final String? postCreatorType;
   final String? userUid;
-  final String? title;
 
   PostData({
     this.postCreatorType,
     this.userUid,
-    this.title,
   });
 
   PostData copyWith({
     String? postCreatorType,
     String? userUid,
-    String? title,
   }) =>
       PostData(
         postCreatorType: postCreatorType ?? this.postCreatorType,
         userUid: userUid ?? this.userUid,
-        title: title ?? this.title,
       );
 
   factory PostData.fromJson(String str) => PostData.fromMap(json.decode(str));
@@ -108,12 +104,10 @@ class PostData {
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
         postCreatorType: json["post_creator_type"],
         userUid: json["user_uid"],
-        title: json["title"],
       );
 
   Map<String, dynamic> toMap() => {
         "post_creator_type": postCreatorType,
         "user_uid": userUid,
-        "title": title,
       };
 }

@@ -49,7 +49,7 @@ class ProductGuides {
     List<Widget> guides = [
       const Text(
           'Select portrait or landscape video or image to create a offer.'),
-      const Text('Minimum video duration is 15 sec now.'),
+      const Text('Minimum video duration is 10 sec now.'),
       const Text('Maximum video duration is 5 min now.'),
     ];
     showAppModalSheet(

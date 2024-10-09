@@ -108,7 +108,6 @@ class CreateVideoPostBloc
                 sizeBytes: state.videoMetaData?.sizeInBytes,
               ),
               postData: PostData(
-                title: titleController.text,
                 userUid: await AuthUserDb.getLastLoggedUserUid(),
                 postCreatorType: state.pageArgument?.postCreatorType.value,
               )));

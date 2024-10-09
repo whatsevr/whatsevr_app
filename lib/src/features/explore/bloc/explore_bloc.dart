@@ -10,6 +10,7 @@ import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dar
 import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/recommendations.dart';
 import '../../../../config/api/response_model/recommendation_memories.dart';
+import '../../../../config/api/response_model/recommendation_offers.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';
@@ -27,8 +28,14 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
             isLoading: false,
             noMoreData: false,
           ),
+          offersPaginationData: PaginationData(
+            currentPage: 1,
+            isLoading: false,
+            noMoreData: false,
+          ),
           recommendationVideos: [],
           recommendationMemories: [],
+          recommendationOffers: [],
         )) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
@@ -36,6 +43,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
     on<LoadMemoriesEvent>(_loadMemories);
     on<LoadMoreMemoriesEvent>(_onLoadMoreMemories);
+    on<LoadOffersEvent>(_loadOffers);
+    on<LoadMoreOffersEvent>(_onLoadMoreOffers);
   }
 
   Future<void> _onInitial(
@@ -44,6 +53,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   ) async {
     add(LoadVideosEvent());
     add(LoadMemoriesEvent());
+    add(LoadOffersEvent());
   }
 
   FutureOr<void> _loadVideos(
@@ -154,6 +164,64 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           memoryPaginationData: state.memoryPaginationData?.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadOffers(
+      LoadOffersEvent event, Emitter<ExploreState> emit) async {
+    try {
+      RecommendationOffersResponse? recommendationOffers =
+          await RecommendationApi.publicOffers(
+        page: 1,
+      );
+      emit(
+        state.copyWith(
+          recommendationOffers: recommendationOffers?.recommendedOffers,
+          offersPaginationData: state.offersPaginationData?.copyWith(
+            isLoading: false,
+            currentPage: 1,
+            noMoreData: recommendationOffers?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMoreOffers(
+      LoadMoreOffersEvent event, Emitter<ExploreState> emit) async {
+    if (state.offersPaginationData?.isLoading == true ||
+        state.offersPaginationData?.noMoreData == true) return;
+    try {
+      emit(
+        state.copyWith(
+            offersPaginationData:
+                state.offersPaginationData?.copyWith(isLoading: true)),
+      );
+      RecommendationOffersResponse? recommendationOffers =
+          await RecommendationApi.publicOffers(
+        page: event.page!,
+      );
+
+      emit(state.copyWith(
+        recommendationOffers: state.recommendationOffers! +
+            (recommendationOffers?.recommendedOffers ?? []),
+        offersPaginationData: state.offersPaginationData?.copyWith(
+          currentPage: event.page,
+          isLoading: false,
+          noMoreData: recommendationOffers?.lastPage,
+        ),
+      ));
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          offersPaginationData: state.offersPaginationData?.copyWith(
             isLoading: false,
           ),
         ),

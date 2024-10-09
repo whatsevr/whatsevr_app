@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/media/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/memories/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/offers/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
@@ -42,7 +43,12 @@ class ExplorePage extends StatelessWidget {
                   scrollController: searchBoxHideController,
                 )
               ),
-              ('Offers', const Text('Offers')),
+              (
+                'Offers',
+                ExplorePageOffersPage(
+                  scrollController: searchBoxHideController,
+                )
+              ),
               (
                 'Memories',
                 ExplorePageMemoriesPage(
