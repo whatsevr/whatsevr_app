@@ -7,6 +7,7 @@ class CreateOfferState extends Equatable {
   final PlacesNearbyResponse? placesNearbyResponse;
   final String? userCurrentLocationLatLongWkb;
   final String? selectedAddress;
+  final String? selectedTargetAddress;
   final String? selectedAddressLatLongWkb;
   final List<String> taggedUsersUid;
   final List<String> taggedCommunitiesUid;
@@ -19,6 +20,7 @@ class CreateOfferState extends Equatable {
     this.placesNearbyResponse,
     this.userCurrentLocationLatLongWkb,
     this.selectedAddress,
+    this.selectedTargetAddress,
     this.selectedAddressLatLongWkb,
     this.taggedUsersUid = const [],
     this.taggedCommunitiesUid = const [],
@@ -34,6 +36,7 @@ class CreateOfferState extends Equatable {
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedAddress,
+        selectedTargetAddress,
         selectedAddressLatLongWkb,
         taggedUsersUid,
         taggedCommunitiesUid,
@@ -48,6 +51,7 @@ class CreateOfferState extends Equatable {
     PlacesNearbyResponse? placesNearbyResponse,
     String? userCurrentLocationLatLongWkb,
     String? selectedAddress,
+    String? selectedTargetAddress,
     String? selectedAddressLatLongWkb,
     List<String>? taggedUsersUid,
     List<String>? taggedCommunitiesUid,
@@ -62,6 +66,8 @@ class CreateOfferState extends Equatable {
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
       selectedAddress: selectedAddress ?? this.selectedAddress,
+      selectedTargetAddress:
+          selectedTargetAddress ?? this.selectedTargetAddress,
       selectedAddressLatLongWkb:
           selectedAddressLatLongWkb ?? this.selectedAddressLatLongWkb,
       taggedUsersUid: taggedUsersUid ?? this.taggedUsersUid,

@@ -367,7 +367,7 @@ class CreateMemoryPage extends StatelessWidget {
                 child: ExpansionTileItem.flat(
                   childrenPadding: EdgeInsets.zero,
                   tilePadding: EdgeInsets.zero,
-                  title: Text('More Options',
+                  title: Text('More Details',
                       style: TextStyle(color: Colors.black)),
                   children: [
                     GestureDetector(
