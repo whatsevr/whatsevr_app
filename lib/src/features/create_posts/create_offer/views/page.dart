@@ -7,7 +7,6 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/country_state_city.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
 import '../../../../../config/routes/router.dart';
@@ -17,14 +16,12 @@ import '../../../../../config/widgets/button.dart';
 import '../../../../../config/widgets/common_data_list.dart';
 import '../../../../../config/widgets/dynamic_height_views.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
 import '../../../../../config/widgets/pad_horizontal.dart';
 import '../../../../../config/widgets/place_search_list.dart';
 import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
-import '../../../../../config/widgets/stepper.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
 import '../../../media_previewer/views/page.dart';
@@ -290,27 +287,116 @@ class CreateOfferPage extends StatelessWidget {
               const Gap(12),
               WhatsevrFormField.invokeCustomFunction(
                 context: context,
-                controller: TextEditingController(
-                  text: state.selectedTargetAddress ?? '',
-                ),
                 suffixWidget: const Icon(Icons.location_on),
                 hintText: 'Target Area',
                 customFunction: () {
                   showAppModalSheet(child: CountryStateCityPage(
                     onPlaceSelected: (countryName, stateName, cityName) {
+                      if (countryName == null &&
+                          stateName == null &&
+                          cityName == null) return;
+                      String address = '';
+                      if (countryName?.isNotEmpty ?? false) {
+                        address += '$countryName';
+                      }
+                      if (stateName?.isNotEmpty ?? false) {
+                        address += ' ,$stateName';
+                      }
+                      if (cityName?.isNotEmpty ?? false) {
+                        address += ' ,$cityName';
+                      }
                       context.read<CreateOfferBloc>().emit(state.copyWith(
-                          selectedTargetAddress:
-                              '$cityName, $stateName, $countryName'));
+                          selectedTargetAddresses:
+                              state.selectedTargetAddresses! + [address]));
                     },
                   ));
                 },
               ),
+              const Gap(12),
+              for (String address in state.selectedTargetAddresses ?? []) ...[
+                Row(
+                  children: [
+                    Text(address),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        List<String> addresses = state.selectedTargetAddresses!;
+                        addresses.remove(address);
+                        context.read<CreateOfferBloc>().emit(state.copyWith(
+                              selectedTargetAddresses: addresses,
+                            ));
+                      },
+                      child: const Icon(Icons.clear_rounded, color: Colors.red),
+                    ),
+                  ],
+                ),
+              ],
               const Gap(12),
               ExpansionTileItem.flat(
                 title: Text('More Details'),
                 childrenPadding: EdgeInsets.zero,
                 tilePadding: EdgeInsets.zero,
                 children: [
+                  //target gender choice chip
+                  Row(
+                    children: [
+                      Text('Audience'),
+                      const Spacer(),
+                      for (String audience
+                          in context.read<CreateOfferBloc>().targetGender) ...[
+                        ChoiceChip(
+                          label: Text(audience),
+                          selected: state.selectedTargetGender == audience,
+                          onSelected: (value) {
+                            context.read<CreateOfferBloc>().emit(
+                                state.copyWith(selectedTargetGender: audience));
+                          },
+                        ),
+                        const Gap(4),
+                      ],
+                    ],
+                  ),
+                  const Gap(12),
+                  Column(
+                    children: [
+                      WhatsevrFormField.invokeCustomFunction(
+                        controller: TextEditingController(
+                          text: state.ctaAction ?? '',
+                        ),
+                        context: context,
+                        hintText: 'User Action',
+                        customFunction: () {
+                          showAppModalSheet(
+                              child: CommonDataSearchSelectPage(
+                            showCtaActions: true,
+                            onCtaActionSelected: (p0) {
+                              context
+                                  .read<CreateOfferBloc>()
+                                  .emit(state.copyWith(ctaAction: p0.action));
+                            },
+                          ));
+                        },
+                      ),
+                      const Gap(12),
+                      WhatsevrFormField.generalTextField(
+                        controller: context
+                            .read<CreateOfferBloc>()
+                            .ctaActionUrlController,
+                        hintText: 'Action URL',
+                        onChanged: (value) {
+                          if (state.ctaAction == null) {
+                            SmartDialog.showToast(
+                                'Please select a User action first');
+                            context
+                                .read<CreateOfferBloc>()
+                                .ctaActionUrlController
+                                .clear();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                  const Gap(12),
                   Column(
                     children: [
                       GestureDetector(
@@ -398,126 +484,6 @@ class CreateOfferPage extends StatelessWidget {
                           ],
                         ),
                       ],
-                    ],
-                  ),
-                  const Gap(12),
-                  Column(
-                    children: [
-                      WhatsevrFormField.invokeCustomFunction(
-                        context: context,
-                        controller: TextEditingController(
-                          text: state.selectedAddress ?? '',
-                        ),
-                        suffixWidget: const Icon(Icons.location_on),
-                        hintText: 'Your Location',
-                        customFunction: () {
-                          showAppModalSheet(child: PlaceSearchByNamePage(
-                            onPlaceSelected: (placeName, lat, long) {
-                              context
-                                  .read<CreateOfferBloc>()
-                                  .add(UpdatePostAddressEvent(
-                                    address: placeName,
-                                    addressLatitude: lat,
-                                    addressLongitude: long,
-                                  ));
-                            },
-                          ));
-                        },
-                      ),
-                      if (state.placesNearbyResponse?.places?.isNotEmpty ??
-                          false) ...[
-                        const Gap(8),
-                        SizedBox(
-                          height: 22,
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  context
-                                      .read<CreateOfferBloc>()
-                                      .add(UpdatePostAddressEvent(
-                                        address: state.placesNearbyResponse
-                                            ?.places?[index].displayName?.text,
-                                        addressLatitude: state
-                                            .placesNearbyResponse
-                                            ?.places?[index]
-                                            .location
-                                            ?.latitude,
-                                        addressLongitude: state
-                                            .placesNearbyResponse
-                                            ?.places?[index]
-                                            .location
-                                            ?.longitude,
-                                      ));
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.black45,
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(
-                                    '${state.placesNearbyResponse?.places?[index].displayName?.text}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const Gap(4);
-                            },
-                            itemCount:
-                                state.placesNearbyResponse?.places?.length ?? 0,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const Gap(12),
-                  Column(
-                    children: [
-                      WhatsevrFormField.invokeCustomFunction(
-                        controller: TextEditingController(
-                          text: state.ctaAction ?? '',
-                        ),
-                        context: context,
-                        hintText: 'User Action',
-                        customFunction: () {
-                          showAppModalSheet(
-                              child: CommonDataSearchSelectPage(
-                            showCtaActions: true,
-                            onCtaActionSelected: (p0) {
-                              context
-                                  .read<CreateOfferBloc>()
-                                  .emit(state.copyWith(ctaAction: p0.action));
-                            },
-                          ));
-                        },
-                      ),
-                      const Gap(12),
-                      WhatsevrFormField.generalTextField(
-                        controller: context
-                            .read<CreateOfferBloc>()
-                            .ctaActionUrlController,
-                        hintText: 'Action URL',
-                        onChanged: (value) {
-                          if (state.ctaAction == null) {
-                            SmartDialog.showToast(
-                                'Please select a User action first');
-                            context
-                                .read<CreateOfferBloc>()
-                                .ctaActionUrlController
-                                .clear();
-                          }
-                        },
-                      ),
                     ],
                   ),
                 ],

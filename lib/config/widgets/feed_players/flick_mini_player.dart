@@ -2,7 +2,6 @@ import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:video_player/video_player.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class FlickMiniPlayer extends StatefulWidget {

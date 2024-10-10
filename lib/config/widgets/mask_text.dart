@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MaskText extends StatefulWidget {
-  @override
-  final Key key;
   final String text;
   final int maskLength;
   final bool maskFirstDigits;
   final TextStyle? style;
   const MaskText({
-    required this.key,
+    required super.key,
     required this.text,
     required this.maskLength,
     required this.maskFirstDigits,

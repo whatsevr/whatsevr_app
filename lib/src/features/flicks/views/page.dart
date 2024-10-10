@@ -24,7 +24,7 @@ import '../../../../config/widgets/two_state_ui.dart';
 import '../bloc/flicks_bloc.dart';
 
 class FlicksPage extends StatefulWidget {
-  FlicksPage({super.key});
+  const FlicksPage({super.key});
 
   @override
   State<FlicksPage> createState() => _FlicksPageState();

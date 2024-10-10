@@ -7,6 +7,7 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
@@ -16,9 +17,6 @@ import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 
 import '../../../../../config/api/requests_model/sanity_check_new_offer.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/services/auth_db.dart';
-import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
 
 import '../../../../../config/widgets/media/meta_data.dart';
@@ -32,6 +30,7 @@ part 'create_offer_state.dart';
 class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   final int maxVideoCount = 2;
   final int maxImageCount = 5;
+  List<String> targetGender = ['All', 'Man', 'Women'];
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
@@ -43,7 +42,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     on<PickVideoEvent>(_onPickVideo);
     on<ChangeVideoThumbnail>(_onChangeVideoThumbnail);
     on<PickImageEvent>(_onPickImage);
-    on<UpdatePostAddressEvent>(_onUpdatePostAddress);
+
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
@@ -68,7 +67,6 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           }
         },
       );
-      emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -107,7 +105,19 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewOffer(
-          request: SanityCheckNewOfferRequest());
+          request: SanityCheckNewOfferRequest(
+        mediaMetaData: [
+          for (var e in state.uiFilesData)
+            MediaMetaDatum(
+              videoDurationSec: e.fileMetaData?.durationInSec,
+              sizeBytes: e.fileMetaData?.sizeInBytes,
+            ),
+        ],
+        postData: PostData(
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+        ),
+      ));
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -194,21 +204,6 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     }
   }
 
-  Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateOfferState> emit) async {
-    try {
-      emit(
-        state.copyWith(
-          selectedAddress: event.address,
-          selectedAddressLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude),
-        ),
-      );
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
-
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
       Emitter<CreateOfferState> emit) {
@@ -229,10 +224,12 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
-        emit(state.copyWith(
-          taggedUsersUid: taggedUsersUid,
-          taggedCommunitiesUid: taggedCommunitiesUid,
-        ));
+        emit(
+          state.copyWith(
+            taggedUsersUid: taggedUsersUid,
+            taggedCommunitiesUid: taggedCommunitiesUid,
+          ),
+        );
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

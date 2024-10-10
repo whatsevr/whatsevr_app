@@ -45,18 +45,6 @@ class PickImageEvent extends CreateOfferEvent {
   List<Object?> get props => <Object?>[pickedImageFile];
 }
 
-class UpdatePostAddressEvent extends CreateOfferEvent {
-  final String? address;
-  final double? addressLatitude;
-  final double? addressLongitude;
-  const UpdatePostAddressEvent(
-      {this.address, this.addressLatitude, this.addressLongitude});
-
-  @override
-  List<Object?> get props =>
-      <Object?>[address, addressLatitude, addressLongitude];
-}
-
 class UpdateTaggedUsersAndCommunitiesEvent extends CreateOfferEvent {
   final bool? clearAll;
   final List<String>? taggedUsersUid;

@@ -1,6 +1,4 @@
 import 'package:background_downloader/background_downloader.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 
 import '../api/external/models/business_validation_exception.dart';
 

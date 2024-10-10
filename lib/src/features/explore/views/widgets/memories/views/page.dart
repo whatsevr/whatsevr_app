@@ -190,7 +190,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
 class _MemoriesPlayer extends StatefulWidget {
   final List<RecommendedMemory>? memories;
   final int index;
-  _MemoriesPlayer({
+  const _MemoriesPlayer({
     this.memories,
     required this.index,
   });
@@ -318,7 +318,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                             Expanded(
                               child: WhatsevrButton.filled(
                                 label:
-                                    '${userMemories[index].ctaAction ?? 'Open Link'}',
+                                    userMemories[index].ctaAction ?? 'Open Link',
                                 onPressed: () {
                                   launchWebURL(context,
                                       url: userMemories[index].ctaActionUrl ??

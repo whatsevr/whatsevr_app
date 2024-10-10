@@ -4,28 +4,27 @@ class CreateOfferState extends Equatable {
   final CreateOfferPageArgument? pageArgument;
   final List<UiFileData> uiFilesData;
   final UiFileData? selectedUiFileData;
-  final PlacesNearbyResponse? placesNearbyResponse;
+
   final String? userCurrentLocationLatLongWkb;
-  final String? selectedAddress;
-  final String? selectedTargetAddress;
-  final String? selectedAddressLatLongWkb;
+
+  final List<String>? selectedTargetAddresses;
+
   final List<String> taggedUsersUid;
   final List<String> taggedCommunitiesUid;
   final String? ctaAction;
   final int? noOfDays;
+  final String? selectedTargetGender;
   const CreateOfferState({
     this.pageArgument,
     this.uiFilesData = const [],
     this.selectedUiFileData,
-    this.placesNearbyResponse,
     this.userCurrentLocationLatLongWkb,
-    this.selectedAddress,
-    this.selectedTargetAddress,
-    this.selectedAddressLatLongWkb,
+    this.selectedTargetAddresses = const [],
     this.taggedUsersUid = const [],
     this.taggedCommunitiesUid = const [],
     this.ctaAction,
     this.noOfDays = 1,
+    this.selectedTargetGender = 'All',
   });
 
   @override
@@ -33,47 +32,41 @@ class CreateOfferState extends Equatable {
         pageArgument,
         uiFilesData,
         selectedUiFileData,
-        placesNearbyResponse,
         userCurrentLocationLatLongWkb,
-        selectedAddress,
-        selectedTargetAddress,
-        selectedAddressLatLongWkb,
+        selectedTargetAddresses,
+        selectedTargetAddresses?.length,
         taggedUsersUid,
         taggedCommunitiesUid,
         ctaAction,
         noOfDays,
+        selectedTargetGender,
       ];
 
   CreateOfferState copyWith({
     CreateOfferPageArgument? pageArgument,
     List<UiFileData>? uiFilesData,
     UiFileData? selectedUiFileData,
-    PlacesNearbyResponse? placesNearbyResponse,
     String? userCurrentLocationLatLongWkb,
-    String? selectedAddress,
-    String? selectedTargetAddress,
-    String? selectedAddressLatLongWkb,
+    List<String>? selectedTargetAddresses,
     List<String>? taggedUsersUid,
     List<String>? taggedCommunitiesUid,
     String? ctaAction,
     int? noOfDays,
+    String? selectedTargetGender,
   }) {
     return CreateOfferState(
       pageArgument: pageArgument ?? this.pageArgument,
       uiFilesData: uiFilesData ?? this.uiFilesData,
       selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
-      placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
-      selectedAddress: selectedAddress ?? this.selectedAddress,
-      selectedTargetAddress:
-          selectedTargetAddress ?? this.selectedTargetAddress,
-      selectedAddressLatLongWkb:
-          selectedAddressLatLongWkb ?? this.selectedAddressLatLongWkb,
+      selectedTargetAddresses:
+          selectedTargetAddresses ?? this.selectedTargetAddresses,
       taggedUsersUid: taggedUsersUid ?? this.taggedUsersUid,
       taggedCommunitiesUid: taggedCommunitiesUid ?? this.taggedCommunitiesUid,
       ctaAction: ctaAction ?? this.ctaAction,
       noOfDays: noOfDays ?? this.noOfDays,
+      selectedTargetGender: selectedTargetGender ?? this.selectedTargetGender,
     );
   }
 }
@@ -87,7 +80,7 @@ class UiFileData extends Equatable {
   final File? thumbnailFile;
   final FileMetaData? thumbnailMetaData;
 
-  UiFileData({
+  const UiFileData({
     this.type,
     this.file,
     this.fileMetaData,

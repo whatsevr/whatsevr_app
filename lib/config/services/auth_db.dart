@@ -66,6 +66,7 @@ class AuthUserDb {
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
+    return null;
   }
 
   static Future<void> removeAuthorisedUser(String userId) async {
@@ -95,6 +96,7 @@ class AuthUserDb {
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
+    return null;
   }
 
   ///[clearAllAuthorisedUser]

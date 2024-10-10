@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
@@ -17,7 +16,6 @@ import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
 
 import 'package:whatsevr_app/config/services/location.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
@@ -28,7 +26,6 @@ import '../../../../../config/api/requests_model/sanity_check_new_video_post.dar
 import '../../../../../config/services/long_running_task/controller.dart';
 import '../../../../../config/services/long_running_task/task_models/posts.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../dev/talker.dart';
 
 part 'create_post_event.dart';
 part 'create_post_state.dart';

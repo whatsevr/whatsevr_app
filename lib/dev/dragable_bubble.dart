@@ -1,4 +1,4 @@
-library draggable_widget;
+library;
 
 import 'dart:math';
 
