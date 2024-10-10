@@ -20,7 +20,7 @@ class CustomAssetPicker {
     required Function(File file)? onCompleted,
     bool cropImage = true,
     bool editImage = true,
-    required List<WhatsevrAspectRatio> aspectRatios,
+    List<WhatsevrAspectRatio> aspectRatios = WhatsevrAspectRatio.values,
     bool withCircleCropperUi = false,
   }) async {
     File? capturedFile;
@@ -66,7 +66,7 @@ class CustomAssetPicker {
 
   static void pickImageFromGallery({
     bool editImage = true,
-    List<WhatsevrAspectRatio> aspectRatios = const [],
+    List<WhatsevrAspectRatio> aspectRatios = WhatsevrAspectRatio.values,
     bool withCircleCropperUi = false,
     required Function(File file) onCompleted,
   }) async {

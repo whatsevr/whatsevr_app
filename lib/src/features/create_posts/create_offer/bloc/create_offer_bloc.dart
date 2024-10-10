@@ -7,6 +7,7 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 
@@ -129,10 +130,24 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
       FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickedVideoFile);
+      if (videoMetaData == null ||
+          videoMetaData.isVideo != true ||
+          videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
+        throw BusinessException(
+            'Video is not valid, it must be landscape or square');
+      }
       final File? thumbnailFile =
           await getThumbnailFile(videoFile: event.pickedVideoFile!);
+
       FileMetaData? thumbnailMetaData =
           await FileMetaData.fromFile(thumbnailFile);
+      if (thumbnailMetaData == null ||
+          thumbnailMetaData.isImage != true ||
+          thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
+              true) {
+        throw BusinessException(
+            'Thumbnail is not valid, it must be landscape or square');
+      }
       emit(state.copyWith(
         uiFilesData: [
           ...state.uiFilesData,
@@ -157,6 +172,13 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     try {
       final FileMetaData? thumbnailMetaData =
           await FileMetaData.fromFile(event.pickedThumbnailFile);
+      if (thumbnailMetaData == null ||
+          thumbnailMetaData.isImage != true ||
+          thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
+              true) {
+        throw BusinessException(
+            'Thumbnail is not valid, it must be landscape or square');
+      }
       emit(state.copyWith(
         uiFilesData: state.uiFilesData
             .map((e) => e == event.uiFileData
@@ -220,13 +242,21 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   FutureOr<void> _onPickImage(
       PickImageEvent event, Emitter<CreateOfferState> emit) async {
     try {
+      FileMetaData? imageMetaData =
+          await FileMetaData.fromFile(event.pickedImageFile);
+      if (imageMetaData == null ||
+          imageMetaData.isImage != true ||
+          imageMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
+        throw BusinessException(
+            'Image is not valid, it must be landscape or square');
+      }
       emit(state.copyWith(
         uiFilesData: [
           ...state.uiFilesData,
           UiFileData(
             file: event.pickedImageFile,
             type: UiFileTypes.image,
-            fileMetaData: await FileMetaData.fromFile(event.pickedImageFile),
+            fileMetaData: imageMetaData,
           ),
         ],
       ));

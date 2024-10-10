@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class SwipeAbleDynamicHeightViews extends StatefulWidget {
   ///PASS UniqueKey() TO REBUILD THE WIDGET WHENEVER NEEDED
   final List<Widget>? children;
-  final Function(int)? onIndexChanged;
+  final Function(int)? onViewIndexChanged;
+  final int? selectedViewIndex;
   final bool showDotIndicator;
   const SwipeAbleDynamicHeightViews({
     super.key,
     this.children,
-    this.onIndexChanged,
+    this.onViewIndexChanged,
+    this.selectedViewIndex,
     this.showDotIndicator = true,
   });
 
@@ -47,6 +49,9 @@ class _SwipeAbleDynamicHeightViewsState
     if (widget.children != null && widget.children!.isNotEmpty) {
       setState(() {
         _children = widget.children!;
+        if (widget.selectedViewIndex != null) {
+          currentIndex = widget.selectedViewIndex!;
+        }
       });
     }
   }
@@ -67,7 +72,7 @@ class _SwipeAbleDynamicHeightViewsState
             setState(() {
               currentSwipeIsLeft = true;
               currentIndex++;
-              widget.onIndexChanged?.call(currentIndex);
+              widget.onViewIndexChanged?.call(currentIndex);
             });
           }
         } else {
@@ -77,7 +82,7 @@ class _SwipeAbleDynamicHeightViewsState
             setState(() {
               currentSwipeIsLeft = false;
               currentIndex--;
-              widget.onIndexChanged?.call(currentIndex);
+              widget.onViewIndexChanged?.call(currentIndex);
             });
           }
         }

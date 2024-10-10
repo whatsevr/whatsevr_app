@@ -197,7 +197,8 @@ class CreateVideoPostBloc
       if (videoMetaData == null ||
           videoMetaData.isVideo != true ||
           videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
-        throw BusinessException('Video is not under the required conditions');
+        throw BusinessException(
+            'Video is not valid, it must be landscape or square');
       }
 
       emit(state.copyWith(videoFile: event.pickVideoFile));

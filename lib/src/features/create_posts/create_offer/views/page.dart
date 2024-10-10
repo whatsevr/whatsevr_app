@@ -38,8 +38,8 @@ class CreateOfferPageArgument {
 class CreateOfferPage extends StatelessWidget {
   final CreateOfferPageArgument pageArgument;
 
-  const CreateOfferPage({super.key, required this.pageArgument});
-
+  CreateOfferPage({super.key, required this.pageArgument});
+  int? selectedSwipeAbleViewIndex;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -73,6 +73,10 @@ class CreateOfferPage extends StatelessWidget {
                 builder: (context) {
                   if (state.uiFilesData.isNotEmpty) {
                     return SwipeAbleDynamicHeightViews(
+                      selectedViewIndex: selectedSwipeAbleViewIndex,
+                      onViewIndexChanged: (index) {
+                        selectedSwipeAbleViewIndex = index;
+                      },
                       key: UniqueKey(),
                       children: [
                         for (UiFileData uiFileData in state.uiFilesData) ...[
@@ -166,7 +170,7 @@ class CreateOfferPage extends StatelessWidget {
                                       showWhatsevrThumbnailSelectionPage(
                                         videoFile: uiFileData.file!,
                                         allowPickFromGallery: false,
-                                        aspectRatios: flicksAspectRatio,
+                                        aspectRatios: offerPostAspectRatio,
                                       ).then((value) {
                                         if (value != null) {
                                           context
@@ -201,6 +205,7 @@ class CreateOfferPage extends StatelessWidget {
                                     .read<CreateOfferBloc>()
                                     .add(PickImageEvent(pickedImageFile: file));
                               },
+                              aspectRatios: offerPostAspectRatio,
                             );
                           },
                           onChoosingVideoFromGallery: () {
@@ -240,6 +245,7 @@ class CreateOfferPage extends StatelessWidget {
                                 .read<CreateOfferBloc>()
                                 .add(PickImageEvent(pickedImageFile: file));
                           },
+                          aspectRatios: offerPostAspectRatio,
                         );
                       },
                       onChoosingVideoFromGallery: () {

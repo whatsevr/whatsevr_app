@@ -89,9 +89,9 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   },
                   interactive: true,
                   withCircleUi: widget.pageArgument.withCircleCropperUi,
-                  aspectRatio: widget.pageArgument.aspectRatios.length == 1
-                      ? widget.pageArgument.aspectRatios.first.ratio
-                      : null,
+                  aspectRatio: widget.pageArgument.aspectRatios.isEmpty
+                      ? null
+                      : widget.pageArgument.aspectRatios.first.ratio,
                   fixCropRect: true,
                   baseColor: Colors.white,
                   initialSize: 0.9, //rect size

@@ -21,12 +21,19 @@ enum WhatsevrAspectRatio {
 }
 
 List<WhatsevrAspectRatio> videoPostAspectRatio = <WhatsevrAspectRatio>[
+  WhatsevrAspectRatio.square,
   WhatsevrAspectRatio.horizontal3by2,
   WhatsevrAspectRatio.landscape,
   WhatsevrAspectRatio.widescreen16by9,
   WhatsevrAspectRatio.ultraWide21by9,
 ];
-
+List<WhatsevrAspectRatio> offerPostAspectRatio = <WhatsevrAspectRatio>[
+  WhatsevrAspectRatio.square,
+  WhatsevrAspectRatio.horizontal3by2,
+  WhatsevrAspectRatio.landscape,
+  WhatsevrAspectRatio.widescreen16by9,
+  WhatsevrAspectRatio.ultraWide21by9,
+];
 List<WhatsevrAspectRatio> imagePostAspectRatio = <WhatsevrAspectRatio>[
   WhatsevrAspectRatio.square,
   WhatsevrAspectRatio.portrait4by5,

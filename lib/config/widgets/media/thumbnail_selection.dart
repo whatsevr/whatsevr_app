@@ -52,7 +52,7 @@ class _Ui extends StatefulWidget {
     required this.videoFile,
     required this.onThumbnailSelected,
     this.allowPickFromGallery = true,
-    this.aspectRatios = const <WhatsevrAspectRatio>[WhatsevrAspectRatio.square],
+    this.aspectRatios = WhatsevrAspectRatio.values,
   });
 
   @override
