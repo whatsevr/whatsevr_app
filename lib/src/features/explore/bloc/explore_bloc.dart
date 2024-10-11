@@ -7,7 +7,7 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
 import '../../../../config/api/external/models/pagination_data.dart';
-import '../../../../config/api/methods/recommendations.dart';
+import '../../../../config/api/methods/public_recommendations.dart';
 import '../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../config/api/response_model/recommendation_offers.dart';
 

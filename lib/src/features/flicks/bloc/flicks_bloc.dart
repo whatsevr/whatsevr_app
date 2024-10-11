@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 import '../../../../config/api/external/models/pagination_data.dart';
-import '../../../../config/api/methods/recommendations.dart';
+import '../../../../config/api/methods/public_recommendations.dart';
 import '../../../../config/api/response_model/recommendation_flicks.dart';
 
 part 'flicks_event.dart';

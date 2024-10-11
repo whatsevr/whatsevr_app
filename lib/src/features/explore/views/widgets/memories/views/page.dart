@@ -317,8 +317,8 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                           children: [
                             Expanded(
                               child: WhatsevrButton.filled(
-                                label:
-                                    userMemories[index].ctaAction ?? 'Open Link',
+                                label: userMemories[index].ctaAction ??
+                                    'Open Link',
                                 onPressed: () {
                                   launchWebURL(context,
                                       url: userMemories[index].ctaActionUrl ??

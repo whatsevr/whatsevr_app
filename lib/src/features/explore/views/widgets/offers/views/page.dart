@@ -19,7 +19,7 @@ class ExplorePageOffersPage extends StatelessWidget {
     scrollController?.addListener(() {
       if (scrollController?.position.pixels ==
           scrollController?.position.maxScrollExtent) {
-        context.read<ExploreBloc>().add(LoadMoreVideosEvent(
+        context.read<ExploreBloc>().add(LoadMoreOffersEvent(
               page: context
                       .read<ExploreBloc>()
                       .state

@@ -16,7 +16,7 @@ class RecommendationApi {
   }) async {
     try {
       Response response = await ApiClient.client.get(
-          '/v1/recommendations/video-posts',
+          '/v1/public-recommendations/video-posts',
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationVideosResponse.fromMap(response.data);
@@ -33,7 +33,7 @@ class RecommendationApi {
   }) async {
     try {
       Response response = await ApiClient.client.get(
-        '/v1/recommendations/flick-posts',
+        '/v1/public-recommendations/flick-posts',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -51,7 +51,7 @@ class RecommendationApi {
   }) async {
     try {
       Response response = await ApiClient.client.get(
-          '/v1/recommendations/memories',
+          '/v1/public-recommendations/memories',
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationMemoriesResponse.fromMap(response.data);
@@ -68,7 +68,7 @@ class RecommendationApi {
   }) async {
     try {
       Response response = await ApiClient.client.get(
-          '/v1/recommendations/offers',
+          '/v1/public-recommendations/offers',
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationOffersResponse.fromMap(response.data);
