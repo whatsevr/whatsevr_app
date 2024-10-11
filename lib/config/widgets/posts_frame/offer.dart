@@ -121,6 +121,7 @@ class OfferPostFrame extends StatelessWidget {
             Stack(
               children: <Widget>[
                 SwipeAbleDynamicHeightViews(
+                  key: UniqueKey(),
                   children: [
                     if (filesData != null && filesData!.isNotEmpty)
                       for (final FilesDatum file in filesData!)

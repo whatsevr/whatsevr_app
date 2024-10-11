@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:media_info/media_info.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
@@ -89,8 +90,25 @@ class FileMetaData {
     if (file == null) return null;
 
     try {
-      final mediaInfo = await MediaInfo().getMediaInfo(file.path);
+      TalkerService.instance.info('Getting file metadata for ${file.path}');
+      if (!file.existsSync()) {
+        TalkerService.instance.error('File does not exist: ${file.path}');
+        return null;
+      }
+      Map<String, dynamic>? mediaInfo;
+      try {
+        mediaInfo = await MediaInfo().getMediaInfo(file.path);
+      } catch (e) {
+        TalkerService.instance.error(
+            'Error getting media info so trying to get media info for renamed file');
 
+        ///in case package:media_info was unable to get media info for the file for complex file name
+        File? renamedFile = await _copyToTempDirectoryAndRenameFile(
+          file.path,
+        );
+        mediaInfo = await MediaInfo().getMediaInfo(renamedFile!.path);
+        file = renamedFile;
+      }
       final width = mediaInfo['width'] as int?;
       final height = mediaInfo['height'] as int?;
       final aspectRatio = getAspectRatio(width: width, height: height);
@@ -108,7 +126,7 @@ class FileMetaData {
       final int? durationInSec = sec;
       final int? durationInMin = min;
       final int? durationInHour = hour;
-      return FileMetaData(
+      FileMetaData fileMetaData = FileMetaData(
         name: file.path.split('/').last,
         path: file.path,
         extension: file.path.split('.').last,
@@ -134,6 +152,8 @@ class FileMetaData {
             width != null && height != null && width > height,
         isOrientationSquare: width != null && height != null && width == height,
       );
+      TalkerService.instance.info(fileMetaData.toMap());
+      return fileMetaData;
     } catch (e) {
       TalkerService.instance.error('Error getting file metadata: $e');
       return null;
@@ -208,5 +228,37 @@ class FileMetaData {
         ],
       ),
     );
+  }
+}
+
+Future<File?> _copyToTempDirectoryAndRenameFile(String sourceFilePath) async {
+  try {
+    // Check if the source file exists
+    final sourceFile = File(sourceFilePath);
+    String fileExtension = sourceFile.path.split('.').last;
+    if (!await sourceFile.exists()) {
+      debugPrint('Source file does not exist.');
+      return null;
+    }
+
+    // Get the temporary directory
+    final Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+
+    // Create a unique filename using the current timestamp
+    String newFileName =
+        'temp_whatsevr_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
+
+    // Create the new file path in the temporary directory
+    final newFilePath = '$tempPath/$newFileName';
+
+    // Copy the file and rename it
+    final newFile = await sourceFile.copy(newFilePath);
+    debugPrint('File copied and renamed to: ${newFile.path}');
+
+    return newFile;
+  } catch (e) {
+    debugPrint('Error occurred while copying and renaming the file: $e');
+    return null;
   }
 }
