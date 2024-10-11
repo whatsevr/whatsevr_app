@@ -437,120 +437,127 @@ class ProfileUpdatePage extends StatelessWidget {
                                 TextEditingController endDateController =
                                     TextEditingController();
 
-                                return WhatsevrFormField.showModalSheetOnTap(
+                                return WhatsevrFormField.invokeCustomFunction(
                                   context: context,
                                   headingTitle: 'Educations',
                                   hintText: 'Add Education',
-                                  modalSheetUi: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      WhatsevrFormField.generalTextField(
-                                        headingTitle: 'Enter School',
-                                        controller: schoolController,
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.invokeCustomFunction(
-                                        context: context,
-                                        headingTitle: 'Select Degree',
-                                        controller: degreeController,
-                                        readOnly: false,
-                                        customFunction: () {
-                                          showAppModalSheet(
-                                            context: context,
-                                            child: CommonDataSearchSelectPage(
-                                              showEducationDegrees: true,
-                                              onEducationDegreeSelected:
-                                                  (EducationDegree p0) {
-                                                degreeController.text =
-                                                    p0.title ?? '';
-                                                degreeTypeController.text =
-                                                    p0.type ?? '';
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.generalTextField(
-                                        readOnly: true,
-                                        controller: degreeTypeController,
-                                        headingTitle: 'Degree Type',
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.datePicker(
-                                        context: context,
-                                        controller: startDateController,
-                                        headingTitle: 'Select Start Date',
-                                        onDateSelected: (DateTime date) {
-                                          startDateController.text =
-                                              DateFormat('dd-MM-yyyy')
-                                                  .format(date);
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.datePicker(
-                                        context: context,
-                                        controller: endDateController,
-                                        headingTitle: 'Select End Date',
-                                        onDateSelected: (DateTime date) {
-                                          endDateController.text =
-                                              DateFormat('dd-MM-yyyy')
-                                                  .format(date);
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      MaterialButton(
-                                        minWidth: double.infinity,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                  customFunction: () {
+                                    showAppModalSheet(
+                                        child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        WhatsevrFormField.generalTextField(
+                                          headingTitle: 'Enter School',
+                                          controller: schoolController,
                                         ),
-                                        color: Colors.blueAccent,
-                                        onPressed: () {
-                                          if (degreeController.text.isNotEmpty &&
-                                              schoolController
-                                                  .text.isNotEmpty &&
-                                              startDateController
-                                                  .text.isNotEmpty &&
-                                              endDateController
-                                                  .text.isNotEmpty) {
-                                            context.read<ProfileBloc>().add(
-                                                  AddOrRemoveEducation(
-                                                    education: UiEducation(
-                                                      degreeName:
-                                                          degreeController.text,
-                                                      degreeType:
-                                                          degreeTypeController
+                                        const Gap(12),
+                                        WhatsevrFormField.invokeCustomFunction(
+                                          context: context,
+                                          headingTitle: 'Select Degree',
+                                          controller: degreeController,
+                                          readOnly: false,
+                                          customFunction: () {
+                                            showAppModalSheet(
+                                              context: context,
+                                              child: CommonDataSearchSelectPage(
+                                                showEducationDegrees: true,
+                                                onEducationDegreeSelected:
+                                                    (EducationDegree p0) {
+                                                  degreeController.text =
+                                                      p0.title ?? '';
+                                                  degreeTypeController.text =
+                                                      p0.type ?? '';
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const Gap(12),
+                                        WhatsevrFormField.generalTextField(
+                                          readOnly: true,
+                                          controller: degreeTypeController,
+                                          headingTitle: 'Degree Type',
+                                        ),
+                                        const Gap(12),
+                                        WhatsevrFormField.datePicker(
+                                          context: context,
+                                          controller: startDateController,
+                                          headingTitle: 'Select Start Date',
+                                          onDateSelected: (DateTime date) {
+                                            startDateController.text =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date);
+                                          },
+                                        ),
+                                        const Gap(12),
+                                        WhatsevrFormField.datePicker(
+                                          context: context,
+                                          controller: endDateController,
+                                          headingTitle: 'Select End Date',
+                                          onDateSelected: (DateTime date) {
+                                            endDateController.text =
+                                                DateFormat('dd-MM-yyyy')
+                                                    .format(date);
+                                          },
+                                        ),
+                                        const Gap(12),
+                                        MaterialButton(
+                                          minWidth: double.infinity,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          color: Colors.blueAccent,
+                                          onPressed: () {
+                                            if (degreeController.text.isNotEmpty &&
+                                                schoolController
+                                                    .text.isNotEmpty &&
+                                                startDateController
+                                                    .text.isNotEmpty &&
+                                                endDateController
+                                                    .text.isNotEmpty) {
+                                              context.read<ProfileBloc>().add(
+                                                    AddOrRemoveEducation(
+                                                      education: UiEducation(
+                                                        degreeName:
+                                                            degreeController
+                                                                .text,
+                                                        degreeType:
+                                                            degreeTypeController
+                                                                .text,
+                                                        startDate: DateFormat(
+                                                          'dd-MM-yyyy',
+                                                        ).parse(
+                                                          startDateController
                                                               .text,
-                                                      startDate: DateFormat(
-                                                        'dd-MM-yyyy',
-                                                      ).parse(
-                                                        startDateController
-                                                            .text,
+                                                        ),
+                                                        endDate: DateFormat(
+                                                          'dd-MM-yyyy',
+                                                        ).parse(
+                                                          endDateController
+                                                              .text,
+                                                        ),
+                                                        institute:
+                                                            schoolController
+                                                                .text,
+                                                        isOngoingEducation:
+                                                            false,
                                                       ),
-                                                      endDate: DateFormat(
-                                                        'dd-MM-yyyy',
-                                                      ).parse(
-                                                        endDateController.text,
-                                                      ),
-                                                      institute:
-                                                          schoolController.text,
-                                                      isOngoingEducation: false,
                                                     ),
-                                                  ),
-                                                );
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Add',
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                                  );
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: const Text(
+                                            'Add',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ));
+                                  },
                                 );
                               },
                             ),
@@ -609,121 +616,129 @@ class ProfileUpdatePage extends StatelessWidget {
                                 TextEditingController endDateController =
                                     TextEditingController();
 
-                                return WhatsevrFormField.showModalSheetOnTap(
+                                return WhatsevrFormField.invokeCustomFunction(
                                   context: context,
                                   headingTitle: 'Work Experience',
                                   hintText: 'Add Work Experience',
-                                  modalSheetUi: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      WhatsevrFormField.generalTextField(
-                                        headingTitle: 'Enter Company Name',
-                                        controller: companyNameController,
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.generalTextField(
-                                        headingTitle: 'Enter Designation',
-                                        controller: designationController,
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.invokeCustomFunction(
-                                        context: context,
-                                        headingTitle: 'Select Mode of Work',
-                                        controller: workingModeController,
-                                        customFunction: () {
-                                          showAppModalSheet(
-                                            context: context,
-                                            child: CommonDataSearchSelectPage(
-                                              showWorkingModes: true,
-                                              onWorkingModeSelected:
-                                                  (WorkingMode p0) {
-                                                workingModeController.text =
-                                                    p0.mode ?? '';
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.datePicker(
-                                        context: context,
-                                        controller: startDateController,
-                                        headingTitle: 'Start Start Date',
-                                        onDateSelected: (DateTime date) {
-                                          startDateController.text =
-                                              DateFormat('dd-MM-yyyy')
-                                                  .format(date);
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      WhatsevrFormField.datePicker(
-                                        context: context,
-                                        headingTitle: 'End Date',
-                                        controller: endDateController,
-                                        onDateSelected: (DateTime date) {
-                                          endDateController.text =
-                                              DateFormat('dd-MM-yyyy')
-                                                  .format(date);
-                                        },
-                                      ),
-                                      const Gap(12),
-                                      MaterialButton(
-                                        minWidth: double.infinity,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        color: Colors.blueAccent,
-                                        onPressed: () {
-                                          if (companyNameController.text.isNotEmpty &&
-                                              workingModeController
-                                                  .text.isNotEmpty &&
-                                              startDateController
-                                                  .text.isNotEmpty &&
-                                              endDateController
-                                                  .text.isNotEmpty &&
-                                              designationController
-                                                  .text.isNotEmpty) {
-                                            context.read<ProfileBloc>().add(
-                                                  AddOrRemoveWorkExperience(
-                                                    workExperience:
-                                                        UiWorkExperience(
-                                                      companyName:
-                                                          companyNameController
-                                                              .text,
-                                                      isCurrentlyWorking: false,
-                                                      designation:
-                                                          designationController
-                                                              .text,
-                                                      workingMode:
-                                                          workingModeController
-                                                              .text,
-                                                      startDate: DateFormat(
-                                                        'dd-MM-yyyy',
-                                                      ).parse(
-                                                        startDateController
-                                                            .text,
-                                                      ),
-                                                      endDate: DateFormat(
-                                                        'dd-MM-yyyy',
-                                                      ).parse(
-                                                        endDateController.text,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                            Navigator.pop(context);
-                                          }
-                                        },
-                                        child: const Text(
-                                          'Add',
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                  customFunction: () {
+                                    showAppModalSheet(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          WhatsevrFormField.generalTextField(
+                                            headingTitle: 'Enter Company Name',
+                                            controller: companyNameController,
                                           ),
-                                        ),
+                                          const Gap(12),
+                                          WhatsevrFormField.generalTextField(
+                                            headingTitle: 'Enter Designation',
+                                            controller: designationController,
+                                          ),
+                                          const Gap(12),
+                                          WhatsevrFormField
+                                              .invokeCustomFunction(
+                                            context: context,
+                                            headingTitle: 'Select Mode of Work',
+                                            controller: workingModeController,
+                                            customFunction: () {
+                                              showAppModalSheet(
+                                                context: context,
+                                                child:
+                                                    CommonDataSearchSelectPage(
+                                                  showWorkingModes: true,
+                                                  onWorkingModeSelected:
+                                                      (WorkingMode p0) {
+                                                    workingModeController.text =
+                                                        p0.mode ?? '';
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                          const Gap(12),
+                                          WhatsevrFormField.datePicker(
+                                            context: context,
+                                            controller: startDateController,
+                                            headingTitle: 'Start Start Date',
+                                            onDateSelected: (DateTime date) {
+                                              startDateController.text =
+                                                  DateFormat('dd-MM-yyyy')
+                                                      .format(date);
+                                            },
+                                          ),
+                                          const Gap(12),
+                                          WhatsevrFormField.datePicker(
+                                            context: context,
+                                            headingTitle: 'End Date',
+                                            controller: endDateController,
+                                            onDateSelected: (DateTime date) {
+                                              endDateController.text =
+                                                  DateFormat('dd-MM-yyyy')
+                                                      .format(date);
+                                            },
+                                          ),
+                                          const Gap(12),
+                                          MaterialButton(
+                                            minWidth: double.infinity,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            color: Colors.blueAccent,
+                                            onPressed: () {
+                                              if (companyNameController.text.isNotEmpty &&
+                                                  workingModeController
+                                                      .text.isNotEmpty &&
+                                                  startDateController
+                                                      .text.isNotEmpty &&
+                                                  endDateController
+                                                      .text.isNotEmpty &&
+                                                  designationController
+                                                      .text.isNotEmpty) {
+                                                context.read<ProfileBloc>().add(
+                                                      AddOrRemoveWorkExperience(
+                                                        workExperience:
+                                                            UiWorkExperience(
+                                                          companyName:
+                                                              companyNameController
+                                                                  .text,
+                                                          isCurrentlyWorking:
+                                                              false,
+                                                          designation:
+                                                              designationController
+                                                                  .text,
+                                                          workingMode:
+                                                              workingModeController
+                                                                  .text,
+                                                          startDate: DateFormat(
+                                                            'dd-MM-yyyy',
+                                                          ).parse(
+                                                            startDateController
+                                                                .text,
+                                                          ),
+                                                          endDate: DateFormat(
+                                                            'dd-MM-yyyy',
+                                                          ).parse(
+                                                            endDateController
+                                                                .text,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                            child: const Text(
+                                              'Add',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -767,20 +782,24 @@ class ProfileUpdatePage extends StatelessWidget {
                               ),
                               const Gap(8),
                             ],
-                            WhatsevrFormField.showModalSheetOnTap(
+                            WhatsevrFormField.invokeCustomFunction(
                               context: context,
                               controller:
                                   TextEditingController(text: state.gender),
                               headingTitle: 'Gender',
                               hintText: 'Select Gender',
-                              modalSheetUi: CommonDataSearchSelectPage(
-                                showGenders: true,
-                                onGenderSelected: (Gender p0) {
-                                  context
-                                      .read<ProfileBloc>()
-                                      .add(UpdateGender(p0.gender));
-                                },
-                              ),
+                              customFunction: () {
+                                showAppModalSheet(
+                                  child: CommonDataSearchSelectPage(
+                                    showGenders: true,
+                                    onGenderSelected: (Gender p0) {
+                                      context
+                                          .read<ProfileBloc>()
+                                          .add(UpdateGender(p0.gender));
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),

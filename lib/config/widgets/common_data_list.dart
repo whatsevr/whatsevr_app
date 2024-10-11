@@ -17,6 +17,8 @@ class CommonDataSearchSelectPage extends StatefulWidget {
   final Function(WorkingMode)? onWorkingModeSelected;
   final bool showCtaActions;
   final Function(CtaAction)? onCtaActionSelected;
+  final bool showProfessionalStatus;
+  final Function(ProfessionalStatus)? onProfessionalStatusSelected;
 
   // Multi-select items for Interests
   final bool showInterests;
@@ -38,6 +40,8 @@ class CommonDataSearchSelectPage extends StatefulWidget {
     this.onPersonalInterestsSelected,
     this.showCtaActions = false,
     this.onCtaActionSelected,
+    this.showProfessionalStatus = false,
+    this.onProfessionalStatusSelected,
   });
 
   @override
@@ -107,6 +111,9 @@ class _CommonDataSearchSelectPageState
       _filteredItems = _commonData!.interests!;
     } else if (widget.showCtaActions && _commonData?.ctaActions != null) {
       _filteredItems = _commonData!.ctaActions!;
+    } else if (widget.showProfessionalStatus &&
+        _commonData?.professionalStatus != null) {
+      _filteredItems = _commonData!.professionalStatus!;
     }
   }
 
@@ -158,6 +165,14 @@ class _CommonDataSearchSelectPageState
                 (CtaAction item) =>
                     item.action != null &&
                     item.action!.toLowerCase().contains(query),
+              )
+              .toList();
+        } else if (widget.showProfessionalStatus) {
+          _filteredItems = _commonData!.professionalStatus!
+              .where(
+                (ProfessionalStatus item) =>
+                    item.title != null &&
+                    item.title!.toLowerCase().contains(query),
               )
               .toList();
         }
@@ -283,6 +298,16 @@ class _CommonDataSearchSelectPageState
             onTap: () {
               if (widget.onCtaActionSelected != null) {
                 widget.onCtaActionSelected!(item);
+              }
+              Navigator.pop(context);
+            },
+          );
+        } else if (item is ProfessionalStatus) {
+          return ListTile(
+            title: Text(item.title!),
+            onTap: () {
+              if (widget.onProfessionalStatusSelected != null) {
+                widget.onProfessionalStatusSelected!(item);
               }
               Navigator.pop(context);
             },

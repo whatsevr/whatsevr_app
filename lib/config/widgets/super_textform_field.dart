@@ -211,32 +211,6 @@ class WhatsevrFormField extends StatefulWidget {
       suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
     );
   }
-  // Factory: Dropdown with Arrow Down
-  factory WhatsevrFormField.showModalSheetOnTap({
-    required BuildContext context,
-    String? headingTitle,
-    TextEditingController? controller,
-    String? hintText,
-    String? labelText,
-    Widget? suffixWidget, // List of icons or widgets to display
-    bool readOnly = true, // TextField is read-only by default
-    Widget? modalSheetUi, // Function to be invoked on tap
-  }) {
-    return WhatsevrFormField._internal(
-      headingTitle: headingTitle,
-      controller: controller,
-      hintText: hintText,
-      labelText: labelText,
-      readOnly: readOnly,
-      onTap: () {
-        showAppModalSheet(
-          context: context,
-          child: modalSheetUi,
-        );
-      },
-      suffixIcon: suffixWidget ?? const Icon(Icons.filter_list_rounded),
-    );
-  }
 
   // Factory: TextField with Clear Icon
   factory WhatsevrFormField.textFieldWithClearIcon({

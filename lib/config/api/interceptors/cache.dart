@@ -10,7 +10,10 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
     required bool? cachePostRequest,
   }) : super(
           options: CacheOptions(
-            store: HiveCacheStore(cacheDirectoryPath),
+            store: HiveCacheStore(
+              cacheDirectoryPath,
+              hiveBoxName: 'api_cache_747',
+            ),
             policy: CachePolicy.request,
             hitCacheOnErrorExcept: <int>[
               HttpStatus.unauthorized,

@@ -131,6 +131,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           status: statusController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
           targetAreas: state.selectedTargetAddresses,
+          targetGender: state.selectedTargetGender?.toLowerCase(),
           hashtags: hashtags,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,

@@ -103,7 +103,7 @@ class FileMetaData {
             'Error getting media info so trying to get media info for renamed file');
 
         ///in case package:media_info was unable to get media info for the file for complex file name
-        File? renamedFile = await _copyToTempDirectoryAndRenameFile(
+        File? renamedFile = await _simplifyFileNameAndPutToTempDir(
           file.path,
         );
         mediaInfo = await MediaInfo().getMediaInfo(renamedFile!.path);
@@ -231,7 +231,7 @@ class FileMetaData {
   }
 }
 
-Future<File?> _copyToTempDirectoryAndRenameFile(String sourceFilePath) async {
+Future<File?> _simplifyFileNameAndPutToTempDir(String sourceFilePath) async {
   try {
     // Check if the source file exists
     final sourceFile = File(sourceFilePath);

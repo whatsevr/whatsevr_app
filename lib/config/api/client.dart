@@ -30,6 +30,7 @@ class ApiClient {
         },
         headers: <String, dynamic>{
           'secret': 'your_secret_key',
+          'ETag': '56574',
         },
       ),
     );

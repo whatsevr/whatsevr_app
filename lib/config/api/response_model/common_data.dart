@@ -7,6 +7,7 @@ class CommonDataResponse {
   final List<WorkingMode>? workingModes;
   final List<Interest>? interests;
   final List<CtaAction>? ctaActions;
+  final List<ProfessionalStatus>? professionalStatus;
 
   CommonDataResponse({
     this.message,
@@ -15,6 +16,7 @@ class CommonDataResponse {
     this.workingModes,
     this.interests,
     this.ctaActions,
+    this.professionalStatus,
   });
 
   CommonDataResponse copyWith({
@@ -24,6 +26,7 @@ class CommonDataResponse {
     List<WorkingMode>? workingModes,
     List<Interest>? interests,
     List<CtaAction>? ctaActions,
+    List<ProfessionalStatus>? professionalStatus,
   }) =>
       CommonDataResponse(
         message: message ?? this.message,
@@ -32,6 +35,7 @@ class CommonDataResponse {
         workingModes: workingModes ?? this.workingModes,
         interests: interests ?? this.interests,
         ctaActions: ctaActions ?? this.ctaActions,
+        professionalStatus: professionalStatus ?? this.professionalStatus,
       );
 
   factory CommonDataResponse.fromJson(String str) =>
@@ -61,6 +65,10 @@ class CommonDataResponse {
             ? []
             : List<CtaAction>.from(
                 json["cta_actions"]!.map((x) => CtaAction.fromMap(x))),
+        professionalStatus: json["professional_status"] == null
+            ? []
+            : List<ProfessionalStatus>.from(json["professional_status"]!
+                .map((x) => ProfessionalStatus.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -80,6 +88,9 @@ class CommonDataResponse {
         "cta_actions": ctaActions == null
             ? []
             : List<dynamic>.from(ctaActions!.map((x) => x.toMap())),
+        "professional_status": professionalStatus == null
+            ? []
+            : List<dynamic>.from(professionalStatus!.map((x) => x.toMap())),
       };
 }
 
@@ -257,6 +268,49 @@ class Interest {
         "id": id,
         "created_at": createdAt?.toIso8601String(),
         "name": name,
+      };
+}
+
+class ProfessionalStatus {
+  final int? id;
+  final DateTime? createdAt;
+  final String? title;
+
+  ProfessionalStatus({
+    this.id,
+    this.createdAt,
+    this.title,
+  });
+
+  ProfessionalStatus copyWith({
+    int? id,
+    DateTime? createdAt,
+    String? title,
+  }) =>
+      ProfessionalStatus(
+        id: id ?? this.id,
+        createdAt: createdAt ?? this.createdAt,
+        title: title ?? this.title,
+      );
+
+  factory ProfessionalStatus.fromJson(String str) =>
+      ProfessionalStatus.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ProfessionalStatus.fromMap(Map<String, dynamic> json) =>
+      ProfessionalStatus(
+        id: json["id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "title": title,
       };
 }
 

@@ -6,6 +6,7 @@ class CreateOfferRequest {
   final String? status;
   final String? userUid;
   final List<String>? targetAreas;
+  final String? targetGender;
   final List<String>? hashtags;
   final String? postCreatorType;
 
@@ -22,6 +23,7 @@ class CreateOfferRequest {
     this.status,
     this.userUid,
     this.targetAreas,
+    this.targetGender,
     this.hashtags,
     this.postCreatorType,
     this.creatorLatLongWkb,
@@ -38,6 +40,7 @@ class CreateOfferRequest {
     String? status,
     String? userUid,
     List<String>? targetAreas,
+    String? targetGender,
     List<String>? hashtags,
     String? postCreatorType,
     String? creatorLatLongWkb,
@@ -53,6 +56,7 @@ class CreateOfferRequest {
         status: status ?? this.status,
         userUid: userUid ?? this.userUid,
         targetAreas: targetAreas ?? this.targetAreas,
+        targetGender: targetGender ?? this.targetGender,
         hashtags: hashtags ?? this.hashtags,
         postCreatorType: postCreatorType ?? this.postCreatorType,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
@@ -77,6 +81,7 @@ class CreateOfferRequest {
         targetAreas: json["target_areas"] == null
             ? []
             : List<String>.from(json["target_areas"]!.map((x) => x)),
+        targetGender: json["target_gender"],
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
@@ -104,6 +109,7 @@ class CreateOfferRequest {
         "target_areas": targetAreas == null
             ? []
             : List<dynamic>.from(targetAreas!.map((x) => x)),
+        "target_gender": targetGender,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         "post_creator_type": postCreatorType,
