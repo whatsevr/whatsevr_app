@@ -71,6 +71,7 @@ class OfferPostFrame extends StatelessWidget {
         onRequestOfOfferDetails?.call();
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           PadHorizontal(
             child: Column(

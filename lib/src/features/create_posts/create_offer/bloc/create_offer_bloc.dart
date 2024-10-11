@@ -16,7 +16,10 @@ import '../../../../../config/api/external/models/business_validation_exception.
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 
+import '../../../../../config/api/requests_model/create_offer.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_offer.dart';
+import '../../../../../config/routes/router.dart';
+import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
 
 import '../../../../../config/widgets/media/meta_data.dart';
@@ -46,6 +49,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
+    on<AddOrRemoveTargetAddressEvent>(_onAddOrRemoveTargetAddress);
   }
   FutureOr<void> _onInitial(
     CreateOfferInitialEvent event,
@@ -77,9 +81,6 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      if (state.uiFilesData.isEmpty) {
-        throw BusinessException('Please select an image or video');
-      }
       titleController.text = titleController.text.trim();
       if (titleController.text.isEmpty) {
         throw BusinessException('Caption is required');
@@ -108,10 +109,11 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           request: SanityCheckNewOfferRequest(
         mediaMetaData: [
           for (var e in state.uiFilesData)
-            MediaMetaDatum(
-              videoDurationSec: e.fileMetaData?.durationInSec,
-              sizeBytes: e.fileMetaData?.sizeInBytes,
-            ),
+            if (e.type == UiFileTypes.video)
+              MediaMetaDatum(
+                videoDurationSec: e.fileMetaData?.durationInSec,
+                sizeBytes: e.fileMetaData?.sizeInBytes,
+              ),
         ],
         postData: PostData(
           userUid: await AuthUserDb.getLastLoggedUserUid(),
@@ -120,6 +122,58 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       ));
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
+      }
+      SmartDialog.showLoading(msg: 'Creating post...');
+      (String?, int?)? response = await PostApi.createOffer(
+        post: CreateOfferRequest(
+          title: titleController.text,
+          description: descriptionController.text,
+          status: statusController.text,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          targetAreas: state.selectedTargetAddresses,
+          hashtags: hashtags,
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
+          filesData: [
+            for (var e in state.uiFilesData)
+              e.type == UiFileTypes.video
+                  ? VideoFileDatum(
+                      type: 'video',
+                      videoUrl: await FileUploadService.uploadFileToCloudinary(
+                        e.file!,
+                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        fileRelatedTo: 'offer-video',
+                      ),
+                      videoThumbnailUrl:
+                          await FileUploadService.uploadFilesToSupabase(
+                        e.thumbnailFile!,
+                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        fileRelatedTo: 'offer-thumbnail',
+                      ),
+                      videoDurationMs: e.fileMetaData?.durationInMs,
+                    )
+                  : ImageFileDatum(
+                      type: 'image',
+                      imageUrl: await FileUploadService.uploadFilesToSupabase(
+                        e.file!,
+                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        fileRelatedTo: 'offer-image',
+                      ),
+                    ),
+          ],
+          ctaAction:
+              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
+          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
+              ? ctaActionUrlController.text
+              : null,
+        ),
+      );
+      if (response != null) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('${response.$1}');
+        AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -331,4 +385,37 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   //     highLevelCatch(e, stackTrace);
   //   }
   // }
+
+  FutureOr<void> _onAddOrRemoveTargetAddress(
+      AddOrRemoveTargetAddressEvent event,
+      Emitter<CreateOfferState> emit) async {
+    try {
+      if (event.removableTargetAddress != null) {
+        emit(state.copyWith(
+          selectedTargetAddresses: state.selectedTargetAddresses!
+              .where((element) => element != event.removableTargetAddress)
+              .toList(),
+        ));
+        return;
+      }
+      if (event.countryName == null &&
+          event.stateName == null &&
+          event.cityName == null) return;
+      String address = '';
+      if (event.countryName?.isNotEmpty ?? false) {
+        address += '${event.countryName}';
+      }
+      if (event.stateName?.isNotEmpty ?? false) {
+        address += ', ${event.stateName}';
+      }
+      if (event.cityName?.isNotEmpty ?? false) {
+        address += ', ${event.cityName}';
+      }
+      emit(state.copyWith(
+        selectedTargetAddresses: state.selectedTargetAddresses! + [address],
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
 }

@@ -55,7 +55,7 @@ class WhatsevrLongTaskController extends TaskHandler {
       final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
         File(taskData.videoFilePath!),
         userUid: taskData.userUid!,
-        fileType: 'video-post',
+        fileRelatedTo: 'video-post',
       );
       if (videoUrl == null) {
         TalkerService.instance.error('Failed to upload video file.');
@@ -65,7 +65,7 @@ class WhatsevrLongTaskController extends TaskHandler {
           await FileUploadService.uploadFilesToSupabase(
         File(taskData.thumbnailFilePath!),
         userUid: taskData.userUid!,
-        fileType: 'video-post-thumbnail',
+        fileRelatedTo: 'video-post-thumbnail',
       );
       if (thumbnailUrl == null) {
         TalkerService.instance.error('Failed to upload thumbnail file.');

@@ -158,7 +158,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       String? profilePictureUrl = await FileUploadService.uploadFilesToSupabase(
         event.profileImage!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'profile-picture',
+        fileRelatedTo: 'profile-picture',
         fileExtension: 'jpg',
       );
       await UsersApi.updateProfilePicture(
@@ -199,7 +199,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         String? imageUrl = await FileUploadService.uploadFilesToSupabase(
           imageFile!,
           userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-          fileType: 'cover-image',
+          fileRelatedTo: 'cover-image',
           fileExtension: 'jpg',
         );
         String? videoUrl;
@@ -207,7 +207,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           videoUrl = await FileUploadService.uploadFilesToSupabase(
             videoFile,
             userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-            fileType: 'cover-video',
+            fileRelatedTo: 'cover-video',
           );
         }
 

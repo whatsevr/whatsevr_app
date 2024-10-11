@@ -285,52 +285,49 @@ class CreateOfferPage extends StatelessWidget {
                 customFunction: () {},
               ),
               const Gap(12),
-              WhatsevrFormField.invokeCustomFunction(
-                context: context,
-                suffixWidget: const Icon(Icons.location_on),
-                hintText: 'Target Area',
-                customFunction: () {
-                  showAppModalSheet(child: CountryStateCityPage(
-                    onPlaceSelected: (countryName, stateName, cityName) {
-                      if (countryName == null &&
-                          stateName == null &&
-                          cityName == null) return;
-                      String address = '';
-                      if (countryName?.isNotEmpty ?? false) {
-                        address += '$countryName';
-                      }
-                      if (stateName?.isNotEmpty ?? false) {
-                        address += ' ,$stateName';
-                      }
-                      if (cityName?.isNotEmpty ?? false) {
-                        address += ' ,$cityName';
-                      }
-                      context.read<CreateOfferBloc>().emit(state.copyWith(
-                          selectedTargetAddresses:
-                              state.selectedTargetAddresses! + [address]));
+              Column(
+                children: [
+                  WhatsevrFormField.invokeCustomFunction(
+                    context: context,
+                    suffixWidget: const Icon(Icons.location_on),
+                    hintText: 'Target Area',
+                    customFunction: () {
+                      showAppModalSheet(child: CountryStateCityPage(
+                        onPlaceSelected: (countryName, stateName, cityName) {
+                          context
+                              .read<CreateOfferBloc>()
+                              .add(AddOrRemoveTargetAddressEvent(
+                                countryName: countryName,
+                                stateName: stateName,
+                                cityName: cityName,
+                              ));
+                        },
+                      ));
                     },
-                  ));
-                },
-              ),
-              const Gap(12),
-              for (String address in state.selectedTargetAddresses ?? []) ...[
-                Row(
-                  children: [
-                    Text(address),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        List<String> addresses = state.selectedTargetAddresses!;
-                        addresses.remove(address);
-                        context.read<CreateOfferBloc>().emit(state.copyWith(
-                              selectedTargetAddresses: addresses,
-                            ));
-                      },
-                      child: const Icon(Icons.clear_rounded, color: Colors.red),
+                  ),
+                  const Gap(12),
+                  for (String address
+                      in state.selectedTargetAddresses ?? []) ...[
+                    Row(
+                      children: [
+                        Text(address),
+                        const Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            context
+                                .read<CreateOfferBloc>()
+                                .add(AddOrRemoveTargetAddressEvent(
+                                  removableTargetAddress: address,
+                                ));
+                          },
+                          child: const Icon(Icons.clear_rounded,
+                              color: Colors.red),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
+                ],
+              ),
               const Gap(12),
               ExpansionTileItem.flat(
                 title: Text('More Details'),

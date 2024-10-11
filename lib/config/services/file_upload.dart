@@ -27,7 +27,7 @@ class FileUploadService {
   static Future<String?> uploadFilesToSupabase(
     File file, {
     required String userUid,
-    required fileType,
+    required fileRelatedTo,
     String? fileExtension,
   }) async {
     try {
@@ -36,7 +36,7 @@ class FileUploadService {
             'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)');
       }
       final String fileName =
-          '${userUid}_${fileType}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
+          '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
 
       final String uploadStorageResponse = await _supabaseStorageClient
           .from('files') // Replace with your storage bucket name
@@ -58,12 +58,12 @@ class FileUploadService {
   static Future<String?> uploadFileToCloudinary(
     File file, {
     required String userUid,
-    required String fileType,
+    required String fileRelatedTo,
     String? fileExtension,
   }) async {
     try {
       final String fileName =
-          '${userUid}_${fileType}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
+          '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
 
       CloudinaryResponse response = await cloudinary.upload(
           file: file.path,

@@ -58,8 +58,6 @@ class RecommendedOffer {
   final String? uid;
   final String? title;
   final String? description;
-  final String? status;
-
   final List<String>? hashtags;
   final List<String>? taggedUserUids;
   final bool? isDeleted;
@@ -67,12 +65,10 @@ class RecommendedOffer {
   final bool? isActive;
   final String? postCreatorType;
   final String? userUid;
-  final String? location;
   final int? totalViews;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
-  final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final List<String>? taggedCommunityUids;
   final int? totalShares;
@@ -80,6 +76,9 @@ class RecommendedOffer {
   final String? ctaAction;
   final String? ctaActionUrl;
   final List<FilesDatum>? filesData;
+  final String? status;
+  final String? targetGender;
+  final List<String>? targetAreas;
   final User? user;
 
   RecommendedOffer({
@@ -88,7 +87,6 @@ class RecommendedOffer {
     this.uid,
     this.title,
     this.description,
-    this.status,
     this.hashtags,
     this.taggedUserUids,
     this.isDeleted,
@@ -96,12 +94,10 @@ class RecommendedOffer {
     this.isActive,
     this.postCreatorType,
     this.userUid,
-    this.location,
     this.totalViews,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
-    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedCommunityUids,
     this.totalShares,
@@ -109,6 +105,9 @@ class RecommendedOffer {
     this.ctaAction,
     this.ctaActionUrl,
     this.filesData,
+    this.status,
+    this.targetGender,
+    this.targetAreas,
     this.user,
   });
 
@@ -118,7 +117,6 @@ class RecommendedOffer {
     String? uid,
     String? title,
     String? description,
-    String? status,
     List<String>? hashtags,
     List<String>? taggedUserUids,
     bool? isDeleted,
@@ -126,12 +124,10 @@ class RecommendedOffer {
     bool? isActive,
     String? postCreatorType,
     String? userUid,
-    String? location,
     int? totalViews,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
-    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedCommunityUids,
     int? totalShares,
@@ -139,6 +135,9 @@ class RecommendedOffer {
     String? ctaAction,
     String? ctaActionUrl,
     List<FilesDatum>? filesData,
+    String? status,
+    String? targetGender,
+    List<String>? targetAreas,
     User? user,
   }) =>
       RecommendedOffer(
@@ -147,7 +146,6 @@ class RecommendedOffer {
         uid: uid ?? this.uid,
         title: title ?? this.title,
         description: description ?? this.description,
-        status: status ?? this.status,
         hashtags: hashtags ?? this.hashtags,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         isDeleted: isDeleted ?? this.isDeleted,
@@ -155,13 +153,11 @@ class RecommendedOffer {
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
         userUid: userUid ?? this.userUid,
-        location: location ?? this.location,
         totalViews: totalViews ?? this.totalViews,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
             internalAiDescription ?? this.internalAiDescription,
-        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
@@ -169,6 +165,9 @@ class RecommendedOffer {
         ctaAction: ctaAction ?? this.ctaAction,
         ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
         filesData: filesData ?? this.filesData,
+        status: status ?? this.status,
+        targetGender: targetGender ?? this.targetGender,
+        targetAreas: targetAreas ?? this.targetAreas,
         user: user ?? this.user,
       );
 
@@ -186,7 +185,6 @@ class RecommendedOffer {
         uid: json["uid"],
         title: json["title"],
         description: json["description"],
-        status: json["status"],
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
@@ -198,12 +196,10 @@ class RecommendedOffer {
         isActive: json["is_active"],
         postCreatorType: json["post_creator_type"],
         userUid: json["user_uid"],
-        location: json["location"],
         totalViews: json["total_views"],
         totalLikes: json["total_likes"],
         totalComments: json["total_comments"],
         internalAiDescription: json["internal_ai_description"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedCommunityUids: json["tagged_community_uids"] == null
             ? []
@@ -216,6 +212,11 @@ class RecommendedOffer {
             ? []
             : List<FilesDatum>.from(
                 json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
+        status: json["status"],
+        targetGender: json["target_gender"],
+        targetAreas: json["target_areas"] == null
+            ? []
+            : List<String>.from(json["target_areas"]!.map((x) => x)),
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
 
@@ -225,7 +226,6 @@ class RecommendedOffer {
         "uid": uid,
         "title": title,
         "description": description,
-        "status": status,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         "tagged_user_uids": taggedUserUids == null
@@ -236,12 +236,10 @@ class RecommendedOffer {
         "is_active": isActive,
         "post_creator_type": postCreatorType,
         "user_uid": userUid,
-        "location": location,
         "total_views": totalViews,
         "total_likes": totalLikes,
         "total_comments": totalComments,
         "internal_ai_description": internalAiDescription,
-        "address_lat_long_wkb": addressLatLongWkb,
         "creator_lat_long_wkb": creatorLatLongWkb,
         "tagged_community_uids": taggedCommunityUids == null
             ? []
@@ -253,6 +251,11 @@ class RecommendedOffer {
         "files_data": filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        "status": status,
+        "target_gender": targetGender,
+        "target_areas": targetAreas == null
+            ? []
+            : List<dynamic>.from(targetAreas!.map((x) => x)),
         "user": user?.toMap(),
       };
 }
@@ -261,30 +264,30 @@ class FilesDatum {
   final String? type;
   final String? imageUrl;
   final String? videoUrl;
-  final String? videoThumbnailUrl;
   final int? videoDurationMs;
+  final String? videoThumbnailUrl;
 
   FilesDatum({
     this.type,
     this.imageUrl,
     this.videoUrl,
-    this.videoThumbnailUrl,
     this.videoDurationMs,
+    this.videoThumbnailUrl,
   });
 
   FilesDatum copyWith({
     String? type,
     String? imageUrl,
     String? videoUrl,
-    String? videoThumbnailUrl,
     int? videoDurationMs,
+    String? videoThumbnailUrl,
   }) =>
       FilesDatum(
         type: type ?? this.type,
         imageUrl: imageUrl ?? this.imageUrl,
         videoUrl: videoUrl ?? this.videoUrl,
-        videoThumbnailUrl: videoThumbnailUrl ?? this.videoThumbnailUrl,
         videoDurationMs: videoDurationMs ?? this.videoDurationMs,
+        videoThumbnailUrl: videoThumbnailUrl ?? this.videoThumbnailUrl,
       );
 
   factory FilesDatum.fromJson(String str) =>
@@ -296,16 +299,16 @@ class FilesDatum {
         type: json["type"],
         imageUrl: json["image_url"],
         videoUrl: json["video_url"],
-        videoThumbnailUrl: json["video_thumbnail_url"],
         videoDurationMs: json["video_duration_ms"],
+        videoThumbnailUrl: json["video_thumbnail_url"],
       );
 
   Map<String, dynamic> toMap() => {
         "type": type,
         "image_url": imageUrl,
         "video_url": videoUrl,
-        "video_thumbnail_url": videoThumbnailUrl,
         "video_duration_ms": videoDurationMs,
+        "video_thumbnail_url": videoThumbnailUrl,
       };
 }
 

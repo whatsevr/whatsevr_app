@@ -5,10 +5,10 @@ class CreateOfferRequest {
   final String? description;
   final String? status;
   final String? userUid;
-  final String? location;
+  final List<String>? targetAreas;
   final List<String>? hashtags;
   final String? postCreatorType;
-  final String? addressLatLongWkb;
+
   final String? creatorLatLongWkb;
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
@@ -21,10 +21,9 @@ class CreateOfferRequest {
     this.description,
     this.status,
     this.userUid,
-    this.location,
+    this.targetAreas,
     this.hashtags,
     this.postCreatorType,
-    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedUserUids,
     this.taggedCommunityUids,
@@ -38,10 +37,9 @@ class CreateOfferRequest {
     String? description,
     String? status,
     String? userUid,
-    String? location,
+    List<String>? targetAreas,
     List<String>? hashtags,
     String? postCreatorType,
-    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedUserUids,
     List<String>? taggedCommunityUids,
@@ -54,10 +52,9 @@ class CreateOfferRequest {
         description: description ?? this.description,
         status: status ?? this.status,
         userUid: userUid ?? this.userUid,
-        location: location ?? this.location,
+        targetAreas: targetAreas ?? this.targetAreas,
         hashtags: hashtags ?? this.hashtags,
         postCreatorType: postCreatorType ?? this.postCreatorType,
-        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
@@ -77,12 +74,13 @@ class CreateOfferRequest {
         description: json["description"],
         status: json["status"],
         userUid: json["user_uid"],
-        location: json["location"],
+        targetAreas: json["target_areas"] == null
+            ? []
+            : List<String>.from(json["target_areas"]!.map((x) => x)),
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
         postCreatorType: json["post_creator_type"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedUserUids: json["tagged_user_uids"] == null
             ? []
@@ -103,11 +101,12 @@ class CreateOfferRequest {
         "description": description,
         "status": status,
         "user_uid": userUid,
-        "location": location,
+        "target_areas": targetAreas == null
+            ? []
+            : List<dynamic>.from(targetAreas!.map((x) => x)),
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         "post_creator_type": postCreatorType,
-        "address_lat_long_wkb": addressLatLongWkb,
         "creator_lat_long_wkb": creatorLatLongWkb,
         "tagged_user_uids": taggedUserUids == null
             ? []
@@ -171,13 +170,13 @@ class ImageFileDatum extends FilesDatum {
 // Handles video data
 class VideoFileDatum extends FilesDatum {
   final String? videoUrl;
-  final String? thumbnailUrl;
+  final String? videoThumbnailUrl;
   final int? videoDurationMs;
 
   VideoFileDatum({
     required String type,
     this.videoUrl,
-    this.thumbnailUrl,
+    this.videoThumbnailUrl,
     this.videoDurationMs,
   }) : super(type);
 
@@ -189,7 +188,7 @@ class VideoFileDatum extends FilesDatum {
   factory VideoFileDatum.fromMap(Map<String, dynamic> json) => VideoFileDatum(
         type: json["type"],
         videoUrl: json["video_url"],
-        thumbnailUrl: json["thumbnail_url"],
+        videoThumbnailUrl: json["video_thumbnail_url"],
         videoDurationMs: json["video_duration_ms"],
       );
 
@@ -197,7 +196,7 @@ class VideoFileDatum extends FilesDatum {
   Map<String, dynamic> toMap() => {
         "type": type,
         "video_url": videoUrl,
-        "thumbnail_url": thumbnailUrl,
+        "video_thumbnail_url": videoThumbnailUrl,
         "video_duration_ms": videoDurationMs,
       };
 }

@@ -137,13 +137,13 @@ class CreateVideoPostBloc
                 await FileUploadService.uploadFileToCloudinary(
               state.videoFile!,
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileType: 'video-post',
+              fileRelatedTo: 'video-post',
             );
             final String? thumbnailUrl =
                 await FileUploadService.uploadFilesToSupabase(
               state.thumbnailFile!,
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileType: 'video-post-thumbnail',
+              fileRelatedTo: 'video-post-thumbnail',
             );
             (String? message, int? statusCode)? response =
                 await PostApi.createVideoPost(

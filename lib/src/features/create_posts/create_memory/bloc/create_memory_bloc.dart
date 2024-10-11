@@ -284,13 +284,13 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
         state.videoFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-video',
+        fileRelatedTo: 'memory-video',
       );
       final String? thumbnailUrl =
           await FileUploadService.uploadFilesToSupabase(
         state.thumbnailFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-image',
+        fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
       (String? message, int? statusCode)? response = await PostApi.createMemory(
@@ -338,7 +338,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       final String? imageUrl = await FileUploadService.uploadFilesToSupabase(
         state.imageFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-        fileType: 'memory-image',
+        fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
       (String? message, int? statusCode)? response = await PostApi.createMemory(
