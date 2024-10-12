@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import '../../src/features/create_posts/create_flick_post/views/page.dart';
 import '../../src/features/create_posts/create_memory/views/page.dart';
 import '../../src/features/create_posts/create_offer/views/page.dart';
+import '../../src/features/create_posts/create_photo_post/views/page.dart';
 
 void showContentUploadBottomSheet(
   BuildContext context, {
@@ -79,6 +80,12 @@ class _Ui extends StatelessWidget {
           ),
           onPressed: () async {
             Navigator.pop(context);
+            AppNavigationService.newRoute(
+              RoutesName.createPhotoPost,
+              extras: CreatePhotoPostPageArgument(
+                postCreatorType: postCreatorType,
+              ),
+            );
           },
           child: const Row(
             children: <Widget>[

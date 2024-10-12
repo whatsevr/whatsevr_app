@@ -8,6 +8,7 @@ import '../external/models/business_validation_exception.dart';
 import '../response_model/recommendation_flicks.dart';
 import '../response_model/recommendation_memories.dart';
 import '../response_model/recommendation_offers.dart';
+import '../response_model/recommendation_photo_posts.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> publicVideoPosts({
@@ -47,7 +48,7 @@ class RecommendationApi {
 
   static Future<RecommendationMemoriesResponse?> publicMemories({
     required int page,
-    int pageSize = 8,
+    int pageSize = 10,
   }) async {
     try {
       Response response = await ApiClient.client.get(
@@ -72,6 +73,23 @@ class RecommendationApi {
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return RecommendationOffersResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<RecommendationPhotoPostsResponse?> publicPhotoPosts({
+    required int page,
+    int pageSize = 5,
+  }) async {
+    try {
+      Response response = await ApiClient.client.get(
+          '/v1/public-recommendations/photo-posts',
+          queryParameters: {'page': page, 'page_size': pageSize});
+      if (response.data != null) {
+        return RecommendationPhotoPostsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

@@ -16,8 +16,8 @@ import '../../../../../config/api/external/models/business_validation_exception.
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 
-import '../../../../../config/api/requests_model/create_offer.dart';
-import '../../../../../config/api/requests_model/sanity_check_new_offer.dart';
+import '../../../../../config/api/requests_model/create_photo_post.dart';
+import '../../../../../config/api/requests_model/sanity_check_new_photo_posts.dart';
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
@@ -27,19 +27,19 @@ import '../../../../../config/widgets/media/thumbnail_selection.dart';
 
 import '../views/page.dart';
 
-part 'create_offer_event.dart';
-part 'create_offer_state.dart';
+part 'create_photo_post_event.dart';
+part 'create_photo_post_state.dart';
 
-class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
+class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
   final int maxVideoCount = 2;
-  final int maxImageCount = 5;
+  final int maxImageCount = 10;
   List<String> targetGender = ['All', 'Man', 'Women'];
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
   final TextEditingController ctaActionUrlController = TextEditingController();
 
-  CreateOfferBloc() : super(const CreateOfferState()) {
+  CreateOfferBloc() : super(const CreatePhotoPostState()) {
     on<CreateOfferInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
@@ -53,7 +53,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   }
   FutureOr<void> _onInitial(
     CreateOfferInitialEvent event,
-    Emitter<CreateOfferState> emit,
+    Emitter<CreatePhotoPostState> emit,
   ) async {
     try {
       emit(state.copyWith(pageArgument: event.pageArgument));
@@ -78,7 +78,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onSubmit(
     SubmitPostEvent event,
-    Emitter<CreateOfferState> emit,
+    Emitter<CreatePhotoPostState> emit,
   ) async {
     try {
       titleController.text = titleController.text.trim();
@@ -105,8 +105,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewOffer(
-          request: SanityCheckNewOfferRequest(
+      (String?, int?)? itm = await PostApi.sanityCheckNewPhotoPost(
+          request: SanityCheckNewPhotoPostRequest(
         mediaMetaData: [
           for (var e in state.uiFilesData)
             if (e.type == UiFileTypes.video)
@@ -124,8 +124,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
         throw BusinessException(itm!.$1!);
       }
       SmartDialog.showLoading(msg: 'Creating post...');
-      (String?, int?)? response = await PostApi.createOffer(
-        post: CreateOfferRequest(
+      (String?, int?)? response = await PostApi.createPhotoPost(
+        post: CreatePhotoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
           status: statusController.text,
@@ -183,7 +183,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onPickVideo(
     PickVideoEvent event,
-    Emitter<CreateOfferState> emit,
+    Emitter<CreatePhotoPostState> emit,
   ) async {
     try {
       int videoCount = state.uiFilesData
@@ -232,7 +232,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   Future<void> _onChangeVideoThumbnail(
     ChangeVideoThumbnail event,
-    Emitter<CreateOfferState> emit,
+    Emitter<CreatePhotoPostState> emit,
   ) async {
     try {
       final FileMetaData? thumbnailMetaData =
@@ -261,7 +261,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateOfferState> emit) {
+      Emitter<CreatePhotoPostState> emit) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(
@@ -292,7 +292,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreateOfferState> emit) async {
+      PickImageEvent event, Emitter<CreatePhotoPostState> emit) async {
     try {
       FileMetaData? imageMetaData =
           await FileMetaData.fromFile(event.pickedImageFile);
@@ -318,7 +318,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreateOfferState> emit) {
+      RemoveVideoOrImageEvent event, Emitter<CreatePhotoPostState> emit) {
     try {
       emit(state.copyWith(
         uiFilesData: state.uiFilesData
@@ -332,7 +332,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onAddOrRemoveTargetAddress(
       AddOrRemoveTargetAddressEvent event,
-      Emitter<CreateOfferState> emit) async {
+      Emitter<CreatePhotoPostState> emit) async {
     try {
       if (event.removableTargetAddress != null) {
         emit(state.copyWith(

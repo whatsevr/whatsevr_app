@@ -26,6 +26,7 @@ import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 import '../../src/features/create_posts/create_flick_post/views/page.dart';
 import '../../src/features/create_posts/create_memory/views/page.dart';
 import '../../src/features/create_posts/create_offer/views/page.dart';
+import '../../src/features/create_posts/create_photo_post/views/page.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();
@@ -201,6 +202,17 @@ class AppNavigationService {
               CreateOfferPageArgument pageArgument =
                   state.extra as CreateOfferPageArgument;
               return CreateOfferPage(
+                pageArgument: pageArgument,
+              );
+            },
+          ),
+          GoRoute(
+            name: RoutesName.createPhotoPost,
+            path: RoutesName.createPhotoPost,
+            builder: (BuildContext context, GoRouterState state) {
+              CreatePhotoPostPageArgument pageArgument =
+                  state.extra as CreatePhotoPostPageArgument;
+              return CreatePhotoPostPage(
                 pageArgument: pageArgument,
               );
             },

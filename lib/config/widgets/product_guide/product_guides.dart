@@ -58,4 +58,17 @@ class ProductGuides {
       guides: guides,
     ));
   }
+
+  static showPhotoPostCreationGuide() {
+    List<Widget> guides = [
+      const Text(
+          'Select landscape or square or vertical images to create a offer.'),
+      const Text('Maximum 10 images can be post in one post.'),
+    ];
+    showAppModalSheet(
+        child: AppGuideView(
+      headingTitle: 'Photo Post Creation Guide',
+      guides: guides,
+    ));
+  }
 }
