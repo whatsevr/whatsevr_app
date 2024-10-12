@@ -69,7 +69,7 @@ class CreatePhotoPostPage extends StatelessWidget {
               const Gap(12),
               Builder(
                 builder: (context) {
-                  if (state.uiFilesData.isNotEmpty) {
+                  if (state.uiImageData.isNotEmpty) {
                     return SwipeAbleDynamicHeightViews(
                       selectedViewIndex: selectedSwipeAbleViewIndex,
                       onViewIndexChanged: (index) {
@@ -77,115 +77,37 @@ class CreatePhotoPostPage extends StatelessWidget {
                       },
                       key: UniqueKey(),
                       children: [
-                        for (UiFileData uiFileData in state.uiFilesData) ...[
-                          if (uiFileData.type == UiFileTypes.image) ...[
-                            Stack(
-                              children: [
-                                ExtendedImage.file(
-                                  uiFileData.file!,
-                                  width: double.infinity,
-                                  fit: BoxFit.contain,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
+                        for (UiImageData uiFileData in state.uiImageData) ...[
+                          Stack(
+                            children: [
+                              ExtendedImage.file(
+                                uiFileData.file!,
+                                width: double.infinity,
+                                fit: BoxFit.contain,
+                                shape: BoxShape.rectangle,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<CreatePhotoPostBloc>()
+                                        .add(RemoveVideoOrImageEvent(
+                                          uiFileData: uiFileData,
+                                        ));
+                                  },
+                                  icon: const Icon(
+                                    Icons.clear_rounded,
+                                    color: Colors.red,
                                   ),
                                 ),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      context
-                                          .read<CreatePhotoPostBloc>()
-                                          .add(RemoveVideoOrImageEvent(
-                                            uiFileData: uiFileData,
-                                          ));
-                                    },
-                                    icon: const Icon(
-                                      Icons.clear_rounded,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                          if (uiFileData.type == UiFileTypes.video) ...[
-                            Stack(
-                              children: [
-                                ExtendedImage.file(
-                                  uiFileData.thumbnailFile!,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                Positioned.fill(
-                                  child: Center(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        AppNavigationService.newRoute(
-                                          RoutesName.fullVideoPlayer,
-                                          extras: MediaPreviewerPageArguments(
-                                            videoUrl: uiFileData.file!.path,
-                                          ),
-                                        );
-                                      },
-                                      icon: const Icon(
-                                        Icons.play_circle_fill_rounded,
-                                        color: Colors.white,
-                                        size: 50,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      context
-                                          .read<CreatePhotoPostBloc>()
-                                          .add(RemoveVideoOrImageEvent(
-                                            uiFileData: uiFileData,
-                                          ));
-                                    },
-                                    icon: const Icon(
-                                      Icons.clear_rounded,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 6,
-                                  child: WhatsevrButton.filled(
-                                    shrink: true,
-                                    miniButton: true,
-                                    onPressed: () {
-                                      showWhatsevrThumbnailSelectionPage(
-                                        videoFile: uiFileData.file!,
-                                        allowPickFromGallery: false,
-                                        aspectRatios: offerPostAspectRatio,
-                                      ).then((value) {
-                                        if (value != null) {
-                                          context
-                                              .read<CreatePhotoPostBloc>()
-                                              .add(ChangeVideoThumbnail(
-                                                pickedThumbnailFile: value,
-                                                uiFileData: uiFileData,
-                                              ));
-                                        }
-                                      });
-                                    },
-                                    label: 'Update Cover',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                              ),
+                            ],
+                          ),
                         ],
                       ],
                     );
@@ -206,15 +128,6 @@ class CreatePhotoPostPage extends StatelessWidget {
                               aspectRatios: offerPostAspectRatio,
                             );
                           },
-                          onChoosingVideoFromGallery: () {
-                            CustomAssetPicker.pickVideoFromGallery(
-                              onCompleted: (file) {
-                                context
-                                    .read<CreatePhotoPostBloc>()
-                                    .add(PickVideoEvent(pickedVideoFile: file));
-                              },
-                            );
-                          },
                         );
                       },
                       shape: RoundedRectangleBorder(
@@ -228,10 +141,9 @@ class CreatePhotoPostPage extends StatelessWidget {
                 },
               ),
               const Gap(8),
-              if (state.uiFilesData.isNotEmpty &&
-                  state.uiFilesData.length !=
-                      context.read<CreatePhotoPostBloc>().maxVideoCount +
-                          context.read<CreatePhotoPostBloc>().maxImageCount)
+              if (state.uiImageData.isNotEmpty &&
+                  state.uiImageData.length !=
+                      context.read<CreatePhotoPostBloc>().maxImageCount)
                 WhatsevrButton.outlined(
                   label: 'Pick images',
                   onPressed: () {
@@ -244,15 +156,6 @@ class CreatePhotoPostPage extends StatelessWidget {
                                 .add(PickImageEvent(pickedImageFile: file));
                           },
                           aspectRatios: offerPostAspectRatio,
-                        );
-                      },
-                      onChoosingVideoFromGallery: () {
-                        CustomAssetPicker.pickVideoFromGallery(
-                          onCompleted: (file) {
-                            context
-                                .read<CreatePhotoPostBloc>()
-                                .add(PickVideoEvent(pickedVideoFile: file));
-                          },
                         );
                       },
                     );

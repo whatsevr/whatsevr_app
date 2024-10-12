@@ -19,24 +19,6 @@ class SubmitPostEvent extends CreatePhotoPostEvent {
   List<Object?> get props => <Object?>[];
 }
 
-class PickVideoEvent extends CreatePhotoPostEvent {
-  final File? pickedVideoFile;
-  const PickVideoEvent({required this.pickedVideoFile});
-
-  @override
-  List<Object?> get props => <Object?>[pickedVideoFile];
-}
-
-class ChangeVideoThumbnail extends CreatePhotoPostEvent {
-  final UiFileData uiFileData;
-  final File? pickedThumbnailFile;
-  const ChangeVideoThumbnail(
-      {required this.pickedThumbnailFile, required this.uiFileData});
-
-  @override
-  List<Object?> get props => <Object?>[pickedThumbnailFile, uiFileData];
-}
-
 class PickImageEvent extends CreatePhotoPostEvent {
   final File? pickedImageFile;
   const PickImageEvent({required this.pickedImageFile});
@@ -58,7 +40,7 @@ class UpdateTaggedUsersAndCommunitiesEvent extends CreatePhotoPostEvent {
 }
 
 class RemoveVideoOrImageEvent extends CreatePhotoPostEvent {
-  final UiFileData uiFileData;
+  final UiImageData uiFileData;
   const RemoveVideoOrImageEvent({required this.uiFileData});
 
   @override

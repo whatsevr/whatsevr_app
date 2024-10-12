@@ -43,21 +43,17 @@ class SanityCheckNewPhotoPostRequest {
 }
 
 class MediaMetaDatum {
-  final int? videoDurationSec;
-  final int? sizeBytes;
+  final int? imageSizeBytes;
 
   MediaMetaDatum({
-    this.videoDurationSec,
-    this.sizeBytes,
+    this.imageSizeBytes,
   });
 
   MediaMetaDatum copyWith({
-    int? videoDurationSec,
-    int? sizeBytes,
+    int? imageSizeBytes,
   }) =>
       MediaMetaDatum(
-        videoDurationSec: videoDurationSec ?? this.videoDurationSec,
-        sizeBytes: sizeBytes ?? this.sizeBytes,
+        imageSizeBytes: imageSizeBytes ?? this.imageSizeBytes,
       );
 
   factory MediaMetaDatum.fromJson(String str) =>
@@ -66,36 +62,34 @@ class MediaMetaDatum {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaDatum.fromMap(Map<String, dynamic> json) => MediaMetaDatum(
-        videoDurationSec: json["video_duration_sec"],
-        sizeBytes: json["size_bytes"],
+        imageSizeBytes: json["image_size_bytes"],
       );
 
   Map<String, dynamic> toMap() => {
-        "video_duration_sec": videoDurationSec,
-        "size_bytes": sizeBytes,
+        "image_size_bytes": imageSizeBytes,
       };
 }
 
 class PostData {
+  final String? postCreatorType;
   final String? userUid;
   final String? communityUid;
-  final String? postCreatorType;
 
   PostData({
+    this.postCreatorType,
     this.userUid,
     this.communityUid,
-    this.postCreatorType,
   });
 
   PostData copyWith({
+    String? postCreatorType,
     String? userUid,
     String? communityUid,
-    String? postCreatorType,
   }) =>
       PostData(
+        postCreatorType: postCreatorType ?? this.postCreatorType,
         userUid: userUid ?? this.userUid,
         communityUid: communityUid ?? this.communityUid,
-        postCreatorType: postCreatorType ?? this.postCreatorType,
       );
 
   factory PostData.fromJson(String str) => PostData.fromMap(json.decode(str));
@@ -103,14 +97,14 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
+        postCreatorType: json["post_creator_type"],
         userUid: json["user_uid"],
         communityUid: json["community_uid"],
-        postCreatorType: json["post_creator_type"],
       );
 
   Map<String, dynamic> toMap() => {
+        "post_creator_type": postCreatorType,
         "user_uid": userUid,
         "community_uid": communityUid,
-        "post_creator_type": postCreatorType,
       };
 }

@@ -32,7 +32,6 @@ part 'create_photo_post_state.dart';
 
 class CreatePhotoPostBloc
     extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
-  final int maxVideoCount = 2;
   final int maxImageCount = 10;
 
   final TextEditingController titleController = TextEditingController();
@@ -41,9 +40,9 @@ class CreatePhotoPostBloc
   CreatePhotoPostBloc() : super(const CreatePhotoPostState()) {
     on<CreateOfferInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
-    on<PickVideoEvent>(_onPickVideo);
+
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
-    on<ChangeVideoThumbnail>(_onChangeVideoThumbnail);
+
     on<PickImageEvent>(_onPickImage);
 
     on<UpdateTaggedUsersAndCommunitiesEvent>(
@@ -121,12 +120,10 @@ class CreatePhotoPostBloc
       (String?, int?)? itm = await PostApi.sanityCheckNewPhotoPost(
           request: SanityCheckNewPhotoPostRequest(
         mediaMetaData: [
-          for (var e in state.uiFilesData)
-            if (e.type == UiFileTypes.video)
-              MediaMetaDatum(
-                videoDurationSec: e.fileMetaData?.durationInSec,
-                sizeBytes: e.fileMetaData?.sizeInBytes,
-              ),
+          for (var e in state.uiImageData)
+            MediaMetaDatum(
+              imageSizeBytes: e.fileMetaData?.sizeInBytes,
+            ),
         ],
         postData: PostData(
           userUid: await AuthUserDb.getLastLoggedUserUid(),
@@ -142,39 +139,23 @@ class CreatePhotoPostBloc
           title: titleController.text,
           description: descriptionController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
-          targetAreas: state.selectedTargetAddresses,
-          targetGender: state.selectedTargetGender?.toLowerCase(),
+          location: state.selectedPostLocation,
+          addressLatLongWkb: state.selectedPostLocationLatLongWkb,
           hashtags: hashtags,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
           filesData: [
-            for (var e in state.uiFilesData)
-              e.type == UiFileTypes.video
-                  ? VideoFileDatum(
-                      type: 'video',
-                      videoUrl: await FileUploadService.uploadFileToCloudinary(
-                        e.file!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-                        fileRelatedTo: 'offer-video',
-                      ),
-                      videoThumbnailUrl:
-                          await FileUploadService.uploadFilesToSupabase(
-                        e.thumbnailFile!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-                        fileRelatedTo: 'offer-thumbnail',
-                      ),
-                      videoDurationMs: e.fileMetaData?.durationInMs,
-                    )
-                  : ImageFileDatum(
-                      type: 'image',
-                      imageUrl: await FileUploadService.uploadFilesToSupabase(
-                        e.file!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-                        fileRelatedTo: 'offer-image',
-                      ),
-                    ),
+            for (var e in state.uiImageData)
+              FilesDatum(
+                type: 'image',
+                imageUrl: await FileUploadService.uploadFilesToSupabase(
+                  e.file!,
+                  userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                  fileRelatedTo: 'photo-post-image',
+                ),
+              )
           ],
         ),
       );
@@ -183,84 +164,6 @@ class CreatePhotoPostBloc
         SmartDialog.showToast('${response.$1}');
         AppNavigationService.goBack();
       }
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
-
-  FutureOr<void> _onPickVideo(
-    PickVideoEvent event,
-    Emitter<CreatePhotoPostState> emit,
-  ) async {
-    try {
-      int videoCount = state.uiFilesData
-          .where((element) => element.type == UiFileTypes.video)
-          .length;
-      if (videoCount >= maxVideoCount) {
-        throw BusinessException('You can only select $maxVideoCount videos');
-      }
-
-      FileMetaData? videoMetaData =
-          await FileMetaData.fromFile(event.pickedVideoFile);
-      if (videoMetaData == null ||
-          videoMetaData.isVideo != true ||
-          videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
-        throw BusinessException(
-            'Video is not valid, it must be landscape or square');
-      }
-      final File? thumbnailFile =
-          await getThumbnailFile(videoFile: event.pickedVideoFile!);
-
-      FileMetaData? thumbnailMetaData =
-          await FileMetaData.fromFile(thumbnailFile);
-      if (thumbnailMetaData == null ||
-          thumbnailMetaData.isImage != true ||
-          thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
-              true) {
-        throw BusinessException(
-            'Thumbnail is not valid, it must be landscape or square');
-      }
-      emit(state.copyWith(
-        uiFilesData: [
-          ...state.uiFilesData,
-          UiFileData(
-            file: event.pickedVideoFile,
-            type: UiFileTypes.video,
-            fileMetaData: videoMetaData,
-            thumbnailFile: thumbnailFile,
-            thumbnailMetaData: thumbnailMetaData,
-          ),
-        ],
-      ));
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
-
-  Future<void> _onChangeVideoThumbnail(
-    ChangeVideoThumbnail event,
-    Emitter<CreatePhotoPostState> emit,
-  ) async {
-    try {
-      final FileMetaData? thumbnailMetaData =
-          await FileMetaData.fromFile(event.pickedThumbnailFile);
-      if (thumbnailMetaData == null ||
-          thumbnailMetaData.isImage != true ||
-          thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
-              true) {
-        throw BusinessException(
-            'Thumbnail is not valid, it must be landscape or square');
-      }
-      emit(state.copyWith(
-        uiFilesData: state.uiFilesData
-            .map((e) => e == event.uiFileData
-                ? e.copyWith(
-                    thumbnailFile: event.pickedThumbnailFile,
-                    thumbnailMetaData: thumbnailMetaData,
-                  )
-                : e)
-            .toList(),
-      ));
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -311,10 +214,9 @@ class CreatePhotoPostBloc
       }
       emit(state.copyWith(
         uiFilesData: [
-          ...state.uiFilesData,
-          UiFileData(
+          ...state.uiImageData,
+          UiImageData(
             file: event.pickedImageFile,
-            type: UiFileTypes.image,
             fileMetaData: imageMetaData,
           ),
         ],
@@ -328,7 +230,7 @@ class CreatePhotoPostBloc
       RemoveVideoOrImageEvent event, Emitter<CreatePhotoPostState> emit) {
     try {
       emit(state.copyWith(
-        uiFilesData: state.uiFilesData
+        uiFilesData: state.uiImageData
             .where((element) => element != event.uiFileData)
             .toList(),
       ));

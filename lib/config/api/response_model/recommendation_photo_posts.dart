@@ -4,26 +4,27 @@ class RecommendationPhotoPostsResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<RecommendedOffer>? recommendedOffers;
+  final List<RecommendedPhotoPost>? recommendedPhotoPosts;
 
   RecommendationPhotoPostsResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.recommendedOffers,
+    this.recommendedPhotoPosts,
   });
 
   RecommendationPhotoPostsResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<RecommendedOffer>? recommendedOffers,
+    List<RecommendedPhotoPost>? recommendedPhotoPosts,
   }) =>
       RecommendationPhotoPostsResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        recommendedOffers: recommendedOffers ?? this.recommendedOffers,
+        recommendedPhotoPosts:
+            recommendedPhotoPosts ?? this.recommendedPhotoPosts,
       );
 
   factory RecommendationPhotoPostsResponse.fromJson(String str) =>
@@ -36,23 +37,23 @@ class RecommendationPhotoPostsResponse {
         message: json["message"],
         page: json["page"],
         lastPage: json["last_page"],
-        recommendedOffers: json["recommended_offers"] == null
+        recommendedPhotoPosts: json["recommended_photo_posts"] == null
             ? []
-            : List<RecommendedOffer>.from(json["recommended_offers"]!
-                .map((x) => RecommendedOffer.fromMap(x))),
+            : List<RecommendedPhotoPost>.from(json["recommended_photo_posts"]!
+                .map((x) => RecommendedPhotoPost.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "message": message,
         "page": page,
         "last_page": lastPage,
-        "recommended_offers": recommendedOffers == null
+        "recommended_photo_posts": recommendedPhotoPosts == null
             ? []
-            : List<dynamic>.from(recommendedOffers!.map((x) => x.toMap())),
+            : List<dynamic>.from(recommendedPhotoPosts!.map((x) => x.toMap())),
       };
 }
 
-class RecommendedOffer {
+class RecommendedPhotoPost {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -64,24 +65,22 @@ class RecommendedOffer {
   final bool? isArchived;
   final bool? isActive;
   final String? postCreatorType;
+  final DateTime? updatedAt;
   final String? userUid;
-  final int? totalViews;
+  final String? location;
+  final int? totalImpressions;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
+  final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final String? ctaAction;
-  final String? ctaActionUrl;
   final List<FilesDatum>? filesData;
-  final String? status;
-  final String? targetGender;
-  final List<String>? targetAreas;
   final User? user;
 
-  RecommendedOffer({
+  RecommendedPhotoPost({
     this.id,
     this.createdAt,
     this.uid,
@@ -93,25 +92,23 @@ class RecommendedOffer {
     this.isArchived,
     this.isActive,
     this.postCreatorType,
+    this.updatedAt,
     this.userUid,
-    this.totalViews,
+    this.location,
+    this.totalImpressions,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
+    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.ctaAction,
-    this.ctaActionUrl,
     this.filesData,
-    this.status,
-    this.targetGender,
-    this.targetAreas,
     this.user,
   });
 
-  RecommendedOffer copyWith({
+  RecommendedPhotoPost copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -123,24 +120,22 @@ class RecommendedOffer {
     bool? isArchived,
     bool? isActive,
     String? postCreatorType,
+    DateTime? updatedAt,
     String? userUid,
-    int? totalViews,
+    String? location,
+    int? totalImpressions,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
+    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    String? ctaAction,
-    String? ctaActionUrl,
     List<FilesDatum>? filesData,
-    String? status,
-    String? targetGender,
-    List<String>? targetAreas,
     User? user,
   }) =>
-      RecommendedOffer(
+      RecommendedPhotoPost(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -152,32 +147,30 @@ class RecommendedOffer {
         isArchived: isArchived ?? this.isArchived,
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
+        updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
-        totalViews: totalViews ?? this.totalViews,
+        location: location ?? this.location,
+        totalImpressions: totalImpressions ?? this.totalImpressions,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
             internalAiDescription ?? this.internalAiDescription,
+        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        ctaAction: ctaAction ?? this.ctaAction,
-        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
         filesData: filesData ?? this.filesData,
-        status: status ?? this.status,
-        targetGender: targetGender ?? this.targetGender,
-        targetAreas: targetAreas ?? this.targetAreas,
         user: user ?? this.user,
       );
 
-  factory RecommendedOffer.fromJson(String str) =>
-      RecommendedOffer.fromMap(json.decode(str));
+  factory RecommendedPhotoPost.fromJson(String str) =>
+      RecommendedPhotoPost.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendedOffer.fromMap(Map<String, dynamic> json) =>
-      RecommendedOffer(
+  factory RecommendedPhotoPost.fromMap(Map<String, dynamic> json) =>
+      RecommendedPhotoPost(
         id: json["id"],
         createdAt: json["created_at"] == null
             ? null
@@ -195,28 +188,26 @@ class RecommendedOffer {
         isArchived: json["is_archived"],
         isActive: json["is_active"],
         postCreatorType: json["post_creator_type"],
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
         userUid: json["user_uid"],
-        totalViews: json["total_views"],
+        location: json["location"],
+        totalImpressions: json["total_impressions"],
         totalLikes: json["total_likes"],
         totalComments: json["total_comments"],
         internalAiDescription: json["internal_ai_description"],
+        addressLatLongWkb: json["address_lat_long_wkb"],
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedCommunityUids: json["tagged_community_uids"] == null
             ? []
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"],
-        ctaAction: json["cta_action"],
-        ctaActionUrl: json["cta_action_url"],
         filesData: json["files_data"] == null
             ? []
             : List<FilesDatum>.from(
                 json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
-        status: json["status"],
-        targetGender: json["target_gender"],
-        targetAreas: json["target_areas"] == null
-            ? []
-            : List<String>.from(json["target_areas"]!.map((x) => x)),
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
 
@@ -235,27 +226,23 @@ class RecommendedOffer {
         "is_archived": isArchived,
         "is_active": isActive,
         "post_creator_type": postCreatorType,
+        "updated_at": updatedAt?.toIso8601String(),
         "user_uid": userUid,
-        "total_views": totalViews,
+        "location": location,
+        "total_impressions": totalImpressions,
         "total_likes": totalLikes,
         "total_comments": totalComments,
         "internal_ai_description": internalAiDescription,
+        "address_lat_long_wkb": addressLatLongWkb,
         "creator_lat_long_wkb": creatorLatLongWkb,
         "tagged_community_uids": taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "cta_action": ctaAction,
-        "cta_action_url": ctaActionUrl,
         "files_data": filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-        "status": status,
-        "target_gender": targetGender,
-        "target_areas": targetAreas == null
-            ? []
-            : List<dynamic>.from(targetAreas!.map((x) => x)),
         "user": user?.toMap(),
       };
 }
@@ -263,31 +250,19 @@ class RecommendedOffer {
 class FilesDatum {
   final String? type;
   final String? imageUrl;
-  final String? videoUrl;
-  final int? videoDurationMs;
-  final String? videoThumbnailUrl;
 
   FilesDatum({
     this.type,
     this.imageUrl,
-    this.videoUrl,
-    this.videoDurationMs,
-    this.videoThumbnailUrl,
   });
 
   FilesDatum copyWith({
     String? type,
     String? imageUrl,
-    String? videoUrl,
-    int? videoDurationMs,
-    String? videoThumbnailUrl,
   }) =>
       FilesDatum(
         type: type ?? this.type,
         imageUrl: imageUrl ?? this.imageUrl,
-        videoUrl: videoUrl ?? this.videoUrl,
-        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
-        videoThumbnailUrl: videoThumbnailUrl ?? this.videoThumbnailUrl,
       );
 
   factory FilesDatum.fromJson(String str) =>
@@ -298,17 +273,11 @@ class FilesDatum {
   factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
         type: json["type"],
         imageUrl: json["image_url"],
-        videoUrl: json["video_url"],
-        videoDurationMs: json["video_duration_ms"],
-        videoThumbnailUrl: json["video_thumbnail_url"],
       );
 
   Map<String, dynamic> toMap() => {
         "type": type,
         "image_url": imageUrl,
-        "video_url": videoUrl,
-        "video_duration_ms": videoDurationMs,
-        "video_thumbnail_url": videoThumbnailUrl,
       };
 }
 

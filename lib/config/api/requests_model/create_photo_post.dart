@@ -3,68 +3,55 @@ import 'dart:convert';
 class CreatePhotoPostRequest {
   final String? title;
   final String? description;
-  final String? status;
   final String? userUid;
-  final List<String>? targetAreas;
-  final String? targetGender;
+  final String? location;
   final List<String>? hashtags;
   final String? postCreatorType;
-
+  final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
   final List<FilesDatum>? filesData;
-  final String? ctaAction;
-  final String? ctaActionUrl;
 
   CreatePhotoPostRequest({
     this.title,
     this.description,
-    this.status,
     this.userUid,
-    this.targetAreas,
-    this.targetGender,
+    this.location,
     this.hashtags,
     this.postCreatorType,
+    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedUserUids,
     this.taggedCommunityUids,
     this.filesData,
-    this.ctaAction,
-    this.ctaActionUrl,
   });
 
   CreatePhotoPostRequest copyWith({
     String? title,
     String? description,
-    String? status,
     String? userUid,
-    List<String>? targetAreas,
-    String? targetGender,
+    String? location,
     List<String>? hashtags,
     String? postCreatorType,
+    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedUserUids,
     List<String>? taggedCommunityUids,
     List<FilesDatum>? filesData,
-    String? ctaAction,
-    String? ctaActionUrl,
   }) =>
       CreatePhotoPostRequest(
         title: title ?? this.title,
         description: description ?? this.description,
-        status: status ?? this.status,
         userUid: userUid ?? this.userUid,
-        targetAreas: targetAreas ?? this.targetAreas,
-        targetGender: targetGender ?? this.targetGender,
+        location: location ?? this.location,
         hashtags: hashtags ?? this.hashtags,
         postCreatorType: postCreatorType ?? this.postCreatorType,
+        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         filesData: filesData ?? this.filesData,
-        ctaAction: ctaAction ?? this.ctaAction,
-        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
       );
 
   factory CreatePhotoPostRequest.fromJson(String str) =>
@@ -76,16 +63,13 @@ class CreatePhotoPostRequest {
       CreatePhotoPostRequest(
         title: json["title"],
         description: json["description"],
-        status: json["status"],
         userUid: json["user_uid"],
-        targetAreas: json["target_areas"] == null
-            ? []
-            : List<String>.from(json["target_areas"]!.map((x) => x)),
-        targetGender: json["target_gender"],
+        location: json["location"],
         hashtags: json["hashtags"] == null
             ? []
             : List<String>.from(json["hashtags"]!.map((x) => x)),
         postCreatorType: json["post_creator_type"],
+        addressLatLongWkb: json["address_lat_long_wkb"],
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedUserUids: json["tagged_user_uids"] == null
             ? []
@@ -97,22 +81,17 @@ class CreatePhotoPostRequest {
             ? []
             : List<FilesDatum>.from(
                 json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
-        ctaAction: json["cta_action"],
-        ctaActionUrl: json["cta_action_url"],
       );
 
   Map<String, dynamic> toMap() => {
         "title": title,
         "description": description,
-        "status": status,
         "user_uid": userUid,
-        "target_areas": targetAreas == null
-            ? []
-            : List<dynamic>.from(targetAreas!.map((x) => x)),
-        "target_gender": targetGender,
+        "location": location,
         "hashtags":
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         "post_creator_type": postCreatorType,
+        "address_lat_long_wkb": addressLatLongWkb,
         "creator_lat_long_wkb": creatorLatLongWkb,
         "tagged_user_uids": taggedUserUids == null
             ? []
@@ -123,86 +102,39 @@ class CreatePhotoPostRequest {
         "files_data": filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-        "cta_action": ctaAction,
-        "cta_action_url": ctaActionUrl,
       };
 }
 
-// Base class for handling common behavior
-abstract class FilesDatum {
-  final String type;
-
-  FilesDatum(this.type);
-
-  factory FilesDatum.fromMap(Map<String, dynamic> json) {
-    if (json["type"] == "image") {
-      return ImageFileDatum.fromMap(json);
-    } else if (json["type"] == "video") {
-      return VideoFileDatum.fromMap(json);
-    } else {
-      throw Exception("Unknown file type");
-    }
-  }
-
-  Map<String, dynamic> toMap();
-}
-
-// Handles image data
-class ImageFileDatum extends FilesDatum {
+class FilesDatum {
+  final String? type;
   final String? imageUrl;
 
-  ImageFileDatum({
-    required String type,
+  FilesDatum({
+    this.type,
     this.imageUrl,
-  }) : super(type);
+  });
 
-  factory ImageFileDatum.fromJson(String str) =>
-      ImageFileDatum.fromMap(json.decode(str));
+  FilesDatum copyWith({
+    String? type,
+    String? imageUrl,
+  }) =>
+      FilesDatum(
+        type: type ?? this.type,
+        imageUrl: imageUrl ?? this.imageUrl,
+      );
+
+  factory FilesDatum.fromJson(String str) =>
+      FilesDatum.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory ImageFileDatum.fromMap(Map<String, dynamic> json) => ImageFileDatum(
+  factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
         type: json["type"],
         imageUrl: json["image_url"],
       );
 
-  @override
   Map<String, dynamic> toMap() => {
         "type": type,
         "image_url": imageUrl,
-      };
-}
-
-// Handles video data
-class VideoFileDatum extends FilesDatum {
-  final String? videoUrl;
-  final String? videoThumbnailUrl;
-  final int? videoDurationMs;
-
-  VideoFileDatum({
-    required String type,
-    this.videoUrl,
-    this.videoThumbnailUrl,
-    this.videoDurationMs,
-  }) : super(type);
-
-  factory VideoFileDatum.fromJson(String str) =>
-      VideoFileDatum.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory VideoFileDatum.fromMap(Map<String, dynamic> json) => VideoFileDatum(
-        type: json["type"],
-        videoUrl: json["video_url"],
-        videoThumbnailUrl: json["video_thumbnail_url"],
-        videoDurationMs: json["video_duration_ms"],
-      );
-
-  @override
-  Map<String, dynamic> toMap() => {
-        "type": type,
-        "video_url": videoUrl,
-        "video_thumbnail_url": videoThumbnailUrl,
-        "video_duration_ms": videoDurationMs,
       };
 }
