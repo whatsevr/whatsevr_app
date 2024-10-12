@@ -125,7 +125,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                                     .read<CreatePhotoPostBloc>()
                                     .add(PickImageEvent(pickedImageFile: file));
                               },
-                              aspectRatios: offerPostAspectRatio,
+                              aspectRatios: imagePostAspectRatio,
                             );
                           },
                         );
@@ -134,7 +134,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: Colors.black,
-                      child: Text('Add Image or Video',
+                      child: Text('Add Image',
                           style: TextStyle(color: Colors.white)),
                     ),
                   );
@@ -155,7 +155,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                                 .read<CreatePhotoPostBloc>()
                                 .add(PickImageEvent(pickedImageFile: file));
                           },
-                          aspectRatios: offerPostAspectRatio,
+                          aspectRatios: imagePostAspectRatio,
                         );
                       },
                     );

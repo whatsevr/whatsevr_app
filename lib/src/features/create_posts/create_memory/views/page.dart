@@ -318,7 +318,7 @@ class CreateMemoryPage extends StatelessWidget {
                     );
                   }
                   return AspectRatio(
-                    aspectRatio: WhatsevrAspectRatio.portrait2by3.ratio,
+                    aspectRatio: WhatsevrAspectRatio.portrait4by5.ratio,
                     child: MaterialButton(
                       onPressed: () {
                         showWhatsevrMediaPickerChoice(

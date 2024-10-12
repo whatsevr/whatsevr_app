@@ -50,7 +50,11 @@ class _SwipeAbleDynamicHeightViewsState
       setState(() {
         _children = widget.children!;
         if (widget.selectedViewIndex != null) {
-          currentIndex = widget.selectedViewIndex!;
+          if (widget.selectedViewIndex! >= _children.length) {
+            currentIndex = _children.length - 1;
+          } else {
+            currentIndex = widget.selectedViewIndex!;
+          }
         }
       });
     }

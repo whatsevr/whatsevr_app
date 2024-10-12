@@ -206,11 +206,8 @@ class CreatePhotoPostBloc
     try {
       FileMetaData? imageMetaData =
           await FileMetaData.fromFile(event.pickedImageFile);
-      if (imageMetaData == null ||
-          imageMetaData.isImage != true ||
-          imageMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
-        throw BusinessException(
-            'Image is not valid, it must be landscape or square');
+      if (imageMetaData == null || imageMetaData.isImage != true) {
+        throw BusinessException('Image is not valid');
       }
       emit(state.copyWith(
         uiFilesData: [
