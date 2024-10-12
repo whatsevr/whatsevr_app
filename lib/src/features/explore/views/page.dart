@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/src/features/explore/views/widgets/media/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/memories/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/mix_posts/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/offers/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/photos/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
@@ -30,6 +31,7 @@ class ExplorePage extends StatelessWidget {
         Expanded(
           child: WhatsevrTabBarWithViews(
             isTabsScrollable: true,
+            tabAlignment: TabAlignment.start,
             tabViews: [
               (
                 'Wtv',
@@ -38,14 +40,20 @@ class ExplorePage extends StatelessWidget {
                 )
               ),
               (
-                'Media',
-                ExplorePageMediaPage(
+                'Explore',
+                ExploreMixPostsView(
                   scrollController: searchBoxHideController,
                 )
               ),
               (
                 'Offers',
                 ExplorePageOffersPage(
+                  scrollController: searchBoxHideController,
+                )
+              ),
+              (
+                'Posts',
+                ExplorePagePhotosPage(
                   scrollController: searchBoxHideController,
                 )
               ),

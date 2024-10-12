@@ -10,6 +10,7 @@ import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/public_recommendations.dart';
 import '../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../config/api/response_model/recommendation_offers.dart';
+import '../../../../config/api/response_model/recommendation_photo_posts.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';
@@ -32,18 +33,25 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
             isLoading: false,
             noMoreData: false,
           ),
+          photoPostPaginationData: PaginationData(
+            currentPage: 1,
+            isLoading: false,
+            noMoreData: false,
+          ),
           recommendationVideos: [],
           recommendationMemories: [],
           recommendationOffers: [],
+          recommendationPhotoPosts: [],
         )) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
-
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
     on<LoadMemoriesEvent>(_loadMemories);
     on<LoadMoreMemoriesEvent>(_onLoadMoreMemories);
     on<LoadOffersEvent>(_loadOffers);
     on<LoadMoreOffersEvent>(_onLoadMoreOffers);
+    on<LoadPhotoPostsEvent>(_loadPhotoPosts);
+    on<LoadMorePhotoPostsEvent>(_onLoadMorePhotoPosts);
   }
 
   Future<void> _onInitial(
@@ -53,6 +61,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     add(LoadVideosEvent());
     add(LoadMemoriesEvent());
     add(LoadOffersEvent());
+    add(LoadPhotoPostsEvent());
   }
 
   FutureOr<void> _loadVideos(
@@ -221,6 +230,65 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           offersPaginationData: state.offersPaginationData?.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadPhotoPosts(
+      LoadPhotoPostsEvent event, Emitter<ExploreState> emit) async {
+    try {
+      RecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await RecommendationApi.publicPhotoPosts(
+        page: 1,
+      );
+      emit(
+        state.copyWith(
+          recommendationPhotoPosts:
+              recommendationPhotoPosts?.recommendedPhotoPosts,
+          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+            isLoading: false,
+            currentPage: 1,
+            noMoreData: recommendationPhotoPosts?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMorePhotoPosts(
+      LoadMorePhotoPostsEvent event, Emitter<ExploreState> emit) async {
+    if (state.photoPostPaginationData?.isLoading == true ||
+        state.photoPostPaginationData?.noMoreData == true) return;
+    try {
+      emit(
+        state.copyWith(
+            photoPostPaginationData:
+                state.photoPostPaginationData?.copyWith(isLoading: true)),
+      );
+      RecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await RecommendationApi.publicPhotoPosts(
+        page: event.page!,
+      );
+
+      emit(state.copyWith(
+        recommendationPhotoPosts: state.recommendationPhotoPosts! +
+            (recommendationPhotoPosts?.recommendedPhotoPosts ?? []),
+        photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+          currentPage: event.page,
+          isLoading: false,
+          noMoreData: recommendationPhotoPosts?.lastPage,
+        ),
+      ));
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
             isLoading: false,
           ),
         ),

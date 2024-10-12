@@ -44,3 +44,15 @@ class LoadMoreOffersEvent extends ExploreEvent {
   @override
   List<Object?> get props => <Object?>[page];
 }
+
+class LoadPhotoPostsEvent extends ExploreEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMorePhotoPostsEvent extends ExploreEvent {
+  final int? page;
+  const LoadMorePhotoPostsEvent({required this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

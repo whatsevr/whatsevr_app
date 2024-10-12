@@ -171,7 +171,7 @@ class CreatePhotoPostPage extends StatelessWidget {
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
-                maxLength: 5000,
+                maxLength: 2200,
                 minLines: 5,
                 maxLines: 20,
                 controller:
