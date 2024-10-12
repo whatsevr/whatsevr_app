@@ -122,9 +122,9 @@ class CreateVideoPostBloc
             hashtags: hashtags.isEmpty
                 ? null
                 : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-            location: state.selectedAddress,
+            location: state.selectedPostLocation,
             postCreatorType: state.pageArgument?.postCreatorType.value,
-            addressLatLongWkb: state.selectedAddressLatLongWkb,
+            addressLatLongWkb: state.selectedPostLocationLatLongWkb,
             creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
             taggedUserUids: state.taggedUsersUid,
             taggedCommunityUids: state.taggedCommunitiesUid,
@@ -154,11 +154,11 @@ class CreateVideoPostBloc
                 hashtags: hashtags.isEmpty
                     ? null
                     : hashtags.map((e) => e.replaceAll("#", '')).toList(),
-                location: state.selectedAddress,
+                location: state.selectedPostLocation,
                 postCreatorType: state.pageArgument?.postCreatorType.value,
                 thumbnail: thumbnailUrl,
                 videoUrl: videoUrl,
-                addressLatLongWkb: state.selectedAddressLatLongWkb,
+                addressLatLongWkb: state.selectedPostLocationLatLongWkb,
                 creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
                 taggedUserUids: state.taggedUsersUid,
                 taggedCommunityUids: state.taggedCommunitiesUid,
@@ -253,8 +253,8 @@ class CreateVideoPostBloc
     try {
       emit(
         state.copyWith(
-          selectedAddress: event.address,
-          selectedAddressLatLongWkb: WKBUtil.getWkbString(
+          selectedPostLocation: event.address,
+          selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
               lat: event.addressLatitude, long: event.addressLongitude),
         ),
       );

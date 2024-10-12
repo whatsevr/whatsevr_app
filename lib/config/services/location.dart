@@ -12,6 +12,35 @@ class LocationService {
   static const String _googlePlaceAndGeoCodingApiKey =
       "AIzaSyBO4o78fH_94mh2JHYjiq3WAa9Sue6G5EE";
   LocationService._();
+  static Future<(double lat, double long)?> getCurrentGpsLatLong(
+      {bool isRequired = false}) async {
+    try {
+      bool deviceGpsEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!deviceGpsEnabled) {
+        if (isRequired) {
+          throw BusinessException('Please enable device GPS');
+        }
+        return null;
+      }
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.deniedForever) {
+        if (isRequired) {
+          throw BusinessException('Please enable device GPS');
+        }
+        return null;
+      }
+      Position position = await Geolocator.getCurrentPosition(
+          locationSettings:
+              const LocationSettings(accuracy: LocationAccuracy.high));
+      return (position.latitude, position.longitude);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+      return null;
+    }
+  }
 
   static Future<void> getNearByPlacesFromLatLong({
     double? lat,

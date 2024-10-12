@@ -42,7 +42,7 @@ class CreatePhotoPostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (BuildContext context) => CreateOfferBloc()
+      create: (BuildContext context) => CreatePhotoPostBloc()
         ..add(CreateOfferInitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (BuildContext context) {
@@ -53,7 +53,7 @@ class CreatePhotoPostPage extends StatelessWidget {
   }
 
   Widget buildPage(BuildContext context) {
-    return BlocBuilder<CreateOfferBloc, CreatePhotoPostState>(
+    return BlocBuilder<CreatePhotoPostBloc, CreatePhotoPostState>(
       builder: (BuildContext context, CreatePhotoPostState state) {
         return Scaffold(
           appBar: CustomAppBar(
@@ -96,7 +96,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                                   child: IconButton(
                                     onPressed: () {
                                       context
-                                          .read<CreateOfferBloc>()
+                                          .read<CreatePhotoPostBloc>()
                                           .add(RemoveVideoOrImageEvent(
                                             uiFileData: uiFileData,
                                           ));
@@ -147,7 +147,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                                   child: IconButton(
                                     onPressed: () {
                                       context
-                                          .read<CreateOfferBloc>()
+                                          .read<CreatePhotoPostBloc>()
                                           .add(RemoveVideoOrImageEvent(
                                             uiFileData: uiFileData,
                                           ));
@@ -172,7 +172,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                                       ).then((value) {
                                         if (value != null) {
                                           context
-                                              .read<CreateOfferBloc>()
+                                              .read<CreatePhotoPostBloc>()
                                               .add(ChangeVideoThumbnail(
                                                 pickedThumbnailFile: value,
                                                 uiFileData: uiFileData,
@@ -200,7 +200,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                             CustomAssetPicker.pickImageFromGallery(
                               onCompleted: (file) {
                                 context
-                                    .read<CreateOfferBloc>()
+                                    .read<CreatePhotoPostBloc>()
                                     .add(PickImageEvent(pickedImageFile: file));
                               },
                               aspectRatios: offerPostAspectRatio,
@@ -210,7 +210,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                             CustomAssetPicker.pickVideoFromGallery(
                               onCompleted: (file) {
                                 context
-                                    .read<CreateOfferBloc>()
+                                    .read<CreatePhotoPostBloc>()
                                     .add(PickVideoEvent(pickedVideoFile: file));
                               },
                             );
@@ -230,17 +230,17 @@ class CreatePhotoPostPage extends StatelessWidget {
               const Gap(8),
               if (state.uiFilesData.isNotEmpty &&
                   state.uiFilesData.length !=
-                      context.read<CreateOfferBloc>().maxVideoCount +
-                          context.read<CreateOfferBloc>().maxImageCount)
+                      context.read<CreatePhotoPostBloc>().maxVideoCount +
+                          context.read<CreatePhotoPostBloc>().maxImageCount)
                 WhatsevrButton.outlined(
-                  label: 'Pick image or video',
+                  label: 'Pick images',
                   onPressed: () {
                     showWhatsevrMediaPickerChoice(
                       onChoosingImageFromGallery: () {
                         CustomAssetPicker.pickImageFromGallery(
                           onCompleted: (file) {
                             context
-                                .read<CreateOfferBloc>()
+                                .read<CreatePhotoPostBloc>()
                                 .add(PickImageEvent(pickedImageFile: file));
                           },
                           aspectRatios: offerPostAspectRatio,
@@ -250,7 +250,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                         CustomAssetPicker.pickVideoFromGallery(
                           onCompleted: (file) {
                             context
-                                .read<CreateOfferBloc>()
+                                .read<CreatePhotoPostBloc>()
                                 .add(PickVideoEvent(pickedVideoFile: file));
                           },
                         );
@@ -263,7 +263,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                 maxLength: 150,
                 minLines: 1,
                 maxLines: 5,
-                controller: context.read<CreateOfferBloc>().titleController,
+                controller: context.read<CreatePhotoPostBloc>().titleController,
                 hintText: 'Title',
               ),
               const Gap(12),
@@ -272,8 +272,82 @@ class CreatePhotoPostPage extends StatelessWidget {
                 minLines: 5,
                 maxLines: 20,
                 controller:
-                    context.read<CreateOfferBloc>().descriptionController,
+                    context.read<CreatePhotoPostBloc>().descriptionController,
                 hintText: 'Description',
+              ),
+              const Gap(12),
+              Column(
+                children: [
+                  WhatsevrFormField.invokeCustomFunction(
+                    context: context,
+                    controller: TextEditingController(
+                      text: state.selectedPostLocation ?? '',
+                    ),
+                    suffixWidget: const Icon(Icons.location_on),
+                    hintText: 'Location',
+                    customFunction: () {
+                      showAppModalSheet(child: PlaceSearchByNamePage(
+                        onPlaceSelected: (placeName, lat, long) {
+                          context
+                              .read<CreatePhotoPostBloc>()
+                              .add(UpdatePostAddressEvent(
+                                address: placeName,
+                                addressLatitude: lat,
+                                addressLongitude: long,
+                              ));
+                        },
+                      ));
+                    },
+                  ),
+                  if (state.placesNearbyResponse?.places?.isNotEmpty ??
+                      false) ...[
+                    const Gap(8),
+                    SizedBox(
+                      height: 22,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CreatePhotoPostBloc>()
+                                  .add(UpdatePostAddressEvent(
+                                    address: state.placesNearbyResponse
+                                        ?.places?[index].displayName?.text,
+                                    addressLatitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.latitude,
+                                    addressLongitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.longitude,
+                                  ));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Gap(4);
+                        },
+                        itemCount:
+                            state.placesNearbyResponse?.places?.length ?? 0,
+                      ),
+                    ),
+                  ],
+                ],
               ),
               const Gap(12),
               Column(
@@ -285,7 +359,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                         child: SearchAndTagUsersAndCommunityPage(
                           onDone: (selectedUsersUid, selectedCommunitiesUid) {
                             context
-                                .read<CreateOfferBloc>()
+                                .read<CreatePhotoPostBloc>()
                                 .add(UpdateTaggedUsersAndCommunitiesEvent(
                                   taggedUsersUid: selectedUsersUid,
                                   taggedCommunitiesUid: selectedCommunitiesUid,
@@ -344,7 +418,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            context.read<CreateOfferBloc>().add(
+                            context.read<CreatePhotoPostBloc>().add(
                                 const UpdateTaggedUsersAndCommunitiesEvent(
                                     clearAll: true));
                           },
@@ -376,7 +450,9 @@ class CreatePhotoPostPage extends StatelessWidget {
             ),
             child: WhatsevrButton.filled(
               onPressed: () {
-                context.read<CreateOfferBloc>().add(const SubmitPostEvent());
+                context
+                    .read<CreatePhotoPostBloc>()
+                    .add(const SubmitPostEvent());
               },
               label: 'Done',
             ),

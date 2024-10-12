@@ -57,20 +57,14 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   ) async {
     try {
       emit(state.copyWith(pageArgument: event.pageArgument));
-
-      PlacesNearbyResponse? placesNearbyResponse;
-      await LocationService.getNearByPlacesFromLatLong(
-        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed) {
-          placesNearbyResponse = nearbyPlacesResponse;
-          if (lat != null && long != null) {
-            emit(state.copyWith(
-              userCurrentLocationLatLongWkb:
-                  WKBUtil.getWkbString(lat: lat, long: long),
-            ));
-          }
-        },
-      );
+      (double, double)? currentGpsLatLong =
+          await LocationService.getCurrentGpsLatLong();
+      if (currentGpsLatLong != null) {
+        emit(state.copyWith(
+          userCurrentLocationLatLongWkb: WKBUtil.getWkbString(
+              lat: currentGpsLatLong.$1, long: currentGpsLatLong.$2),
+        ));
+      }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

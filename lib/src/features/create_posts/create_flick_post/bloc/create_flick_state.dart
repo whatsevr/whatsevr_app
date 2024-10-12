@@ -7,9 +7,10 @@ class CreateFlickPostState extends Equatable {
   final File? thumbnailFile;
   final FileMetaData? thumbnailMetaData;
   final PlacesNearbyResponse? placesNearbyResponse;
+  final String? selectedPostLocation;
+  final String? selectedPostLocationLatLongWkb;
   final String? userCurrentLocationLatLongWkb;
-  final String? selectedAddress;
-  final String? selectedAddressLatLongWkb;
+
   final List<String> taggedUsersUid;
   final List<String> taggedCommunitiesUid;
 
@@ -21,8 +22,8 @@ class CreateFlickPostState extends Equatable {
     this.thumbnailMetaData,
     this.placesNearbyResponse,
     this.userCurrentLocationLatLongWkb,
-    this.selectedAddress,
-    this.selectedAddressLatLongWkb,
+    this.selectedPostLocation,
+    this.selectedPostLocationLatLongWkb,
     this.taggedUsersUid = const [],
     this.taggedCommunitiesUid = const [],
   });
@@ -36,8 +37,8 @@ class CreateFlickPostState extends Equatable {
         pageArgument,
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
-        selectedAddress,
-        selectedAddressLatLongWkb,
+        selectedPostLocation,
+        selectedPostLocationLatLongWkb,
         taggedUsersUid,
         taggedCommunitiesUid,
       ];
@@ -50,8 +51,8 @@ class CreateFlickPostState extends Equatable {
     FileMetaData? thumbnailMetaData,
     PlacesNearbyResponse? placesNearbyResponse,
     String? userCurrentLocationLatLongWkb,
-    String? selectedAddress,
-    String? selectedAddressLatLongWkb,
+    String? selectedPostLocation,
+    String? selectedPostLocationLatLongWkb,
     List<String>? taggedUsersUid,
     List<String>? taggedCommunitiesUid,
   }) {
@@ -64,9 +65,9 @@ class CreateFlickPostState extends Equatable {
       placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
-      selectedAddress: selectedAddress ?? this.selectedAddress,
-      selectedAddressLatLongWkb:
-          selectedAddressLatLongWkb ?? this.selectedAddressLatLongWkb,
+      selectedPostLocation: selectedPostLocation ?? this.selectedPostLocation,
+      selectedPostLocationLatLongWkb:
+          selectedPostLocationLatLongWkb ?? this.selectedPostLocationLatLongWkb,
       taggedUsersUid: taggedUsersUid ?? this.taggedUsersUid,
       taggedCommunitiesUid: taggedCommunitiesUid ?? this.taggedCommunitiesUid,
     );

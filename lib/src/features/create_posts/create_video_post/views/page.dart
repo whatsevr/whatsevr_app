@@ -256,7 +256,7 @@ class CreateVideoPostPage extends StatelessWidget {
               WhatsevrFormField.invokeCustomFunction(
                 context: context,
                 controller: TextEditingController(
-                  text: state.selectedAddress ?? '',
+                  text: state.selectedPostLocation ?? '',
                 ),
                 suffixWidget: const Icon(Icons.location_on),
                 hintText: 'Location',

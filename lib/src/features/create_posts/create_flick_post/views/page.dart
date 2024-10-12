@@ -253,151 +253,164 @@ class CreateFlickPostPage extends StatelessWidget {
                 hintText: 'Hashtags (start with #, max 30)',
               ),
               const Gap(12),
-              WhatsevrFormField.invokeCustomFunction(
-                context: context,
-                controller: TextEditingController(
-                  text: state.selectedAddress ?? '',
-                ),
-                suffixWidget: const Icon(Icons.location_on),
-                hintText: 'Location',
-                customFunction: () {
-                  showAppModalSheet(child: PlaceSearchByNamePage(
-                    onPlaceSelected: (placeName, lat, long) {
-                      context
-                          .read<CreateFlickPostBloc>()
-                          .add(UpdatePostAddressEvent(
-                            address: placeName,
-                            addressLatitude: lat,
-                            addressLongitude: long,
-                          ));
-                    },
-                  ));
-                },
-              ),
-              if (state.placesNearbyResponse?.places?.isNotEmpty ?? false) ...[
-                const Gap(8),
-                SizedBox(
-                  height: 22,
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
+              Column(
+                children: [
+                  WhatsevrFormField.invokeCustomFunction(
+                    context: context,
+                    controller: TextEditingController(
+                      text: state.selectedPostLocation ?? '',
+                    ),
+                    suffixWidget: const Icon(Icons.location_on),
+                    hintText: 'Location',
+                    customFunction: () {
+                      showAppModalSheet(child: PlaceSearchByNamePage(
+                        onPlaceSelected: (placeName, lat, long) {
                           context
                               .read<CreateFlickPostBloc>()
                               .add(UpdatePostAddressEvent(
-                                address: state.placesNearbyResponse
-                                    ?.places?[index].displayName?.text,
-                                addressLatitude: state.placesNearbyResponse
-                                    ?.places?[index].location?.latitude,
-                                addressLongitude: state.placesNearbyResponse
-                                    ?.places?[index].location?.longitude,
+                                address: placeName,
+                                addressLatitude: lat,
+                                addressLongitude: long,
                               ));
                         },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.black45,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            '${state.placesNearbyResponse?.places?[index].displayName?.text}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                      ));
+                    },
+                  ),
+                  if (state.placesNearbyResponse?.places?.isNotEmpty ??
+                      false) ...[
+                    const Gap(8),
+                    SizedBox(
+                      height: 22,
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<CreateFlickPostBloc>()
+                                  .add(UpdatePostAddressEvent(
+                                    address: state.placesNearbyResponse
+                                        ?.places?[index].displayName?.text,
+                                    addressLatitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.latitude,
+                                    addressLongitude: state.placesNearbyResponse
+                                        ?.places?[index].location?.longitude,
+                                  ));
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '${state.placesNearbyResponse?.places?[index].displayName?.text}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
-                          ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Gap(4);
+                        },
+                        itemCount:
+                            state.placesNearbyResponse?.places?.length ?? 0,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const Gap(18),
+              Column(
+                children: [
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      showAppModalSheet(
+                        child: SearchAndTagUsersAndCommunityPage(
+                          onDone: (selectedUsersUid, selectedCommunitiesUid) {
+                            context
+                                .read<CreateFlickPostBloc>()
+                                .add(UpdateTaggedUsersAndCommunitiesEvent(
+                                  taggedUsersUid: selectedUsersUid,
+                                  taggedCommunitiesUid: selectedCommunitiesUid,
+                                ));
+                          },
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) {
-                      return const Gap(4);
-                    },
-                    itemCount: state.placesNearbyResponse?.places?.length ?? 0,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person, color: Colors.black),
+                        Gap(4),
+                        Text('Tag People',
+                            style: TextStyle(color: Colors.black)),
+                        Spacer(),
+                        Icon(Icons.arrow_right_rounded, color: Colors.black),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-              const Gap(18),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  showAppModalSheet(
-                    child: SearchAndTagUsersAndCommunityPage(
-                      onDone: (selectedUsersUid, selectedCommunitiesUid) {
-                        context
-                            .read<CreateFlickPostBloc>()
-                            .add(UpdateTaggedUsersAndCommunitiesEvent(
-                              taggedUsersUid: selectedUsersUid,
-                              taggedCommunitiesUid: selectedCommunitiesUid,
-                            ));
-                      },
-                    ),
-                  );
-                },
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.person, color: Colors.black),
-                    Gap(4),
-                    Text('Tag People', style: TextStyle(color: Colors.black)),
-                    Spacer(),
-                    Icon(Icons.arrow_right_rounded, color: Colors.black),
-                  ],
-                ),
-              ),
-              if (state.taggedUsersUid.isNotEmpty ||
-                  state.taggedCommunitiesUid.isNotEmpty) ...[
-                const Gap(12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Selected ',
-                              style: TextStyle(color: Colors.black),
+                  if (state.taggedUsersUid.isNotEmpty ||
+                      state.taggedCommunitiesUid.isNotEmpty) ...[
+                    const Gap(12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Selected ',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                if (state.taggedUsersUid.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '${state.taggedUsersUid.length} users',
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                                ],
+                                if (state.taggedUsersUid.isNotEmpty &&
+                                    state.taggedCommunitiesUid.isNotEmpty)
+                                  const TextSpan(
+                                    text: ' and ',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                if (state.taggedCommunitiesUid.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '${state.taggedCommunitiesUid.length} communities',
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                                ],
+                              ],
                             ),
-                            if (state.taggedUsersUid.isNotEmpty) ...[
-                              TextSpan(
-                                text: '${state.taggedUsersUid.length} users',
-                                style: const TextStyle(color: Colors.blue),
-                              ),
-                            ],
-                            if (state.taggedUsersUid.isNotEmpty &&
-                                state.taggedCommunitiesUid.isNotEmpty)
-                              const TextSpan(
-                                text: ' and ',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            if (state.taggedCommunitiesUid.isNotEmpty) ...[
-                              TextSpan(
-                                text:
-                                    '${state.taggedCommunitiesUid.length} communities',
-                                style: const TextStyle(color: Colors.blue),
-                              ),
-                            ],
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        context.read<CreateFlickPostBloc>().add(
-                            const UpdateTaggedUsersAndCommunitiesEvent(
-                                clearAll: true));
-                      },
-                      child: const Icon(
-                        Icons.clear_rounded,
-                        color: Colors.red,
-                        size: 20,
-                      ),
+                        GestureDetector(
+                          onTap: () {
+                            context.read<CreateFlickPostBloc>().add(
+                                const UpdateTaggedUsersAndCommunitiesEvent(
+                                    clearAll: true));
+                          },
+                          child: const Icon(
+                            Icons.clear_rounded,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
+                ],
+              ),
               const Gap(50),
             ],
           ),

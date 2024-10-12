@@ -4,7 +4,9 @@ class CreatePhotoPostState extends Equatable {
   final CreatePhotoPostPageArgument? pageArgument;
   final List<UiFileData> uiFilesData;
   final UiFileData? selectedUiFileData;
-
+  final PlacesNearbyResponse? placesNearbyResponse;
+  final String? selectedPostLocation;
+  final String? selectedPostLocationLatLongWkb;
   final String? userCurrentLocationLatLongWkb;
 
   final List<String>? selectedTargetAddresses;
@@ -18,6 +20,9 @@ class CreatePhotoPostState extends Equatable {
     this.pageArgument,
     this.uiFilesData = const [],
     this.selectedUiFileData,
+    this.placesNearbyResponse,
+    this.selectedPostLocation,
+    this.selectedPostLocationLatLongWkb,
     this.userCurrentLocationLatLongWkb,
     this.selectedTargetAddresses = const [],
     this.taggedUsersUid = const [],
@@ -32,6 +37,9 @@ class CreatePhotoPostState extends Equatable {
         pageArgument,
         uiFilesData,
         selectedUiFileData,
+        placesNearbyResponse,
+        selectedPostLocation,
+        selectedPostLocationLatLongWkb,
         userCurrentLocationLatLongWkb,
         selectedTargetAddresses,
         selectedTargetAddresses?.length,
@@ -46,6 +54,9 @@ class CreatePhotoPostState extends Equatable {
     CreatePhotoPostPageArgument? pageArgument,
     List<UiFileData>? uiFilesData,
     UiFileData? selectedUiFileData,
+    PlacesNearbyResponse? placesNearbyResponse,
+    String? selectedPostLocation,
+    String? selectedPostLocationLatLongWkb,
     String? userCurrentLocationLatLongWkb,
     List<String>? selectedTargetAddresses,
     List<String>? taggedUsersUid,
@@ -58,6 +69,10 @@ class CreatePhotoPostState extends Equatable {
       pageArgument: pageArgument ?? this.pageArgument,
       uiFilesData: uiFilesData ?? this.uiFilesData,
       selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
+      placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
+      selectedPostLocation: selectedPostLocation ?? this.selectedPostLocation,
+      selectedPostLocationLatLongWkb:
+          selectedPostLocationLatLongWkb ?? this.selectedPostLocationLatLongWkb,
       userCurrentLocationLatLongWkb:
           userCurrentLocationLatLongWkb ?? this.userCurrentLocationLatLongWkb,
       selectedTargetAddresses:

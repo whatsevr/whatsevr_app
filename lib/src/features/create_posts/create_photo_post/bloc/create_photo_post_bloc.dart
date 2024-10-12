@@ -30,17 +30,19 @@ import '../views/page.dart';
 part 'create_photo_post_event.dart';
 part 'create_photo_post_state.dart';
 
-class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
+class CreatePhotoPostBloc
+    extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
   final int maxVideoCount = 2;
   final int maxImageCount = 10;
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
-  CreateOfferBloc() : super(const CreatePhotoPostState()) {
+  CreatePhotoPostBloc() : super(const CreatePhotoPostState()) {
     on<CreateOfferInitialEvent>(_onInitial);
     on<SubmitPostEvent>(_onSubmit);
     on<PickVideoEvent>(_onPickVideo);
+    on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<ChangeVideoThumbnail>(_onChangeVideoThumbnail);
     on<PickImageEvent>(_onPickImage);
 
@@ -67,6 +69,22 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
             ));
           }
         },
+      );
+      emit(state.copyWith(placesNearbyResponse: placesNearbyResponse));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  Future<void> _onUpdatePostAddress(
+      UpdatePostAddressEvent event, Emitter<CreatePhotoPostState> emit) async {
+    try {
+      emit(
+        state.copyWith(
+          selectedPostLocation: event.address,
+          selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
+              lat: event.addressLatitude, long: event.addressLongitude),
+        ),
       );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
