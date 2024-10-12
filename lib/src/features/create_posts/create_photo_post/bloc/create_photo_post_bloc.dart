@@ -33,11 +33,9 @@ part 'create_photo_post_state.dart';
 class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
   final int maxVideoCount = 2;
   final int maxImageCount = 10;
-  List<String> targetGender = ['All', 'Man', 'Women'];
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController statusController = TextEditingController();
-  final TextEditingController ctaActionUrlController = TextEditingController();
 
   CreateOfferBloc() : super(const CreatePhotoPostState()) {
     on<CreateOfferInitialEvent>(_onInitial);
@@ -49,7 +47,6 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
     on<UpdateTaggedUsersAndCommunitiesEvent>(
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
-    on<AddOrRemoveTargetAddressEvent>(_onAddOrRemoveTargetAddress);
   }
   FutureOr<void> _onInitial(
     CreateOfferInitialEvent event,
@@ -88,9 +85,7 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
       if (titleController.text.isEmpty) {
         throw BusinessException('Description is required');
       }
-      if (statusController.text.isEmpty) {
-        throw BusinessException('Status is required');
-      }
+
       String hashtagsArea = titleController.text + descriptionController.text;
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
@@ -128,7 +123,6 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
         post: CreatePhotoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
-          status: statusController.text,
           userUid: await AuthUserDb.getLastLoggedUserUid(),
           targetAreas: state.selectedTargetAddresses,
           targetGender: state.selectedTargetGender?.toLowerCase(),
@@ -164,11 +158,6 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
                       ),
                     ),
           ],
-          ctaAction:
-              ctaActionUrlController.text.isEmpty ? null : state.ctaAction,
-          ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
-              ? ctaActionUrlController.text
-              : null,
         ),
       );
       if (response != null) {
@@ -324,39 +313,6 @@ class CreateOfferBloc extends Bloc<CreatePhotoPostEvent, CreatePhotoPostState> {
         uiFilesData: state.uiFilesData
             .where((element) => element != event.uiFileData)
             .toList(),
-      ));
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
-  }
-
-  FutureOr<void> _onAddOrRemoveTargetAddress(
-      AddOrRemoveTargetAddressEvent event,
-      Emitter<CreatePhotoPostState> emit) async {
-    try {
-      if (event.removableTargetAddress != null) {
-        emit(state.copyWith(
-          selectedTargetAddresses: state.selectedTargetAddresses!
-              .where((element) => element != event.removableTargetAddress)
-              .toList(),
-        ));
-        return;
-      }
-      if (event.countryName == null &&
-          event.stateName == null &&
-          event.cityName == null) return;
-      String address = '';
-      if (event.countryName?.isNotEmpty ?? false) {
-        address += '${event.countryName}';
-      }
-      if (event.stateName?.isNotEmpty ?? false) {
-        address += ', ${event.stateName}';
-      }
-      if (event.cityName?.isNotEmpty ?? false) {
-        address += ', ${event.cityName}';
-      }
-      emit(state.copyWith(
-        selectedTargetAddresses: state.selectedTargetAddresses! + [address],
       ));
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

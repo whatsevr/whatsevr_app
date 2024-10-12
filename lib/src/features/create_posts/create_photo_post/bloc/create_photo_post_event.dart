@@ -64,19 +64,3 @@ class RemoveVideoOrImageEvent extends CreatePhotoPostEvent {
   @override
   List<Object?> get props => <Object?>[uiFileData];
 }
-
-class AddOrRemoveTargetAddressEvent extends CreatePhotoPostEvent {
-  final String? removableTargetAddress;
-  final String? countryName;
-  final String? stateName;
-  final String? cityName;
-  const AddOrRemoveTargetAddressEvent({
-    this.countryName,
-    this.stateName,
-    this.cityName,
-    this.removableTargetAddress,
-  });
-
-  @override
-  List<Object?> get props => <Object?>[countryName, stateName, cityName];
-}

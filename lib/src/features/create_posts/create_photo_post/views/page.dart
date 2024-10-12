@@ -67,14 +67,6 @@ class CreatePhotoPostPage extends StatelessWidget {
             padding: PadHorizontal.padding,
             children: <Widget>[
               const Gap(12),
-              WhatsevrFormField.generalTextField(
-                maxLength: 150,
-                minLines: 1,
-                maxLines: 5,
-                controller: context.read<CreateOfferBloc>().titleController,
-                hintText: 'Title',
-              ),
-              const Gap(12),
               Builder(
                 builder: (context) {
                   if (state.uiFilesData.isNotEmpty) {
@@ -267,6 +259,14 @@ class CreatePhotoPostPage extends StatelessWidget {
                   },
                 ),
               const Gap(12),
+              WhatsevrFormField.generalTextField(
+                maxLength: 150,
+                minLines: 1,
+                maxLines: 5,
+                controller: context.read<CreateOfferBloc>().titleController,
+                hintText: 'Title',
+              ),
+              const Gap(12),
               WhatsevrFormField.multilineTextField(
                 maxLength: 5000,
                 minLines: 5,
@@ -276,222 +276,87 @@ class CreatePhotoPostPage extends StatelessWidget {
                 hintText: 'Description',
               ),
               const Gap(12),
-              WhatsevrFormField.invokeCustomFunction(
-                context: context,
-                maxLength: 35,
-                readOnly: false,
-                controller: context.read<CreateOfferBloc>().statusController,
-                hintText: 'Status',
-                customFunction: () {
-                  showAppModalSheet(
-                      child: CommonDataSearchSelectPage(
-                    showProfessionalStatus: true,
-                    onProfessionalStatusSelected: (professionalStatus) {
-                      context.read<CreateOfferBloc>().statusController.text =
-                          professionalStatus.title ?? '';
-                    },
-                  ));
-                },
-              ),
-              const Gap(12),
               Column(
                 children: [
-                  WhatsevrFormField.invokeCustomFunction(
-                    context: context,
-                    suffixWidget: const Icon(Icons.location_on),
-                    hintText: 'Target Area',
-                    customFunction: () {
-                      showAppModalSheet(child: CountryStateCityPage(
-                        onPlaceSelected: (countryName, stateName, cityName) {
-                          context
-                              .read<CreateOfferBloc>()
-                              .add(AddOrRemoveTargetAddressEvent(
-                                countryName: countryName,
-                                stateName: stateName,
-                                cityName: cityName,
-                              ));
-                        },
-                      ));
-                    },
-                  ),
-                  const Gap(12),
-                  for (String address
-                      in state.selectedTargetAddresses ?? []) ...[
-                    Row(
-                      children: [
-                        Text(address),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      showAppModalSheet(
+                        child: SearchAndTagUsersAndCommunityPage(
+                          onDone: (selectedUsersUid, selectedCommunitiesUid) {
                             context
                                 .read<CreateOfferBloc>()
-                                .add(AddOrRemoveTargetAddressEvent(
-                                  removableTargetAddress: address,
+                                .add(UpdateTaggedUsersAndCommunitiesEvent(
+                                  taggedUsersUid: selectedUsersUid,
+                                  taggedCommunitiesUid: selectedCommunitiesUid,
                                 ));
                           },
-                          child: const Icon(Icons.clear_rounded,
-                              color: Colors.red),
+                        ),
+                      );
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person, color: Colors.black),
+                        Gap(4),
+                        Text('Tag', style: TextStyle(color: Colors.black)),
+                        Spacer(),
+                        Icon(Icons.arrow_right_rounded, color: Colors.black),
+                      ],
+                    ),
+                  ),
+                  if (state.taggedUsersUid.isNotEmpty ||
+                      state.taggedCommunitiesUid.isNotEmpty) ...[
+                    const Gap(12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: 'Selected ',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                if (state.taggedUsersUid.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '${state.taggedUsersUid.length} users',
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                                ],
+                                if (state.taggedUsersUid.isNotEmpty &&
+                                    state.taggedCommunitiesUid.isNotEmpty)
+                                  const TextSpan(
+                                    text: ' and ',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                if (state.taggedCommunitiesUid.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '${state.taggedCommunitiesUid.length} communities',
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.read<CreateOfferBloc>().add(
+                                const UpdateTaggedUsersAndCommunitiesEvent(
+                                    clearAll: true));
+                          },
+                          child: const Icon(
+                            Icons.clear_rounded,
+                            color: Colors.red,
+                            size: 20,
+                          ),
                         ),
                       ],
                     ),
                   ],
-                ],
-              ),
-              const Gap(12),
-              ExpansionTileItem.flat(
-                title: Text('More Details'),
-                childrenPadding: EdgeInsets.zero,
-                tilePadding: EdgeInsets.zero,
-                children: [
-                  //target gender choice chip
-                  Row(
-                    children: [
-                      Text('Audience'),
-                      const Spacer(),
-                      for (String audience
-                          in context.read<CreateOfferBloc>().targetGender) ...[
-                        ChoiceChip(
-                          label: Text(audience),
-                          selected: state.selectedTargetGender == audience,
-                          onSelected: (value) {
-                            context.read<CreateOfferBloc>().emit(
-                                state.copyWith(selectedTargetGender: audience));
-                          },
-                        ),
-                        const Gap(4),
-                      ],
-                    ],
-                  ),
-                  const Gap(12),
-                  Column(
-                    children: [
-                      WhatsevrFormField.invokeCustomFunction(
-                        controller: TextEditingController(
-                          text: state.ctaAction ?? '',
-                        ),
-                        context: context,
-                        hintText: 'User Action',
-                        customFunction: () {
-                          showAppModalSheet(
-                              child: CommonDataSearchSelectPage(
-                            showCtaActions: true,
-                            onCtaActionSelected: (p0) {
-                              context
-                                  .read<CreateOfferBloc>()
-                                  .emit(state.copyWith(ctaAction: p0.action));
-                            },
-                          ));
-                        },
-                      ),
-                      const Gap(12),
-                      WhatsevrFormField.generalTextField(
-                        controller: context
-                            .read<CreateOfferBloc>()
-                            .ctaActionUrlController,
-                        hintText: 'Action URL',
-                        onChanged: (value) {
-                          if (state.ctaAction == null) {
-                            SmartDialog.showToast(
-                                'Please select a User action first');
-                            context
-                                .read<CreateOfferBloc>()
-                                .ctaActionUrlController
-                                .clear();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  const Gap(12),
-                  Column(
-                    children: [
-                      GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          showAppModalSheet(
-                            child: SearchAndTagUsersAndCommunityPage(
-                              onDone:
-                                  (selectedUsersUid, selectedCommunitiesUid) {
-                                context
-                                    .read<CreateOfferBloc>()
-                                    .add(UpdateTaggedUsersAndCommunitiesEvent(
-                                      taggedUsersUid: selectedUsersUid,
-                                      taggedCommunitiesUid:
-                                          selectedCommunitiesUid,
-                                    ));
-                              },
-                            ),
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.person, color: Colors.black),
-                            Gap(4),
-                            Text('Tag', style: TextStyle(color: Colors.black)),
-                            Spacer(),
-                            Icon(Icons.arrow_right_rounded,
-                                color: Colors.black),
-                          ],
-                        ),
-                      ),
-                      if (state.taggedUsersUid.isNotEmpty ||
-                          state.taggedCommunitiesUid.isNotEmpty) ...[
-                        const Gap(12),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: RichText(
-                                text: TextSpan(
-                                  children: [
-                                    const TextSpan(
-                                      text: 'Selected ',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    if (state.taggedUsersUid.isNotEmpty) ...[
-                                      TextSpan(
-                                        text:
-                                            '${state.taggedUsersUid.length} users',
-                                        style:
-                                            const TextStyle(color: Colors.blue),
-                                      ),
-                                    ],
-                                    if (state.taggedUsersUid.isNotEmpty &&
-                                        state.taggedCommunitiesUid.isNotEmpty)
-                                      const TextSpan(
-                                        text: ' and ',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    if (state
-                                        .taggedCommunitiesUid.isNotEmpty) ...[
-                                      TextSpan(
-                                        text:
-                                            '${state.taggedCommunitiesUid.length} communities',
-                                        style:
-                                            const TextStyle(color: Colors.blue),
-                                      ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                context.read<CreateOfferBloc>().add(
-                                    const UpdateTaggedUsersAndCommunitiesEvent(
-                                        clearAll: true));
-                              },
-                              child: const Icon(
-                                Icons.clear_rounded,
-                                color: Colors.red,
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ],
-                  ),
                 ],
               ),
               const Gap(50),
