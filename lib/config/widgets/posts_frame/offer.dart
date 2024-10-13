@@ -36,11 +36,11 @@ class OfferPostFrame extends StatelessWidget {
   final int? shares;
   final int? comments;
   final String? username;
+  final String? fullName;
 
   final int? totalTags;
   final Function()? onTapTags;
   final Function()? onRequestOfOfferDetails;
-  final double? thumbnailHeightAspectRatio;
 
   const OfferPostFrame({
     super.key,
@@ -57,10 +57,10 @@ class OfferPostFrame extends StatelessWidget {
     this.shares,
     this.comments,
     this.username,
+    this.fullName,
     this.totalTags,
     this.onTapTags,
     this.onRequestOfOfferDetails,
-    this.thumbnailHeightAspectRatio,
   });
 
   @override
@@ -73,49 +73,6 @@ class OfferPostFrame extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PadHorizontal(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '$title',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const Gap(8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Text(
-                    '$status',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-                const Gap(8),
-                Text(
-                  '$description',
-                  maxLines: filesData?.isNotEmpty ?? false ? 2 : 12,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
           if (filesData?.isNotEmpty ?? false) ...[
             const Gap(8),
             Stack(
@@ -135,8 +92,6 @@ class OfferPostFrame extends StatelessWidget {
                           WTVMiniPlayer(
                             videoUrl: file.videoUrl,
                             thumbnail: file.videoThumbnailUrl,
-                            thumbnailHeightAspectRatio:
-                                thumbnailHeightAspectRatio,
                             onTapFreeArea: () {
                               onRequestOfOfferDetails?.call();
                             },
@@ -187,6 +142,52 @@ class OfferPostFrame extends StatelessWidget {
           ],
           const Gap(8),
           PadHorizontal(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '$title',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const Gap(8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Text(
+                    '$status',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                if (filesData?.isEmpty ?? true) ...[
+                  const Gap(8),
+                  Text(
+                    '$description',
+                    maxLines: filesData?.isNotEmpty ?? false ? 2 : 12,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ]
+              ],
+            ),
+          ),
+          const Gap(8),
+          PadHorizontal(
             child: Row(
               children: <Widget>[
                 CircleAvatar(
@@ -201,7 +202,7 @@ class OfferPostFrame extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Full Name',
+                        '$fullName',
                       ),
                       const Gap(4),
                       Row(

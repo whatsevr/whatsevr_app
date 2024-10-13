@@ -19,7 +19,7 @@ class ExplorePagePhotosPage extends StatelessWidget {
     scrollController?.addListener(() {
       if (scrollController?.position.pixels ==
           scrollController?.position.maxScrollExtent) {
-        context.read<ExploreBloc>().add(LoadMoreOffersEvent(
+        context.read<ExploreBloc>().add(LoadMorePhotoPostsEvent(
               page: context
                       .read<ExploreBloc>()
                       .state
@@ -52,6 +52,7 @@ class ExplorePagePhotosPage extends StatelessWidget {
                   PhotosPostFrame(
                     avatarUrl: offer.user?.profilePicture,
                     username: data[index].user?.username,
+                    fullName: data[index].user?.name,
                     title: data[index].title,
                     description: data[index].description,
                     filesData: data[index].filesData,

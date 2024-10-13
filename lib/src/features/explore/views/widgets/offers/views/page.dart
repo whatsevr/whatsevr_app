@@ -52,6 +52,7 @@ class ExplorePageOffersPage extends StatelessWidget {
                   OfferPostFrame(
                     avatarUrl: offer.user?.profilePicture,
                     username: data[index].user?.username,
+                    fullName: data[index].user?.name,
                     title: data[index].title,
                     description: data[index].description,
                     status: data[index].status,

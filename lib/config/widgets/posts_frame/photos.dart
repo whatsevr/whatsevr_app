@@ -35,7 +35,7 @@ class PhotosPostFrame extends StatelessWidget {
   final int? shares;
   final int? comments;
   final String? username;
-
+  final String? fullName;
   final int? totalTags;
   final Function()? onTapTags;
   final Function()? onRequestOfOfferDetails;
@@ -52,6 +52,7 @@ class PhotosPostFrame extends StatelessWidget {
     this.shares,
     this.comments,
     this.username,
+    this.fullName,
     this.totalTags,
     this.onTapTags,
     this.onRequestOfOfferDetails,
@@ -81,14 +82,15 @@ class PhotosPostFrame extends StatelessWidget {
                   ),
                 ),
                 const Gap(8),
-                Text(
-                  '$description',
-                  maxLines: filesData?.isNotEmpty ?? false ? 2 : 12,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
+                if (description?.isNotEmpty ?? false)
+                  Text(
+                    '$description',
+                    maxLines: filesData?.isNotEmpty ?? false ? 2 : 12,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -165,7 +167,7 @@ class PhotosPostFrame extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Full Name',
+                        '$fullName',
                       ),
                       const Gap(4),
                       Row(

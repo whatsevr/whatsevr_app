@@ -228,28 +228,38 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leadingWidth: 22,
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: 16.0,
-              backgroundImage: ExtendedNetworkImageProvider(
-                widget.memories?[currentPageIndex].user?.profilePicture ??
-                    MockData.imageAvatar,
-                cache: true,
-              ),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 16.0,
+            backgroundImage: ExtendedNetworkImageProvider(
+              widget.memories?[currentPageIndex].user?.profilePicture ??
+                  MockData.imageAvatar,
+              cache: true,
             ),
-            Gap(8),
-            Text(
-              widget.memories?[currentPageIndex].user?.username ?? '',
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+          ),
         ),
+        title: Text(
+          widget.memories?[currentPageIndex].user?.username ?? '',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          Text(
+            GetTimeAgo.parse(
+              widget.memories![currentPageIndex]
+                  .userMemories![currentMemoryIndex].createdAt!,
+            ),
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 12.0,
+            ),
+          ),
+          Gap(8),
+        ],
       ),
       body: PageView.builder(
           controller: pageViewController,
@@ -286,6 +296,21 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                                   milliseconds: widget.memories?[index]
                                           .userMemories?[i].videoDurationMs ??
                                       0),
+                              caption: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '${widget.memories?[index].userMemories?[i].caption}',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  Gap(50),
+                                ],
+                              ),
                             )
                           : StoryItem.text(
                               title:
