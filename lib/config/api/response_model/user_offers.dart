@@ -1,58 +1,58 @@
 import 'dart:convert';
 
-class UserVideoPostsResponse {
+class UserOffersResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<VideoPost>? videoPosts;
+  final List<OfferPost>? offerPosts;
 
-  UserVideoPostsResponse({
+  UserOffersResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.videoPosts,
+    this.offerPosts,
   });
 
-  UserVideoPostsResponse copyWith({
+  UserOffersResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<VideoPost>? videoPosts,
+    List<OfferPost>? offerPosts,
   }) =>
-      UserVideoPostsResponse(
+      UserOffersResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        videoPosts: videoPosts ?? this.videoPosts,
+        offerPosts: offerPosts ?? this.offerPosts,
       );
 
-  factory UserVideoPostsResponse.fromJson(String str) =>
-      UserVideoPostsResponse.fromMap(json.decode(str));
+  factory UserOffersResponse.fromJson(String str) =>
+      UserOffersResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserVideoPostsResponse.fromMap(Map<String, dynamic> json) =>
-      UserVideoPostsResponse(
+  factory UserOffersResponse.fromMap(Map<String, dynamic> json) =>
+      UserOffersResponse(
         message: json["message"],
         page: json["page"],
         lastPage: json["last_page"],
-        videoPosts: json["video_posts"] == null
+        offerPosts: json["offer_posts"] == null
             ? []
-            : List<VideoPost>.from(
-                json["video_posts"]!.map((x) => VideoPost.fromMap(x))),
+            : List<OfferPost>.from(
+                json["offer_posts"]!.map((x) => OfferPost.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "message": message,
         "page": page,
         "last_page": lastPage,
-        "video_posts": videoPosts == null
+        "offer_posts": offerPosts == null
             ? []
-            : List<dynamic>.from(videoPosts!.map((x) => x.toMap())),
+            : List<dynamic>.from(offerPosts!.map((x) => x.toMap())),
       };
 }
 
-class VideoPost {
+class OfferPost {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -64,23 +64,23 @@ class VideoPost {
   final bool? isArchived;
   final bool? isActive;
   final String? postCreatorType;
-  final DateTime? updatedAt;
   final String? userUid;
-  final String? thumbnail;
-  final String? videoUrl;
-  final String? location;
-  final int? totalViews;
+  final int? totalImpressions;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
-  final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final int? videoDurationInSec;
+  final String? ctaAction;
+  final String? ctaActionUrl;
+  final List<FilesDatum>? filesData;
+  final String? status;
+  final String? targetGender;
+  final List<String>? targetAreas;
 
-  VideoPost({
+  OfferPost({
     this.id,
     this.createdAt,
     this.uid,
@@ -92,24 +92,24 @@ class VideoPost {
     this.isArchived,
     this.isActive,
     this.postCreatorType,
-    this.updatedAt,
     this.userUid,
-    this.thumbnail,
-    this.videoUrl,
-    this.location,
-    this.totalViews,
+    this.totalImpressions,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
-    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.videoDurationInSec,
+    this.ctaAction,
+    this.ctaActionUrl,
+    this.filesData,
+    this.status,
+    this.targetGender,
+    this.targetAreas,
   });
 
-  VideoPost copyWith({
+  OfferPost copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -121,23 +121,23 @@ class VideoPost {
     bool? isArchived,
     bool? isActive,
     String? postCreatorType,
-    DateTime? updatedAt,
     String? userUid,
-    String? thumbnail,
-    String? videoUrl,
-    String? location,
-    int? totalViews,
+    int? totalImpressions,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
-    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    int? videoDurationInSec,
+    String? ctaAction,
+    String? ctaActionUrl,
+    List<FilesDatum>? filesData,
+    String? status,
+    String? targetGender,
+    List<String>? targetAreas,
   }) =>
-      VideoPost(
+      OfferPost(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -149,29 +149,29 @@ class VideoPost {
         isArchived: isArchived ?? this.isArchived,
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
-        updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
-        thumbnail: thumbnail ?? this.thumbnail,
-        videoUrl: videoUrl ?? this.videoUrl,
-        location: location ?? this.location,
-        totalViews: totalViews ?? this.totalViews,
+        totalImpressions: totalImpressions ?? this.totalImpressions,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
             internalAiDescription ?? this.internalAiDescription,
-        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
+        ctaAction: ctaAction ?? this.ctaAction,
+        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+        filesData: filesData ?? this.filesData,
+        status: status ?? this.status,
+        targetGender: targetGender ?? this.targetGender,
+        targetAreas: targetAreas ?? this.targetAreas,
       );
 
-  factory VideoPost.fromJson(String str) => VideoPost.fromMap(json.decode(str));
+  factory OfferPost.fromJson(String str) => OfferPost.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory VideoPost.fromMap(Map<String, dynamic> json) => VideoPost(
+  factory OfferPost.fromMap(Map<String, dynamic> json) => OfferPost(
         id: json["id"],
         createdAt: json["created_at"] == null
             ? null
@@ -189,25 +189,28 @@ class VideoPost {
         isArchived: json["is_archived"],
         isActive: json["is_active"],
         postCreatorType: json["post_creator_type"],
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
         userUid: json["user_uid"],
-        thumbnail: json["thumbnail"],
-        videoUrl: json["video_url"],
-        location: json["location"],
-        totalViews: json["total_views"],
+        totalImpressions: json["total_impressions"],
         totalLikes: json["total_likes"],
         totalComments: json["total_comments"],
         internalAiDescription: json["internal_ai_description"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
         creatorLatLongWkb: json["creator_lat_long_wkb"],
         taggedCommunityUids: json["tagged_community_uids"] == null
             ? []
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"],
-        videoDurationInSec: json["video_duration_in_sec"],
+        ctaAction: json["cta_action"],
+        ctaActionUrl: json["cta_action_url"],
+        filesData: json["files_data"] == null
+            ? []
+            : List<FilesDatum>.from(
+                json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
+        status: json["status"],
+        targetGender: json["target_gender"],
+        targetAreas: json["target_areas"] == null
+            ? []
+            : List<String>.from(json["target_areas"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -225,22 +228,78 @@ class VideoPost {
         "is_archived": isArchived,
         "is_active": isActive,
         "post_creator_type": postCreatorType,
-        "updated_at": updatedAt?.toIso8601String(),
         "user_uid": userUid,
-        "thumbnail": thumbnail,
-        "video_url": videoUrl,
-        "location": location,
-        "total_views": totalViews,
+        "total_impressions": totalImpressions,
         "total_likes": totalLikes,
         "total_comments": totalComments,
         "internal_ai_description": internalAiDescription,
-        "address_lat_long_wkb": addressLatLongWkb,
         "creator_lat_long_wkb": creatorLatLongWkb,
         "tagged_community_uids": taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "video_duration_in_sec": videoDurationInSec,
+        "cta_action": ctaAction,
+        "cta_action_url": ctaActionUrl,
+        "files_data": filesData == null
+            ? []
+            : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        "status": status,
+        "target_gender": targetGender,
+        "target_areas": targetAreas == null
+            ? []
+            : List<dynamic>.from(targetAreas!.map((x) => x)),
+      };
+}
+
+class FilesDatum {
+  final String? type;
+  final String? videoUrl;
+  final int? videoDurationMs;
+  final String? videoThumbnailUrl;
+  final String? imageUrl;
+
+  FilesDatum({
+    this.type,
+    this.videoUrl,
+    this.videoDurationMs,
+    this.videoThumbnailUrl,
+    this.imageUrl,
+  });
+
+  FilesDatum copyWith({
+    String? type,
+    String? videoUrl,
+    int? videoDurationMs,
+    String? videoThumbnailUrl,
+    String? imageUrl,
+  }) =>
+      FilesDatum(
+        type: type ?? this.type,
+        videoUrl: videoUrl ?? this.videoUrl,
+        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
+        videoThumbnailUrl: videoThumbnailUrl ?? this.videoThumbnailUrl,
+        imageUrl: imageUrl ?? this.imageUrl,
+      );
+
+  factory FilesDatum.fromJson(String str) =>
+      FilesDatum.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
+        type: json["type"],
+        videoUrl: json["video_url"],
+        videoDurationMs: json["video_duration_ms"],
+        videoThumbnailUrl: json["video_thumbnail_url"],
+        imageUrl: json["image_url"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "type": type,
+        "video_url": videoUrl,
+        "video_duration_ms": videoDurationMs,
+        "video_thumbnail_url": videoThumbnailUrl,
+        "image_url": imageUrl,
       };
 }

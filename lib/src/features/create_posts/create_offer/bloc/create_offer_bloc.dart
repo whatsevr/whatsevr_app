@@ -50,6 +50,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
         _onUpdateTaggedUsersAndCommunities);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
     on<AddOrRemoveTargetAddressEvent>(_onAddOrRemoveTargetAddress);
+    on<UpdateCtaActionEvent>(_onUpdateCtaAction);
+    on<UpdateTargetGenderEvent>(_onUpdateTargetGender);
   }
   FutureOr<void> _onInitial(
     CreateOfferInitialEvent event,
@@ -352,6 +354,24 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       emit(state.copyWith(
         selectedTargetAddresses: state.selectedTargetAddresses! + [address],
       ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onUpdateCtaAction(
+      UpdateCtaActionEvent event, Emitter<CreateOfferState> emit) {
+    try {
+      emit(state.copyWith(ctaAction: event.ctaAction));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onUpdateTargetGender(
+      UpdateTargetGenderEvent event, Emitter<CreateOfferState> emit) {
+    try {
+      emit(state.copyWith(selectedTargetGender: event.targetGender));
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

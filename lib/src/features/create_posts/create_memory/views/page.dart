@@ -549,10 +549,12 @@ class CreateMemoryPage extends StatelessWidget {
                         showAppModalSheet(
                             child: CommonDataSearchSelectPage(
                           showCtaActions: true,
-                          onCtaActionSelected: (p0) {
+                          onCtaActionSelected: (ctaAction) {
                             context
                                 .read<CreateMemoryBloc>()
-                                .emit(state.copyWith(ctaAction: p0.action));
+                                .add(UpdateCtaActionEvent(
+                                  ctaAction: ctaAction.action,
+                                ));
                           },
                         ));
                       },
@@ -590,7 +592,7 @@ class CreateMemoryPage extends StatelessWidget {
                           counterCallback: (number) {
                             context
                                 .read<CreateMemoryBloc>()
-                                .emit(state.copyWith(noOfDays: number));
+                                .add(UpdateNoOfDaysEvent(noOfDays: number));
                           },
                           stickySuffix: 'day',
                         ),

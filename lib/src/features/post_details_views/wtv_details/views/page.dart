@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 
-import 'package:whatsevr_app/src/features/wtv_details/views/widgets/related_videos.dart';
+import 'package:whatsevr_app/src/features/post_details_views/wtv_details/views/widgets/related_videos.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 

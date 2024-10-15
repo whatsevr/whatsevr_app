@@ -82,25 +82,32 @@ class AccountPageAboutView extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              'View More>>',
+                              'All Services>>',
                               style:
                                   TextStyle(fontSize: 14, color: Colors.blue),
                             ),
                           ],
                         ),
+                        Gap(8),
                         Wrap(
                           spacing: 8,
                           children: <Widget>[
                             for (UserService? service
                                 in state.profileDetailsResponse?.userServices ??
                                     <UserService?>[])
-                              ActionChip(
-                                backgroundColor: Colors.blueGrey,
-                                label: Text(
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blueGrey,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
                                   '${service?.title}',
                                   style: const TextStyle(color: Colors.white),
                                 ),
-                                onPressed: () {},
                               ),
                           ],
                         ),

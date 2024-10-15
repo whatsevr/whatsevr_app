@@ -65,7 +65,7 @@ class RecommendedOffer {
   final bool? isActive;
   final String? postCreatorType;
   final String? userUid;
-  final int? totalViews;
+  final int? totalImpressions;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
@@ -94,7 +94,7 @@ class RecommendedOffer {
     this.isActive,
     this.postCreatorType,
     this.userUid,
-    this.totalViews,
+    this.totalImpressions,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
@@ -124,7 +124,7 @@ class RecommendedOffer {
     bool? isActive,
     String? postCreatorType,
     String? userUid,
-    int? totalViews,
+    int? totalImpressions,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
@@ -153,7 +153,7 @@ class RecommendedOffer {
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
         userUid: userUid ?? this.userUid,
-        totalViews: totalViews ?? this.totalViews,
+        totalImpressions: totalImpressions ?? this.totalImpressions,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
@@ -196,7 +196,7 @@ class RecommendedOffer {
         isActive: json["is_active"],
         postCreatorType: json["post_creator_type"],
         userUid: json["user_uid"],
-        totalViews: json["total_views"],
+        totalImpressions: json["total_impressions"],
         totalLikes: json["total_likes"],
         totalComments: json["total_comments"],
         internalAiDescription: json["internal_ai_description"],
@@ -236,7 +236,7 @@ class RecommendedOffer {
         "is_active": isActive,
         "post_creator_type": postCreatorType,
         "user_uid": userUid,
-        "total_views": totalViews,
+        "total_impressions": totalImpressions,
         "total_likes": totalLikes,
         "total_comments": totalComments,
         "internal_ai_description": internalAiDescription,

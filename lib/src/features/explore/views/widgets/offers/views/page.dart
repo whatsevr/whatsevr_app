@@ -73,7 +73,7 @@ class ExplorePageOffersPage extends StatelessWidget {
                     comments: data[index].totalComments,
                     likes: data[index].totalLikes,
                     shares: data[index].totalShares,
-                    views: data[index].totalViews,
+                    views: data[index].totalImpressions,
                   ),
                   if (index == data.length - 1 &&
                       context

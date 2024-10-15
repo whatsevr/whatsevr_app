@@ -354,8 +354,9 @@ class CreateOfferPage extends StatelessWidget {
                           label: Text(audience),
                           selected: state.selectedTargetGender == audience,
                           onSelected: (value) {
-                            context.read<CreateOfferBloc>().emit(
-                                state.copyWith(selectedTargetGender: audience));
+                            context.read<CreateOfferBloc>().add(
+                                UpdateTargetGenderEvent(
+                                    targetGender: audience));
                           },
                         ),
                         const Gap(4),
@@ -375,10 +376,10 @@ class CreateOfferPage extends StatelessWidget {
                           showAppModalSheet(
                               child: CommonDataSearchSelectPage(
                             showCtaActions: true,
-                            onCtaActionSelected: (p0) {
-                              context
-                                  .read<CreateOfferBloc>()
-                                  .emit(state.copyWith(ctaAction: p0.action));
+                            onCtaActionSelected: (ctaAction) {
+                              context.read<CreateOfferBloc>().add(
+                                  UpdateCtaActionEvent(
+                                      ctaAction: ctaAction.action));
                             },
                           ));
                         },

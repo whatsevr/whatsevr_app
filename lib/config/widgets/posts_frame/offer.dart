@@ -87,6 +87,8 @@ class OfferPostFrame extends StatelessWidget {
                             file.imageUrl ?? MockData.imagePlaceholder("Offer"),
                             width: double.infinity,
                             fit: BoxFit.contain,
+                            enableLoadState: false,
+                            cache: true,
                           )
                         else if (file.type == 'video')
                           WTVMiniPlayer(

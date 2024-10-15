@@ -80,3 +80,19 @@ class AddOrRemoveTargetAddressEvent extends CreateOfferEvent {
   @override
   List<Object?> get props => <Object?>[countryName, stateName, cityName];
 }
+
+class UpdateCtaActionEvent extends CreateOfferEvent {
+  final String? ctaAction;
+  const UpdateCtaActionEvent({this.ctaAction});
+
+  @override
+  List<Object?> get props => <Object?>[ctaAction];
+}
+
+class UpdateTargetGenderEvent extends CreateOfferEvent {
+  final String? targetGender;
+  const UpdateTargetGenderEvent({this.targetGender});
+
+  @override
+  List<Object?> get props => <Object?>[targetGender];
+}

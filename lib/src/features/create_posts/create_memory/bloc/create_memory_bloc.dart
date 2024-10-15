@@ -46,6 +46,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
     on<CreateVideoMemoryEvent>(_onCreateVideoMemory);
     on<CreateImageMemoryEvent>(_onCreateImageMemory);
+    on<UpdateCtaActionEvent>(_onUpdateCtaAction);
+    on<UpdateNoOfDaysEvent>(_onUpdateNoOfDays);
   }
   FutureOr<void> _onInitial(
     CreateMemoryInitialEvent event,
@@ -372,5 +374,15 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
+  }
+
+  FutureOr<void> _onUpdateCtaAction(
+      UpdateCtaActionEvent event, Emitter<CreateMemoryState> emit) {
+    emit(state.copyWith(ctaAction: event.ctaAction));
+  }
+
+  FutureOr<void> _onUpdateNoOfDays(
+      UpdateNoOfDaysEvent event, Emitter<CreateMemoryState> emit) {
+    emit(state.copyWith(noOfDays: event.noOfDays));
   }
 }

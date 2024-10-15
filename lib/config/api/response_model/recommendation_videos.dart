@@ -78,7 +78,7 @@ class RecommendedVideo {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final double? thumbnailAspectRatio;
+
   final int? videoDurationInSec;
   final User? user;
 
@@ -108,7 +108,6 @@ class RecommendedVideo {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.thumbnailAspectRatio,
     this.videoDurationInSec,
     this.user,
   });
@@ -170,7 +169,6 @@ class RecommendedVideo {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        thumbnailAspectRatio: thumbnailAspectRatio ?? this.thumbnailAspectRatio,
         videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
         user: user ?? this.user,
       );
@@ -217,7 +215,6 @@ class RecommendedVideo {
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"],
-        thumbnailAspectRatio: json["thumbnail_aspect_ratio"]?.toDouble(),
         videoDurationInSec: json["video_duration_in_sec"],
         user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
@@ -253,7 +250,6 @@ class RecommendedVideo {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "thumbnail_aspect_ratio": thumbnailAspectRatio,
         "video_duration_in_sec": videoDurationInSec,
         "user": user?.toMap(),
       };

@@ -89,3 +89,19 @@ class CreateImageMemoryEvent extends CreateMemoryEvent {
   @override
   List<Object?> get props => <Object?>[hashtags];
 }
+
+class UpdateCtaActionEvent extends CreateMemoryEvent {
+  final String? ctaAction;
+  const UpdateCtaActionEvent({this.ctaAction});
+
+  @override
+  List<Object?> get props => <Object?>[ctaAction];
+}
+
+class UpdateNoOfDaysEvent extends CreateMemoryEvent {
+  final int? noOfDays;
+  const UpdateNoOfDaysEvent({this.noOfDays});
+
+  @override
+  List<Object?> get props => <Object?>[noOfDays];
+}

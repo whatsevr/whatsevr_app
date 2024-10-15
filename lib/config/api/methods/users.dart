@@ -13,6 +13,9 @@ import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dar
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
 
 import '../external/models/business_validation_exception.dart';
 import '../response_model/user_flicks.dart';
@@ -87,16 +90,16 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfileDetailsResponse?> getMemories({
+  static Future<UserMemoriesResponse?> getMemories({
     required String userUid,
   }) async {
     try {
       Response response = await ApiClient.client.get(
-        '/v1/user-profile-details',
+        '/v1/user-memories',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {
-        return ProfileDetailsResponse.fromMap(response.data);
+        return UserMemoriesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -104,16 +107,16 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfileDetailsResponse?> getPhotoPosts({
+  static Future<UserPhotoPostsResponse?> getPhotoPosts({
     required String userUid,
   }) async {
     try {
       Response response = await ApiClient.client.get(
-        '/v1/user-profile-details',
+        '/v1/user-photo-posts',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {
-        return ProfileDetailsResponse.fromMap(response.data);
+        return UserPhotoPostsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -121,16 +124,16 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfileDetailsResponse?> getOfferPosts({
+  static Future<UserOffersResponse?> getOfferPosts({
     required String userUid,
   }) async {
     try {
       Response response = await ApiClient.client.get(
-        '/v1/user-profile-details',
+        '/v1/user-offer-posts',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {
-        return ProfileDetailsResponse.fromMap(response.data);
+        return UserOffersResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

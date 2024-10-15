@@ -13,7 +13,7 @@ import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
-import '../../../../../wtv_details/views/page.dart';
+import '../../../../../post_details_views/wtv_details/views/page.dart';
 
 class ExplorePageWtvPage extends StatelessWidget {
   const ExplorePageWtvPage({super.key, this.scrollController});

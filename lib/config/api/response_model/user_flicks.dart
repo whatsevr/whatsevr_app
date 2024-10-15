@@ -77,9 +77,7 @@ class Flick {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final double? thumbnailAspectRatio;
   final int? videoDurationInSec;
-  final User? user;
 
   Flick({
     this.id,
@@ -107,9 +105,7 @@ class Flick {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.thumbnailAspectRatio,
     this.videoDurationInSec,
-    this.user,
   });
 
   Flick copyWith({
@@ -138,9 +134,7 @@ class Flick {
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    double? thumbnailAspectRatio,
     int? videoDurationInSec,
-    User? user,
   }) =>
       Flick(
         id: id ?? this.id,
@@ -169,9 +163,7 @@ class Flick {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        thumbnailAspectRatio: thumbnailAspectRatio ?? this.thumbnailAspectRatio,
         videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
-        user: user ?? this.user,
       );
 
   factory Flick.fromJson(String str) => Flick.fromMap(json.decode(str));
@@ -214,9 +206,7 @@ class Flick {
             : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
         totalShares: json["total_shares"],
         cumulativeScore: json["cumulative_score"],
-        thumbnailAspectRatio: json["thumbnail_aspect_ratio"]?.toDouble(),
         videoDurationInSec: json["video_duration_in_sec"],
-        user: json["user"] == null ? null : User.fromMap(json["user"]),
       );
 
   Map<String, dynamic> toMap() => {
@@ -250,198 +240,6 @@ class Flick {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         "total_shares": totalShares,
         "cumulative_score": cumulativeScore,
-        "thumbnail_aspect_ratio": thumbnailAspectRatio,
         "video_duration_in_sec": videoDurationInSec,
-        "user": user?.toMap(),
-      };
-}
-
-class User {
-  final int? id;
-  final String? bio;
-  final DateTime? dob;
-  final String? uid;
-  final String? name;
-  final String? gender;
-  final String? address;
-  final bool? isSpam;
-  final String? emailId;
-  final String? username;
-  final bool? isActive;
-  final bool? isBanned;
-  final bool? isOnline;
-  final bool? isPortfolio;
-  final String? mobileNumber;
-  final DateTime? registeredOn;
-  final bool? isDeactivated;
-  final DateTime? lastActiveAt;
-  final String? portfolioTitle;
-  final String? profilePicture;
-  final int? totalFollowers;
-  final String? portfolioStatus;
-  final int? totalFollowings;
-  final int? totalPostLikes;
-  final DateTime? portfolioCreatedAt;
-  final String? portfolioDescription;
-  final String? userLastLatLongWkb;
-
-  User({
-    this.id,
-    this.bio,
-    this.dob,
-    this.uid,
-    this.name,
-    this.gender,
-    this.address,
-    this.isSpam,
-    this.emailId,
-    this.username,
-    this.isActive,
-    this.isBanned,
-    this.isOnline,
-    this.isPortfolio,
-    this.mobileNumber,
-    this.registeredOn,
-    this.isDeactivated,
-    this.lastActiveAt,
-    this.portfolioTitle,
-    this.profilePicture,
-    this.totalFollowers,
-    this.portfolioStatus,
-    this.totalFollowings,
-    this.totalPostLikes,
-    this.portfolioCreatedAt,
-    this.portfolioDescription,
-    this.userLastLatLongWkb,
-  });
-
-  User copyWith({
-    int? id,
-    String? bio,
-    DateTime? dob,
-    String? uid,
-    String? name,
-    String? gender,
-    String? address,
-    bool? isSpam,
-    String? emailId,
-    String? username,
-    bool? isActive,
-    bool? isBanned,
-    bool? isOnline,
-    bool? isPortfolio,
-    String? mobileNumber,
-    DateTime? registeredOn,
-    bool? isDeactivated,
-    DateTime? lastActiveAt,
-    String? portfolioTitle,
-    String? profilePicture,
-    int? totalFollowers,
-    String? portfolioStatus,
-    int? totalFollowings,
-    int? totalPostLikes,
-    DateTime? portfolioCreatedAt,
-    String? portfolioDescription,
-    String? userLastLatLongWkb,
-  }) =>
-      User(
-        id: id ?? this.id,
-        bio: bio ?? this.bio,
-        dob: dob ?? this.dob,
-        uid: uid ?? this.uid,
-        name: name ?? this.name,
-        gender: gender ?? this.gender,
-        address: address ?? this.address,
-        isSpam: isSpam ?? this.isSpam,
-        emailId: emailId ?? this.emailId,
-        username: username ?? this.username,
-        isActive: isActive ?? this.isActive,
-        isBanned: isBanned ?? this.isBanned,
-        isOnline: isOnline ?? this.isOnline,
-        isPortfolio: isPortfolio ?? this.isPortfolio,
-        mobileNumber: mobileNumber ?? this.mobileNumber,
-        registeredOn: registeredOn ?? this.registeredOn,
-        isDeactivated: isDeactivated ?? this.isDeactivated,
-        lastActiveAt: lastActiveAt ?? this.lastActiveAt,
-        portfolioTitle: portfolioTitle ?? this.portfolioTitle,
-        profilePicture: profilePicture ?? this.profilePicture,
-        totalFollowers: totalFollowers ?? this.totalFollowers,
-        portfolioStatus: portfolioStatus ?? this.portfolioStatus,
-        totalFollowings: totalFollowings ?? this.totalFollowings,
-        totalPostLikes: totalPostLikes ?? this.totalPostLikes,
-        portfolioCreatedAt: portfolioCreatedAt ?? this.portfolioCreatedAt,
-        portfolioDescription: portfolioDescription ?? this.portfolioDescription,
-        userLastLatLongWkb: userLastLatLongWkb ?? this.userLastLatLongWkb,
-      );
-
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory User.fromMap(Map<String, dynamic> json) => User(
-        id: json["id"],
-        bio: json["bio"],
-        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
-        uid: json["uid"],
-        name: json["name"],
-        gender: json["gender"],
-        address: json["address"],
-        isSpam: json["is_spam"],
-        emailId: json["email_id"],
-        username: json["username"],
-        isActive: json["is_active"],
-        isBanned: json["is_banned"],
-        isOnline: json["is_online"],
-        isPortfolio: json["is_portfolio"],
-        mobileNumber: json["mobile_number"],
-        registeredOn: json["registered_on"] == null
-            ? null
-            : DateTime.parse(json["registered_on"]),
-        isDeactivated: json["is_deactivated"],
-        lastActiveAt: json["last_active_at"] == null
-            ? null
-            : DateTime.parse(json["last_active_at"]),
-        portfolioTitle: json["portfolio_title"],
-        profilePicture: json["profile_picture"],
-        totalFollowers: json["total_followers"],
-        portfolioStatus: json["portfolio_status"],
-        totalFollowings: json["total_followings"],
-        totalPostLikes: json["total_post_likes"],
-        portfolioCreatedAt: json["portfolio_created_at"] == null
-            ? null
-            : DateTime.parse(json["portfolio_created_at"]),
-        portfolioDescription: json["portfolio_description"],
-        userLastLatLongWkb: json["user_last_lat_long_wkb"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "bio": bio,
-        "dob":
-            "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
-        "uid": uid,
-        "name": name,
-        "gender": gender,
-        "address": address,
-        "is_spam": isSpam,
-        "email_id": emailId,
-        "username": username,
-        "is_active": isActive,
-        "is_banned": isBanned,
-        "is_online": isOnline,
-        "is_portfolio": isPortfolio,
-        "mobile_number": mobileNumber,
-        "registered_on": registeredOn?.toIso8601String(),
-        "is_deactivated": isDeactivated,
-        "last_active_at": lastActiveAt?.toIso8601String(),
-        "portfolio_title": portfolioTitle,
-        "profile_picture": profilePicture,
-        "total_followers": totalFollowers,
-        "portfolio_status": portfolioStatus,
-        "total_followings": totalFollowings,
-        "total_post_likes": totalPostLikes,
-        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
-        "portfolio_description": portfolioDescription,
-        "user_last_lat_long_wkb": userLastLatLongWkb,
       };
 }

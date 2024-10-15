@@ -14,11 +14,8 @@ import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
 import '../../../utils/conversion.dart';
-
 import '../../api/response_model/recommendation_photo_posts.dart';
 import '../two_state_ui.dart';
 
@@ -107,6 +104,8 @@ class PhotosPostFrame extends StatelessWidget {
                           file.imageUrl ?? MockData.imagePlaceholder("Photo"),
                           width: double.infinity,
                           fit: BoxFit.contain,
+                          enableLoadState: false,
+                          cache: true,
                         ),
                   ],
                 ),
