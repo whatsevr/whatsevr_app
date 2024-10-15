@@ -27,6 +27,7 @@ import '../../src/features/create_posts/create_flick_post/views/page.dart';
 import '../../src/features/create_posts/create_memory/views/page.dart';
 import '../../src/features/create_posts/create_offer/views/page.dart';
 import '../../src/features/create_posts/create_photo_post/views/page.dart';
+import '../../src/features/create_posts/upload_pdf/views/page.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();
@@ -213,6 +214,17 @@ class AppNavigationService {
               CreatePhotoPostPageArgument pageArgument =
                   state.extra as CreatePhotoPostPageArgument;
               return CreatePhotoPostPage(
+                pageArgument: pageArgument,
+              );
+            },
+          ),
+          GoRoute(
+            name: RoutesName.uploadPdf,
+            path: RoutesName.uploadPdf,
+            builder: (BuildContext context, GoRouterState state) {
+              UploadPdfPageArgument pageArgument =
+                  state.extra as UploadPdfPageArgument;
+              return UploadPdfPage(
                 pageArgument: pageArgument,
               );
             },

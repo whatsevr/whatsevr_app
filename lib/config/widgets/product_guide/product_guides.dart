@@ -71,4 +71,18 @@ class ProductGuides {
       guides: guides,
     ));
   }
+
+  static showUploadPdfGuide() {
+    List<Widget> guides = [
+      const Text('Thumbnail should be in landscape or square aspect ratio.'),
+      const Text(
+          'Max file size is 20 MB, only one PDF files are allowed to upload.'),
+      const Text('Uploading new PDF will replace the existing PDF.'),
+    ];
+    showAppModalSheet(
+        child: AppGuideView(
+      headingTitle: 'PDF Upload Guide',
+      guides: guides,
+    ));
+  }
 }
