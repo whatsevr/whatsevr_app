@@ -23,8 +23,6 @@ import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
-
-import '../../../media_previewer/views/page.dart';
 import '../bloc/create_photo_post_bloc.dart';
 
 class CreatePhotoPostPageArgument {

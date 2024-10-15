@@ -19,7 +19,7 @@ import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
-import '../../../media_previewer/views/page.dart';
+import '../../../previewers/views/page.dart';
 import '../bloc/create_flick_bloc.dart';
 
 class CreateFlickPostPageArgument {
@@ -86,7 +86,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                     onPressed: () {
                                       AppNavigationService.newRoute(
                                         RoutesName.fullVideoPlayer,
-                                        extras: MediaPreviewerPageArguments(
+                                        extras: PreviewersPageArguments(
                                           videoUrl: state.videoFile!.path,
                                         ),
                                       );

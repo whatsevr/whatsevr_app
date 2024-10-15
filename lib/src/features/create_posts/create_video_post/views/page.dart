@@ -22,7 +22,7 @@ import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../media_previewer/views/page.dart';
+import '../../../previewers/views/page.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -87,7 +87,7 @@ class CreateVideoPostPage extends StatelessWidget {
                                     onPressed: () {
                                       AppNavigationService.newRoute(
                                         RoutesName.fullVideoPlayer,
-                                        extras: MediaPreviewerPageArguments(
+                                        extras: PreviewersPageArguments(
                                           videoUrl: state.videoFile!.path,
                                         ),
                                       );

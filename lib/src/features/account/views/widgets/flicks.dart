@@ -39,6 +39,7 @@ class AccountPageFlicksView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                         shape: BoxShape.rectangle,
                         fit: BoxFit.cover,
+                        enableLoadState: false,
                       ),
                       Positioned(
                         top: 0,
@@ -59,7 +60,7 @@ class AccountPageFlicksView extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        bottom: 0,
+                        bottom: 2,
                         right: 0,
                         child: Container(
                           padding: const EdgeInsets.symmetric(

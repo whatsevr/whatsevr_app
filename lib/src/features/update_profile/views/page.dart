@@ -24,7 +24,7 @@ import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/mask_text.dart';
 
-import '../../media_previewer/views/page.dart';
+import '../../previewers/views/page.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {
@@ -242,8 +242,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                           onPressed: () {
                                             AppNavigationService.newRoute(
                                               RoutesName.fullVideoPlayer,
-                                              extras:
-                                                  MediaPreviewerPageArguments(
+                                              extras: PreviewersPageArguments(
                                                 videoUrl:
                                                     coverMedia.videoUrl ?? '',
                                               ),

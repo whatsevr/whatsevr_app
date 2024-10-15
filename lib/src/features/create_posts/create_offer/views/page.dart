@@ -24,7 +24,7 @@ import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
-import '../../../media_previewer/views/page.dart';
+import '../../../previewers/views/page.dart';
 import '../bloc/create_offer_bloc.dart';
 
 class CreateOfferPageArgument {
@@ -136,7 +136,7 @@ class CreateOfferPage extends StatelessWidget {
                                       onPressed: () {
                                         AppNavigationService.newRoute(
                                           RoutesName.fullVideoPlayer,
-                                          extras: MediaPreviewerPageArguments(
+                                          extras: PreviewersPageArguments(
                                             videoUrl: uiFileData.file!.path,
                                           ),
                                         );

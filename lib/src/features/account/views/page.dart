@@ -46,6 +46,7 @@ class AccountPage extends StatelessWidget {
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
           return Scaffold(
+            backgroundColor: Colors.white,
             body: Column(
               children: <Widget>[
                 PadHorizontal(
@@ -347,7 +348,7 @@ class AccountPage extends StatelessWidget {
                                     ('Tags', Text('Tags')),
                                   ],
                                 ),
-                                Gap(8),
+                                Gap(50),
                               ],
                             ),
                           ),

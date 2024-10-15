@@ -432,6 +432,7 @@ class UserPdf {
   final String? fileUrl;
   final String? userUid;
   final String? title;
+  final String? description;
   final String? thumbnailUrl;
 
   UserPdf({
@@ -440,6 +441,7 @@ class UserPdf {
     this.fileUrl,
     this.userUid,
     this.title,
+    this.description,
     this.thumbnailUrl,
   });
 
@@ -449,6 +451,7 @@ class UserPdf {
     String? fileUrl,
     String? userUid,
     String? title,
+    String? description,
     String? thumbnailUrl,
   }) =>
       UserPdf(
@@ -457,6 +460,7 @@ class UserPdf {
         fileUrl: fileUrl ?? this.fileUrl,
         userUid: userUid ?? this.userUid,
         title: title ?? this.title,
+        description: description ?? this.description,
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       );
 

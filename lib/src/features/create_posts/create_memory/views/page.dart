@@ -25,7 +25,7 @@ import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/stepper.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
-import '../../../media_previewer/views/page.dart';
+import '../../../previewers/views/page.dart';
 import '../bloc/create_memory_bloc.dart';
 
 class CreateMemoryPageArgument {
@@ -97,8 +97,7 @@ class CreateMemoryPage extends StatelessWidget {
                                           onPressed: () {
                                             AppNavigationService.newRoute(
                                               RoutesName.fullVideoPlayer,
-                                              extras:
-                                                  MediaPreviewerPageArguments(
+                                              extras: PreviewersPageArguments(
                                                 videoUrl: state.videoFile!.path,
                                               ),
                                             );

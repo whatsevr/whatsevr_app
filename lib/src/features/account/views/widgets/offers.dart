@@ -49,6 +49,14 @@ class AccountPageOffersView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Text(
+                        "Posted on: ${ddMonthyy(userOfferPost?.createdAt)}",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Gap(4),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -72,6 +80,7 @@ class AccountPageOffersView extends StatelessWidget {
                       Text(
                         '${userOfferPost?.description}',
                         maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
@@ -92,31 +101,17 @@ class AccountPageOffersView extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           FilesDatum? fileData =
                               userOfferPost?.filesData?[index];
-                          if (fileData?.type == 'image') {
-                            return Container(
+                          if (fileData?.type == 'image' ||
+                              fileData?.type == 'video') {
+                            return ExtendedImage.network(
                               width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: ExtendedImage.network(
-                                fileData?.imageUrl ?? '',
-                                fit: BoxFit.cover,
-                                cache: true,
-                              ),
-                            );
-                          } else if (fileData?.type == 'video') {
-                            return Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: ExtendedImage.network(
-                                fileData?.videoThumbnailUrl ?? '',
-                                fit: BoxFit.cover,
-                                cache: true,
-                              ),
+                              fileData?.imageUrl ??
+                                  fileData?.videoThumbnailUrl ??
+                                  '',
+                              fit: BoxFit.cover,
+                              cache: true,
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(8),
                             );
                           } else {
                             return SizedBox();
@@ -127,27 +122,42 @@ class AccountPageOffersView extends StatelessWidget {
                   ],
                   const Gap(8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${formatCountToKMBTQ(userOfferPost?.totalImpressions)}',
-                        style: TextStyle(
-                          fontSize: 12,
+                      for ((String? value, IconData? icon) record in [
+                        (
+                          '${formatCountToKMBTQ(userOfferPost?.totalImpressions)}',
+                          Icons.remove_red_eye,
                         ),
-                      ),
-                      Gap(4),
-                      const Icon(
-                        Icons.remove_red_eye,
-                        size: 16,
-                      ),
-                      const Gap(8),
-                      Text(
-                        '${ddMonthyy(userOfferPost?.createdAt)}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
+                        (
+                          '${formatCountToKMBTQ(userOfferPost?.totalLikes)}',
+                          Icons.thumb_up_sharp,
                         ),
-                      ),
+                        (
+                          '${formatCountToKMBTQ(userOfferPost?.totalComments)}',
+                          Icons.comment,
+                        ),
+                        (
+                          '${formatCountToKMBTQ(userOfferPost?.totalShares)}',
+                          Icons.share_sharp,
+                        ),
+                      ])
+                        Row(
+                          children: [
+                            Text(
+                              '${record.$1}',
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
+                            Gap(4),
+                            Icon(
+                              record.$2,
+                              size: 16,
+                            ),
+                            const Gap(8)
+                          ],
+                        )
                     ],
                   ),
                 ],
