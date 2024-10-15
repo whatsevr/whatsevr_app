@@ -15,7 +15,7 @@ class CreateFlickPostRequest {
   final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final int? videoDurationInSec;
-  final double? thumbnailAspectRatio;
+
   CreateFlickPostRequest({
     this.title,
     this.description,
@@ -30,7 +30,6 @@ class CreateFlickPostRequest {
     this.taggedUserUids,
     this.taggedCommunityUids,
     this.videoDurationInSec,
-    this.thumbnailAspectRatio,
   });
 
   factory CreateFlickPostRequest.fromJson(String str) =>
@@ -59,7 +58,6 @@ class CreateFlickPostRequest {
             ? <String>[]
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         videoDurationInSec: json['video_duration_in_sec'],
-        thumbnailAspectRatio: json['thumbnail_aspect_ratio'],
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
@@ -82,6 +80,5 @@ class CreateFlickPostRequest {
             ? <String>[]
             : List<dynamic>.from(taggedCommunityUids!.map((String x) => x)),
         'video_duration_in_sec': videoDurationInSec,
-        'thumbnail_aspect_ratio': thumbnailAspectRatio,
       };
 }

@@ -129,12 +129,11 @@ class CreateVideoPostBloc
             taggedUserUids: state.taggedUsersUid,
             taggedCommunityUids: state.taggedCommunitiesUid,
             videoDurationInSec: state.videoMetaData?.durationInSec,
-            thumbnailAspectRatio: state.thumbnailMetaData?.aspectRatio,
           ),
           onTaskAssignFail: () async {
             SmartDialog.showLoading();
             final String? videoUrl =
-                await FileUploadService.uploadFileToCloudinary(
+                await FileUploadService.uploadFilesToSupabase(
               state.videoFile!,
               userUid: (await AuthUserDb.getLastLoggedUserUid())!,
               fileRelatedTo: 'video-post',

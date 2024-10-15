@@ -477,6 +477,7 @@ class UserPdf {
         userUid: json["user_uid"],
         title: json["title"],
         thumbnailUrl: json["thumbnail_url"],
+        description: json["description"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -486,6 +487,7 @@ class UserPdf {
         "user_uid": userUid,
         "title": title,
         "thumbnail_url": thumbnailUrl,
+        "description": description,
       };
 }
 

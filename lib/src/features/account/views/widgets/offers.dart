@@ -31,15 +31,9 @@ class AccountPageOffersView extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: const Offset(0, 1),
-                  ),
-                ],
+                border: Border.all(
+                  color: Colors.grey[300]!,
+                ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -49,11 +43,21 @@ class AccountPageOffersView extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "Posted on: ${ddMonthyy(userOfferPost?.createdAt)}",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          "${userOfferPost?.status}",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       Gap(4),
@@ -76,22 +80,24 @@ class AccountPageOffersView extends StatelessWidget {
                           ]
                         ],
                       ),
-                      const Gap(4),
-                      Text(
-                        '${userOfferPost?.description}',
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+                      if (userOfferPost?.filesData?.isEmpty ?? true) ...[
+                        const Gap(4),
+                        Text(
+                          '${userOfferPost?.description}',
+                          maxLines: 8,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
+                      ]
                     ],
                   ),
                   if (userOfferPost?.filesData?.isNotEmpty ?? false) ...[
                     const Gap(8),
                     SizedBox(
-                      height: 100,
+                      height: 120,
                       child: ListView.separated(
                         itemCount: userOfferPost?.filesData?.length ?? 0,
                         scrollDirection: Axis.horizontal,
@@ -104,11 +110,11 @@ class AccountPageOffersView extends StatelessWidget {
                           if (fileData?.type == 'image' ||
                               fileData?.type == 'video') {
                             return ExtendedImage.network(
-                              width: 100,
                               fileData?.imageUrl ??
                                   fileData?.videoThumbnailUrl ??
                                   '',
                               fit: BoxFit.cover,
+                              enableLoadState: false,
                               cache: true,
                               shape: BoxShape.rectangle,
                               borderRadius: BorderRadius.circular(8),
@@ -120,7 +126,7 @@ class AccountPageOffersView extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const Gap(8),
+                  const Gap(12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

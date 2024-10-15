@@ -283,7 +283,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         throw BusinessException('Please select a thumbnail for video');
       }
       SmartDialog.showLoading(msg: 'Uploading video...');
-      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
+      final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
         state.videoFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'memory-video',

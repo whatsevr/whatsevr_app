@@ -138,7 +138,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
               e.type == UiFileTypes.video
                   ? VideoFileDatum(
                       type: 'video',
-                      videoUrl: await FileUploadService.uploadFileToCloudinary(
+                      videoUrl: await FileUploadService.uploadFilesToSupabase(
                         e.file!,
                         userUid: (await AuthUserDb.getLastLoggedUserUid())!,
                         fileRelatedTo: 'offer-video',

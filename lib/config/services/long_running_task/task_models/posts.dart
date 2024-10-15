@@ -38,24 +38,22 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
   final int? videoDurationInSec;
-  final double? thumbnailAspectRatio;
 
-  VideoPostTaskDataForLRT(
-      {this.title,
-      this.description,
-      required this.userUid,
-      required this.videoFilePath,
-      required this.thumbnailFilePath,
-      this.hashtags,
-      this.location,
-      this.postCreatorType,
-      this.addressLatLongWkb,
-      this.creatorLatLongWkb,
-      this.taggedUserUids,
-      this.taggedCommunityUids,
-      this.videoDurationInSec,
-      this.thumbnailAspectRatio})
-      : super(
+  VideoPostTaskDataForLRT({
+    this.title,
+    this.description,
+    required this.userUid,
+    required this.videoFilePath,
+    required this.thumbnailFilePath,
+    this.hashtags,
+    this.location,
+    this.postCreatorType,
+    this.addressLatLongWkb,
+    this.creatorLatLongWkb,
+    this.taggedUserUids,
+    this.taggedCommunityUids,
+    this.videoDurationInSec,
+  }) : super(
           taskTitle: 'New Video Post: $title',
           taskDescription: 'Creating post please wait...',
           taskType: 'new-video-post-task',
@@ -78,7 +76,6 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
       'taggedUserUids': taggedUserUids,
       'taggedCommunityUids': taggedCommunityUids,
       'videoDurationInSec': videoDurationInSec,
-      'thumbnailAspectRatio': thumbnailAspectRatio,
     };
   }
 
@@ -97,7 +94,6 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
       postCreatorType: map['postCreatorType'],
       taggedUserUids: map['taggedUserUids']?.cast<String>(),
       videoDurationInSec: map['videoDurationInSec'],
-      thumbnailAspectRatio: map['thumbnailAspectRatio'],
     );
   }
 }

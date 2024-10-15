@@ -52,7 +52,7 @@ class WhatsevrLongTaskController extends TaskHandler {
       await ApiClient.init();
       FileUploadService.init();
       // Upload video and thumbnail
-      final String? videoUrl = await FileUploadService.uploadFileToCloudinary(
+      final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
         File(taskData.videoFilePath!),
         userUid: taskData.userUid!,
         fileRelatedTo: 'video-post',

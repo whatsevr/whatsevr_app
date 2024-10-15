@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPagePdfsView extends StatelessWidget {
@@ -22,6 +23,7 @@ class AccountPagePdfsView extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ExtendedImage.network(
                   '${userPdf?.thumbnailUrl}',
@@ -45,7 +47,9 @@ class AccountPagePdfsView extends StatelessWidget {
                             '${userPdf?.title}',
                             maxLines: 2,
                             style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold,),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const Gap(8),
                           Text(
@@ -61,7 +65,9 @@ class AccountPagePdfsView extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         DownloadService.downloadFile(
-                            '${userPdf.fileUrl}', '${userPdf.title}.pdf',);
+                          '${userPdf.fileUrl}',
+                          '${userPdf.title}.pdf',
+                        );
                       },
                       icon: const Icon(
                         Icons.download,
@@ -69,6 +75,14 @@ class AccountPagePdfsView extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                const Gap(8),
+                Text(
+                  '${userPdf.description}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
                 ),
               ],
             );
