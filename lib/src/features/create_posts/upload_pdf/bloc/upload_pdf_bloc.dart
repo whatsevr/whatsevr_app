@@ -79,7 +79,7 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
       if (state.thumbnailFile == null) {
         throw BusinessException('Please select a thumbnail');
       }
-      SmartDialog.showLoading();
+      SmartDialog.showLoading(msg: 'Uploading pdf...');
       final String? pdfUrl = await FileUploadService.uploadFilesToSupabase(
         state.pdfFile!,
         userUid: (await AuthUserDb.getLastLoggedUserUid())!,

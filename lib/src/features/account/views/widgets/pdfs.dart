@@ -1,12 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
@@ -25,11 +27,38 @@ class AccountPagePdfsView extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ExtendedImage.network(
-                  '${userPdf?.thumbnailUrl}',
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+                GestureDetector(
+                    onTap: () {
+                      showGeneralDialog(
+                        context: context,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return Scaffold(
+                            appBar: CustomAppBar(title: '${userPdf?.title}'),
+                            body: PDF(
+                              fitEachPage: true,
+                              fitPolicy: FitPolicy.WIDTH,
+                              swipeHorizontal: false,
+                              autoSpacing: true,
+                              pageFling: true,
+                              pageSnap: true,
+                            ).cachedFromUrl(
+                              '${userPdf?.fileUrl}',
+                              placeholder: (progress) =>
+                                  Center(child: Text('$progress %')),
+                              errorWidget: (error) =>
+                                  Center(child: Text(error.toString())),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: ExtendedImage.network(
+                      '${userPdf?.thumbnailUrl}',
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(8),
+                    )),
                 const Gap(8),
                 Row(
                   children: <Widget>[
