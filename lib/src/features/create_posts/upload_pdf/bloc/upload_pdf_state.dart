@@ -1,4 +1,4 @@
-part of 'create_post_bloc.dart';
+part of 'upload_pdf_bloc.dart';
 
 class UploadPdfState extends Equatable {
   final UploadPdfPageArgument? pageArgument;

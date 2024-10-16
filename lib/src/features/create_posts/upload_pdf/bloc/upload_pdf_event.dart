@@ -1,4 +1,4 @@
-part of 'create_post_bloc.dart';
+part of 'upload_pdf_bloc.dart';
 
 sealed class UploadPdfPostEvent extends Equatable {
   const UploadPdfPostEvent();

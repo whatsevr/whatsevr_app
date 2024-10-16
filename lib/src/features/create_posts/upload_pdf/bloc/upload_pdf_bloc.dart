@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
+import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -28,8 +29,8 @@ import '../../../../../config/services/long_running_task/task_models/posts.dart'
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../views/page.dart';
 
-part 'create_post_event.dart';
-part 'create_post_state.dart';
+part 'upload_pdf_event.dart';
+part 'upload_pdf_state.dart';
 
 class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
   final TextEditingController titleController = TextEditingController();
@@ -71,71 +72,33 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
       }
 
       SmartDialog.showLoading();
-      //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewVideoPost(
-          request: SanityCheckNewVideoPostRequest(
-              mediaMetaData: MediaMetaData(
-                aspectRatio: state.pdfMetaData?.aspectRatio,
-                durationSec: state.pdfMetaData?.durationInSec,
-                sizeBytes: state.pdfMetaData?.sizeInBytes,
-              ),
-              postData: PostData(
-                userUid: await AuthUserDb.getLastLoggedUserUid(),
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-              )));
-      if (itm?.$2 != 200) {
-        throw BusinessException(itm!.$1!);
+      final String? pdfUrl = await FileUploadService.uploadFilesToSupabase(
+        state.pdfFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileRelatedTo: 'pdf-doc',
+      );
+      final String? thumbnailUrl =
+          await FileUploadService.uploadFilesToSupabase(
+        state.thumbnailFile!,
+        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        fileRelatedTo: 'pdf-doc-thumbnail',
+      );
+      (String? message, int? statusCode)? response = await PostApi.uploadPdfDoc(
+        post: UploadPdfRequest(
+          title: titleController.text,
+          description: descriptionController.text,
+          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          thumbnailUrl: thumbnailUrl,
+          fileUrl: pdfUrl,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+        ),
+      );
+      if (response?.$2 == 200) {
+        SmartDialog.dismiss();
+        SmartDialog.showToast('${response?.$1}');
+        AppNavigationService.goBack();
       }
-
-      WhatsevrLongTaskController.startServiceWithTaskData(
-          taskData: VideoPostTaskDataForLRT(
-            videoFilePath: state.pdfFile!.path,
-            thumbnailFilePath: state.thumbnailFile!.path,
-            title: titleController.text,
-            description: descriptionController.text,
-            userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-            postCreatorType: state.pageArgument?.postCreatorType.value,
-            creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-            videoDurationInSec: state.pdfMetaData?.durationInSec,
-          ),
-          onTaskAssignFail: () async {
-            SmartDialog.showLoading();
-            final String? videoUrl =
-                await FileUploadService.uploadFilesToSupabase(
-              state.pdfFile!,
-              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileRelatedTo: 'video-post',
-            );
-            final String? thumbnailUrl =
-                await FileUploadService.uploadFilesToSupabase(
-              state.thumbnailFile!,
-              userUid: (await AuthUserDb.getLastLoggedUserUid())!,
-              fileRelatedTo: 'video-post-thumbnail',
-            );
-            (String? message, int? statusCode)? response =
-                await PostApi.createVideoPost(
-              post: CreateVideoPostRequest(
-                title: titleController.text,
-                description: descriptionController.text,
-                userUid: await AuthUserDb.getLastLoggedUserUid(),
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-                thumbnail: thumbnailUrl,
-                videoUrl: videoUrl,
-                creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-                videoDurationInSec: state.pdfMetaData?.durationInSec,
-              ),
-            );
-            if (response?.$2 == 200) {
-              SmartDialog.dismiss();
-              SmartDialog.showToast('${response?.$1}');
-              AppNavigationService.goBack();
-            }
-          },
-          onTaskAssigned: () {
-            SmartDialog.dismiss();
-            SmartDialog.showToast('Creating post, do not close the app');
-            AppNavigationService.goBack();
-          });
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -148,29 +111,19 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
     try {
       if (event.pickPdfFile == null) return;
       SmartDialog.showLoading(msg: 'Validating pdf...');
-      FileMetaData? videoMetaData =
+      FileMetaData? pdfMetaData =
           await FileMetaData.fromFile(event.pickPdfFile);
-      // Validate video metadata
-      if (videoMetaData == null ||
-          videoMetaData.isVideo != true ||
-          videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
+
+      if (pdfMetaData == null || (pdfMetaData.sizeInBytes ?? 0) > 10000000) {
         throw BusinessException(
             'Video is not valid, it must be landscape or square');
       }
 
       emit(state.copyWith(pdfFile: event.pickPdfFile));
 
-      final File? thumbnailFile =
-          await getThumbnailFile(videoFile: event.pickPdfFile!);
-
-      final FileMetaData? thumbnailMetaData =
-          await FileMetaData.fromFile(thumbnailFile);
-
       emit(
         state.copyWith(
-          thumbnailFile: thumbnailFile,
-          pdfMetaData: videoMetaData,
-          thumbnailMetaData: thumbnailMetaData,
+          pdfMetaData: pdfMetaData,
         ),
       );
       SmartDialog.dismiss();
@@ -184,18 +137,14 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
     Emitter<UploadPdfState> emit,
   ) async {
     try {
-      // Check if videoFile is null, return early if it is
       if (state.pdfFile == null) {
-        // Handle the null case (e.g., show a toast or log an error)
-        throw BusinessException('Please select a video first');
+        throw BusinessException('Please select a pdf first');
       }
 
-      // If no thumbnail was selected, return early
       if (event.pickedThumbnailFile == null) {
         throw BusinessException('No thumbnail selected');
       }
 
-      // Emit state changes after the thumbnail has been selected
       emit(
         state.copyWith(
           thumbnailFile: event.pickedThumbnailFile,

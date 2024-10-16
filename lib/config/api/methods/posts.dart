@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
 
 import '../external/models/business_validation_exception.dart';
 import '../requests_model/create_flick_post.dart';
@@ -165,6 +166,22 @@ class PostApi {
     try {
       Response response = await ApiClient.client.post(
         '/v1/create-photo-post',
+        data: post.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> uploadPdfDoc({
+    required UploadPdfRequest post,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/upload-pdf-doc',
         data: post.toMap(),
       );
 
