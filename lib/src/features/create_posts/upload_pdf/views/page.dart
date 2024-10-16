@@ -26,11 +26,13 @@ import '../../../previewers/views/page.dart';
 
 class UploadPdfPageArgument {
   final EnumPostCreatorType postCreatorType;
+
   const UploadPdfPageArgument({required this.postCreatorType});
 }
 
 class UploadPdfPage extends StatelessWidget {
   final UploadPdfPageArgument pageArgument;
+
   const UploadPdfPage({super.key, required this.pageArgument});
 
   @override
@@ -69,96 +71,64 @@ class UploadPdfPage extends StatelessWidget {
                     child: Builder(
                       builder: (BuildContext context) {
                         double baseHeight = double.infinity;
-                        if (state.thumbnailFile != null) {
-                          return Stack(
-                            children: <Widget>[
-                              ExtendedImage.file(
-                                state.thumbnailFile!,
-                                width: double.infinity,
-                                height: baseHeight,
-                                fit: BoxFit.cover,
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                              ),
-                              Positioned.fill(
-                                child: Center(
-                                  child: IconButton(
-                                    onPressed: () {
-                                      AppNavigationService.newRoute(
-                                        RoutesName.fullVideoPlayer,
-                                        extras: PreviewersPageArguments(
-                                          videoUrl: state.pdfFile!.path,
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.play_circle_fill_rounded,
-                                      color: Colors.white,
-                                      size: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (state.pdfMetaData != null)
-                                GestureDetector(
-                                  onTap: () {
-                                    FileMetaData.showMetaData(
-                                        state.pdfMetaData);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.5),
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      '${state.pdfMetaData!.durationInText} | ${state.pdfMetaData!.sizeInText} | ${state.pdfMetaData!.width}x${state.pdfMetaData!.height}',
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          );
-                        }
+
                         if (state.pdfFile != null) {
-                          return MaterialButton(
-                            onPressed: () {
-                              showWhatsevrThumbnailSelectionPage(
-                                videoFile: state.pdfFile!,
-                                aspectRatios: videoPostAspectRatio,
-                              ).then((value) {
-                                if (value != null) {
-                                  context
-                                      .read<UploadPdfBloc>()
-                                      .add(PickThumbnailEvent(
-                                        pickedThumbnailFile: value,
-                                      ));
-                                }
-                              });
-                            },
-                            minWidth: double.infinity,
-                            height: baseHeight,
-                            color: Colors.white10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                          return GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              width: double.infinity,
+                              height: baseHeight,
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                                image: state.thumbnailFile == null
+                                    ? null
+                                    : DecorationImage(
+                                        image: ExtendedFileImageProvider(
+                                          state.thumbnailFile!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                              child: state.thumbnailFile == null
+                                  ? Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.remove_red_eye,
+                                            color: Colors.white,
+                                          ),
+                                          Gap(6),
+                                          Text('View Pdf',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          Gap(6),
+                                          Text(
+                                            '(${FileMetaData.getFileSize(state.pdfFile?.lengthSync())})',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : null,
                             ),
                           );
                         }
                         return GestureDetector(
                           behavior: HitTestBehavior.translucent,
                           onTap: () {
-                            CustomAssetPicker.pickVideoFromGallery(
+                            CustomAssetPicker.pickDocuments(
                               onCompleted: (file) {
                                 context
                                     .read<UploadPdfBloc>()
-                                    .add(PickPdfEvent(pickPdfFile: file));
+                                    .add(PickPdfEvent(pickPdfFile: file.first));
                               },
                             );
                           },
@@ -174,9 +144,13 @@ class UploadPdfPage extends StatelessWidget {
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.video_file_rounded,
-                                    color: Colors.white, size: 50),
-                                Text('Add a video',
+                                Icon(
+                                  Icons.picture_as_pdf,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
+                                Gap(6),
+                                Text('Add',
                                     style: TextStyle(color: Colors.white)),
                               ],
                             ),
@@ -185,48 +159,39 @@ class UploadPdfPage extends StatelessWidget {
                       },
                     ),
                   ),
-                  if (state.pdfFile != null || state.thumbnailFile != null)
+                  if (state.pdfFile != null)
                     Row(
                       children: <Widget>[
                         const Spacer(),
-                        if (state.pdfFile != null &&
-                            state.thumbnailFile != null)
-                          WhatsevrButton.filled(
-                            shrink: true,
-                            miniButton: true,
-                            onPressed: () {
-                              showWhatsevrThumbnailSelectionPage(
-                                videoFile: state.pdfFile!,
+                        WhatsevrButton.filled(
+                          shrink: true,
+                          miniButton: true,
+                          onPressed: () {
+                            CustomAssetPicker.pickImageFromGallery(
                                 aspectRatios: videoPostAspectRatio,
-                              ).then((value) {
-                                if (value != null) {
-                                  context
-                                      .read<UploadPdfBloc>()
-                                      .add(PickThumbnailEvent(
-                                        pickedThumbnailFile: value,
-                                      ));
-                                }
-                              });
-                            },
-                            label: 'Update Thumb',
-                          ),
-                        if (state.pdfFile != null) ...[
-                          const Gap(6),
-                          WhatsevrButton.filled(
-                            miniButton: true,
-                            shrink: true,
-                            onPressed: () {
-                              CustomAssetPicker.pickVideoFromGallery(
                                 onCompleted: (file) {
-                                  context
-                                      .read<UploadPdfBloc>()
-                                      .add(PickPdfEvent(pickPdfFile: file));
-                                },
-                              );
-                            },
-                            label: 'Change Video',
-                          )
-                        ],
+                                  context.read<UploadPdfBloc>().add(
+                                      PickThumbnailEvent(
+                                          pickedThumbnailFile: file));
+                                });
+                          },
+                          label: 'Add Thumbnail',
+                        ),
+                        const Gap(6),
+                        WhatsevrButton.filled(
+                          miniButton: true,
+                          shrink: true,
+                          onPressed: () {
+                            CustomAssetPicker.pickDocuments(
+                              onCompleted: (file) {
+                                context
+                                    .read<UploadPdfBloc>()
+                                    .add(PickPdfEvent(pickPdfFile: file.first));
+                              },
+                            );
+                          },
+                          label: 'Change Pdf',
+                        )
                       ],
                     ),
                 ],

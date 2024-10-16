@@ -28,7 +28,6 @@ class AccountPagePdfsView extends StatelessWidget {
                 ExtendedImage.network(
                   '${userPdf?.thumbnailUrl}',
                   width: double.infinity,
-                  height: 200,
                   fit: BoxFit.cover,
                 ),
                 const Gap(8),

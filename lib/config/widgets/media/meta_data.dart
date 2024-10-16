@@ -174,7 +174,8 @@ class FileMetaData {
     return width / height;
   }
 
-  static String getFileSize(int bytes) {
+  static String? getFileSize(int? bytes) {
+    if (bytes == null) return null;
     if (bytes <= 0) return '0 B';
     const suffixes = <String>[
       'B',

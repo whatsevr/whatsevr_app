@@ -70,7 +70,15 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
       if (titleController.text.isEmpty) {
         throw BusinessException('Title is required');
       }
-
+      if (descriptionController.text.isEmpty) {
+        throw BusinessException('Description is required');
+      }
+      if (state.pdfFile == null) {
+        throw BusinessException('Please select a pdf file');
+      }
+      if (state.thumbnailFile == null) {
+        throw BusinessException('Please select a thumbnail');
+      }
       SmartDialog.showLoading();
       final String? pdfUrl = await FileUploadService.uploadFilesToSupabase(
         state.pdfFile!,
@@ -111,21 +119,20 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
     try {
       if (event.pickPdfFile == null) return;
       SmartDialog.showLoading(msg: 'Validating pdf...');
-      FileMetaData? pdfMetaData =
-          await FileMetaData.fromFile(event.pickPdfFile);
+      int? sizeInBytes = event.pickPdfFile?.lengthSync();
 
-      if (pdfMetaData == null || (pdfMetaData.sizeInBytes ?? 0) > 10000000) {
-        throw BusinessException(
-            'Video is not valid, it must be landscape or square');
+      if ((sizeInBytes ?? 0) > 26214400) {
+        throw BusinessException('Please select a pdf file less than 25 MB');
       }
 
-      emit(state.copyWith(pdfFile: event.pickPdfFile));
+      emit(UploadPdfState(
+        pdfFile: event.pickPdfFile,
+        thumbnailFile: null,
+        thumbnailMetaData: null,
+        pageArgument: state.pageArgument,
+        userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
+      ));
 
-      emit(
-        state.copyWith(
-          pdfMetaData: pdfMetaData,
-        ),
-      );
       SmartDialog.dismiss();
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

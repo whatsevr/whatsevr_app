@@ -76,7 +76,7 @@ class ProductGuides {
     List<Widget> guides = [
       const Text('Thumbnail should be in landscape or square aspect ratio.'),
       const Text(
-          'Max file size is 20 MB, only one PDF files are allowed to upload.'),
+          'Max file size is 25 MB, only one PDF files are allowed to upload.'),
       const Text('Uploading new PDF will replace the existing PDF.'),
     ];
     showAppModalSheet(

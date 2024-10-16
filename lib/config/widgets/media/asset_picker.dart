@@ -172,14 +172,17 @@ class CustomAssetPicker {
     onCompleted?.call(editedVideo!);
   }
 
-  static Future<List<File>?> pickDocuments({bool singleFile = false}) async {
+  static void pickDocuments(
+      {bool singleFile = true,
+      required Function(List<File>) onCompleted}) async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: !singleFile,
-      type: FileType.any,
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
     );
 
     if (result == null) return null;
 
-    return result.paths.map((String? path) => File(path!)).toList();
+    onCompleted(result.paths.map((String? path) => File(path!)).toList());
   }
 }
