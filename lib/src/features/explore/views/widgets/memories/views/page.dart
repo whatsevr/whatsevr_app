@@ -55,13 +55,13 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                     onTap: () {
                       showMemoriesPlayer(
                         context,
-                        uiMemoryGroup: [
+                        uiMemoryGroups: [
                           for (RecommendedMemory memoryGroup in data ?? [])
                             UiMemoryGroup(
                               userUid: memoryGroup.userUid,
                               profilePicture: memoryGroup.user?.profilePicture,
                               username: memoryGroup.user?.username,
-                              uiMemoryData: [
+                              uiMemoryGroupItems: [
                                 for (UserMemory? memory
                                     in memoryGroup.userMemories ?? [])
                                   UiMemoryGroupItems(

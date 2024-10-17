@@ -21,17 +21,33 @@ import '../../../../../../../config/services/launch_url.dart';
 import '../../../../../../../config/widgets/links_preview_list.dart';
 import '../../../../../../../config/widgets/refresh_indicator.dart';
 
+showMemoriesPlayer(BuildContext context,
+    {required List<UiMemoryGroup>? uiMemoryGroups,
+    required int startGroupIndex,
+    required int startMemoryIndex}) {
+  showGeneralDialog(
+    context: context,
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return _MemoriesPlayer(
+        uiMemoryGroups: uiMemoryGroups,
+        startGroupIndex: startGroupIndex,
+        startMemoryIndex: startMemoryIndex,
+      );
+    },
+  );
+}
+
 class UiMemoryGroup {
   final String? userUid;
   final String? username;
   final String? profilePicture;
-  final List<UiMemoryGroupItems?> uiMemoryData;
+  final List<UiMemoryGroupItems?> uiMemoryGroupItems;
 
   UiMemoryGroup({
     required this.userUid,
     required this.username,
     required this.profilePicture,
-    required this.uiMemoryData,
+    required this.uiMemoryGroupItems,
   });
 }
 
@@ -58,29 +74,13 @@ class UiMemoryGroupItems {
   });
 }
 
-showMemoriesPlayer(BuildContext context,
-    {required List<UiMemoryGroup>? uiMemoryGroup,
-    required int startGroupIndex,
-    required int startMemoryIndex}) {
-  showGeneralDialog(
-    context: context,
-    pageBuilder: (context, animation, secondaryAnimation) {
-      return _MemoriesPlayer(
-        uiMemoryGroup: uiMemoryGroup,
-        startGroupIndex: startGroupIndex,
-        startMemoryIndex: startMemoryIndex,
-      );
-    },
-  );
-}
-
 class _MemoriesPlayer extends StatefulWidget {
-  final List<UiMemoryGroup>? uiMemoryGroup;
+  final List<UiMemoryGroup>? uiMemoryGroups;
   final int startGroupIndex;
   final int startMemoryIndex;
   const _MemoriesPlayer({
     super.key,
-    required this.uiMemoryGroup,
+    required this.uiMemoryGroups,
     required this.startGroupIndex,
     required this.startMemoryIndex,
   });
@@ -102,6 +102,11 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
     currentPageIndex = widget.startGroupIndex;
     currentMemoryIndex = widget.startMemoryIndex;
     pageViewController = PageController(initialPage: widget.startGroupIndex);
+    if (widget.startMemoryIndex != 0) {
+      for (int i = 0; i < widget.startMemoryIndex; i++) {
+        flutterStoryController.next();
+      }
+    }
     setState(() {});
   }
 
@@ -124,14 +129,14 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
           child: CircleAvatar(
             radius: 16.0,
             backgroundImage: ExtendedNetworkImageProvider(
-              widget.uiMemoryGroup?[currentPageIndex].profilePicture ??
+              widget.uiMemoryGroups?[currentPageIndex].profilePicture ??
                   MockData.imageAvatar,
               cache: true,
             ),
           ),
         ),
         title: Text(
-          widget.uiMemoryGroup?[currentPageIndex].username ?? '',
+          widget.uiMemoryGroups?[currentPageIndex].username ?? '',
           style: const TextStyle(
             color: Colors.black,
             fontSize: 16.0,
@@ -141,8 +146,8 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
         actions: [
           Text(
             GetTimeAgo.parse(
-              widget.uiMemoryGroup![currentPageIndex]
-                  .uiMemoryData[currentMemoryIndex]!.createdAt!,
+              widget.uiMemoryGroups![currentPageIndex]
+                  .uiMemoryGroupItems[currentMemoryIndex]!.createdAt!,
             ),
             style: const TextStyle(
               color: Colors.black,
@@ -154,14 +159,14 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
       ),
       body: PageView.builder(
         controller: pageViewController,
-        itemCount: widget.uiMemoryGroup?.length ?? 0,
+        itemCount: widget.uiMemoryGroups?.length ?? 0,
         onPageChanged: (index) {
           currentPageIndex = index;
           setState(() {});
         },
         itemBuilder: (context, index) {
           List<UiMemoryGroupItems?> uiMemoryData =
-              widget.uiMemoryGroup?[index].uiMemoryData ?? [];
+              widget.uiMemoryGroups?[index].uiMemoryGroupItems ?? [];
           return StoryView(
             onVerticalSwipeComplete: (direction) {
               if (direction == Direction.down || direction == Direction.up) {
@@ -174,24 +179,26 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                     ? StoryItem.pageImage(
                         controller: flutterStoryController,
                         url:
-                            '${widget.uiMemoryGroup?[index].uiMemoryData[i]?.imageUrl}',
+                            '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.imageUrl}',
                         duration: baseDuration,
                       )
                     : uiMemoryData[i]?.isVideo == true
                         ? StoryItem.pageVideo(
                             generateOptimizedCloudinaryVideoUrl(
                                 originalUrl:
-                                    '${widget.uiMemoryGroup?[index].uiMemoryData[i]?.videoUrl}'),
+                                    '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.videoUrl}'),
                             controller: flutterStoryController,
                             duration: Duration(
-                                milliseconds: widget.uiMemoryGroup?[index]
-                                        .uiMemoryData[i]?.videoDurationMs ??
+                                milliseconds: widget
+                                        .uiMemoryGroups?[index]
+                                        .uiMemoryGroupItems[i]
+                                        ?.videoDurationMs ??
                                     0),
                             caption: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  '${widget.uiMemoryGroup?[index].uiMemoryData[i]?.caption}',
+                                  '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.caption}',
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -261,9 +268,9 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                 SmartDialog.dismiss();
               }
             },
-            repeat: widget.uiMemoryGroup?.length == 1,
+            repeat: widget.uiMemoryGroups?.length == 1,
             onComplete: () async {
-              if (index < (widget.uiMemoryGroup?.length ?? 0) - 1) {
+              if (index < (widget.uiMemoryGroups?.length ?? 0) - 1) {
                 pageViewController?.nextPage(
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,

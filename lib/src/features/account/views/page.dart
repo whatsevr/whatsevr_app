@@ -11,6 +11,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/previewers/memories.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
@@ -128,76 +129,138 @@ class AccountPage extends StatelessWidget {
                           ),
                           const Gap(8),
                           Builder(builder: (context) {
-                            List<Memory?> memories = state.userMemories;
                             return PadHorizontal(
                               child: Row(
                                 children: <Widget>[
                                   GestureDetector(
                                     onTap: () {
+                                      if (state.userMemories.isEmpty) {
+                                        return;
+                                      }
                                       showAppModalSheet(
                                           draggableScrollable: false,
                                           child: SizedBox(
                                             height: 220,
                                             child: ListView.separated(
-                                              itemCount: memories.length,
+                                              itemCount:
+                                                  state.userMemories.length,
                                               scrollDirection: Axis.horizontal,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                return Column(
-                                                  children: [
-                                                    Text(
-                                                      GetTimeAgo.parse(
-                                                          memories[index]!
-                                                              .createdAt!),
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    ),
-                                                    Gap(8),
-                                                    Expanded(
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          border: Border.all(
-                                                            color: Colors.black,
-                                                          ),
-                                                          image:
-                                                              DecorationImage(
-                                                            image:
-                                                                ExtendedNetworkImageProvider(
-                                                              '${memories[index]?.imageUrl}',
-                                                              cache: true,
-                                                            ),
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Gap(8),
-                                                    Row(
+                                                Memory? memory =
+                                                    state.userMemories[index];
+                                                return GestureDetector(
+                                                    onTap: () {
+                                                      showMemoriesPlayer(
+                                                        context,
+                                                        uiMemoryGroups: [
+                                                          UiMemoryGroup(
+                                                            userUid: state
+                                                                .profileDetailsResponse
+                                                                ?.userInfo
+                                                                ?.uid,
+                                                            username: state
+                                                                .profileDetailsResponse
+                                                                ?.userInfo
+                                                                ?.username,
+                                                            profilePicture: state
+                                                                .profileDetailsResponse
+                                                                ?.userInfo
+                                                                ?.profilePicture,
+                                                            uiMemoryGroupItems: [
+                                                              for (Memory? memory
+                                                                  in state
+                                                                      .userMemories)
+                                                                UiMemoryGroupItems(
+                                                                  isImage: memory
+                                                                      ?.isImage,
+                                                                  imageUrl: memory
+                                                                      ?.imageUrl,
+                                                                  isVideo: memory
+                                                                      ?.isVideo,
+                                                                  videoUrl: memory
+                                                                      ?.videoUrl,
+                                                                  videoDurationMs:
+                                                                      memory
+                                                                          ?.videoDurationMs,
+                                                                  ctaAction: memory
+                                                                      ?.ctaAction,
+                                                                  ctaActionUrl:
+                                                                      memory
+                                                                          ?.ctaActionUrl,
+                                                                  caption: memory
+                                                                      ?.caption,
+                                                                  createdAt: memory
+                                                                      ?.createdAt,
+                                                                )
+                                                            ],
+                                                          )
+                                                        ],
+                                                        startGroupIndex: 0,
+                                                        startMemoryIndex: index,
+                                                      );
+                                                    },
+                                                    child: Column(
                                                       children: [
-                                                        const Icon(
-                                                          Icons.remove_red_eye,
-                                                          size: 16,
-                                                        ),
-                                                        const Gap(4),
                                                         Text(
-                                                          '${formatCountToKMBTQ(memories[index]?.totalViews)}',
+                                                          GetTimeAgo.parse(
+                                                              memory!
+                                                                  .createdAt!),
                                                           style:
                                                               const TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 12,
                                                           ),
                                                         ),
+                                                        Gap(8),
+                                                        Expanded(
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border:
+                                                                  Border.all(
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                              image:
+                                                                  DecorationImage(
+                                                                image:
+                                                                    ExtendedNetworkImageProvider(
+                                                                  '${memory?.imageUrl}',
+                                                                  cache: true,
+                                                                ),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Gap(8),
+                                                        Row(
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .remove_red_eye,
+                                                              size: 16,
+                                                            ),
+                                                            const Gap(4),
+                                                            Text(
+                                                              '${formatCountToKMBTQ(memory?.totalViews)}',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 14,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Gap(8),
                                                       ],
-                                                    ),
-                                                    Gap(8),
-                                                  ],
-                                                );
+                                                    ));
                                               },
                                               separatorBuilder:
                                                   (BuildContext context,
@@ -220,7 +283,7 @@ class AccountPage extends StatelessWidget {
                                       size: 62,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        border: memories.isEmpty
+                                        border: state.userMemories.isEmpty
                                             ? null
                                             : Border.all(
                                                 color: Colors.blue,
@@ -228,7 +291,7 @@ class AccountPage extends StatelessWidget {
                                               ),
                                       ),
                                       child: Padding(
-                                        padding: memories.isEmpty
+                                        padding: state.userMemories.isEmpty
                                             ? EdgeInsets.zero
                                             : const EdgeInsets.all(2),
                                         child: ExtendedImage.network(
