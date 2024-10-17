@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'package:whatsevr_app/app.dart';
@@ -15,6 +16,7 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
 
 import 'config/services/long_running_task/controller.dart';
 import 'config/services/notification.dart';
@@ -42,6 +44,7 @@ Future<void> main() async {
       TalkerService.init();
       FlutterForegroundTask.initCommunicationPort();
       runApp(const WhatsevrApp());
+      afterRunAppServices();
     },
     catchUnhandledExceptions,
   );
@@ -57,4 +60,9 @@ void afterLoginServices() {
   TalkerService.instance.info('Executing after login services.');
   WhatsevrLongTaskController.registerNotificationChannel();
   NotificationService().init();
+}
+
+void afterRunAppServices() {
+  GetTimeAgo.setDefaultLocale('en');
+  GetTimeAgo.setCustomLocaleMessages('en', GetTimeAgoMessages());
 }

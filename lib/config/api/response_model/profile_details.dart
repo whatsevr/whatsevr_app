@@ -3,7 +3,6 @@ import 'dart:convert';
 class ProfileDetailsResponse {
   final String? message;
   final UserInfo? userInfo;
-
   final List<UserEducation>? userEducations;
   final List<UserCoverMedia>? userCoverMedia;
   final List<UserPdf>? userPdfs;
@@ -99,7 +98,7 @@ class UserCoverMedia {
   final String? imageUrl;
   final bool? isVideo;
   final String? userUid;
-  final dynamic videoUrl;
+  final String? videoUrl;
 
   UserCoverMedia({
     this.id,
@@ -116,7 +115,7 @@ class UserCoverMedia {
     String? imageUrl,
     bool? isVideo,
     String? userUid,
-    dynamic videoUrl,
+    String? videoUrl,
   }) =>
       UserCoverMedia(
         id: id ?? this.id,
@@ -264,6 +263,8 @@ class UserInfo {
   final bool? isOnline;
   final DateTime? lastActiveAt;
   final String? userLastLatLongWkb;
+  final int? totalConnections;
+  final int? totalLikes;
 
   UserInfo({
     this.id,
@@ -293,6 +294,8 @@ class UserInfo {
     this.isOnline,
     this.lastActiveAt,
     this.userLastLatLongWkb,
+    this.totalConnections,
+    this.totalLikes,
   });
 
   UserInfo copyWith({
@@ -323,6 +326,8 @@ class UserInfo {
     bool? isOnline,
     DateTime? lastActiveAt,
     String? userLastLatLongWkb,
+    int? totalConnections,
+    int? totalLikes,
   }) =>
       UserInfo(
         id: id ?? this.id,
@@ -352,6 +357,8 @@ class UserInfo {
         isOnline: isOnline ?? this.isOnline,
         lastActiveAt: lastActiveAt ?? this.lastActiveAt,
         userLastLatLongWkb: userLastLatLongWkb ?? this.userLastLatLongWkb,
+        totalConnections: totalConnections ?? this.totalConnections,
+        totalLikes: totalLikes ?? this.totalLikes,
       );
 
   factory UserInfo.fromJson(String str) => UserInfo.fromMap(json.decode(str));
@@ -392,6 +399,8 @@ class UserInfo {
             ? null
             : DateTime.parse(json["last_active_at"]),
         userLastLatLongWkb: json["user_last_lat_long_wkb"],
+        totalConnections: json["total_connections"],
+        totalLikes: json["total_likes"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -423,6 +432,8 @@ class UserInfo {
         "is_online": isOnline,
         "last_active_at": lastActiveAt?.toIso8601String(),
         "user_last_lat_long_wkb": userLastLatLongWkb,
+        "total_connections": totalConnections,
+        "total_likes": totalLikes,
       };
 }
 
@@ -432,8 +443,11 @@ class UserPdf {
   final String? fileUrl;
   final String? userUid;
   final String? title;
-  final String? description;
   final String? thumbnailUrl;
+  final String? description;
+  final String? postCreatorType;
+  final dynamic communityUid;
+  final dynamic creatorLatLongWkb;
 
   UserPdf({
     this.id,
@@ -441,8 +455,11 @@ class UserPdf {
     this.fileUrl,
     this.userUid,
     this.title,
-    this.description,
     this.thumbnailUrl,
+    this.description,
+    this.postCreatorType,
+    this.communityUid,
+    this.creatorLatLongWkb,
   });
 
   UserPdf copyWith({
@@ -451,8 +468,11 @@ class UserPdf {
     String? fileUrl,
     String? userUid,
     String? title,
-    String? description,
     String? thumbnailUrl,
+    String? description,
+    String? postCreatorType,
+    dynamic communityUid,
+    dynamic creatorLatLongWkb,
   }) =>
       UserPdf(
         id: id ?? this.id,
@@ -460,8 +480,11 @@ class UserPdf {
         fileUrl: fileUrl ?? this.fileUrl,
         userUid: userUid ?? this.userUid,
         title: title ?? this.title,
-        description: description ?? this.description,
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+        description: description ?? this.description,
+        postCreatorType: postCreatorType ?? this.postCreatorType,
+        communityUid: communityUid ?? this.communityUid,
+        creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
       );
 
   factory UserPdf.fromJson(String str) => UserPdf.fromMap(json.decode(str));
@@ -478,6 +501,9 @@ class UserPdf {
         title: json["title"],
         thumbnailUrl: json["thumbnail_url"],
         description: json["description"],
+        postCreatorType: json["post_creator_type"],
+        communityUid: json["community_uid"],
+        creatorLatLongWkb: json["creator_lat_long_wkb"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -488,6 +514,9 @@ class UserPdf {
         "title": title,
         "thumbnail_url": thumbnailUrl,
         "description": description,
+        "post_creator_type": postCreatorType,
+        "community_uid": communityUid,
+        "creator_lat_long_wkb": creatorLatLongWkb,
       };
 }
 
@@ -542,200 +571,6 @@ class UserService {
         "title": title,
         "user_uid": userUid,
         "description": description,
-      };
-}
-
-class UserVideoPost {
-  final int? id;
-  final DateTime? createdAt;
-  final String? uid;
-  final String? title;
-  final String? description;
-  final List<String>? hashtags;
-  final List<String>? taggedUserUids;
-  final bool? isDeleted;
-  final bool? isArchived;
-  final bool? isActive;
-  final String? postCreatorType;
-  final DateTime? updatedAt;
-  final String? userUid;
-  final String? thumbnail;
-  final String? videoUrl;
-  final String? location;
-  final String? videoDuration;
-  final int? totalViews;
-  final int? totalLikes;
-  final int? totalComments;
-  final String? internalAiDescription;
-  final String? addressLatLongWkb;
-  final String? creatorLatLongWkb;
-  final List<String>? taggedCommunityUids;
-  final int? totalShares;
-  final int? retentionPercent;
-
-  UserVideoPost({
-    this.id,
-    this.createdAt,
-    this.uid,
-    this.title,
-    this.description,
-    this.hashtags,
-    this.taggedUserUids,
-    this.isDeleted,
-    this.isArchived,
-    this.isActive,
-    this.postCreatorType,
-    this.updatedAt,
-    this.userUid,
-    this.thumbnail,
-    this.videoUrl,
-    this.location,
-    this.videoDuration,
-    this.totalViews,
-    this.totalLikes,
-    this.totalComments,
-    this.internalAiDescription,
-    this.addressLatLongWkb,
-    this.creatorLatLongWkb,
-    this.taggedCommunityUids,
-    this.totalShares,
-    this.retentionPercent,
-  });
-
-  UserVideoPost copyWith({
-    int? id,
-    DateTime? createdAt,
-    String? uid,
-    String? title,
-    String? description,
-    List<String>? hashtags,
-    List<String>? taggedUserUids,
-    bool? isDeleted,
-    bool? isArchived,
-    bool? isActive,
-    String? postCreatorType,
-    DateTime? updatedAt,
-    String? userUid,
-    String? thumbnail,
-    String? videoUrl,
-    String? location,
-    String? videoDuration,
-    int? totalViews,
-    int? totalLikes,
-    int? totalComments,
-    String? internalAiDescription,
-    String? addressLatLongWkb,
-    String? creatorLatLongWkb,
-    List<String>? taggedCommunityUids,
-    int? totalShares,
-    int? retentionPercent,
-  }) =>
-      UserVideoPost(
-        id: id ?? this.id,
-        createdAt: createdAt ?? this.createdAt,
-        uid: uid ?? this.uid,
-        title: title ?? this.title,
-        description: description ?? this.description,
-        hashtags: hashtags ?? this.hashtags,
-        taggedUserUids: taggedUserUids ?? this.taggedUserUids,
-        isDeleted: isDeleted ?? this.isDeleted,
-        isArchived: isArchived ?? this.isArchived,
-        isActive: isActive ?? this.isActive,
-        postCreatorType: postCreatorType ?? this.postCreatorType,
-        updatedAt: updatedAt ?? this.updatedAt,
-        userUid: userUid ?? this.userUid,
-        thumbnail: thumbnail ?? this.thumbnail,
-        videoUrl: videoUrl ?? this.videoUrl,
-        location: location ?? this.location,
-        videoDuration: videoDuration ?? this.videoDuration,
-        totalViews: totalViews ?? this.totalViews,
-        totalLikes: totalLikes ?? this.totalLikes,
-        totalComments: totalComments ?? this.totalComments,
-        internalAiDescription:
-            internalAiDescription ?? this.internalAiDescription,
-        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
-        creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
-        taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
-        totalShares: totalShares ?? this.totalShares,
-        retentionPercent: retentionPercent ?? this.retentionPercent,
-      );
-
-  factory UserVideoPost.fromJson(String str) =>
-      UserVideoPost.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory UserVideoPost.fromMap(Map<String, dynamic> json) => UserVideoPost(
-        id: json["id"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        uid: json["uid"],
-        title: json["title"],
-        description: json["description"],
-        hashtags: json["hashtags"] == null
-            ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUserUids: json["tagged_user_uids"] == null
-            ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        isDeleted: json["is_deleted"],
-        isArchived: json["is_archived"],
-        isActive: json["is_active"],
-        postCreatorType: json["post_creator_type"],
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        userUid: json["user_uid"],
-        thumbnail: json["thumbnail"],
-        videoUrl: json["video_url"],
-        location: json["location"],
-        videoDuration: json["video_duration"],
-        totalViews: json["total_views"],
-        totalLikes: json["total_likes"],
-        totalComments: json["total_comments"],
-        internalAiDescription: json["internal_ai_description"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedCommunityUids: json["tagged_community_uids"] == null
-            ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        totalShares: json["total_shares"],
-        retentionPercent: json["retention_percent"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "uid": uid,
-        "title": title,
-        "description": description,
-        "hashtags":
-            hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_user_uids": taggedUserUids == null
-            ? []
-            : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "is_deleted": isDeleted,
-        "is_archived": isArchived,
-        "is_active": isActive,
-        "post_creator_type": postCreatorType,
-        "updated_at": updatedAt?.toIso8601String(),
-        "user_uid": userUid,
-        "thumbnail": thumbnail,
-        "video_url": videoUrl,
-        "location": location,
-        "video_duration": videoDuration,
-        "total_views": totalViews,
-        "total_likes": totalLikes,
-        "total_comments": totalComments,
-        "internal_ai_description": internalAiDescription,
-        "address_lat_long_wkb": addressLatLongWkb,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_community_uids": taggedCommunityUids == null
-            ? []
-            : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "total_shares": totalShares,
-        "retention_percent": retentionPercent,
       };
 }
 
