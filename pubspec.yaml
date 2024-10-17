@@ -95,6 +95,7 @@ dependencies:
   markdown_editor_plus: ^0.2.15
   country_state_city_pro: ^0.0.6
   flutter_cached_pdfview: ^0.4.2
+  flutter_advanced_avatar: ^1.5.0
 
 
 

@@ -22,7 +22,6 @@ import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/upload_pdf/bloc/upload_pdf_bloc.dart';
 
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../previewers/views/page.dart';
 
 class UploadPdfPageArgument {
   final EnumPostCreatorType postCreatorType;

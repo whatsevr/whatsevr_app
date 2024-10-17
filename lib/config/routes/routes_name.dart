@@ -5,8 +5,6 @@ class RoutesName {
   static const String register = 'register';
   static const String forgotPassword = 'forgot-password';
   static const String dashboard = 'dashboard';
-
-  static const String fullVideoPlayer = 'full-video-player';
   static const String accountSearch = 'account-search';
   static const String account = 'account';
   static const String community = 'community';

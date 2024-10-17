@@ -14,12 +14,12 @@ import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
 import '../../../../../config/widgets/pad_horizontal.dart';
 import '../../../../../config/widgets/place_search_list.dart';
+import '../../../../../config/widgets/previewers/video.dart';
 import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/search_and_tag.dart';
 import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
-import '../../../previewers/views/page.dart';
 import '../bloc/create_flick_bloc.dart';
 
 class CreateFlickPostPageArgument {
@@ -84,11 +84,9 @@ class CreateFlickPostPage extends StatelessWidget {
                                 child: Center(
                                   child: IconButton(
                                     onPressed: () {
-                                      AppNavigationService.newRoute(
-                                        RoutesName.fullVideoPlayer,
-                                        extras: PreviewersPageArguments(
-                                          videoUrl: state.videoFile!.path,
-                                        ),
+                                      showVideoPreviewDialog(
+                                        context: context,
+                                        videoUrl: state.videoFile!.path,
                                       );
                                     },
                                     icon: const Icon(

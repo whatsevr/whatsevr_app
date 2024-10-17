@@ -18,13 +18,12 @@ import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/mask_text.dart';
-
-import '../../previewers/views/page.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {
@@ -240,12 +239,9 @@ class ProfileUpdatePage extends StatelessWidget {
                                             ),
                                           ),
                                           onPressed: () {
-                                            AppNavigationService.newRoute(
-                                              RoutesName.fullVideoPlayer,
-                                              extras: PreviewersPageArguments(
-                                                videoUrl:
-                                                    coverMedia.videoUrl ?? '',
-                                              ),
+                                            showVideoPreviewDialog(
+                                              context: context,
+                                              videoUrl: coverMedia.videoUrl,
                                             );
                                           },
                                           icon: const Icon(

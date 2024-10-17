@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
+import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
@@ -25,7 +26,6 @@ import '../../../../../config/widgets/showAppModalSheet.dart';
 import '../../../../../config/widgets/stepper.dart';
 import '../../../../../config/widgets/super_textform_field.dart';
 
-import '../../../previewers/views/page.dart';
 import '../bloc/create_memory_bloc.dart';
 
 class CreateMemoryPageArgument {
@@ -95,11 +95,9 @@ class CreateMemoryPage extends StatelessWidget {
                                       child: Center(
                                         child: IconButton(
                                           onPressed: () {
-                                            AppNavigationService.newRoute(
-                                              RoutesName.fullVideoPlayer,
-                                              extras: PreviewersPageArguments(
-                                                videoUrl: state.videoFile!.path,
-                                              ),
+                                            showVideoPreviewDialog(
+                                              context: context,
+                                              videoUrl: state.videoFile!.path,
                                             );
                                           },
                                           icon: const Icon(

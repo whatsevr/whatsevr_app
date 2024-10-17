@@ -2,35 +2,19 @@ import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/flick_full_player.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
-class PreviewersPageArguments {
-  final String? videoUrl;
-
-  const PreviewersPageArguments({
-    this.videoUrl,
-  });
-}
-
-class PreviewersPage extends StatelessWidget {
-  final PreviewersPageArguments pageArguments;
-
-  const PreviewersPage({
-    super.key,
-    required this.pageArguments,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return pageArguments.videoUrl != null
-        ? _VideoPreviewer(
-            videoUrl: pageArguments.videoUrl!,
-          )
-        : const Center(
-            child: Text('Nothing to preview'),
-          );
-  }
+showVideoPreviewDialog({BuildContext? context, String? videoUrl}) {
+  if (videoUrl == null) return;
+  context ??= AppNavigationService.currentContext!;
+  showGeneralDialog(
+    context: context,
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return _VideoPreviewer(videoUrl: videoUrl);
+    },
+  );
 }
 
 /// full fledged video player
@@ -55,6 +39,7 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
     _controller =
         CachedVideoPlayerPlusController.networkUrl(Uri.parse(widget.videoUrl))
           ..initialize().then((_) {
+            _controller.play();
             if (mounted) {
               setState(() {});
             }
@@ -79,18 +64,20 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
 
   @override
   Widget build(BuildContext context) {
-    return _controller.value.isInitialized
-        ? Stack(
-            children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: CachedVideoPlayerPlus(_controller),
-              ),
-              //positioning the player controls
-            ],
-          )
-        : const Center(
-            child: CupertinoActivityIndicator(),
-          );
+    return Scaffold(
+      body: Center(
+        child: _controller.value.isInitialized
+            ? Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: CachedVideoPlayerPlus(_controller),
+                  ),
+                  //positioning the player controls
+                ],
+              )
+            : CupertinoActivityIndicator(),
+      ),
+    );
   }
 }

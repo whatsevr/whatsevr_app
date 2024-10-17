@@ -14,7 +14,6 @@ import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 
-import 'package:whatsevr_app/src/features/previewers/views/page.dart';
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/splash/views/page.dart';
@@ -103,17 +102,6 @@ class AppNavigationService {
             path: RoutesName.dashboard,
             builder: (BuildContext context, GoRouterState state) {
               return const DashboardPage();
-            },
-          ),
-          GoRoute(
-            name: RoutesName.fullVideoPlayer,
-            path: RoutesName.fullVideoPlayer,
-            builder: (BuildContext context, GoRouterState state) {
-              PreviewersPageArguments argument =
-                  state.extra as PreviewersPageArguments;
-              return PreviewersPage(
-                pageArguments: argument,
-              );
             },
           ),
           GoRoute(

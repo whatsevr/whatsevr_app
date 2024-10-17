@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/flicks.dart';
@@ -36,6 +38,7 @@ class AccountPageArgument {
 
 class AccountPage extends StatelessWidget {
   final AccountPageArgument? pageArgument;
+
   const AccountPage({super.key, required this.pageArgument});
 
   @override
@@ -123,11 +126,30 @@ class AccountPage extends StatelessWidget {
                           PadHorizontal(
                             child: Row(
                               children: <Widget>[
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: ExtendedNetworkImageProvider(
-                                    '${state.profileDetailsResponse?.userInfo?.profilePicture}',
-                                    cache: true,
+                                GestureDetector(
+                                  onTap: () {},
+                                  onLongPress: () {
+                                    showPhotoPreviewDialog(
+                                      context: context,
+                                      photoUrl:
+                                          '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                      appBarTitle:
+                                          '${state.profileDetailsResponse?.userInfo?.username}',
+                                    );
+                                  },
+                                  child: AdvancedAvatar(
+                                    size: 60,
+                                    image: ExtendedNetworkImageProvider(
+                                      '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                      cache: true,
+                                    ),
+                                    foregroundDecoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.blue,
+                                        width: 3.0,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 const Gap(8),

@@ -9,6 +9,7 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/previewers/pdf.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
@@ -29,27 +30,10 @@ class AccountPagePdfsView extends StatelessWidget {
               children: <Widget>[
                 GestureDetector(
                     onTap: () {
-                      showGeneralDialog(
+                      showPdfPreviewDialog(
                         context: context,
-                        pageBuilder: (context, animation, secondaryAnimation) {
-                          return Scaffold(
-                            appBar: CustomAppBar(title: '${userPdf?.title}'),
-                            body: PDF(
-                              fitEachPage: true,
-                              fitPolicy: FitPolicy.WIDTH,
-                              swipeHorizontal: false,
-                              autoSpacing: true,
-                              pageFling: true,
-                              pageSnap: true,
-                            ).cachedFromUrl(
-                              '${userPdf?.fileUrl}',
-                              placeholder: (progress) =>
-                                  Center(child: Text('$progress %')),
-                              errorWidget: (error) =>
-                                  Center(child: Text(error.toString())),
-                            ),
-                          );
-                        },
+                        pdfUrl: userPdf?.fileUrl,
+                        appBarTitle: userPdf?.title,
                       );
                     },
                     child: ExtendedImage.network(

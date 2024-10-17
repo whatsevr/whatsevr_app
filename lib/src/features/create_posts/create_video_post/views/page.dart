@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/place_search_list.dart';
+import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
 import 'package:whatsevr_app/config/widgets/search_and_tag.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
@@ -22,7 +23,6 @@ import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../previewers/views/page.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -85,11 +85,9 @@ class CreateVideoPostPage extends StatelessWidget {
                                 child: Center(
                                   child: IconButton(
                                     onPressed: () {
-                                      AppNavigationService.newRoute(
-                                        RoutesName.fullVideoPlayer,
-                                        extras: PreviewersPageArguments(
-                                          videoUrl: state.videoFile!.path,
-                                        ),
+                                      showVideoPreviewDialog(
+                                        context: context,
+                                        videoUrl: state.videoFile!.path,
                                       );
                                     },
                                     icon: const Icon(

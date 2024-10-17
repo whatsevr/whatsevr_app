@@ -127,8 +127,6 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
 
       emit(UploadPdfState(
         pdfFile: event.pickPdfFile,
-        thumbnailFile: null,
-        thumbnailMetaData: null,
         pageArgument: state.pageArgument,
         userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
       ));
