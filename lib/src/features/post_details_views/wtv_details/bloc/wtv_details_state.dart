@@ -1,10 +1,28 @@
 part of 'wtv_details_bloc.dart';
 
-sealed class WtvDetailsState extends Equatable {
-  const WtvDetailsState();
-}
+class WtvDetailsState extends Equatable {
+  final String? videoPostUid;
+  final String? thumbnail;
+  final String? videoUrl;
 
-final class WtvDetailsInitial extends WtvDetailsState {
+  const WtvDetailsState({
+    this.videoPostUid,
+    this.thumbnail,
+    this.videoUrl,
+  });
+
   @override
-  List<Object> get props => <Object>[];
+  List<Object?> get props => [videoPostUid, thumbnail, videoUrl];
+
+  WtvDetailsState copyWith({
+    String? videoPostUid,
+    String? thumbnail,
+    String? videoUrl,
+  }) {
+    return WtvDetailsState(
+      videoPostUid: videoPostUid ?? this.videoPostUid,
+      thumbnail: thumbnail ?? this.thumbnail,
+      videoUrl: videoUrl ?? this.videoUrl,
+    );
+  }
 }

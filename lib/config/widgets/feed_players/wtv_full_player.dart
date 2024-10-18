@@ -1,4 +1,3 @@
-
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -46,11 +45,13 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
   }
 
   void initializePlayer() async {
+    if (widget.videoUrl == null) return;
     String? optimizedUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
     _controller = CachedVideoPlayerPlusController.networkUrl(
-      Uri.parse(optimizedUrl),invalidateCacheIfOlderThan: const Duration(days: 90),
+      Uri.parse(optimizedUrl),
+      invalidateCacheIfOlderThan: const Duration(days: 90),
       videoPlayerOptions: VideoPlayerOptions(
         allowBackgroundPlayback: true,
       ),
