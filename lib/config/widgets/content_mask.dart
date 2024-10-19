@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import 'loading_indicator.dart';
+
 class ContentMask extends StatelessWidget {
   final Widget child;
   final Widget? customMask;
   final bool showMask;
-  const ContentMask(
-      {super.key,
-      required this.child,
-      required this.showMask,
-      this.customMask,});
+  const ContentMask({
+    super.key,
+    required this.child,
+    required this.showMask,
+    this.customMask,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class ContentMask extends StatelessWidget {
         ignorePointers: true,
         child: customMask ??
             const Center(
-              child: CupertinoActivityIndicator(),
+              child: WhatsevrLoadingIndicator(),
             ),
       );
     }

@@ -1,4 +1,5 @@
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
@@ -12,22 +13,23 @@ class WtvFullPlayer extends StatefulWidget {
     required this.videoUrl,
     required this.thumbnail,
     this.iconColor = Colors.white,
-    this.loadingColor = Colors.red,
     this.skipVideoUptoSec = 10,
     this.videoProgressBgColor = Colors.grey,
     this.videoProgressBufferColor = Colors.white24,
     this.videoProgressPlayedColor = Colors.red,
     this.autoPlay = true,
   });
+
   final String? videoUrl;
   final String? thumbnail;
   final Color iconColor;
-  final Color loadingColor;
+
   final int skipVideoUptoSec;
   final Color videoProgressBgColor;
   final Color videoProgressBufferColor;
   final Color videoProgressPlayedColor;
   final bool autoPlay;
+
   @override
   State<WtvFullPlayer> createState() => _WtvFullPlayerState();
 }
@@ -81,74 +83,79 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 200,
-      child: isVideoLoading == true
-          ? Center(child: CircularProgressIndicator(color: widget.loadingColor))
-          : !_controller.value.isInitialized
-              ? const SizedBox()
-              : GestureDetector(
-                  onTap: hideControls,
-                  onLongPress: hideControls,
+    return isVideoLoading == true
+        ? AspectRatio(
+            aspectRatio: 16 / 9,
+            child: Container(
+              alignment: Alignment.center,
+              color: Colors.black,
+              child: CupertinoActivityIndicator(),
+            ),
+          )
+        : !_controller.value.isInitialized
+            ? const SizedBox()
+            : GestureDetector(
+                onTap: hideControls,
+                onLongPress: hideControls,
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
                   child: Stack(
-                    alignment: Alignment.center,
                     children: [
                       Container(
                         decoration: const BoxDecoration(
                           color: Colors.black,
                         ),
                       ),
-                      AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: CachedVideoPlayerPlus(_controller)),
-                      skipSeconds(context),
-                      showInitialPlayButton(),
+                      CachedVideoPlayerPlus(_controller),
+                      Center(child: showInitialPlayButton()),
+                      skipSecondsButtons(context),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           videoProgressIndicator(),
-                          otherControls(false)
+                          durationAndFullScreenButton(false)
                         ],
                       )
                     ],
                   ),
                 ),
-    );
+              );
   }
 
-  skipSeconds(context) {
-    return Visibility(
-      visible: showControls,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                skipBy(-widget.skipVideoUptoSec);
-              });
-            },
-            icon: const Icon(Icons.replay_10),
-            color: widget.iconColor,
-          ),
-          //play pause
-          playPauseReplayButton(),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                skipBy(widget.skipVideoUptoSec);
-              });
-            },
-            icon: const Icon(Icons.forward_10),
-            color: widget.iconColor,
-          ),
-        ],
+  Widget skipSecondsButtons(context) {
+    return Center(
+      child: Visibility(
+        visible: showControls,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  skipBy(-widget.skipVideoUptoSec);
+                });
+              },
+              icon: const Icon(Icons.replay_10),
+              color: widget.iconColor,
+            ),
+            //play pause
+            playPauseReplayButton(),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  skipBy(widget.skipVideoUptoSec);
+                });
+              },
+              icon: const Icon(Icons.forward_10),
+              color: widget.iconColor,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  skipBy(int seconds) {
+  void skipBy(int seconds) {
     if (_controller.value.isInitialized) {
       final newPosition =
           Duration(seconds: _controller.value.position.inSeconds + seconds);
@@ -156,7 +163,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     }
   }
 
-  showInitialPlayButton() {
+  Widget showInitialPlayButton() {
     return Visibility(
       visible: showPlayButton,
       child: Container(
@@ -183,7 +190,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     );
   }
 
-  videoProgressIndicator() {
+  Widget videoProgressIndicator() {
     return VideoProgressIndicator(_controller,
         allowScrubbing: true,
         colors: VideoProgressColors(
@@ -192,7 +199,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
             playedColor: widget.videoProgressPlayedColor));
   }
 
-  otherControls(isFullScreen) {
+  Widget durationAndFullScreenButton(isFullScreen) {
     return Visibility(
       visible: showControls,
       child: Row(
@@ -206,7 +213,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     );
   }
 
-  playPauseReplayButton() {
+  Widget playPauseReplayButton() {
     return ValueListenableBuilder(
         valueListenable: _controller,
         builder: (context, value, child) {
@@ -238,19 +245,20 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
         });
   }
 
-  videoDuration() {
+  Widget videoDuration() {
     return ValueListenableBuilder(
         valueListenable: _controller,
         builder: (context, value, child) {
           return Text(
             '${formatDuration(_controller.value.position)} / ${formatDuration(_controller.value.duration)}',
-            style: TextStyle(color: widget.iconColor),
+            style: TextStyle(color: widget.iconColor, fontSize: 12),
           );
         });
   }
 
-  fullScreenButton(bool isFullScreen) {
+  Widget fullScreenButton(bool isFullScreen) {
     return IconButton(
+        visualDensity: VisualDensity.compact,
         onPressed: () {
           SystemChrome.setPreferredOrientations([
             !isFullScreen
