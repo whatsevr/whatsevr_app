@@ -12,3 +12,18 @@ class InitialEvent extends WtvDetailsEvent {
   @override
   List<Object> get props => [pageArgument];
 }
+
+class FetchVideoPostDetails extends WtvDetailsEvent {
+  final String? videoPostUid;
+  final String? thumbnail;
+  final String? videoUrl;
+  const FetchVideoPostDetails(
+      {this.videoPostUid, this.thumbnail, this.videoUrl});
+
+  @override
+  List<Object?> get props => [
+        videoPostUid,
+        thumbnail,
+        videoUrl,
+      ];
+}
