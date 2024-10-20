@@ -4,9 +4,12 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 
-void showTaggedUsersBottomSheet(BuildContext context,
-    {List<String>? taggedUserUids,}) {
+void showTaggedUsersBottomSheet(
+  BuildContext context, {
+  List<String>? taggedUserUids,
+}) {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -59,7 +62,7 @@ class _UiState extends State<_Ui> {
           Builder(
             builder: (BuildContext context) {
               if (_multipleUserDetailsResponse == null) {
-                return const Center(child: CupertinoActivityIndicator());
+                return const Center(child: WhatsevrLoadingIndicator());
               }
               if (_multipleUserDetailsResponse!.users!.isEmpty) {
                 return const Center(child: Text('No tags'));
@@ -72,7 +75,8 @@ class _UiState extends State<_Ui> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                            user.profilePicture ?? MockData.imageAvatar,),
+                          user.profilePicture ?? MockData.imageAvatar,
+                        ),
                       ),
                       const Gap(8),
                       Expanded(

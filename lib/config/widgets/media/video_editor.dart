@@ -14,6 +14,7 @@ import 'package:fraction/fraction.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class VideoEditorPageArgument {
@@ -178,7 +179,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
                   ],
                 ),
               )
-            : const Center(child: CupertinoActivityIndicator()),
+            : const Center(child: WhatsevrLoadingIndicator()),
         bottomNavigationBar: _topNavBar(),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
@@ -140,7 +141,7 @@ class ExplorePageWtvPage extends StatelessWidget {
                             .videoPaginationData!
                             .isLoading) ...[
                       const Gap(8),
-                      CupertinoActivityIndicator(),
+                      WhatsevrLoadingIndicator(),
                       const Gap(8),
                     ],
                   ],

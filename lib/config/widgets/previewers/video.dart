@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/flick_full_player.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 showVideoPreviewDialog({BuildContext? context, String? videoUrl}) {
@@ -43,13 +44,13 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
             if (mounted) {
               setState(() {});
             }
+            if (!_controller.value.aspectRatio.isAspectRatioPortrait) {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.landscapeRight,
+                DeviceOrientation.landscapeLeft,
+              ]);
+            }
           });
-    if (!_controller.value.aspectRatio.isAspectRatioPortrait) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeRight,
-        DeviceOrientation.landscapeLeft,
-      ]);
-    }
   }
 
   @override
@@ -76,7 +77,7 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
                   //positioning the player controls
                 ],
               )
-            : CupertinoActivityIndicator(),
+            : WhatsevrLoadingIndicator(),
       ),
     );
   }

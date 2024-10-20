@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/file.dart';
@@ -67,7 +68,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
         builder: (BuildContext context) {
           if (imageBytes == null) {
             return const Center(
-              child: CupertinoActivityIndicator(),
+              child: WhatsevrLoadingIndicator(),
             );
           }
           return Column(
@@ -96,7 +97,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   baseColor: Colors.white,
                   initialSize: 0.9, //rect size
                   maskColor: Colors.white.withAlpha(120),
-                  progressIndicator: const CupertinoActivityIndicator(),
+                  progressIndicator: const WhatsevrLoadingIndicator(),
                   radius: 20,
                   willUpdateScale: (double newScale) {
                     //max zoom level

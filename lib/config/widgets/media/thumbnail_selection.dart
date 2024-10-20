@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -137,7 +138,7 @@ class _UiState extends State<_Ui> {
               child: Builder(
                 builder: (BuildContext context) {
                   if (selectedThumbnail == null) {
-                    return const CupertinoActivityIndicator();
+                    return const WhatsevrLoadingIndicator();
                   }
                   return Container(
                     width: double.infinity,

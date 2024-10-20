@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
 
 class SplashPage extends StatelessWidget {
@@ -35,7 +36,7 @@ class SplashPage extends StatelessWidget {
               width: 100,
             ),
             const Spacer(),
-            const CupertinoActivityIndicator(),
+            const WhatsevrLoadingIndicator(),
             const Gap(30),
             const Text(
               'WhatsEvr',

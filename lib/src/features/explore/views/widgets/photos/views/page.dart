@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
@@ -79,7 +80,7 @@ class ExplorePagePhotosPage extends StatelessWidget {
                           .videoPaginationData!
                           .isLoading) ...[
                     const Gap(8),
-                    CupertinoActivityIndicator(),
+                    WhatsevrLoadingIndicator(),
                     const Gap(8),
                   ],
                 ],

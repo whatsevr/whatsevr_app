@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class WhatsevrLoadingIndicator extends StatelessWidget {
-  const WhatsevrLoadingIndicator({super.key});
+  final bool showBorder;
+  const WhatsevrLoadingIndicator({super.key, this.showBorder = true});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class WhatsevrLoadingIndicator extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: CupertinoColors.white,
+            color: showBorder ? CupertinoColors.white : null,
           ),
           child: CupertinoActivityIndicator()),
     );
