@@ -2,6 +2,7 @@ import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import '../../services/file_upload.dart';
 
@@ -39,6 +40,8 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
   bool isVideoLoading = true;
   bool showControls = false;
   bool showPlayButton = true;
+  double volume = 1.0;
+  double brightness = 1.0;
 
   @override
   void initState() {
@@ -293,84 +296,83 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
             },
             child: StatefulBuilder(builder: (context, setState) {
               return Scaffold(
-                  body: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    showControls = !showControls;
-                  });
-                },
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      color: Colors.black,
-                      child: Center(
-                        child: AspectRatio(
+                body: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      showControls = !showControls;
+                    });
+                  },
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        color: Colors.black,
+                        child: Center(
+                          child: AspectRatio(
                             aspectRatio: _controller.value.aspectRatio,
-                            child: CachedVideoPlayerPlus(_controller)),
-                      ),
-                    ),
-                    //back buttton and title
-
-                    Visibility(
-                      visible: showControls,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                skipBy(-widget.skipVideoUptoSec);
-                              });
-                            },
-                            icon: const Icon(Icons.replay_10),
-                            color: widget.iconColor,
+                            child: CachedVideoPlayerPlus(_controller),
                           ),
-                          playPauseReplayButton(),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                skipBy(widget.skipVideoUptoSec);
-                              });
-                            },
-                            icon: const Icon(Icons.forward_10),
-                            color: widget.iconColor,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Visibility(
-                      visible: showControls,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Gap(8),
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  SystemChrome.setPreferredOrientations(
-                                      [DeviceOrientation.portraitUp]);
-                                  SystemChrome.setEnabledSystemUIMode(
-                                      SystemUiMode.edgeToEdge);
-                                  Navigator.pop(context);
-                                },
-                                icon: const Icon(Icons.arrow_back),
-                                color: widget.iconColor,
-                              ),
-                              Expanded(
-                                child: const Text(
-                                  'Title name',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
+                      Visibility(
+                        visible: showControls,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  skipBy(-widget.skipVideoUptoSec);
+                                });
+                              },
+                              icon: const Icon(Icons.replay_10),
+                              color: widget.iconColor,
+                            ),
+                            playPauseReplayButton(),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  skipBy(widget.skipVideoUptoSec);
+                                });
+                              },
+                              icon: const Icon(Icons.forward_10),
+                              color: widget.iconColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                        visible: showControls,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Gap(8),
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    SystemChrome.setPreferredOrientations(
+                                        [DeviceOrientation.portraitUp]);
+                                    SystemChrome.setEnabledSystemUIMode(
+                                        SystemUiMode.edgeToEdge);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(Icons.arrow_back),
+                                  color: widget.iconColor,
+                                ),
+                                Expanded(
+                                  child: const Text(
+                                    'Title name',
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  showAppModalSheet(
+                                IconButton(
+                                  onPressed: () {
+                                    showAppModalSheet(
                                       context: context,
                                       child: Column(
                                         children: [
@@ -387,32 +389,81 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                                             title: const Text('Download'),
                                           ),
                                         ],
-                                      ));
-                                },
-                                icon: const Icon(Icons.more_vert),
-                                color: widget.iconColor,
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          videoProgressIndicator(),
-                          Visibility(
-                            visible: showControls,
-                            child: Row(
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.more_vert),
+                                  color: widget.iconColor,
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            videoProgressIndicator(),
+                            Row(
                               children: [
                                 Gap(8),
                                 videoDuration(),
                                 const Spacer(),
-                                fullScreenButton(true)
+                                fullScreenButton(true),
                               ],
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                      // Volume Slider
+                      Positioned(
+                        left: 10,
+                        top: MediaQuery.of(context).size.height / 2 - 50,
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Visibility(
+                            visible: showControls,
+                            child: CupertinoSlider(
+                              value: volume,
+                              min: 0,
+                              max: 1,
+                              activeColor: Colors.white,
+                              divisions: 10,
+                              onChanged: (newVolume) {
+                                setState(() {
+                                  volume = newVolume;
+                                  _controller.setVolume(volume);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Brightness Slider
+                      Positioned(
+                        right: 10,
+                        top: MediaQuery.of(context).size.height / 2 - 50,
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Visibility(
+                            visible: showControls,
+                            child: CupertinoSlider(
+                              value: brightness,
+                              min: 0,
+                              max: 1,
+                              divisions: 10,
+                              activeColor: Colors.white,
+                              onChanged: (newBrightness) {
+                                setState(() {
+                                  brightness = newBrightness;
+                                  ScreenBrightness()
+                                      .setApplicationScreenBrightness(
+                                          brightness);
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ));
+              );
             }),
           );
         },
