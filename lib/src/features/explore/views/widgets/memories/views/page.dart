@@ -8,7 +8,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../../../../../../../config/api/response_model/recommendation_memories.dart';
-import '../../../../../../../config/widgets/previewers/memories.dart';
+import '../../../../../post_details_views/memory/views/memories.dart';
 import '../../../../../../../config/widgets/refresh_indicator.dart';
 import '../../../../bloc/explore_bloc.dart';
 

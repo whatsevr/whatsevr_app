@@ -11,7 +11,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
-import 'package:whatsevr_app/config/widgets/previewers/memories.dart';
+import 'package:whatsevr_app/src/features/post_details_views/memory/views/memories.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';

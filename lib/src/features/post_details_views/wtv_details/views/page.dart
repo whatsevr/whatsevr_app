@@ -1,4 +1,3 @@
-import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 import 'package:whatsevr_app/src/features/post_details_views/wtv_details/bloc/wtv_details_bloc.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -51,6 +51,8 @@ class WtvDetailsPage extends StatelessWidget {
                   key: ValueKey('wtv-details-${state.videoPostUid}'),
                   videoUrl: state.videoUrl,
                   thumbnail: state.thumbnail,
+                  title:
+                      state.videoPostDetailsResponse?.videoPostDetails?.title,
                 ),
               Expanded(
                 child: ContentMask(
@@ -121,39 +123,9 @@ class WtvDetailsPage extends StatelessWidget {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: DetectableText(
+                            child: WhatsevrDetectableText(
                               text:
                                   '${state.videoPostDetailsResponse?.videoPostDetails?.description}',
-                              trimLines: 3,
-                              trimMode: TrimMode.Line,
-                              colorClickableText: Colors.blue,
-                              moreStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                              ),
-                              lessStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14,
-                              ),
-                              detectionRegExp: detectionRegExp(
-                                hashtag: false,
-                              )!,
-                              detectedStyle: TextStyle(
-                                fontSize: 13,
-                                color: Colors.blue,
-                              ),
-                              basicStyle: TextStyle(
-                                fontSize: 13,
-                              ),
-                              onTap: (tappedText) {
-                                print(tappedText);
-                                if (TextPatternDetector.isDetected(
-                                    tappedText, atSignUrlRegExp)) {
-                                } else if (TextPatternDetector.isDetected(
-                                    tappedText, urlRegex)) {
-                                  launchWebURL(context, url: tappedText);
-                                }
-                              },
                             ),
                           ),
                         )

@@ -13,6 +13,7 @@ class WtvFullPlayer extends StatefulWidget {
     super.key,
     required this.videoUrl,
     required this.thumbnail,
+    required this.title,
     this.iconColor = Colors.white,
     this.skipVideoUptoSec = 10,
     this.videoProgressBgColor = Colors.grey,
@@ -23,6 +24,7 @@ class WtvFullPlayer extends StatefulWidget {
 
   final String? videoUrl;
   final String? thumbnail;
+  final String? title;
   final Color iconColor;
 
   final int skipVideoUptoSec;
@@ -70,6 +72,15 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
           }
         });
       });
+    _controller.addListener(_onVideoStateChanged);
+  }
+
+  void _onVideoStateChanged() {
+    if (_controller.value.position == _controller.value.duration) {
+      setState(() {
+        showControls = true;
+      });
+    }
   }
 
   void hideControls() {
@@ -263,11 +274,12 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
     return IconButton(
         visualDensity: VisualDensity.compact,
         onPressed: () {
-          SystemChrome.setPreferredOrientations([
-            !isFullScreen
-                ? DeviceOrientation.landscapeRight
-                : DeviceOrientation.portraitUp
-          ]);
+          SystemChrome.setPreferredOrientations(!isFullScreen
+              ? [
+                  DeviceOrientation.landscapeRight,
+                  DeviceOrientation.landscapeLeft
+                ]
+              : [DeviceOrientation.portraitUp]);
           !isFullScreen ? goFullScreen(context) : Navigator.pop(context);
           !isFullScreen
               ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive)
@@ -281,7 +293,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
   }
 
   void goFullScreen(BuildContext context) {
-    bool showControls = false;
+    bool showControls = true;
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -361,9 +373,10 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                                   color: widget.iconColor,
                                 ),
                                 Expanded(
-                                  child: const Text(
-                                    'Title name',
+                                  child: Text(
+                                    '${widget.title}',
                                     maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: Colors.white,

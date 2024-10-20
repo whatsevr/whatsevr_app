@@ -67,6 +67,7 @@ class WtvVideoPostFrame extends StatelessWidget {
           Stack(
             children: <Widget>[
               WTVMiniPlayer(
+                key: ValueKey('explore-wtv-video-$videoUrl'),
                 videoUrl: videoUrl,
                 thumbnail: thumbnail,
                 thumbnailHeightAspectRatio: thumbnailHeightAspectRatio,

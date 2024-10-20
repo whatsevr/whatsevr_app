@@ -16,10 +16,10 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
-import '../../../../../../../config/api/response_model/recommendation_memories.dart';
-import '../../../../../../../config/services/launch_url.dart';
-import '../../../../../../../config/widgets/links_preview_list.dart';
-import '../../../../../../../config/widgets/refresh_indicator.dart';
+import '../../../../../../../../../config/api/response_model/recommendation_memories.dart';
+import '../../../../../../../../../config/services/launch_url.dart';
+import '../../../../../../../../../config/widgets/links_preview_list.dart';
+import '../../../../../../../../../config/widgets/refresh_indicator.dart';
 
 showMemoriesPlayer(BuildContext context,
     {required List<UiMemoryGroup>? uiMemoryGroups,
