@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/slider.dart';
 import '../../services/file_upload.dart';
 
 import 'package:flutter/services.dart';
@@ -427,23 +428,18 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       Positioned(
                         left: 10,
                         top: MediaQuery.of(context).size.height / 2 - 50,
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Visibility(
-                            visible: showControls,
-                            child: CupertinoSlider(
-                              value: volume,
-                              min: 0,
-                              max: 1,
-                              activeColor: Colors.white,
-                              divisions: 10,
-                              onChanged: (newVolume) {
-                                setState(() {
-                                  volume = newVolume;
-                                  _controller.setVolume(volume);
-                                });
-                              },
-                            ),
+                        child: Visibility(
+                          visible: showControls,
+                          child: WhatsevrSlider(
+                            value: volume,
+                            min: 0,
+                            max: 1,
+                            onChanged: (newVolume) {
+                              setState(() {
+                                volume = newVolume;
+                                _controller.setVolume(volume);
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -451,25 +447,19 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       Positioned(
                         right: 10,
                         top: MediaQuery.of(context).size.height / 2 - 50,
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Visibility(
-                            visible: showControls,
-                            child: CupertinoSlider(
-                              value: brightness,
-                              min: 0,
-                              max: 1,
-                              divisions: 10,
-                              activeColor: Colors.white,
-                              onChanged: (newBrightness) {
-                                setState(() {
-                                  brightness = newBrightness;
-                                  ScreenBrightness()
-                                      .setApplicationScreenBrightness(
-                                          brightness);
-                                });
-                              },
-                            ),
+                        child: Visibility(
+                          visible: showControls,
+                          child: WhatsevrSlider(
+                            value: brightness,
+                            min: 0,
+                            max: 1,
+                            onChanged: (newBrightness) {
+                              setState(() {
+                                brightness = newBrightness;
+                                ScreenBrightness()
+                                    .setApplicationScreenBrightness(brightness);
+                              });
+                            },
                           ),
                         ),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/widgets/slider.dart';
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
 import '../config/widgets/dynamic_height_views.dart';
@@ -42,7 +43,12 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               onPressed: itm.$2,
               child: Text(itm.$1),
             ),
-          SwipeAbleDynamicHeightViews(),
+          WhatsevrSlider(
+            value: 0.5,
+            min: 0,
+            max: 1,
+            onChanged: (value) {},
+          ),
         ],
       ),
     );
