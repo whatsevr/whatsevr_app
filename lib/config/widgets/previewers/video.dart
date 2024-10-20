@@ -7,6 +7,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/slider.dart';
 
 showVideoPreviewDialog({BuildContext? context, String? videoUrl}) {
   if (videoUrl == null) return;
@@ -239,32 +240,24 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
                     ),
                     Positioned(
                       left: 10,
-                      top: MediaQuery.of(context).size.height / 2 - 50,
-                      child: RotatedBox(
-                        quarterTurns: 3,
-                        child: CupertinoSlider(
-                          value: volume,
-                          min: 0,
-                          max: 1,
-                          divisions: 10,
-                          activeColor: Colors.white,
-                          onChanged: changeVolume,
-                        ),
+                      bottom: 0,
+                      top: 0,
+                      child: WhatsevrVideoPlayerSlider(
+                        value: volume,
+                        min: 0,
+                        max: 1,
+                        onChanged: changeVolume,
                       ),
                     ),
                     Positioned(
                       right: 10,
-                      top: MediaQuery.of(context).size.height / 2 - 50,
-                      child: RotatedBox(
-                        quarterTurns: 3,
-                        child: CupertinoSlider(
-                          value: brightness,
-                          min: 0,
-                          max: 1,
-                          divisions: 10,
-                          activeColor: Colors.white,
-                          onChanged: changeBrightness,
-                        ),
+                      bottom: 0,
+                      top: 0,
+                      child: WhatsevrVideoPlayerSlider(
+                        value: brightness,
+                        min: 0,
+                        max: 1,
+                        onChanged: changeBrightness,
                       ),
                     ),
                   ],

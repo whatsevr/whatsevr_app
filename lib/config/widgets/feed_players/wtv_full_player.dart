@@ -314,6 +314,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                     setState(() {
                       showControls = !showControls;
                     });
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
                   },
                   child: Stack(
                     alignment: Alignment.center,
@@ -426,11 +427,12 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       ),
                       // Volume Slider
                       Positioned(
-                        left: 10,
-                        top: MediaQuery.of(context).size.height / 2 - 50,
+                        left: 6,
+                        top: 0,
+                        bottom: 0,
                         child: Visibility(
                           visible: showControls,
-                          child: WhatsevrSlider(
+                          child: WhatsevrVideoPlayerSlider(
                             value: volume,
                             min: 0,
                             max: 1,
@@ -445,11 +447,12 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                       ),
                       // Brightness Slider
                       Positioned(
-                        right: 10,
-                        top: MediaQuery.of(context).size.height / 2 - 50,
+                        right: 6,
+                        top: 0,
+                        bottom: 0,
                         child: Visibility(
                           visible: showControls,
-                          child: WhatsevrSlider(
+                          child: WhatsevrVideoPlayerSlider(
                             value: brightness,
                             min: 0,
                             max: 1,

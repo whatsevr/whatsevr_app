@@ -43,7 +43,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               onPressed: itm.$2,
               child: Text(itm.$1),
             ),
-          WhatsevrSlider(
+          WhatsevrVideoPlayerSlider(
             value: 0.5,
             min: 0,
             max: 1,
