@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 
-class TwoStateWidget extends StatefulWidget {
+class WhatsevrTwoStateUi extends StatefulWidget {
   final bool? isFirstState;
   final Widget? firstStateUi;
   final Widget? secondStateUi;
-  const TwoStateWidget({
+
+  final Function(bool isFirstState, bool isSecondState)? onStateChanged;
+  const WhatsevrTwoStateUi({
     super.key,
     this.isFirstState,
     this.firstStateUi,
     this.secondStateUi,
+    this.onStateChanged,
   });
 
   @override
-  State<TwoStateWidget> createState() => _TwoStateWidgetState();
+  State<WhatsevrTwoStateUi> createState() => _WhatsevrTwoStateUiState();
 }
 
-class _TwoStateWidgetState extends State<TwoStateWidget> {
+class _WhatsevrTwoStateUiState extends State<WhatsevrTwoStateUi> {
   @override
   void initState() {
     super.initState();
@@ -27,12 +30,15 @@ class _TwoStateWidgetState extends State<TwoStateWidget> {
   Widget build(BuildContext context) {
     return IconButton(
       icon: _firstState
-          ? widget.firstStateUi ?? const Icon(Icons.circle_outlined)
-          : widget.secondStateUi ?? const Icon(Icons.check_circle),
+          ? AbsorbPointer(
+              child: widget.firstStateUi ?? const Icon(Icons.circle_outlined))
+          : AbsorbPointer(
+              child: widget.secondStateUi ?? const Icon(Icons.check_circle)),
       onPressed: () {
         setState(() {
           _firstState = !_firstState;
         });
+        widget.onStateChanged?.call(_firstState, !_firstState);
       },
     );
   }

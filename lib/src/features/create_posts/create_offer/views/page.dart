@@ -14,6 +14,7 @@ import '../../../../../config/routes/router.dart';
 import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/button.dart';
+import '../../../../../config/widgets/choice_chip.dart';
 import '../../../../../config/widgets/common_data_list.dart';
 import '../../../../../config/widgets/dynamic_height_views.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
@@ -56,7 +57,7 @@ class CreateOfferPage extends StatelessWidget {
     return BlocBuilder<CreateOfferBloc, CreateOfferState>(
       builder: (BuildContext context, CreateOfferState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Create Offer',
             showAiAction: true,
             showInfo: () {
@@ -348,8 +349,8 @@ class CreateOfferPage extends StatelessWidget {
                       const Spacer(),
                       for (String audience
                           in context.read<CreateOfferBloc>().targetGender) ...[
-                        ChoiceChip(
-                          label: Text(audience),
+                        WhatsevrChoiceChip(
+                          label: audience,
                           selected: state.selectedTargetGender == audience,
                           onSelected: (value) {
                             context.read<CreateOfferBloc>().add(

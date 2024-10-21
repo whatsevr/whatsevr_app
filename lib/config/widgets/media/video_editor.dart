@@ -103,7 +103,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
       canPop: !_isExporting.value,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(
+        appBar: WhatsevrAppBar(
           title: 'Edit',
           actions: <Widget>[
             IconButton(

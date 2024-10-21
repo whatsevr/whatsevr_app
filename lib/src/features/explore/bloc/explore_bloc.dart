@@ -18,30 +18,14 @@ part 'explore_state.dart';
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   ExploreBloc()
       : super(const ExploreState(
-          videoPaginationData: PaginationData(
-            currentPage: 1,
-            isLoading: false,
-            noMoreData: false,
-          ),
-          memoryPaginationData: PaginationData(
-            currentPage: 1,
-            isLoading: false,
-            noMoreData: false,
-          ),
-          offersPaginationData: PaginationData(
-            currentPage: 1,
-            isLoading: false,
-            noMoreData: false,
-          ),
-          photoPostPaginationData: PaginationData(
-            currentPage: 1,
-            isLoading: false,
-            noMoreData: false,
-          ),
           recommendationVideos: [],
           recommendationMemories: [],
           recommendationOffers: [],
           recommendationPhotoPosts: [],
+          videoPaginationData: PaginationData(),
+          memoryPaginationData: PaginationData(),
+          offersPaginationData: PaginationData(),
+          photoPostPaginationData: PaginationData(),
         )) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);

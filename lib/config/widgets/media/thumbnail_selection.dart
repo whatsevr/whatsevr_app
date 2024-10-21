@@ -120,7 +120,7 @@ class _UiState extends State<_Ui> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: WhatsevrAppBar(
         title: 'Select Thumbnail',
         actions: <Widget>[
           IconButton(

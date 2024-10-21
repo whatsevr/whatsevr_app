@@ -49,7 +49,7 @@ class ProfileUpdatePage extends StatelessWidget {
         builder: (BuildContext context) {
           return Scaffold(
             backgroundColor: Colors.blueGrey[50],
-            appBar: const CustomAppBar(
+            appBar: const WhatsevrAppBar(
               title: 'Update Profile',
               showAiAction: true,
             ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/widgets/ai_button.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? showInfo;
   final List<Widget>? actions;
   final Widget? leading;
   final Color? backgroundColor;
   final bool showAiAction;
-  const CustomAppBar({
+  const WhatsevrAppBar({
     super.key,
     required this.title,
     this.showInfo,

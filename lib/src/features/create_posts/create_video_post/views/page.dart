@@ -51,7 +51,7 @@ class CreateVideoPostPage extends StatelessWidget {
     return BlocBuilder<CreateVideoPostBloc, CreateVideoPostState>(
       builder: (BuildContext context, CreateVideoPostState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Create Video Post',
             showAiAction: true,
             showInfo: () {

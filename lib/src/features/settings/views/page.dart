@@ -1,10 +1,13 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -12,7 +15,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: const WhatsevrAppBar(
         title: 'Settings',
       ),
       body: PadHorizontal(
@@ -34,12 +37,18 @@ class SettingsPage extends StatelessWidget {
                 builder: (BuildContext context) {
                   List<Widget> children = <Widget>[
                     //create community
-                    const Column(
-                      children: <CircleAvatar>[
-                        CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.add),
-                        ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              AppNavigationService.newRoute(
+                                  RoutesName.newCommunity,
+                                  extras: NewCommunityPageArgument());
+                            },
+                            child: CircleAvatar(
+                              radius: 30,
+                              child: Icon(Icons.add),
+                            )),
                       ],
                     ),
                     for (int i = 0; i < 15; i++)

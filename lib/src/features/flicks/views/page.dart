@@ -159,7 +159,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                       ),
                                       Gap(8),
                                       //follow
-                                      TwoStateWidget(
+                                      WhatsevrTwoStateUi(
                                         firstStateUi: AbsorbPointer(
                                           child: WhatsevrButton.outlined(
                                             miniButton: true,

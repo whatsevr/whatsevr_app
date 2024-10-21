@@ -25,7 +25,7 @@ class ImageEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Image'),
+      appBar: const WhatsevrAppBar(title: 'Edit Image'),
       body: ProImageEditor.file(
         pageArgument.imageFileToEdit,
         callbacks: ProImageEditorCallbacks(

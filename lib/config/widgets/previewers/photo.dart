@@ -35,7 +35,7 @@ class _Ui extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: title ?? 'Pdf'),
+      appBar: WhatsevrAppBar(title: title ?? 'Pdf'),
       body: Center(
         child: ExtendedImage.network(
           url,

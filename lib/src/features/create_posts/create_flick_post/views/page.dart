@@ -50,7 +50,7 @@ class CreateFlickPostPage extends StatelessWidget {
     return BlocBuilder<CreateFlickPostBloc, CreateFlickPostState>(
       builder: (BuildContext context, CreateFlickPostState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Create Flick',
             showAiAction: true,
             showInfo: () {

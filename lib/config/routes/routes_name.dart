@@ -8,7 +8,7 @@ class RoutesName {
   static const String accountSearch = 'account-search';
   static const String account = 'account';
   static const String community = 'community';
-  static const String settings = 'settings';
+
   static const String wtvDetails = 'wtv-details';
   static const String createVideoPost = 'create-video-post';
   static const String createFlick = 'create-flick';
@@ -19,8 +19,10 @@ class RoutesName {
   static const String updateProfile = 'update-profile';
 
   static const String videoEditor = 'video-editor';
-
   static const String cameraView = 'camera-view';
   static const String imageEditor = 'image-editor';
   static const String imageCropper = 'image-cropper';
+
+  static const String settings = 'settings';
+  static const String newCommunity = 'new-community';
 }

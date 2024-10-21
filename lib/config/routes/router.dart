@@ -13,6 +13,7 @@ import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
+import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 
 import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
@@ -268,6 +269,17 @@ class AppNavigationService {
               ImageCropperPageArgument pageArgument =
                   state.extra as ImageCropperPageArgument;
               return ImageCropperPage(
+                pageArgument: pageArgument,
+              );
+            },
+          ),
+          GoRoute(
+            name: RoutesName.newCommunity,
+            path: RoutesName.newCommunity,
+            builder: (BuildContext context, GoRouterState state) {
+              NewCommunityPageArgument pageArgument =
+                  state.extra as NewCommunityPageArgument;
+              return NewCommunityPage(
                 pageArgument: pageArgument,
               );
             },

@@ -6,9 +6,9 @@ class PaginationData extends Equatable {
   final bool noMoreData;
 
   const PaginationData({
-    required this.currentPage,
-    required this.isLoading,
-    required this.noMoreData,
+    this.currentPage = 1,
+    this.isLoading = false,
+    this.noMoreData = false,
   });
 
   @override

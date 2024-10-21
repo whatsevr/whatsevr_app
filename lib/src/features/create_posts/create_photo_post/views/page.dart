@@ -54,7 +54,7 @@ class CreatePhotoPostPage extends StatelessWidget {
     return BlocBuilder<CreatePhotoPostBloc, CreatePhotoPostState>(
       builder: (BuildContext context, CreatePhotoPostState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Create Photo Post',
             showAiAction: true,
             showInfo: () {

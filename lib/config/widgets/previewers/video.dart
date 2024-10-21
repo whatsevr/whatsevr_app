@@ -125,7 +125,7 @@ class __VideoPreviewerState extends State<_VideoPreviewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: CustomAppBar(title: 'Video Preview'),
+      appBar: WhatsevrAppBar(title: 'Video Preview'),
       body: Center(
         child: _controller.value.isInitialized
             ? Stack(

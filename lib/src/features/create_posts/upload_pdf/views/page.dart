@@ -52,7 +52,7 @@ class UploadPdfPage extends StatelessWidget {
     return BlocBuilder<UploadPdfBloc, UploadPdfState>(
       builder: (BuildContext context, UploadPdfState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Upload Pdf Doc',
             showAiAction: true,
             showInfo: () {

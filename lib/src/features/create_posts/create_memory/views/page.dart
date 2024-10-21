@@ -57,7 +57,7 @@ class CreateMemoryPage extends StatelessWidget {
     return BlocBuilder<CreateMemoryBloc, CreateMemoryState>(
       builder: (BuildContext context, CreateMemoryState state) {
         return Scaffold(
-          appBar: CustomAppBar(
+          appBar: WhatsevrAppBar(
             title: 'Create Memory',
             showAiAction: true,
             showInfo: () {

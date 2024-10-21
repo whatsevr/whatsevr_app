@@ -189,7 +189,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                         ? ''
                         : formatCountToKMBTQ(shares) ?? ''),
                     const Spacer(),
-                    const TwoStateWidget(
+                    const WhatsevrTwoStateUi(
                       firstStateUi: Iconify(Ph.bookmark_simple_thin),
                       secondStateUi: Iconify(Ph.bookmark_fill),
                     ),
