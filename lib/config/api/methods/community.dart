@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
 
 import '../external/models/business_validation_exception.dart';
 
@@ -11,11 +13,43 @@ class CommunityApi {
     int pageSize = 20,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
-          '/v1/top-communities',
+      Response response = await ApiClient.client.get('/v1/top-communities',
           queryParameters: {'page': page, 'page_size': pageSize});
       if (response.data != null) {
         return TopCommunitiesResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> createCommunity({
+    required CreateCommunityRequest post,
+  }) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/create-community',
+        data: post.toMap(),
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserCommunitiesResponse?> getUserCommunities({
+    required String userUid,
+  }) async {
+    try {
+      Response response = await ApiClient.client.get(
+        '/v1/user-communities',
+        queryParameters: <String, dynamic>{'user_uid': userUid},
+      );
+      if (response.data != null) {
+        return UserCommunitiesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

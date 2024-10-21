@@ -167,6 +167,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
               : null,
         ),
       );
+
       if (response != null) {
         SmartDialog.dismiss();
         SmartDialog.showToast('${response.$1}');

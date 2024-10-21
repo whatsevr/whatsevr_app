@@ -27,6 +27,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
@@ -349,6 +350,7 @@ class AccountPage extends StatelessWidget {
                                       onPressed: () {
                                         AppNavigationService.newRoute(
                                           RoutesName.settings,
+                                          extras: SettingsPageArgument(),
                                         );
                                       },
                                     ),

@@ -12,7 +12,7 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
           options: CacheOptions(
             store: HiveCacheStore(
               cacheDirectoryPath,
-              hiveBoxName: 'api_cache_747',
+              hiveBoxName: 'api_cache_4365',
             ),
             policy: CachePolicy.request,
             hitCacheOnErrorExcept: <int>[

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
@@ -17,9 +18,9 @@ class ExplorePageOffersPage extends StatelessWidget {
   final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
-    scrollController?.addListener(() {
-      if (scrollController?.position.pixels ==
-          scrollController?.position.maxScrollExtent) {
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
         context.read<ExploreBloc>().add(LoadMoreOffersEvent(
               page: context
                       .read<ExploreBloc>()
@@ -28,8 +29,9 @@ class ExplorePageOffersPage extends StatelessWidget {
                       .currentPage +
                   1,
             ));
-      }
-    });
+      },
+    );
+
     return BlocSelector<ExploreBloc, ExploreState, List<RecommendedOffer>?>(
       selector: (ExploreState state) => state.recommendationOffers,
       builder: (BuildContext context, List<RecommendedOffer>? data) {

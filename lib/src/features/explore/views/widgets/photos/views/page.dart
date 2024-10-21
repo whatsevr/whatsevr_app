@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
@@ -17,9 +18,9 @@ class ExplorePagePhotosPage extends StatelessWidget {
   final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
-    scrollController?.addListener(() {
-      if (scrollController?.position.pixels ==
-          scrollController?.position.maxScrollExtent) {
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
         context.read<ExploreBloc>().add(LoadMorePhotoPostsEvent(
               page: context
                       .read<ExploreBloc>()
@@ -28,8 +29,9 @@ class ExplorePagePhotosPage extends StatelessWidget {
                       .currentPage +
                   1,
             ));
-      }
-    });
+      },
+    );
+
     return BlocSelector<ExploreBloc, ExploreState, List<RecommendedPhotoPost>?>(
       selector: (ExploreState state) => state.recommendationPhotoPosts,
       builder: (BuildContext context, List<RecommendedPhotoPost>? data) {

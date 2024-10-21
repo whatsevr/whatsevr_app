@@ -1,13 +1,40 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(SettingsInitial()) {
-    on<SettingsEvent>((SettingsEvent event, Emitter<SettingsState> emit) {
-      // TODO: implement event handler
-    });
+  SettingsBloc() : super(SettingsState()) {
+    on<InitialEvent>(_onInitialEvent);
+    on<LoadUserCommunitiesEvent>(_onLoadUserCommunitiesEvent);
+  }
+
+  FutureOr<void> _onInitialEvent(
+      InitialEvent event, Emitter<SettingsState> emit) async {
+    try {
+      add(LoadUserCommunitiesEvent());
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadUserCommunitiesEvent(
+      LoadUserCommunitiesEvent event, Emitter<SettingsState> emit) async {
+    try {
+      UserCommunitiesResponse? userCommunitiesResponse =
+          await CommunityApi.getUserCommunities(
+              userUid: (await AuthUserDb.getLastLoggedUserUid())!);
+
+      emit(state.copyWith(userCommunitiesResponse: userCommunitiesResponse));
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
   }
 }

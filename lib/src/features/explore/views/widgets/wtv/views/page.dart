@@ -6,6 +6,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
@@ -21,9 +22,9 @@ class ExplorePageWtvPage extends StatelessWidget {
   final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
-    scrollController?.addListener(() {
-      if (scrollController?.position.pixels ==
-          scrollController?.position.maxScrollExtent) {
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
         context.read<ExploreBloc>().add(LoadMoreVideosEvent(
               page: context
                       .read<ExploreBloc>()
@@ -32,8 +33,9 @@ class ExplorePageWtvPage extends StatelessWidget {
                       .currentPage +
                   1,
             ));
-      }
-    });
+      },
+    );
+
     return BlocSelector<ExploreBloc, ExploreState, List<RecommendedVideo>?>(
       selector: (ExploreState state) => state.recommendationVideos,
       builder: (BuildContext context, List<RecommendedVideo>? data) {

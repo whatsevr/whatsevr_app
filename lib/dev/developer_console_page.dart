@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:username_generator/username_generator.dart';
 import 'package:whatsevr_app/config/widgets/slider.dart';
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
 import '../config/widgets/dynamic_height_views.dart';
+import '../utils/username.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -36,19 +38,12 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 );
               }
             ),
-            ('Cloudinary Video', () async {}),
-            ('Story Editor', () async {}),
+            ('Test', () async {}),
           ])
             TextButton(
               onPressed: itm.$2,
               child: Text(itm.$1),
             ),
-          WhatsevrVideoPlayerSlider(
-            value: 0.5,
-            min: 0,
-            max: 1,
-            onChanged: (value) {},
-          ),
         ],
       ),
     );

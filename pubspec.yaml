@@ -97,6 +97,9 @@ dependencies:
   flutter_cached_pdfview: ^0.4.2
   flutter_advanced_avatar: ^1.5.0
   screen_brightness: ^2.0.0+2
+  username_generator:
+    git:
+      url: https://github.com/whatsevr/username_generator.dart.git
 
 
 

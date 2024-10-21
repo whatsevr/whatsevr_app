@@ -138,7 +138,11 @@ class AppNavigationService {
             name: RoutesName.settings,
             path: RoutesName.settings,
             builder: (BuildContext context, GoRouterState state) {
-              return const SettingsPage();
+              SettingsPageArgument settingsPageArgument =
+                  state.extra as SettingsPageArgument;
+              return SettingsPage(
+                pageArgument: settingsPageArgument,
+              );
             },
           ),
           GoRoute(

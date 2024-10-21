@@ -1,6 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
@@ -8,12 +12,26 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/src/features/new_community/views/page.dart';
+import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart';
+part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
+
+class SettingsPageArgument {
+  const SettingsPageArgument();
+}
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  final SettingsPageArgument pageArgument;
+  const SettingsPage({super.key, required this.pageArgument});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (BuildContext context) => SettingsBloc()..add(InitialEvent()),
+      child: buildPage(context),
+    );
+  }
+
+  Widget buildPage(BuildContext context) {
     return Scaffold(
       appBar: const WhatsevrAppBar(
         title: 'Settings',
@@ -22,62 +40,7 @@ class SettingsPage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             const Gap(8),
-            //stories with name and image
-            const Text(
-              'Your communities',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(8),
-            SizedBox(
-              height: 100,
-              child: Builder(
-                builder: (BuildContext context) {
-                  List<Widget> children = <Widget>[
-                    //create community
-                    Column(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              AppNavigationService.newRoute(
-                                  RoutesName.newCommunity,
-                                  extras: NewCommunityPageArgument());
-                            },
-                            child: CircleAvatar(
-                              radius: 30,
-                              child: Icon(Icons.add),
-                            )),
-                      ],
-                    ),
-                    for (int i = 0; i < 15; i++)
-                      Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: ExtendedNetworkImageProvider(
-                              MockData.randomImageAvatar(),
-                            ),
-                            radius: 30,
-                          ),
-                          const Gap(8),
-                          Text('Group $i'),
-                        ],
-                      ),
-                  ];
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return children[index];
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Gap(8);
-                    },
-                    itemCount: children.length,
-                  );
-                },
-              ),
-            ),
+            _YourCommunities(),
             const Gap(8),
             Container(
               padding: const EdgeInsets.all(16),

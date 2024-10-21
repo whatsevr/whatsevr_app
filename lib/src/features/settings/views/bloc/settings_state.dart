@@ -1,10 +1,17 @@
 part of 'settings_bloc.dart';
 
-sealed class SettingsState extends Equatable {
-  const SettingsState();
-}
-
-final class SettingsInitial extends SettingsState {
+class SettingsState extends Equatable {
+  final UserCommunitiesResponse? userCommunitiesResponse;
+  const SettingsState({this.userCommunitiesResponse});
   @override
-  List<Object> get props => <Object>[];
+  List<Object?> get props => <Object?>[userCommunitiesResponse];
+
+  SettingsState copyWith({
+    UserCommunitiesResponse? userCommunitiesResponse,
+  }) {
+    return SettingsState(
+      userCommunitiesResponse:
+          userCommunitiesResponse ?? this.userCommunitiesResponse,
+    );
+  }
 }

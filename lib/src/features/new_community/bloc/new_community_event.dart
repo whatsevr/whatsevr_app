@@ -25,3 +25,18 @@ class LoadMoreTopCommunitiesEvent extends NewCommunityEvent {
   @override
   List<Object?> get props => [page];
 }
+
+class ChangeApproveJoiningRequestEvent extends NewCommunityEvent {
+  const ChangeApproveJoiningRequestEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class CreateCommunityEvent extends NewCommunityEvent {
+  final Function onCompleted;
+  const CreateCommunityEvent({required this.onCompleted});
+
+  @override
+  List<Object?> get props => [onCompleted];
+}

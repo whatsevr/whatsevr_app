@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -19,9 +20,9 @@ class ExplorePageMemoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    scrollController?.addListener(() {
-      if (scrollController?.position.pixels ==
-          scrollController?.position.maxScrollExtent) {
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
         context.read<ExploreBloc>().add(LoadMoreMemoriesEvent(
               page: context
                       .read<ExploreBloc>()
@@ -30,8 +31,9 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                       .currentPage +
                   1,
             ));
-      }
-    });
+      },
+    );
+
     return PadHorizontal(
       child: BlocSelector<ExploreBloc, ExploreState, List<RecommendedMemory>?>(
         selector: (ExploreState state) => state.recommendationMemories,

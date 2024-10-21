@@ -2,16 +2,25 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/src/features/new_community/views/page.dart';
+import 'package:whatsevr_app/utils/username.dart';
 
 part 'new_community_event.dart';
 part 'new_community_state.dart';
 
 class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
+  final TextEditingController communityNameController = TextEditingController();
+  final TextEditingController communityStatusController =
+      TextEditingController();
   NewCommunityBloc()
       : super(NewCommunityState(
           topCommunities: const [],
@@ -20,6 +29,8 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
     on<NewCommunityInitialEvent>(_onInitialEvent);
     on<LoadTopCommunitiesEvent>(_loadTopCommunities);
     on<LoadMoreTopCommunitiesEvent>(_loadMoreTopCommunities);
+    on<ChangeApproveJoiningRequestEvent>(_changeApproveJoiningRequest);
+    on<CreateCommunityEvent>(_createCommunity);
   }
 
   FutureOr<void> _onInitialEvent(
@@ -73,6 +84,50 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
           isLoading: false,
         ),
       ));
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _changeApproveJoiningRequest(
+      ChangeApproveJoiningRequestEvent event, Emitter<NewCommunityState> emit) {
+    emit(state.copyWith(
+        approveJoiningRequest: !(state.approveJoiningRequest ?? false)));
+  }
+
+  FutureOr<void> _createCommunity(
+      CreateCommunityEvent event, Emitter<NewCommunityState> emit) async {
+    try {
+      if (communityNameController.text.isEmpty) {
+        throw BusinessException('Community name is required');
+      }
+      if (communityStatusController.text.isEmpty) {
+        throw BusinessException('Community status is required');
+      }
+      if (state.approveJoiningRequest == null) {
+        throw BusinessException('Approve joining request is required');
+      }
+      SmartDialog.showLoading(msg: 'Creating community...');
+      final (String? message, int? statusCode)? response =
+          await CommunityApi.createCommunity(
+        post: CreateCommunityRequest(
+          title: communityNameController.text,
+          status: communityStatusController.text,
+          adminUserUid: await AuthUserDb.getLastLoggedUserUid(),
+          requireJoiningApproval: state.approveJoiningRequest!,
+          username:
+              getAUniqueUserName(communityNameController.text, 'community'),
+        ),
+      );
+      if (response?.$2 != 200) {
+        throw BusinessException(response?.$1 ?? 'Failed to create community');
+      }
+      communityNameController.clear();
+      communityStatusController.clear();
+      emit(state.copyWith(approveJoiningRequest: false));
+      SmartDialog.dismiss();
+      SmartDialog.showToast('${response?.$1}');
+      event.onCompleted.call();
+    } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
