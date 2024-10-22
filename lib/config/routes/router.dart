@@ -82,7 +82,7 @@ class AppNavigationService {
 
   static final GoRouter _router = GoRouter(
     navigatorKey: _navigatorKey,
-    initialLocation: RoutesName.auth,
+    initialLocation: RoutesName.splashAuth,
     debugLogDiagnostics: true,
     observers: <NavigatorObserver>[
       NavigationObserver(),
@@ -92,15 +92,12 @@ class AppNavigationService {
     ],
     routes: <RouteBase>[
       GoRoute(
-        path: RoutesName.splash,
+        path: RoutesName.splashAuth,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SplashPage();
+        },
         routes: <RouteBase>[
           if (kTestingMode) ...getDevRoutes(),
-          GoRoute(
-            path: RoutesName.auth,
-            builder: (BuildContext context, GoRouterState state) {
-              return const SplashPage();
-            },
-          ),
           GoRoute(
             name: RoutesName.dashboard,
             path: RoutesName.dashboard,

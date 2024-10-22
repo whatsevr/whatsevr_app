@@ -65,7 +65,7 @@ class AuthUserService {
     if (newUserUid == null) return false;
     if (await setCurrentUser(newUserUid) == true) {
       await AuthUserDb.saveLastLoggedUserId(newUserUid);
-      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
     } else {
       TalkerService.instance.error('Failed to switch user to $newUserUid');
       return false;
@@ -80,7 +80,7 @@ class AuthUserService {
     await AuthUserDb.clearLastLoggedUserId();
 
     if (restartApp) {
-      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
     }
   }
 
@@ -91,7 +91,7 @@ class AuthUserService {
     await AuthUserDb.clearAllAuthData();
 
     if (restartApp) {
-      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
     }
   }
 }
