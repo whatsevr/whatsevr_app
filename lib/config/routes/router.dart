@@ -43,7 +43,7 @@ class AppNavigationService {
     String routeName, {
     Object? extras,
   }) async {
-    return await _router.pushNamed(
+    return await _router.push(
       routeName,
       extra: extras,
     );
@@ -82,7 +82,7 @@ class AppNavigationService {
 
   static final GoRouter _router = GoRouter(
     navigatorKey: _navigatorKey,
-    initialLocation: RoutesName.splashAuth,
+    initialLocation: RoutesName.auth,
     debugLogDiagnostics: true,
     observers: <NavigatorObserver>[
       NavigationObserver(),
@@ -91,204 +91,184 @@ class AppNavigationService {
       TalkerService.takerRouteObserver(),
     ],
     routes: <RouteBase>[
+      if (kTestingMode) ...getDevRoutes(),
       GoRoute(
-        path: RoutesName.splashAuth,
+        path: RoutesName.auth,
         builder: (BuildContext context, GoRouterState state) {
           return const SplashPage();
         },
-        routes: <RouteBase>[
-          if (kTestingMode) ...getDevRoutes(),
-          GoRoute(
-            name: RoutesName.dashboard,
-            path: RoutesName.dashboard,
-            builder: (BuildContext context, GoRouterState state) {
-              return const DashboardPage();
-            },
-          ),
-          GoRoute(
-            name: RoutesName.accountSearch,
-            path: RoutesName.accountSearch,
-            builder: (BuildContext context, GoRouterState state) {
-              AccountSearchPage? accountSearchPage =
-                  state.extra as AccountSearchPage?;
-              return AccountSearchPage(
-                hintTexts: accountSearchPage?.hintTexts,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.account,
-            path: RoutesName.account,
-            builder: (BuildContext context, GoRouterState state) {
-              AccountPageArgument accountPageArgument =
-                  state.extra as AccountPageArgument;
-              return AccountPage(
-                pageArgument: accountPageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.community,
-            path: RoutesName.community,
-            builder: (BuildContext context, GoRouterState state) {
-              return CommunityPage();
-            },
-          ),
-          GoRoute(
-            name: RoutesName.settings,
-            path: RoutesName.settings,
-            builder: (BuildContext context, GoRouterState state) {
-              SettingsPageArgument settingsPageArgument =
-                  state.extra as SettingsPageArgument;
-              return SettingsPage(
-                pageArgument: settingsPageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.wtvDetails,
-            path: RoutesName.wtvDetails,
-            builder: (BuildContext context, GoRouterState state) {
-              WtvDetailsPageArgument pageArgument =
-                  state.extra as WtvDetailsPageArgument;
-              return WtvDetailsPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.createVideoPost,
-            path: RoutesName.createVideoPost,
-            builder: (BuildContext context, GoRouterState state) {
-              CreateVideoPostPageArgument pageArgument =
-                  state.extra as CreateVideoPostPageArgument;
-              return CreateVideoPostPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.createFlick,
-            path: RoutesName.createFlick,
-            builder: (BuildContext context, GoRouterState state) {
-              CreateFlickPostPageArgument pageArgument =
-                  state.extra as CreateFlickPostPageArgument;
-              return CreateFlickPostPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.createMemory,
-            path: RoutesName.createMemory,
-            builder: (BuildContext context, GoRouterState state) {
-              CreateMemoryPageArgument pageArgument =
-                  state.extra as CreateMemoryPageArgument;
-              return CreateMemoryPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.createOffer,
-            path: RoutesName.createOffer,
-            builder: (BuildContext context, GoRouterState state) {
-              CreateOfferPageArgument pageArgument =
-                  state.extra as CreateOfferPageArgument;
-              return CreateOfferPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.createPhotoPost,
-            path: RoutesName.createPhotoPost,
-            builder: (BuildContext context, GoRouterState state) {
-              CreatePhotoPostPageArgument pageArgument =
-                  state.extra as CreatePhotoPostPageArgument;
-              return CreatePhotoPostPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.uploadPdf,
-            path: RoutesName.uploadPdf,
-            builder: (BuildContext context, GoRouterState state) {
-              UploadPdfPageArgument pageArgument =
-                  state.extra as UploadPdfPageArgument;
-              return UploadPdfPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.updateProfile,
-            path: RoutesName.updateProfile,
-            builder: (BuildContext context, GoRouterState state) {
-              ProfileUpdatePageArgument pageArgument =
-                  state.extra as ProfileUpdatePageArgument;
-              return ProfileUpdatePage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.cameraView,
-            path: RoutesName.cameraView,
-            builder: (BuildContext context, GoRouterState state) {
-              CameraViewPageArgument pageArgument =
-                  state.extra as CameraViewPageArgument;
-              return CameraViewPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.videoEditor,
-            path: RoutesName.videoEditor,
-            builder: (BuildContext context, GoRouterState state) {
-              VideoEditorPageArgument pageArgument =
-                  state.extra as VideoEditorPageArgument;
-              return VideoEditorPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.imageEditor,
-            path: RoutesName.imageEditor,
-            builder: (BuildContext context, GoRouterState state) {
-              ImageEditorPageArgument pageArgument =
-                  state.extra as ImageEditorPageArgument;
-              return ImageEditorPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.imageCropper,
-            path: RoutesName.imageCropper,
-            builder: (BuildContext context, GoRouterState state) {
-              ImageCropperPageArgument pageArgument =
-                  state.extra as ImageCropperPageArgument;
-              return ImageCropperPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-          GoRoute(
-            name: RoutesName.newCommunity,
-            path: RoutesName.newCommunity,
-            builder: (BuildContext context, GoRouterState state) {
-              NewCommunityPageArgument pageArgument =
-                  state.extra as NewCommunityPageArgument;
-              return NewCommunityPage(
-                pageArgument: pageArgument,
-              );
-            },
-          ),
-        ],
+      ),
+      GoRoute(
+        path: RoutesName.dashboard,
+        builder: (BuildContext context, GoRouterState state) {
+          return const DashboardPage();
+        },
+      ),
+      GoRoute(
+        path: RoutesName.accountSearch,
+        builder: (BuildContext context, GoRouterState state) {
+          AccountSearchPage? accountSearchPage =
+              state.extra as AccountSearchPage?;
+          return AccountSearchPage(
+            hintTexts: accountSearchPage?.hintTexts,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.account,
+        builder: (BuildContext context, GoRouterState state) {
+          AccountPageArgument accountPageArgument =
+              state.extra as AccountPageArgument;
+          return AccountPage(
+            pageArgument: accountPageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.community,
+        builder: (BuildContext context, GoRouterState state) {
+          return CommunityPage();
+        },
+      ),
+      GoRoute(
+        path: RoutesName.settings,
+        builder: (BuildContext context, GoRouterState state) {
+          SettingsPageArgument settingsPageArgument =
+              state.extra as SettingsPageArgument;
+          return SettingsPage(
+            pageArgument: settingsPageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.wtvDetails,
+        builder: (BuildContext context, GoRouterState state) {
+          WtvDetailsPageArgument pageArgument =
+              state.extra as WtvDetailsPageArgument;
+          return WtvDetailsPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.createVideoPost,
+        builder: (BuildContext context, GoRouterState state) {
+          CreateVideoPostPageArgument pageArgument =
+              state.extra as CreateVideoPostPageArgument;
+          return CreateVideoPostPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.createFlick,
+        builder: (BuildContext context, GoRouterState state) {
+          CreateFlickPostPageArgument pageArgument =
+              state.extra as CreateFlickPostPageArgument;
+          return CreateFlickPostPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.createMemory,
+        builder: (BuildContext context, GoRouterState state) {
+          CreateMemoryPageArgument pageArgument =
+              state.extra as CreateMemoryPageArgument;
+          return CreateMemoryPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.createOffer,
+        builder: (BuildContext context, GoRouterState state) {
+          CreateOfferPageArgument pageArgument =
+              state.extra as CreateOfferPageArgument;
+          return CreateOfferPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.createPhotoPost,
+        builder: (BuildContext context, GoRouterState state) {
+          CreatePhotoPostPageArgument pageArgument =
+              state.extra as CreatePhotoPostPageArgument;
+          return CreatePhotoPostPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.uploadPdf,
+        builder: (BuildContext context, GoRouterState state) {
+          UploadPdfPageArgument pageArgument =
+              state.extra as UploadPdfPageArgument;
+          return UploadPdfPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.updateProfile,
+        builder: (BuildContext context, GoRouterState state) {
+          ProfileUpdatePageArgument pageArgument =
+              state.extra as ProfileUpdatePageArgument;
+          return ProfileUpdatePage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.cameraView,
+        builder: (BuildContext context, GoRouterState state) {
+          CameraViewPageArgument pageArgument =
+              state.extra as CameraViewPageArgument;
+          return CameraViewPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.videoEditor,
+        builder: (BuildContext context, GoRouterState state) {
+          VideoEditorPageArgument pageArgument =
+              state.extra as VideoEditorPageArgument;
+          return VideoEditorPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.imageEditor,
+        builder: (BuildContext context, GoRouterState state) {
+          ImageEditorPageArgument pageArgument =
+              state.extra as ImageEditorPageArgument;
+          return ImageEditorPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.imageCropper,
+        builder: (BuildContext context, GoRouterState state) {
+          ImageCropperPageArgument pageArgument =
+              state.extra as ImageCropperPageArgument;
+          return ImageCropperPage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.newCommunity,
+        builder: (BuildContext context, GoRouterState state) {
+          NewCommunityPageArgument pageArgument =
+              state.extra as NewCommunityPageArgument;
+          return NewCommunityPage(
+            pageArgument: pageArgument,
+          );
+        },
       ),
     ],
   );
