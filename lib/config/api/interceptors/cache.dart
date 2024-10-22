@@ -28,9 +28,4 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
             allowPostMethod: cachePostRequest ?? false,
           ),
         );
-
-  static Future<void> clearCache() async {
-    Box cacheDb = Hive.box(cacheDbName);
-    await cacheDb.clear();
-  }
 }

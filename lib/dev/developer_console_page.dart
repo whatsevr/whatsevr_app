@@ -146,9 +146,6 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           for (String? userUid
               in AuthUserService.currentUser?.allAuthUserUids ?? <String>[])
             ListTile(
-              leading: Text(
-                  '${(AuthUserService.currentUser?.allAuthUserUids?.indexOf(userUid) ?? 0) + 1}',
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
               title: Text(userUid ?? 'Unknown',
                   style: TextStyle(color: Colors.white, fontSize: 12)),
             ),

@@ -11,6 +11,7 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/switch_user_dialog.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
@@ -119,18 +120,7 @@ class _DashboardPageBottomNavigationBarState
               );
         },
         () {
-          showAppModalSheet(
-              draggableScrollable: false,
-              child: Column(
-                children: [
-                  WhatsevrButton.filled(
-                    label: 'Logout From All Account',
-                    onPressed: () {
-                      AuthUserService.logOutCurrentUser(restartApp: true);
-                    },
-                  ),
-                ],
-              ));
+          showSwitchUserDialog();
         },
       ),
     ];
