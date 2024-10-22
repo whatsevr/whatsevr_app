@@ -18,6 +18,7 @@ import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
+import 'config/services/device_info.dart';
 import 'config/services/long_running_task/controller.dart';
 import 'config/services/notification.dart';
 import 'firebase_options.dart';
@@ -36,12 +37,14 @@ Future<void> main() async {
         catchUnhandledExceptions(error, stack);
         return true;
       };
+      TalkerService.init();
+      DeviceInfoService.setDeviceInfo();
       WakelockPlus.enable();
       await AuthUserDb.initDB();
       await ApiClient.init();
       FileUploadService.init();
       DownloadService.init();
-      TalkerService.init();
+
       FlutterForegroundTask.initCommunicationPort();
       runApp(const WhatsevrApp());
       afterRunAppServices();
