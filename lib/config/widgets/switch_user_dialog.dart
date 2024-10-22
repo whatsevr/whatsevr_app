@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 
 void showSwitchUserDialog() {
@@ -30,37 +33,27 @@ class _UiState extends State<_Ui> {
   void fetchOtherUsers() async {
     List<String>? allAuthUserUids =
         AuthUserService.currentUser?.allAuthUserUids;
-    // allAuthUserUids?.remove(AuthUserService.currentUser?.userUid);
+
     if (allAuthUserUids?.isEmpty ?? true) return;
+    allAuthUserUids = allAuthUserUids?.toSet().toList();
     multipleUserDetailsResponse =
         await UsersApi.getMultipleUserDetails(userUids: allAuthUserUids!);
+    multipleUserDetailsResponse?.users?.sort((a, b) {
+      if (a.totalFollowers == null || b.totalFollowers == null) return 0;
+      return b.totalFollowers!.compareTo(a.totalFollowers!);
+    });
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    CurrentUser? currentUser = AuthUserService.currentUser;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return ContentMask(
+      showMask: multipleUserDetailsResponse == null,
+      customMask: WhatsevrLoadingIndicator(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (currentUser != null)
-            ListTile(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              leading: CircleAvatar(
-                backgroundImage: ExtendedNetworkImageProvider(
-                    currentUser.profilePictureUrl ?? ''),
-              ),
-              title: Text(currentUser.userName ?? 'Unknown User'),
-              subtitle: Text('Current User'),
-            ),
           if (multipleUserDetailsResponse?.users?.isNotEmpty ?? false) ...[
-            const Gap(16),
-            const Divider(),
-            const Gap(16),
             for (User user in multipleUserDetailsResponse?.users ?? [])
               ListTile(
                 onTap: () async {
@@ -68,18 +61,27 @@ class _UiState extends State<_Ui> {
                   await AuthUserService.switchUser(user.uid);
                 },
                 leading: CircleAvatar(
-                  backgroundImage:
-                      ExtendedNetworkImageProvider(user.profilePicture ?? ''),
+                  backgroundImage: ExtendedNetworkImageProvider(
+                      user.profilePicture ?? MockData.blankProfileAvatar),
                 ),
                 title: Text(user.username ?? 'Unknown User'),
                 subtitle: Text('${user.totalFollowers} Followers'),
+                trailing: user.uid == AuthUserService.currentUser?.userUid
+                    ? const Icon(Icons.check_circle, color: Colors.black)
+                    : null,
               ),
           ],
           const Gap(16),
-          WhatsevrButton.filled(
+          WhatsevrButton.outlined(
             label: 'Logout From All Accounts',
             onPressed: () {
-              AuthUserService.logOutCurrentUser(restartApp: true);
+              AuthUserService.logOutAllUser(startFomBegin: true);
+            },
+          ),
+          WhatsevrButton.filled(
+            label: 'Add New Account',
+            onPressed: () {
+              AuthUserService.logOutCurrentUser(startFomBegin: true);
             },
           ),
         ],

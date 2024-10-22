@@ -131,11 +131,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                                           .currentProfileDetailsResponse
                                                           ?.userInfo
                                                           ?.profilePicture ??
-                                                      MockData.imageAvatar,
+                                                      MockData
+                                                          .blankProfileAvatar,
                                                   cache: true,
                                                 )
                                               : ExtendedNetworkImageProvider(
-                                                  MockData.imageAvatar,
+                                                  MockData.blankProfileAvatar,
                                                   cache: true,
                                                 ),
                                       fit: BoxFit.cover,

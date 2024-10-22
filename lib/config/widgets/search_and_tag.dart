@@ -96,7 +96,7 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      user?.profilePicture ?? MockData.imageAvatar),
+                      user?.profilePicture ?? MockData.blankProfileAvatar),
                 ),
                 title: Text(
                   '${user?.name}',
@@ -136,7 +136,7 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      community?.profilePicture ?? MockData.imageAvatar),
+                      community?.profilePicture ?? MockData.blankProfileAvatar),
                 ),
                 title: Text(
                   '${community?.title}',

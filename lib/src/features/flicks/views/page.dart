@@ -129,9 +129,9 @@ class _FlicksPageState extends State<FlicksPage> {
                                       CircleAvatar(
                                         radius: 30,
                                         backgroundImage:
-                                            ExtendedNetworkImageProvider(
-                                                flick?.user?.profilePicture ??
-                                                    MockData.imageAvatar),
+                                            ExtendedNetworkImageProvider(flick
+                                                    ?.user?.profilePicture ??
+                                                MockData.blankProfileAvatar),
                                       ),
                                       const SizedBox(width: 8),
                                       Expanded(
@@ -221,7 +221,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                             CircleAvatar(
                                               radius: 10,
                                               backgroundImage: NetworkImage(
-                                                  MockData.imageAvatar),
+                                                  MockData.blankProfileAvatar),
                                             ),
                                             const Gap(8),
                                             const Expanded(

@@ -77,14 +77,14 @@ class DraggableWidget extends StatefulWidget {
     super.key,
     this.horizontalSpace = 0,
     this.verticalSpace = 0,
-    this.initialPosition = AnchoringPosition.bottomRight,
+    this.initialPosition = AnchoringPosition.topRight,
     this.intialVisibility = true,
     this.bottomMargin = 70,
     this.topMargin = 24,
     this.statusBarHeight = 24,
     this.shadowBorderRadius = 10,
     this.dragController,
-    this.dragAnimationScale = 1.1,
+    this.dragAnimationScale = 0.6,
     this.touchDelay = Duration.zero,
     this.normalShadow = const BoxShadow(
       color: Colors.black38,
@@ -156,10 +156,12 @@ class _DraggableWidgetState extends State<DraggableWidget>
     animation = Tween<double>(
       begin: 0,
       end: 1,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
-    ),);
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     widget.dragController?._addState(this);
 
@@ -172,9 +174,11 @@ class _DraggableWidgetState extends State<DraggableWidget>
         });
       }
 
-      await Future.delayed(const Duration(
-        milliseconds: 100,
-      ),);
+      await Future.delayed(
+        const Duration(
+          milliseconds: 100,
+        ),
+      );
       setState(() {
         offstage = false;
         boundary = MediaQuery.of(context).size.height - widget.bottomMargin;

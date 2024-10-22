@@ -130,7 +130,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
             radius: 16.0,
             backgroundImage: ExtendedNetworkImageProvider(
               widget.uiMemoryGroups?[currentPageIndex].profilePicture ??
-                  MockData.imageAvatar,
+                  MockData.blankProfileAvatar,
               cache: true,
             ),
           ),

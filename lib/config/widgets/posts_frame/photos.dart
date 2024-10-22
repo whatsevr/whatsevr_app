@@ -156,7 +156,7 @@ class PhotosPostFrame extends StatelessWidget {
               children: <Widget>[
                 CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                    avatarUrl ?? MockData.imageAvatar,
+                    avatarUrl ?? MockData.blankProfileAvatar,
                     cache: true,
                   ),
                 ),

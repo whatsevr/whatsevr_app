@@ -46,7 +46,7 @@ class _YourCommunities extends StatelessWidget {
                             size: 62,
                             image: ExtendedNetworkImageProvider(
                               userCommunity?.profilePicture ??
-                                  MockData.imageAvatar,
+                                  MockData.blankProfileAvatar,
                             ),
                             children: [
                               Positioned(
@@ -100,7 +100,7 @@ class _YourCommunities extends StatelessWidget {
                           CircleAvatar(
                             backgroundImage: ExtendedNetworkImageProvider(
                               joinedCommunity?.profilePicture ??
-                                  MockData.imageAvatar,
+                                  MockData.blankProfileAvatar,
                             ),
                             radius: 30,
                           ),

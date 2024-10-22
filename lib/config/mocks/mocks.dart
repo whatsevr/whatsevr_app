@@ -11,7 +11,7 @@ class MockData {
     return url;
   }
 
-  static String get imageAvatar {
+  static String get blankProfileAvatar {
     return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/user.png';
   }
 

@@ -106,15 +106,11 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                     fontWeight: FontWeight.bold,
                     fontSize: 14)),
           ),
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: ExtendedNetworkImageProvider(
-              AuthUserService.currentUser?.profilePictureUrl ?? '',
-            ),
-          ),
-          const SizedBox(height: 8),
           for ((String, String) itm in <(String, String)>[
-            ('User Name', AuthUserService.currentUser?.userName ?? 'Unknown'),
+            (
+              'Mobile Number',
+              AuthUserService.currentUser?.mobileNumber ?? 'Unknown'
+            ),
             ('User UID', AuthUserService.currentUser?.userUid ?? 'Unknown'),
           ])
             ListTile(

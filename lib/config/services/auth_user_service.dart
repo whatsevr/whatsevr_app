@@ -10,21 +10,19 @@ import 'package:whatsevr_app/dev/talker.dart';
 
 class CurrentUser {
   final String userUid;
-  final String? userName;
-  final String? profilePictureUrl;
+  final String? mobileNumber;
+
   final List<String>? allAuthUserUids;
   CurrentUser({
     required this.userUid,
-    required this.userName,
-    required this.profilePictureUrl,
+    required this.mobileNumber,
     required this.allAuthUserUids,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'userUid': userUid,
-      'userName': userName,
-      'profilePictureUrl': profilePictureUrl,
+      'mobileNumber': mobileNumber,
       'allAuthUserUids': allAuthUserUids,
     };
   }
@@ -46,8 +44,7 @@ class AuthUserService {
     if (userInfo != null) {
       _currentUser = CurrentUser(
           userUid: userInfo.data!.uid!,
-          userName: userInfo.data?.username,
-          profilePictureUrl: userInfo.data?.profilePicture,
+          mobileNumber: userInfo.data?.mobileNumber,
           allAuthUserUids: [
             for (AuthServiceUserResponse? authUser
                 in (await AuthUserDb.getAllAuthorisedUser()) ?? [])
@@ -74,23 +71,23 @@ class AuthUserService {
   }
 
   static Future<void> logOutCurrentUser({
-    bool restartApp = false,
+    bool startFomBegin = false,
   }) async {
     _currentUser = null;
     await AuthUserDb.clearLastLoggedUserId();
 
-    if (restartApp) {
+    if (startFomBegin) {
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     }
   }
 
   static Future<void> logOutAllUser({
-    bool restartApp = false,
+    bool startFomBegin = false,
   }) async {
     _currentUser = null;
     await AuthUserDb.clearAllAuthData();
 
-    if (restartApp) {
+    if (startFomBegin) {
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     }
   }

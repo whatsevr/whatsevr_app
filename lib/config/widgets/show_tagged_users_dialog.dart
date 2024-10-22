@@ -75,7 +75,7 @@ class _UiState extends State<_Ui> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                          user.profilePicture ?? MockData.imageAvatar,
+                          user.profilePicture ?? MockData.blankProfileAvatar,
                         ),
                       ),
                       const Gap(8),

@@ -116,7 +116,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                               radius: 24.0,
                               backgroundImage: ExtendedNetworkImageProvider(
                                 data?[index].user?.profilePicture ??
-                                    MockData.imageAvatar,
+                                    MockData.blankProfileAvatar,
                                 cache: true,
                               ),
                             ),
