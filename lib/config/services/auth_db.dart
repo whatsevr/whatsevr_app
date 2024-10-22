@@ -18,47 +18,48 @@ class AuthUserDb {
   static const String _allLoggedUsers = 'all_logged_users';
 
   static Future<void> initDB() async {
-    String dbBoxName = 'logged-user-hive-boxs-5254325';
+    String dbBoxName = 'auth-user-hive-box-2546';
     await Hive.initFlutter();
     await Hive.openBox<dynamic>(dbBoxName);
     _authorisedCustomersBox = Hive.box(dbBoxName);
   }
 
   ///[saveAuthorisedUser]
-  static Future<void> saveAuthorisedUser(AuthServiceUserResponse? user) async {
-    if (user == null) return;
-    log('hiveDb.saveLoggedUser: ${user.toMap()}');
+  static Future<void> saveAuthorisedUser(
+      AuthServiceUserResponse? authServiceUserResponse) async {
+    if (authServiceUserResponse == null) return;
+    log('hiveDb.saveLoggedUser: ${authServiceUserResponse.toMap()}');
     List<dynamic> allLoggedUsers =
         await _authorisedCustomersBox.get(_allLoggedUsers) ?? <dynamic>[];
 
     int index = allLoggedUsers.indexWhere(
-      (element) => element['data']['userId'] == user.data!.userId,
+      (element) =>
+          element['data']['userId'] == authServiceUserResponse.data!.userId,
     );
     if (index != -1) {
-      allLoggedUsers[index] = user.toMap();
+      allLoggedUsers[index] = authServiceUserResponse.toMap();
     } else {
-      allLoggedUsers.add(user.toMap());
+      allLoggedUsers.add(authServiceUserResponse.toMap());
     }
     await _authorisedCustomersBox.put(_allLoggedUsers, allLoggedUsers);
-    await saveLastLoggedUserId(user);
   }
 
-  static Future<AuthServiceUserResponse?> getLastLoggedAuthorisedUser() async {
-    List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-    if (users == null) return null;
-    String? lastLoggedUserId = await getLastLoggedUserUid();
-    if (lastLoggedUserId == null) return null;
-    var user = users.firstWhereOrNull(
-      (element) => element['data']['userId'] == lastLoggedUserId,
-    );
-    if (user == null) return null;
-    return AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(user)));
-  }
+  // static Future<AuthServiceUserResponse?> getLastLoggedAuthorisedUser() async {
+  //   List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+  //   if (users == null) return null;
+  //   String? lastLoggedUserId = await getLastLoggedUserUid();
+  //   if (lastLoggedUserId == null) return null;
+  //   var user = users.firstWhereOrNull(
+  //     (element) => element['data']['userId'] == lastLoggedUserId,
+  //   );
+  //   if (user == null) return null;
+  //   return AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(user)));
+  // }
 
   static Future<List<AuthServiceUserResponse>?> getAllAuthorisedUser() async {
     try {
       List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-      if (users == null) throw BusinessException('No user found');
+      if (users == null) return null;
       return users
           .map(
               (e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
@@ -81,17 +82,15 @@ class AuthUserDb {
   }
 
   ///[saveLastLoggedUserId]
-  static Future<void> saveLastLoggedUserId(AuthServiceUserResponse user) async {
-    await _authorisedCustomersBox.put(_lastLoggedUserId, user.data!.userId);
+  static Future<void> saveLastLoggedUserId(String userUid) async {
+    await _authorisedCustomersBox.put(_lastLoggedUserId, userUid);
   }
 
   static Future<String?> getLastLoggedUserUid() async {
     try {
       String? lastLoggedUserId =
           await _authorisedCustomersBox.get(_lastLoggedUserId);
-      if (lastLoggedUserId == null) {
-        throw BusinessException('No user found');
-      }
+
       return lastLoggedUserId;
     } catch (e, s) {
       lowLevelCatch(e, s);

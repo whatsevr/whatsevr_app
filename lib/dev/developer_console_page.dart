@@ -1,12 +1,12 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:username_generator/username_generator.dart';
-import 'package:whatsevr_app/config/widgets/slider.dart';
+
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
 import '../config/services/device_info.dart';
-import '../config/widgets/dynamic_height_views.dart';
-import '../utils/username.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -26,52 +26,160 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Console'),
+        backgroundColor: Colors.red,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          ExpansionTile(
-            title: const Text('Device Info'),
-            children: [
-              for ((String, String) itm in <(String, String)>[
-                (
-                  'Device Name',
-                  DeviceInfoService.currentDeviceInfo?.deviceName ?? 'Unknown'
-                ),
-                (
-                  'Country Code',
-                  DeviceInfoService.currentDeviceInfo?.countryCode ?? 'Unknown'
-                ),
-                (
-                  'Device Type',
-                  DeviceInfoService.currentDeviceInfo?.isAndroid ?? false
-                      ? 'Android'
-                      : DeviceInfoService.currentDeviceInfo?.isIos ?? false
-                          ? 'iOS'
-                          : 'Unknown',
-                ),
-              ])
-                ListTile(
-                  title: Text(itm.$1),
-                  subtitle: Text(itm.$2),
-                ),
-            ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: <Widget>[
+            _buildActionsCard(),
+            const SizedBox(height: 8),
+            _buildDeviceInfoCard(),
+            const SizedBox(height: 8),
+            _buildLoggedUserInfoCard(),
+            const SizedBox(height: 8),
+            _buildAllAuthorizedUsersCard(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeviceInfoCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          ListTile(
+            leading:
+                Icon(FontAwesomeIcons.mobileAlt, color: Colors.teal, size: 20),
+            title: Text('Device Information',
+                style: TextStyle(
+                    color: Colors.teal,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14)),
+          ),
+          for ((String, String) itm in <(String, String)>[
+            (
+              'Device Name',
+              DeviceInfoService.currentDeviceInfo?.deviceName ?? 'Unknown'
+            ),
+            (
+              'Country Code',
+              DeviceInfoService.currentDeviceInfo?.countryCode ?? 'Unknown'
+            ),
+            (
+              'Device Type',
+              DeviceInfoService.currentDeviceInfo?.isAndroid ?? false
+                  ? 'Android'
+                  : DeviceInfoService.currentDeviceInfo?.isIos ?? false
+                      ? 'iOS'
+                      : 'Unknown',
+            ),
+          ])
+            ListTile(
+              title: Text(itm.$1,
+                  style: TextStyle(color: Colors.teal, fontSize: 12)),
+              subtitle: Text(itm.$2, style: TextStyle(fontSize: 12)),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoggedUserInfoCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.user, color: Colors.teal, size: 20),
+            title: Text('Logged User Information',
+                style: TextStyle(
+                    color: Colors.teal,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14)),
+          ),
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: ExtendedNetworkImageProvider(
+              AuthUserService.currentUser?.profilePictureUrl ?? '',
+            ),
+          ),
+          const SizedBox(height: 8),
+          for ((String, String) itm in <(String, String)>[
+            ('User Name', AuthUserService.currentUser?.userName ?? 'Unknown'),
+            ('User UID', AuthUserService.currentUser?.userUid ?? 'Unknown'),
+          ])
+            ListTile(
+              title: Text(itm.$1,
+                  style: TextStyle(color: Colors.teal, fontSize: 12)),
+              subtitle: Text(itm.$2, style: TextStyle(fontSize: 12)),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAllAuthorizedUsersCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.users, color: Colors.teal, size: 20),
+            title: Text('All Authorized Users',
+                style: TextStyle(
+                    color: Colors.teal,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14)),
+          ),
+          for (String? userUid
+              in AuthUserService.currentUser?.allAuthUserUids ?? <String>[])
+            ListTile(
+              leading: Text(
+                  '${(AuthUserService.currentUser?.allAuthUserUids?.indexOf(userUid) ?? 0) + 1}',
+                  style: TextStyle(fontSize: 12)),
+              title: Text(userUid ?? 'Unknown',
+                  style: TextStyle(color: Colors.teal, fontSize: 12)),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionsCard() {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.cogs, color: Colors.teal, size: 20),
+            title: const Text('Actions',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
           ),
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
             (
-              'Debugger',
+              'Monitoring Console',
               () async {
                 await AppNavigationService.newRoute(
                   RoutesName.talkerMonitorPage,
                 );
               }
             ),
-            ('Test', () async {}),
+            ('Test Function', () async {}),
           ])
-            TextButton(
-              onPressed: itm.$2,
-              child: Text(itm.$1),
+            ListTile(
+              title: TextButton(
+                onPressed: itm.$2,
+                child: Text(itm.$1,
+                    style: TextStyle(color: Colors.teal, fontSize: 12)),
+              ),
             ),
         ],
       ),

@@ -18,9 +18,9 @@ class LoginOrSignupEvent extends SplashEvent {
   List<Object?> get props => <Object?>[];
 }
 
-class CheckUserStatus extends SplashEvent {
+class ContinueToLoginOrRegisterEvent extends SplashEvent {
   final dynamic authUserData;
-  const CheckUserStatus({this.authUserData});
+  const ContinueToLoginOrRegisterEvent({this.authUserData});
 
   @override
   List<Object?> get props => <Object?>[authUserData];
