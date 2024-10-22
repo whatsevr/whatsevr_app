@@ -1,3 +1,5 @@
+import 'package:restart_app/restart_app.dart';
+import 'package:whatsevr_app/config/api/interceptors/cache.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
@@ -5,7 +7,7 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 class CurrentUser {
-  final String? userUid;
+  final String userUid;
   final String? userName;
   final String? profilePictureUrl;
   final List<String?>? allAuthUserUids;
@@ -41,7 +43,7 @@ class AuthUserService {
         await UsersApi.getUserDetails(userUid: newUserUid);
     if (userInfo != null) {
       _currentUser = CurrentUser(
-        userUid: newUserUid,
+        userUid: userInfo.data!.uid!,
         userName: userInfo.data?.username,
         profilePictureUrl: userInfo.data?.profilePicture,
         allAuthUserUids: (await AuthUserDb.getAllAuthorisedUser())
@@ -59,4 +61,26 @@ class AuthUserService {
   }
 
   static Future<void> checkCurrentUserSanity(String newUserUid) async {}
+
+  static Future<void> logOutCurrentUser({
+    bool restartApp = false,
+  }) async {
+    _currentUser = null;
+    await AuthUserDb.clearLastLoggedUserId();
+    await ApiCacheInterceptor.clearCache();
+    if (restartApp) {
+      Restart.restartApp();
+    }
+  }
+
+  static Future<void> logOutAllUser({
+    bool restartApp = false,
+  }) async {
+    _currentUser = null;
+    await AuthUserDb.clearAllAuthData();
+    await ApiCacheInterceptor.clearCache();
+    if (restartApp) {
+      Restart.restartApp();
+    }
+  }
 }

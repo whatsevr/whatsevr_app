@@ -99,9 +99,6 @@ class AuthUserDb {
   }
 
   ///[clearAllAuthorisedUser]
-  static Future<void> clearAllAuthorisedUser() async {
-    await _authorisedCustomersBox.delete(_allLoggedUsers);
-  }
 
   static Future<void> clearLastLoggedUserId() async {
     await _authorisedCustomersBox.delete(_lastLoggedUserId);

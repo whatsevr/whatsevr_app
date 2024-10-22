@@ -28,6 +28,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
         title: const Text('Developer Console'),
         backgroundColor: Colors.red,
       ),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -47,16 +48,17 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildDeviceInfoCard() {
     return Card(
+      color: Colors.red,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
           ListTile(
             leading:
-                Icon(FontAwesomeIcons.mobileAlt, color: Colors.teal, size: 20),
+                Icon(FontAwesomeIcons.mobileAlt, color: Colors.blue, size: 20),
             title: Text('Device Information',
                 style: TextStyle(
-                    color: Colors.teal,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14)),
           ),
@@ -80,8 +82,9 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.teal, fontSize: 12)),
-              subtitle: Text(itm.$2, style: TextStyle(fontSize: 12)),
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
+              subtitle: Text(itm.$2,
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
             ),
         ],
       ),
@@ -90,15 +93,16 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildLoggedUserInfoCard() {
     return Card(
+      color: Colors.red,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.user, color: Colors.teal, size: 20),
+            leading: Icon(FontAwesomeIcons.user, color: Colors.blue, size: 20),
             title: Text('Logged User Information',
                 style: TextStyle(
-                    color: Colors.teal,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14)),
           ),
@@ -115,8 +119,9 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.teal, fontSize: 12)),
-              subtitle: Text(itm.$2, style: TextStyle(fontSize: 12)),
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
+              subtitle: Text(itm.$2,
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
             ),
         ],
       ),
@@ -125,15 +130,16 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildAllAuthorizedUsersCard() {
     return Card(
+      color: Colors.red,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.users, color: Colors.teal, size: 20),
+            leading: Icon(FontAwesomeIcons.users, color: Colors.blue, size: 20),
             title: Text('All Authorized Users',
                 style: TextStyle(
-                    color: Colors.teal,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14)),
           ),
@@ -142,9 +148,9 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             ListTile(
               leading: Text(
                   '${(AuthUserService.currentUser?.allAuthUserUids?.indexOf(userUid) ?? 0) + 1}',
-                  style: TextStyle(fontSize: 12)),
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
               title: Text(userUid ?? 'Unknown',
-                  style: TextStyle(color: Colors.teal, fontSize: 12)),
+                  style: TextStyle(color: Colors.white, fontSize: 12)),
             ),
         ],
       ),
@@ -153,14 +159,18 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildActionsCard() {
     return Card(
+      color: Colors.red,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.cogs, color: Colors.teal, size: 20),
+            leading: Icon(FontAwesomeIcons.cogs, color: Colors.blue, size: 20),
             title: const Text('Actions',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14)),
           ),
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
@@ -178,7 +188,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               title: TextButton(
                 onPressed: itm.$2,
                 child: Text(itm.$1,
-                    style: TextStyle(color: Colors.teal, fontSize: 12)),
+                    style: TextStyle(color: Colors.white, fontSize: 12)),
               ),
             ),
         ],

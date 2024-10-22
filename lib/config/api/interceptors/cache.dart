@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import 'package:hive/hive.dart';
 
 class ApiCacheInterceptor extends DioCacheInterceptor {
+  static const String cacheDbName = 'api_cache_43635';
   ApiCacheInterceptor({
     required String? cacheDirectoryPath,
     required int? maxMinuteOnDevice,
@@ -12,7 +14,7 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
           options: CacheOptions(
             store: HiveCacheStore(
               cacheDirectoryPath,
-              hiveBoxName: 'api_cache_4365',
+              hiveBoxName: cacheDbName,
             ),
             policy: CachePolicy.request,
             hitCacheOnErrorExcept: <int>[
@@ -26,4 +28,9 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
             allowPostMethod: cachePostRequest ?? false,
           ),
         );
+
+  static Future<void> clearCache() async {
+    Box cacheDb = Hive.box(cacheDbName);
+    await cacheDb.clear();
+  }
 }

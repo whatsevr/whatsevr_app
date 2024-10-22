@@ -8,6 +8,9 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
@@ -36,7 +39,7 @@ class _DashboardPageBottomNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-    List<(Widget, VoidCallback)> items = [
+    List<(Widget icon, VoidCallback? onTap, VoidCallback? onLongTap)> items = [
       (
         const Iconify(MaterialSymbols.explore, size: 30),
         () {
@@ -45,7 +48,8 @@ class _DashboardPageBottomNavigationBarState
                   newView: ExplorePage(),
                 ),
               );
-        }
+        },
+        null
       ),
       (
         const Iconify(GameIcons.nest_eggs, size: 30),
@@ -55,7 +59,8 @@ class _DashboardPageBottomNavigationBarState
                   newView: HomePage(),
                 ),
               );
-        }
+        },
+        null
       ),
       (
         const Iconify(Ri.heart_add_fill, size: 30),
@@ -64,7 +69,8 @@ class _DashboardPageBottomNavigationBarState
             context,
             postCreatorType: EnumPostCreatorType.ACCOUNT,
           );
-        }
+        },
+        null
       ),
       (
         const Iconify(Pepicons.play_print, size: 30),
@@ -74,7 +80,8 @@ class _DashboardPageBottomNavigationBarState
                   newView: FlicksPage(),
                 ),
               );
-        }
+        },
+        null
       ),
       (
         const Iconify(Ph.chat_circle_text_fill, size: 30),
@@ -84,7 +91,8 @@ class _DashboardPageBottomNavigationBarState
                   newView: ChatsPage(),
                 ),
               );
-        }
+        },
+        null
       ),
       (
         const Iconify(Ic.twotone_notifications_none, size: 30),
@@ -94,7 +102,8 @@ class _DashboardPageBottomNavigationBarState
                   newView: NotificationsPage(),
                 ),
               );
-        }
+        },
+        null
       ),
       (
         const Iconify(Ic.sharp_account_circle, size: 30),
@@ -108,7 +117,21 @@ class _DashboardPageBottomNavigationBarState
                   ),
                 ),
               );
-        }
+        },
+        () {
+          showAppModalSheet(
+              draggableScrollable: false,
+              child: Column(
+                children: [
+                  WhatsevrButton.filled(
+                    label: 'Logout From All Account',
+                    onPressed: () {
+                      AuthUserService.logOutCurrentUser(restartApp: true);
+                    },
+                  ),
+                ],
+              ));
+        },
       ),
     ];
     return Container(
@@ -126,18 +149,22 @@ class _DashboardPageBottomNavigationBarState
       child: Builder(
         builder: (BuildContext context) {
           List<Widget> children = <Widget>[
-            for ((Widget, VoidCallback) itm in items)
+            for ((Widget, VoidCallback?, VoidCallback?) itm in items)
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  IconButton(
-                    icon: itm.$1,
-                    onPressed: () {
-                      itm.$2();
+                  GestureDetector(
+                    onTap: () {
+                      itm.$2?.call();
                       setState(() {
                         selectedIndex = items.indexOf(itm);
                       });
                     },
+                    onLongPress: itm.$3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: itm.$1,
+                    ),
                   ),
                   if (selectedIndex == items.indexOf(itm))
                     const Positioned(

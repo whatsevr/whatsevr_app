@@ -20,7 +20,10 @@ List<GoRoute> getDevRoutes() {
       name: RoutesName.talkerMonitorPage,
       path: RoutesName.talkerMonitorPage,
       builder: (BuildContext context, GoRouterState state) {
-        return TalkerScreen(talker: TalkerService.instance);
+        return TalkerScreen(
+          talker: TalkerService.instance,
+          appBarTitle: 'Console',
+        );
       },
     ),
   ];
