@@ -1,8 +1,10 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/common_data_list.dart';
@@ -88,8 +90,9 @@ class NewCommunityPage extends StatelessWidget {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(community?.profilePicture ?? ''),
+                            backgroundImage: ExtendedNetworkImageProvider(
+                                community?.profilePicture ??
+                                    MockData.blankCommunityAvatar),
                             radius: 20,
                           ),
                           Gap(4),

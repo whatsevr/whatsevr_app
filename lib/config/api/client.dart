@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:whatsevr_app/config/api/interceptors/encryption.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 import 'package:whatsevr_app/config/api/interceptors/cache.dart';
@@ -12,13 +13,14 @@ class ApiClient {
   ApiClient._();
 
   // static const String BASE_URL = "https://www.whatsevr.com"; cannot use this for now for follow redirect 300+ code use
-  static const String BASE_URL = 'https://whatsevr-server-dev.onrender.com/';
+  static const String whatsevrApiBaseUrl =
+      'https://whatsevr-server-dev.onrender.com/';
   static late Dio client;
   static Directory? dioCacheDirectory;
   static Future<void> init() async {
     client = Dio(
       BaseOptions(
-        baseUrl: BASE_URL,
+        baseUrl: whatsevrApiBaseUrl,
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
         sendTimeout: const Duration(seconds: 30),
@@ -29,12 +31,12 @@ class ApiClient {
               status == HttpStatus.badRequest;
         },
         headers: <String, dynamic>{
-          'secret': 'your_secret_key',
-          'ETag': '56574',
+          'Authorization': 'Bearer <user token>',
         },
       ),
     );
     dioCacheDirectory = await getTemporaryDirectory();
+
     client.interceptors.addAll(<Interceptor>[
       ApiRetryInterceptor(dio: client),
       ApiCacheInterceptor(

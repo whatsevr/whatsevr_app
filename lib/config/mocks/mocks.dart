@@ -15,6 +15,10 @@ class MockData {
     return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/user.png';
   }
 
+  static String get blankCommunityAvatar {
+    return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/team-icon-grey.png';
+  }
+
   static String randomImageAvatar([String? hw, int? index]) {
     return 'https://i.pravatar.cc/${hw ?? 300}/?img=${index ?? Random().nextInt(50)}';
   }

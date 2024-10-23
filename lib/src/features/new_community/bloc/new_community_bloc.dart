@@ -114,8 +114,6 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
           status: communityStatusController.text,
           adminUserUid: await AuthUserDb.getLastLoggedUserUid(),
           requireJoiningApproval: state.approveJoiningRequest!,
-          username:
-              getAUniqueUserName(communityNameController.text, 'community'),
         ),
       );
       if (response?.$2 != 200) {
