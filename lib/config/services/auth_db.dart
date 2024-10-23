@@ -1,11 +1,6 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
-
-import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
 
 import '../api/external/models/business_validation_exception.dart';
 
@@ -14,82 +9,59 @@ class AuthUserDb {
 
   static late Box<dynamic> _authorisedCustomersBox;
 
-  static const String _lastLoggedUserId = 'last_logged_user_id';
-  static const String _allLoggedUsers = 'all_logged_users';
+  static const String _lastLoggedUserUid = 'last_logged_user_uid';
+  static const String _allLoggedUserUids = 'all_logged_user_uids';
 
   static Future<void> initDB() async {
-    String dbBoxName = 'auth-user-hive-box-2546';
+    String dbBoxName = 'auth-user-hive-box-43263';
     await Hive.initFlutter();
     await Hive.openBox<dynamic>(dbBoxName);
     _authorisedCustomersBox = Hive.box(dbBoxName);
   }
 
-  ///[saveAuthorisedUser]
-  static Future<void> saveAuthorisedUser(
-      AuthServiceUserResponse? authServiceUserResponse) async {
-    if (authServiceUserResponse == null) return;
-    log('hiveDb.saveLoggedUser: ${authServiceUserResponse.toMap()}');
+  ///[saveAuthorisedUserUid]
+  static Future<void> saveAuthorisedUserUid(String? userUid) async {
+    if (userUid == null) return;
+    log('hiveDb.saveLoggedUser: $userUid');
     List<dynamic> allLoggedUsers =
-        await _authorisedCustomersBox.get(_allLoggedUsers) ?? <dynamic>[];
+        await _authorisedCustomersBox.get(_allLoggedUserUids) ?? <dynamic>[];
 
-    int index = allLoggedUsers.indexWhere(
-      (element) =>
-          element['data']['userId'] == authServiceUserResponse.data!.userId,
-    );
-    if (index != -1) {
-      allLoggedUsers[index] = authServiceUserResponse.toMap();
-    } else {
-      allLoggedUsers.add(authServiceUserResponse.toMap());
-    }
-    await _authorisedCustomersBox.put(_allLoggedUsers, allLoggedUsers);
+    allLoggedUsers.add(userUid);
+    allLoggedUsers = allLoggedUsers.toSet().toList();
+    await _authorisedCustomersBox.put(_allLoggedUserUids, allLoggedUsers);
   }
 
-  // static Future<AuthServiceUserResponse?> getLastLoggedAuthorisedUser() async {
-  //   List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
-  //   if (users == null) return null;
-  //   String? lastLoggedUserId = await getLastLoggedUserUid();
-  //   if (lastLoggedUserId == null) return null;
-  //   var user = users.firstWhereOrNull(
-  //     (element) => element['data']['userId'] == lastLoggedUserId,
-  //   );
-  //   if (user == null) return null;
-  //   return AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(user)));
-  // }
-
-  static Future<List<AuthServiceUserResponse>?> getAllAuthorisedUser() async {
+  static List<String>? getAllAuthorisedUserUid() {
     try {
-      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
       if (users == null) return null;
-      return users
-          .map(
-              (e) => AuthServiceUserResponse.fromMap(jsonDecode(jsonEncode(e))))
-          .toList();
+      return users.cast<String>();
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<void> removeAuthorisedUser(String userId) async {
+  static Future<void> removeAuthorisedUserUid(String userId) async {
     try {
-      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUsers);
+      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
       if (users == null) throw BusinessException('No user found');
-      users.removeWhere((element) => element['data']['userId'] == userId);
-      await _authorisedCustomersBox.put(_allLoggedUsers, users);
+      users.remove(userId);
+      await _authorisedCustomersBox.put(_allLoggedUserUids, users);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
   }
 
-  ///[saveLastLoggedUserId]
-  static Future<void> saveLastLoggedUserId(String userUid) async {
-    await _authorisedCustomersBox.put(_lastLoggedUserId, userUid);
+  ///[saveLastLoggedUserUid]
+  static Future<void> saveLastLoggedUserUid(String userUid) async {
+    await _authorisedCustomersBox.put(_lastLoggedUserUid, userUid);
   }
 
-  static Future<String?> getLastLoggedUserUid() async {
+  static String? getLastLoggedUserUid() {
     try {
       String? lastLoggedUserId =
-          await _authorisedCustomersBox.get(_lastLoggedUserId);
+          _authorisedCustomersBox.get(_lastLoggedUserUid);
 
       return lastLoggedUserId;
     } catch (e, s) {
@@ -100,8 +72,8 @@ class AuthUserDb {
 
   ///[clearAllAuthorisedUser]
 
-  static Future<void> clearLastLoggedUserId() async {
-    await _authorisedCustomersBox.delete(_lastLoggedUserId);
+  static Future<void> clearLastLoggedUserUid() async {
+    await _authorisedCustomersBox.delete(_lastLoggedUserUid);
   }
 
   static Future<void> clearAllAuthData() async {

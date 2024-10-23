@@ -1,20 +1,18 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
+import 'package:whatsevr_app/config/api/methods/auth.dart';
+import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:otpless_flutter/otpless_flutter.dart';
 
-import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
@@ -25,8 +23,8 @@ part 'splash_state.dart';
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
   SplashBloc() : super(const SplashState()) {
     on<InitialEvent>(_onInitial);
-    on<LoginOrSignupEvent>(_onLoginOrSignup);
-    on<ContinueToLoginOrRegisterEvent>(_onContinueToLoginOrRegister);
+    on<InitiateAuthServiceEvent>(_onInitiateAuthService);
+    on<ContinueToLoginAndRegisterEvent>(_onContinueToLoginAndRegister);
   }
 
   FutureOr<void> _onInitial(
@@ -35,99 +33,73 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   ) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      String? lastLoggedUserUid = await AuthUserDb.getLastLoggedUserUid();
+      String? lastLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
       if (lastLoggedUserUid == null) {
-        add(const LoginOrSignupEvent());
+        add(const InitiateAuthServiceEvent());
         return;
       }
-      bool setSuccess = await AuthUserService.setCurrentUser(lastLoggedUserUid);
-      if (!setSuccess) {
-        throw BusinessException('Unable to recognise user for given user id');
-      }
+
       AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
-      FirebaseCrashlytics.instance.setUserIdentifier(lastLoggedUserUid);
-      FirebaseAnalytics.instance.setUserId(id: lastLoggedUserUid);
       FirebaseAnalytics.instance.logLogin(loginMethod: 'Auto Login From Local');
-      FirebaseAnalytics.instance.setUserProperty(
-        name: 'user_uid',
-        value: lastLoggedUserUid,
-      );
     } catch (e, stackTrace) {
-      add(const LoginOrSignupEvent());
+      add(const InitiateAuthServiceEvent());
       highLevelCatch(e, stackTrace);
     }
 
     FirebaseAnalytics.instance.logAppOpen();
   }
 
-  FutureOr<void> _onLoginOrSignup(
-    LoginOrSignupEvent event,
+  FutureOr<void> _onInitiateAuthService(
+    InitiateAuthServiceEvent event,
     Emitter<SplashState> emit,
   ) async {
-    final Otpless otplessFlutterPlugin = Otpless();
-    Map<String, String> arg = <String, String>{
-      'appId': 'YAA8EYVROHZ00125AAAV',
-    };
-
-    await otplessFlutterPlugin.openLoginPage(
-      (result) {
-        log('auth-service-response (${result.runtimeType}): $result');
-
-        if (result['data'] != null) {
-          add(ContinueToLoginOrRegisterEvent(authUserData: result));
-        } else {
-          SmartDialog.showToast('${result['errorMessage']}');
-        }
+    await AuthUserService.loginWithOtpLessService(
+      onLoginSuccess: (userUid) {
+        add(ContinueToLoginAndRegisterEvent(userUid: userUid));
       },
-      arg,
+      onLoginFailed: (errorMessage) {
+        SmartDialog.showToast(errorMessage);
+      },
     );
   }
 
-  FutureOr<void> _onContinueToLoginOrRegister(
-    ContinueToLoginOrRegisterEvent event,
+  FutureOr<void> _onContinueToLoginAndRegister(
+    ContinueToLoginAndRegisterEvent event,
     Emitter<SplashState> emit,
   ) async {
     try {
-      AuthServiceUserResponse? authServiceUserResponse =
-          AuthServiceUserResponse.fromMap(event.authUserData!);
-      if (authServiceUserResponse.data?.userId == null ||
-          authServiceUserResponse.data!.userId!.isEmpty) {
-        throw BusinessException(
-            'Unable to get user details from auth service provider');
-      }
-      UserDetailsResponse? userStatusResponse = await UsersApi.getUserDetails(
-        userUid: authServiceUserResponse.data!.userId!,
+      (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
+        event.userUid,
       );
-      await AuthUserDb.saveAuthorisedUser(authServiceUserResponse);
-      await AuthUserDb.saveLastLoggedUserId(userStatusResponse!.data!.uid!);
-      bool setSuccess = await AuthUserService.setCurrentUser(
-          authServiceUserResponse.data?.userId);
-      if (!setSuccess) {
-        throw BusinessException('Unable to recognise user for given user id');
-      }
-      FirebaseCrashlytics.instance
-          .setUserIdentifier(authServiceUserResponse.data!.userId!);
-      FirebaseAnalytics.instance
-          .setUserId(id: authServiceUserResponse.data!.userId!);
-      FirebaseAnalytics.instance.logLogin(loginMethod: 'OTP');
-      FirebaseAnalytics.instance.setUserProperty(
-        name: 'mobile_number',
-        value: userStatusResponse.data?.mobileNumber,
-      );
-      FirebaseAnalytics.instance.setUserProperty(
-        name: 'email_id',
-        value: userStatusResponse.data?.emailId,
-      );
-      FirebaseAnalytics.instance.setDefaultEventParameters(
-        <String, dynamic>{
-          'user_uid': authServiceUserResponse.data?.userId,
-          'mobile_number': userStatusResponse.data?.mobileNumber,
-          'email_id': userStatusResponse.data?.emailId,
-        },
-      );
-      SmartDialog.showToast('${userStatusResponse.message}');
+      if (loginInfo?.$1 == HttpStatus.ok) {
+        await AuthUserDb.saveAuthorisedUserUid(loginInfo!.$3!.userInfo!.uid!);
+        await AuthUserDb.saveLastLoggedUserUid(loginInfo.$3!.userInfo!.uid!);
 
-      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
+        FirebaseCrashlytics.instance
+            .setUserIdentifier(loginInfo.$3!.userInfo!.uid!);
+        FirebaseAnalytics.instance.setUserId(id: loginInfo.$3!.userInfo!.uid!);
+        FirebaseAnalytics.instance.logLogin(loginMethod: 'OTP');
+        FirebaseAnalytics.instance.setUserProperty(
+          name: 'mobile_number',
+          value: loginInfo.$3?.userInfo?.mobileNumber,
+        );
+        FirebaseAnalytics.instance.setUserProperty(
+          name: 'email_id',
+          value: loginInfo.$3?.userInfo?.emailId,
+        );
+        FirebaseAnalytics.instance.setDefaultEventParameters(
+          <String, dynamic>{
+            'user_uid': loginInfo.$3?.userInfo?.uid,
+            'mobile_number': loginInfo.$3?.userInfo?.mobileNumber,
+            'email_id': loginInfo.$3?.userInfo?.emailId,
+          },
+        );
+        SmartDialog.showToast('Login Successful');
+
+        AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
+      } else {
+        SmartDialog.showToast('${loginInfo?.$2}');
+      }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -107,11 +108,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                     fontSize: 14)),
           ),
           for ((String, String) itm in <(String, String)>[
-            (
-              'Mobile Number',
-              AuthUserService.currentUser?.mobileNumber ?? 'Unknown'
-            ),
-            ('User UID', AuthUserService.currentUser?.userUid ?? 'Unknown'),
+            ('User UID', AuthUserDb.getLastLoggedUserUid() ?? 'Unknown'),
           ])
             ListTile(
               title: Text(itm.$1,
@@ -140,7 +137,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                     fontSize: 14)),
           ),
           for (String? userUid
-              in AuthUserService.currentUser?.allAuthUserUids ?? <String>[])
+              in AuthUserDb.getAllAuthorisedUserUid() ?? <String?>[])
             ListTile(
               title: Text(userUid ?? 'Unknown',
                   style: TextStyle(color: Colors.white, fontSize: 12)),

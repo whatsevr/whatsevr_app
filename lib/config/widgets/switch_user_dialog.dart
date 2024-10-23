@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
@@ -23,7 +24,7 @@ class _Ui extends StatefulWidget {
 
 class _UiState extends State<_Ui> {
   MultipleUserDetailsResponse? multipleUserDetailsResponse;
-
+  String? currentUserId;
   @override
   void initState() {
     super.initState();
@@ -31,8 +32,8 @@ class _UiState extends State<_Ui> {
   }
 
   void fetchOtherUsers() async {
-    List<String>? allAuthUserUids =
-        AuthUserService.currentUser?.allAuthUserUids;
+    currentUserId = await AuthUserDb.getLastLoggedUserUid();
+    List<String>? allAuthUserUids = await AuthUserDb.getAllAuthorisedUserUid();
 
     if (allAuthUserUids?.isEmpty ?? true) return;
     allAuthUserUids = allAuthUserUids?.toSet().toList();
@@ -58,7 +59,6 @@ class _UiState extends State<_Ui> {
               ListTile(
                 onTap: () async {
                   Navigator.pop(context);
-                  await AuthUserService.switchUser(user.uid);
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
@@ -66,7 +66,7 @@ class _UiState extends State<_Ui> {
                 ),
                 title: Text(user.username ?? 'Unknown User'),
                 subtitle: Text('${user.totalFollowers} Followers'),
-                trailing: user.uid == AuthUserService.currentUser?.userUid
+                trailing: user.uid == currentUserId
                     ? const Icon(Icons.check_circle, color: Colors.black)
                     : null,
               ),

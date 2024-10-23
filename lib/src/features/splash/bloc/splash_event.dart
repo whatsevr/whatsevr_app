@@ -11,17 +11,17 @@ class InitialEvent extends SplashEvent {
   List<Object?> get props => <Object?>[];
 }
 
-class LoginOrSignupEvent extends SplashEvent {
-  const LoginOrSignupEvent();
+class InitiateAuthServiceEvent extends SplashEvent {
+  const InitiateAuthServiceEvent();
 
   @override
   List<Object?> get props => <Object?>[];
 }
 
-class ContinueToLoginOrRegisterEvent extends SplashEvent {
-  final dynamic authUserData;
-  const ContinueToLoginOrRegisterEvent({this.authUserData});
+class ContinueToLoginAndRegisterEvent extends SplashEvent {
+  final String userUid;
+  const ContinueToLoginAndRegisterEvent({required this.userUid});
 
   @override
-  List<Object?> get props => <Object?>[authUserData];
+  List<Object?> get props => <Object?>[userUid];
 }

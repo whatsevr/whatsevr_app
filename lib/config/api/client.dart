@@ -28,7 +28,9 @@ class ApiClient {
           /// this client will only accept status code 200 and 204 as success
           return status == HttpStatus.ok ||
               status == HttpStatus.noContent ||
-              status == HttpStatus.badRequest;
+              status == HttpStatus.badRequest ||
+              status == HttpStatus.forbidden ||
+              status == HttpStatus.partialContent;
         },
         headers: <String, dynamic>{
           'Authorization': 'Bearer <user token>',

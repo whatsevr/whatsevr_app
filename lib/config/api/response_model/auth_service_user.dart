@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-class AuthServiceUserResponse {
+class OtpLessSuccessResponse {
   final Data? data;
 
-  AuthServiceUserResponse({
+  OtpLessSuccessResponse({
     this.data,
   });
 
-  factory AuthServiceUserResponse.fromJson(String str) =>
-      AuthServiceUserResponse.fromMap(json.decode(str));
+  factory OtpLessSuccessResponse.fromJson(String str) =>
+      OtpLessSuccessResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AuthServiceUserResponse.fromMap(Map<String, dynamic> json) =>
-      AuthServiceUserResponse(
+  factory OtpLessSuccessResponse.fromMap(Map<String, dynamic> json) =>
+      OtpLessSuccessResponse(
         data: json['data'] == null ? null : Data.fromMap(json['data']),
       );
 
