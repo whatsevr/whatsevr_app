@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
@@ -59,6 +60,7 @@ class _UiState extends State<_Ui> {
               ListTile(
                 onTap: () async {
                   Navigator.pop(context);
+                  AuthUserService.loginToApp(user.uid!);
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
@@ -81,7 +83,14 @@ class _UiState extends State<_Ui> {
           WhatsevrButton.filled(
             label: 'Add New Account',
             onPressed: () {
-              AuthUserService.logOutCurrentUser(startFomBegin: true);
+              AuthUserService.loginWithOtpLessService(
+                onLoginSuccess: (userUid) {
+                  AuthUserService.loginToApp(userUid);
+                },
+                onLoginFailed: (errorMessage) {
+                  SmartDialog.showToast(errorMessage);
+                },
+              );
             },
           ),
         ],

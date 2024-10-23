@@ -24,7 +24,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   SplashBloc() : super(const SplashState()) {
     on<InitialEvent>(_onInitial);
     on<InitiateAuthServiceEvent>(_onInitiateAuthService);
-    on<ContinueToLoginAndRegisterEvent>(_onContinueToLoginAndRegister);
   }
 
   FutureOr<void> _onInitial(
@@ -55,53 +54,11 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   ) async {
     await AuthUserService.loginWithOtpLessService(
       onLoginSuccess: (userUid) {
-        add(ContinueToLoginAndRegisterEvent(userUid: userUid));
+        AuthUserService.loginToApp(userUid);
       },
       onLoginFailed: (errorMessage) {
         SmartDialog.showToast(errorMessage);
       },
     );
-  }
-
-  FutureOr<void> _onContinueToLoginAndRegister(
-    ContinueToLoginAndRegisterEvent event,
-    Emitter<SplashState> emit,
-  ) async {
-    try {
-      (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
-        event.userUid,
-      );
-      if (loginInfo?.$1 == HttpStatus.ok) {
-        await AuthUserDb.saveAuthorisedUserUid(loginInfo!.$3!.userInfo!.uid!);
-        await AuthUserDb.saveLastLoggedUserUid(loginInfo.$3!.userInfo!.uid!);
-
-        FirebaseCrashlytics.instance
-            .setUserIdentifier(loginInfo.$3!.userInfo!.uid!);
-        FirebaseAnalytics.instance.setUserId(id: loginInfo.$3!.userInfo!.uid!);
-        FirebaseAnalytics.instance.logLogin(loginMethod: 'OTP');
-        FirebaseAnalytics.instance.setUserProperty(
-          name: 'mobile_number',
-          value: loginInfo.$3?.userInfo?.mobileNumber,
-        );
-        FirebaseAnalytics.instance.setUserProperty(
-          name: 'email_id',
-          value: loginInfo.$3?.userInfo?.emailId,
-        );
-        FirebaseAnalytics.instance.setDefaultEventParameters(
-          <String, dynamic>{
-            'user_uid': loginInfo.$3?.userInfo?.uid,
-            'mobile_number': loginInfo.$3?.userInfo?.mobileNumber,
-            'email_id': loginInfo.$3?.userInfo?.emailId,
-          },
-        );
-        SmartDialog.showToast('Login Successful');
-
-        AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
-      } else {
-        SmartDialog.showToast('${loginInfo?.$2}');
-      }
-    } catch (e, stackTrace) {
-      highLevelCatch(e, stackTrace);
-    }
   }
 }

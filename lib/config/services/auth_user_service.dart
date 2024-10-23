@@ -25,16 +25,6 @@ class AuthUserService {
 
   static AuthUserService get instance => _instance;
 
-  static Future<void> logOutCurrentUser({
-    bool startFomBegin = false,
-  }) async {
-    await AuthUserDb.clearLastLoggedUserUid();
-
-    if (startFomBegin) {
-      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
-    }
-  }
-
   static Future<void> logOutAllUser({
     bool startFomBegin = false,
   }) async {
@@ -83,14 +73,28 @@ class AuthUserService {
     if (loginInfo?.$1 == HttpStatus.ok) {
       await AuthUserDb.saveAuthorisedUserUid(userUid);
       await AuthUserDb.saveLastLoggedUserUid(userUid);
-
-      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
       FirebaseCrashlytics.instance.setUserIdentifier(userUid);
       FirebaseAnalytics.instance.setUserId(id: userUid);
       FirebaseAnalytics.instance.setUserProperty(
         name: 'user_uid',
         value: userUid,
       );
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'mobile_number',
+        value: loginInfo?.$3?.userInfo?.mobileNumber,
+      );
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'email_id',
+        value: loginInfo?.$3?.userInfo?.emailId,
+      );
+      FirebaseAnalytics.instance.setDefaultEventParameters(
+        <String, dynamic>{
+          'user_uid': userUid,
+          'mobile_number': loginInfo?.$3?.userInfo?.mobileNumber,
+          'email_id': loginInfo?.$3?.userInfo?.emailId,
+        },
+      );
+      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
     } else {
       SmartDialog.showToast('Failed to login, ${loginInfo?.$2}');
     }

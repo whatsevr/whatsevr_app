@@ -17,11 +17,3 @@ class InitiateAuthServiceEvent extends SplashEvent {
   @override
   List<Object?> get props => <Object?>[];
 }
-
-class ContinueToLoginAndRegisterEvent extends SplashEvent {
-  final String userUid;
-  const ContinueToLoginAndRegisterEvent({required this.userUid});
-
-  @override
-  List<Object?> get props => <Object?>[userUid];
-}
