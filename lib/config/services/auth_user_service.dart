@@ -132,7 +132,7 @@ class AuthUserService {
         );
       } else if (loginInfo?.$1 == HttpStatus.forbidden) {
         showAppModalSheet(
-          draggableScrollable: false,
+          flexibleSheet: false,
           dismissPrevious: true,
           child: AccountBannedUi(
             userUid: userUid,
@@ -142,7 +142,7 @@ class AuthUserService {
         );
       } else if (loginInfo?.$1 == HttpStatus.partialContent) {
         showAppModalSheet(
-          draggableScrollable: false,
+          flexibleSheet: false,
           dismissPrevious: true,
           child: AccountIsDeactivatedStateUi(
             userUid: userUid,

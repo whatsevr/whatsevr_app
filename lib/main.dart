@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -55,8 +56,26 @@ Future<void> main() async {
 
 void catchUnhandledExceptions(Object error, StackTrace? stack) {
   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-  debugPrintStack(stackTrace: stack, label: error.toString());
   TalkerService.instance.error(error.toString(), stack);
+  if (kDebugMode) {
+    SmartDialog.showToast(
+      error.toString(),
+      builder: (context) {
+        return Container(
+          color: Colors.red,
+          padding: EdgeInsets.all(12),
+          child: Text(
+            '$error',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 void afterLoginServices() {

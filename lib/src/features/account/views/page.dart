@@ -118,7 +118,7 @@ class AccountPage extends StatelessWidget {
                                         return;
                                       }
                                       showAppModalSheet(
-                                          draggableScrollable: false,
+                                          flexibleSheet: false,
                                           child: SizedBox(
                                             height: 220,
                                             child: ListView.separated(
@@ -331,7 +331,7 @@ class AccountPage extends StatelessWidget {
                                       icon: const Icon(Icons.menu),
                                       onPressed: () {
                                         showAppModalSheet(
-                                            draggableScrollable: false,
+                                            flexibleSheet: false,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [

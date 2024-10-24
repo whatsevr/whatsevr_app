@@ -224,9 +224,8 @@ class CreateAccountUi extends StatelessWidget {
         WhatsevrButton.filled(
           label: 'Continue',
           onPressed: () async {
-            if (nameController.text.isEmpty || nameController.text.length < 3) {
-              SmartDialog.showToast(
-                  'Name is required and should be atleast 3 characters');
+            if (nameController.text.isEmpty) {
+              SmartDialog.showToast('Name is required');
               return;
             }
             SmartDialog.showLoading(msg: 'Creating Account');

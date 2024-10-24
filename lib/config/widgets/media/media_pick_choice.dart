@@ -14,7 +14,7 @@ showWhatsevrMediaPickerChoice({
   Function? onChoosingVideoFromGallery,
 }) {
   showAppModalSheet(
-      draggableScrollable: false,
+      flexibleSheet: false,
       child: _Ui(
         onChoosingImageFromCamera: onChoosingImageFromCamera,
         onChoosingImageFromGallery: onChoosingImageFromGallery,

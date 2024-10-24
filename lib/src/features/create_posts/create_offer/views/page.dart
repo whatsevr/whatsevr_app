@@ -283,7 +283,7 @@ class CreateOfferPage extends StatelessWidget {
                 hintText: 'Status',
                 customFunction: () {
                   showAppModalSheet(
-                      draggableScrollable: true,
+                      flexibleSheet: true,
                       child: CommonDataSearchSelectPage(
                         showProfessionalStatus: true,
                         onProfessionalStatusSelected: (professionalStatus) {

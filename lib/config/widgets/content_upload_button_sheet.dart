@@ -24,7 +24,7 @@ void showContentUploadBottomSheet(
 }) {
   showAppModalSheet(
     context: context,
-    draggableScrollable: false,
+    flexibleSheet: false,
     child: _Ui(
       postCreatorType: postCreatorType,
     ),

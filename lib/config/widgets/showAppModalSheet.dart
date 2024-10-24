@@ -8,7 +8,7 @@ Completer<void>? _currentModalCompleter;
 Future<void> showAppModalSheet({
   BuildContext? context,
   required Widget? child,
-  bool draggableScrollable = true,
+  bool flexibleSheet = true,
   bool dismissPrevious = true,
 }) async {
   // Dismiss the previous modal sheet if it exists and dismissPrevious is true
@@ -39,7 +39,7 @@ Future<void> showAppModalSheet({
     isScrollControlled: true, //auto adjust height
     showDragHandle: true,
     builder: (BuildContext context) {
-      if (!draggableScrollable) {
+      if (!flexibleSheet) {
         return PadHorizontal(child: child ?? const SizedBox.shrink());
       }
       return Padding(

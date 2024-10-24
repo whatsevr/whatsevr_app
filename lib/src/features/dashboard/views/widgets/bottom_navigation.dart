@@ -118,8 +118,7 @@ class _DashboardPageBottomNavigationBarState
               );
         },
         () {
-          showAppModalSheet(
-              draggableScrollable: false, child: SwitchUserDialogUi());
+          showAppModalSheet(flexibleSheet: false, child: SwitchUserDialogUi());
         },
       ),
     ];

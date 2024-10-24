@@ -1,14 +1,15 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 
@@ -174,20 +175,35 @@ class UsersApi {
     return null;
   }
 
-  static Future<String?> updateUserInfo(UpdateUserInfoRequest request) async {
+  static Future<(int? statusCode, String? message)?> updateUserInfo(
+      UpdateUserInfoRequest request) async {
     try {
       Response response = await ApiClient.client.post(
         '/v1/user-info',
         data: request.toMap(),
       );
-      return response.data['message'];
+      return (response.statusCode, response.data['message'] as String);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<String?> updateEducations(
+  static Future<(int? statusCode, String? message)?> updateUserPortfolioInfo(
+      UpdateUserPortfolioInfoRequest request) async {
+    try {
+      Response response = await ApiClient.client.post(
+        '/v1/update-user-portfolio-info',
+        data: request.toMap(),
+      );
+      return (response.statusCode, response.data['message'] as String);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(int? statusCode, String? message)?> updateEducations(
     UpdateUserEducationsRequest request,
   ) async {
     try {
@@ -195,14 +211,14 @@ class UsersApi {
         '/v1/user-educations',
         data: request.toMap(),
       );
-      return response.data['message'];
+      return (response.statusCode, response.data['message'] as String);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<String?> updateWorkExperiences(
+  static Future<(int? statusCode, String? message)?> updateWorkExperiences(
     UpdateUserWorkExperiencesRequest request,
   ) async {
     try {
@@ -210,14 +226,14 @@ class UsersApi {
         '/v1/user-work-experiences',
         data: request.toMap(),
       );
-      return response.data['message'];
+      return (response.statusCode, response.data['message'] as String);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<String?> updateServices(
+  static Future<(int? statusCode, String? message)?> updateServices(
     UpdateUserServicesRequest request,
   ) async {
     try {
@@ -225,7 +241,7 @@ class UsersApi {
         '/v1/user-services',
         data: request.toMap(),
       );
-      return response.data['message'];
+      return (response.statusCode, response.data['message'] as String);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }

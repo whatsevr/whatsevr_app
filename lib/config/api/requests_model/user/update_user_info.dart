@@ -34,9 +34,7 @@ class UserInfo {
   final String? bio;
   final String? address;
   final DateTime? dob;
-  final String? portfolioStatus;
-  final String? portfolioDescription;
-  final String? portfolioTitle;
+
   final String? gender;
 
   UserInfo({
@@ -45,9 +43,6 @@ class UserInfo {
     this.bio,
     this.address,
     this.dob,
-    this.portfolioStatus,
-    this.portfolioDescription,
-    this.portfolioTitle,
     this.gender,
   });
 
@@ -61,9 +56,6 @@ class UserInfo {
         bio: json['bio'],
         address: json['address'],
         dob: json['dob'] == null ? null : DateTime.parse(json['dob']),
-        portfolioStatus: json['portfolio_status'],
-        portfolioDescription: json['portfolio_description'],
-        portfolioTitle: json['portfolio_title'],
         gender: json['gender'],
       );
 
@@ -72,11 +64,7 @@ class UserInfo {
         'name': name,
         'bio': bio,
         'address': address,
-        'dob':
-            "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
-        'portfolio_status': portfolioStatus,
-        'portfolio_description': portfolioDescription,
-        'portfolio_title': portfolioTitle,
+        'dob': dob?.toIso8601String(),
         'gender': gender,
       };
 }

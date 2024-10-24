@@ -544,7 +544,7 @@ class CreateMemoryPage extends StatelessWidget {
                       hintText: 'User Action',
                       customFunction: () {
                         showAppModalSheet(
-                            draggableScrollable: true,
+                            flexibleSheet: true,
                             child: CommonDataSearchSelectPage(
                               showCtaActions: true,
                               onCtaActionSelected: (ctaAction) {

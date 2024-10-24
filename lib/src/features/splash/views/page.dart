@@ -56,7 +56,7 @@ class SplashPage extends StatelessWidget {
                       if (localUids?.isNotEmpty ?? false) {
                         showAppModalSheet(
                           dismissPrevious: true,
-                          draggableScrollable: false,
+                          flexibleSheet: false,
                           child: SwitchUserDialogUi(),
                         );
                       } else {

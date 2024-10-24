@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_educations.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_services.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
     hide
         UserInfo,
@@ -23,7 +25,7 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
 
 import '../../../../config/services/auth_db.dart';
 
@@ -334,6 +336,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     try {
+      if (nameController.text.isEmpty) {
+        throw BusinessException('Name cannot be empty');
+      }
+      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
+        if (portfolioTitle.text.isEmpty) {
+          throw BusinessException('Portfolio title cannot be empty');
+        }
+      }
       SmartDialog.showLoading();
       UpdateUserInfoRequest newUpdateUserInfoRequest = UpdateUserInfoRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
@@ -341,14 +351,32 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           name: nameController.text,
           bio: bioController.text,
           address: addressController.text,
-          portfolioStatus: portfolioStatus.text,
-          portfolioDescription: portfolioDescriptionController.text,
-          portfolioTitle: portfolioTitle.text,
           publicEmailId: publicEmailController.text,
           dob: state.dob,
           gender: state.gender,
         ),
       );
+      (int?, String?)? userInfoUpdateResponse =
+          await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
+      if (userInfoUpdateResponse?.$1 != HttpStatus.ok) {
+        throw BusinessException(
+            userInfoUpdateResponse?.$2 ?? 'Failed to update profile info');
+      }
+      SmartDialog.showLoading(msg: '${userInfoUpdateResponse?.$2}');
+      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
+        UpdateUserPortfolioInfoRequest newUserPortfolioInfoRequest =
+            UpdateUserPortfolioInfoRequest(
+          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          portfolioInfo: PortfolioInfo(
+            portfolioStatus: portfolioStatus.text,
+            portfolioDescription: portfolioDescriptionController.text,
+            portfolioTitle: portfolioTitle.text,
+          ),
+        );
+        (int?, String?)? portfolioUpdateResponse =
+            await UsersApi.updateUserPortfolioInfo(newUserPortfolioInfoRequest);
+        SmartDialog.showLoading(msg: '${portfolioUpdateResponse?.$2}');
+      }
       UpdateUserEducationsRequest newUserEducationsRequest =
           UpdateUserEducationsRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
@@ -366,7 +394,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             )
             .toList(),
       );
-      UpdateUserWorkExperiencesRequest newUserWorkExperiencesRequest =
+      (int?, String?)? m2 =
+          await UsersApi.updateEducations(newUserEducationsRequest);
+
+      SmartDialog.showLoading(msg: '${m2?.$2}');
+      UpdateUserWorkExperiencesRequest? newUserWorkExperiencesRequest =
           UpdateUserWorkExperiencesRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userWorkExperiences: state.workExperiences
@@ -383,34 +415,32 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             )
             .toList(),
       );
-      UpdateUserServicesRequest newUserServicesRequest =
-          UpdateUserServicesRequest(
-        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-        userServices: state.services
-            ?.map(
-              (UiService e) => UserService(
-                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-                title: e.serviceName,
-                description: e.serviceDescription,
-              ),
-            )
-            .toList(),
-      );
-      String? m1 = await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
-      SmartDialog.showLoading(msg: '$m1');
-      String? m2 = await UsersApi.updateEducations(newUserEducationsRequest);
-      SmartDialog.showLoading(msg: '$m2');
-      String? m3 =
+
+      (int?, String?)? m3 =
           await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
-      SmartDialog.showLoading(msg: '$m3');
-      String? m4 = await UsersApi.updateServices(newUserServicesRequest);
-      SmartDialog.showLoading(msg: '$m4');
+      SmartDialog.showLoading(msg: '${m3?.$2}');
+      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
+        UpdateUserServicesRequest newUserServicesRequest =
+            UpdateUserServicesRequest(
+          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          userServices: state.services
+              ?.map(
+                (UiService e) => UserService(
+                  userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                  title: e.serviceName,
+                  description: e.serviceDescription,
+                ),
+              )
+              .toList(),
+        );
+        (int?, String?)? m4 =
+            await UsersApi.updateServices(newUserServicesRequest);
+        SmartDialog.showLoading(msg: '${m4?.$2}');
+      }
       SmartDialog.dismiss();
       AppNavigationService.goBack();
-    } catch (e) {
-      SmartDialog.dismiss();
-      SmartDialog.showToast(e.toString());
-      if (kDebugMode) rethrow;
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
   }
 }
