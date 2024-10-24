@@ -15,8 +15,7 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 import 'package:whatsevr_app/generated/assets.dart';
 
@@ -40,10 +39,10 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
     currentUserId = AuthUserDb.getLastLoggedUserUid();
     List<String>? allAuthUserUids = AuthUserDb.getAllAuthorisedUserUid();
 
-    if (allAuthUserUids?.isEmpty ?? true) return;
-    allAuthUserUids = allAuthUserUids?.toSet().toList();
+    if (allAuthUserUids.isEmpty) return;
+    allAuthUserUids = allAuthUserUids.toSet().toList();
     multipleUserDetailsResponse =
-        await UsersApi.getMultipleUserDetails(userUids: allAuthUserUids!);
+        await UsersApi.getMultipleUserDetails(userUids: allAuthUserUids);
     multipleUserDetailsResponse?.users?.sort((a, b) {
       if (a.totalFollowers == null || b.totalFollowers == null) return 0;
       return b.totalFollowers!.compareTo(a.totalFollowers!);
@@ -59,9 +58,9 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
         ContentMask(
           showMask: multipleUserDetailsResponse == null,
           customMask: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              for (String? userUid
-                  in AuthUserDb.getAllAuthorisedUserUid() ?? [])
+              for (var _ in AuthUserDb.getAllAuthorisedUserUid() ?? [])
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
                   decoration: BoxDecoration(

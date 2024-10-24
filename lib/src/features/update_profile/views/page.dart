@@ -639,6 +639,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             controller: workingModeController,
                                             customFunction: () {
                                               showAppModalSheet(
+                                                draggableScrollable: true,
                                                 context: context,
                                                 child:
                                                     CommonDataSearchSelectPage(
@@ -787,6 +788,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               hintText: 'Select Gender',
                               customFunction: () {
                                 showAppModalSheet(
+                                  draggableScrollable: true,
                                   child: CommonDataSearchSelectPage(
                                     showGenders: true,
                                     onGenderSelected: (Gender p0) {

@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
-import 'package:hive/hive.dart';
 
 class ApiCacheInterceptor extends DioCacheInterceptor {
-  static const String cacheDbName = 'api_cache_43635';
+  static const String cacheDbName = 'api_cache_433635';
   ApiCacheInterceptor({
     required String? cacheDirectoryPath,
     required int? maxMinuteOnDevice,

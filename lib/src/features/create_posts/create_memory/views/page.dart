@@ -544,16 +544,17 @@ class CreateMemoryPage extends StatelessWidget {
                       hintText: 'User Action',
                       customFunction: () {
                         showAppModalSheet(
+                            draggableScrollable: true,
                             child: CommonDataSearchSelectPage(
-                          showCtaActions: true,
-                          onCtaActionSelected: (ctaAction) {
-                            context
-                                .read<CreateMemoryBloc>()
-                                .add(UpdateCtaActionEvent(
-                                  ctaAction: ctaAction.action,
-                                ));
-                          },
-                        ));
+                              showCtaActions: true,
+                              onCtaActionSelected: (ctaAction) {
+                                context
+                                    .read<CreateMemoryBloc>()
+                                    .add(UpdateCtaActionEvent(
+                                      ctaAction: ctaAction.action,
+                                    ));
+                              },
+                            ));
                       },
                     ),
                     const Gap(12),

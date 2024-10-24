@@ -36,7 +36,7 @@ Future<void> showAppModalSheet({
         topRight: Radius.circular(20),
       ),
     ),
-    isScrollControlled: draggableScrollable,
+    isScrollControlled: true, //auto adjust height
     showDragHandle: true,
     builder: (BuildContext context) {
       if (!draggableScrollable) {
@@ -49,7 +49,7 @@ Future<void> showAppModalSheet({
         ),
         child: DraggableScrollableSheet(
           expand: false,
-          initialChildSize: 0.7,
+          initialChildSize: 0.6,
           builder: (BuildContext context, ScrollController scrollController) {
             return SingleChildScrollView(
               controller: scrollController,

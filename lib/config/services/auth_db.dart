@@ -31,15 +31,16 @@ class AuthUserDb {
     await _authorisedCustomersBox.put(_allLoggedUserUids, allLoggedUsers);
   }
 
-  static List<String>? getAllAuthorisedUserUid() {
+  static List<String> getAllAuthorisedUserUid() {
     try {
-      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
-      if (users == null) return null;
+      List<dynamic>? users =
+          _authorisedCustomersBox.get(_allLoggedUserUids, defaultValue: []);
+      if (users == null) return [];
       return users.cast<String>();
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
-    return null;
+    return [];
   }
 
   static Future<void> removeAuthorisedUserUid(String userId) async {

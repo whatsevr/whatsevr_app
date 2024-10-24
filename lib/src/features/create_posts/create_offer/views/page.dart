@@ -283,13 +283,16 @@ class CreateOfferPage extends StatelessWidget {
                 hintText: 'Status',
                 customFunction: () {
                   showAppModalSheet(
+                      draggableScrollable: true,
                       child: CommonDataSearchSelectPage(
-                    showProfessionalStatus: true,
-                    onProfessionalStatusSelected: (professionalStatus) {
-                      context.read<CreateOfferBloc>().statusController.text =
-                          professionalStatus.title ?? '';
-                    },
-                  ));
+                        showProfessionalStatus: true,
+                        onProfessionalStatusSelected: (professionalStatus) {
+                          context
+                              .read<CreateOfferBloc>()
+                              .statusController
+                              .text = professionalStatus.title ?? '';
+                        },
+                      ));
                 },
               ),
               const Gap(12),
