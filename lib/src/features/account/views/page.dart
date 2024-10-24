@@ -93,41 +93,20 @@ class AccountPage extends StatelessWidget {
                         shrinkWrap: true,
                         children: <Widget>[
                           AccountPageCoverVideoView(),
-                          const Gap(8),
-                          PadHorizontal(
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(
-                                    '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                          if (state.profileDetailsResponse?.userInfo
+                                  ?.isPortfolio ==
+                              true) ...[
+                            const Gap(8),
+                            PadHorizontal(
+                              child: Text(
+                                '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Gap(8),
-                                if (pageArgument?.isEditMode ==
-                                    true) ...<Widget>[
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () async {
-                                      await AppNavigationService.newRoute(
-                                        RoutesName.updateProfile,
-                                        extras: ProfileUpdatePageArgument(
-                                          profileDetailsResponse:
-                                              state.profileDetailsResponse,
-                                        ),
-                                      );
-                                      context
-                                          .read<AccountBloc>()
-                                          .add(AccountInitialEvent());
-                                    },
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
+                              ),
+                            )
+                          ],
                           const Gap(8),
                           Builder(builder: (context) {
                             return PadHorizontal(
@@ -232,7 +211,7 @@ class AccountPage extends StatelessWidget {
                                                                   DecorationImage(
                                                                 image:
                                                                     ExtendedNetworkImageProvider(
-                                                                  '${memory?.imageUrl}',
+                                                                  '${memory.imageUrl}',
                                                                   cache: true,
                                                                 ),
                                                                 fit: BoxFit
@@ -251,7 +230,7 @@ class AccountPage extends StatelessWidget {
                                                             ),
                                                             const Gap(4),
                                                             Text(
-                                                              '${formatCountToKMBTQ(memory?.totalViews)}',
+                                                              '${formatCountToKMBTQ(memory.totalViews)}',
                                                               style:
                                                                   const TextStyle(
                                                                 fontSize: 14,
@@ -281,7 +260,7 @@ class AccountPage extends StatelessWidget {
                                       );
                                     },
                                     child: AdvancedAvatar(
-                                      size: 62,
+                                      size: 55,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: state.userMemories.isEmpty
@@ -296,7 +275,9 @@ class AccountPage extends StatelessWidget {
                                             ? EdgeInsets.zero
                                             : const EdgeInsets.all(2),
                                         child: ExtendedImage.network(
-                                          '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                          state.profileDetailsResponse?.userInfo
+                                                  ?.profilePicture ??
+                                              MockData.blankProfileAvatar,
                                           shape: BoxShape.circle,
                                           fit: BoxFit.cover,
                                           enableLoadState: false,
@@ -317,7 +298,7 @@ class AccountPage extends StatelessWidget {
                                         Text(
                                           ' @${state.profileDetailsResponse?.userInfo?.username}',
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             color: Colors.grey,
                                           ),
                                         ),
@@ -325,6 +306,7 @@ class AccountPage extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  Gap(12),
                                   if (pageArgument?.isEditMode ==
                                       true) ...<Widget>[
                                     IconButton(
@@ -348,10 +330,51 @@ class AccountPage extends StatelessWidget {
                                     IconButton(
                                       icon: const Icon(Icons.menu),
                                       onPressed: () {
-                                        AppNavigationService.newRoute(
-                                          RoutesName.settings,
-                                          extras: SettingsPageArgument(),
-                                        );
+                                        showAppModalSheet(
+                                            draggableScrollable: false,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  leading:
+                                                      const Icon(Icons.edit),
+                                                  title: const Text(
+                                                      'Edit Profile'),
+                                                  onTap: () async {
+                                                    Navigator.pop(context);
+                                                    await AppNavigationService
+                                                        .newRoute(
+                                                      RoutesName.updateProfile,
+                                                      extras:
+                                                          ProfileUpdatePageArgument(
+                                                        profileDetailsResponse:
+                                                            state
+                                                                .profileDetailsResponse,
+                                                      ),
+                                                    );
+                                                    context
+                                                        .read<AccountBloc>()
+                                                        .add(
+                                                            AccountInitialEvent());
+                                                  },
+                                                ),
+                                                ListTile(
+                                                  leading: const Icon(
+                                                      Icons.settings),
+                                                  title: const Text(
+                                                      'Manage Account'),
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    AppNavigationService
+                                                        .newRoute(
+                                                      RoutesName.settings,
+                                                      extras:
+                                                          SettingsPageArgument(),
+                                                    );
+                                                  },
+                                                )
+                                              ],
+                                            ));
                                       },
                                     ),
                                   ],

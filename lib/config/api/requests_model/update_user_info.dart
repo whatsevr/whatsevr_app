@@ -29,7 +29,7 @@ class UpdateUserInfoRequest {
 }
 
 class UserInfo {
-  final String? emailId;
+  final String? publicEmailId;
   final String? name;
   final String? bio;
   final String? address;
@@ -40,7 +40,7 @@ class UserInfo {
   final String? gender;
 
   UserInfo({
-    this.emailId,
+    this.publicEmailId,
     this.name,
     this.bio,
     this.address,
@@ -56,7 +56,7 @@ class UserInfo {
   String toJson() => json.encode(toMap());
 
   factory UserInfo.fromMap(Map<String, dynamic> json) => UserInfo(
-        emailId: json['email_id'],
+        publicEmailId: json['public_email_id'],
         name: json['name'],
         bio: json['bio'],
         address: json['address'],
@@ -68,7 +68,7 @@ class UserInfo {
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-        'email_id': emailId,
+        'public_email_id': publicEmailId,
         'name': name,
         'bio': bio,
         'address': address,

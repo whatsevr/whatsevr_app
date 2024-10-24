@@ -238,7 +238,6 @@ class UserEducation {
 class UserInfo {
   final int? id;
   final DateTime? registeredOn;
-  final bool? isActive;
   final String? uid;
   final String? username;
   final String? mobileNumber;
@@ -265,11 +264,11 @@ class UserInfo {
   final String? userLastLatLongWkb;
   final int? totalConnections;
   final int? totalLikes;
+  final String? publicEmailId;
 
   UserInfo({
     this.id,
     this.registeredOn,
-    this.isActive,
     this.uid,
     this.username,
     this.mobileNumber,
@@ -296,12 +295,12 @@ class UserInfo {
     this.userLastLatLongWkb,
     this.totalConnections,
     this.totalLikes,
+    this.publicEmailId,
   });
 
   UserInfo copyWith({
     int? id,
     DateTime? registeredOn,
-    bool? isActive,
     String? uid,
     String? username,
     String? mobileNumber,
@@ -328,11 +327,11 @@ class UserInfo {
     String? userLastLatLongWkb,
     int? totalConnections,
     int? totalLikes,
+    String? publicEmailId,
   }) =>
       UserInfo(
         id: id ?? this.id,
         registeredOn: registeredOn ?? this.registeredOn,
-        isActive: isActive ?? this.isActive,
         uid: uid ?? this.uid,
         username: username ?? this.username,
         mobileNumber: mobileNumber ?? this.mobileNumber,
@@ -359,6 +358,7 @@ class UserInfo {
         userLastLatLongWkb: userLastLatLongWkb ?? this.userLastLatLongWkb,
         totalConnections: totalConnections ?? this.totalConnections,
         totalLikes: totalLikes ?? this.totalLikes,
+        publicEmailId: publicEmailId ?? this.publicEmailId,
       );
 
   factory UserInfo.fromJson(String str) => UserInfo.fromMap(json.decode(str));
@@ -370,7 +370,6 @@ class UserInfo {
         registeredOn: json["registered_on"] == null
             ? null
             : DateTime.parse(json["registered_on"]),
-        isActive: json["is_active"],
         uid: json["uid"],
         username: json["username"],
         mobileNumber: json["mobile_number"],
@@ -401,12 +400,12 @@ class UserInfo {
         userLastLatLongWkb: json["user_last_lat_long_wkb"],
         totalConnections: json["total_connections"],
         totalLikes: json["total_likes"],
+        publicEmailId: json["public_email_id"],
       );
 
   Map<String, dynamic> toMap() => {
         "id": id,
         "registered_on": registeredOn?.toIso8601String(),
-        "is_active": isActive,
         "uid": uid,
         "username": username,
         "mobile_number": mobileNumber,
@@ -434,6 +433,7 @@ class UserInfo {
         "user_last_lat_long_wkb": userLastLatLongWkb,
         "total_connections": totalConnections,
         "total_likes": totalLikes,
+        "public_email_id": publicEmailId,
       };
 }
 

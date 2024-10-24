@@ -119,17 +119,35 @@ class AccountPageAboutView extends StatelessWidget {
               ),
             ],
             for ((String label, String info) itm in <(String, String)>[
-              ('Bio', '${state.profileDetailsResponse?.userInfo?.bio}'),
-              ('Address', '${state.profileDetailsResponse?.userInfo?.address}'),
-              (
-                'Education',
-                '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.title} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
-              ),
-              (
-                'Working Experience',
-                '${state.profileDetailsResponse?.userWorkExperiences?.map((UserWorkExperience? e) => '${e?.companyName} - ${e?.designation} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
-              ),
-              ('Email', '${state.profileDetailsResponse?.userInfo?.emailId}'),
+              if (state.profileDetailsResponse?.userInfo?.bio?.isNotEmpty ??
+                  false)
+                ('Bio', '${state.profileDetailsResponse?.userInfo?.bio}'),
+              if (state.profileDetailsResponse?.userInfo?.address?.isNotEmpty ??
+                  false)
+                (
+                  'Address',
+                  '${state.profileDetailsResponse?.userInfo?.address}'
+                ),
+              if (state.profileDetailsResponse?.userEducations?.isNotEmpty ??
+                  false)
+                (
+                  'Education',
+                  '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.title} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
+                ),
+              if (state.profileDetailsResponse?.userWorkExperiences
+                      ?.isNotEmpty ??
+                  false)
+                (
+                  'Working Experience',
+                  '${state.profileDetailsResponse?.userWorkExperiences?.map((UserWorkExperience? e) => '${e?.companyName} - ${e?.designation} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
+                ),
+              if (state.profileDetailsResponse?.userInfo?.publicEmailId
+                      ?.isNotEmpty ??
+                  false)
+                (
+                  'Email',
+                  (state.profileDetailsResponse?.userInfo?.publicEmailId ?? '')
+                ),
               if (state.profileDetailsResponse?.userInfo?.dob != null)
                 (
                   'Birthday',
@@ -138,9 +156,7 @@ class AccountPageAboutView extends StatelessWidget {
               if (state.profileDetailsResponse?.userInfo?.registeredOn != null)
                 (
                   'Join On',
-                  (DateFormat('hh:mm a, dd MMM,yyyy').format(
-                    state.profileDetailsResponse!.userInfo!.registeredOn!,
-                  ))
+                  '${ddMonthyy(state.profileDetailsResponse?.userInfo?.registeredOn)}'
                 ),
               (
                 state.profileDetailsResponse?.userInfo?.isPortfolio == true
@@ -148,20 +164,25 @@ class AccountPageAboutView extends StatelessWidget {
                     : 'Account link',
                 'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.username}'
               ),
-              if (state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
-                  null)
+              if (state.profileDetailsResponse?.userInfo?.isPortfolio == true &&
+                  state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
+                      null)
                 (
                   'Portfolio Created On',
-                  (DateFormat('hh:mm a, dd MMM,yyyy').format(
-                    state.profileDetailsResponse!.userInfo!.portfolioCreatedAt!,
-                  ))
+                  '${ddMonthyy(state.profileDetailsResponse?.userInfo?.portfolioCreatedAt)}'
+                ),
+              if (state.profileDetailsResponse?.userInfo?.portfolioDescription
+                      ?.isNotEmpty ??
+                  false)
+                (
+                  'Description',
+                  '${state.profileDetailsResponse?.userInfo?.portfolioDescription}'
                 ),
               (
-                'Description',
-                '${state.profileDetailsResponse?.userInfo?.portfolioDescription}'
+                'Total Connection',
+                '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}'
               ),
-              ('Total Connection', '3636'),
-              ('Total Post', '2524'),
+              ('Total Post', '0'),
             ])
               ListTile(
                 visualDensity: VisualDensity.compact,

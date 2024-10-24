@@ -383,8 +383,9 @@ class ProfileUpdatePage extends StatelessWidget {
                             ),
                             const Gap(8),
                             WhatsevrFormField.email(
-                              controller:
-                                  context.read<ProfileBloc>().emailController,
+                              controller: context
+                                  .read<ProfileBloc>()
+                                  .publicEmailController,
                               headingTitle: 'Email',
                               maxLength: 60,
                             ),

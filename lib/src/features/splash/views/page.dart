@@ -3,9 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
+
+import '../../../../config/widgets/auth_dialogs.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -47,9 +51,19 @@ class SplashPage extends StatelessWidget {
                     shrink: true,
                     label: 'Login',
                     onPressed: () {
-                      context
-                          .read<SplashBloc>()
-                          .add(const InitiateAuthServiceEvent());
+                      List<String>? localUids =
+                          AuthUserDb.getAllAuthorisedUserUid();
+                      if (localUids?.isNotEmpty ?? false) {
+                        showAppModalSheet(
+                          dismissPrevious: true,
+                          draggableScrollable: false,
+                          child: SwitchUserDialogUi(),
+                        );
+                      } else {
+                        context
+                            .read<SplashBloc>()
+                            .add(const InitiateAuthServiceEvent());
+                      }
                     });
               },
             ),

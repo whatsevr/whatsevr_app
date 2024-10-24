@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/api/methods/auth.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/requests_model/auth/register.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
@@ -48,113 +53,111 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
 
   @override
   Widget build(BuildContext context) {
-    return ContentMask(
-      showMask: multipleUserDetailsResponse == null,
-      customMask: WhatsevrLoadingIndicator(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (multipleUserDetailsResponse?.users?.isNotEmpty ?? false) ...[
-            for (User user in multipleUserDetailsResponse?.users ?? [])
-              ListTile(
-                onTap: () async {
-                  Navigator.pop(context);
-                  AuthUserService.loginToApp(
-                    userUid: user.uid!,
-                    mobileNumber: user.mobileNumber,
-                    emailId: user.emailId,
-                  );
-                },
-                leading: CircleAvatar(
-                  backgroundImage: ExtendedNetworkImageProvider(
-                      user.profilePicture ?? MockData.blankProfileAvatar),
-                ),
-                title: Text(user.username ?? 'Unknown User'),
-                subtitle: Text('${user.totalFollowers} Followers'),
-                trailing: user.uid == currentUserId
-                    ? const Icon(Icons.check_circle, color: Colors.black)
-                    : null,
-              ),
-          ],
-          const Gap(16),
-          WhatsevrButton.outlined(
-            label: 'Logout From All Accounts',
-            onPressed: () {
-              AuthUserService.logOutAllUser(startFomBegin: true);
-            },
-          ),
-          WhatsevrButton.filled(
-            label: 'Add New Account',
-            onPressed: () {
-              AuthUserService.loginWithOtpLessService(
-                onLoginSuccess: (userUid, mobileNumber, emailId) {
-                  AuthUserService.loginToApp(
-                    userUid: userUid,
-                    mobileNumber: mobileNumber,
-                    emailId: emailId,
-                  );
-                },
-                onLoginFailed: (errorMessage) {
-                  SmartDialog.showToast(errorMessage);
-                },
-              );
-            },
-          ),
-          Gap(50),
-        ],
-      ),
-    );
-  }
-}
-
-class AccountDoestNotExistUi extends StatelessWidget {
-  final String userUid;
-  final String? mobileNumber;
-  final String? emailId;
-  const AccountDoestNotExistUi({
-    super.key,
-    required this.userUid,
-    this.mobileNumber,
-    this.emailId,
-  });
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
-          'Account does not exist with',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
+        ContentMask(
+          showMask: multipleUserDetailsResponse == null,
+          customMask: Column(
+            children: [
+              for (String? userUid
+                  in AuthUserDb.getAllAuthorisedUserUid() ?? [])
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  width: double.infinity,
+                  child: ListTile(
+                    leading: const CircleAvatar(),
+                    title: const Text('XXXXXXXXXXXXXXXXXXX'),
+                    subtitle: const Text('XXXXXXXXX'),
+                  ),
+                )
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (multipleUserDetailsResponse?.users?.isNotEmpty ?? false) ...[
+                for (User user in multipleUserDetailsResponse?.users ?? [])
+                  ListTile(
+                    onTap: () async {
+                      Navigator.pop(context);
+                      AuthUserService.loginToApp(
+                        userUid: user.uid!,
+                        mobileNumber: user.mobileNumber,
+                        emailId: user.emailId,
+                      );
+                    },
+                    leading: CircleAvatar(
+                      backgroundImage: ExtendedNetworkImageProvider(
+                          user.profilePicture ?? MockData.blankProfileAvatar),
+                    ),
+                    title: Text(user.username ?? 'Unknown User'),
+                    subtitle: Text('${user.totalFollowers} Followers'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (user.uid == currentUserId)
+                          const Icon(Icons.check_circle, color: Colors.black),
+                        IconButton(
+                          icon: const Icon(Icons.logout),
+                          onPressed: () {
+                            AuthUserDb.removeAuthorisedUserUid(user.uid!);
+                            if (user.uid == currentUserId) {
+                              Navigator.pop(context);
+                              AuthUserDb.clearLastLoggedUserUid();
+                              AppNavigationService.clearAllAndNewRoute(
+                                  RoutesName.auth);
+                            } else {
+                              setState(() {
+                                int index = multipleUserDetailsResponse!.users!
+                                    .indexWhere(
+                                        (element) => element.uid == user.uid);
+                                multipleUserDetailsResponse!.users!
+                                    .removeAt(index);
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+              if ((multipleUserDetailsResponse?.users?.length ?? 0) > 1) ...[
+                const Gap(16),
+                WhatsevrButton.outlined(
+                  label: 'Logout From All Accounts',
+                  onPressed: () {
+                    Navigator.pop(context);
+                    AuthUserService.logOutAllUser(startFomBegin: true);
+                  },
+                )
+              ],
+            ],
           ),
         ),
-        if (mobileNumber != null) ...[
-          const Gap(8),
-          Text('$mobileNumber'),
-        ],
-        if (emailId != null) ...[
-          const Gap(8),
-          Text('$emailId'),
-        ],
-        const Gap(16),
         WhatsevrButton.filled(
-          label: 'Create Account',
+          label: 'Add New Account',
           onPressed: () {
-            AppNavigationService.goBack();
-            showAppModalSheet(
-                child: CreateAccountUi(
-              userUid: userUid,
-              mobileNumber: mobileNumber,
-              emailId: emailId,
-            ));
+            AuthUserService.loginWithOtpLessService(
+              onLoginSuccess: (userUid, mobileNumber, emailId) {
+                Navigator.pop(context);
+                AuthUserService.loginToApp(
+                  userUid: userUid,
+                  mobileNumber: mobileNumber,
+                  emailId: emailId,
+                );
+              },
+              onLoginFailed: (errorMessage) {
+                SmartDialog.showToast(errorMessage);
+              },
+            );
           },
         ),
-        const Gap(8),
-        WhatsevrButton.outlined(
-          label: 'Login With Different Account',
-          onPressed: () {},
-        ),
+        Gap(50),
       ],
     );
   }
@@ -164,24 +167,34 @@ class CreateAccountUi extends StatelessWidget {
   final String userUid;
   final String? mobileNumber;
   final String? emailId;
-  const CreateAccountUi({
+  CreateAccountUi({
     super.key,
     required this.userUid,
     this.mobileNumber,
     this.emailId,
   });
-
+  final TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
+        const Gap(25),
         ExtendedImage.asset(
           Assets.imagesWhatsevrAppLogo,
           width: 100,
           height: 100,
           shape: BoxShape.circle,
         ),
-        const Gap(8),
+        const Gap(25),
+        const Text(
+          'Create Account',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Gap(25),
         if (mobileNumber != null) ...[
           const Gap(8),
           WhatsevrFormField.generalTextField(
@@ -202,6 +215,7 @@ class CreateAccountUi extends StatelessWidget {
         ],
         const Gap(12),
         WhatsevrFormField.generalTextField(
+          controller: nameController,
           headingTitle: 'Enter you name',
           maxLength: 50,
           maxLines: 1,
@@ -209,9 +223,32 @@ class CreateAccountUi extends StatelessWidget {
         ),
         const Gap(16),
         WhatsevrButton.filled(
-          label: 'Create Account',
-          onPressed: () {
-            AppNavigationService.goBack();
+          label: 'Continue',
+          onPressed: () async {
+            if (nameController.text.isEmpty || nameController.text.length < 3) {
+              SmartDialog.showToast(
+                  'Name is required and should be atleast 3 characters');
+              return;
+            }
+            SmartDialog.showLoading(msg: 'Creating Account');
+            (String?, int?)? registerInfo = await AuthApi.register(
+              UserRegistrationRequest(
+                userUid: userUid,
+                mobileNumber: mobileNumber,
+                emailId: emailId,
+                name: nameController.text,
+              ),
+            );
+            if (registerInfo?.$2 != HttpStatus.ok) {
+              SmartDialog.showToast(
+                  registerInfo?.$1 ?? 'Failed to create account');
+              return;
+            }
+            AuthUserService.loginToApp(
+              userUid: userUid,
+              mobileNumber: mobileNumber,
+              emailId: emailId,
+            );
           },
         ),
         const Gap(16),
@@ -252,10 +289,6 @@ class AccountBannedUi extends StatelessWidget {
           },
         ),
         const Gap(16),
-        WhatsevrButton.outlined(
-          label: 'Login With Different Account',
-          onPressed: () {},
-        ),
       ],
     );
   }
@@ -275,6 +308,7 @@ class AccountIsDeactivatedStateUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         const Text('Account is in deactivated state'),
         if (mobileNumber != null) ...[
@@ -293,10 +327,6 @@ class AccountIsDeactivatedStateUi extends StatelessWidget {
           },
         ),
         const Gap(16),
-        WhatsevrButton.outlined(
-          label: 'Login With Different Account',
-          onPressed: () {},
-        ),
       ],
     );
   }

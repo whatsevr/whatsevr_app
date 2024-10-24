@@ -33,7 +33,7 @@ part 'state.dart';
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   TextEditingController nameController = TextEditingController();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController publicEmailController = TextEditingController();
 
   TextEditingController bioController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -128,8 +128,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     nameController.text =
         event.pageArgument.profileDetailsResponse?.userInfo?.name ?? '';
 
-    emailController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.emailId ?? '';
+    publicEmailController.text =
+        event.pageArgument.profileDetailsResponse?.userInfo?.publicEmailId ??
+            '';
 
     bioController.text =
         event.pageArgument.profileDetailsResponse?.userInfo?.bio ?? '';
@@ -157,7 +158,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(profileImage: event.profileImage));
       String? profilePictureUrl = await FileUploadService.uploadFilesToSupabase(
         event.profileImage!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'profile-picture',
         fileExtension: 'jpg',
       );
@@ -198,7 +199,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         File? videoFile = event.coverVideo;
         String? imageUrl = await FileUploadService.uploadFilesToSupabase(
           imageFile!,
-          userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+          userUid: (AuthUserDb.getLastLoggedUserUid())!,
           fileRelatedTo: 'cover-image',
           fileExtension: 'jpg',
         );
@@ -206,7 +207,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if (videoFile != null) {
           videoUrl = await FileUploadService.uploadFilesToSupabase(
             videoFile,
-            userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+            userUid: (AuthUserDb.getLastLoggedUserUid())!,
             fileRelatedTo: 'cover-video',
           );
         }
@@ -343,7 +344,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           portfolioStatus: portfolioStatus.text,
           portfolioDescription: portfolioDescriptionController.text,
           portfolioTitle: portfolioTitle.text,
-          emailId: emailController.text,
+          publicEmailId: publicEmailController.text,
           dob: state.dob,
           gender: state.gender,
         ),

@@ -92,6 +92,8 @@ class AuthUserService {
       required String? emailId}) async {
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid,
+      mobileNumber,
+      emailId,
     );
     if (loginInfo?.$1 == HttpStatus.ok) {
       await AuthUserDb.saveAuthorisedUserUid(userUid);
@@ -121,8 +123,8 @@ class AuthUserService {
     } else {
       if (loginInfo?.$1 == HttpStatus.notAcceptable) {
         showAppModalSheet(
-          draggableScrollable: false,
-          child: AccountDoestNotExistUi(
+          dismissPrevious: true,
+          child: CreateAccountUi(
             userUid: userUid,
             mobileNumber: mobileNumber,
             emailId: emailId,
@@ -131,7 +133,8 @@ class AuthUserService {
       } else if (loginInfo?.$1 == HttpStatus.forbidden) {
         showAppModalSheet(
           draggableScrollable: false,
-          child: AccountDoestNotExistUi(
+          dismissPrevious: true,
+          child: AccountBannedUi(
             userUid: userUid,
             mobileNumber: mobileNumber,
             emailId: emailId,
@@ -140,7 +143,8 @@ class AuthUserService {
       } else if (loginInfo?.$1 == HttpStatus.partialContent) {
         showAppModalSheet(
           draggableScrollable: false,
-          child: AccountDoestNotExistUi(
+          dismissPrevious: true,
+          child: AccountIsDeactivatedStateUi(
             userUid: userUid,
             mobileNumber: mobileNumber,
             emailId: emailId,
