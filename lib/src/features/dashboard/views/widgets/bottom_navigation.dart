@@ -8,10 +8,8 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
-import 'package:whatsevr_app/config/services/auth_user_service.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/auth_dialogs.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/switch_user_dialog.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
@@ -120,7 +118,8 @@ class _DashboardPageBottomNavigationBarState
               );
         },
         () {
-          showSwitchUserDialog();
+          showAppModalSheet(
+              draggableScrollable: false, child: SwitchUserDialogUi());
         },
       ),
     ];

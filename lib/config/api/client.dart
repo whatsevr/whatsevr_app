@@ -27,10 +27,10 @@ class ApiClient {
         validateStatus: (int? status) {
           /// this client will only accept status code 200 and 204 as success
           return status == HttpStatus.ok ||
-              status == HttpStatus.noContent ||
               status == HttpStatus.badRequest ||
               status == HttpStatus.forbidden ||
-              status == HttpStatus.partialContent;
+              status == HttpStatus.partialContent ||
+              status == HttpStatus.notAcceptable;
         },
         headers: <String, dynamic>{
           'Authorization': 'Bearer <user token>',

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
@@ -27,7 +29,7 @@ class AuthApi {
       return (
         response.statusCode,
         response.data['message'] as String?,
-        response.statusCode == 200
+        response.statusCode == HttpStatus.ok
             ? LoginSuccessResponse.fromMap(response.data)
             : null,
       );

@@ -53,8 +53,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     Emitter<SplashState> emit,
   ) async {
     await AuthUserService.loginWithOtpLessService(
-      onLoginSuccess: (userUid) {
-        AuthUserService.loginToApp(userUid);
+      onLoginSuccess: (userUid, mobileNumber, emailId) {
+        AuthUserService.loginToApp(
+            userUid: userUid, mobileNumber: mobileNumber, emailId: emailId);
       },
       onLoginFailed: (errorMessage) {
         SmartDialog.showToast(errorMessage);

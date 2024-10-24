@@ -5,16 +5,16 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
-import 'package:whatsevr_app/config/api/interceptors/cache.dart';
 import 'package:whatsevr_app/config/api/methods/auth.dart';
 
 import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
 import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-
+import 'package:collection/collection.dart';
+import 'package:whatsevr_app/config/widgets/auth_dialogs.dart';
+import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 class AuthUserService {
@@ -36,7 +36,8 @@ class AuthUserService {
   }
 
   static Future<void> loginWithOtpLessService({
-    required Function(String userUid) onLoginSuccess,
+    required Function(String userUid, String? mobileNumber, String? emailId)
+        onLoginSuccess,
     required Function(String errorMessage) onLoginFailed,
   }) async {
     final Otpless otplessFlutterPlugin = Otpless();
@@ -55,7 +56,28 @@ class AuthUserService {
             onLoginFailed('User id is received as null from auth service');
             return;
           }
-          onLoginSuccess(authServiceUserResponse.data!.userId!);
+          String? emailId = authServiceUserResponse.data?.identities
+              ?.firstWhereOrNull(
+                (element) => element.identityType == 'EMAIL',
+              )
+              ?.identityValue;
+          String? mobileNumber = authServiceUserResponse.data?.identities
+              ?.firstWhereOrNull(
+                (element) => element.identityType == 'MOBILE',
+              )
+              ?.identityValue;
+          TalkerService.instance.log({
+            'event': 'login_with_otpless',
+            'user_uid': authServiceUserResponse.data!.userId!,
+            'mobile_number': mobileNumber,
+            'email_id': emailId,
+          });
+          if (emailId == null && mobileNumber == null) {
+            onLoginFailed('Email id and mobile number both are empty');
+            return;
+          }
+          onLoginSuccess(
+              authServiceUserResponse.data!.userId!, mobileNumber, emailId);
         } else {
           onLoginFailed('${result['errorMessage']}');
         }
@@ -65,8 +87,9 @@ class AuthUserService {
   }
 
   static Future<void> loginToApp(
-    String userUid,
-  ) async {
+      {required String userUid,
+      required String? mobileNumber,
+      required String? emailId}) async {
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid,
     );
@@ -94,9 +117,38 @@ class AuthUserService {
           'email_id': loginInfo?.$3?.userInfo?.emailId,
         },
       );
-      AppNavigationService.clearAllAndNewRoute(RoutesName.dashboard);
+      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     } else {
-      SmartDialog.showToast('Failed to login, ${loginInfo?.$2}');
+      if (loginInfo?.$1 == HttpStatus.notAcceptable) {
+        showAppModalSheet(
+          draggableScrollable: false,
+          child: AccountDoestNotExistUi(
+            userUid: userUid,
+            mobileNumber: mobileNumber,
+            emailId: emailId,
+          ),
+        );
+      } else if (loginInfo?.$1 == HttpStatus.forbidden) {
+        showAppModalSheet(
+          draggableScrollable: false,
+          child: AccountDoestNotExistUi(
+            userUid: userUid,
+            mobileNumber: mobileNumber,
+            emailId: emailId,
+          ),
+        );
+      } else if (loginInfo?.$1 == HttpStatus.partialContent) {
+        showAppModalSheet(
+          draggableScrollable: false,
+          child: AccountDoestNotExistUi(
+            userUid: userUid,
+            mobileNumber: mobileNumber,
+            emailId: emailId,
+          ),
+        );
+      } else {
+        SmartDialog.showToast(loginInfo?.$2 ?? 'Something went wrong');
+      }
     }
   }
 }

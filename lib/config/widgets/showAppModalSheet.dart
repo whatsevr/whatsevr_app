@@ -3,10 +3,11 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../routes/router.dart';
 
-showAppModalSheet(
-    {BuildContext? context,
-    required Widget? child,
-    bool draggableScrollable = true}) {
+showAppModalSheet({
+  BuildContext? context,
+  required Widget? child,
+  bool draggableScrollable = true,
+}) {
   context ??= AppNavigationService.currentContext!;
   showModalBottomSheet(
     useRootNavigator: true,

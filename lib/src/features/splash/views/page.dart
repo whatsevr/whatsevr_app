@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
 
@@ -36,7 +37,22 @@ class SplashPage extends StatelessWidget {
               width: 100,
             ),
             const Spacer(),
-            const WhatsevrLoadingIndicator(),
+            FutureBuilder(
+              future: Future.delayed(const Duration(seconds: 3)),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const WhatsevrLoadingIndicator();
+                }
+                return WhatsevrButton.filled(
+                    shrink: true,
+                    label: 'Login',
+                    onPressed: () {
+                      context
+                          .read<SplashBloc>()
+                          .add(const InitiateAuthServiceEvent());
+                    });
+              },
+            ),
             const Gap(30),
             const Text(
               'WhatsEvr',
