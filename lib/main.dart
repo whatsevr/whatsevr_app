@@ -16,6 +16,7 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
+import 'package:whatsevr_app/constants.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
@@ -57,7 +58,7 @@ Future<void> main() async {
 void catchUnhandledExceptions(Object error, StackTrace? stack) {
   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
   TalkerService.instance.error(error.toString(), stack);
-  if (kDebugMode) {
+  if (kTestingMode) {
     SmartDialog.showToast(
       error.toString(),
       builder: (context) {
