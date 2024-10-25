@@ -7,7 +7,7 @@ import 'package:whatsevr_app/config/api/response_model/post_details/video.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/src/features/post_details_views/wtv_details/bloc/wtv_details_bloc.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/bloc/wtv_details_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
 class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
@@ -38,6 +38,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
                       );
                 },
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Stack(
                       children: <Widget>[
@@ -47,8 +48,8 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                           shape: BoxShape.rectangle,
                           fit: BoxFit.cover,
-                          height: 100,
-                          width: 150,
+                          height: 120,
+                          width: 180,
                         ),
                         Positioned(
                           bottom: 0,

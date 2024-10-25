@@ -1,15 +1,18 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
-import 'package:whatsevr_app/src/features/post_details_views/wtv_details/bloc/wtv_details_bloc.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/bloc/wtv_details_bloc.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:whatsevr_app/src/features/post_details_views/wtv_details/views/widgets/related_videos.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/views/widgets/related_videos.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
@@ -130,7 +133,101 @@ class WtvDetailsPage extends StatelessWidget {
                           ),
                         )
                       ],
+
+                      //latest comments
+                      if (state.videoPostDetailsResponse?.videoPostDetails
+                              ?.userComments?.isNotEmpty ??
+                          false) ...[
+                        Gap(8),
+                        PadHorizontal(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Comments',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Gap(8),
+                                    Text(
+                                      '${formatCountToKMBTQ(state.videoPostDetailsResponse?.videoPostDetails?.totalComments)}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Text(
+                                      'View all',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                CarouselSlider.builder(
+                                  itemCount: state.videoPostDetailsResponse
+                                      ?.videoPostDetails?.userComments?.length,
+                                  options: CarouselOptions(
+                                    height: 60,
+                                    viewportFraction: 1,
+                                    initialPage: 0,
+                                    autoPlay: true,
+                                    scrollDirection: Axis.horizontal,
+                                  ),
+                                  itemBuilder: (BuildContext context, int index,
+                                      int realIndex) {
+                                    return ListTile(
+                                      dense: true,
+                                      visualDensity: VisualDensity.compact,
+                                      leading: CircleAvatar(
+                                        radius: 15,
+                                        backgroundImage:
+                                            ExtendedNetworkImageProvider(
+                                          state
+                                                  .videoPostDetailsResponse
+                                                  ?.videoPostDetails
+                                                  ?.userComments?[index]
+                                                  .author
+                                                  ?.profilePicture ??
+                                              MockData.blankProfileAvatar,
+                                        ),
+                                      ),
+                                      title: Text(
+                                        '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                       Gap(8),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -138,10 +235,10 @@ class WtvDetailsPage extends StatelessWidget {
                             // Channel name
                             CircleAvatar(
                               radius: 20,
-                              backgroundImage: NetworkImage(
+                              backgroundImage: ExtendedNetworkImageProvider(
                                 state.videoPostDetailsResponse?.videoPostDetails
-                                        ?.user?.profilePicture ??
-                                    '',
+                                        ?.author?.profilePicture ??
+                                    MockData.blankProfileAvatar,
                               ),
                             ),
                             const Gap(8),
@@ -150,8 +247,8 @@ class WtvDetailsPage extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${state.videoPostDetailsResponse?.videoPostDetails?.user?.name}',
-                                    maxLines: 2,
+                                    '${state.videoPostDetailsResponse?.videoPostDetails?.author?.name}',
+                                    maxLines: 1,
                                     style: TextStyle(
                                       fontSize: 16,
                                     ),
@@ -162,14 +259,14 @@ class WtvDetailsPage extends StatelessWidget {
                                     runSpacing: 4,
                                     children: [
                                       Text(
-                                        '${state.videoPostDetailsResponse?.videoPostDetails?.user?.username}',
+                                        '${state.videoPostDetailsResponse?.videoPostDetails?.author?.username}',
                                         maxLines: 1,
                                         style: TextStyle(
                                           fontSize: 12,
                                         ),
                                       ),
                                       Text(
-                                        '${formatCountToKMBTQ(state.videoPostDetailsResponse?.videoPostDetails?.user?.totalFollowers)} followers',
+                                        '${formatCountToKMBTQ(state.videoPostDetailsResponse?.videoPostDetails?.author?.totalFollowers)} followers',
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey,
@@ -220,7 +317,6 @@ class WtvDetailsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      //comments
 
                       const Gap(10),
                       const WtvVideoDetailsRelatedVideosView(),

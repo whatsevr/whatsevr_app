@@ -8,8 +8,8 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
-class CommunityPage extends StatelessWidget {
-  CommunityPage({super.key});
+class CommunityPageX extends StatelessWidget {
+  CommunityPageX({super.key});
   final PageController controller = PageController();
   @override
   Widget build(BuildContext context) {

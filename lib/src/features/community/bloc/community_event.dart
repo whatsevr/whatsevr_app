@@ -1,5 +1,5 @@
 part of 'community_bloc.dart';
 
-sealed class CommunityEvent extends Equatable {
-  const CommunityEvent();
+sealed class CommunityEventX extends Equatable {
+  const CommunityEventX();
 }

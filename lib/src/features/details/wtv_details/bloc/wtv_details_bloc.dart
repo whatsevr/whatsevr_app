@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:whatsevr_app/config/api/methods/post_details.dart';
 import 'package:whatsevr_app/config/api/response_model/post_details/video.dart';
-import 'package:whatsevr_app/src/features/post_details_views/wtv_details/views/page.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
 
 part 'wtv_details_event.dart';
 part 'wtv_details_state.dart';

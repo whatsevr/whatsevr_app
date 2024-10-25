@@ -19,7 +19,7 @@ import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/splash/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
-import 'package:whatsevr_app/src/features/post_details_views/wtv_details/views/page.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
@@ -127,7 +127,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.community,
         builder: (BuildContext context, GoRouterState state) {
-          return CommunityPage();
+          return CommunityPageX();
         },
       ),
       GoRoute(
