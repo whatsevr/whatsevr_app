@@ -16,6 +16,7 @@ import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -83,6 +84,7 @@ class _UiState extends State<_Ui> {
   PaginationData? commentsPaginationData = PaginationData();
   m1.Comment? replyingToTheComment;
   bool isTopComments = false;
+  File? _imageFile;
   @override
   void initState() {
     super.initState();
@@ -130,7 +132,7 @@ class _UiState extends State<_Ui> {
     }
   }
 
-  void _onCommentOrReply(String text) async {
+  void _onPostCommentOrReply(String text) async {
     _controller.clear();
     (int?, String?, String?)? replyResponse =
         await CommentsApi.postCommentOrReply(CommentAndReplyRequest(
@@ -144,6 +146,7 @@ class _UiState extends State<_Ui> {
       offerPostUid: widget.offerPostUid,
       pdfUid: widget.pdfUid,
       photoPostUid: widget.photoPostUid,
+      imageUrl: _imageFile,
     ));
     if (replyResponse?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${replyResponse?.$2}');
@@ -294,8 +297,30 @@ class _UiState extends State<_Ui> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 4),
-                                Text(comment.commentText ?? ''),
+                                if (comment.commentText?.isNotEmpty ??
+                                    false) ...[
+                                  const SizedBox(height: 4),
+                                  Text(comment.commentText ?? '')
+                                ],
+                                if (comment.imageUrl?.isNotEmpty ?? false) ...[
+                                  const SizedBox(height: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showPhotoPreviewDialog(
+                                        context: context,
+                                        photoUrl: comment.imageUrl,
+                                        appBarTitle: comment.author?.name,
+                                      );
+                                    },
+                                    child: ExtendedImage.network(
+                                      comment.imageUrl!,
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.circular(8),
+                                      width: double.infinity,
+                                      enableLoadState: false,
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -444,14 +469,33 @@ class _UiState extends State<_Ui> {
                       radius: 15,
                     ),
                   ),
-                  suffixWidget: IconButton(
-                    icon: const Icon(Icons.send),
-                    color: Colors.black,
-                    onPressed: () {
-                      if (_controller.text.isNotEmpty) {
-                        _onCommentOrReply(_controller.text);
-                      }
-                    },
+                  suffixWidget: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        icon: const Icon(Icons.attach_file),
+                        color: Colors.black,
+                        onPressed: () {
+                          showWhatsevrMediaPickerChoice(
+                            onChoosingImageFromGallery: (File file) {},
+                          );
+                        },
+                      ),
+                      GestureDetector(
+                        child: const Icon(
+                          Icons.send,
+                          color: Colors.black,
+                          size: 22,
+                        ),
+                        onTap: () {
+                          if (_controller.text.isNotEmpty) {
+                            _onPostCommentOrReply(_controller.text);
+                          }
+                        },
+                      ),
+                      Gap(4),
+                    ],
                   ),
                 ),
               ),

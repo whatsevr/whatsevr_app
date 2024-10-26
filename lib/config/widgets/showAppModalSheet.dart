@@ -9,7 +9,7 @@ Future<void> showAppModalSheet({
   BuildContext? context,
   required Widget? child,
   bool flexibleSheet = true,
-  bool dismissPrevious = true,
+  bool dismissPrevious = false,
   bool transparentMask = false,
   double maxSheetHeight = 0.9,
 }) async {
@@ -43,6 +43,7 @@ Future<void> showAppModalSheet({
     ),
     isScrollControlled: true, //auto adjust height
     showDragHandle: true,
+
     builder: (BuildContext context) {
       return Padding(
         padding: EdgeInsets.only(

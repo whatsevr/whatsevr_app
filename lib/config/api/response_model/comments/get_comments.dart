@@ -63,6 +63,7 @@ class Comment {
   final dynamic photoPostUid;
   final dynamic pdfUid;
   final String? uid;
+  final String? imageUrl;
   final List<UserCommentReply>? userCommentReplies;
   final CommentAuthor? author;
 
@@ -77,6 +78,7 @@ class Comment {
     this.photoPostUid,
     this.pdfUid,
     this.uid,
+    this.imageUrl,
     this.userCommentReplies,
     this.author,
   });
@@ -92,6 +94,7 @@ class Comment {
     dynamic photoPostUid,
     dynamic pdfUid,
     String? uid,
+    String? imageUrl,
     List<UserCommentReply>? userCommentReplies,
     CommentAuthor? author,
   }) =>
@@ -106,6 +109,7 @@ class Comment {
         photoPostUid: photoPostUid ?? this.photoPostUid,
         pdfUid: pdfUid ?? this.pdfUid,
         uid: uid ?? this.uid,
+        imageUrl: imageUrl ?? this.imageUrl,
         userCommentReplies: userCommentReplies ?? this.userCommentReplies,
         author: author ?? this.author,
       );
@@ -127,6 +131,7 @@ class Comment {
         photoPostUid: json["photo_post_uid"],
         pdfUid: json["pdf_uid"],
         uid: json["uid"],
+        imageUrl: json["image_url"],
         userCommentReplies: json["user_comment_replies"] == null
             ? []
             : List<UserCommentReply>.from(json["user_comment_replies"]!
@@ -147,6 +152,7 @@ class Comment {
         "photo_post_uid": photoPostUid,
         "pdf_uid": pdfUid,
         "uid": uid,
+        "image_url": imageUrl,
         "user_comment_replies": userCommentReplies == null
             ? []
             : List<dynamic>.from(userCommentReplies!.map((x) => x.toMap())),
@@ -155,7 +161,6 @@ class Comment {
 }
 
 class CommentAuthor {
-  final int? id;
   final String? bio;
   final DateTime? dob;
   final String? uid;
@@ -186,7 +191,6 @@ class CommentAuthor {
   final String? userLastLatLongWkb;
 
   CommentAuthor({
-    this.id,
     this.bio,
     this.dob,
     this.uid,
@@ -218,7 +222,6 @@ class CommentAuthor {
   });
 
   CommentAuthor copyWith({
-    int? id,
     String? bio,
     DateTime? dob,
     String? uid,
@@ -249,7 +252,6 @@ class CommentAuthor {
     String? userLastLatLongWkb,
   }) =>
       CommentAuthor(
-        id: id ?? this.id,
         bio: bio ?? this.bio,
         dob: dob ?? this.dob,
         uid: uid ?? this.uid,
@@ -286,7 +288,6 @@ class CommentAuthor {
   String toJson() => json.encode(toMap());
 
   factory CommentAuthor.fromMap(Map<String, dynamic> json) => CommentAuthor(
-        id: json["id"],
         bio: json["bio"],
         dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
         uid: json["uid"],
@@ -324,7 +325,6 @@ class CommentAuthor {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "bio": bio,
         "dob":
             "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
@@ -421,12 +421,11 @@ class UserCommentReply {
 }
 
 class UserCommentReplyAuthor {
-  final int? id;
   final String? bio;
   final DateTime? dob;
   final String? uid;
   final String? name;
-  final dynamic gender;
+  final String? gender;
   final String? address;
   final bool? isSpam;
   final String? emailId;
@@ -440,19 +439,18 @@ class UserCommentReplyAuthor {
   final bool? isDeactivated;
   final DateTime? lastActiveAt;
   final String? portfolioTitle;
-  final dynamic profilePicture;
+  final String? profilePicture;
   final String? publicEmailId;
   final int? totalFollowers;
   final String? portfolioStatus;
   final int? totalFollowings;
   final int? totalPostLikes;
   final int? totalConnections;
-  final dynamic portfolioCreatedAt;
+  final DateTime? portfolioCreatedAt;
   final String? portfolioDescription;
-  final dynamic userLastLatLongWkb;
+  final String? userLastLatLongWkb;
 
   UserCommentReplyAuthor({
-    this.id,
     this.bio,
     this.dob,
     this.uid,
@@ -484,12 +482,11 @@ class UserCommentReplyAuthor {
   });
 
   UserCommentReplyAuthor copyWith({
-    int? id,
     String? bio,
     DateTime? dob,
     String? uid,
     String? name,
-    dynamic gender,
+    String? gender,
     String? address,
     bool? isSpam,
     String? emailId,
@@ -503,19 +500,18 @@ class UserCommentReplyAuthor {
     bool? isDeactivated,
     DateTime? lastActiveAt,
     String? portfolioTitle,
-    dynamic profilePicture,
+    String? profilePicture,
     String? publicEmailId,
     int? totalFollowers,
     String? portfolioStatus,
     int? totalFollowings,
     int? totalPostLikes,
     int? totalConnections,
-    dynamic portfolioCreatedAt,
+    DateTime? portfolioCreatedAt,
     String? portfolioDescription,
-    dynamic userLastLatLongWkb,
+    String? userLastLatLongWkb,
   }) =>
       UserCommentReplyAuthor(
-        id: id ?? this.id,
         bio: bio ?? this.bio,
         dob: dob ?? this.dob,
         uid: uid ?? this.uid,
@@ -553,7 +549,6 @@ class UserCommentReplyAuthor {
 
   factory UserCommentReplyAuthor.fromMap(Map<String, dynamic> json) =>
       UserCommentReplyAuthor(
-        id: json["id"],
         bio: json["bio"],
         dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
         uid: json["uid"],
@@ -583,13 +578,14 @@ class UserCommentReplyAuthor {
         totalFollowings: json["total_followings"],
         totalPostLikes: json["total_post_likes"],
         totalConnections: json["total_connections"],
-        portfolioCreatedAt: json["portfolio_created_at"],
+        portfolioCreatedAt: json["portfolio_created_at"] == null
+            ? null
+            : DateTime.parse(json["portfolio_created_at"]),
         portfolioDescription: json["portfolio_description"],
         userLastLatLongWkb: json["user_last_lat_long_wkb"],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "bio": bio,
         "dob":
             "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
@@ -616,7 +612,7 @@ class UserCommentReplyAuthor {
         "total_followings": totalFollowings,
         "total_post_likes": totalPostLikes,
         "total_connections": totalConnections,
-        "portfolio_created_at": portfolioCreatedAt,
+        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
         "portfolio_description": portfolioDescription,
         "user_last_lat_long_wkb": userLastLatLongWkb,
       };
