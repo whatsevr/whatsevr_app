@@ -13,6 +13,11 @@ class CommentsApi {
     required int page,
     int pageSize = 10,
     String? videoPostUid,
+    String? flickPostUid,
+    String? memoryUid,
+    String? offerPostUid,
+    String? photoPostUid,
+    String? pdfUid,
   }) async {
     try {
       Response response =
@@ -20,6 +25,11 @@ class CommentsApi {
         'page': page,
         'page_size': pageSize,
         'video_post_uid': videoPostUid,
+        'flick_post_uid': flickPostUid,
+        'memory_uid': memoryUid,
+        'offer_post_uid': offerPostUid,
+        'photo_post_uid': photoPostUid,
+        'pdf_uid': pdfUid,
       });
       if (response.data != null) {
         return GetCommentsResponse.fromMap(response.data);
@@ -39,7 +49,7 @@ class CommentsApi {
         return (
           response.statusCode,
           response.data['message'] as String?,
-          response.data['comment_uid'] as String?
+          response.data['new_comment_uid'] as String?
         );
       }
     } catch (e, s) {

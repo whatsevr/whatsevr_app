@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:expansion_tile_group/expansion_tile_group.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -19,22 +20,57 @@ import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 
-showCommentsDialog({
+void showCommentsDialog({
   String? videoPostUid,
+  String? photoPostUid,
+  String? pdfUid,
+  String? memoryUid,
+  String? offerPostUid,
+  String? flickPostUid,
 }) {
+  int nonNullCount = [
+    videoPostUid,
+    photoPostUid,
+    pdfUid,
+    memoryUid,
+    offerPostUid,
+    flickPostUid
+  ].where((element) => element != null).length;
+
+  if (nonNullCount != 1) {
+    throw ArgumentError('Only one parameter should be non-null');
+  }
   showAppModalSheet(
       transparentMask: true,
       flexibleSheet: false,
       maxSheetHeight: 0.7,
       child: _Ui(
         videoPostUid: videoPostUid,
+        photoPostUid: photoPostUid,
+        pdfUid: pdfUid,
+        memoryUid: memoryUid,
+        offerPostUid: offerPostUid,
+        flickPostUid: flickPostUid,
       ));
 }
 
 class _Ui extends StatefulWidget {
   final String? videoPostUid;
+  final String? photoPostUid;
+  final String? pdfUid;
+  final String? memoryUid;
+  final String? offerPostUid;
+  final String? flickPostUid;
 
-  const _Ui({super.key, this.videoPostUid});
+  const _Ui({
+    super.key,
+    this.videoPostUid,
+    this.photoPostUid,
+    this.pdfUid,
+    this.memoryUid,
+    this.offerPostUid,
+    this.flickPostUid,
+  });
 
   @override
   State<_Ui> createState() => _UiState();
@@ -76,6 +112,11 @@ class _UiState extends State<_Ui> {
     m1.GetCommentsResponse? response = await CommentsApi.getComments(
       page: page,
       videoPostUid: widget.videoPostUid,
+      photoPostUid: widget.photoPostUid,
+      pdfUid: widget.pdfUid,
+      memoryUid: widget.memoryUid,
+      offerPostUid: widget.offerPostUid,
+      flickPostUid: widget.flickPostUid,
     );
     if (response != null) {
       setState(() {
@@ -98,6 +139,11 @@ class _UiState extends State<_Ui> {
       userUid: AuthUserDb.getLastLoggedUserUid(),
       videoPostUid: widget.videoPostUid,
       commentUid: replyingToTheComment?.uid,
+      flickPostUid: widget.flickPostUid,
+      memoryUid: widget.memoryUid,
+      offerPostUid: widget.offerPostUid,
+      pdfUid: widget.pdfUid,
+      photoPostUid: widget.photoPostUid,
     ));
     if (replyResponse?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${replyResponse?.$2}');
@@ -261,69 +307,75 @@ class _UiState extends State<_Ui> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (comment.userCommentReplies?.isNotEmpty ?? false)
-                              Text(
-                                '${comment.userCommentReplies?.length ?? 0} reply',
-                                style: const TextStyle(
-                                    color: Colors.grey, fontSize: 12),
-                              ),
-                            for (m1.UserCommentReply reply
-                                in comment.userCommentReplies ?? [])
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        showPhotoPreviewDialog(
-                                          context: context,
-                                          photoUrl:
-                                              reply.author?.profilePicture,
-                                          appBarTitle: reply.author?.name,
-                                        );
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundImage:
-                                            ExtendedNetworkImageProvider(
-                                          reply.author?.profilePicture ??
-                                              MockData.blankProfileAvatar,
-                                        ),
-                                        radius: 15,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Column(
+                              ExpansionTileFlat(
+                                tilePadding: EdgeInsets.zero,
+                                childrenPadding: EdgeInsets.zero,
+                                isDefaultVerticalPadding: false,
+                                title: Text(
+                                    '${comment.userCommentReplies?.length ?? 0} reply'),
+                                children: [
+                                  for (m1.UserCommentReply reply
+                                      in comment.userCommentReplies ?? [])
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0),
+                                      child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
-                                          Row(
-                                            children: [
-                                              Text(
-                                                reply.author?.name ?? 'Unknown',
-                                                style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showPhotoPreviewDialog(
+                                                context: context,
+                                                photoUrl: reply
+                                                    .author?.profilePicture,
+                                                appBarTitle: reply.author?.name,
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundImage:
+                                                  ExtendedNetworkImageProvider(
+                                                reply.author?.profilePicture ??
+                                                    MockData.blankProfileAvatar,
                                               ),
-                                              Spacer(),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                GetTimeAgo.parse(
-                                                    reply.createdAt!),
-                                                style: const TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12),
-                                              ),
-                                            ],
+                                              radius: 15,
+                                            ),
                                           ),
-                                          const SizedBox(height: 4),
-                                          Text(reply.replyText ?? ''),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      reply.author?.name ??
+                                                          'Unknown',
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Spacer(),
+                                                    const SizedBox(width: 8),
+                                                    Text(
+                                                      GetTimeAgo.parse(
+                                                          reply.createdAt!),
+                                                      style: const TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 12),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(reply.replyText ?? ''),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                ],
                               ),
                             GestureDetector(
                               onTap: () => _replyToComment(comment),
