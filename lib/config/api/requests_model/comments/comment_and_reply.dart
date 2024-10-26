@@ -9,7 +9,8 @@ class CommentAndReplyRequest {
   final String? photoPostUid;
   final String? pdfUid;
   final String? commentUid;
-//
+  final String? imageUrl;
+
   const CommentAndReplyRequest({
     this.commentText,
     this.replyText,
@@ -21,6 +22,7 @@ class CommentAndReplyRequest {
     this.pdfUid,
     this.commentUid,
     this.userUid,
+    this.imageUrl,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +36,7 @@ class CommentAndReplyRequest {
         'photo_post_uid': photoPostUid,
         'pdf_uid': pdfUid,
         'comment_uid': commentUid,
+        'image_url': imageUrl,
       };
 
   factory CommentAndReplyRequest.fromJson(Map<String, dynamic> json) =>
@@ -48,5 +51,6 @@ class CommentAndReplyRequest {
         photoPostUid: json['photo_post_uid'],
         pdfUid: json['pdf_uid'],
         commentUid: json['comment_uid'],
+        imageUrl: json['image_url'],
       );
 }

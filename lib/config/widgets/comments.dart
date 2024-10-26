@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dar
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/widgets/choice_chip.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
@@ -134,6 +135,14 @@ class _UiState extends State<_Ui> {
 
   void _onPostCommentOrReply(String text) async {
     _controller.clear();
+    String? imageUrl;
+    if (_imageFile != null) {
+      imageUrl = await FileUploadService.uploadFilesToSupabase(
+        _imageFile!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
+        fileRelatedTo: 'comment',
+      );
+    }
     (int?, String?, String?)? replyResponse =
         await CommentsApi.postCommentOrReply(CommentAndReplyRequest(
       commentText: replyingToTheComment != null ? null : text,
@@ -146,7 +155,7 @@ class _UiState extends State<_Ui> {
       offerPostUid: widget.offerPostUid,
       pdfUid: widget.pdfUid,
       photoPostUid: widget.photoPostUid,
-      imageUrl: _imageFile,
+      imageUrl: imageUrl,
     ));
     if (replyResponse?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${replyResponse?.$2}');
