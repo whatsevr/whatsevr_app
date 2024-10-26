@@ -219,8 +219,8 @@ class NewCommunityPage extends StatelessWidget {
                               ),
                               WhatsevrChoiceChip(
                                 label: 'Yes',
-                                selected: state.approveJoiningRequest ?? false,
-                                onSelected: (value) {
+                                choiced: state.approveJoiningRequest ?? false,
+                                switchChoice: (value) {
                                   context
                                       .read<NewCommunityBloc>()
                                       .add(ChangeApproveJoiningRequestEvent());
@@ -229,9 +229,9 @@ class NewCommunityPage extends StatelessWidget {
                               Gap(4),
                               WhatsevrChoiceChip(
                                 label: 'No',
-                                selected:
+                                choiced:
                                     !(state.approveJoiningRequest ?? false),
-                                onSelected: (value) {
+                                switchChoice: (value) {
                                   context
                                       .read<NewCommunityBloc>()
                                       .add(ChangeApproveJoiningRequestEvent());

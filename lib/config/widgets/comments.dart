@@ -1,6 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
+import 'package:whatsevr_app/config/api/methods/comments.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart'
+    as m1;
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/widgets/choice_chip.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
@@ -17,46 +27,6 @@ showCommentsDialog({
       ));
 }
 
-class Comment {
-  final String? comment;
-  final String? commentUid;
-  final String? authorUid;
-  final String? authorName;
-  final String? authorAvatar;
-  final String? createdAt;
-  final List<Reply>? replies;
-
-  Comment({
-    this.comment,
-    this.commentUid,
-    this.authorUid,
-    this.authorName,
-    this.authorAvatar,
-    this.createdAt,
-    this.replies,
-  });
-}
-
-class Reply {
-  final String? reply;
-  final String? replyUid;
-  final String? commentUid;
-  final String? authorUid;
-  final String? authorName;
-  final String? authorAvatar;
-  final String? createdAt;
-
-  Reply({
-    this.reply,
-    this.replyUid,
-    this.commentUid,
-    this.authorUid,
-    this.authorName,
-    this.authorAvatar,
-    this.createdAt,
-  });
-}
-
 class _Ui extends StatefulWidget {
   final String? videoPostUid;
 
@@ -67,130 +37,136 @@ class _Ui extends StatefulWidget {
 }
 
 class _UiState extends State<_Ui> {
-  List<Comment> _comments = [
-    Comment(
-      comment:
-          'This is a comment This is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a commentThis is a comment',
-      authorName: 'John Doe',
-      authorAvatar: MockData.randomImageAvatar(),
-      createdAt: DateTime.now().toString(),
-      replies: [
-        Reply(
-          reply: 'This is a reply',
-          authorName: 'Jane Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-        Reply(
-          reply: 'This is another reply',
-          authorName: 'John Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-      ],
-    ),
-    Comment(
-      comment: 'This is a comment',
-      authorName: 'John Doe',
-      authorAvatar: MockData.randomImageAvatar(),
-      createdAt: DateTime.now().toString(),
-      replies: [
-        Reply(
-          reply: 'This is a reply',
-          authorName: 'Jane Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-        Reply(
-          reply: 'This is another reply',
-          authorName: 'John Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-      ],
-    ),
-    Comment(
-      comment: 'This is a comment',
-      authorName: 'John Doe',
-      authorAvatar: MockData.randomImageAvatar(),
-      createdAt: DateTime.now().toString(),
-      replies: [
-        Reply(
-          reply: 'This is a reply',
-          authorName: 'Jane Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-        Reply(
-          reply:
-              'This is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another replyThis is another reply',
-          authorName: 'John Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-      ],
-    ),
-    Comment(
-      comment: 'This is a comment',
-      authorName: 'John Doe',
-      createdAt: DateTime.now().toString(),
-      replies: [
-        Reply(
-          reply: 'This is a reply',
-          authorName: 'Jane Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-        Reply(
-          reply: 'This is another reply',
-          authorName: 'John Doe',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-      ],
-    ),
-    Comment(
-      comment: 'This is another comment',
-      authorName: 'Jane Doe',
-      authorAvatar: MockData.randomImageAvatar(),
-      createdAt: DateTime.now().toString(),
-      replies: [
-        Reply(
-          reply: 'This is another reply',
-          authorName: 'John Doe',
-          createdAt: DateTime.now().toString(),
-        ),
-      ],
-    ),
-  ];
+  List<m1.Comment> _comments = [];
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  PaginationData? commentsPaginationData = PaginationData();
+  m1.Comment? commentReplyingTo;
+  bool isTopComments = false;
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUserDetails();
+    getComments(1);
+  }
+
+  UserDetailsResponse? currentUserDetails;
+  void getCurrentUserDetails() async {
+    String? userUid = AuthUserDb.getLastLoggedUserUid();
+    currentUserDetails = await UsersApi.getUserDetails(userUid: userUid!);
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void getComments(int page) async {
+    if (commentsPaginationData?.noMoreData == true ||
+        commentsPaginationData?.isLoading == true) {
+      return;
+    }
+    commentsPaginationData = commentsPaginationData?.copyWith(isLoading: true);
+    m1.GetCommentsResponse? response = await CommentsApi.getComments(
+      page: page,
+      videoPostUid: widget.videoPostUid,
+    );
+    if (response != null) {
+      setState(() {
+        _comments = [..._comments, ...(response.comments ?? [])];
+        commentsPaginationData = commentsPaginationData?.copyWith(
+          isLoading: false,
+          currentPage: page,
+          noMoreData: response.lastPage,
+        );
+      });
+    }
+  }
 
   void _addComment(String text) {
     setState(() {
-      _comments = [
-        Comment(
-          comment: text,
-          authorName: 'Current User',
-          authorAvatar: MockData.randomImageAvatar(),
-          createdAt: DateTime.now().toString(),
-        ),
-        ..._comments
-      ];
+      if (commentReplyingTo != null) {
+        final updatedReplies = [
+          m1.UserCommentReply(
+            replyText: text,
+            author: m1.UserCommentReplyAuthor(
+              name: 'You',
+            ),
+            createdAt: DateTime.now(),
+          ),
+          ...?commentReplyingTo!.userCommentReplies,
+        ];
+
+        setState(() {
+          _comments = _comments.map((comment) {
+            if (comment == commentReplyingTo) {
+              return comment.copyWith(userCommentReplies: updatedReplies);
+            }
+            return comment;
+          }).toList();
+          commentReplyingTo = null;
+        });
+      } else {
+        _comments = [
+          m1.Comment(
+            commentText: text,
+            author: m1.CommentAuthor(
+              name: 'You',
+            ),
+            createdAt: DateTime.now(),
+          ),
+          ..._comments
+        ];
+      }
     });
     _controller.clear();
+  }
+
+  void _replyToComment(m1.Comment comment) {
+    setState(() {
+      commentReplyingTo = comment;
+    });
+    _focusNode.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        const Gap(8),
+        Row(
+          children: [
+            WhatsevrChoiceChip(
+                choiced: isTopComments,
+                switchChoice: (bool selected) {
+                  if (_comments.isEmpty) return;
+
+                  setState(() {
+                    isTopComments = selected;
+                    if (isTopComments) {
+                      _comments.sort((a, b) => a.author!.totalFollowers!
+                          .compareTo(b.author!.totalFollowers!));
+                    } else {
+                      _comments
+                          .sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+                    }
+                    _comments = _comments.reversed.toList();
+                  });
+                },
+                label: 'Top Comments'),
+          ],
+        ),
+        const Gap(8),
         Expanded(
           child: Builder(builder: (context) {
             if (_comments.isEmpty) {
               return const Center(
                 child: Text(
-                  'Be the first to comment',
+                  'Waiting for comments...',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.grey,
@@ -202,7 +178,7 @@ class _UiState extends State<_Ui> {
               shrinkWrap: true,
               itemCount: _comments.length,
               itemBuilder: (context, index) {
-                var comment = _comments[index];
+                m1.Comment comment = _comments[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Column(
@@ -215,12 +191,12 @@ class _UiState extends State<_Ui> {
                               onTap: () {
                                 showPhotoPreviewDialog(
                                   context: context,
-                                  photoUrl: comment.authorAvatar,
-                                  appBarTitle: comment.authorName,
+                                  photoUrl: comment.author?.profilePicture,
+                                  appBarTitle: comment.author?.name,
                                 );
                               },
                               child: ExtendedImage.network(
-                                comment.authorAvatar ??
+                                comment.author?.profilePicture ??
                                     MockData.blankProfileAvatar,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.horizontal(
@@ -237,98 +213,109 @@ class _UiState extends State<_Ui> {
                                 Row(
                                   children: [
                                     Text(
-                                      comment.authorName ?? 'Anonymous',
+                                      comment.author?.name ?? 'Anonymous',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
+                                    Spacer(),
                                     const SizedBox(width: 8),
                                     Text(
-                                      comment.createdAt ?? '',
+                                      GetTimeAgo.parse(comment.createdAt!) ??
+                                          '',
                                       style: const TextStyle(
                                           color: Colors.grey, fontSize: 12),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                Text(comment.comment ?? ''),
-                                const SizedBox(height: 4),
-                                Text(
-                                  '${comment.replies?.length ?? 0} replies',
-                                  style: const TextStyle(
-                                      color: Colors.blue, fontSize: 12),
-                                ),
+                                Text(comment.commentText ?? ''),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      if (comment.replies != null)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30.0, top: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              for (var reply in comment.replies ?? [])
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      GestureDetector(
-                                        onTap: () {
-                                          showPhotoPreviewDialog(
-                                            context: context,
-                                            photoUrl: reply.authorAvatar,
-                                            appBarTitle: reply.authorName,
-                                          );
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                            reply.authorAvatar ??
-                                                MockData.blankProfileAvatar,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 30.0, top: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (comment.userCommentReplies?.isNotEmpty ?? false)
+                              Text(
+                                '${comment.userCommentReplies?.length ?? 0} reply',
+                                style: const TextStyle(
+                                    color: Colors.grey, fontSize: 12),
+                              ),
+                            for (m1.UserCommentReply reply
+                                in comment.userCommentReplies ?? [])
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        showPhotoPreviewDialog(
+                                          context: context,
+                                          photoUrl:
+                                              reply.author?.profilePicture,
+                                          appBarTitle: reply.author?.name,
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          reply.author?.profilePicture ??
+                                              MockData.blankProfileAvatar,
+                                        ),
+                                        radius: 15,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Text(
+                                                reply.author?.name ?? 'Unknown',
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Spacer(),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                GetTimeAgo.parse(
+                                                    reply.createdAt!),
+                                                style: const TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12),
+                                              ),
+                                            ],
                                           ),
-                                          radius: 15,
-                                        ),
+                                          const SizedBox(height: 4),
+                                          Text(reply.replyText ?? ''),
+                                        ],
                                       ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  reply.authorName ??
-                                                      'Anonymous',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                Text(
-                                                  reply.createdAt ?? '',
-                                                  style: const TextStyle(
-                                                      color: Colors.grey,
-                                                      fontSize: 12),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(reply.reply ?? ''),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              Text('Reply',
-                                  style: const TextStyle(color: Colors.blue)),
-                            ],
-                          ),
+                              ),
+                            GestureDetector(
+                              onTap: () => _replyToComment(comment),
+                              child: Text(
+                                'Reply',
+                                style: const TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
                     ],
                   ),
                 );
@@ -336,6 +323,26 @@ class _UiState extends State<_Ui> {
             );
           }),
         ),
+        if (commentReplyingTo != null)
+          Row(
+            children: [
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    commentReplyingTo = null;
+                  });
+                },
+                child: const Text(
+                  'Cancel Reply',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           width: double.infinity,
@@ -347,9 +354,22 @@ class _UiState extends State<_Ui> {
               Expanded(
                 child: WhatsevrFormField.multilineTextField(
                   controller: _controller,
-                  hintText: 'Add a comment',
+                  focusNode: _focusNode,
+                  hintText: commentReplyingTo != null
+                      ? 'Add a reply'
+                      : 'Add a comment',
                   minLines: 1,
                   maxLines: 4,
+                  prefixWidget: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: CircleAvatar(
+                      backgroundImage: ExtendedNetworkImageProvider(
+                        currentUserDetails?.data?.profilePicture ??
+                            MockData.blankProfileAvatar,
+                      ),
+                      radius: 15,
+                    ),
+                  ),
                   suffixWidget: IconButton(
                     icon: const Icon(Icons.send),
                     color: Colors.black,

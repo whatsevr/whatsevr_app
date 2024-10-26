@@ -20,7 +20,7 @@ class WhatsevrFormField extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final int? maxLength;
-
+  final FocusNode? focusNode;
   const WhatsevrFormField._internal({
     this.headingTitle,
     this.controller,
@@ -38,6 +38,7 @@ class WhatsevrFormField extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.maxLength,
+    this.focusNode,
   });
 
   // General text input factory with maxLength support
@@ -322,7 +323,9 @@ class WhatsevrFormField extends StatefulWidget {
     int minLines = 3,
     int? maxLines,
     int? maxLength,
+    Widget? prefixWidget,
     Widget? suffixWidget,
+    FocusNode? focusNode,
   }) {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
@@ -336,7 +339,9 @@ class WhatsevrFormField extends StatefulWidget {
         LengthLimitingTextInputFormatter(maxLength),
       ],
       maxLength: maxLength,
+      prefixIcon: prefixWidget,
       suffixIcon: suffixWidget,
+      focusNode: focusNode,
     );
   }
 
@@ -393,6 +398,7 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
               onChanged: widget.onChanged,
               minLines: widget.minLines,
               maxLines: widget.maxLines ?? 1,
+              focusNode: widget.focusNode,
               decoration: InputDecoration(
                 isDense: true,
                 contentPadding: defaultContextPadding,

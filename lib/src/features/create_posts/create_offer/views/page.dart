@@ -354,8 +354,8 @@ class CreateOfferPage extends StatelessWidget {
                           in context.read<CreateOfferBloc>().targetGender) ...[
                         WhatsevrChoiceChip(
                           label: audience,
-                          selected: state.selectedTargetGender == audience,
-                          onSelected: (value) {
+                          choiced: state.selectedTargetGender == audience,
+                          switchChoice: (value) {
                             context.read<CreateOfferBloc>().add(
                                 UpdateTargetGenderEvent(
                                     targetGender: audience));

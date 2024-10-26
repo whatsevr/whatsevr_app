@@ -12,7 +12,7 @@ class MockData {
   }
 
   static String get blankProfileAvatar {
-    return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/user.png';
+    return 'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/blank-profile.jpg';
   }
 
   static String get blankCommunityAvatar {
