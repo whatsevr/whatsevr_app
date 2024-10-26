@@ -7,6 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/comments.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
@@ -140,88 +141,99 @@ class WtvDetailsPage extends StatelessWidget {
                           false) ...[
                         Gap(8),
                         PadHorizontal(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Comments',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
+                          child: GestureDetector(
+                            onTap: () {
+                              showCommentsDialog(
+                                videoPostUid: state.videoPostDetailsResponse
+                                    ?.videoPostDetails?.uid,
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Comments',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Gap(8),
-                                    Text(
-                                      '${formatCountToKMBTQ(state.videoPostDetailsResponse?.videoPostDetails?.totalComments)}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
+                                      Gap(8),
+                                      Text(
+                                        '${formatCountToKMBTQ(state.videoPostDetailsResponse?.videoPostDetails?.totalComments)}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      'View all',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
+                                      const Spacer(),
+                                      Text(
+                                        'View all',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                CarouselSlider.builder(
-                                  itemCount: state.videoPostDetailsResponse
-                                      ?.videoPostDetails?.userComments?.length,
-                                  options: CarouselOptions(
-                                    height: 60,
-                                    viewportFraction: 1,
-                                    initialPage: 0,
-                                    autoPlay: true,
-                                    scrollDirection: Axis.horizontal,
+                                    ],
                                   ),
-                                  itemBuilder: (BuildContext context, int index,
-                                      int realIndex) {
-                                    return ListTile(
-                                      dense: true,
-                                      visualDensity: VisualDensity.compact,
-                                      leading: CircleAvatar(
-                                        radius: 15,
-                                        backgroundImage:
-                                            ExtendedNetworkImageProvider(
-                                          state
-                                                  .videoPostDetailsResponse
-                                                  ?.videoPostDetails
-                                                  ?.userComments?[index]
-                                                  .author
-                                                  ?.profilePicture ??
-                                              MockData.blankProfileAvatar,
+                                  CarouselSlider.builder(
+                                    itemCount: state
+                                        .videoPostDetailsResponse
+                                        ?.videoPostDetails
+                                        ?.userComments
+                                        ?.length,
+                                    options: CarouselOptions(
+                                      height: 60,
+                                      viewportFraction: 1,
+                                      initialPage: 0,
+                                      autoPlay: true,
+                                      scrollDirection: Axis.horizontal,
+                                    ),
+                                    itemBuilder: (BuildContext context,
+                                        int index, int realIndex) {
+                                      return ListTile(
+                                        dense: true,
+                                        visualDensity: VisualDensity.compact,
+                                        leading: CircleAvatar(
+                                          radius: 15,
+                                          backgroundImage:
+                                              ExtendedNetworkImageProvider(
+                                            state
+                                                    .videoPostDetailsResponse
+                                                    ?.videoPostDetails
+                                                    ?.userComments?[index]
+                                                    .author
+                                                    ?.profilePicture ??
+                                                MockData.blankProfileAvatar,
+                                          ),
                                         ),
-                                      ),
-                                      title: Text(
-                                        '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        title: Text(
+                                          '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                      subtitle: Text(
-                                        '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
-                                        style: TextStyle(
-                                          fontSize: 14,
+                                        subtitle: Text(
+                                          '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )

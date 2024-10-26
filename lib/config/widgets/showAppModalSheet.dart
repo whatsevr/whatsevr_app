@@ -10,6 +10,8 @@ Future<void> showAppModalSheet({
   required Widget? child,
   bool flexibleSheet = true,
   bool dismissPrevious = true,
+  bool transparentMask = false,
+  double maxSheetHeight = 0.9,
 }) async {
   // Dismiss the previous modal sheet if it exists and dismissPrevious is true
   if (dismissPrevious &&
@@ -25,9 +27,12 @@ Future<void> showAppModalSheet({
   await showModalBottomSheet(
     useRootNavigator: true,
     constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.9,
+      maxHeight: MediaQuery.of(context).size.height * maxSheetHeight -
+          MediaQuery.of(context).viewInsets.bottom,
       minWidth: MediaQuery.of(context).size.width,
     ),
+    barrierColor:
+        transparentMask ? Colors.transparent : Colors.white.withOpacity(0.5),
     backgroundColor: Colors.white,
     context: context,
     shape: const RoundedRectangleBorder(
@@ -39,24 +44,26 @@ Future<void> showAppModalSheet({
     isScrollControlled: true, //auto adjust height
     showDragHandle: true,
     builder: (BuildContext context) {
-      if (!flexibleSheet) {
-        return PadHorizontal(child: child ?? const SizedBox.shrink());
-      }
       return Padding(
         padding: EdgeInsets.only(
           bottom:
               MediaQuery.of(context).viewInsets.bottom, // Keyboard adjustment
         ),
-        child: DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.6,
-          builder: (BuildContext context, ScrollController scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: PadHorizontal(child: child ?? const SizedBox.shrink()),
-            );
-          },
-        ),
+        child: Builder(builder: (context) {
+          if (!flexibleSheet) {
+            return PadHorizontal(child: child ?? const SizedBox.shrink());
+          }
+          return DraggableScrollableSheet(
+            expand: false,
+            initialChildSize: 0.6,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return SingleChildScrollView(
+                controller: scrollController,
+                child: PadHorizontal(child: child ?? const SizedBox.shrink()),
+              );
+            },
+          );
+        }),
       );
     },
   );

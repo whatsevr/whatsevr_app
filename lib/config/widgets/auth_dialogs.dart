@@ -200,7 +200,6 @@ class CreateAccountUi extends StatelessWidget {
             controller: TextEditingController(text: mobileNumber),
             headingTitle: 'Mobile Number',
             readOnly: true,
-            maxLines: 1,
           ),
         ],
         if (emailId != null) ...[
@@ -209,7 +208,6 @@ class CreateAccountUi extends StatelessWidget {
             controller: TextEditingController(text: emailId),
             headingTitle: 'Email',
             readOnly: true,
-            maxLines: 1,
           ),
         ],
         const Gap(12),
@@ -217,7 +215,6 @@ class CreateAccountUi extends StatelessWidget {
           controller: nameController,
           headingTitle: 'Enter you name',
           maxLength: 50,
-          maxLines: 1,
           keyboardType: TextInputType.name,
         ),
         const Gap(16),

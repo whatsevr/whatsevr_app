@@ -68,7 +68,7 @@ class CreateOfferPage extends StatelessWidget {
             padding: PadHorizontal.padding,
             children: <Widget>[
               const Gap(12),
-              WhatsevrFormField.generalTextField(
+              WhatsevrFormField.multilineTextField(
                 maxLength: 150,
                 minLines: 1,
                 maxLines: 5,

@@ -54,8 +54,6 @@ class WhatsevrFormField extends StatefulWidget {
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatters,
     bool readOnly = false,
-    int? minLines,
-    int? maxLines,
     int? maxLength,
   }) {
     return WhatsevrFormField._internal(
@@ -73,8 +71,6 @@ class WhatsevrFormField extends StatefulWidget {
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
       ],
       readOnly: readOnly,
-      minLines: minLines,
-      maxLines: maxLines,
       onChanged: onChanged,
       maxLength: maxLength,
     );
@@ -326,6 +322,7 @@ class WhatsevrFormField extends StatefulWidget {
     int minLines = 3,
     int? maxLines,
     int? maxLength,
+    Widget? suffixWidget,
   }) {
     return WhatsevrFormField._internal(
       headingTitle: headingTitle,
@@ -339,6 +336,7 @@ class WhatsevrFormField extends StatefulWidget {
         LengthLimitingTextInputFormatter(maxLength),
       ],
       maxLength: maxLength,
+      suffixIcon: suffixWidget,
     );
   }
 
@@ -369,6 +367,7 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         if (widget.headingTitle != null)
           Padding(
