@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/comments.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
 import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart'
     as m1;
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
@@ -41,7 +45,7 @@ class _UiState extends State<_Ui> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   PaginationData? commentsPaginationData = PaginationData();
-  m1.Comment? commentReplyingTo;
+  m1.Comment? replyingToTheComment;
   bool isTopComments = false;
   @override
   void initState() {
@@ -85,35 +89,53 @@ class _UiState extends State<_Ui> {
     }
   }
 
-  void _addComment(String text) {
+  void _onCommentOrReply(String text) async {
+    _controller.clear();
+    (int?, String?, String?)? replyResponse =
+        await CommentsApi.postCommentOrReply(CommentAndReplyRequest(
+      commentText: replyingToTheComment != null ? null : text,
+      replyText: replyingToTheComment != null ? text : null,
+      userUid: AuthUserDb.getLastLoggedUserUid(),
+      videoPostUid: widget.videoPostUid,
+      commentUid: replyingToTheComment?.uid,
+    ));
+    if (replyResponse?.$1 != HttpStatus.ok) {
+      SmartDialog.showToast('${replyResponse?.$2}');
+      return;
+    }
     setState(() {
-      if (commentReplyingTo != null) {
+      if (replyingToTheComment != null) {
         final updatedReplies = [
           m1.UserCommentReply(
             replyText: text,
-            author: m1.UserCommentReplyAuthor(
-              name: 'You',
+            commentUid: replyingToTheComment?.uid,
+            userUid: currentUserDetails?.data?.uid,
+            author: m1.UserCommentReplyAuthor.fromMap(
+              currentUserDetails?.data?.toMap() ?? {},
             ),
             createdAt: DateTime.now(),
           ),
-          ...?commentReplyingTo!.userCommentReplies,
+          ...?replyingToTheComment!.userCommentReplies,
         ];
 
         setState(() {
           _comments = _comments.map((comment) {
-            if (comment == commentReplyingTo) {
+            if (comment == replyingToTheComment) {
               return comment.copyWith(userCommentReplies: updatedReplies);
             }
             return comment;
           }).toList();
-          commentReplyingTo = null;
+          replyingToTheComment = null;
         });
       } else {
         _comments = [
           m1.Comment(
+            uid: replyResponse?.$3,
             commentText: text,
-            author: m1.CommentAuthor(
-              name: 'You',
+            userUid: currentUserDetails?.data?.uid,
+            videoPostUid: widget.videoPostUid,
+            author: m1.CommentAuthor.fromMap(
+              currentUserDetails?.data?.toMap() ?? {},
             ),
             createdAt: DateTime.now(),
           ),
@@ -121,12 +143,11 @@ class _UiState extends State<_Ui> {
         ];
       }
     });
-    _controller.clear();
   }
 
   void _replyToComment(m1.Comment comment) {
     setState(() {
-      commentReplyingTo = comment;
+      replyingToTheComment = comment;
     });
     _focusNode.requestFocus();
   }
@@ -263,7 +284,8 @@ class _UiState extends State<_Ui> {
                                         );
                                       },
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
+                                        backgroundImage:
+                                            ExtendedNetworkImageProvider(
                                           reply.author?.profilePicture ??
                                               MockData.blankProfileAvatar,
                                         ),
@@ -323,14 +345,14 @@ class _UiState extends State<_Ui> {
             );
           }),
         ),
-        if (commentReplyingTo != null)
+        if (replyingToTheComment != null)
           Row(
             children: [
               Spacer(),
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    commentReplyingTo = null;
+                    replyingToTheComment = null;
                   });
                 },
                 child: const Text(
@@ -355,7 +377,7 @@ class _UiState extends State<_Ui> {
                 child: WhatsevrFormField.multilineTextField(
                   controller: _controller,
                   focusNode: _focusNode,
-                  hintText: commentReplyingTo != null
+                  hintText: replyingToTheComment != null
                       ? 'Add a reply'
                       : 'Add a comment',
                   minLines: 1,
@@ -375,7 +397,7 @@ class _UiState extends State<_Ui> {
                     color: Colors.black,
                     onPressed: () {
                       if (_controller.text.isNotEmpty) {
-                        _addComment(_controller.text);
+                        _onCommentOrReply(_controller.text);
                       }
                     },
                   ),

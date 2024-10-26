@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
 import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart';
 
 import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
@@ -22,6 +23,24 @@ class CommentsApi {
       });
       if (response.data != null) {
         return GetCommentsResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(int? statusCode, String? message, String? newCommentUid)?>
+      postCommentOrReply(CommentAndReplyRequest request) async {
+    try {
+      Response response = await ApiClient.client
+          .post('/v1/post-comment-or-reply', data: request.toJson());
+      if (response.data != null) {
+        return (
+          response.statusCode,
+          response.data['message'] as String?,
+          response.data['comment_uid'] as String?
+        );
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
