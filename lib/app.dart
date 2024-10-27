@@ -54,7 +54,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
-          AppTheme theme = context.theme;
+          AppTheme theme = context.whatsevrTheme;
           return WhatsevrStackToast(
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,

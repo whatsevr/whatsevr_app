@@ -179,6 +179,6 @@ class DarkTheme extends AppTheme {
 
 extension ThemeBlocX on BuildContext {
   ThemeBloc get themeBloc => read<ThemeBloc>();
-  AppTheme get theme => read<ThemeBloc>().currentTheme;
+  AppTheme get whatsevrTheme => read<ThemeBloc>().currentTheme;
   bool get isDarkMode => read<ThemeBloc>().state.themeType == ThemeType.dark;
 }

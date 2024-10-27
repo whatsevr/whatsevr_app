@@ -22,6 +22,7 @@ import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
 
 void showCommentsDialog({
@@ -88,13 +89,14 @@ class _UiState extends State<_Ui> {
   m1.Comment? replyingToTheComment;
   bool isTopComments = false;
   File? _imageFile;
-  ScrollController controller = ScrollController();
+  ScrollController scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     getCurrentUserDetails();
     getComments(1);
-    onReachingEndOfTheList(controller, execute: () {
+    onReachingEndOfTheList(scrollController, execute: () {
       getComments((commentsPaginationData?.currentPage ?? 0) + 1);
     });
   }
@@ -148,6 +150,8 @@ class _UiState extends State<_Ui> {
 
   void _onPostCommentOrReply(String text) async {
     _controller.clear();
+    WhatsevrStackToast.showInfo(
+        replyingToTheComment != null ? 'Adding reply...' : 'Adding comment...');
     String? imageUrl;
     if (_imageFile != null) {
       File imageFile = _imageFile!;
@@ -215,6 +219,11 @@ class _UiState extends State<_Ui> {
           ),
           ..._comments
         ];
+        scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
       }
     });
   }
@@ -272,7 +281,7 @@ class _UiState extends State<_Ui> {
             return ListView.builder(
               shrinkWrap: true,
               itemCount: _comments.length,
-              controller: controller,
+              controller: scrollController,
               itemBuilder: (context, index) {
                 m1.Comment comment = _comments[index];
                 return Padding(
@@ -472,11 +481,19 @@ class _UiState extends State<_Ui> {
         if (_imageFile != null)
           Stack(
             children: [
-              ExtendedImage.file(
-                _imageFile!,
-                height: 100,
-                fit: BoxFit.contain,
-              ),
+              GestureDetector(
+                  onTap: () {
+                    showPhotoPreviewDialog(
+                      context: context,
+                      photoUrl: _imageFile!.path,
+                      appBarTitle: 'Preview',
+                    );
+                  },
+                  child: ExtendedImage.file(
+                    _imageFile!,
+                    height: 80,
+                    fit: BoxFit.contain,
+                  )),
               Positioned(
                 top: 0,
                 right: 0,
@@ -517,6 +534,7 @@ class _UiState extends State<_Ui> {
                       backgroundImage: ExtendedNetworkImageProvider(
                         currentUserDetails?.data?.profilePicture ??
                             MockData.blankProfileAvatar,
+                        cache: true,
                       ),
                       radius: 15,
                     ),

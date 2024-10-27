@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/comments.dart';
+import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
@@ -136,9 +136,7 @@ class WtvDetailsPage extends StatelessWidget {
                       ],
 
                       //latest comments
-                      if (state.videoPostDetailsResponse?.videoPostDetails
-                              ?.userComments?.isNotEmpty ??
-                          false) ...[
+                      ...[
                         Gap(8),
                         PadHorizontal(
                           child: GestureDetector(
@@ -186,52 +184,70 @@ class WtvDetailsPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  CarouselSlider.builder(
-                                    itemCount: state
-                                        .videoPostDetailsResponse
-                                        ?.videoPostDetails
-                                        ?.userComments
-                                        ?.length,
-                                    options: CarouselOptions(
-                                      height: 60,
-                                      viewportFraction: 1,
-                                      initialPage: 0,
-                                      autoPlay: true,
-                                      scrollDirection: Axis.horizontal,
-                                    ),
-                                    itemBuilder: (BuildContext context,
-                                        int index, int realIndex) {
+                                  Builder(builder: (context) {
+                                    if (state
+                                            .videoPostDetailsResponse
+                                            ?.videoPostDetails
+                                            ?.userComments
+                                            ?.isEmpty ??
+                                        true) {
                                       return ListTile(
-                                        dense: true,
-                                        visualDensity: VisualDensity.compact,
-                                        leading: CircleAvatar(
-                                          radius: 15,
-                                          backgroundImage:
-                                              ExtendedNetworkImageProvider(
-                                            state
-                                                    .videoPostDetailsResponse
-                                                    ?.videoPostDetails
-                                                    ?.userComments?[index]
-                                                    .author
-                                                    ?.profilePicture ??
-                                                MockData.blankProfileAvatar,
-                                          ),
-                                        ),
                                         title: Text(
-                                          '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                          'Be the first to comment',
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
                                         ),
                                       );
-                                    },
-                                  ),
+                                    }
+                                    return CarouselSlider.builder(
+                                      itemCount: state
+                                          .videoPostDetailsResponse
+                                          ?.videoPostDetails
+                                          ?.userComments
+                                          ?.length,
+                                      options: CarouselOptions(
+                                        height: 60,
+                                        viewportFraction: 1,
+                                        initialPage: 0,
+                                        enableInfiniteScroll: false,
+                                        autoPlay: true,
+                                        scrollDirection: Axis.horizontal,
+                                      ),
+                                      itemBuilder: (BuildContext context,
+                                          int index, int realIndex) {
+                                        return ListTile(
+                                          dense: true,
+                                          visualDensity: VisualDensity.compact,
+                                          leading: CircleAvatar(
+                                            radius: 15,
+                                            backgroundImage:
+                                                ExtendedNetworkImageProvider(
+                                              state
+                                                      .videoPostDetailsResponse
+                                                      ?.videoPostDetails
+                                                      ?.userComments?[index]
+                                                      .author
+                                                      ?.profilePicture ??
+                                                  MockData.blankProfileAvatar,
+                                            ),
+                                          ),
+                                          title: Text(
+                                            '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }),
                                 ],
                               ),
                             ),

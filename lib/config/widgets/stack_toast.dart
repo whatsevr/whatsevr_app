@@ -1,8 +1,7 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:animated_toast_list/animated_toast_list.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/icons/wi.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 class WhatsevrStackToast extends StatelessWidget {
   final Widget child;
@@ -11,25 +10,25 @@ class WhatsevrStackToast extends StatelessWidget {
 
   static showInfo(String message) {
     AppNavigationService.currentContext!.showToast(
-      _StackToastModel(message, StackToastType.info),
+      _StackToastModel(message, _StackToastType.info),
     );
   }
 
   static showSuccess(String message) {
     AppNavigationService.currentContext!.showToast(
-      _StackToastModel(message, StackToastType.success),
+      _StackToastModel(message, _StackToastType.success),
     );
   }
 
   static showWarning(String message) {
     AppNavigationService.currentContext!.showToast(
-      _StackToastModel(message, StackToastType.warning),
+      _StackToastModel(message, _StackToastType.warning),
     );
   }
 
   static showFailed(String message) {
     AppNavigationService.currentContext!.showToast(
-      _StackToastModel(message, StackToastType.failed),
+      _StackToastModel(message, _StackToastType.failed),
     );
   }
 
@@ -39,7 +38,7 @@ class WhatsevrStackToast extends StatelessWidget {
     int index,
     Animation<double> animation,
   ) {
-    return _ToastItem(
+    return _StackToastItem(
       animation: animation,
       item: item,
       onTap: () => context.hideToast(
@@ -52,6 +51,7 @@ class WhatsevrStackToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToastListOverlay<_StackToastModel>(
+      width: double.infinity,
       child: child,
       itemBuilder: (
         BuildContext context,
@@ -64,8 +64,8 @@ class WhatsevrStackToast extends StatelessWidget {
   }
 }
 
-class _ToastItem extends StatelessWidget {
-  const _ToastItem({
+class _StackToastItem extends StatelessWidget {
+  const _StackToastItem({
     Key? key,
     this.onTap,
     required this.animation,
@@ -78,52 +78,73 @@ class _ToastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(color: Colors.white);
+    TextStyle textStyle = TextStyle(color: context.whatsevrTheme.text);
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       child: FadeTransition(
         opacity: animation,
         child: SizeTransition(
           sizeFactor: animation,
-          child: Container(
-            decoration: BoxDecoration(
-              color: _getTypeColor(item.type),
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-            ),
-            child: ListTile(
-              title: Text('Item ${item.message}', style: textStyle),
-              trailing: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => onTap?.call()),
-            ),
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: _getTypeColor(item.type),
+                  borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                  border: Border.all(
+                    color: _getTypeColor(item.type),
+                    width: 2,
+                  ),
+                ),
+                child: Text(
+                  item.message,
+                  style: textStyle,
+                ),
+              ),
+              Positioned(
+                right: 8,
+                top: 8,
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Icon(
+                    Icons.close,
+                    color: context.whatsevrTheme.text,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Color _getTypeColor(StackToastType type) {
+  Color _getTypeColor(_StackToastType type) {
+    AppTheme theme = AppNavigationService.currentContext!.whatsevrTheme;
     switch (type) {
-      case StackToastType.success:
-        return const Color(0xFF00FF00);
-      case StackToastType.warning:
-        return const Color(0xFFFFFF00);
-      case StackToastType.info:
-        return const Color(0xFFFFFFFF);
-      case StackToastType.failed:
-        return const Color(0xFFFF0000);
+      case _StackToastType.success:
+        return theme.surface;
+      case _StackToastType.warning:
+        return theme.accent;
+      case _StackToastType.info:
+        return theme.surface;
+      case _StackToastType.failed:
+        return theme.accent;
       default:
-        return const Color(0xFFFFFFFF);
+        return theme.surface;
     }
   }
 }
 
-enum StackToastType { success, failed, warning, info }
+enum _StackToastType { success, failed, warning, info }
 
 class _StackToastModel {
   String message;
-  StackToastType type;
+  _StackToastType type;
 
   _StackToastModel(this.message, this.type);
 }

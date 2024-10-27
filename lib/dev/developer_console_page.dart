@@ -222,7 +222,7 @@ class _ColorPalettePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
+    final theme = context.whatsevrTheme;
 
     return Scaffold(
       backgroundColor: theme.background,
