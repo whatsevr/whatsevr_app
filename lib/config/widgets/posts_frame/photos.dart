@@ -36,6 +36,7 @@ class PhotosPostFrame extends StatelessWidget {
   final int? totalTags;
   final Function()? onTapTags;
   final Function()? onRequestOfOfferDetails;
+  final Function()? onTapComment;
 
   const PhotosPostFrame({
     super.key,
@@ -53,6 +54,7 @@ class PhotosPostFrame extends StatelessWidget {
     this.totalTags,
     this.onTapTags,
     this.onRequestOfOfferDetails,
+    this.onTapComment,
   });
 
   @override
@@ -210,7 +212,9 @@ class PhotosPostFrame extends StatelessWidget {
                   : formatCountToKMBTQ(likes) ?? ''),
               IconButton(
                 icon: const Iconify(Octicon.comment_24),
-                onPressed: () {},
+                onPressed: () {
+                  onTapComment?.call();
+                },
               ),
               Text(comments == null || comments == 0
                   ? ''

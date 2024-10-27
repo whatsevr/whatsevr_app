@@ -41,6 +41,7 @@ class OfferPostFrame extends StatelessWidget {
   final int? totalTags;
   final Function()? onTapTags;
   final Function()? onRequestOfOfferDetails;
+  final Function()? onTapComment;
 
   const OfferPostFrame({
     super.key,
@@ -61,6 +62,7 @@ class OfferPostFrame extends StatelessWidget {
     this.totalTags,
     this.onTapTags,
     this.onRequestOfOfferDetails,
+    this.onTapComment,
   });
 
   @override
@@ -248,7 +250,9 @@ class OfferPostFrame extends StatelessWidget {
                   : formatCountToKMBTQ(likes) ?? ''),
               IconButton(
                 icon: const Iconify(Octicon.comment_24),
-                onPressed: () {},
+                onPressed: () {
+                  onTapComment?.call();
+                },
               ),
               Text(comments == null || comments == 0
                   ? ''

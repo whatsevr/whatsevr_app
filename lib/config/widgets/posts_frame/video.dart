@@ -35,7 +35,7 @@ class WtvVideoPostFrame extends StatelessWidget {
   final Function()? onTapTags;
   final Function()? onRequestOfVideoDetails;
   final double? thumbnailHeightAspectRatio;
-
+  final VoidCallback? onTapComment;
   const WtvVideoPostFrame({
     super.key,
     this.title,
@@ -53,6 +53,7 @@ class WtvVideoPostFrame extends StatelessWidget {
     this.onTapTags,
     this.onRequestOfVideoDetails,
     this.thumbnailHeightAspectRatio,
+    this.onTapComment,
   });
 
   @override
@@ -176,7 +177,9 @@ class WtvVideoPostFrame extends StatelessWidget {
                         : formatCountToKMBTQ(likes) ?? ''),
                     IconButton(
                       icon: const Iconify(Octicon.comment_24),
-                      onPressed: () {},
+                      onPressed: () {
+                        onTapComment?.call();
+                      },
                     ),
                     Text(comments == null || comments == 0
                         ? ''

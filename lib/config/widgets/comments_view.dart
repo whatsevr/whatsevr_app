@@ -48,6 +48,7 @@ void showCommentsDialog({
   showAppModalSheet(
       transparentMask: true,
       flexibleSheet: false,
+      resizeToAvoidBottomInset: false,
       maxSheetHeight: 0.8,
       child: _Ui(
         videoPostUid: videoPostUid,
@@ -101,18 +102,19 @@ class _UiState extends State<_Ui> {
     });
   }
 
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
+
   UserDetailsResponse? currentUserDetails;
 
   void getCurrentUserDetails() async {
     String? userUid = AuthUserDb.getLastLoggedUserUid();
     currentUserDetails = await UsersApi.getUserDetails(userUid: userUid!);
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    _controller.dispose();
-    super.dispose();
   }
 
   void getComments(int page) async {
@@ -219,11 +221,13 @@ class _UiState extends State<_Ui> {
           ),
           ..._comments
         ];
-        scrollController.animateTo(
-          0,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
+        if (scrollController.hasClients) {
+          scrollController.animateTo(
+            0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
       }
     });
   }
@@ -232,356 +236,372 @@ class _UiState extends State<_Ui> {
     setState(() {
       replyingToTheComment = comment;
     });
+
     _focusNode.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Gap(8),
-        Row(
-          children: [
-            WhatsevrChoiceChip(
-                choiced: isTopComments,
-                switchChoice: (bool selected) {
-                  if (_comments.isEmpty) return;
-
-                  setState(() {
-                    isTopComments = selected;
-                    if (isTopComments) {
-                      _comments.sort((a, b) => a.author!.totalFollowers!
-                          .compareTo(b.author!.totalFollowers!));
-                    } else {
-                      _comments
-                          .sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
-                    }
-                    _comments = _comments.reversed.toList();
-                  });
-                },
-                label: 'Top Comments'),
-          ],
-        ),
-        const Gap(8),
-        Expanded(
-          child: Builder(builder: (context) {
-            if (_comments.isEmpty) {
-              return const Center(
-                child: Text(
-                  'Waiting for comments...',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
+    return Scaffold(
+      bottomSheet: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (replyingToTheComment != null)
+                Row(
+                  children: [
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          replyingToTheComment = null;
+                        });
+                      },
+                      child: const Text(
+                        'Cancel Reply',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            }
-            return ListView.builder(
-              shrinkWrap: true,
-              itemCount: _comments.length,
-              controller: scrollController,
-              itemBuilder: (context, index) {
-                m1.Comment comment = _comments[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          GestureDetector(
-                              onTap: () {
-                                showPhotoPreviewDialog(
-                                  context: context,
-                                  photoUrl: comment.author?.profilePicture,
-                                  appBarTitle: comment.author?.name,
+              if (_imageFile != null)
+                Stack(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          showPhotoPreviewDialog(
+                            context: context,
+                            photoUrl: _imageFile!.path,
+                            appBarTitle: 'Preview',
+                          );
+                        },
+                        child: ExtendedImage.file(
+                          _imageFile!,
+                          height: 80,
+                          fit: BoxFit.contain,
+                        )),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _imageFile = null;
+                          });
+                        },
+                        child: const Icon(
+                          Icons.cancel,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: WhatsevrFormField.multilineTextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        hintText: replyingToTheComment != null
+                            ? 'Add a reply'
+                            : 'Add a comment',
+                        minLines: 1,
+                        maxLines: 4,
+                        prefixWidget: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: CircleAvatar(
+                            backgroundImage: ExtendedNetworkImageProvider(
+                              currentUserDetails?.data?.profilePicture ??
+                                  MockData.blankProfileAvatar,
+                              cache: true,
+                            ),
+                            radius: 15,
+                          ),
+                        ),
+                        suffixWidget: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              visualDensity: VisualDensity.compact,
+                              icon: const Icon(Icons.attach_file),
+                              color: Colors.black,
+                              onPressed: () {
+                                showWhatsevrMediaPickerChoice(
+                                  onChoosingImageFromGallery: () {
+                                    CustomAssetPicker.pickImageFromGallery(
+                                        quality: 50,
+                                        editImage: false,
+                                        onCompleted: (File file) {
+                                          setState(() {
+                                            _imageFile = file;
+                                          });
+                                        });
+                                  },
                                 );
                               },
-                              child: ExtendedImage.network(
-                                comment.author?.profilePicture ??
-                                    MockData.blankProfileAvatar,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.horizontal(
-                                  left: Radius.circular(16),
-                                ),
-                                width: 80,
-                                height: 80,
-                              )),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    Text(
-                                      comment.author?.name ?? 'Anonymous',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Spacer(),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      GetTimeAgo.parse(comment.createdAt!) ??
-                                          '',
-                                      style: const TextStyle(
-                                          color: Colors.grey, fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                                if (comment.commentText?.isNotEmpty ??
-                                    false) ...[
-                                  const SizedBox(height: 4),
-                                  Text(comment.commentText ?? '')
-                                ],
-                                if (comment.imageUrl?.isNotEmpty ?? false) ...[
-                                  const SizedBox(height: 4),
-                                  GestureDetector(
-                                    onTap: () {
-                                      showPhotoPreviewDialog(
-                                        context: context,
-                                        photoUrl: comment.imageUrl,
-                                        appBarTitle: comment.author?.name,
-                                      );
-                                    },
-                                    child: ExtendedImage.network(
-                                      comment.imageUrl!,
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(8),
-                                      width: double.infinity,
-                                      fit: BoxFit.contain,
-                                      enableLoadState: false,
-                                    ),
-                                  ),
-                                ],
-                              ],
                             ),
-                          ),
-                        ],
+                            GestureDetector(
+                              child: const Icon(
+                                Icons.send,
+                                color: Colors.black,
+                                size: 22,
+                              ),
+                              onTap: () {
+                                if (_controller.text.isNotEmpty) {
+                                  _onPostCommentOrReply(_controller.text);
+                                }
+                              },
+                            ),
+                            Gap(4),
+                          ],
+                        ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30.0, top: 8.0),
-                        child: Column(
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Gap(8),
+          Row(
+            children: [
+              WhatsevrChoiceChip(
+                  choiced: isTopComments,
+                  switchChoice: (bool selected) {
+                    if (_comments.isEmpty) return;
+
+                    setState(() {
+                      isTopComments = selected;
+                      if (isTopComments) {
+                        _comments.sort((a, b) => a.author!.totalFollowers!
+                            .compareTo(b.author!.totalFollowers!));
+                      } else {
+                        _comments.sort(
+                            (a, b) => a.createdAt!.compareTo(b.createdAt!));
+                      }
+                      _comments = _comments.reversed.toList();
+                    });
+                  },
+                  label: 'Top Comments'),
+            ],
+          ),
+          const Gap(8),
+          Expanded(
+            child: Builder(builder: (context) {
+              if (_comments.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'Waiting for comments...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              }
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: _comments.length,
+                controller: scrollController,
+                itemBuilder: (context, index) {
+                  m1.Comment comment = _comments[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (comment.userCommentReplies?.isNotEmpty ?? false)
-                              ExpansionTileFlat(
-                                tilePadding: EdgeInsets.zero,
-                                childrenPadding: EdgeInsets.zero,
-                                isDefaultVerticalPadding: false,
-                                title: Text(
-                                    '${comment.userCommentReplies?.length ?? 0} reply'),
-                                children: [
-                                  for (m1.UserCommentReply reply
-                                      in comment.userCommentReplies ?? [])
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              showPhotoPreviewDialog(
-                                                context: context,
-                                                photoUrl: reply
-                                                    .author?.profilePicture,
-                                                appBarTitle: reply.author?.name,
-                                              );
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  ExtendedNetworkImageProvider(
-                                                reply.author?.profilePicture ??
-                                                    MockData.blankProfileAvatar,
-                                              ),
-                                              radius: 15,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      reply.author?.name ??
-                                                          'Unknown',
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Spacer(),
-                                                    const SizedBox(width: 8),
-                                                    Text(
-                                                      GetTimeAgo.parse(
-                                                          reply.createdAt!),
-                                                      style: const TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(reply.replyText ?? ''),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                          children: <Widget>[
+                            GestureDetector(
+                                onTap: () {
+                                  showPhotoPreviewDialog(
+                                    context: context,
+                                    photoUrl: comment.author?.profilePicture,
+                                    appBarTitle: comment.author?.name,
+                                  );
+                                },
+                                child: ExtendedImage.network(
+                                  comment.author?.profilePicture ??
+                                      MockData.blankProfileAvatar,
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.horizontal(
+                                    left: Radius.circular(16),
+                                  ),
+                                  width: 80,
+                                  height: 80,
+                                )),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Text(
+                                        comment.author?.name ?? 'Anonymous',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Spacer(),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        GetTimeAgo.parse(comment.createdAt!) ??
+                                            '',
+                                        style: const TextStyle(
+                                            color: Colors.grey, fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  if (comment.commentText?.isNotEmpty ??
+                                      false) ...[
+                                    const SizedBox(height: 4),
+                                    Text(comment.commentText ?? '')
+                                  ],
+                                  if (comment.imageUrl?.isNotEmpty ??
+                                      false) ...[
+                                    const SizedBox(height: 4),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showPhotoPreviewDialog(
+                                          context: context,
+                                          photoUrl: comment.imageUrl,
+                                          appBarTitle: comment.author?.name,
+                                        );
+                                      },
+                                      child: ExtendedImage.network(
+                                        comment.imageUrl!,
+                                        shape: BoxShape.rectangle,
+                                        borderRadius: BorderRadius.circular(8),
+                                        width: double.infinity,
+                                        fit: BoxFit.contain,
+                                        enableLoadState: false,
                                       ),
                                     ),
+                                  ],
                                 ],
-                              ),
-                            GestureDetector(
-                              onTap: () => _replyToComment(comment),
-                              child: Text(
-                                'Reply',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 12,
-                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          }),
-        ),
-        if (replyingToTheComment != null)
-          Row(
-            children: [
-              Spacer(),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    replyingToTheComment = null;
-                  });
-                },
-                child: const Text(
-                  'Cancel Reply',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        if (_imageFile != null)
-          Stack(
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    showPhotoPreviewDialog(
-                      context: context,
-                      photoUrl: _imageFile!.path,
-                      appBarTitle: 'Preview',
-                    );
-                  },
-                  child: ExtendedImage.file(
-                    _imageFile!,
-                    height: 80,
-                    fit: BoxFit.contain,
-                  )),
-              Positioned(
-                top: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _imageFile = null;
-                    });
-                  },
-                  child: const Icon(
-                    Icons.cancel,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: WhatsevrFormField.multilineTextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  hintText: replyingToTheComment != null
-                      ? 'Add a reply'
-                      : 'Add a comment',
-                  minLines: 1,
-                  maxLines: 4,
-                  prefixWidget: Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: CircleAvatar(
-                      backgroundImage: ExtendedNetworkImageProvider(
-                        currentUserDetails?.data?.profilePicture ??
-                            MockData.blankProfileAvatar,
-                        cache: true,
-                      ),
-                      radius: 15,
-                    ),
-                  ),
-                  suffixWidget: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        visualDensity: VisualDensity.compact,
-                        icon: const Icon(Icons.attach_file),
-                        color: Colors.black,
-                        onPressed: () {
-                          showWhatsevrMediaPickerChoice(
-                            onChoosingImageFromGallery: () {
-                              CustomAssetPicker.pickImageFromGallery(
-                                  quality: 50,
-                                  editImage: false,
-                                  onCompleted: (File file) {
-                                    setState(() {
-                                      _imageFile = file;
-                                    });
-                                  });
-                            },
-                          );
-                        },
-                      ),
-                      GestureDetector(
-                        child: const Icon(
-                          Icons.send,
-                          color: Colors.black,
-                          size: 22,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30.0, top: 8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (comment.userCommentReplies?.isNotEmpty ??
+                                  false)
+                                ExpansionTileFlat(
+                                  tilePadding: EdgeInsets.zero,
+                                  childrenPadding: EdgeInsets.zero,
+                                  isDefaultVerticalPadding: false,
+                                  title: Text(
+                                      '${comment.userCommentReplies?.length ?? 0} reply'),
+                                  children: [
+                                    for (m1.UserCommentReply reply
+                                        in comment.userCommentReplies ?? [])
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                showPhotoPreviewDialog(
+                                                  context: context,
+                                                  photoUrl: reply
+                                                      .author?.profilePicture,
+                                                  appBarTitle:
+                                                      reply.author?.name,
+                                                );
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundImage:
+                                                    ExtendedNetworkImageProvider(
+                                                  reply.author
+                                                          ?.profilePicture ??
+                                                      MockData
+                                                          .blankProfileAvatar,
+                                                ),
+                                                radius: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        reply.author?.name ??
+                                                            'Unknown',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      Spacer(),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        GetTimeAgo.parse(
+                                                            reply.createdAt!),
+                                                        style: const TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(reply.replyText ?? ''),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              GestureDetector(
+                                onTap: () => _replyToComment(comment),
+                                child: Text(
+                                  'Reply',
+                                  style: const TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        onTap: () {
-                          if (_controller.text.isNotEmpty) {
-                            _onPostCommentOrReply(_controller.text);
-                          }
-                        },
-                      ),
-                      Gap(4),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+                      ],
+                    ),
+                  );
+                },
+              );
+            }),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

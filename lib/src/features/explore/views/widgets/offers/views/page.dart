@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 
@@ -77,6 +78,9 @@ class ExplorePageOffersPage extends StatelessWidget {
                     likes: data[index].totalLikes,
                     shares: data[index].totalShares,
                     views: data[index].totalImpressions,
+                    onTapComment: () {
+                      showCommentsDialog(offerPostUid: data[index].uid);
+                    },
                   ),
                   if (index == data.length - 1 &&
                       context

@@ -12,6 +12,7 @@ Future<void> showAppModalSheet({
   bool dismissPrevious = false,
   bool transparentMask = false,
   double maxSheetHeight = 0.9,
+  bool resizeToAvoidBottomInset = true,
 }) async {
   // Dismiss the previous modal sheet if it exists and dismissPrevious is true
   if (dismissPrevious &&
@@ -47,8 +48,9 @@ Future<void> showAppModalSheet({
     builder: (BuildContext context) {
       return Padding(
         padding: EdgeInsets.only(
-          bottom:
-              MediaQuery.of(context).viewInsets.bottom, // Keyboard adjustment
+          bottom: resizeToAvoidBottomInset
+              ? MediaQuery.of(context).viewInsets.bottom
+              : 0.0, // Keyboard adjustment
         ),
         child: Builder(builder: (context) {
           if (!flexibleSheet) {

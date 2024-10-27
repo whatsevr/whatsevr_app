@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
@@ -134,6 +135,9 @@ class ExplorePageWtvPage extends StatelessWidget {
                               thumbnail: data[index].thumbnail,
                               videoUrl: data[index].videoUrl,
                             ));
+                      },
+                      onTapComment: () {
+                        showCommentsDialog(videoPostUid: data[index].uid);
                       },
                     ),
                     if (index == data.length - 1 &&

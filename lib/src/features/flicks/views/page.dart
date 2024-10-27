@@ -14,6 +14,7 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -44,6 +45,7 @@ class _FlicksPageState extends State<FlicksPage> {
 
   CachedVideoPlayerPlusController? currentVideoController;
   final PreloadPageController scrollController = PreloadPageController();
+
   Widget _buildBody(BuildContext context) {
     onReachingEndOfTheList(scrollController, execute: () {
       context.read<FlicksBloc>().add(LoadMoreFlicksEvent(
@@ -188,21 +190,10 @@ class _FlicksPageState extends State<FlicksPage> {
                                     ],
                                   ),
                                   const Gap(8),
-                                  CarouselSlider.builder(
-                                    itemCount: 15,
-                                    options: CarouselOptions(
-                                      height: 40,
-                                      viewportFraction: 1,
-                                      enableInfiniteScroll: true,
-                                      enlargeCenterPage: false,
-                                      autoPlay: true,
-                                      scrollDirection: Axis.horizontal,
-                                    ),
-                                    itemBuilder: (BuildContext context,
-                                            int itemIndex, int pageViewIndex) =>
-                                        GestureDetector(
+                                  GestureDetector(
                                       onTap: () {
-                                        showAppModalSheet(child: Container());
+                                        showCommentsDialog(
+                                            flickPostUid: flick?.uid);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
@@ -214,28 +205,41 @@ class _FlicksPageState extends State<FlicksPage> {
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
-                                        child: Row(
-                                          children: <Widget>[
-                                            const Gap(8),
-                                            CircleAvatar(
-                                              radius: 10,
-                                              backgroundImage: NetworkImage(
-                                                  MockData.blankProfileAvatar),
-                                            ),
-                                            const Gap(8),
-                                            const Expanded(
-                                              child: Text(
-                                                'Top Comments',
-                                                style: TextStyle(
-                                                  color: Colors.white,
+                                        child: CarouselSlider.builder(
+                                          itemCount: 15,
+                                          options: CarouselOptions(
+                                            height: 40,
+                                            viewportFraction: 1,
+                                            enableInfiniteScroll: true,
+                                            enlargeCenterPage: false,
+                                            autoPlay: true,
+                                            scrollDirection: Axis.horizontal,
+                                          ),
+                                          itemBuilder: (BuildContext context,
+                                                  int itemIndex,
+                                                  int pageViewIndex) =>
+                                              Row(
+                                            children: <Widget>[
+                                              const Gap(8),
+                                              CircleAvatar(
+                                                radius: 10,
+                                                backgroundImage: NetworkImage(
+                                                    MockData
+                                                        .blankProfileAvatar),
+                                              ),
+                                              const Gap(8),
+                                              const Expanded(
+                                                child: Text(
+                                                  'Top Comments',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
+                                      )),
                                 ],
                               ),
                               const Gap(16),
