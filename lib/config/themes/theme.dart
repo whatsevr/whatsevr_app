@@ -177,8 +177,9 @@ class DarkTheme extends AppTheme {
 
 // lib/theme/extensions/theme_extension.dart
 
-extension ThemeBlocX on BuildContext {
+extension ThemeBlocXtn on BuildContext {
   ThemeBloc get themeBloc => read<ThemeBloc>();
+  toggleTheme() => read<ThemeBloc>().add(ToggleThemeEvent());
   AppTheme get whatsevrTheme => read<ThemeBloc>().currentTheme;
   bool get isDarkMode => read<ThemeBloc>().state.themeType == ThemeType.dark;
 }

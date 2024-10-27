@@ -138,7 +138,7 @@ class NewCommunityPage extends StatelessWidget {
                           ),
                           Gap(4),
                           WhatsevrTwoStateUi(
-                            isFirstState: true,
+                            isSecondState: true,
                             firstStateUi: WhatsevrButton.outlined(
                               miniButton: true,
                               label: 'Join',

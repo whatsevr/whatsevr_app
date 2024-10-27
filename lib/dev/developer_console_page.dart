@@ -243,7 +243,7 @@ class _ColorPalettePage extends StatelessWidget {
                   Switch(
                     value: context.isDarkMode,
                     onChanged: (_) {
-                      context.themeBloc.add(ToggleThemeEvent());
+                      context.toggleTheme();
                     },
                   ),
                 ],

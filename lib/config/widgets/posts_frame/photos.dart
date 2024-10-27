@@ -206,7 +206,7 @@ class PhotosPostFrame extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(8),
-              const AnimatedLikeIconButton(),
+              const WhatsevrLikeButton(),
               Text(likes == null || likes == 0
                   ? ''
                   : formatCountToKMBTQ(likes) ?? ''),
@@ -227,10 +227,7 @@ class PhotosPostFrame extends StatelessWidget {
                   ? ''
                   : formatCountToKMBTQ(shares) ?? ''),
               const Spacer(),
-              const WhatsevrTwoStateUi(
-                firstStateUi: Iconify(Ph.bookmark_simple_thin),
-                secondStateUi: Iconify(Ph.bookmark_fill),
-              ),
+              const WhatsevrBookmarkButton(),
               IconButton(
                 icon: const Iconify(SystemUicons.menu_vertical),
                 onPressed: () {

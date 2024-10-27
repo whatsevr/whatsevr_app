@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
+import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
@@ -322,24 +323,23 @@ class WtvDetailsPage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: <Widget>[
-                              // Like button
-                              for ((String label, IconData icon) record
-                                  in <(String, IconData)>[
-                                ('Like', Icons.thumb_up),
-                                ('Share', Icons.share),
-                                ('Save', Icons.bookmark),
-                              ])
-                                MaterialButton(
-                                  onPressed: () {},
-                                  child: Row(
-                                    children: <Widget>[
-                                      Icon(record.$2),
-                                      const Gap(5),
-                                      Text(record.$1),
-                                    ],
-                                  ),
-                                ),
-
+                              WhatsevrLikeButton(),
+                              const Gap(8),
+                              WhatsevrBookmarkButton(),
+                              const Gap(8),
+                              WhatsevrCommentButton(
+                                onTapComment: () {
+                                  showCommentsDialog(
+                                    videoPostUid: state.videoPostDetailsResponse
+                                        ?.videoPostDetails?.uid,
+                                  );
+                                },
+                              ),
+                              const Gap(8),
+                              const Gap(8),
+                              WhatsevrShareButton(
+                                onTapShare: () {},
+                              ),
                               // Share button
                             ],
                           ),

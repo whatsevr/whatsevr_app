@@ -244,53 +244,26 @@ class OfferPostFrame extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(8),
-              const AnimatedLikeIconButton(),
+              const WhatsevrLikeButton(),
               Text(likes == null || likes == 0
                   ? ''
                   : formatCountToKMBTQ(likes) ?? ''),
-              IconButton(
-                icon: const Iconify(Octicon.comment_24),
-                onPressed: () {
+              WhatsevrCommentButton(
+                onTapComment: () {
                   onTapComment?.call();
                 },
               ),
               Text(comments == null || comments == 0
                   ? ''
                   : formatCountToKMBTQ(comments) ?? ''),
-              IconButton(
-                icon: const Iconify(La.share),
-                onPressed: () {},
-              ),
+              WhatsevrShareButton(),
               Text(shares == null || shares == 0
                   ? ''
                   : formatCountToKMBTQ(shares) ?? ''),
               const Spacer(),
-              const WhatsevrTwoStateUi(
-                firstStateUi: Iconify(Ph.bookmark_simple_thin),
-                secondStateUi: Iconify(Ph.bookmark_fill),
-              ),
-              IconButton(
-                icon: const Iconify(SystemUicons.menu_vertical),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <ListTile>[
-                          ListTile(
-                            title: Text('View Account'),
-                            leading: Icon(Icons.account_box_rounded),
-                          ),
-                          ListTile(
-                            title: Text('Report'),
-                            leading: Icon(Icons.report),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+              const WhatsevrBookmarkButton(),
+              WhatsevrShareButton(
+                onTapShare: () {},
               ),
             ],
           ),

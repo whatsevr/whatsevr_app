@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/comments_view.dart';
@@ -100,26 +102,26 @@ class _FlicksPageState extends State<FlicksPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  AnimatedLikeIconButton(
+                                  WhatsevrLikeButton(
                                     size: 30,
-                                    firstColor: Colors.white,
+                                    firstColor: DarkTheme().icon,
                                   ),
-                                  Gap(16),
-                                  Icon(
-                                    Icons.link,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                  Gap(16),
-                                  Icon(
-                                    Icons.share,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
+                                  const Gap(16),
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.link,
+                                        size: 30,
+                                        color: Colors.white,
+                                      )),
+                                  const Gap(16),
+                                  WhatsevrShareButton(
+                                    iconColor: DarkTheme().icon,
+                                  )
                                 ],
                               ),
                               const Gap(16),
@@ -180,13 +182,9 @@ class _FlicksPageState extends State<FlicksPage> {
                                       ),
 
                                       Gap(12),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.more_vert,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                                      Whatsevr3DotMenuButton(
+                                        iconColor: DarkTheme().icon,
+                                      )
                                     ],
                                   ),
                                   const Gap(8),
