@@ -2,12 +2,16 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 
 import 'package:whatsevr_app/dev/dragable_bubble.dart';
 
@@ -39,42 +43,58 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
   }
 
   GoRouter routeConfig = AppNavigationService.allRoutes();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'WhatsEvr',
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-        textSelectionTheme: const TextSelectionThemeData(
-          cursorColor: Colors.grey,
-          selectionColor: Colors.grey,
-          selectionHandleColor: Colors.grey,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ThemeBloc>(
+          create: (context) => ThemeBloc(),
         ),
-        useMaterial3: true,
-        //flipkart
-        textTheme: GoogleFonts.poppinsTextTheme(),
-      ),
-      routerConfig: routeConfig,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        scrollbars: false,
-        dragDevices: PointerDeviceKind.values.toSet(),
-      ),
-      builder: FlutterSmartDialog.init(
-        toastBuilder: (msg) => _toastUi(msg),
-        loadingBuilder: (String msg) => _loaderUi(msg),
-        builder: (BuildContext context, Widget? child) {
-          return GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: Stack(
-              children: <Widget>[
-                SafeArea(
-                  child: child!,
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          AppTheme theme = context.theme;
+          return WhatsevrStackToast(
+            child: MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              title: 'WhatsEvr',
+              theme: ThemeData(
+                primaryColor: theme.primary,
+                scaffoldBackgroundColor: theme.background,
+                textSelectionTheme: const TextSelectionThemeData(
+                  cursorColor: Colors.grey,
+                  selectionColor: Colors.grey,
+                  selectionHandleColor: Colors.grey,
                 ),
-                if (kTestingMode) const DraggableWidget(),
-              ],
+                useMaterial3: true,
+                //flipkart
+                textTheme: GoogleFonts.poppinsTextTheme(),
+              ),
+              routerConfig: routeConfig,
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                scrollbars: false,
+                dragDevices: PointerDeviceKind.values.toSet(),
+              ),
+              builder: FlutterSmartDialog.init(
+                toastBuilder: (msg) => _toastUi(msg),
+                loadingBuilder: (String msg) => _loaderUi(msg),
+                builder: (BuildContext context, Widget? child) {
+                  return GestureDetector(
+                    onTap: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    child: Stack(
+                      children: <Widget>[
+                        SafeArea(
+                          child: child!,
+                        ),
+                        if (kTestingMode) const DraggableWidget(),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },

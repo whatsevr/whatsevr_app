@@ -1,13 +1,12 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-
-import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
 import '../config/services/device_info.dart';
+import '../config/themes/bloc/theme_bloc.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -27,9 +26,12 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Console'),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.redAccent,
+        foregroundColor: Colors.white,
+        elevation: 4,
+        shadowColor: Colors.black.withOpacity(0.5),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -49,19 +51,20 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildDeviceInfoCard() {
     return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: Colors.black.withOpacity(0.2),
       child: Column(
         children: [
           ListTile(
-            leading:
-                Icon(FontAwesomeIcons.mobileAlt, color: Colors.blue, size: 20),
+            leading: Icon(FontAwesomeIcons.mobileAlt,
+                color: Colors.redAccent, size: 24),
             title: Text('Device Information',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14)),
+                    fontSize: 16)),
           ),
           for ((String, String) itm in <(String, String)>[
             (
@@ -83,9 +86,9 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
               subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 12)),
             ),
         ],
       ),
@@ -94,27 +97,29 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildLoggedUserInfoCard() {
     return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: Colors.black.withOpacity(0.2),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.user, color: Colors.blue, size: 20),
+            leading:
+                Icon(FontAwesomeIcons.user, color: Colors.redAccent, size: 24),
             title: Text('Logged User Information',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14)),
+                    fontSize: 16)),
           ),
           for ((String, String) itm in <(String, String)>[
             ('User UID', AuthUserDb.getLastLoggedUserUid() ?? 'Unknown'),
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
               subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 12)),
             ),
         ],
       ),
@@ -123,24 +128,26 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildAllAuthorizedUsersCard() {
     return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: Colors.black.withOpacity(0.2),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.users, color: Colors.blue, size: 20),
+            leading:
+                Icon(FontAwesomeIcons.users, color: Colors.redAccent, size: 24),
             title: Text('All Authorized Users',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14)),
+                    fontSize: 16)),
           ),
           for (String? userUid
               in AuthUserDb.getAllAuthorisedUserUid() ?? <String?>[])
             ListTile(
               title: Text(userUid ?? 'Unknown',
-                  style: TextStyle(color: Colors.white, fontSize: 12)),
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
             ),
         ],
       ),
@@ -149,18 +156,20 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 
   Widget _buildActionsCard() {
     return Card(
-      color: Colors.red,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      color: Colors.white,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: Colors.black.withOpacity(0.2),
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.cogs, color: Colors.blue, size: 20),
+            leading:
+                Icon(FontAwesomeIcons.cogs, color: Colors.redAccent, size: 24),
             title: const Text('Actions',
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 14)),
+                    fontSize: 16)),
           ),
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
@@ -172,15 +181,263 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 );
               }
             ),
-            ('Test Function', () async {}),
+            (
+              'Check Theme Colors',
+              () async {
+                showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return _ColorPalettePage();
+                    });
+              }
+            ),
+            (
+              'Test Function 1',
+              () async {
+                WhatsevrStackToast.showSuccess('Success Test Function');
+              }
+            ),
+            (
+              'Test Function 2',
+              () async {
+                WhatsevrStackToast.showFailed('Failed Test Function');
+              }
+            ),
           ])
             ListTile(
               title: TextButton(
                 onPressed: itm.$2,
                 child: Text(itm.$1,
-                    style: TextStyle(color: Colors.white, fontSize: 12)),
+                    style: TextStyle(color: Colors.redAccent, fontSize: 14)),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ColorPalettePage extends StatelessWidget {
+  const _ColorPalettePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.theme;
+
+    return Scaffold(
+      backgroundColor: theme.background,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(theme.spacing2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with theme toggle
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Theme Properties',
+                    style: theme.h1,
+                  ),
+                  Switch(
+                    value: context.isDarkMode,
+                    onChanged: (_) {
+                      context.themeBloc.add(ToggleThemeEvent());
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: theme.spacing3),
+
+              // Theme properties
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      _ThemePropertyBox(
+                        name: 'Primary',
+                        color: theme.primary,
+                        icon: Icons.color_lens,
+                        tooltip: 'Primary color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Secondary',
+                        color: theme.secondary,
+                        icon: Icons.colorize,
+                        tooltip: 'Secondary color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Background',
+                        color: theme.background,
+                        icon: Icons.format_paint,
+                        tooltip: 'Background color of the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Surface',
+                        color: theme.surface,
+                        icon: Icons.layers,
+                        tooltip: 'Surface color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Error',
+                        color: theme.error,
+                        icon: Icons.error,
+                        tooltip: 'Error color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Text',
+                        color: theme.text,
+                        icon: Icons.text_fields,
+                        tooltip: 'Primary text color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Text Light',
+                        color: theme.textLight,
+                        icon: Icons.text_format,
+                        tooltip: 'Light text color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Divider',
+                        color: theme.divider,
+                        icon: Icons.line_weight,
+                        tooltip: 'Divider color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Disabled',
+                        color: theme.disabled,
+                        icon: Icons.block,
+                        tooltip: 'Disabled color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Accent',
+                        color: theme.accent,
+                        icon: Icons.highlight,
+                        tooltip: 'Accent color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Button',
+                        color: theme.button,
+                        icon: Icons.radio_button_checked,
+                        tooltip: 'Button color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Card',
+                        color: theme.card,
+                        icon: Icons.credit_card,
+                        tooltip: 'Card color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Icon',
+                        color: theme.icon,
+                        icon: Icons.insert_emoticon,
+                        tooltip: 'Icon color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Shadow',
+                        color: theme.shadow,
+                        icon: Icons.blur_on,
+                        tooltip: 'Shadow color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'AppBar',
+                        color: theme.appBar,
+                        icon: Icons.view_headline,
+                        tooltip: 'AppBar color used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Spacing 1',
+                        value: theme.spacing1,
+                        icon: Icons.space_bar,
+                        tooltip: 'Spacing 1 value used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Spacing 2',
+                        value: theme.spacing2,
+                        icon: Icons.space_bar,
+                        tooltip: 'Spacing 2 value used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Spacing 3',
+                        value: theme.spacing3,
+                        icon: Icons.space_bar,
+                        tooltip: 'Spacing 3 value used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Border Radius',
+                        value: theme.borderRadius,
+                        icon: Icons.rounded_corner,
+                        tooltip: 'Border radius value used in the app',
+                      ),
+                      _ThemePropertyBox(
+                        name: 'Button Height',
+                        value: theme.buttonHeight,
+                        icon: Icons.height,
+                        tooltip: 'Button height value used in the app',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ThemePropertyBox extends StatelessWidget {
+  final String name;
+  final Color? color;
+  final double? value;
+  final IconData icon;
+  final String tooltip;
+
+  const _ThemePropertyBox({
+    required this.name,
+    this.color,
+    this.value,
+    required this.icon,
+    required this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isColorProperty = color != null;
+    final displayValue = isColorProperty ? '' : value.toString();
+    final displayColor = isColorProperty ? color : Colors.grey[200];
+    final textColor = isColorProperty
+        ? (ThemeData.estimateBrightnessForColor(color!) == Brightness.light
+            ? Colors.black
+            : Colors.white)
+        : Colors.black;
+
+    return Container(
+      width: double.infinity,
+      height: 80,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: displayColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      alignment: Alignment.centerLeft,
+      child: Row(
+        children: [
+          Tooltip(
+            message: tooltip,
+            child: Icon(icon, color: textColor),
+          ),
+          SizedBox(width: 16),
+          Text(
+            '$name: $displayValue',
+            style: TextStyle(
+              color: textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
