@@ -17,6 +17,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/widgets/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
@@ -45,7 +47,7 @@ void showCommentsDialog({
   showAppModalSheet(
       transparentMask: true,
       flexibleSheet: false,
-      maxSheetHeight: 0.7,
+      maxSheetHeight: 0.8,
       child: _Ui(
         videoPostUid: videoPostUid,
         photoPostUid: photoPostUid,
@@ -86,14 +88,19 @@ class _UiState extends State<_Ui> {
   m1.Comment? replyingToTheComment;
   bool isTopComments = false;
   File? _imageFile;
+  ScrollController controller = ScrollController();
   @override
   void initState() {
     super.initState();
     getCurrentUserDetails();
     getComments(1);
+    onReachingEndOfTheList(controller, execute: () {
+      getComments((commentsPaginationData?.currentPage ?? 0) + 1);
+    });
   }
 
   UserDetailsResponse? currentUserDetails;
+
   void getCurrentUserDetails() async {
     String? userUid = AuthUserDb.getLastLoggedUserUid();
     currentUserDetails = await UsersApi.getUserDetails(userUid: userUid!);
@@ -133,12 +140,20 @@ class _UiState extends State<_Ui> {
     }
   }
 
+  void removeAttachments() {
+    setState(() {
+      _imageFile = null;
+    });
+  }
+
   void _onPostCommentOrReply(String text) async {
     _controller.clear();
     String? imageUrl;
     if (_imageFile != null) {
+      File imageFile = _imageFile!;
+      removeAttachments();
       imageUrl = await FileUploadService.uploadFilesToSupabase(
-        _imageFile!,
+        imageFile,
         userUid: AuthUserDb.getLastLoggedUserUid()!,
         fileRelatedTo: 'comment',
       );
@@ -192,6 +207,7 @@ class _UiState extends State<_Ui> {
             commentText: text,
             userUid: currentUserDetails?.data?.uid,
             videoPostUid: widget.videoPostUid,
+            imageUrl: imageUrl,
             author: m1.CommentAuthor.fromMap(
               currentUserDetails?.data?.toMap() ?? {},
             ),
@@ -256,6 +272,7 @@ class _UiState extends State<_Ui> {
             return ListView.builder(
               shrinkWrap: true,
               itemCount: _comments.length,
+              controller: controller,
               itemBuilder: (context, index) {
                 m1.Comment comment = _comments[index];
                 return Padding(
@@ -326,6 +343,7 @@ class _UiState extends State<_Ui> {
                                       shape: BoxShape.rectangle,
                                       borderRadius: BorderRadius.circular(8),
                                       width: double.infinity,
+                                      fit: BoxFit.contain,
                                       enableLoadState: false,
                                     ),
                                   ),
@@ -451,6 +469,31 @@ class _UiState extends State<_Ui> {
               ),
             ],
           ),
+        if (_imageFile != null)
+          Stack(
+            children: [
+              ExtendedImage.file(
+                _imageFile!,
+                height: 100,
+                fit: BoxFit.contain,
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _imageFile = null;
+                    });
+                  },
+                  child: const Icon(
+                    Icons.cancel,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           width: double.infinity,
@@ -487,7 +530,16 @@ class _UiState extends State<_Ui> {
                         color: Colors.black,
                         onPressed: () {
                           showWhatsevrMediaPickerChoice(
-                            onChoosingImageFromGallery: (File file) {},
+                            onChoosingImageFromGallery: () {
+                              CustomAssetPicker.pickImageFromGallery(
+                                  quality: 50,
+                                  editImage: false,
+                                  onCompleted: (File file) {
+                                    setState(() {
+                                      _imageFile = file;
+                                    });
+                                  });
+                            },
                           );
                         },
                       ),

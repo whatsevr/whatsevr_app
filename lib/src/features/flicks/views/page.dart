@@ -15,6 +15,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
 import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
@@ -44,19 +45,17 @@ class _FlicksPageState extends State<FlicksPage> {
   CachedVideoPlayerPlusController? currentVideoController;
   final PreloadPageController scrollController = PreloadPageController();
   Widget _buildBody(BuildContext context) {
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        context.read<FlicksBloc>().add(LoadMoreFlicksEvent(
-              page: context
-                      .read<FlicksBloc>()
-                      .state
-                      .flicksPaginationData!
-                      .currentPage +
-                  1,
-            ));
-      }
+    onReachingEndOfTheList(scrollController, execute: () {
+      context.read<FlicksBloc>().add(LoadMoreFlicksEvent(
+            page: context
+                    .read<FlicksBloc>()
+                    .state
+                    .flicksPaginationData!
+                    .currentPage +
+                1,
+          ));
     });
+
     return BlocSelector<FlicksBloc, FlicksState, List<RecommendedFlick>?>(
       selector: (FlicksState state) => state.recommendationFlicks,
       builder: (context, data) {

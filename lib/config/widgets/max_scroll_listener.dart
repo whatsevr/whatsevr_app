@@ -6,7 +6,8 @@ void onReachingEndOfTheList(
 }) {
   scrollController?.addListener(() {
     if (scrollController.position.pixels ==
-        scrollController.position.maxScrollExtent - 100) {
+        scrollController.position.maxScrollExtent) {
+      debugPrint('Reached the end of the list.');
       execute?.call();
     }
   });

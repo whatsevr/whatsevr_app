@@ -12,6 +12,7 @@ import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
+import 'package:whatsevr_app/utils/file.dart';
 
 class CustomAssetPicker {
   CustomAssetPicker._();
@@ -22,6 +23,7 @@ class CustomAssetPicker {
     bool editImage = true,
     List<WhatsevrAspectRatio> aspectRatios = WhatsevrAspectRatio.values,
     bool withCircleCropperUi = false,
+    int? quality,
   }) async {
     File? capturedFile;
     await AppNavigationService.newRoute(
@@ -31,15 +33,21 @@ class CustomAssetPicker {
       }),
     );
     if (capturedFile == null) return;
+    File? compressedFile;
+    if (quality != null) {
+      compressedFile = await compressImage(capturedFile, quality: quality);
+    }
+
     if (!cropImage) {
-      onCompleted?.call(capturedFile!);
+      onCompleted?.call(compressedFile ?? capturedFile!);
       return;
     }
+
     File? croppedImage;
     await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-        imageFileToCrop: capturedFile!,
+        imageFileToCrop: compressedFile ?? capturedFile!,
         aspectRatios: aspectRatios,
         withCircleCropperUi: withCircleCropperUi,
         onCompleted: (File file) {
@@ -69,6 +77,7 @@ class CustomAssetPicker {
     List<WhatsevrAspectRatio> aspectRatios = WhatsevrAspectRatio.values,
     bool withCircleCropperUi = false,
     required Function(File file) onCompleted,
+    int? quality,
   }) async {
     final List<AssetEntity>? pickedAssets = await AssetPicker.pickAssets(
       AppNavigationService.currentContext!,
@@ -92,11 +101,15 @@ class CustomAssetPicker {
     }
     File? pickedFile = await pickedAssets.first.file;
     if (pickedFile == null) throw Exception('File does not exist');
+    File? compressedFile;
+    if (quality != null) {
+      compressedFile = await compressImage(pickedFile, quality: quality);
+    }
     File? croppedImage;
     await AppNavigationService.newRoute(
       RoutesName.imageCropper,
       extras: ImageCropperPageArgument(
-        imageFileToCrop: pickedFile,
+        imageFileToCrop: compressedFile ?? pickedFile,
         aspectRatios: aspectRatios,
         onCompleted: (File file) {
           croppedImage = file;

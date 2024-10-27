@@ -73,6 +73,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               showWhatsevrMediaPickerChoice(
                                 onChoosingImageFromCamera: () async {
                                   CustomAssetPicker.captureImage(
+                                    quality: 50,
                                     withCircleCropperUi: true,
                                     aspectRatios: [
                                       WhatsevrAspectRatio.square,
@@ -88,6 +89,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                 },
                                 onChoosingImageFromGallery: () {
                                   CustomAssetPicker.pickImageFromGallery(
+                                    quality: 50,
                                     withCircleCropperUi: true,
                                     aspectRatios: [
                                       WhatsevrAspectRatio.square,

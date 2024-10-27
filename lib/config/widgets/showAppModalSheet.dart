@@ -69,6 +69,6 @@ Future<void> showAppModalSheet({
     },
   );
 
-  _currentModalCompleter!.complete();
+  _currentModalCompleter?.complete();
   _currentModalCompleter = null;
 }
