@@ -5,10 +5,13 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/auth.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
 
 import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
 import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
@@ -153,6 +156,25 @@ class AuthUserService {
       } else {
         SmartDialog.showToast(loginInfo?.$2 ?? 'Something went wrong');
       }
+    }
+  }
+
+  static Future<void> getSupportiveDataForLoggedUser() async {
+    print('53426327');
+    String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
+    try {
+      if (currentlyLoggedUserUid != null) {
+        (int?, dynamic)? supportiveDataResponse =
+            await UsersApi.getSupportiveUserData(
+                userUid: currentlyLoggedUserUid);
+        if (supportiveDataResponse?.$1 != HttpStatus.ok) {
+          throw BusinessException('Failed to fetch logged user data');
+        }
+      }
+    } catch (e, stackTrace) {
+      AuthUserDb.clearLastLoggedUserUid();
+      AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
+      highLevelCatch(e, stackTrace);
     }
   }
 }

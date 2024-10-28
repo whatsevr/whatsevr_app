@@ -40,6 +40,23 @@ class UsersApi {
     return null;
   }
 
+  static Future<(int? statusCode, dynamic data)?> getSupportiveUserData({
+    required String userUid,
+  }) async {
+    try {
+      Response response = await ApiClient.client.get(
+        '/v1/get-user-supportive-data',
+        queryParameters: <String, dynamic>{'user_uid': userUid},
+      );
+      if (response.data != null) {
+        return (response.statusCode, response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
   static Future<ProfileDetailsResponse?> getProfileDetails({
     required String userUid,
   }) async {

@@ -13,7 +13,7 @@ class AuthUserDb {
   static const String _allLoggedUserUids = 'all_logged_user_uids';
 
   static Future<void> initDB() async {
-    String dbBoxName = 'auth-user-hive-box-43263';
+    String dbBoxName = 'auth-user-hive-box-2735';
     await Hive.initFlutter();
     await Hive.openBox<dynamic>(dbBoxName);
     _authorisedCustomersBox = Hive.box(dbBoxName);

@@ -247,6 +247,7 @@ class _UiState extends State<_Ui> {
           color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (replyingToTheComment != null)
                 Row(
@@ -420,181 +421,200 @@ class _UiState extends State<_Ui> {
                 controller: scrollController,
                 itemBuilder: (context, index) {
                   m1.Comment comment = _comments[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            GestureDetector(
-                                onTap: () {
-                                  showPhotoPreviewDialog(
-                                    context: context,
-                                    photoUrl: comment.author?.profilePicture,
-                                    appBarTitle: comment.author?.name,
-                                  );
-                                },
-                                child: ExtendedImage.network(
-                                  comment.author?.profilePicture ??
-                                      MockData.blankProfileAvatar,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.horizontal(
-                                    left: Radius.circular(16),
-                                  ),
-                                  width: 80,
-                                  height: 80,
-                                )),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    children: [
-                                      Text(
-                                        comment.author?.name ?? 'Anonymous',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                GestureDetector(
+                                    onTap: () {
+                                      showPhotoPreviewDialog(
+                                        context: context,
+                                        photoUrl:
+                                            comment.author?.profilePicture,
+                                        appBarTitle: comment.author?.name,
+                                      );
+                                    },
+                                    child: ExtendedImage.network(
+                                      comment.author?.profilePicture ??
+                                          MockData.blankProfileAvatar,
+                                      shape: BoxShape.rectangle,
+                                      borderRadius: BorderRadius.horizontal(
+                                        left: Radius.circular(16),
                                       ),
-                                      Spacer(),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        GetTimeAgo.parse(comment.createdAt!) ??
-                                            '',
-                                        style: const TextStyle(
-                                            color: Colors.grey, fontSize: 12),
+                                      width: 80,
+                                      height: 80,
+                                    )),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: [
+                                          Text(
+                                            comment.author?.name ?? 'Anonymous',
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Spacer(),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            GetTimeAgo.parse(
+                                                    comment.createdAt!) ??
+                                                '',
+                                            style: const TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12),
+                                          ),
+                                        ],
                                       ),
+                                      if (comment.commentText?.isNotEmpty ??
+                                          false) ...[
+                                        const SizedBox(height: 4),
+                                        Text(comment.commentText ?? '')
+                                      ],
+                                      if (comment.imageUrl?.isNotEmpty ??
+                                          false) ...[
+                                        const SizedBox(height: 4),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showPhotoPreviewDialog(
+                                              context: context,
+                                              photoUrl: comment.imageUrl,
+                                              appBarTitle: comment.author?.name,
+                                            );
+                                          },
+                                          child: ExtendedImage.network(
+                                            comment.imageUrl!,
+                                            shape: BoxShape.rectangle,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            width: double.infinity,
+                                            fit: BoxFit.contain,
+                                            enableLoadState: false,
+                                          ),
+                                        ),
+                                      ],
                                     ],
                                   ),
-                                  if (comment.commentText?.isNotEmpty ??
-                                      false) ...[
-                                    const SizedBox(height: 4),
-                                    Text(comment.commentText ?? '')
-                                  ],
-                                  if (comment.imageUrl?.isNotEmpty ??
-                                      false) ...[
-                                    const SizedBox(height: 4),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showPhotoPreviewDialog(
-                                          context: context,
-                                          photoUrl: comment.imageUrl,
-                                          appBarTitle: comment.author?.name,
-                                        );
-                                      },
-                                      child: ExtendedImage.network(
-                                        comment.imageUrl!,
-                                        shape: BoxShape.rectangle,
-                                        borderRadius: BorderRadius.circular(8),
-                                        width: double.infinity,
-                                        fit: BoxFit.contain,
-                                        enableLoadState: false,
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 30.0, top: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (comment.userCommentReplies?.isNotEmpty ??
+                                      false)
+                                    ExpansionTileFlat(
+                                      tilePadding: EdgeInsets.zero,
+                                      childrenPadding: EdgeInsets.zero,
+                                      isDefaultVerticalPadding: false,
+                                      title: Text(
+                                          '${comment.userCommentReplies?.length ?? 0} reply'),
+                                      children: [
+                                        for (m1.UserCommentReply reply
+                                            in comment.userCommentReplies ?? [])
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showPhotoPreviewDialog(
+                                                      context: context,
+                                                      photoUrl: reply.author
+                                                          ?.profilePicture,
+                                                      appBarTitle:
+                                                          reply.author?.name,
+                                                    );
+                                                  },
+                                                  child: CircleAvatar(
+                                                    backgroundImage:
+                                                        ExtendedNetworkImageProvider(
+                                                      reply.author
+                                                              ?.profilePicture ??
+                                                          MockData
+                                                              .blankProfileAvatar,
+                                                    ),
+                                                    radius: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            reply.author
+                                                                    ?.name ??
+                                                                'Unknown',
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Spacer(),
+                                                          const SizedBox(
+                                                              width: 8),
+                                                          Text(
+                                                            GetTimeAgo.parse(
+                                                                reply
+                                                                    .createdAt!),
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    fontSize:
+                                                                        12),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      Text(reply.replyText ??
+                                                          ''),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  GestureDetector(
+                                    onTap: () => _replyToComment(comment),
+                                    child: Text(
+                                      'Reply',
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 12,
                                       ),
                                     ),
-                                  ],
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30.0, top: 8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (comment.userCommentReplies?.isNotEmpty ??
-                                  false)
-                                ExpansionTileFlat(
-                                  tilePadding: EdgeInsets.zero,
-                                  childrenPadding: EdgeInsets.zero,
-                                  isDefaultVerticalPadding: false,
-                                  title: Text(
-                                      '${comment.userCommentReplies?.length ?? 0} reply'),
-                                  children: [
-                                    for (m1.UserCommentReply reply
-                                        in comment.userCommentReplies ?? [])
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            GestureDetector(
-                                              onTap: () {
-                                                showPhotoPreviewDialog(
-                                                  context: context,
-                                                  photoUrl: reply
-                                                      .author?.profilePicture,
-                                                  appBarTitle:
-                                                      reply.author?.name,
-                                                );
-                                              },
-                                              child: CircleAvatar(
-                                                backgroundImage:
-                                                    ExtendedNetworkImageProvider(
-                                                  reply.author
-                                                          ?.profilePicture ??
-                                                      MockData
-                                                          .blankProfileAvatar,
-                                                ),
-                                                radius: 15,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 8),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        reply.author?.name ??
-                                                            'Unknown',
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      Spacer(),
-                                                      const SizedBox(width: 8),
-                                                      Text(
-                                                        GetTimeAgo.parse(
-                                                            reply.createdAt!),
-                                                        style: const TextStyle(
-                                                            color: Colors.grey,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 4),
-                                                  Text(reply.replyText ?? ''),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              GestureDetector(
-                                onTap: () => _replyToComment(comment),
-                                child: Text(
-                                  'Reply',
-                                  style: const TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      if (index == _comments.length - 1) Gap(100),
+                    ],
                   );
                 },
               );
