@@ -244,7 +244,7 @@ class OfferPostFrame extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(8),
-              const WhatsevrLikeButton(),
+              const WhatsevrReactButton(),
               Text(likes == null || likes == 0
                   ? ''
                   : formatCountToKMBTQ(likes) ?? ''),

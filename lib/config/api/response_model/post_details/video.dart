@@ -469,7 +469,7 @@ class VideoPostDetails {
   final String? videoUrl;
   final String? location;
   final int? totalViews;
-  final int? totalLikes;
+  final int? totalReactions;
   final int? totalComments;
   final String? internalAiDescription;
   final String? addressLatLongWkb;
@@ -499,7 +499,7 @@ class VideoPostDetails {
     this.videoUrl,
     this.location,
     this.totalViews,
-    this.totalLikes,
+    this.totalReactions,
     this.totalComments,
     this.internalAiDescription,
     this.addressLatLongWkb,
@@ -560,7 +560,7 @@ class VideoPostDetails {
         videoUrl: videoUrl ?? this.videoUrl,
         location: location ?? this.location,
         totalViews: totalViews ?? this.totalViews,
-        totalLikes: totalLikes ?? this.totalLikes,
+        totalReactions: totalLikes ?? this.totalReactions,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
             internalAiDescription ?? this.internalAiDescription,
@@ -606,7 +606,7 @@ class VideoPostDetails {
         videoUrl: json["video_url"],
         location: json["location"],
         totalViews: json["total_views"],
-        totalLikes: json["total_likes"],
+        totalReactions: json["total_likes"],
         totalComments: json["total_comments"],
         internalAiDescription: json["internal_ai_description"],
         addressLatLongWkb: json["address_lat_long_wkb"],
@@ -646,7 +646,7 @@ class VideoPostDetails {
         "video_url": videoUrl,
         "location": location,
         "total_views": totalViews,
-        "total_likes": totalLikes,
+        "total_likes": totalReactions,
         "total_comments": totalComments,
         "internal_ai_description": internalAiDescription,
         "address_lat_long_wkb": addressLatLongWkb,

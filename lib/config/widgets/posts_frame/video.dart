@@ -171,7 +171,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                 const Gap(8),
                 Row(
                   children: <Widget>[
-                    const WhatsevrLikeButton(),
+                    const WhatsevrReactButton(),
                     Text(likes == null || likes == 0
                         ? ''
                         : formatCountToKMBTQ(likes) ?? ''),

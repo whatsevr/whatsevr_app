@@ -7,38 +7,96 @@ import 'package:like_button/like_button.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ant_design.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 import 'package:whatsevr_app/config/widgets/two_state_ui.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
 
-class WhatsevrLikeButton extends StatelessWidget {
+class WhatsevrReactButton extends StatefulWidget {
+  final bool? initiallyReacted;
+  final int? reactionCount;
   final Color? firstColor;
   final double? size;
-  final Function(bool isLiked)? onLike;
-  final Function(bool isUnLiked)? onUnLike;
-  const WhatsevrLikeButton(
-      {super.key, this.size, this.firstColor, this.onLike, this.onUnLike});
+  final Function(bool isLiked)? onReact;
+  final Function(bool isUnLiked)? onUnreact;
+  final Function()? onTapSide;
+
+  const WhatsevrReactButton(
+      {super.key,
+      this.initiallyReacted,
+      this.reactionCount,
+      this.size,
+      this.firstColor,
+      this.onReact,
+      this.onUnreact,
+      this.onTapSide});
+
+  @override
+  State<WhatsevrReactButton> createState() => _WhatsevrReactButtonState();
+}
+
+class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
+  bool _isReacted = false;
+  int _reactionCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _isReacted = widget.initiallyReacted ?? false;
+    _reactionCount = widget.reactionCount ?? 0;
+  }
 
   @override
   Widget build(BuildContext context) {
     return UnconstrainedBox(
-      child: LikeButton(
-        size: size ?? 26,
-        padding: const EdgeInsets.all(6),
-        likeBuilder: (bool isLiked) {
-          return Iconify(
-            isLiked ? AntDesign.heart_filled : AntDesign.heart_outlined,
-            color: isLiked ? Colors.red : firstColor ?? Colors.black,
-          );
-        },
-        onTap: (isLiked) {
-          if (isLiked) {
-            onUnLike?.call(isLiked);
-          } else {
-            onLike?.call(isLiked);
-          }
-          return Future.value(!isLiked);
-        },
-      ),
+      child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            widget.onTapSide?.call();
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                LikeButton(
+                  size: widget.size ?? 26,
+                  padding: const EdgeInsets.all(6),
+                  likeBuilder: (bool isLiked) {
+                    return Iconify(
+                      isLiked
+                          ? AntDesign.heart_filled
+                          : AntDesign.heart_outlined,
+                      color: isLiked
+                          ? Colors.red
+                          : widget.firstColor ?? Colors.black,
+                    );
+                  },
+                  isLiked: _isReacted,
+                  onTap: (isReacted) {
+                    if (isReacted) {
+                      widget.onUnreact?.call(isReacted);
+                    } else {
+                      widget.onReact?.call(isReacted);
+                    }
+                    setState(() {
+                      _isReacted = !isReacted;
+                      if (isReacted) {
+                        _reactionCount--;
+                      } else {
+                        _reactionCount++;
+                      }
+                    });
+                    return Future.value(!isReacted);
+                  },
+                ),
+                if (_reactionCount != 0)
+                  Text(
+                    '${formatCountToKMBTQ(_reactionCount)}',
+                    style: TextStyle(color: Colors.black),
+                  ),
+              ],
+            ),
+          )),
     );
   }
 }
@@ -49,6 +107,7 @@ class WhatsevrBookmarkButton extends StatelessWidget {
   final bool? isBookmarked;
   final Function(bool? actionSuccess)? onBookmarked;
   final Function(bool? actionSuccess)? onUnBookmarkRemoved;
+
   const WhatsevrBookmarkButton(
       {super.key,
       this.isBookmarked,
@@ -82,6 +141,7 @@ class WhatsevrBookmarkButton extends StatelessWidget {
 class WhatsevrCommentButton extends StatelessWidget {
   final Color? iconColor;
   final Function()? onTapComment;
+
   const WhatsevrCommentButton({super.key, this.onTapComment, this.iconColor});
 
   @override
@@ -99,6 +159,7 @@ class WhatsevrCommentButton extends StatelessWidget {
 class WhatsevrShareButton extends StatelessWidget {
   final Color? iconColor;
   final Function()? onTapShare;
+
   const WhatsevrShareButton({super.key, this.onTapShare, this.iconColor});
 
   @override
@@ -119,6 +180,7 @@ class WhatsevrShareButton extends StatelessWidget {
 class Whatsevr3DotMenuButton extends StatelessWidget {
   final Color? iconColor;
   final Function()? onTapMenu;
+
   const Whatsevr3DotMenuButton({super.key, this.onTapMenu, this.iconColor});
 
   @override

@@ -4,7 +4,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/api/methods/reactions.dart';
+import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/button.dart';
@@ -12,6 +15,7 @@ import 'package:whatsevr_app/config/widgets/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
+import 'package:whatsevr_app/config/widgets/reactions_view.dart';
 import 'package:whatsevr_app/src/features/details/wtv_details/bloc/wtv_details_bloc.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:whatsevr_app/src/features/details/wtv_details/views/widgets/related_videos.dart';
@@ -323,10 +327,34 @@ class WtvDetailsPage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: <Widget>[
-                              WhatsevrLikeButton(),
+                              WhatsevrReactButton(
+                                onTapSide: () {
+                                  showReactionsDialog(
+                                    videoPostUid: state.videoPostDetailsResponse
+                                        ?.videoPostDetails?.uid,
+                                  );
+                                },
+                                reactionCount: state.videoPostDetailsResponse
+                                    ?.videoPostDetails?.totalReactions,
+                                onReact: (isLiked) {
+                                  ReactionsApi.recordReaction(
+                                    reactionType:
+                                        ReactionType.like.reactionType,
+                                    userUid: AuthUserDb.getLastLoggedUserUid(),
+                                    videoPostUid: state.videoPostDetailsResponse
+                                        ?.videoPostDetails?.uid,
+                                  );
+                                },
+                                onUnreact: (isUnLiked) {
+                                  ReactionsApi.deleteReaction(
+                                    userUid: AuthUserDb.getLastLoggedUserUid(),
+                                    videoPostUid: state.videoPostDetailsResponse
+                                        ?.videoPostDetails?.uid,
+                                  );
+                                },
+                              ),
                               const Gap(8),
-                              WhatsevrBookmarkButton(),
-                              const Gap(8),
+
                               WhatsevrCommentButton(
                                 onTapComment: () {
                                   showCommentsDialog(
@@ -335,8 +363,9 @@ class WtvDetailsPage extends StatelessWidget {
                                   );
                                 },
                               ),
+                              const Gap(8), WhatsevrBookmarkButton(),
                               const Gap(8),
-                              const Gap(8),
+
                               WhatsevrShareButton(
                                 onTapShare: () {},
                               ),

@@ -19,7 +19,7 @@ class ReactionsApi {
   }) async {
     try {
       Response response =
-          await ApiClient.client.get('/v1/get-comments', queryParameters: {
+          await ApiClient.client.get('/v1/get-reactions', queryParameters: {
         'page': page,
         'page_size': pageSize,
         'video_post_uid': videoPostUid,

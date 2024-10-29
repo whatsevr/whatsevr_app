@@ -106,7 +106,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  WhatsevrLikeButton(
+                                  WhatsevrReactButton(
                                     size: 30,
                                     firstColor: DarkTheme().icon,
                                   ),
