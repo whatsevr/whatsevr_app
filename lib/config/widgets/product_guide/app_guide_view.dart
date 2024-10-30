@@ -28,7 +28,7 @@ class AppGuideView extends StatelessWidget {
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: guides![index]);
+                child: guides![index],);
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Gap(10);

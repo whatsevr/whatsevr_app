@@ -31,17 +31,17 @@ class UserPhotoPostsResponse {
   String toJson() => json.encode(toMap());
 
   factory UserPhotoPostsResponse.fromMap(Map<String, dynamic> json) => UserPhotoPostsResponse(
-    message: json["message"],
-    page: json["page"],
-    lastPage: json["last_page"],
-    photoPosts: json["photo_posts"] == null ? [] : List<PhotoPost>.from(json["photo_posts"]!.map((x) => PhotoPost.fromMap(x))),
+    message: json['message'],
+    page: json['page'],
+    lastPage: json['last_page'],
+    photoPosts: json['photo_posts'] == null ? [] : List<PhotoPost>.from(json['photo_posts']!.map((x) => PhotoPost.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
-    "message": message,
-    "page": page,
-    "last_page": lastPage,
-    "photo_posts": photoPosts == null ? [] : List<dynamic>.from(photoPosts!.map((x) => x.toMap())),
+    'message': message,
+    'page': page,
+    'last_page': lastPage,
+    'photo_posts': photoPosts == null ? [] : List<dynamic>.from(photoPosts!.map((x) => x.toMap())),
   };
 }
 
@@ -156,57 +156,57 @@ class PhotoPost {
   String toJson() => json.encode(toMap());
 
   factory PhotoPost.fromMap(Map<String, dynamic> json) => PhotoPost(
-    id: json["id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    uid: json["uid"],
-    title: json["title"],
-    description: json["description"],
-    hashtags: json["hashtags"] == null ? [] : List<String>.from(json["hashtags"]!.map((x) => x)),
-    taggedUserUids: json["tagged_user_uids"] == null ? [] : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-    isDeleted: json["is_deleted"],
-    isArchived: json["is_archived"],
-    isActive: json["is_active"],
-    postCreatorType: json["post_creator_type"],
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    userUid: json["user_uid"],
-    location: json["location"],
-    totalImpressions: json["total_impressions"],
-    totalLikes: json["total_likes"],
-    totalComments: json["total_comments"],
-    internalAiDescription: json["internal_ai_description"],
-    addressLatLongWkb: json["address_lat_long_wkb"],
-    creatorLatLongWkb: json["creator_lat_long_wkb"],
-    taggedCommunityUids: json["tagged_community_uids"] == null ? [] : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-    totalShares: json["total_shares"],
-    cumulativeScore: json["cumulative_score"],
-    filesData: json["files_data"] == null ? [] : List<FilesDatum>.from(json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
+    id: json['id'],
+    createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
+    uid: json['uid'],
+    title: json['title'],
+    description: json['description'],
+    hashtags: json['hashtags'] == null ? [] : List<String>.from(json['hashtags']!.map((x) => x)),
+    taggedUserUids: json['tagged_user_uids'] == null ? [] : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+    isDeleted: json['is_deleted'],
+    isArchived: json['is_archived'],
+    isActive: json['is_active'],
+    postCreatorType: json['post_creator_type'],
+    updatedAt: json['updated_at'] == null ? null : DateTime.parse(json['updated_at']),
+    userUid: json['user_uid'],
+    location: json['location'],
+    totalImpressions: json['total_impressions'],
+    totalLikes: json['total_likes'],
+    totalComments: json['total_comments'],
+    internalAiDescription: json['internal_ai_description'],
+    addressLatLongWkb: json['address_lat_long_wkb'],
+    creatorLatLongWkb: json['creator_lat_long_wkb'],
+    taggedCommunityUids: json['tagged_community_uids'] == null ? [] : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+    totalShares: json['total_shares'],
+    cumulativeScore: json['cumulative_score'],
+    filesData: json['files_data'] == null ? [] : List<FilesDatum>.from(json['files_data']!.map((x) => FilesDatum.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
-    "created_at": createdAt?.toIso8601String(),
-    "uid": uid,
-    "title": title,
-    "description": description,
-    "hashtags": hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-    "tagged_user_uids": taggedUserUids == null ? [] : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-    "is_deleted": isDeleted,
-    "is_archived": isArchived,
-    "is_active": isActive,
-    "post_creator_type": postCreatorType,
-    "updated_at": updatedAt?.toIso8601String(),
-    "user_uid": userUid,
-    "location": location,
-    "total_impressions": totalImpressions,
-    "total_likes": totalLikes,
-    "total_comments": totalComments,
-    "internal_ai_description": internalAiDescription,
-    "address_lat_long_wkb": addressLatLongWkb,
-    "creator_lat_long_wkb": creatorLatLongWkb,
-    "tagged_community_uids": taggedCommunityUids == null ? [] : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-    "total_shares": totalShares,
-    "cumulative_score": cumulativeScore,
-    "files_data": filesData == null ? [] : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+    'id': id,
+    'created_at': createdAt?.toIso8601String(),
+    'uid': uid,
+    'title': title,
+    'description': description,
+    'hashtags': hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
+    'tagged_user_uids': taggedUserUids == null ? [] : List<dynamic>.from(taggedUserUids!.map((x) => x)),
+    'is_deleted': isDeleted,
+    'is_archived': isArchived,
+    'is_active': isActive,
+    'post_creator_type': postCreatorType,
+    'updated_at': updatedAt?.toIso8601String(),
+    'user_uid': userUid,
+    'location': location,
+    'total_impressions': totalImpressions,
+    'total_likes': totalLikes,
+    'total_comments': totalComments,
+    'internal_ai_description': internalAiDescription,
+    'address_lat_long_wkb': addressLatLongWkb,
+    'creator_lat_long_wkb': creatorLatLongWkb,
+    'tagged_community_uids': taggedCommunityUids == null ? [] : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
+    'total_shares': totalShares,
+    'cumulative_score': cumulativeScore,
+    'files_data': filesData == null ? [] : List<dynamic>.from(filesData!.map((x) => x.toMap())),
   };
 }
 
@@ -233,12 +233,12 @@ class FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-    type: json["type"],
-    imageUrl: json["image_url"],
+    type: json['type'],
+    imageUrl: json['image_url'],
   );
 
   Map<String, dynamic> toMap() => {
-    "type": type,
-    "image_url": imageUrl,
+    'type': type,
+    'image_url': imageUrl,
   };
 }

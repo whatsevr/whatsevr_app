@@ -13,7 +13,7 @@ class AuthUserDb {
   static const String _allLoggedUserUids = 'all_logged_user_uids';
 
   static Future<void> initDB() async {
-    String dbBoxName = 'auth-user-hive-box-2735';
+    final String dbBoxName = 'auth-user-hive-box-2735';
     await Hive.initFlutter();
     await Hive.openBox<dynamic>(dbBoxName);
     _authorisedCustomersBox = Hive.box(dbBoxName);
@@ -33,7 +33,7 @@ class AuthUserDb {
 
   static List<String> getAllAuthorisedUserUid() {
     try {
-      List<dynamic>? users =
+      final List<dynamic>? users =
           _authorisedCustomersBox.get(_allLoggedUserUids, defaultValue: []);
       if (users == null) return [];
       return users.cast<String>();
@@ -45,7 +45,7 @@ class AuthUserDb {
 
   static Future<void> removeAuthorisedUserUid(String userId) async {
     try {
-      List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
+      final List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
       if (users == null) throw BusinessException('No user found');
       users.remove(userId);
       await _authorisedCustomersBox.put(_allLoggedUserUids, users);
@@ -61,7 +61,7 @@ class AuthUserDb {
 
   static String? getLastLoggedUserUid() {
     try {
-      String? lastLoggedUserId =
+      final String? lastLoggedUserId =
           _authorisedCustomersBox.get(_lastLoggedUserUid);
 
       return lastLoggedUserId;

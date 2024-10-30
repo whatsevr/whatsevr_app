@@ -1,13 +1,13 @@
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/slider.dart';
-import '../../services/file_upload.dart';
 
-import 'package:flutter/services.dart';
+import '../../services/file_upload.dart';
+import '../dialogs/showAppModalSheet.dart';
+import '../slider.dart';
 
 class WtvFullPlayer extends StatefulWidget {
   const WtvFullPlayer({
@@ -54,7 +54,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
 
   void initializePlayer() async {
     if (widget.videoUrl == null) return;
-    String? optimizedUrl = generateOptimizedCloudinaryVideoUrl(
+    final String optimizedUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
     _controller = CachedVideoPlayerPlusController.networkUrl(
@@ -128,9 +128,9 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           videoProgressIndicator(),
-                          durationAndFullScreenButton(false)
+                          durationAndFullScreenButton(false),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -211,7 +211,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
         colors: VideoProgressColors(
             backgroundColor: widget.videoProgressBgColor,
             bufferedColor: widget.videoProgressBufferColor,
-            playedColor: widget.videoProgressPlayedColor));
+            playedColor: widget.videoProgressPlayedColor,),);
   }
 
   Widget durationAndFullScreenButton(isFullScreen) {
@@ -222,7 +222,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
           Gap(8),
           videoDuration(),
           const Spacer(),
-          fullScreenButton(isFullScreen)
+          fullScreenButton(isFullScreen),
         ],
       ),
     );
@@ -257,7 +257,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
               color: widget.iconColor,
             ),
           );
-        });
+        },);
   }
 
   Widget videoDuration() {
@@ -268,7 +268,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
             '${formatDuration(_controller.value.position)} / ${formatDuration(_controller.value.duration)}',
             style: TextStyle(color: widget.iconColor, fontSize: 12),
           );
-        });
+        },);
   }
 
   Widget fullScreenButton(bool isFullScreen) {
@@ -278,9 +278,9 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
           SystemChrome.setPreferredOrientations(!isFullScreen
               ? [
                   DeviceOrientation.landscapeRight,
-                  DeviceOrientation.landscapeLeft
+                  DeviceOrientation.landscapeLeft,
                 ]
-              : [DeviceOrientation.portraitUp]);
+              : [DeviceOrientation.portraitUp],);
           !isFullScreen ? goFullScreen(context) : Navigator.pop(context);
           !isFullScreen
               ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive)
@@ -290,7 +290,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
         icon: Icon(
           Icons.fullscreen,
           color: widget.iconColor,
-        ));
+        ),);
   }
 
   void goFullScreen(BuildContext context) {
@@ -302,7 +302,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
           return WillPopScope(
             onWillPop: () async {
               SystemChrome.setPreferredOrientations(
-                  [DeviceOrientation.portraitUp]);
+                  [DeviceOrientation.portraitUp],);
               SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
               Navigator.pop(context);
               return true;
@@ -366,9 +366,9 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                                 IconButton(
                                   onPressed: () {
                                     SystemChrome.setPreferredOrientations(
-                                        [DeviceOrientation.portraitUp]);
+                                        [DeviceOrientation.portraitUp],);
                                     SystemChrome.setEnabledSystemUIMode(
-                                        SystemUiMode.edgeToEdge);
+                                        SystemUiMode.edgeToEdge,);
                                     Navigator.pop(context);
                                   },
                                   icon: const Icon(Icons.arrow_back),
@@ -470,7 +470,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                   ),
                 ),
               );
-            }),
+            },),
           );
         },
       ),
@@ -478,13 +478,13 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
   }
 
   String formatDuration(Duration duration) {
-    String hours = duration.inHours.remainder(24).toString().padLeft(2, '0');
-    String minutes =
+    final String hours = duration.inHours.remainder(24).toString().padLeft(2, '0');
+    final String minutes =
         duration.inMinutes.remainder(60).toString().padLeft(2, '0');
-    String seconds =
+    final String seconds =
         duration.inSeconds.remainder(60).toString().padLeft(2, '0');
 
-    if (hours == "00") {
+    if (hours == '00') {
       return '$minutes:$seconds';
     } else {
       return '$hours:$minutes:$seconds';

@@ -6,24 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
-import 'package:whatsevr_app/config/api/methods/comments.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
-import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart'
+
+import '../../api/external/models/pagination_data.dart';
+import '../../api/methods/comments.dart';
+import '../../api/methods/users.dart';
+import '../../api/requests_model/comments/comment_and_reply.dart';
+import '../../api/response_model/comments/get_comments.dart'
     as m1;
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import '../../api/response_model/user_details.dart';
+import '../../mocks/mocks.dart';
+import '../../services/auth_db.dart';
+import '../../services/file_upload.dart';
+import '../buttons/choice_chip.dart';
+import '../max_scroll_listener.dart';
+import '../media/asset_picker.dart';
+import '../media/media_pick_choice.dart';
+import '../previewers/photo.dart';
+import '../stack_toast.dart';
+import '../textfield/super_textform_field.dart';
+import 'showAppModalSheet.dart';
 
 void showCommentsDialog({
   String? videoPostUid,
@@ -33,13 +34,13 @@ void showCommentsDialog({
   String? offerPostUid,
   String? flickPostUid,
 }) {
-  int nonNullCount = [
+  final int nonNullCount = [
     videoPostUid,
     photoPostUid,
     pdfUid,
     memoryUid,
     offerPostUid,
-    flickPostUid
+    flickPostUid,
   ].where((element) => element != null).length;
 
   if (nonNullCount != 1) {
@@ -57,7 +58,7 @@ void showCommentsDialog({
         memoryUid: memoryUid,
         offerPostUid: offerPostUid,
         flickPostUid: flickPostUid,
-      ));
+      ),);
 }
 
 class _Ui extends StatefulWidget {
@@ -69,7 +70,6 @@ class _Ui extends StatefulWidget {
   final String? flickPostUid;
 
   const _Ui({
-    super.key,
     this.videoPostUid,
     this.photoPostUid,
     this.pdfUid,
@@ -99,7 +99,7 @@ class _UiState extends State<_Ui> {
     getComments(1);
     onReachingEndOfTheList(scrollController, execute: () {
       getComments((commentsPaginationData?.currentPage ?? 0) + 1);
-    });
+    },);
   }
 
   @override
@@ -113,7 +113,7 @@ class _UiState extends State<_Ui> {
   UserDetailsResponse? currentUserDetails;
 
   void getCurrentUserDetails() async {
-    String? userUid = AuthUserDb.getLastLoggedUserUid();
+    final String? userUid = AuthUserDb.getLastLoggedUserUid();
     currentUserDetails = await UsersApi.getUserDetails(userUid: userUid!);
   }
 
@@ -123,7 +123,7 @@ class _UiState extends State<_Ui> {
       return;
     }
     commentsPaginationData = commentsPaginationData?.copyWith(isLoading: true);
-    m1.GetCommentsResponse? response = await CommentsApi.getComments(
+    final m1.GetCommentsResponse? response = await CommentsApi.getComments(
       page: page,
       videoPostUid: widget.videoPostUid,
       photoPostUid: widget.photoPostUid,
@@ -153,10 +153,10 @@ class _UiState extends State<_Ui> {
   void _onPostCommentOrReply(String text) async {
     _controller.clear();
     WhatsevrStackToast.showInfo(
-        replyingToTheComment != null ? 'Adding reply...' : 'Adding comment...');
+        replyingToTheComment != null ? 'Adding reply...' : 'Adding comment...',);
     String? imageUrl;
     if (_imageFile != null) {
-      File imageFile = _imageFile!;
+      final File imageFile = _imageFile!;
       removeAttachments();
       imageUrl = await FileUploadService.uploadFilesToSupabase(
         imageFile,
@@ -177,7 +177,7 @@ class _UiState extends State<_Ui> {
       pdfUid: widget.pdfUid,
       photoPostUid: widget.photoPostUid,
       imageUrl: imageUrl,
-    ));
+    ),);
     if (replyResponse?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${replyResponse?.$2}');
       return;
@@ -219,7 +219,7 @@ class _UiState extends State<_Ui> {
             ),
             createdAt: DateTime.now(),
           ),
-          ..._comments
+          ..._comments,
         ];
         if (scrollController.hasClients) {
           scrollController.animateTo(
@@ -284,7 +284,7 @@ class _UiState extends State<_Ui> {
                           _imageFile!,
                           height: 80,
                           fit: BoxFit.contain,
-                        )),
+                        ),),
                     Positioned(
                       top: 0,
                       right: 0,
@@ -347,7 +347,7 @@ class _UiState extends State<_Ui> {
                                           setState(() {
                                             _imageFile = file;
                                           });
-                                        });
+                                        },);
                                   },
                                 );
                               },
@@ -373,7 +373,7 @@ class _UiState extends State<_Ui> {
                 ),
               ),
             ],
-          )),
+          ),),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,15 +390,15 @@ class _UiState extends State<_Ui> {
                       isTopComments = selected;
                       if (isTopComments) {
                         _comments.sort((a, b) => a.author!.totalFollowers!
-                            .compareTo(b.author!.totalFollowers!));
+                            .compareTo(b.author!.totalFollowers!),);
                       } else {
                         _comments.sort(
-                            (a, b) => a.createdAt!.compareTo(b.createdAt!));
+                            (a, b) => a.createdAt!.compareTo(b.createdAt!),);
                       }
                       _comments = _comments.reversed.toList();
                     });
                   },
-                  label: 'Top Comments'),
+                  label: 'Top Comments',),
             ],
           ),
           const Gap(8),
@@ -420,7 +420,7 @@ class _UiState extends State<_Ui> {
                 itemCount: _comments.length,
                 controller: scrollController,
                 itemBuilder: (context, index) {
-                  m1.Comment comment = _comments[index];
+                  final m1.Comment comment = _comments[index];
                   return Column(
                     children: [
                       Padding(
@@ -449,7 +449,7 @@ class _UiState extends State<_Ui> {
                                       ),
                                       width: 80,
                                       height: 80,
-                                    )),
+                                    ),),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
@@ -461,24 +461,24 @@ class _UiState extends State<_Ui> {
                                           Text(
                                             comment.author?.name ?? 'Anonymous',
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold),
+                                                fontWeight: FontWeight.bold,),
                                           ),
                                           Spacer(),
                                           const SizedBox(width: 8),
                                           Text(
                                             GetTimeAgo.parse(
-                                                    comment.createdAt!) ??
+                                                    comment.createdAt!,) ??
                                                 '',
                                             style: const TextStyle(
                                                 color: Colors.grey,
-                                                fontSize: 12),
+                                                fontSize: 12,),
                                           ),
                                         ],
                                       ),
                                       if (comment.commentText?.isNotEmpty ??
                                           false) ...[
                                         const SizedBox(height: 4),
-                                        Text(comment.commentText ?? '')
+                                        Text(comment.commentText ?? ''),
                                       ],
                                       if (comment.imageUrl?.isNotEmpty ??
                                           false) ...[
@@ -520,13 +520,13 @@ class _UiState extends State<_Ui> {
                                       childrenPadding: EdgeInsets.zero,
                                       isDefaultVerticalPadding: false,
                                       title: Text(
-                                          '${comment.userCommentReplies?.length ?? 0} reply'),
+                                          '${comment.userCommentReplies?.length ?? 0} reply',),
                                       children: [
                                         for (m1.UserCommentReply reply
                                             in comment.userCommentReplies ?? [])
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
+                                                vertical: 4.0,),
                                             child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -568,27 +568,27 @@ class _UiState extends State<_Ui> {
                                                             style: const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .bold),
+                                                                        .bold,),
                                                           ),
                                                           Spacer(),
                                                           const SizedBox(
-                                                              width: 8),
+                                                              width: 8,),
                                                           Text(
                                                             GetTimeAgo.parse(
                                                                 reply
-                                                                    .createdAt!),
+                                                                    .createdAt!,),
                                                             style:
                                                                 const TextStyle(
                                                                     color: Colors
                                                                         .grey,
                                                                     fontSize:
-                                                                        12),
+                                                                        12,),
                                                           ),
                                                         ],
                                                       ),
                                                       const SizedBox(height: 4),
                                                       Text(reply.replyText ??
-                                                          ''),
+                                                          '',),
                                                     ],
                                                   ),
                                                 ),
@@ -618,7 +618,7 @@ class _UiState extends State<_Ui> {
                   );
                 },
               );
-            }),
+            },),
           ),
         ],
       ),

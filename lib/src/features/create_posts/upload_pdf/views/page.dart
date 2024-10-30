@@ -1,27 +1,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/enums/post_creator_type.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/place_search_list.dart';
-import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/search_and_tag.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/create_posts/upload_pdf/bloc/upload_pdf_bloc.dart';
-
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../../config/enums/post_creator_type.dart';
+import '../../../../../config/widgets/app_bar.dart';
+import '../../../../../config/widgets/buttons/button.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/meta_data.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
+import '../../../../../config/widgets/textfield/super_textform_field.dart';
+import '../bloc/upload_pdf_bloc.dart';
 
 class UploadPdfPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -69,7 +60,7 @@ class UploadPdfPage extends StatelessWidget {
                     aspectRatio: state.thumbnailMetaData?.aspectRatio ?? 16 / 9,
                     child: Builder(
                       builder: (BuildContext context) {
-                        double baseHeight = double.infinity;
+                        final double baseHeight = double.infinity;
 
                         if (state.pdfFile != null) {
                           return GestureDetector(
@@ -104,7 +95,7 @@ class UploadPdfPage extends StatelessWidget {
                                           Gap(6),
                                           Text('View Pdf',
                                               style: TextStyle(
-                                                  color: Colors.white)),
+                                                  color: Colors.white,),),
                                           Gap(6),
                                           Text(
                                             '(${FileMetaData.getFileSize(state.pdfFile?.lengthSync())})',
@@ -150,7 +141,7 @@ class UploadPdfPage extends StatelessWidget {
                                 ),
                                 Gap(6),
                                 Text('Add',
-                                    style: TextStyle(color: Colors.white)),
+                                    style: TextStyle(color: Colors.white),),
                               ],
                             ),
                           ),
@@ -171,8 +162,8 @@ class UploadPdfPage extends StatelessWidget {
                                 onCompleted: (file) {
                                   context.read<UploadPdfBloc>().add(
                                       PickThumbnailEvent(
-                                          pickedThumbnailFile: file));
-                                });
+                                          pickedThumbnailFile: file,),);
+                                },);
                           },
                           label: 'Add Thumbnail',
                         ),
@@ -190,7 +181,7 @@ class UploadPdfPage extends StatelessWidget {
                             );
                           },
                           label: 'Change Pdf',
-                        )
+                        ),
                       ],
                     ),
                 ],

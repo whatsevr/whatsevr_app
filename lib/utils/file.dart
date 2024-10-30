@@ -3,17 +3,17 @@ import 'dart:typed_data';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+import '../config/api/external/models/business_validation_exception.dart';
+import '../dev/talker.dart';
 
 Future<File?> uint8BytesToFile(Uint8List bytes) async {
   try {
     // Get the application documents directory
-    Directory appDocDir = await getTemporaryDirectory();
-    String appDocPath = appDocDir.path;
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final Directory appDocDir = await getTemporaryDirectory();
+    final String appDocPath = appDocDir.path;
+    final String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     // Create the file path
-    File file = File('$appDocPath/$fileName');
+    final File file = File('$appDocPath/$fileName');
 
     // Write the byte array to the file
     return await file.writeAsBytes(bytes);
@@ -40,7 +40,7 @@ Future<File?> compressImage(
 }) async {
   try {
     if (file == null) return null;
-    XFile? result = await FlutterImageCompress.compressAndGetFile(
+    final XFile? result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       '${(await getTemporaryDirectory()).path}/compressed_image_${DateTime.now().millisecondsSinceEpoch}.${file.path.split('.').last}',
       quality: quality,

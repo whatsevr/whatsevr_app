@@ -74,57 +74,57 @@ class CreateOfferRequest {
 
   factory CreateOfferRequest.fromMap(Map<String, dynamic> json) =>
       CreateOfferRequest(
-        title: json["title"],
-        description: json["description"],
-        status: json["status"],
-        userUid: json["user_uid"],
-        targetAreas: json["target_areas"] == null
+        title: json['title'],
+        description: json['description'],
+        status: json['status'],
+        userUid: json['user_uid'],
+        targetAreas: json['target_areas'] == null
             ? []
-            : List<String>.from(json["target_areas"]!.map((x) => x)),
-        targetGender: json["target_gender"],
-        hashtags: json["hashtags"] == null
+            : List<String>.from(json['target_areas']!.map((x) => x)),
+        targetGender: json['target_gender'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        postCreatorType: json["post_creator_type"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedUserUids: json["tagged_user_uids"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        postCreatorType: json['post_creator_type'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedUserUids: json['tagged_user_uids'] == null
             ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        taggedCommunityUids: json["tagged_community_uids"] == null
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        filesData: json["files_data"] == null
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
-        ctaAction: json["cta_action"],
-        ctaActionUrl: json["cta_action_url"],
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+        ctaAction: json['cta_action'],
+        ctaActionUrl: json['cta_action_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "title": title,
-        "description": description,
-        "status": status,
-        "user_uid": userUid,
-        "target_areas": targetAreas == null
+        'title': title,
+        'description': description,
+        'status': status,
+        'user_uid': userUid,
+        'target_areas': targetAreas == null
             ? []
             : List<dynamic>.from(targetAreas!.map((x) => x)),
-        "target_gender": targetGender,
-        "hashtags":
+        'target_gender': targetGender,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "post_creator_type": postCreatorType,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_user_uids": taggedUserUids == null
+        'post_creator_type': postCreatorType,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_user_uids': taggedUserUids == null
             ? []
             : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "tagged_community_uids": taggedCommunityUids == null
+        'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "files_data": filesData == null
+        'files_data': filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-        "cta_action": ctaAction,
-        "cta_action_url": ctaActionUrl,
+        'cta_action': ctaAction,
+        'cta_action_url': ctaActionUrl,
       };
 }
 
@@ -135,12 +135,12 @@ abstract class FilesDatum {
   FilesDatum(this.type);
 
   factory FilesDatum.fromMap(Map<String, dynamic> json) {
-    if (json["type"] == "image") {
+    if (json['type'] == 'image') {
       return ImageFileDatum.fromMap(json);
-    } else if (json["type"] == "video") {
+    } else if (json['type'] == 'video') {
       return VideoFileDatum.fromMap(json);
     } else {
-      throw Exception("Unknown file type");
+      throw Exception('Unknown file type');
     }
   }
 
@@ -162,14 +162,14 @@ class ImageFileDatum extends FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory ImageFileDatum.fromMap(Map<String, dynamic> json) => ImageFileDatum(
-        type: json["type"],
-        imageUrl: json["image_url"],
+        type: json['type'],
+        imageUrl: json['image_url'],
       );
 
   @override
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "image_url": imageUrl,
+        'type': type,
+        'image_url': imageUrl,
       };
 }
 
@@ -192,17 +192,17 @@ class VideoFileDatum extends FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory VideoFileDatum.fromMap(Map<String, dynamic> json) => VideoFileDatum(
-        type: json["type"],
-        videoUrl: json["video_url"],
-        videoThumbnailUrl: json["video_thumbnail_url"],
-        videoDurationMs: json["video_duration_ms"],
+        type: json['type'],
+        videoUrl: json['video_url'],
+        videoThumbnailUrl: json['video_thumbnail_url'],
+        videoDurationMs: json['video_duration_ms'],
       );
 
   @override
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "video_url": videoUrl,
-        "video_thumbnail_url": videoThumbnailUrl,
-        "video_duration_ms": videoDurationMs,
+        'type': type,
+        'video_url': videoUrl,
+        'video_thumbnail_url': videoThumbnailUrl,
+        'video_duration_ms': videoDurationMs,
       };
 }

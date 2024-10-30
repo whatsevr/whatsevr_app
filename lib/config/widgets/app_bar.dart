@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/buttons/ai_button.dart';
+import 'buttons/ai_button.dart';
 
 class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

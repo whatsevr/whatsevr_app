@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
+import 'bloc/theme_bloc.dart';
 
 enum ThemeType { light, dark }
 
@@ -179,7 +179,7 @@ class DarkTheme extends AppTheme {
 
 extension ThemeBlocXtn on BuildContext {
   ThemeBloc get themeBloc => read<ThemeBloc>();
-  toggleTheme() => read<ThemeBloc>().add(ToggleThemeEvent());
+  void toggleTheme() => read<ThemeBloc>().add(ToggleThemeEvent());
   AppTheme get whatsevrTheme => read<ThemeBloc>().currentTheme;
   bool get isDarkMode => read<ThemeBloc>().state.themeType == ThemeType.dark;
 }

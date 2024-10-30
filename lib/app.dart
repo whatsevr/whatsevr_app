@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,14 +9,12 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-
-import 'package:whatsevr_app/dev/dragable_bubble.dart';
-
+import 'config/routes/router.dart';
+import 'config/themes/bloc/theme_bloc.dart';
+import 'config/themes/theme.dart';
+import 'config/widgets/stack_toast.dart';
 import 'constants.dart';
+import 'dev/dragable_bubble.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});
@@ -54,7 +53,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
-          AppTheme theme = context.whatsevrTheme;
+          final AppTheme theme = context.whatsevrTheme;
           return WhatsevrStackToast(
             child: MaterialApp.router(
               debugShowCheckedModeBanner: false,
@@ -119,7 +118,7 @@ Center _loaderUi(String msg) {
             const Gap(12),
             Text(msg),
           ],
-        )),
+        ),),
   );
 }
 
@@ -138,5 +137,5 @@ Container _toastUi(String msg) {
           ),
         ],
       ),
-      child: Text(msg));
+      child: Text(msg),);
 }

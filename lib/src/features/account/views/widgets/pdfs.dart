@@ -1,17 +1,15 @@
+import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
-import 'package:whatsevr_app/config/services/file_download.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/previewers/pdf.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
+
+import '../../../../../config/api/response_model/profile_details.dart';
+import '../../../../../config/services/file_download.dart';
+import '../../../../../config/widgets/previewers/pdf.dart';
+import '../../bloc/account_bloc.dart';
 
 class AccountPagePdfsView extends StatelessWidget {
   const AccountPagePdfsView({super.key});
@@ -24,7 +22,7 @@ class AccountPagePdfsView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
+            final UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -42,7 +40,7 @@ class AccountPagePdfsView extends StatelessWidget {
                       fit: BoxFit.cover,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(8),
-                    )),
+                    ),),
                 const Gap(8),
                 Row(
                   children: <Widget>[

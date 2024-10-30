@@ -3,15 +3,14 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 
+import '../../../../config/api/methods/users.dart';
+import '../../../../config/api/response_model/profile_details.dart';
 import '../../../../config/api/response_model/user_flicks.dart';
+import '../../../../config/api/response_model/user_memories.dart';
+import '../../../../config/api/response_model/user_offers.dart';
 import '../../../../config/api/response_model/user_video_posts.dart';
+import '../../../../config/services/auth_db.dart';
 
 part 'account_event.dart';
 part 'account_state.dart';
@@ -26,22 +25,22 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     Emitter<AccountState> emit,
   ) async {
     try {
-      String? userUid = await AuthUserDb.getLastLoggedUserUid();
+      final String? userUid = AuthUserDb.getLastLoggedUserUid();
       if (userUid == null) return;
-      ProfileDetailsResponse? profileDetailsResponse =
+      final ProfileDetailsResponse? profileDetailsResponse =
           await UsersApi.getProfileDetails(userUid: userUid);
       emit(
         state.copyWith(
           profileDetailsResponse: profileDetailsResponse,
         ),
       );
-      UserVideoPostsResponse? userVideoPostsResponse =
+      final UserVideoPostsResponse? userVideoPostsResponse =
           await UsersApi.getVideoPosts(userUid: userUid);
-      UserFlicksResponse? userFlicksResponse =
+      final UserFlicksResponse? userFlicksResponse =
           await UsersApi.getFLicks(userUid: userUid);
-      UserMemoriesResponse? userMemoriesResponse =
+      final UserMemoriesResponse? userMemoriesResponse =
           await UsersApi.getMemories(userUid: userUid);
-      UserOffersResponse? userOffersResponse =
+      final UserOffersResponse? userOffersResponse =
           await UsersApi.getOfferPosts(userUid: userUid);
 
       emit(

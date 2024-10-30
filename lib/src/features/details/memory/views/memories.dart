@@ -1,30 +1,23 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 import 'package:story_view_advance/controller/story_controller.dart';
 import 'package:story_view_advance/utils.dart';
 import 'package:story_view_advance/widgets/story_view_advance.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-
-import '../../../../../../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../../../../../../config/services/launch_url.dart';
 import '../../../../../../../../../config/widgets/links_preview_list.dart';
-import '../../../../../../../../../config/widgets/refresh_indicator.dart';
+import '../../../../../config/mocks/mocks.dart';
+import '../../../../../config/services/file_upload.dart';
+import '../../../../../config/widgets/buttons/button.dart';
+import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
 
 showMemoriesPlayer(BuildContext context,
     {required List<UiMemoryGroup>? uiMemoryGroups,
     required int startGroupIndex,
-    required int startMemoryIndex}) {
+    required int startMemoryIndex,}) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation, secondaryAnimation) {
@@ -79,7 +72,6 @@ class _MemoriesPlayer extends StatefulWidget {
   final int startGroupIndex;
   final int startMemoryIndex;
   const _MemoriesPlayer({
-    super.key,
     required this.uiMemoryGroups,
     required this.startGroupIndex,
     required this.startMemoryIndex,
@@ -165,7 +157,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
           setState(() {});
         },
         itemBuilder: (context, index) {
-          List<UiMemoryGroupItems?> uiMemoryData =
+          final List<UiMemoryGroupItems?> uiMemoryData =
               widget.uiMemoryGroups?[index].uiMemoryGroupItems ?? [];
           return StoryView(
             onVerticalSwipeComplete: (direction) {
@@ -186,14 +178,14 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                         ? StoryItem.pageVideo(
                             generateOptimizedCloudinaryVideoUrl(
                                 originalUrl:
-                                    '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.videoUrl}'),
+                                    '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.videoUrl}',),
                             controller: flutterStoryController,
                             duration: Duration(
                                 milliseconds: widget
                                         .uiMemoryGroups?[index]
                                         .uiMemoryGroupItems[i]
                                         ?.videoDurationMs ??
-                                    0),
+                                    0,),
                             caption: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -245,7 +237,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                               onPressed: () {
                                 launchWebURL(context,
                                     url: uiMemoryData[index]?.ctaActionUrl ??
-                                        '');
+                                        '',);
                               },
                             ),
                           ),
@@ -255,7 +247,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                               showAppModalSheet(
                                   child: LinksPreviewListView(
                                 urls: [uiMemoryData[index]?.ctaActionUrl ?? ''],
-                              ));
+                              ),);
                             },
                             icon: const Icon(Icons.info_outline),
                           ),

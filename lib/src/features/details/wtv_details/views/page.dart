@@ -1,26 +1,24 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/methods/reactions.dart';
-import 'package:whatsevr_app/config/enums/reaction_type.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/launch_url.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
-import 'package:whatsevr_app/config/widgets/content_mask.dart';
-import 'package:whatsevr_app/config/widgets/detectable_text.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/reactions_view.dart';
-import 'package:whatsevr_app/src/features/details/wtv_details/bloc/wtv_details_bloc.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:whatsevr_app/src/features/details/wtv_details/views/widgets/related_videos.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
+
+import '../../../../../config/api/methods/reactions.dart';
+import '../../../../../config/enums/reaction_type.dart';
+import '../../../../../config/mocks/mocks.dart';
+import '../../../../../config/services/auth_db.dart';
+import '../../../../../config/widgets/buttons/animated_like_icon_button.dart';
+import '../../../../../config/widgets/buttons/button.dart';
+import '../../../../../config/widgets/content_mask.dart';
+import '../../../../../config/widgets/detectable_text.dart';
+import '../../../../../config/widgets/dialogs/comments_view.dart';
+import '../../../../../config/widgets/dialogs/reactions_view.dart';
+import '../../../../../config/widgets/feed_players/wtv_full_player.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../utils/conversion.dart';
+import '../bloc/wtv_details_bloc.dart';
+import 'widgets/related_videos.dart';
 
 class WtvDetailsPageArgument {
   final String? videoPostUid;
@@ -45,7 +43,7 @@ class WtvDetailsPage extends StatelessWidget {
       create: (context) => WtvDetailsBloc()..add(InitialEvent(pageArgument)),
       child: Builder(builder: (context) {
         return buildPage(context);
-      }),
+      },),
     );
   }
 
@@ -106,7 +104,7 @@ class WtvDetailsPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Gap(8)
+                        Gap(8),
                       ],
                       PadHorizontal(
                         child: Text(
@@ -137,7 +135,7 @@ class WtvDetailsPage extends StatelessWidget {
                                   '${state.videoPostDetailsResponse?.videoPostDetails?.description}',
                             ),
                           ),
-                        )
+                        ),
                       ],
 
                       //latest comments
@@ -220,7 +218,7 @@ class WtvDetailsPage extends StatelessWidget {
                                         scrollDirection: Axis.horizontal,
                                       ),
                                       itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
+                                          int index, int realIndex,) {
                                         return ListTile(
                                           dense: true,
                                           visualDensity: VisualDensity.compact,
@@ -252,12 +250,12 @@ class WtvDetailsPage extends StatelessWidget {
                                         );
                                       },
                                     );
-                                  }),
+                                  },),
                                 ],
                               ),
                             ),
                           ),
-                        )
+                        ),
                       ],
                       Gap(8),
 

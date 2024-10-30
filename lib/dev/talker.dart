@@ -19,7 +19,7 @@ class TalkerService {
       talker: instance,
       settings: TalkerDioLoggerSettings(
         printRequestHeaders: true,
-      ));
+      ),);
 
   static TalkerRouteObserver takerRouteObserver() {
     return TalkerRouteObserver(instance);

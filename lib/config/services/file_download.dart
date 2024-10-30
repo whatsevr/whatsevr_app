@@ -22,7 +22,7 @@ class DownloadService {
         retries: 3,
         allowPause: true,
       );
-      var taskStatus = await FileDownloader().download(
+      final taskStatus = await FileDownloader().download(
         task,
         onProgress: (double progress) => print('Progress: ${progress * 100}%'),
         onStatus: (TaskStatus status) => print('Status: $status'),

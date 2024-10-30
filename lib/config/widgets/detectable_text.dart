@@ -1,7 +1,8 @@
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/services/launch_url.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+
+import '../services/launch_url.dart';
 
 class WhatsevrDetectableText extends StatelessWidget {
   final String? text;

@@ -4,15 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
-import 'package:whatsevr_app/config/api/methods/community.dart';
-import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
-import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/src/features/new_community/views/page.dart';
-import 'package:whatsevr_app/utils/username.dart';
+
+import '../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../config/api/external/models/pagination_data.dart';
+import '../../../../config/api/methods/community.dart';
+import '../../../../config/api/requests_model/community/create_community.dart';
+import '../../../../config/api/response_model/community/top_communities.dart';
+import '../../../../config/services/auth_db.dart';
+import '../views/page.dart';
 
 part 'new_community_event.dart';
 part 'new_community_state.dart';
@@ -25,7 +24,7 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
       : super(NewCommunityState(
           topCommunities: const [],
           topCommunitiesPaginationData: PaginationData(),
-        )) {
+        ),) {
     on<NewCommunityInitialEvent>(_onInitialEvent);
     on<LoadTopCommunitiesEvent>(_loadTopCommunities);
     on<LoadMoreTopCommunitiesEvent>(_loadMoreTopCommunities);
@@ -34,12 +33,12 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
   }
 
   FutureOr<void> _onInitialEvent(
-      NewCommunityInitialEvent event, Emitter<NewCommunityState> emit) {
+      NewCommunityInitialEvent event, Emitter<NewCommunityState> emit,) {
     add(const LoadTopCommunitiesEvent());
   }
 
   FutureOr<void> _loadTopCommunities(
-      LoadTopCommunitiesEvent event, Emitter<NewCommunityState> emit) async {
+      LoadTopCommunitiesEvent event, Emitter<NewCommunityState> emit,) async {
     try {
       // Fetch the top communities from the API
       final TopCommunitiesResponse? topCommunities =
@@ -52,20 +51,20 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
           isLoading: false,
           noMoreData: topCommunities?.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
 
   FutureOr<void> _loadMoreTopCommunities(LoadMoreTopCommunitiesEvent event,
-      Emitter<NewCommunityState> emit) async {
+      Emitter<NewCommunityState> emit,) async {
     if (state.topCommunitiesPaginationData?.isLoading == true ||
         state.topCommunitiesPaginationData?.noMoreData == true) return;
     try {
       emit(state.copyWith(
           topCommunitiesPaginationData:
-              state.topCommunitiesPaginationData?.copyWith(isLoading: true)));
+              state.topCommunitiesPaginationData?.copyWith(isLoading: true),),);
       final TopCommunitiesResponse? topCommunities =
           await CommunityApi.topCommunities(page: event.page!);
       emit(state.copyWith(
@@ -76,26 +75,26 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
           isLoading: false,
           noMoreData: topCommunities.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       emit(state.copyWith(
         topCommunitiesPaginationData:
             state.topCommunitiesPaginationData?.copyWith(
           isLoading: false,
         ),
-      ));
+      ),);
       highLevelCatch(e, s);
     }
   }
 
   FutureOr<void> _changeApproveJoiningRequest(
-      ChangeApproveJoiningRequestEvent event, Emitter<NewCommunityState> emit) {
+      ChangeApproveJoiningRequestEvent event, Emitter<NewCommunityState> emit,) {
     emit(state.copyWith(
-        approveJoiningRequest: !(state.approveJoiningRequest ?? false)));
+        approveJoiningRequest: !(state.approveJoiningRequest ?? false),),);
   }
 
   FutureOr<void> _createCommunity(
-      CreateCommunityEvent event, Emitter<NewCommunityState> emit) async {
+      CreateCommunityEvent event, Emitter<NewCommunityState> emit,) async {
     try {
       if (communityNameController.text.isEmpty) {
         throw BusinessException('Community name is required');
@@ -112,7 +111,7 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
         post: CreateCommunityRequest(
           title: communityNameController.text,
           status: communityStatusController.text,
-          adminUserUid: await AuthUserDb.getLastLoggedUserUid(),
+          adminUserUid: AuthUserDb.getLastLoggedUserUid(),
           requireJoiningApproval: state.approveJoiningRequest!,
         ),
       );

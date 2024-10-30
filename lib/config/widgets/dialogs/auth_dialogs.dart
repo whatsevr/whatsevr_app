@@ -4,20 +4,20 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/methods/auth.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/auth/register.dart';
-import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/auth_user_service.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/content_mask.dart';
 
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/generated/assets.dart';
+import '../../../generated/assets.dart';
+import '../../api/methods/auth.dart';
+import '../../api/methods/users.dart';
+import '../../api/requests_model/auth/register.dart';
+import '../../api/response_model/multiple_user_details.dart';
+import '../../mocks/mocks.dart';
+import '../../routes/router.dart';
+import '../../routes/routes_name.dart';
+import '../../services/auth_db.dart';
+import '../../services/auth_user_service.dart';
+import '../buttons/button.dart';
+import '../content_mask.dart';
+import '../textfield/super_textform_field.dart';
 
 class SwitchUserDialogUi extends StatefulWidget {
   const SwitchUserDialogUi({super.key});
@@ -73,7 +73,7 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                     title: const Text('XXXXXXXXXXXXXXXXXXX'),
                     subtitle: const Text('XXXXXXXXX'),
                   ),
-                )
+                ),
             ],
           ),
           child: Column(
@@ -92,7 +92,7 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                     },
                     leading: CircleAvatar(
                       backgroundImage: ExtendedNetworkImageProvider(
-                          user.profilePicture ?? MockData.blankProfileAvatar),
+                          user.profilePicture ?? MockData.blankProfileAvatar,),
                     ),
                     title: Text(user.username ?? 'Unknown User'),
                     subtitle: Text('${user.totalFollowers} Followers'),
@@ -109,12 +109,12 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                               Navigator.pop(context);
                               AuthUserDb.clearLastLoggedUserUid();
                               AppNavigationService.clearAllAndNewRoute(
-                                  RoutesName.auth);
+                                  RoutesName.auth,);
                             } else {
                               setState(() {
-                                int index = multipleUserDetailsResponse!.users!
+                                final int index = multipleUserDetailsResponse!.users!
                                     .indexWhere(
-                                        (element) => element.uid == user.uid);
+                                        (element) => element.uid == user.uid,);
                                 multipleUserDetailsResponse!.users!
                                     .removeAt(index);
                               });
@@ -133,7 +133,7 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                     Navigator.pop(context);
                     AuthUserService.logOutAllUser(startFomBegin: true);
                   },
-                )
+                ),
               ],
             ],
           ),
@@ -236,7 +236,7 @@ class CreateAccountUi extends StatelessWidget {
             );
             if (registerInfo?.$2 != HttpStatus.ok) {
               SmartDialog.showToast(
-                  registerInfo?.$1 ?? 'Failed to create account');
+                  registerInfo?.$1 ?? 'Failed to create account',);
               return;
             }
             AuthUserService.loginToApp(

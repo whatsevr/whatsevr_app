@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
-import 'package:whatsevr_app/config/widgets/content_mask.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
-import 'package:whatsevr_app/src/features/new_community/bloc/new_community_bloc.dart';
 
+import '../../../../config/api/response_model/community/top_communities.dart';
+import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/app_bar.dart';
+import '../../../../config/widgets/buttons/button.dart';
 import '../../../../config/widgets/buttons/choice_chip.dart';
+import '../../../../config/widgets/buttons/two_state_ui.dart';
+import '../../../../config/widgets/content_mask.dart';
+import '../../../../config/widgets/dialogs/common_data_list.dart';
+import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../config/widgets/max_scroll_listener.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
+import '../../../../config/widgets/textfield/super_textform_field.dart';
+import '../bloc/new_community_bloc.dart';
 
 class NewCommunityPageArgument {
   NewCommunityPageArgument();
@@ -31,9 +31,11 @@ class NewCommunityPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => NewCommunityBloc()
         ..add(NewCommunityInitialEvent(pageArgument: pageArgument)),
-      child: Builder(builder: (context) {
-        return buildPage(context);
-      }),
+      child: Builder(
+        builder: (context) {
+          return buildPage(context);
+        },
+      ),
     );
   }
 
@@ -43,9 +45,11 @@ class NewCommunityPage extends StatelessWidget {
         onReachingEndOfTheList(
           scrollController,
           execute: () {
-            context.read<NewCommunityBloc>().add(LoadMoreTopCommunitiesEvent(
-                  page: state.topCommunitiesPaginationData!.currentPage + 1,
-                ));
+            context.read<NewCommunityBloc>().add(
+                  LoadMoreTopCommunitiesEvent(
+                    page: state.topCommunitiesPaginationData!.currentPage + 1,
+                  ),
+                );
           },
         );
         return Scaffold(
@@ -91,8 +95,9 @@ class NewCommunityPage extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             backgroundImage: ExtendedNetworkImageProvider(
-                                community?.profilePicture ??
-                                    MockData.blankCommunityAvatar),
+                              community?.profilePicture ??
+                                  MockData.blankCommunityAvatar,
+                            ),
                             radius: 20,
                           ),
                           Gap(4),
@@ -109,8 +114,11 @@ class NewCommunityPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.people,
-                                  size: 14, color: Colors.grey[600]),
+                              Icon(
+                                Icons.people,
+                                size: 14,
+                                color: Colors.grey[600],
+                              ),
                               SizedBox(width: 4),
                               Text(
                                 '${community?.totalMembers ?? 0} members',
@@ -124,8 +132,11 @@ class NewCommunityPage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.lightbulb,
-                                  size: 14, color: Colors.grey[600]),
+                              Icon(
+                                Icons.lightbulb,
+                                size: 14,
+                                color: Colors.grey[600],
+                              ),
                               SizedBox(width: 4),
                               Text(
                                 community?.status ?? 'Unknown',
@@ -150,7 +161,7 @@ class NewCommunityPage extends StatelessWidget {
                               onPressed: () {},
                             ),
                             onStateChanged: (isFirstState, isSecondState) {},
-                          )
+                          ),
                         ],
                       ),
                     );
@@ -177,84 +188,87 @@ class NewCommunityPage extends StatelessWidget {
               label: 'Create A New Community',
               onPressed: () {
                 showAppModalSheet(
-                    child: BlocProvider.value(
-                  value: context.read<NewCommunityBloc>(),
-                  child: BlocBuilder<NewCommunityBloc, NewCommunityState>(
-                    builder: (context, state) {
-                      return Column(
-                        children: [
-                          WhatsevrFormField.generalTextField(
-                            controller: context
-                                .read<NewCommunityBloc>()
-                                .communityNameController,
-                            headingTitle: 'Community Name',
-                          ),
-                          Gap(12),
-                          WhatsevrFormField.invokeCustomFunction(
-                            controller: context
-                                .read<NewCommunityBloc>()
-                                .communityStatusController,
-                            context: context,
-                            readOnly: false,
-                            headingTitle: 'Status',
-                            customFunction: () {
-                              showAppModalSheet(
-                                  child: CommonDataSearchSelectPage(
-                                showProfessionalStatus: true,
-                                onProfessionalStatusSelected:
-                                    (professionalStatus) {
-                                  context
-                                      .read<NewCommunityBloc>()
-                                      .communityStatusController
-                                      .text = professionalStatus.title ?? '';
-                                },
-                              ));
-                            },
-                          ),
-                          Gap(12),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text('Require admin approval to join?'),
-                              ),
-                              WhatsevrChoiceChip(
-                                label: 'Yes',
-                                choiced: state.approveJoiningRequest ?? false,
-                                switchChoice: (value) {
-                                  context
-                                      .read<NewCommunityBloc>()
-                                      .add(ChangeApproveJoiningRequestEvent());
-                                },
-                              ),
-                              Gap(4),
-                              WhatsevrChoiceChip(
-                                label: 'No',
-                                choiced:
-                                    !(state.approveJoiningRequest ?? false),
-                                switchChoice: (value) {
-                                  context
-                                      .read<NewCommunityBloc>()
-                                      .add(ChangeApproveJoiningRequestEvent());
-                                },
-                              ),
-                            ],
-                          ),
-                          Gap(12),
-                          WhatsevrButton.filled(
-                            label: 'Create',
-                            onPressed: () {
-                              context
+                  child: BlocProvider.value(
+                    value: context.read<NewCommunityBloc>(),
+                    child: BlocBuilder<NewCommunityBloc, NewCommunityState>(
+                      builder: (context, state) {
+                        return Column(
+                          children: [
+                            WhatsevrFormField.generalTextField(
+                              controller: context
                                   .read<NewCommunityBloc>()
-                                  .add(CreateCommunityEvent(onCompleted: () {
-                                Navigator.pop(context);
-                              }));
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                                  .communityNameController,
+                              headingTitle: 'Community Name',
+                            ),
+                            Gap(12),
+                            WhatsevrFormField.invokeCustomFunction(
+                              controller: context
+                                  .read<NewCommunityBloc>()
+                                  .communityStatusController,
+                              readOnly: false,
+                              headingTitle: 'Status',
+                              customFunction: () {
+                                showAppModalSheet(
+                                  child: CommonDataSearchSelectPage(
+                                    showProfessionalStatus: true,
+                                    onProfessionalStatusSelected:
+                                        (professionalStatus) {
+                                      context
+                                              .read<NewCommunityBloc>()
+                                              .communityStatusController
+                                              .text =
+                                          professionalStatus.title ?? '';
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                            Gap(12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child:
+                                      Text('Require admin approval to join?'),
+                                ),
+                                WhatsevrChoiceChip(
+                                  label: 'Yes',
+                                  choiced: state.approveJoiningRequest ?? false,
+                                  switchChoice: (value) {
+                                    context.read<NewCommunityBloc>().add(
+                                        ChangeApproveJoiningRequestEvent());
+                                  },
+                                ),
+                                Gap(4),
+                                WhatsevrChoiceChip(
+                                  label: 'No',
+                                  choiced:
+                                      !(state.approveJoiningRequest ?? false),
+                                  switchChoice: (value) {
+                                    context.read<NewCommunityBloc>().add(
+                                        ChangeApproveJoiningRequestEvent());
+                                  },
+                                ),
+                              ],
+                            ),
+                            Gap(12),
+                            WhatsevrButton.filled(
+                              label: 'Create',
+                              onPressed: () {
+                                context.read<NewCommunityBloc>().add(
+                                  CreateCommunityEvent(
+                                    onCompleted: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ));
+                );
               },
             ),
           ),

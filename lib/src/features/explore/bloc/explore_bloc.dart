@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
-import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
-
+import '../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/public_recommendations.dart';
 import '../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../config/api/response_model/recommendation_offers.dart';
 import '../../../../config/api/response_model/recommendation_photo_posts.dart';
+import '../../../../config/api/response_model/recommendation_videos.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';
@@ -26,7 +25,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           memoryPaginationData: PaginationData(),
           offersPaginationData: PaginationData(),
           photoPostPaginationData: PaginationData(),
-        )) {
+        ),) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
@@ -49,9 +48,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadVideos(
-      LoadVideosEvent event, Emitter<ExploreState> emit) async {
+      LoadVideosEvent event, Emitter<ExploreState> emit,) async {
     try {
-      RecommendationVideosResponse? recommendationVideos =
+      final RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
         page: 1,
       );
@@ -71,16 +70,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreVideos(
-      LoadMoreVideosEvent event, Emitter<ExploreState> emit) async {
+      LoadMoreVideosEvent event, Emitter<ExploreState> emit,) async {
     if (state.videoPaginationData?.isLoading == true ||
         state.videoPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
             videoPaginationData:
-                state.videoPaginationData?.copyWith(isLoading: true)),
+                state.videoPaginationData?.copyWith(isLoading: true),),
       );
-      RecommendationVideosResponse? recommendationVideos =
+      final RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
         page: event.page!,
       );
@@ -93,7 +92,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           isLoading: false,
           noMoreData: recommendationVideos?.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -107,9 +106,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadMemories(
-      LoadMemoriesEvent event, Emitter<ExploreState> emit) async {
+      LoadMemoriesEvent event, Emitter<ExploreState> emit,) async {
     try {
-      RecommendationMemoriesResponse? recommendationMemories =
+      final RecommendationMemoriesResponse? recommendationMemories =
           await RecommendationApi.publicMemories(
         page: 1,
       );
@@ -129,16 +128,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreMemories(
-      LoadMoreMemoriesEvent event, Emitter<ExploreState> emit) async {
+      LoadMoreMemoriesEvent event, Emitter<ExploreState> emit,) async {
     if (state.memoryPaginationData?.isLoading == true ||
         state.memoryPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
             memoryPaginationData:
-                state.memoryPaginationData?.copyWith(isLoading: true)),
+                state.memoryPaginationData?.copyWith(isLoading: true),),
       );
-      RecommendationMemoriesResponse? recommendationMemories =
+      final RecommendationMemoriesResponse? recommendationMemories =
           await RecommendationApi.publicMemories(
         page: event.page!,
       );
@@ -151,7 +150,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           isLoading: false,
           noMoreData: recommendationMemories?.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -165,9 +164,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadOffers(
-      LoadOffersEvent event, Emitter<ExploreState> emit) async {
+      LoadOffersEvent event, Emitter<ExploreState> emit,) async {
     try {
-      RecommendationOffersResponse? recommendationOffers =
+      final RecommendationOffersResponse? recommendationOffers =
           await RecommendationApi.publicOffers(
         page: 1,
       );
@@ -187,16 +186,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreOffers(
-      LoadMoreOffersEvent event, Emitter<ExploreState> emit) async {
+      LoadMoreOffersEvent event, Emitter<ExploreState> emit,) async {
     if (state.offersPaginationData?.isLoading == true ||
         state.offersPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
             offersPaginationData:
-                state.offersPaginationData?.copyWith(isLoading: true)),
+                state.offersPaginationData?.copyWith(isLoading: true),),
       );
-      RecommendationOffersResponse? recommendationOffers =
+      final RecommendationOffersResponse? recommendationOffers =
           await RecommendationApi.publicOffers(
         page: event.page!,
       );
@@ -209,7 +208,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           isLoading: false,
           noMoreData: recommendationOffers?.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -223,9 +222,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadPhotoPosts(
-      LoadPhotoPostsEvent event, Emitter<ExploreState> emit) async {
+      LoadPhotoPostsEvent event, Emitter<ExploreState> emit,) async {
     try {
-      RecommendationPhotoPostsResponse? recommendationPhotoPosts =
+      final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await RecommendationApi.publicPhotoPosts(
         page: 1,
       );
@@ -246,16 +245,16 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMorePhotoPosts(
-      LoadMorePhotoPostsEvent event, Emitter<ExploreState> emit) async {
+      LoadMorePhotoPostsEvent event, Emitter<ExploreState> emit,) async {
     if (state.photoPostPaginationData?.isLoading == true ||
         state.photoPostPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
             photoPostPaginationData:
-                state.photoPostPaginationData?.copyWith(isLoading: true)),
+                state.photoPostPaginationData?.copyWith(isLoading: true),),
       );
-      RecommendationPhotoPostsResponse? recommendationPhotoPosts =
+      final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await RecommendationApi.publicPhotoPosts(
         page: event.page!,
       );
@@ -268,7 +267,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           isLoading: false,
           noMoreData: recommendationPhotoPosts?.lastPage,
         ),
-      ));
+      ),);
     } catch (e, s) {
       emit(
         state.copyWith(

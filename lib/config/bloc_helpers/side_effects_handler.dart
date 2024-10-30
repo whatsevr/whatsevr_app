@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:whatsevr_app/config/bloc_helpers/bloc_side_effects.dart';
+import 'bloc_side_effects.dart';
 
 void handleBlocSideEffectsForFlipkart(
   BuildContext context, {

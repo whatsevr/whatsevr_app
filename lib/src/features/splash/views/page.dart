@@ -1,15 +1,14 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
 
+import '../../../../config/services/auth_db.dart';
+import '../../../../config/widgets/buttons/button.dart';
 import '../../../../config/widgets/dialogs/auth_dialogs.dart';
+import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../config/widgets/loading_indicator.dart';
+import '../bloc/splash_bloc.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -51,9 +50,9 @@ class SplashPage extends StatelessWidget {
                     shrink: true,
                     label: 'Login',
                     onPressed: () {
-                      List<String>? localUids =
+                      final List<String> localUids =
                           AuthUserDb.getAllAuthorisedUserUid();
-                      if (localUids?.isNotEmpty ?? false) {
+                      if (localUids.isNotEmpty ?? false) {
                         showAppModalSheet(
                           dismissPrevious: true,
                           flexibleSheet: false,
@@ -64,7 +63,7 @@ class SplashPage extends StatelessWidget {
                             .read<SplashBloc>()
                             .add(const InitiateAuthServiceEvent());
                       }
-                    });
+                    },);
               },
             ),
             const Gap(30),

@@ -50,7 +50,7 @@ class CreatePhotoPostState extends Equatable {
   }) {
     return CreatePhotoPostState(
       pageArgument: pageArgument ?? this.pageArgument,
-      uiImageData: uiFilesData ?? this.uiImageData,
+      uiImageData: uiFilesData ?? uiImageData,
       selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
       placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,
       selectedPostLocation: selectedPostLocation ?? this.selectedPostLocation,

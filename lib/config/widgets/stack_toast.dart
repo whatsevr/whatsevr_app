@@ -1,7 +1,7 @@
 import 'package:animated_toast_list/animated_toast_list.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
+import '../routes/router.dart';
+import '../themes/theme.dart';
 
 class WhatsevrStackToast extends StatelessWidget {
   final Widget child;
@@ -66,11 +66,10 @@ class WhatsevrStackToast extends StatelessWidget {
 
 class _StackToastItem extends StatelessWidget {
   const _StackToastItem({
-    Key? key,
     this.onTap,
     required this.animation,
     required this.item,
-  }) : super(key: key);
+  });
 
   final Animation<double> animation;
   final VoidCallback? onTap;
@@ -78,7 +77,7 @@ class _StackToastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle textStyle = TextStyle(color: context.whatsevrTheme.text);
+    final TextStyle textStyle = TextStyle(color: context.whatsevrTheme.text);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -124,7 +123,7 @@ class _StackToastItem extends StatelessWidget {
   }
 
   Color _getTypeColor(_StackToastType type) {
-    AppTheme theme = AppNavigationService.currentContext!.whatsevrTheme;
+    final AppTheme theme = AppNavigationService.currentContext!.whatsevrTheme;
     switch (type) {
       case _StackToastType.success:
         return theme.surface;

@@ -2,16 +2,16 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/heroicons.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/widgets/tab_bar.dart';
-
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
-import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:iconify_flutter/icons/heroicons.dart';
+
+import '../../../../../config/mocks/mocks.dart';
+import '../../../../../config/routes/router.dart';
+import '../../../../../config/routes/routes_name.dart';
+import '../../../../../config/widgets/tab_bar.dart';
+import '../../../../../config/widgets/textfield/animated_search_field.dart';
+import '../../../account/views/page.dart';
 
 class AccountSearchPage extends StatelessWidget {
   final List<String>? hintTexts;

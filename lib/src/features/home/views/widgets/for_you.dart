@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
+import '../../../../../config/mocks/mocks.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/post_tiles/flick.dart';
+import '../../../../../config/widgets/post_tiles/photo.dart';
+import '../../../../../config/widgets/post_tiles/video.dart';
 
 class HomePageForYouPage extends StatelessWidget {
   const HomePageForYouPage({
@@ -22,7 +22,7 @@ class HomePageForYouPage extends StatelessWidget {
           height: 120.0,
           child: Builder(
             builder: (BuildContext context) {
-              List<Widget> children = <Widget>[
+              final List<Widget> children = <Widget>[
                 Column(
                   children: <Widget>[
                     Expanded(

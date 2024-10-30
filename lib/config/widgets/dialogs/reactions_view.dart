@@ -1,33 +1,22 @@
-import 'dart:io';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/app.dart';
-import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
-import 'package:whatsevr_app/config/api/methods/comments.dart';
-import 'package:whatsevr_app/config/api/methods/reactions.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
-import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart'
+
+import '../../api/external/models/pagination_data.dart';
+import '../../api/methods/reactions.dart';
+import '../../api/methods/users.dart';
+import '../../api/response_model/reactions/get_reactions.dart'
     as m1;
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
-import 'package:whatsevr_app/config/enums/reaction_type.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import '../../api/response_model/user_details.dart';
+import '../../enums/reaction_type.dart';
+import '../../mocks/mocks.dart';
+import '../../services/auth_db.dart';
+import '../../themes/theme.dart';
+import '../buttons/choice_chip.dart';
+import '../max_scroll_listener.dart';
+import '../previewers/photo.dart';
+import 'showAppModalSheet.dart';
 
 void showReactionsDialog({
   String? videoPostUid,
@@ -37,13 +26,13 @@ void showReactionsDialog({
   String? offerPostUid,
   String? flickPostUid,
 }) {
-  int nonNullCount = [
+  final int nonNullCount = [
     videoPostUid,
     photoPostUid,
     pdfUid,
     memoryUid,
     offerPostUid,
-    flickPostUid
+    flickPostUid,
   ].where((element) => element != null).length;
 
   if (nonNullCount != 1) {
@@ -61,7 +50,7 @@ void showReactionsDialog({
         memoryUid: memoryUid,
         offerPostUid: offerPostUid,
         flickPostUid: flickPostUid,
-      ));
+      ),);
 }
 
 class _Ui extends StatefulWidget {
@@ -73,7 +62,6 @@ class _Ui extends StatefulWidget {
   final String? flickPostUid;
 
   const _Ui({
-    super.key,
     this.videoPostUid,
     this.photoPostUid,
     this.pdfUid,
@@ -103,7 +91,7 @@ class _UiState extends State<_Ui> {
     getReactions(1);
     onReachingEndOfTheList(scrollController, execute: () {
       getReactions((reactionsPaginationData?.currentPage ?? 0) + 1);
-    });
+    },);
   }
 
   @override
@@ -117,7 +105,7 @@ class _UiState extends State<_Ui> {
   UserDetailsResponse? currentUserDetails;
 
   void getCurrentUserDetails() async {
-    String? userUid = AuthUserDb.getLastLoggedUserUid();
+    final String? userUid = AuthUserDb.getLastLoggedUserUid();
     currentUserDetails = await UsersApi.getUserDetails(userUid: userUid!);
   }
 
@@ -128,7 +116,7 @@ class _UiState extends State<_Ui> {
     }
     reactionsPaginationData =
         reactionsPaginationData?.copyWith(isLoading: true);
-    m1.GetReactionsResponse? response = await ReactionsApi.getReactions(
+    final m1.GetReactionsResponse? response = await ReactionsApi.getReactions(
       page: page,
       videoPostUid: widget.videoPostUid,
       photoPostUid: widget.photoPostUid,
@@ -180,7 +168,7 @@ class _UiState extends State<_Ui> {
                           // _comments = _comments.reversed.toList();
                         });
                       },
-                      label: '${reactionType.emoji}'),
+                      label: reactionType.emoji,),
                   Gap(8),
                 ],
               ],
@@ -211,7 +199,7 @@ class _UiState extends State<_Ui> {
                   mainAxisSpacing: 8,
                 ),
                 itemBuilder: (context, index) {
-                  m1.Reaction reaction = _reactions[index];
+                  final m1.Reaction reaction = _reactions[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Column(
@@ -265,7 +253,7 @@ class _UiState extends State<_Ui> {
                                     ),
                                   ),
                                 ],
-                              )),
+                              ),),
                         ),
                         const SizedBox(width: 8),
                         Container(
@@ -283,7 +271,7 @@ class _UiState extends State<_Ui> {
                               Text(
                                 reaction.user?.name ?? 'Anonymous',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                    fontWeight: FontWeight.bold,),
                               ),
                               Text(
                                 GetTimeAgo.parse(reaction.createdAt!) ?? '',
@@ -299,7 +287,7 @@ class _UiState extends State<_Ui> {
                   );
                 },
               );
-            }),
+            },),
           ),
         ],
       ),

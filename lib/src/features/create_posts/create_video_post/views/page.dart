@@ -1,28 +1,23 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/enums/post_creator_type.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
 
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/place_search_list.dart';
-import 'package:whatsevr_app/config/widgets/previewers/video.dart';
-import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/search_and_tag.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
-
+import '../../../../../config/enums/post_creator_type.dart';
+import '../../../../../config/widgets/app_bar.dart';
+import '../../../../../config/widgets/buttons/button.dart';
+import '../../../../../config/widgets/dialogs/place_search_list.dart';
+import '../../../../../config/widgets/dialogs/search_and_tag.dart';
+import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/previewers/video.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
+import '../../../../../config/widgets/textfield/super_textform_field.dart';
+import '../bloc/create_post_bloc.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
@@ -68,7 +63,7 @@ class CreateVideoPostPage extends StatelessWidget {
                     aspectRatio: state.thumbnailMetaData?.aspectRatio ?? 16 / 9,
                     child: Builder(
                       builder: (BuildContext context) {
-                        double baseHeight = double.infinity;
+                        final double baseHeight = double.infinity;
                         if (state.thumbnailFile != null) {
                           return Stack(
                             children: <Widget>[
@@ -102,7 +97,8 @@ class CreateVideoPostPage extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () {
                                     FileMetaData.showMetaData(
-                                        state.videoMetaData);
+                                      state.videoMetaData,
+                                    );
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
@@ -133,11 +129,11 @@ class CreateVideoPostPage extends StatelessWidget {
                                 aspectRatios: videoPostAspectRatio,
                               ).then((value) {
                                 if (value != null) {
-                                  context
-                                      .read<CreateVideoPostBloc>()
-                                      .add(PickThumbnailEvent(
-                                        pickedThumbnailFile: value,
-                                      ));
+                                  context.read<CreateVideoPostBloc>().add(
+                                        PickThumbnailEvent(
+                                          pickedThumbnailFile: value,
+                                        ),
+                                      );
                                 }
                               });
                             },
@@ -172,10 +168,15 @@ class CreateVideoPostPage extends StatelessWidget {
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Icon(Icons.video_file_rounded,
-                                    color: Colors.white, size: 50),
-                                Text('Add a video',
-                                    style: TextStyle(color: Colors.white)),
+                                Icon(
+                                  Icons.video_file_rounded,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
+                                Text(
+                                  'Add a video',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ],
                             ),
                           ),
@@ -198,11 +199,11 @@ class CreateVideoPostPage extends StatelessWidget {
                                 aspectRatios: videoPostAspectRatio,
                               ).then((value) {
                                 if (value != null) {
-                                  context
-                                      .read<CreateVideoPostBloc>()
-                                      .add(PickThumbnailEvent(
-                                        pickedThumbnailFile: value,
-                                      ));
+                                  context.read<CreateVideoPostBloc>().add(
+                                        PickThumbnailEvent(
+                                          pickedThumbnailFile: value,
+                                        ),
+                                      );
                                 }
                               });
                             },
@@ -223,7 +224,7 @@ class CreateVideoPostPage extends StatelessWidget {
                               );
                             },
                             label: 'Change Video',
-                          )
+                          ),
                         ],
                       ],
                     ),
@@ -252,24 +253,25 @@ class CreateVideoPostPage extends StatelessWidget {
               ),
               const Gap(12),
               WhatsevrFormField.invokeCustomFunction(
-                context: context,
                 controller: TextEditingController(
                   text: state.selectedPostLocation ?? '',
                 ),
                 suffixWidget: const Icon(Icons.location_on),
                 hintText: 'Location',
                 customFunction: () {
-                  showAppModalSheet(child: PlaceSearchByNamePage(
-                    onPlaceSelected: (placeName, lat, long) {
-                      context
-                          .read<CreateVideoPostBloc>()
-                          .add(UpdatePostAddressEvent(
-                            address: placeName,
-                            addressLatitude: lat,
-                            addressLongitude: long,
-                          ));
-                    },
-                  ));
+                  showAppModalSheet(
+                    child: PlaceSearchByNamePage(
+                      onPlaceSelected: (placeName, lat, long) {
+                        context.read<CreateVideoPostBloc>().add(
+                              UpdatePostAddressEvent(
+                                address: placeName,
+                                addressLatitude: lat,
+                                addressLongitude: long,
+                              ),
+                            );
+                      },
+                    ),
+                  );
                 },
               ),
               if (state.placesNearbyResponse?.places?.isNotEmpty ?? false) ...[
@@ -282,16 +284,16 @@ class CreateVideoPostPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          context
-                              .read<CreateVideoPostBloc>()
-                              .add(UpdatePostAddressEvent(
-                                address: state.placesNearbyResponse
-                                    ?.places?[index].displayName?.text,
-                                addressLatitude: state.placesNearbyResponse
-                                    ?.places?[index].location?.latitude,
-                                addressLongitude: state.placesNearbyResponse
-                                    ?.places?[index].location?.longitude,
-                              ));
+                          context.read<CreateVideoPostBloc>().add(
+                                UpdatePostAddressEvent(
+                                  address: state.placesNearbyResponse
+                                      ?.places?[index].displayName?.text,
+                                  addressLatitude: state.placesNearbyResponse
+                                      ?.places?[index].location?.latitude,
+                                  addressLongitude: state.placesNearbyResponse
+                                      ?.places?[index].location?.longitude,
+                                ),
+                              );
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -324,12 +326,12 @@ class CreateVideoPostPage extends StatelessWidget {
                   showAppModalSheet(
                     child: SearchAndTagUsersAndCommunityPage(
                       onDone: (selectedUsersUid, selectedCommunitiesUid) {
-                        context
-                            .read<CreateVideoPostBloc>()
-                            .add(UpdateTaggedUsersAndCommunitiesEvent(
-                              taggedUsersUid: selectedUsersUid,
-                              taggedCommunitiesUid: selectedCommunitiesUid,
-                            ));
+                        context.read<CreateVideoPostBloc>().add(
+                              UpdateTaggedUsersAndCommunitiesEvent(
+                                taggedUsersUid: selectedUsersUid,
+                                taggedCommunitiesUid: selectedCommunitiesUid,
+                              ),
+                            );
                       },
                     ),
                   );
@@ -384,8 +386,10 @@ class CreateVideoPostPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         context.read<CreateVideoPostBloc>().add(
-                            const UpdateTaggedUsersAndCommunitiesEvent(
-                                clearAll: true));
+                              const UpdateTaggedUsersAndCommunitiesEvent(
+                                clearAll: true,
+                              ),
+                            );
                       },
                       child: const Icon(
                         Icons.clear_rounded,

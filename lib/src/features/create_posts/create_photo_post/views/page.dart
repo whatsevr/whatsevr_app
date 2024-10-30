@@ -1,27 +1,20 @@
-import 'package:expansion_tile_group/expansion_tile_group.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/country_state_city.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/buttons/button.dart';
-import '../../../../../config/widgets/dialogs/common_data_list.dart';
-import '../../../../../config/widgets/dynamic_height_views.dart';
-import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
 import '../../../../../config/widgets/dialogs/place_search_list.dart';
-import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/dialogs/search_and_tag.dart';
 import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/dynamic_height_views.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/media_pick_choice.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/textfield/super_textform_field.dart';
 import '../bloc/create_photo_post_bloc.dart';
 
@@ -92,11 +85,11 @@ class CreatePhotoPostPage extends StatelessWidget {
                                 right: 0,
                                 child: IconButton(
                                   onPressed: () {
-                                    context
-                                        .read<CreatePhotoPostBloc>()
-                                        .add(RemoveVideoOrImageEvent(
-                                          uiFileData: uiFileData,
-                                        ));
+                                    context.read<CreatePhotoPostBloc>().add(
+                                          RemoveVideoOrImageEvent(
+                                            uiFileData: uiFileData,
+                                          ),
+                                        );
                                   },
                                   icon: const Icon(
                                     Icons.clear_rounded,
@@ -132,8 +125,10 @@ class CreatePhotoPostPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: Colors.black,
-                      child: Text('Add Image',
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        'Add Image',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   );
                 },
@@ -180,24 +175,25 @@ class CreatePhotoPostPage extends StatelessWidget {
               Column(
                 children: [
                   WhatsevrFormField.invokeCustomFunction(
-                    context: context,
                     controller: TextEditingController(
                       text: state.selectedPostLocation ?? '',
                     ),
                     suffixWidget: const Icon(Icons.location_on),
                     hintText: 'Location',
                     customFunction: () {
-                      showAppModalSheet(child: PlaceSearchByNamePage(
-                        onPlaceSelected: (placeName, lat, long) {
-                          context
-                              .read<CreatePhotoPostBloc>()
-                              .add(UpdatePostAddressEvent(
-                                address: placeName,
-                                addressLatitude: lat,
-                                addressLongitude: long,
-                              ));
-                        },
-                      ));
+                      showAppModalSheet(
+                        child: PlaceSearchByNamePage(
+                          onPlaceSelected: (placeName, lat, long) {
+                            context.read<CreatePhotoPostBloc>().add(
+                                  UpdatePostAddressEvent(
+                                    address: placeName,
+                                    addressLatitude: lat,
+                                    addressLongitude: long,
+                                  ),
+                                );
+                          },
+                        ),
+                      );
                     },
                   ),
                   if (state.placesNearbyResponse?.places?.isNotEmpty ??
@@ -211,16 +207,22 @@ class CreatePhotoPostPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              context
-                                  .read<CreatePhotoPostBloc>()
-                                  .add(UpdatePostAddressEvent(
-                                    address: state.placesNearbyResponse
-                                        ?.places?[index].displayName?.text,
-                                    addressLatitude: state.placesNearbyResponse
-                                        ?.places?[index].location?.latitude,
-                                    addressLongitude: state.placesNearbyResponse
-                                        ?.places?[index].location?.longitude,
-                                  ));
+                              context.read<CreatePhotoPostBloc>().add(
+                                    UpdatePostAddressEvent(
+                                      address: state.placesNearbyResponse
+                                          ?.places?[index].displayName?.text,
+                                      addressLatitude: state
+                                          .placesNearbyResponse
+                                          ?.places?[index]
+                                          .location
+                                          ?.latitude,
+                                      addressLongitude: state
+                                          .placesNearbyResponse
+                                          ?.places?[index]
+                                          .location
+                                          ?.longitude,
+                                    ),
+                                  );
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -259,12 +261,13 @@ class CreatePhotoPostPage extends StatelessWidget {
                       showAppModalSheet(
                         child: SearchAndTagUsersAndCommunityPage(
                           onDone: (selectedUsersUid, selectedCommunitiesUid) {
-                            context
-                                .read<CreatePhotoPostBloc>()
-                                .add(UpdateTaggedUsersAndCommunitiesEvent(
-                                  taggedUsersUid: selectedUsersUid,
-                                  taggedCommunitiesUid: selectedCommunitiesUid,
-                                ));
+                            context.read<CreatePhotoPostBloc>().add(
+                                  UpdateTaggedUsersAndCommunitiesEvent(
+                                    taggedUsersUid: selectedUsersUid,
+                                    taggedCommunitiesUid:
+                                        selectedCommunitiesUid,
+                                  ),
+                                );
                           },
                         ),
                       );
@@ -320,8 +323,10 @@ class CreatePhotoPostPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             context.read<CreatePhotoPostBloc>().add(
-                                const UpdateTaggedUsersAndCommunitiesEvent(
-                                    clearAll: true));
+                                  const UpdateTaggedUsersAndCommunitiesEvent(
+                                    clearAll: true,
+                                  ),
+                                );
                           },
                           child: const Icon(
                             Icons.clear_rounded,

@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:dio/dio.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:encrypt/encrypt.dart';
+
+import '../external/models/business_validation_exception.dart';
 
 class ApiEncryptionInterceptor extends Interceptor {
   final String encryptionKey;
@@ -49,8 +50,8 @@ class ApiEncryptionInterceptor extends Interceptor {
     final cipherKey = Key.fromUtf8(encryptionKey);
     final encryptService = Encrypter(AES(cipherKey, mode: AESMode.cbc));
     final initVector = IV.fromUtf8(encryptionKey.substring(0, 16));
-    Encrypted encryptedText = encryptService.encrypt(plainText, iv: initVector);
-    String encryptedBase64String = encryptedText.base64;
+    final Encrypted encryptedText = encryptService.encrypt(plainText, iv: initVector);
+    final String encryptedBase64String = encryptedText.base64;
     return encryptedBase64String;
   }
 
@@ -59,7 +60,7 @@ class ApiEncryptionInterceptor extends Interceptor {
       final cipherKey = Key.fromUtf8(encryptionKey);
       final encryptService = Encrypter(AES(cipherKey, mode: AESMode.cbc));
       final initVector = IV.fromUtf8(encryptionKey.substring(0, 16));
-      String decryptedText = encryptService
+      final String decryptedText = encryptService
           .decrypt(Encrypted.fromBase64(encryptedText), iv: initVector);
 
       return decryptedText;

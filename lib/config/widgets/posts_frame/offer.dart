@@ -1,26 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-
-import 'package:iconify_flutter/icons/la.dart';
-
-import 'package:iconify_flutter/icons/octicon.dart';
-
-import 'package:iconify_flutter/icons/ph.dart';
-
-import 'package:iconify_flutter/icons/system_uicons.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
-
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../utils/conversion.dart';
-
-import '../buttons/two_state_ui.dart';
+import '../../api/response_model/recommendation_offers.dart';
+import '../../mocks/mocks.dart';
+import '../buttons/animated_like_icon_button.dart';
+import '../dynamic_height_views.dart';
+import '../feed_players/wtv_mini_player.dart';
+import '../pad_horizontal.dart';
 
 class OfferPostFrame extends StatelessWidget {
   final String? title;
@@ -86,7 +74,7 @@ class OfferPostFrame extends StatelessWidget {
                       for (final FilesDatum file in filesData!)
                         if (file.type == 'image')
                           ExtendedImage.network(
-                            file.imageUrl ?? MockData.imagePlaceholder("Offer"),
+                            file.imageUrl ?? MockData.imagePlaceholder('Offer'),
                             width: double.infinity,
                             fit: BoxFit.contain,
                             enableLoadState: false,
@@ -142,7 +130,7 @@ class OfferPostFrame extends StatelessWidget {
                     ),
                   ),
               ],
-            )
+            ),
           ],
           const Gap(8),
           PadHorizontal(
@@ -186,7 +174,7 @@ class OfferPostFrame extends StatelessWidget {
                       fontSize: 12,
                     ),
                   ),
-                ]
+                ],
               ],
             ),
           ),
@@ -247,7 +235,7 @@ class OfferPostFrame extends StatelessWidget {
               const WhatsevrReactButton(),
               Text(likes == null || likes == 0
                   ? ''
-                  : formatCountToKMBTQ(likes) ?? ''),
+                  : formatCountToKMBTQ(likes) ?? '',),
               WhatsevrCommentButton(
                 onTapComment: () {
                   onTapComment?.call();
@@ -255,11 +243,11 @@ class OfferPostFrame extends StatelessWidget {
               ),
               Text(comments == null || comments == 0
                   ? ''
-                  : formatCountToKMBTQ(comments) ?? ''),
+                  : formatCountToKMBTQ(comments) ?? '',),
               WhatsevrShareButton(),
               Text(shares == null || shares == 0
                   ? ''
-                  : formatCountToKMBTQ(shares) ?? ''),
+                  : formatCountToKMBTQ(shares) ?? '',),
               const Spacer(),
               const WhatsevrBookmarkButton(),
               WhatsevrShareButton(

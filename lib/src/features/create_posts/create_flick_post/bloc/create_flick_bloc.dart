@@ -7,23 +7,20 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 
 import '../../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
 import '../../../../../config/api/requests_model/create_flick_post.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_flick_post.dart';
-
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
-
+import '../../../../../config/widgets/media/aspect_ratio.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-
+import '../../../../../utils/geopoint_wkb_parser.dart';
 import '../views/page.dart';
 
 part 'create_flick_event.dart';
@@ -43,7 +40,7 @@ class CreateFlickPostBloc
     on<PickThumbnailEvent>(_onPickThumbnail);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities);
+        _onUpdateTaggedUsersAndCommunities,);
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
@@ -55,13 +52,13 @@ class CreateFlickPostBloc
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
         onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed) {
+            isPermissionAllowed,) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
             emit(state.copyWith(
               userCurrentLocationLatLongWkb:
                   WKBUtil.getWkbString(lat: lat, long: long),
-            ));
+            ),);
           }
         },
       );
@@ -78,7 +75,7 @@ class CreateFlickPostBloc
     try {
       titleController.text = titleController.text.trim();
       descriptionController.text = descriptionController.text.trim();
-      String hashtagsArea =
+      final String hashtagsArea =
           '${titleController.text} ${hashtagsController.text}';
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
@@ -104,9 +101,9 @@ class CreateFlickPostBloc
                 sizeBytes: state.videoMetaData?.sizeInBytes,
               ),
               postData: PostData(
-                userUid: await AuthUserDb.getLastLoggedUserUid(),
+                userUid: AuthUserDb.getLastLoggedUserUid(),
                 postCreatorType: state.pageArgument?.postCreatorType.value,
-              )));
+              ),),);
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -114,13 +111,13 @@ class CreateFlickPostBloc
       SmartDialog.showLoading(msg: 'Uploading video...');
       final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
         state.videoFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'video-post',
       );
       final String? thumbnailUrl =
           await FileUploadService.uploadFilesToSupabase(
         state.thumbnailFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'video-post-thumbnail',
       );
       SmartDialog.showLoading(msg: 'Creating post...');
@@ -129,10 +126,10 @@ class CreateFlickPostBloc
         post: CreateFlickPostRequest(
           title: titleController.text,
           description: descriptionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           hashtags: hashtags.isEmpty
               ? null
-              : hashtags.map((e) => e.replaceAll("#", '')).toList(),
+              : hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedPostLocation,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           thumbnail: thumbnailUrl,
@@ -161,7 +158,7 @@ class CreateFlickPostBloc
     try {
       if (event.pickVideoFile == null) return;
       SmartDialog.showLoading(msg: 'Validating video...');
-      FileMetaData? videoMetaData =
+      final FileMetaData? videoMetaData =
           await FileMetaData.fromFile(event.pickVideoFile);
       // Validate video metadata
       if (videoMetaData == null ||
@@ -221,13 +218,13 @@ class CreateFlickPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateFlickPostState> emit) async {
+      UpdatePostAddressEvent event, Emitter<CreateFlickPostState> emit,) async {
     try {
       emit(
         state.copyWith(
           selectedPostLocation: event.address,
           selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude),
+              lat: event.addressLatitude, long: event.addressLongitude,),
         ),
       );
     } catch (e, stackTrace) {
@@ -237,28 +234,28 @@ class CreateFlickPostBloc
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateFlickPostState> emit) {
+      Emitter<CreateFlickPostState> emit,) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(
           taggedUsersUid: [],
           taggedCommunitiesUid: [],
-        ));
+        ),);
       } else {
         List<String> taggedUsersUid = [
           ...state.taggedUsersUid,
-          ...?event.taggedUsersUid
+          ...?event.taggedUsersUid,
         ];
         List<String> taggedCommunitiesUid = [
           ...state.taggedCommunitiesUid,
-          ...?event.taggedCommunitiesUid
+          ...?event.taggedCommunitiesUid,
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
         emit(state.copyWith(
           taggedUsersUid: taggedUsersUid,
           taggedCommunitiesUid: taggedCommunitiesUid,
-        ));
+        ),);
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

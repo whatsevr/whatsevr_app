@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+
 import '../../routes/router.dart';
+import '../pad_horizontal.dart';
 
 Completer<void>? _currentModalCompleter;
 
@@ -66,7 +68,7 @@ Future<void> showAppModalSheet({
               );
             },
           );
-        }),
+        },),
       );
     },
   );

@@ -5,7 +5,7 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import '../dialogs/showAppModalSheet.dart';
 
 showWhatsevrMediaPickerChoice({
   Function? onChoosingImageFromCamera,
@@ -20,7 +20,7 @@ showWhatsevrMediaPickerChoice({
         onChoosingImageFromGallery: onChoosingImageFromGallery,
         onChoosingVideoFromCamera: onChoosingVideoFromCamera,
         onChoosingVideoFromGallery: onChoosingVideoFromGallery,
-      ));
+      ),);
 }
 
 class _Ui extends StatelessWidget {
@@ -33,7 +33,7 @@ class _Ui extends StatelessWidget {
       {this.onChoosingImageFromCamera,
       this.onChoosingImageFromGallery,
       this.onChoosingVideoFromCamera,
-      this.onChoosingVideoFromGallery});
+      this.onChoosingVideoFromGallery,});
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +53,14 @@ class _Ui extends StatelessWidget {
                 onChoosingImageFromCamera?.call();
               },
               title: const Text('Capture Image',
-                  style: TextStyle(color: Colors.black)),
+                  style: TextStyle(color: Colors.black),),
               leading: const Iconify(Ic.baseline_camera),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 8, vertical: 4,),
                       decoration: BoxDecoration(
                         color: const Color(0xff51C5DD),
                         borderRadius: BorderRadius.circular(25),
@@ -69,7 +69,7 @@ class _Ui extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.shield_moon_outlined,
-                              color: Colors.white, size: 13),
+                              color: Colors.white, size: 13,),
                           Text(
                             'Benefit: ShotOnLive tag',
                             style: TextStyle(
@@ -78,7 +78,7 @@ class _Ui extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )),
+                      ),),
                 ],
               ),
             ),
@@ -98,14 +98,14 @@ class _Ui extends StatelessWidget {
                 onChoosingVideoFromCamera?.call();
               },
               title: const Text('Capture Video',
-                  style: TextStyle(color: Colors.black)),
+                  style: TextStyle(color: Colors.black),),
               leading: const Iconify(Mdi.camcorder),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
+                          horizontal: 8, vertical: 4,),
                       decoration: BoxDecoration(
                         color: const Color(0xff51C5DD),
                         borderRadius: BorderRadius.circular(25),
@@ -114,7 +114,7 @@ class _Ui extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(Icons.shield_moon_outlined,
-                              color: Colors.white, size: 13),
+                              color: Colors.white, size: 13,),
                           Text(
                             'Benefit: ShotOnLive tag',
                             style: TextStyle(
@@ -123,7 +123,7 @@ class _Ui extends StatelessWidget {
                             ),
                           ),
                         ],
-                      )),
+                      ),),
                 ],
               ),
             ),

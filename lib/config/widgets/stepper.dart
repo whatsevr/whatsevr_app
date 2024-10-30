@@ -31,7 +31,7 @@ class WhatsevrStepper extends StatefulWidget {
       this.buttonIconColor,
       this.buttonFillColor,
       this.stickySuffix,
-      super.key});
+      super.key,});
 
   @override
   _WhatsevrStepperState createState() => _WhatsevrStepperState();
@@ -67,33 +67,33 @@ class _WhatsevrStepperState extends State<WhatsevrStepper> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4), color: _backgroundColor),
+          borderRadius: BorderRadius.circular(4), color: _backgroundColor,),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Visibility(
               visible: _currentCount > 0,
               child: _createIncrementDecrementButton(
-                  Icons.remove, () => _decrease())),
+                  Icons.remove, () => _decrease(),),),
           Visibility(
               visible: _currentCount > 0,
               child: const SizedBox(
                 width: 6,
-              )),
+              ),),
           Visibility(
             visible: _currentCount > 0,
             child: Text(
               '$_currentCount${_stickySuffix != null ? ' $_stickySuffix' : ""}',
               style: const TextStyle(
-                  color: Colors.black87, fontWeight: FontWeight.w600),
+                  color: Colors.black87, fontWeight: FontWeight.w600,),
             ),
           ),
           Visibility(
               visible: _currentCount > 0,
               child: const SizedBox(
                 width: 6,
-              )),
-          _createIncrementDecrementButton(Icons.add, () => _increment())
+              ),),
+          _createIncrementDecrementButton(Icons.add, () => _increment()),
         ],
       ),
     );
@@ -122,7 +122,7 @@ class _WhatsevrStepperState extends State<WhatsevrStepper> {
   }
 
   Widget _createIncrementDecrementButton(
-      IconData icon, void Function() onPressed) {
+      IconData icon, void Function() onPressed,) {
     return RawMaterialButton(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       constraints: const BoxConstraints(minHeight: 30.0, minWidth: 30.0),

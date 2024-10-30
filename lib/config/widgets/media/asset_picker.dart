@@ -1,18 +1,17 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 
-import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
-import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
-
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
-import 'package:whatsevr_app/utils/file.dart';
+import '../../../utils/file.dart';
+import '../../routes/router.dart';
+import '../../routes/routes_name.dart';
+import 'aspect_ratio.dart';
+import 'camera_surface.dart';
+import 'image_cropper.dart';
+import 'image_editor.dart';
+import 'video_editor.dart';
 
 class CustomAssetPicker {
   CustomAssetPicker._();
@@ -30,7 +29,7 @@ class CustomAssetPicker {
       RoutesName.cameraView,
       extras: CameraViewPageArgument(onCapture: (File file) {
         capturedFile = file;
-      }),
+      },),
     );
     if (capturedFile == null) return;
     File? compressedFile;
@@ -67,7 +66,7 @@ class CustomAssetPicker {
           imageFileToEdit: croppedImage!,
           onCompleted: (File file) {
             editedImage = file;
-          }),
+          },),
     );
     onCompleted?.call(editedImage ?? croppedImage!);
   }
@@ -99,7 +98,7 @@ class CustomAssetPicker {
     if (pickedAssets == null || pickedAssets.isEmpty) {
       return;
     }
-    File? pickedFile = await pickedAssets.first.file;
+    final File? pickedFile = await pickedAssets.first.file;
     if (pickedFile == null) throw Exception('File does not exist');
     File? compressedFile;
     if (quality != null) {
@@ -131,7 +130,7 @@ class CustomAssetPicker {
           imageFileToEdit: croppedImage!,
           onCompleted: (File file) {
             editedImage = file;
-          }),
+          },),
     );
     onCompleted.call(editedImage ?? croppedImage!);
   }
@@ -173,7 +172,7 @@ class CustomAssetPicker {
           videoFile: pickedVideo,
           onCompleted: (File? file) {
             editedVideo = file;
-          }),
+          },),
     );
     if (editedVideo == null) {
       if (!(await pickedVideo.exists())) {
@@ -187,7 +186,7 @@ class CustomAssetPicker {
 
   static void pickDocuments(
       {bool singleFile = true,
-      required Function(List<File>) onCompleted}) async {
+      required Function(List<File>) onCompleted,}) async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: !singleFile,
       type: FileType.custom,

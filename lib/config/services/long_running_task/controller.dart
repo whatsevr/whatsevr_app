@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:whatsevr_app/config/services/long_running_task/task_models/posts.dart';
-import 'package:whatsevr_app/dev/talker.dart';
 
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+
+import '../../../dev/talker.dart';
 import '../../api/client.dart';
 import '../../api/external/models/business_validation_exception.dart';
 import '../../api/methods/posts.dart';
 import '../../api/requests_model/create_video_post.dart';
-
 import '../file_upload.dart';
+import 'task_models/posts.dart';
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -156,7 +156,7 @@ class WhatsevrLongTaskController extends TaskHandler {
   static Future<void> startServiceWithTaskData(
       {required LongRunningTask taskData,
       required Function onTaskAssignFail,
-      required Function onTaskAssigned}) async {
+      required Function onTaskAssigned,}) async {
     try {
       if (await FlutterForegroundTask.isRunningService) {
         await FlutterForegroundTask.restartService();

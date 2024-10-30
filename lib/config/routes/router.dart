@@ -3,31 +3,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
-import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
-import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
-import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
-import 'package:whatsevr_app/constants.dart';
-import 'package:whatsevr_app/dev/routes/routes.dart';
-import 'package:whatsevr_app/dev/talker.dart';
-import 'package:whatsevr_app/src/features/community/views/page.dart';
-import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
-import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 
-import 'package:whatsevr_app/src/features/search_pages/account/views/page.dart';
-import 'package:whatsevr_app/src/features/settings/views/page.dart';
-import 'package:whatsevr_app/src/features/splash/views/page.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
-import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
-import 'package:whatsevr_app/src/features/account/views/page.dart';
-import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
-
+import '../../constants.dart';
+import '../../dev/routes/routes.dart';
+import '../../dev/talker.dart';
+import '../../src/features/account/views/page.dart';
+import '../../src/features/community/views/page.dart';
 import '../../src/features/create_posts/create_flick_post/views/page.dart';
 import '../../src/features/create_posts/create_memory/views/page.dart';
 import '../../src/features/create_posts/create_offer/views/page.dart';
 import '../../src/features/create_posts/create_photo_post/views/page.dart';
+import '../../src/features/create_posts/create_video_post/views/page.dart';
 import '../../src/features/create_posts/upload_pdf/views/page.dart';
+import '../../src/features/dashboard/views/page.dart';
+import '../../src/features/details/wtv_details/views/page.dart';
+import '../../src/features/new_community/views/page.dart';
+import '../../src/features/search_pages/account/views/page.dart';
+import '../../src/features/settings/views/page.dart';
+import '../../src/features/splash/views/page.dart';
+import '../../src/features/update_profile/views/page.dart';
+import '../widgets/media/camera_surface.dart';
+import '../widgets/media/image_cropper.dart';
+import '../widgets/media/image_editor.dart';
+import '../widgets/media/video_editor.dart';
+import 'routes_name.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();
@@ -107,7 +106,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.accountSearch,
         builder: (BuildContext context, GoRouterState state) {
-          AccountSearchPage? accountSearchPage =
+          final AccountSearchPage? accountSearchPage =
               state.extra as AccountSearchPage?;
           return AccountSearchPage(
             hintTexts: accountSearchPage?.hintTexts,
@@ -117,7 +116,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.account,
         builder: (BuildContext context, GoRouterState state) {
-          AccountPageArgument accountPageArgument =
+          final AccountPageArgument accountPageArgument =
               state.extra as AccountPageArgument;
           return AccountPage(
             pageArgument: accountPageArgument,
@@ -133,7 +132,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.settings,
         builder: (BuildContext context, GoRouterState state) {
-          SettingsPageArgument settingsPageArgument =
+          final SettingsPageArgument settingsPageArgument =
               state.extra as SettingsPageArgument;
           return SettingsPage(
             pageArgument: settingsPageArgument,
@@ -143,7 +142,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.wtvDetails,
         builder: (BuildContext context, GoRouterState state) {
-          WtvDetailsPageArgument pageArgument =
+          final WtvDetailsPageArgument pageArgument =
               state.extra as WtvDetailsPageArgument;
           return WtvDetailsPage(
             pageArgument: pageArgument,
@@ -153,7 +152,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createVideoPost,
         builder: (BuildContext context, GoRouterState state) {
-          CreateVideoPostPageArgument pageArgument =
+          final CreateVideoPostPageArgument pageArgument =
               state.extra as CreateVideoPostPageArgument;
           return CreateVideoPostPage(
             pageArgument: pageArgument,
@@ -163,7 +162,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createFlick,
         builder: (BuildContext context, GoRouterState state) {
-          CreateFlickPostPageArgument pageArgument =
+          final CreateFlickPostPageArgument pageArgument =
               state.extra as CreateFlickPostPageArgument;
           return CreateFlickPostPage(
             pageArgument: pageArgument,
@@ -173,7 +172,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createMemory,
         builder: (BuildContext context, GoRouterState state) {
-          CreateMemoryPageArgument pageArgument =
+          final CreateMemoryPageArgument pageArgument =
               state.extra as CreateMemoryPageArgument;
           return CreateMemoryPage(
             pageArgument: pageArgument,
@@ -183,7 +182,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createOffer,
         builder: (BuildContext context, GoRouterState state) {
-          CreateOfferPageArgument pageArgument =
+          final CreateOfferPageArgument pageArgument =
               state.extra as CreateOfferPageArgument;
           return CreateOfferPage(
             pageArgument: pageArgument,
@@ -193,7 +192,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createPhotoPost,
         builder: (BuildContext context, GoRouterState state) {
-          CreatePhotoPostPageArgument pageArgument =
+          final CreatePhotoPostPageArgument pageArgument =
               state.extra as CreatePhotoPostPageArgument;
           return CreatePhotoPostPage(
             pageArgument: pageArgument,
@@ -203,7 +202,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.uploadPdf,
         builder: (BuildContext context, GoRouterState state) {
-          UploadPdfPageArgument pageArgument =
+          final UploadPdfPageArgument pageArgument =
               state.extra as UploadPdfPageArgument;
           return UploadPdfPage(
             pageArgument: pageArgument,
@@ -213,7 +212,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.updateProfile,
         builder: (BuildContext context, GoRouterState state) {
-          ProfileUpdatePageArgument pageArgument =
+          final ProfileUpdatePageArgument pageArgument =
               state.extra as ProfileUpdatePageArgument;
           return ProfileUpdatePage(
             pageArgument: pageArgument,
@@ -223,7 +222,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.cameraView,
         builder: (BuildContext context, GoRouterState state) {
-          CameraViewPageArgument pageArgument =
+          final CameraViewPageArgument pageArgument =
               state.extra as CameraViewPageArgument;
           return CameraViewPage(
             pageArgument: pageArgument,
@@ -233,7 +232,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.videoEditor,
         builder: (BuildContext context, GoRouterState state) {
-          VideoEditorPageArgument pageArgument =
+          final VideoEditorPageArgument pageArgument =
               state.extra as VideoEditorPageArgument;
           return VideoEditorPage(
             pageArgument: pageArgument,
@@ -243,7 +242,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.imageEditor,
         builder: (BuildContext context, GoRouterState state) {
-          ImageEditorPageArgument pageArgument =
+          final ImageEditorPageArgument pageArgument =
               state.extra as ImageEditorPageArgument;
           return ImageEditorPage(
             pageArgument: pageArgument,
@@ -253,7 +252,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.imageCropper,
         builder: (BuildContext context, GoRouterState state) {
-          ImageCropperPageArgument pageArgument =
+          final ImageCropperPageArgument pageArgument =
               state.extra as ImageCropperPageArgument;
           return ImageCropperPage(
             pageArgument: pageArgument,
@@ -263,7 +262,7 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.newCommunity,
         builder: (BuildContext context, GoRouterState state) {
-          NewCommunityPageArgument pageArgument =
+          final NewCommunityPageArgument pageArgument =
               state.extra as NewCommunityPageArgument;
           return NewCommunityPage(
             pageArgument: pageArgument,

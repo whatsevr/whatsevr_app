@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/dev/routes/routes_name.dart';
+import '../config/routes/router.dart';
+import 'routes/routes_name.dart';
 
 enum AnchoringPosition {
   topLeft,
@@ -174,7 +174,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
                           child: IconButton(
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.red),
+                                  WidgetStateProperty.all<Color>(Colors.red),
                             ),
                             color: Colors.white,
                             onPressed: () {

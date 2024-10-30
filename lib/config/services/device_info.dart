@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_region/device_region.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+
+import '../../dev/talker.dart';
+import '../api/external/models/business_validation_exception.dart';
 
 class DeviceInfo {
   DeviceInfo({

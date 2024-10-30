@@ -2,22 +2,16 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-
 import 'package:iconify_flutter/icons/la.dart';
-
 import 'package:iconify_flutter/icons/octicon.dart';
-
-import 'package:iconify_flutter/icons/ph.dart';
-
 import 'package:iconify_flutter/icons/system_uicons.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import '../../../utils/conversion.dart';
 import '../../api/response_model/recommendation_photo_posts.dart';
-import '../buttons/two_state_ui.dart';
+import '../../mocks/mocks.dart';
+import '../buttons/animated_like_icon_button.dart';
+import '../dynamic_height_views.dart';
+import '../pad_horizontal.dart';
 
 class PhotosPostFrame extends StatelessWidget {
   final String? title;
@@ -103,7 +97,7 @@ class PhotosPostFrame extends StatelessWidget {
                     if (filesData != null && filesData!.isNotEmpty)
                       for (final FilesDatum file in filesData!)
                         ExtendedImage.network(
-                          file.imageUrl ?? MockData.imagePlaceholder("Photo"),
+                          file.imageUrl ?? MockData.imagePlaceholder('Photo'),
                           width: double.infinity,
                           fit: BoxFit.contain,
                           enableLoadState: false,
@@ -150,7 +144,7 @@ class PhotosPostFrame extends StatelessWidget {
                     ),
                   ),
               ],
-            )
+            ),
           ],
           const Gap(8),
           PadHorizontal(
@@ -209,7 +203,7 @@ class PhotosPostFrame extends StatelessWidget {
               const WhatsevrReactButton(),
               Text(likes == null || likes == 0
                   ? ''
-                  : formatCountToKMBTQ(likes) ?? ''),
+                  : formatCountToKMBTQ(likes) ?? '',),
               IconButton(
                 icon: const Iconify(Octicon.comment_24),
                 onPressed: () {
@@ -218,14 +212,14 @@ class PhotosPostFrame extends StatelessWidget {
               ),
               Text(comments == null || comments == 0
                   ? ''
-                  : formatCountToKMBTQ(comments) ?? ''),
+                  : formatCountToKMBTQ(comments) ?? '',),
               IconButton(
                 icon: const Iconify(La.share),
                 onPressed: () {},
               ),
               Text(shares == null || shares == 0
                   ? ''
-                  : formatCountToKMBTQ(shares) ?? ''),
+                  : formatCountToKMBTQ(shares) ?? '',),
               const Spacer(),
               const WhatsevrBookmarkButton(),
               IconButton(

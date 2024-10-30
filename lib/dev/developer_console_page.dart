@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/stack_toast.dart';
+
 import '../config/routes/router.dart';
 import '../config/routes/routes_name.dart';
+import '../config/services/auth_db.dart';
 import '../config/services/device_info.dart';
-import '../config/themes/bloc/theme_bloc.dart';
+import '../config/themes/theme.dart';
+import '../config/widgets/stack_toast.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -59,12 +59,12 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
         children: [
           ListTile(
             leading: Icon(FontAwesomeIcons.mobileAlt,
-                color: Colors.redAccent, size: 24),
+                color: Colors.redAccent, size: 24,),
             title: Text('Device Information',
                 style: TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16)),
+                    fontSize: 16,),),
           ),
           for ((String, String) itm in <(String, String)>[
             (
@@ -86,9 +86,9 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
+                  style: TextStyle(color: Colors.black, fontSize: 14),),
               subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 12)),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 12),),
             ),
         ],
       ),
@@ -110,16 +110,16 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 style: TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16)),
+                    fontSize: 16,),),
           ),
           for ((String, String) itm in <(String, String)>[
             ('User UID', AuthUserDb.getLastLoggedUserUid() ?? 'Unknown'),
           ])
             ListTile(
               title: Text(itm.$1,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
+                  style: TextStyle(color: Colors.black, fontSize: 14),),
               subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 12)),
+                  style: TextStyle(color: Colors.grey[700], fontSize: 12),),
             ),
         ],
       ),
@@ -141,13 +141,13 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 style: TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16)),
+                    fontSize: 16,),),
           ),
           for (String? userUid
               in AuthUserDb.getAllAuthorisedUserUid() ?? <String?>[])
             ListTile(
               title: Text(userUid ?? 'Unknown',
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
+                  style: TextStyle(color: Colors.black, fontSize: 14),),
             ),
         ],
       ),
@@ -169,7 +169,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 style: TextStyle(
                     color: Colors.redAccent,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16)),
+                    fontSize: 16,),),
           ),
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
@@ -188,7 +188,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
                       return _ColorPalettePage();
-                    });
+                    },);
               }
             ),
             (
@@ -208,7 +208,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               title: TextButton(
                 onPressed: itm.$2,
                 child: Text(itm.$1,
-                    style: TextStyle(color: Colors.redAccent, fontSize: 14)),
+                    style: TextStyle(color: Colors.redAccent, fontSize: 14),),
               ),
             ),
         ],
@@ -218,7 +218,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
 }
 
 class _ColorPalettePage extends StatelessWidget {
-  const _ColorPalettePage({super.key});
+  const _ColorPalettePage();
 
   @override
   Widget build(BuildContext context) {

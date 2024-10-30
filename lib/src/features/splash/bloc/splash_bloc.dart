@@ -1,21 +1,15 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/auth.dart';
-import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
 
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-
-import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/auth_user_service.dart';
+import '../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../config/routes/router.dart';
+import '../../../../config/routes/routes_name.dart';
+import '../../../../config/services/auth_db.dart';
+import '../../../../config/services/auth_user_service.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';
@@ -32,7 +26,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
   ) async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      String? lastLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
+      final String? lastLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
       if (lastLoggedUserUid == null) {
         add(const InitiateAuthServiceEvent());
         return;
@@ -55,7 +49,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     await AuthUserService.loginWithOtpLessService(
       onLoginSuccess: (userUid, mobileNumber, emailId) {
         AuthUserService.loginToApp(
-            userUid: userUid, mobileNumber: mobileNumber, emailId: emailId);
+            userUid: userUid, mobileNumber: mobileNumber, emailId: emailId,);
       },
       onLoginFailed: (errorMessage) {
         SmartDialog.showToast(errorMessage);

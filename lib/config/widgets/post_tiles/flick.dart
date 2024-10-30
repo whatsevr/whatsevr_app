@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
+import '../../mocks/mocks.dart';
 
 class FlickPostTile extends StatelessWidget {
   const FlickPostTile({super.key});

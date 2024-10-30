@@ -4,28 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/previewers/video.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/buttons/button.dart';
 import '../../../../../config/widgets/dialogs/common_data_list.dart';
+import '../../../../../config/widgets/dialogs/place_search_list.dart';
+import '../../../../../config/widgets/dialogs/search_and_tag.dart';
+import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/media_pick_choice.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
 import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/dialogs/place_search_list.dart';
+import '../../../../../config/widgets/previewers/video.dart';
 import '../../../../../config/widgets/product_guide/product_guides.dart';
-import '../../../../../config/widgets/dialogs/search_and_tag.dart';
-import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
 import '../../../../../config/widgets/stepper.dart';
 import '../../../../../config/widgets/textfield/super_textform_field.dart';
-
+import '../../../../../utils/conversion.dart';
 import '../bloc/create_memory_bloc.dart';
 
 class CreateMemoryPageArgument {
@@ -78,7 +75,7 @@ class CreateMemoryPage extends StatelessWidget {
                               state.videoMetaData?.aspectRatio ?? 9 / 12,
                           child: Builder(
                             builder: (BuildContext context) {
-                              double baseHeight = double.infinity;
+                              final double baseHeight = double.infinity;
                               if (state.thumbnailFile != null) {
                                 return Stack(
                                   children: <Widget>[
@@ -89,7 +86,8 @@ class CreateMemoryPage extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       shape: BoxShape.rectangle,
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
+                                        Radius.circular(10),
+                                      ),
                                     ),
                                     Positioned.fill(
                                       child: Center(
@@ -114,7 +112,8 @@ class CreateMemoryPage extends StatelessWidget {
                                       child: IconButton(
                                         onPressed: () {
                                           context.read<CreateMemoryBloc>().add(
-                                              const RemoveVideoOrImageEvent());
+                                                const RemoveVideoOrImageEvent(),
+                                              );
                                         },
                                         icon: const Icon(
                                           Icons.clear_rounded,
@@ -126,7 +125,8 @@ class CreateMemoryPage extends StatelessWidget {
                                       GestureDetector(
                                         onTap: () {
                                           FileMetaData.showMetaData(
-                                              state.videoMetaData);
+                                            state.videoMetaData,
+                                          );
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(4),
@@ -160,11 +160,11 @@ class CreateMemoryPage extends StatelessWidget {
                                       aspectRatios: flicksAspectRatio,
                                     ).then((value) {
                                       if (value != null) {
-                                        context
-                                            .read<CreateMemoryBloc>()
-                                            .add(PickThumbnailEvent(
-                                              pickedThumbnailFile: value,
-                                            ));
+                                        context.read<CreateMemoryBloc>().add(
+                                              PickThumbnailEvent(
+                                                pickedThumbnailFile: value,
+                                              ),
+                                            );
                                       }
                                     });
                                   },
@@ -182,7 +182,8 @@ class CreateMemoryPage extends StatelessWidget {
                                   CustomAssetPicker.pickVideoFromGallery(
                                     onCompleted: (file) {
                                       context.read<CreateMemoryBloc>().add(
-                                          PickVideoEvent(pickVideoFile: file));
+                                            PickVideoEvent(pickVideoFile: file),
+                                          );
                                     },
                                   );
                                 },
@@ -198,11 +199,15 @@ class CreateMemoryPage extends StatelessWidget {
                                   child: const Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      Icon(Icons.video_file_rounded,
-                                          color: Colors.white, size: 50),
-                                      Text('Add a video',
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                      Icon(
+                                        Icons.video_file_rounded,
+                                        color: Colors.white,
+                                        size: 50,
+                                      ),
+                                      Text(
+                                        'Add a video',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -226,11 +231,11 @@ class CreateMemoryPage extends StatelessWidget {
                                       aspectRatios: flicksAspectRatio,
                                     ).then((value) {
                                       if (value != null) {
-                                        context
-                                            .read<CreateMemoryBloc>()
-                                            .add(PickThumbnailEvent(
-                                              pickedThumbnailFile: value,
-                                            ));
+                                        context.read<CreateMemoryBloc>().add(
+                                              PickThumbnailEvent(
+                                                pickedThumbnailFile: value,
+                                              ),
+                                            );
                                       }
                                     });
                                   },
@@ -245,13 +250,15 @@ class CreateMemoryPage extends StatelessWidget {
                                     CustomAssetPicker.pickVideoFromGallery(
                                       onCompleted: (file) {
                                         context.read<CreateMemoryBloc>().add(
-                                            PickVideoEvent(
-                                                pickVideoFile: file));
+                                              PickVideoEvent(
+                                                pickVideoFile: file,
+                                              ),
+                                            );
                                       },
                                     );
                                   },
                                   label: 'Change Video',
-                                )
+                                ),
                               ],
                             ],
                           ),
@@ -299,11 +306,11 @@ class CreateMemoryPage extends StatelessWidget {
                                 onPressed: () {
                                   CustomAssetPicker.pickImageFromGallery(
                                     onCompleted: (file) {
-                                      context
-                                          .read<CreateMemoryBloc>()
-                                          .add(PickImageEvent(
-                                            pickedImageFile: file,
-                                          ));
+                                      context.read<CreateMemoryBloc>().add(
+                                            PickImageEvent(
+                                              pickedImageFile: file,
+                                            ),
+                                          );
                                     },
                                   );
                                 },
@@ -343,8 +350,10 @@ class CreateMemoryPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: Colors.black,
-                      child: Text('Add Image or Video',
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        'Add Image or Video',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   );
                 },
@@ -364,8 +373,10 @@ class CreateMemoryPage extends StatelessWidget {
                 child: ExpansionTileItem.flat(
                   childrenPadding: EdgeInsets.zero,
                   tilePadding: EdgeInsets.zero,
-                  title: Text('More Details',
-                      style: TextStyle(color: Colors.black)),
+                  title: Text(
+                    'More Details',
+                    style: TextStyle(color: Colors.black),
+                  ),
                   children: [
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -373,13 +384,13 @@ class CreateMemoryPage extends StatelessWidget {
                         showAppModalSheet(
                           child: SearchAndTagUsersAndCommunityPage(
                             onDone: (selectedUsersUid, selectedCommunitiesUid) {
-                              context
-                                  .read<CreateMemoryBloc>()
-                                  .add(UpdateTaggedUsersAndCommunitiesEvent(
-                                    taggedUsersUid: selectedUsersUid,
-                                    taggedCommunitiesUid:
-                                        selectedCommunitiesUid,
-                                  ));
+                              context.read<CreateMemoryBloc>().add(
+                                    UpdateTaggedUsersAndCommunitiesEvent(
+                                      taggedUsersUid: selectedUsersUid,
+                                      taggedCommunitiesUid:
+                                          selectedCommunitiesUid,
+                                    ),
+                                  );
                             },
                           ),
                         );
@@ -389,8 +400,10 @@ class CreateMemoryPage extends StatelessWidget {
                         children: [
                           Icon(Icons.person, color: Colors.black),
                           Gap(4),
-                          Text('Mention',
-                              style: TextStyle(color: Colors.black)),
+                          Text(
+                            'Mention',
+                            style: TextStyle(color: Colors.black),
+                          ),
                           Spacer(),
                           Icon(Icons.arrow_right_rounded, color: Colors.black),
                         ],
@@ -439,8 +452,10 @@ class CreateMemoryPage extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               context.read<CreateMemoryBloc>().add(
-                                  const UpdateTaggedUsersAndCommunitiesEvent(
-                                      clearAll: true));
+                                    const UpdateTaggedUsersAndCommunitiesEvent(
+                                      clearAll: true,
+                                    ),
+                                  );
                             },
                             child: const Icon(
                               Icons.clear_rounded,
@@ -455,24 +470,25 @@ class CreateMemoryPage extends StatelessWidget {
                     Column(
                       children: [
                         WhatsevrFormField.invokeCustomFunction(
-                          context: context,
                           controller: TextEditingController(
                             text: state.selectedAddress ?? '',
                           ),
                           suffixWidget: const Icon(Icons.location_on),
                           hintText: 'Location',
                           customFunction: () {
-                            showAppModalSheet(child: PlaceSearchByNamePage(
-                              onPlaceSelected: (placeName, lat, long) {
-                                context
-                                    .read<CreateMemoryBloc>()
-                                    .add(UpdatePostAddressEvent(
-                                      address: placeName,
-                                      addressLatitude: lat,
-                                      addressLongitude: long,
-                                    ));
-                              },
-                            ));
+                            showAppModalSheet(
+                              child: PlaceSearchByNamePage(
+                                onPlaceSelected: (placeName, lat, long) {
+                                  context.read<CreateMemoryBloc>().add(
+                                        UpdatePostAddressEvent(
+                                          address: placeName,
+                                          addressLatitude: lat,
+                                          addressLongitude: long,
+                                        ),
+                                      );
+                                },
+                              ),
+                            );
                           },
                         ),
                         if (state.placesNearbyResponse?.places?.isNotEmpty ??
@@ -486,30 +502,31 @@ class CreateMemoryPage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    context
-                                        .read<CreateMemoryBloc>()
-                                        .add(UpdatePostAddressEvent(
-                                          address: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .displayName
-                                              ?.text,
-                                          addressLatitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.latitude,
-                                          addressLongitude: state
-                                              .placesNearbyResponse
-                                              ?.places?[index]
-                                              .location
-                                              ?.longitude,
-                                        ));
+                                    context.read<CreateMemoryBloc>().add(
+                                          UpdatePostAddressEvent(
+                                            address: state
+                                                .placesNearbyResponse
+                                                ?.places?[index]
+                                                .displayName
+                                                ?.text,
+                                            addressLatitude: state
+                                                .placesNearbyResponse
+                                                ?.places?[index]
+                                                .location
+                                                ?.latitude,
+                                            addressLongitude: state
+                                                .placesNearbyResponse
+                                                ?.places?[index]
+                                                .location
+                                                ?.longitude,
+                                          ),
+                                        );
                                   },
                                   child: Container(
                                     alignment: Alignment.center,
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
+                                      horizontal: 8,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.black45,
                                       borderRadius: BorderRadius.circular(4),
@@ -540,21 +557,21 @@ class CreateMemoryPage extends StatelessWidget {
                       controller: TextEditingController(
                         text: state.ctaAction ?? '',
                       ),
-                      context: context,
                       hintText: 'User Action',
                       customFunction: () {
                         showAppModalSheet(
-                            flexibleSheet: true,
-                            child: CommonDataSearchSelectPage(
-                              showCtaActions: true,
-                              onCtaActionSelected: (ctaAction) {
-                                context
-                                    .read<CreateMemoryBloc>()
-                                    .add(UpdateCtaActionEvent(
+                          flexibleSheet: true,
+                          child: CommonDataSearchSelectPage(
+                            showCtaActions: true,
+                            onCtaActionSelected: (ctaAction) {
+                              context.read<CreateMemoryBloc>().add(
+                                    UpdateCtaActionEvent(
                                       ctaAction: ctaAction.action,
-                                    ));
-                              },
-                            ));
+                                    ),
+                                  );
+                            },
+                          ),
+                        );
                       },
                     ),
                     const Gap(12),
@@ -566,7 +583,8 @@ class CreateMemoryPage extends StatelessWidget {
                       onChanged: (value) {
                         if (state.ctaAction == null) {
                           SmartDialog.showToast(
-                              'Please select a User action first');
+                            'Please select a User action first',
+                          );
                           context
                               .read<CreateMemoryBloc>()
                               .ctaActionUrlController
@@ -578,11 +596,12 @@ class CreateMemoryPage extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                            child: Text('Keep up-to ${ddMMMTime(
-                          DateTime.now().add(
-                            Duration(days: state.noOfDays ?? 1),
-                          ),
-                        )}')),
+                          child: Text('Keep up-to ${ddMMMTime(
+                            DateTime.now().add(
+                              Duration(days: state.noOfDays ?? 1),
+                            ),
+                          )}'),
+                        ),
                         WhatsevrStepper(
                           initNumber: state.noOfDays ?? 1,
                           minNumber: 1,

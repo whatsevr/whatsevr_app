@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import '../dialogs/showAppModalSheet.dart';
 
 import 'app_guide_view.dart';
 
 class ProductGuides {
   static showWtvPostCreationGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text('Select landscape/ horizontal video to create a video post.'),
       const Text('Vertical video are not allowed.'),
       const Text('Minimum video duration is 30 sec now.'),
@@ -15,11 +15,11 @@ class ProductGuides {
         child: AppGuideView(
       headingTitle: 'Video Post Creation Guide',
       guides: guides,
-    ));
+    ),);
   }
 
   static showFlickPostCreationGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text('Select portrait video video to create a flick.'),
       const Text('Horizontal video are not allowed.'),
       const Text('Minimum video duration is 5 sec now.'),
@@ -29,11 +29,11 @@ class ProductGuides {
         child: AppGuideView(
       headingTitle: 'Flick Creation Guide',
       guides: guides,
-    ));
+    ),);
   }
 
   static showMemoryCreationGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text('Select portrait or landscape video to create a memory.'),
       const Text('Minimum video duration is 5 sec now.'),
       const Text('Maximum video duration is 30 sec now.'),
@@ -42,13 +42,13 @@ class ProductGuides {
         child: AppGuideView(
       headingTitle: 'Memory Creation Guide',
       guides: guides,
-    ));
+    ),);
   }
 
   static showOfferCreationGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text(
-          'Select landscape or square video or image to create a offer.'),
+          'Select landscape or square video or image to create a offer.',),
       const Text('Minimum video duration is 10 sec now.'),
       const Text('Maximum video duration is 5 min now.'),
     ];
@@ -56,33 +56,33 @@ class ProductGuides {
         child: AppGuideView(
       headingTitle: 'Offer Creation Guide',
       guides: guides,
-    ));
+    ),);
   }
 
   static showPhotoPostCreationGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text(
-          'Select landscape or square or vertical images to create a offer.'),
+          'Select landscape or square or vertical images to create a offer.',),
       const Text('Maximum 10 images can be post in one post.'),
     ];
     showAppModalSheet(
         child: AppGuideView(
       headingTitle: 'Photo Post Creation Guide',
       guides: guides,
-    ));
+    ),);
   }
 
   static showUploadPdfGuide() {
-    List<Widget> guides = [
+    final List<Widget> guides = [
       const Text('Thumbnail should be in landscape or square aspect ratio.'),
       const Text(
-          'Max file size is 25 MB, only one PDF files are allowed to upload.'),
+          'Max file size is 25 MB, only one PDF files are allowed to upload.',),
       const Text('Uploading new PDF will replace the existing PDF.'),
     ];
     showAppModalSheet(
         child: AppGuideView(
       headingTitle: 'PDF Upload Guide',
       guides: guides,
-    ));
+    ),);
   }
 }

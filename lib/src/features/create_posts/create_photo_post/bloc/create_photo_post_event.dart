@@ -32,7 +32,7 @@ class UpdateTaggedUsersAndCommunitiesEvent extends CreatePhotoPostEvent {
   final List<String>? taggedUsersUid;
   final List<String>? taggedCommunitiesUid;
   const UpdateTaggedUsersAndCommunitiesEvent(
-      {this.taggedUsersUid, this.taggedCommunitiesUid, this.clearAll});
+      {this.taggedUsersUid, this.taggedCommunitiesUid, this.clearAll,});
 
   @override
   List<Object?> get props =>
@@ -52,7 +52,7 @@ class UpdatePostAddressEvent extends CreatePhotoPostEvent {
   final double? addressLatitude;
   final double? addressLongitude;
   const UpdatePostAddressEvent(
-      {this.address, this.addressLatitude, this.addressLongitude});
+      {this.address, this.addressLatitude, this.addressLongitude,});
 
   @override
   List<Object?> get props =>

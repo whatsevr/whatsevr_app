@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/activities.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 
-import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
-import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
+import '../../../../config/widgets/tab_bar.dart';
+import '../../../../config/widgets/textfield/animated_search_field.dart';
+import 'widgets/activities.dart';
+import 'widgets/communities.dart';
+import 'widgets/for_you.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

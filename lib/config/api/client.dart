@@ -2,11 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:whatsevr_app/config/api/interceptors/encryption.dart';
-import 'package:whatsevr_app/dev/talker.dart';
 
-import 'package:whatsevr_app/config/api/interceptors/cache.dart';
-import 'package:whatsevr_app/config/api/interceptors/retry.dart';
+import '../../dev/talker.dart';
+import 'interceptors/cache.dart';
+import 'interceptors/retry.dart';
 
 class ApiClient {
   /// Restricting any instantiation of this class
@@ -44,14 +43,14 @@ class ApiClient {
       ApiCacheInterceptor(
           cacheDirectoryPath: dioCacheDirectory?.path,
           maxMinuteOnDevice: 60 * 24 * 7,
-          cachePostRequest: false),
+          cachePostRequest: false,),
       TalkerService.dioLogger,
     ]);
   }
 
   static Dio generalPurposeClient(
-      [int? cacheMaxAgeInMin, bool? cachePostRequest]) {
-    Dio dio = Dio(
+      [int? cacheMaxAgeInMin, bool? cachePostRequest,]) {
+    final Dio dio = Dio(
       BaseOptions(
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hidable/hidable.dart';
 
-import 'package:whatsevr_app/config/routes/router.dart';
+import '../../routes/router.dart';
 
 class WhatsevrAnimatedSearchField extends StatefulWidget {
   final ScrollController? hideOnScrollController;

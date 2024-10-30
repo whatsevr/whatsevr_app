@@ -25,20 +25,20 @@ class SanityCheckNewPhotoPostRequest {
 
   factory SanityCheckNewPhotoPostRequest.fromMap(Map<String, dynamic> json) =>
       SanityCheckNewPhotoPostRequest(
-        mediaMetaData: json["media_meta_data"] == null
+        mediaMetaData: json['media_meta_data'] == null
             ? []
             : List<MediaMetaDatum>.from(
-                json["media_meta_data"]!.map((x) => MediaMetaDatum.fromMap(x))),
-        postData: json["post_data"] == null
+                json['media_meta_data']!.map((x) => MediaMetaDatum.fromMap(x)),),
+        postData: json['post_data'] == null
             ? null
-            : PostData.fromMap(json["post_data"]),
+            : PostData.fromMap(json['post_data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "media_meta_data": mediaMetaData == null
+        'media_meta_data': mediaMetaData == null
             ? []
             : List<dynamic>.from(mediaMetaData!.map((x) => x.toMap())),
-        "post_data": postData?.toMap(),
+        'post_data': postData?.toMap(),
       };
 }
 
@@ -62,11 +62,11 @@ class MediaMetaDatum {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaDatum.fromMap(Map<String, dynamic> json) => MediaMetaDatum(
-        imageSizeBytes: json["image_size_bytes"],
+        imageSizeBytes: json['image_size_bytes'],
       );
 
   Map<String, dynamic> toMap() => {
-        "image_size_bytes": imageSizeBytes,
+        'image_size_bytes': imageSizeBytes,
       };
 }
 
@@ -97,14 +97,14 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
-        postCreatorType: json["post_creator_type"],
-        userUid: json["user_uid"],
-        communityUid: json["community_uid"],
+        postCreatorType: json['post_creator_type'],
+        userUid: json['user_uid'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
-        "post_creator_type": postCreatorType,
-        "user_uid": userUid,
-        "community_uid": communityUid,
+        'post_creator_type': postCreatorType,
+        'user_uid': userUid,
+        'community_uid': communityUid,
       };
 }

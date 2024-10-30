@@ -1,28 +1,27 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit_config.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_session.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:ffmpeg_kit_flutter/statistics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:fraction/fraction.dart';
 import 'package:video_editor/video_editor.dart';
 
-import 'package:fraction/fraction.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import '../../routes/router.dart';
+import '../app_bar.dart';
+import '../loading_indicator.dart';
+import 'aspect_ratio.dart';
 
 class VideoEditorPageArgument {
   final File videoFile;
   final WhatsevrAspectRatio? aspectRatio;
   final Function(File? file) onCompleted;
   VideoEditorPageArgument(
-      {required this.videoFile, required this.onCompleted, this.aspectRatio});
+      {required this.videoFile, required this.onCompleted, this.aspectRatio,});
 }
 
 class VideoEditorPage extends StatefulWidget {
@@ -358,7 +357,7 @@ class CropPage extends StatelessWidget {
                                         Icons.panorama_vertical_select_rounded,
                                       )
                                     : const Icon(
-                                        Icons.panorama_vertical_rounded),
+                                        Icons.panorama_vertical_rounded,),
                               ),
                               IconButton(
                                 onPressed: () =>
@@ -375,7 +374,7 @@ class CropPage extends StatelessWidget {
                                             .panorama_horizontal_select_rounded,
                                       )
                                     : const Icon(
-                                        Icons.panorama_horizontal_rounded),
+                                        Icons.panorama_horizontal_rounded,),
                               ),
                             ],
                           ),
@@ -388,7 +387,7 @@ class CropPage extends StatelessWidget {
                                 Fraction.fromString('9/16'),
                               ),
                               _buildCropButton(
-                                  context, Fraction.fromString('3/4')),
+                                  context, Fraction.fromString('3/4'),),
                             ],
                           ),
                         ],

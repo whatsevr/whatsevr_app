@@ -1,33 +1,33 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
+
+import '../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../config/api/methods/users.dart';
+import '../../../../config/api/requests_model/update_user_cover_media.dart';
+import '../../../../config/api/requests_model/update_user_profile_picture.dart';
+import '../../../../config/api/requests_model/user/update_user_educations.dart';
+import '../../../../config/api/requests_model/user/update_user_info.dart';
+import '../../../../config/api/requests_model/user/update_user_portfolio_info.dart';
+import '../../../../config/api/requests_model/user/update_user_services.dart';
+import '../../../../config/api/requests_model/user/update_user_work_experiences.dart';
+import '../../../../config/api/response_model/profile_details.dart'
     hide
         UserInfo,
         UserEducation,
         UserWorkExperience,
         UserService,
         UserCoverMedia;
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
-
-import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
-
+import '../../../../config/routes/router.dart';
 import '../../../../config/services/auth_db.dart';
+import '../../../../config/services/file_upload.dart';
+import '../views/page.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -150,7 +150,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             '';
   }
 
-  final ImagePicker _picker = ImagePicker();
   void _onChangeProfilePicture(
     ChangeProfilePictureEvent event,
     Emitter<ProfileState> emit,
@@ -158,7 +157,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       if (event.profileImage == null) throw Exception('No image picked');
       emit(state.copyWith(profileImage: event.profileImage));
-      String? profilePictureUrl = await FileUploadService.uploadFilesToSupabase(
+      final String? profilePictureUrl =
+          await FileUploadService.uploadFilesToSupabase(
         event.profileImage!,
         userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'profile-picture',
@@ -197,9 +197,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
       if (event.coverImage != null || event.coverVideo != null) {
         SmartDialog.showLoading();
-        File? imageFile = event.coverImage;
-        File? videoFile = event.coverVideo;
-        String? imageUrl = await FileUploadService.uploadFilesToSupabase(
+        final File? imageFile = event.coverImage;
+        final File? videoFile = event.coverVideo;
+        final String? imageUrl = await FileUploadService.uploadFilesToSupabase(
           imageFile!,
           userUid: (AuthUserDb.getLastLoggedUserUid())!,
           fileRelatedTo: 'cover-image',
@@ -345,7 +345,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         }
       }
       SmartDialog.showLoading();
-      UpdateUserInfoRequest newUpdateUserInfoRequest = UpdateUserInfoRequest(
+      final UpdateUserInfoRequest newUpdateUserInfoRequest =
+          UpdateUserInfoRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userInfo: UserInfo(
           name: nameController.text,
@@ -360,11 +361,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
       if (userInfoUpdateResponse?.$1 != HttpStatus.ok) {
         throw BusinessException(
-            userInfoUpdateResponse?.$2 ?? 'Failed to update profile info');
+          userInfoUpdateResponse?.$2 ?? 'Failed to update profile info',
+        );
       }
       SmartDialog.showLoading(msg: '${userInfoUpdateResponse?.$2}');
       if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
-        UpdateUserPortfolioInfoRequest newUserPortfolioInfoRequest =
+        final UpdateUserPortfolioInfoRequest newUserPortfolioInfoRequest =
             UpdateUserPortfolioInfoRequest(
           userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
           portfolioInfo: PortfolioInfo(
@@ -377,7 +379,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
             await UsersApi.updateUserPortfolioInfo(newUserPortfolioInfoRequest);
         SmartDialog.showLoading(msg: '${portfolioUpdateResponse?.$2}');
       }
-      UpdateUserEducationsRequest newUserEducationsRequest =
+      final UpdateUserEducationsRequest newUserEducationsRequest =
           UpdateUserEducationsRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userEducations: state.educations
@@ -398,7 +400,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           await UsersApi.updateEducations(newUserEducationsRequest);
 
       SmartDialog.showLoading(msg: '${m2?.$2}');
-      UpdateUserWorkExperiencesRequest? newUserWorkExperiencesRequest =
+      final UpdateUserWorkExperiencesRequest newUserWorkExperiencesRequest =
           UpdateUserWorkExperiencesRequest(
         userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
         userWorkExperiences: state.workExperiences
@@ -420,7 +422,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
       SmartDialog.showLoading(msg: '${m3?.$2}');
       if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
-        UpdateUserServicesRequest newUserServicesRequest =
+        final UpdateUserServicesRequest newUserServicesRequest =
             UpdateUserServicesRequest(
           userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
           userServices: state.services

@@ -61,45 +61,45 @@ class CreatePhotoPostRequest {
 
   factory CreatePhotoPostRequest.fromMap(Map<String, dynamic> json) =>
       CreatePhotoPostRequest(
-        title: json["title"],
-        description: json["description"],
-        userUid: json["user_uid"],
-        location: json["location"],
-        hashtags: json["hashtags"] == null
+        title: json['title'],
+        description: json['description'],
+        userUid: json['user_uid'],
+        location: json['location'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        postCreatorType: json["post_creator_type"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedUserUids: json["tagged_user_uids"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        postCreatorType: json['post_creator_type'],
+        addressLatLongWkb: json['address_lat_long_wkb'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedUserUids: json['tagged_user_uids'] == null
             ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        taggedCommunityUids: json["tagged_community_uids"] == null
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        filesData: json["files_data"] == null
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "title": title,
-        "description": description,
-        "user_uid": userUid,
-        "location": location,
-        "hashtags":
+        'title': title,
+        'description': description,
+        'user_uid': userUid,
+        'location': location,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "post_creator_type": postCreatorType,
-        "address_lat_long_wkb": addressLatLongWkb,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_user_uids": taggedUserUids == null
+        'post_creator_type': postCreatorType,
+        'address_lat_long_wkb': addressLatLongWkb,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_user_uids': taggedUserUids == null
             ? []
             : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "tagged_community_uids": taggedCommunityUids == null
+        'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "files_data": filesData == null
+        'files_data': filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
       };
@@ -129,12 +129,12 @@ class FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: json["type"],
-        imageUrl: json["image_url"],
+        type: json['type'],
+        imageUrl: json['image_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "image_url": imageUrl,
+        'type': type,
+        'image_url': imageUrl,
       };
 }

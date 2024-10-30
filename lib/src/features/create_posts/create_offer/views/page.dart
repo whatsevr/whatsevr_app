@@ -4,28 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/country_state_city.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/buttons/button.dart';
 import '../../../../../config/widgets/buttons/choice_chip.dart';
 import '../../../../../config/widgets/dialogs/common_data_list.dart';
-import '../../../../../config/widgets/dynamic_height_views.dart';
-import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/dialogs/place_search_list.dart';
-import '../../../../../config/widgets/product_guide/product_guides.dart';
+import '../../../../../config/widgets/dialogs/country_state_city.dart';
 import '../../../../../config/widgets/dialogs/search_and_tag.dart';
 import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/dynamic_height_views.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/media_pick_choice.dart';
+import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/previewers/video.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/textfield/super_textform_field.dart';
-
 import '../bloc/create_offer_bloc.dart';
 
 class CreateOfferPageArgument {
@@ -104,11 +100,11 @@ class CreateOfferPage extends StatelessWidget {
                                   right: 0,
                                   child: IconButton(
                                     onPressed: () {
-                                      context
-                                          .read<CreateOfferBloc>()
-                                          .add(RemoveVideoOrImageEvent(
-                                            uiFileData: uiFileData,
-                                          ));
+                                      context.read<CreateOfferBloc>().add(
+                                            RemoveVideoOrImageEvent(
+                                              uiFileData: uiFileData,
+                                            ),
+                                          );
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -153,11 +149,11 @@ class CreateOfferPage extends StatelessWidget {
                                   right: 0,
                                   child: IconButton(
                                     onPressed: () {
-                                      context
-                                          .read<CreateOfferBloc>()
-                                          .add(RemoveVideoOrImageEvent(
-                                            uiFileData: uiFileData,
-                                          ));
+                                      context.read<CreateOfferBloc>().add(
+                                            RemoveVideoOrImageEvent(
+                                              uiFileData: uiFileData,
+                                            ),
+                                          );
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -178,12 +174,12 @@ class CreateOfferPage extends StatelessWidget {
                                         aspectRatios: offerPostAspectRatio,
                                       ).then((value) {
                                         if (value != null) {
-                                          context
-                                              .read<CreateOfferBloc>()
-                                              .add(ChangeVideoThumbnail(
-                                                pickedThumbnailFile: value,
-                                                uiFileData: uiFileData,
-                                              ));
+                                          context.read<CreateOfferBloc>().add(
+                                                ChangeVideoThumbnail(
+                                                  pickedThumbnailFile: value,
+                                                  uiFileData: uiFileData,
+                                                ),
+                                              );
                                         }
                                       });
                                     },
@@ -228,8 +224,10 @@ class CreateOfferPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: Colors.black,
-                      child: Text('Add Image or Video',
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        'Add Image or Video',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   );
                 },
@@ -276,44 +274,43 @@ class CreateOfferPage extends StatelessWidget {
               ),
               const Gap(12),
               WhatsevrFormField.invokeCustomFunction(
-                context: context,
                 maxLength: 35,
                 readOnly: false,
                 controller: context.read<CreateOfferBloc>().statusController,
                 hintText: 'Status',
                 customFunction: () {
                   showAppModalSheet(
-                      flexibleSheet: true,
-                      child: CommonDataSearchSelectPage(
-                        showProfessionalStatus: true,
-                        onProfessionalStatusSelected: (professionalStatus) {
-                          context
-                              .read<CreateOfferBloc>()
-                              .statusController
-                              .text = professionalStatus.title ?? '';
-                        },
-                      ));
+                    flexibleSheet: true,
+                    child: CommonDataSearchSelectPage(
+                      showProfessionalStatus: true,
+                      onProfessionalStatusSelected: (professionalStatus) {
+                        context.read<CreateOfferBloc>().statusController.text =
+                            professionalStatus.title ?? '';
+                      },
+                    ),
+                  );
                 },
               ),
               const Gap(12),
               Column(
                 children: [
                   WhatsevrFormField.invokeCustomFunction(
-                    context: context,
                     suffixWidget: const Icon(Icons.location_on),
                     hintText: 'Target Area',
                     customFunction: () {
-                      showAppModalSheet(child: CountryStateCityPage(
-                        onPlaceSelected: (countryName, stateName, cityName) {
-                          context
-                              .read<CreateOfferBloc>()
-                              .add(AddOrRemoveTargetAddressEvent(
-                                countryName: countryName,
-                                stateName: stateName,
-                                cityName: cityName,
-                              ));
-                        },
-                      ));
+                      showAppModalSheet(
+                        child: CountryStateCityPage(
+                          onPlaceSelected: (countryName, stateName, cityName) {
+                            context.read<CreateOfferBloc>().add(
+                                  AddOrRemoveTargetAddressEvent(
+                                    countryName: countryName,
+                                    stateName: stateName,
+                                    cityName: cityName,
+                                  ),
+                                );
+                          },
+                        ),
+                      );
                     },
                   ),
                   const Gap(12),
@@ -325,14 +322,16 @@ class CreateOfferPage extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            context
-                                .read<CreateOfferBloc>()
-                                .add(AddOrRemoveTargetAddressEvent(
-                                  removableTargetAddress: address,
-                                ));
+                            context.read<CreateOfferBloc>().add(
+                                  AddOrRemoveTargetAddressEvent(
+                                    removableTargetAddress: address,
+                                  ),
+                                );
                           },
-                          child: const Icon(Icons.clear_rounded,
-                              color: Colors.red),
+                          child: const Icon(
+                            Icons.clear_rounded,
+                            color: Colors.red,
+                          ),
                         ),
                       ],
                     ),
@@ -357,8 +356,10 @@ class CreateOfferPage extends StatelessWidget {
                           choiced: state.selectedTargetGender == audience,
                           switchChoice: (value) {
                             context.read<CreateOfferBloc>().add(
-                                UpdateTargetGenderEvent(
-                                    targetGender: audience));
+                                  UpdateTargetGenderEvent(
+                                    targetGender: audience,
+                                  ),
+                                );
                           },
                         ),
                         const Gap(4),
@@ -372,18 +373,20 @@ class CreateOfferPage extends StatelessWidget {
                         controller: TextEditingController(
                           text: state.ctaAction ?? '',
                         ),
-                        context: context,
                         hintText: 'User Action',
                         customFunction: () {
                           showAppModalSheet(
-                              child: CommonDataSearchSelectPage(
-                            showCtaActions: true,
-                            onCtaActionSelected: (ctaAction) {
-                              context.read<CreateOfferBloc>().add(
-                                  UpdateCtaActionEvent(
-                                      ctaAction: ctaAction.action));
-                            },
-                          ));
+                            child: CommonDataSearchSelectPage(
+                              showCtaActions: true,
+                              onCtaActionSelected: (ctaAction) {
+                                context.read<CreateOfferBloc>().add(
+                                      UpdateCtaActionEvent(
+                                        ctaAction: ctaAction.action,
+                                      ),
+                                    );
+                              },
+                            ),
+                          );
                         },
                       ),
                       const Gap(12),
@@ -395,7 +398,8 @@ class CreateOfferPage extends StatelessWidget {
                         onChanged: (value) {
                           if (state.ctaAction == null) {
                             SmartDialog.showToast(
-                                'Please select a User action first');
+                              'Please select a User action first',
+                            );
                             context
                                 .read<CreateOfferBloc>()
                                 .ctaActionUrlController
@@ -415,13 +419,13 @@ class CreateOfferPage extends StatelessWidget {
                             child: SearchAndTagUsersAndCommunityPage(
                               onDone:
                                   (selectedUsersUid, selectedCommunitiesUid) {
-                                context
-                                    .read<CreateOfferBloc>()
-                                    .add(UpdateTaggedUsersAndCommunitiesEvent(
-                                      taggedUsersUid: selectedUsersUid,
-                                      taggedCommunitiesUid:
-                                          selectedCommunitiesUid,
-                                    ));
+                                context.read<CreateOfferBloc>().add(
+                                      UpdateTaggedUsersAndCommunitiesEvent(
+                                        taggedUsersUid: selectedUsersUid,
+                                        taggedCommunitiesUid:
+                                            selectedCommunitiesUid,
+                                      ),
+                                    );
                               },
                             ),
                           );
@@ -433,8 +437,10 @@ class CreateOfferPage extends StatelessWidget {
                             Gap(4),
                             Text('Tag', style: TextStyle(color: Colors.black)),
                             Spacer(),
-                            Icon(Icons.arrow_right_rounded,
-                                color: Colors.black),
+                            Icon(
+                              Icons.arrow_right_rounded,
+                              color: Colors.black,
+                            ),
                           ],
                         ),
                       ),
@@ -481,8 +487,10 @@ class CreateOfferPage extends StatelessWidget {
                             GestureDetector(
                               onTap: () {
                                 context.read<CreateOfferBloc>().add(
-                                    const UpdateTaggedUsersAndCommunitiesEvent(
-                                        clearAll: true));
+                                      const UpdateTaggedUsersAndCommunitiesEvent(
+                                        clearAll: true,
+                                      ),
+                                    );
                               },
                               child: const Icon(
                                 Icons.clear_rounded,

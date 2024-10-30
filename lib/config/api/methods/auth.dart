@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/api/requests_model/auth/register.dart';
-
-import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
-
+import '../client.dart';
 import '../external/models/business_validation_exception.dart';
+import '../requests_model/auth/register.dart';
+import '../response_model/auth/login.dart';
 
 class AuthApi {
   static Future<
@@ -21,7 +19,7 @@ class AuthApi {
     String? emailId,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final Response response = await ApiClient.client.post(
         '/v1/auth/login',
         data: {
           'user_uid': userUid,
@@ -45,9 +43,9 @@ class AuthApi {
 
   //register
   static Future<(String? message, int? statusCode)?> register(
-      UserRegistrationRequest registrationRequest) async {
+      UserRegistrationRequest registrationRequest,) async {
     try {
-      Response response = await ApiClient.client.post(
+      final Response response = await ApiClient.client.post(
         '/v1/auth/register',
         data: registrationRequest.toMap(),
       );

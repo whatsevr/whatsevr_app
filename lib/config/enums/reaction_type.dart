@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:encrypt/encrypt.dart';
 
 enum ReactionType {
   like('👍', 'like', 'liked'),

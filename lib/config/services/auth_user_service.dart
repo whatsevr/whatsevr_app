@@ -1,24 +1,23 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/auth.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
 
-import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
-import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:collection/collection.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+import '../../dev/talker.dart';
+import '../api/external/models/business_validation_exception.dart';
+import '../api/methods/auth.dart';
+import '../api/methods/users.dart';
+import '../api/response_model/auth/login.dart';
+import '../api/response_model/auth_service_user.dart';
+import '../routes/router.dart';
+import '../routes/routes_name.dart';
+import '../widgets/dialogs/auth_dialogs.dart';
+import '../widgets/dialogs/showAppModalSheet.dart';
+import 'auth_db.dart';
 
 class AuthUserService {
   AuthUserService._privateConstructor();
@@ -44,7 +43,7 @@ class AuthUserService {
     required Function(String errorMessage) onLoginFailed,
   }) async {
     final Otpless otplessFlutterPlugin = Otpless();
-    Map<String, String> arg = <String, String>{
+    final Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
     };
 
@@ -53,18 +52,18 @@ class AuthUserService {
         log('auth-service-response (${result.runtimeType}): $result');
 
         if (result['data'] != null) {
-          OtpLessSuccessResponse authServiceUserResponse =
+          final OtpLessSuccessResponse authServiceUserResponse =
               OtpLessSuccessResponse.fromMap(result);
           if (authServiceUserResponse.data?.userId == null) {
             onLoginFailed('User id is received as null from auth service');
             return;
           }
-          String? emailId = authServiceUserResponse.data?.identities
+          final String? emailId = authServiceUserResponse.data?.identities
               ?.firstWhereOrNull(
                 (element) => element.identityType == 'EMAIL',
               )
               ?.identityValue;
-          String? mobileNumber = authServiceUserResponse.data?.identities
+          final String? mobileNumber = authServiceUserResponse.data?.identities
               ?.firstWhereOrNull(
                 (element) => element.identityType == 'MOBILE',
               )
@@ -80,7 +79,7 @@ class AuthUserService {
             return;
           }
           onLoginSuccess(
-              authServiceUserResponse.data!.userId!, mobileNumber, emailId);
+              authServiceUserResponse.data!.userId!, mobileNumber, emailId,);
         } else {
           onLoginFailed('${result['errorMessage']}');
         }
@@ -92,7 +91,7 @@ class AuthUserService {
   static Future<void> loginToApp(
       {required String userUid,
       required String? mobileNumber,
-      required String? emailId}) async {
+      required String? emailId,}) async {
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid,
       mobileNumber,
@@ -161,12 +160,12 @@ class AuthUserService {
 
   static Future<void> getSupportiveDataForLoggedUser() async {
     print('53426327');
-    String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
+    final String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
     try {
       if (currentlyLoggedUserUid != null) {
         (int?, dynamic)? supportiveDataResponse =
             await UsersApi.getSupportiveUserData(
-                userUid: currentlyLoggedUserUid);
+                userUid: currentlyLoggedUserUid,);
         if (supportiveDataResponse?.$1 != HttpStatus.ok) {
           throw BusinessException('Failed to fetch logged user data');
         }

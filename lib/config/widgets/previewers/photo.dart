@@ -1,12 +1,11 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
+import '../../routes/router.dart';
 
 import '../app_bar.dart';
 
-showPhotoPreviewDialog(
-    {BuildContext? context, String? photoUrl, String? appBarTitle}) {
+void showPhotoPreviewDialog(
+    {BuildContext? context, String? photoUrl, String? appBarTitle,}) {
   if (photoUrl == null) return;
   context ??= AppNavigationService.currentContext!;
   showGeneralDialog(
@@ -22,7 +21,6 @@ class _Ui extends StatelessWidget {
   final String? title;
 
   const _Ui({
-    super.key,
     required this.url,
     required this.title,
   });

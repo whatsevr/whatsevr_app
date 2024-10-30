@@ -47,24 +47,24 @@ class UploadPdfRequest {
   String toJson() => json.encode(toMap());
 
   factory UploadPdfRequest.fromMap(Map<String, dynamic> json) => UploadPdfRequest(
-    title: json["title"],
-    description: json["description"],
-    userUid: json["user_uid"],
-    thumbnailUrl: json["thumbnail_url"],
-    fileUrl: json["file_url"],
-    postCreatorType: json["post_creator_type"],
-    communityUid: json["community_uid"],
-    creatorLatLongWkb: json["creator_lat_long_wkb"],
+    title: json['title'],
+    description: json['description'],
+    userUid: json['user_uid'],
+    thumbnailUrl: json['thumbnail_url'],
+    fileUrl: json['file_url'],
+    postCreatorType: json['post_creator_type'],
+    communityUid: json['community_uid'],
+    creatorLatLongWkb: json['creator_lat_long_wkb'],
   );
 
   Map<String, dynamic> toMap() => {
-    "title": title,
-    "description": description,
-    "user_uid": userUid,
-    "thumbnail_url": thumbnailUrl,
-    "file_url": fileUrl,
-    "post_creator_type": postCreatorType,
-    "community_uid": communityUid,
-    "creator_lat_long_wkb": creatorLatLongWkb,
+    'title': title,
+    'description': description,
+    'user_uid': userUid,
+    'thumbnail_url': thumbnailUrl,
+    'file_url': fileUrl,
+    'post_creator_type': postCreatorType,
+    'community_uid': communityUid,
+    'creator_lat_long_wkb': creatorLatLongWkb,
   };
 }

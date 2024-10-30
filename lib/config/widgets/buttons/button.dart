@@ -102,7 +102,7 @@ class WhatsevrButton extends StatelessWidget {
       onPressed: onPressed,
       color: buttonColor,
       padding: EdgeInsets.symmetric(
-          vertical: miniButton ? 8 : 10.0, horizontal: miniButton ? 14 : 22.0),
+          vertical: miniButton ? 8 : 10.0, horizontal: miniButton ? 14 : 22.0,),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(miniButton ? 4 : 8.0),
         side: borderColor == null

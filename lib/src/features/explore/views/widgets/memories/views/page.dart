@@ -1,16 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 import '../../../../../../../config/api/response_model/recommendation_memories.dart';
-import '../../../../../details/memory/views/memories.dart';
+import '../../../../../../../config/mocks/mocks.dart';
+import '../../../../../../../config/widgets/max_scroll_listener.dart';
+import '../../../../../../../config/widgets/pad_horizontal.dart';
 import '../../../../../../../config/widgets/refresh_indicator.dart';
+import '../../../../../details/memory/views/memories.dart';
 import '../../../../bloc/explore_bloc.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
@@ -30,7 +28,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                       .memoryPaginationData!
                       .currentPage +
                   1,
-            ));
+            ),);
       },
     );
 
@@ -188,7 +186,7 @@ class ExplorePageMemoriesPage extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ));
+                    ),);
               },
             ),
           );

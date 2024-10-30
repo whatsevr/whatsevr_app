@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/community.dart';
-import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
+import '../../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../../config/api/methods/community.dart';
+import '../../../../../config/api/response_model/community/user_communities.dart';
+import '../../../../../config/services/auth_db.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
@@ -17,7 +17,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onInitialEvent(
-      InitialEvent event, Emitter<SettingsState> emit) async {
+      InitialEvent event, Emitter<SettingsState> emit,) async {
     try {
       add(LoadUserCommunitiesEvent());
     } catch (e, s) {
@@ -26,11 +26,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLoadUserCommunitiesEvent(
-      LoadUserCommunitiesEvent event, Emitter<SettingsState> emit) async {
+      LoadUserCommunitiesEvent event, Emitter<SettingsState> emit,) async {
     try {
-      UserCommunitiesResponse? userCommunitiesResponse =
+      final UserCommunitiesResponse? userCommunitiesResponse =
           await CommunityApi.getUserCommunities(
-              userUid: (await AuthUserDb.getLastLoggedUserUid())!);
+              userUid: (AuthUserDb.getLastLoggedUserUid())!,);
 
       emit(state.copyWith(userCommunitiesResponse: userCommunitiesResponse));
     } catch (e, s) {

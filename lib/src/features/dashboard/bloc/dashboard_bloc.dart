@@ -3,16 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/common_data.dart';
-import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/permission.dart';
 
-import 'package:whatsevr_app/src/features/explore/views/page.dart';
-
+import '../../../../config/api/external/models/business_validation_exception.dart';
+import '../../../../config/api/methods/common_data.dart';
+import '../../../../config/api/methods/public_recommendations.dart';
+import '../../../../config/api/methods/users.dart';
+import '../../../../config/services/auth_db.dart';
+import '../../../../config/services/permission.dart';
 import '../../../../main.dart';
+import '../../explore/views/page.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
@@ -37,7 +36,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
   void _preloadApiIntoCache() async {
     try {
-      final userUid = await AuthUserDb.getLastLoggedUserUid();
+      final userUid = AuthUserDb.getLastLoggedUserUid();
 
       // Fetch some data from the API and cache it
       await Future.wait([
