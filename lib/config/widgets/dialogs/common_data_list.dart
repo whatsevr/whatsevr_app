@@ -5,7 +5,7 @@ import 'dart:async';
 
 import 'package:whatsevr_app/config/api/methods/common_data.dart';
 import 'package:whatsevr_app/config/api/response_model/common_data.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
 class CommonDataSearchSelectPage extends StatefulWidget {
   final bool scaffoldView;

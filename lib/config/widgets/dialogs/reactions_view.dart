@@ -19,15 +19,15 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
 void showReactionsDialog({
   String? videoPostUid,

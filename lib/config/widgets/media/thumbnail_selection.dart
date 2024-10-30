@@ -14,7 +14,7 @@ import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 
 Future<File?> showWhatsevrThumbnailSelectionPage({
   required File videoFile,

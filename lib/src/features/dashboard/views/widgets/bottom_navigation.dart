@@ -8,13 +8,13 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
-import 'package:whatsevr_app/config/widgets/auth_dialogs.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/notifications/views/page.dart';
 
-import 'package:whatsevr_app/config/widgets/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';

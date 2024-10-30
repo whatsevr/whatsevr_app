@@ -8,7 +8,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';

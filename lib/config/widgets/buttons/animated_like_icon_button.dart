@@ -7,9 +7,9 @@ import 'package:like_button/like_button.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ant_design.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/comments_view.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-import 'package:whatsevr_app/config/widgets/two_state_ui.dart';
+import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 
 class WhatsevrReactButton extends StatefulWidget {

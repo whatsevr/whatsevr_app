@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
-import 'package:whatsevr_app/config/widgets/comments_view.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
-import 'package:whatsevr_app/config/widgets/show_tagged_users_dialog.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
 import '../../../../../../../config/widgets/posts_frame/photos.dart';

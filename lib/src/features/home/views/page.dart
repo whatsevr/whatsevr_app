@@ -5,7 +5,7 @@ import 'package:whatsevr_app/src/features/home/views/widgets/activities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 
-import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 
 class HomePage extends StatelessWidget {

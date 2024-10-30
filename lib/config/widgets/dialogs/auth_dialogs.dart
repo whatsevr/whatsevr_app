@@ -13,10 +13,10 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 import 'package:whatsevr_app/generated/assets.dart';
 
 class SwitchUserDialogUi extends StatefulWidget {

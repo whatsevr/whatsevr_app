@@ -12,12 +12,12 @@ import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../utils/conversion.dart';
-import '../two_state_ui.dart';
+import '../buttons/two_state_ui.dart';
 
 class WtvVideoPostFrame extends StatelessWidget {
   final String? title;

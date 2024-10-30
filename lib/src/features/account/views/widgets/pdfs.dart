@@ -10,7 +10,7 @@ import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/previewers/pdf.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPagePdfsView extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:whatsevr_app/src/features/chats/views/widgets/chats.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/groups.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/requests.dart';
 
-import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 

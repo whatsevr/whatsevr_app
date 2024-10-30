@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:media_info/media_info.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 import '../../../constants.dart';

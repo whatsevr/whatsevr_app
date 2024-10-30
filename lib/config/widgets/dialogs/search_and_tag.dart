@@ -6,8 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/text_search.dart';
 import 'package:whatsevr_app/config/api/response_model/text_search_users_communities.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
 class SearchAndTagUsersAndCommunityPage extends StatefulWidget {
   final bool scaffoldView;

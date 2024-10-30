@@ -6,17 +6,17 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/common_data_list.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
-import 'package:whatsevr_app/config/widgets/two_state_ui.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
 import 'package:whatsevr_app/src/features/new_community/bloc/new_community_bloc.dart';
 
-import '../../../../config/widgets/choice_chip.dart';
+import '../../../../config/widgets/buttons/choice_chip.dart';
 
 class NewCommunityPageArgument {
   NewCommunityPageArgument();

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/external/models/similar_place_by_query.dart';
-import 'package:whatsevr_app/config/widgets/super_textform_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
-import '../services/location.dart';
+import '../../services/location.dart';
 
 class PlaceSearchByNamePage extends StatefulWidget {
   final bool scaffoldView;

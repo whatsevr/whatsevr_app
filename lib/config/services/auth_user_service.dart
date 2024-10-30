@@ -16,8 +16,8 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:collection/collection.dart';
-import 'package:whatsevr_app/config/widgets/auth_dialogs.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 
 class AuthUserService {

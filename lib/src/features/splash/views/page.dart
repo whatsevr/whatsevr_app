@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/splash/bloc/splash_bloc.dart';
 
-import '../../../../config/widgets/auth_dialogs.dart';
+import '../../../../config/widgets/dialogs/auth_dialogs.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});

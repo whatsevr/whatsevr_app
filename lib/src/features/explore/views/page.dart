@@ -6,7 +6,7 @@ import 'package:whatsevr_app/src/features/explore/views/widgets/offers/views/pag
 import 'package:whatsevr_app/src/features/explore/views/widgets/photos/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
-import 'package:whatsevr_app/config/widgets/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 

@@ -14,17 +14,17 @@ import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
-import 'package:whatsevr_app/config/widgets/comments_view.dart';
+import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 import '../../../../config/widgets/feed_players/flick_full_player.dart';
-import '../../../../config/widgets/two_state_ui.dart';
+import '../../../../config/widgets/buttons/two_state_ui.dart';
 import '../bloc/flicks_bloc.dart';
 
 class FlicksPage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 import 'app_guide_view.dart';
 

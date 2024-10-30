@@ -10,11 +10,11 @@ import 'package:story_view_advance/controller/story_controller.dart';
 import 'package:story_view_advance/utils.dart';
 import 'package:story_view_advance/widgets/story_view_advance.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/config/widgets/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 import '../../../../../../../../../config/api/response_model/recommendation_memories.dart';
 import '../../../../../../../../../config/services/launch_url.dart';
