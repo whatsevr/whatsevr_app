@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 
 import '../../../../config/api/response_model/user_memories.dart';
 import '../../../../config/enums/post_creator_type.dart';
@@ -107,16 +108,17 @@ class AccountPage extends StatelessWidget {
                             ),
                           ],
                           const Gap(8),
-                          Builder(builder: (context) {
-                            return PadHorizontal(
-                              child: Row(
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (state.userMemories.isEmpty) {
-                                        return;
-                                      }
-                                      showAppModalSheet(
+                          Builder(
+                            builder: (context) {
+                              return PadHorizontal(
+                                child: Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (state.userMemories.isEmpty) {
+                                          return;
+                                        }
+                                        showAppModalSheet(
                                           flexibleSheet: false,
                                           child: SizedBox(
                                             height: 220,
@@ -124,212 +126,216 @@ class AccountPage extends StatelessWidget {
                                               itemCount:
                                                   state.userMemories.length,
                                               scrollDirection: Axis.horizontal,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index,) {
+                                              itemBuilder: (
+                                                BuildContext context,
+                                                int index,
+                                              ) {
                                                 final Memory? memory =
                                                     state.userMemories[index];
                                                 return GestureDetector(
-                                                    onTap: () {
-                                                      showMemoriesPlayer(
-                                                        context,
-                                                        uiMemoryGroups: [
-                                                          UiMemoryGroup(
-                                                            userUid: state
-                                                                .profileDetailsResponse
-                                                                ?.userInfo
-                                                                ?.uid,
-                                                            username: state
-                                                                .profileDetailsResponse
-                                                                ?.userInfo
-                                                                ?.username,
-                                                            profilePicture: state
-                                                                .profileDetailsResponse
-                                                                ?.userInfo
-                                                                ?.profilePicture,
-                                                            uiMemoryGroupItems: [
-                                                              for (Memory? memory
-                                                                  in state
-                                                                      .userMemories)
-                                                                UiMemoryGroupItems(
-                                                                  isImage: memory
-                                                                      ?.isImage,
-                                                                  imageUrl: memory
-                                                                      ?.imageUrl,
-                                                                  isVideo: memory
-                                                                      ?.isVideo,
-                                                                  videoUrl: memory
-                                                                      ?.videoUrl,
-                                                                  videoDurationMs:
-                                                                      memory
-                                                                          ?.videoDurationMs,
-                                                                  ctaAction: memory
-                                                                      ?.ctaAction,
-                                                                  ctaActionUrl:
-                                                                      memory
-                                                                          ?.ctaActionUrl,
-                                                                  caption: memory
-                                                                      ?.caption,
-                                                                  createdAt: memory
-                                                                      ?.createdAt,
-                                                                ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                        startGroupIndex: 0,
-                                                        startMemoryIndex: index,
-                                                      );
-                                                    },
-                                                    child: Column(
-                                                      children: [
-                                                        Text(
-                                                          GetTimeAgo.parse(
-                                                              memory!
-                                                                  .createdAt!,),
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                        Gap(8),
-                                                        Expanded(
-                                                          child: Container(
-                                                            width: 100,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8,),
-                                                              border:
-                                                                  Border.all(
-                                                                color: Colors
-                                                                    .black,
+                                                  onTap: () {
+                                                    showMemoriesPlayer(
+                                                      context,
+                                                      uiMemoryGroups: [
+                                                        UiMemoryGroup(
+                                                          userUid: state
+                                                              .profileDetailsResponse
+                                                              ?.userInfo
+                                                              ?.uid,
+                                                          username: state
+                                                              .profileDetailsResponse
+                                                              ?.userInfo
+                                                              ?.username,
+                                                          profilePicture: state
+                                                              .profileDetailsResponse
+                                                              ?.userInfo
+                                                              ?.profilePicture,
+                                                          uiMemoryGroupItems: [
+                                                            for (Memory? memory
+                                                                in state
+                                                                    .userMemories)
+                                                              UiMemoryGroupItems(
+                                                                isImage: memory
+                                                                    ?.isImage,
+                                                                imageUrl: memory
+                                                                    ?.imageUrl,
+                                                                isVideo: memory
+                                                                    ?.isVideo,
+                                                                videoUrl: memory
+                                                                    ?.videoUrl,
+                                                                videoDurationMs:
+                                                                    memory
+                                                                        ?.videoDurationMs,
+                                                                ctaAction: memory
+                                                                    ?.ctaAction,
+                                                                ctaActionUrl: memory
+                                                                    ?.ctaActionUrl,
+                                                                caption: memory
+                                                                    ?.caption,
+                                                                createdAt: memory
+                                                                    ?.createdAt,
                                                               ),
-                                                              image:
-                                                                  DecorationImage(
-                                                                image:
-                                                                    ExtendedNetworkImageProvider(
-                                                                  '${memory.imageUrl}',
-                                                                  cache: true,
-                                                                ),
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Gap(8),
-                                                        Row(
-                                                          children: [
-                                                            const Icon(
-                                                              Icons
-                                                                  .remove_red_eye,
-                                                              size: 16,
-                                                            ),
-                                                            const Gap(4),
-                                                            Text(
-                                                              '${formatCountToKMBTQ(memory.totalViews)}',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 14,
-                                                              ),
-                                                            ),
                                                           ],
                                                         ),
-                                                        Gap(8),
                                                       ],
-                                                    ),);
+                                                      startGroupIndex: 0,
+                                                      startMemoryIndex: index,
+                                                    );
+                                                  },
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        GetTimeAgo.parse(
+                                                          memory!.createdAt!,
+                                                        ),
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                      Gap(8),
+                                                      Expanded(
+                                                        child: Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                              8,
+                                                            ),
+                                                            border: Border.all(
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            image:
+                                                                DecorationImage(
+                                                              image:
+                                                                  ExtendedNetworkImageProvider(
+                                                                '${memory.imageUrl}',
+                                                                cache: true,
+                                                              ),
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Gap(8),
+                                                      Row(
+                                                        children: [
+                                                          const Icon(
+                                                            Icons
+                                                                .remove_red_eye,
+                                                            size: 16,
+                                                          ),
+                                                          const Gap(4),
+                                                          Text(
+                                                            '${formatCountToKMBTQ(memory.totalViews)}',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Gap(8),
+                                                    ],
+                                                  ),
+                                                );
                                               },
-                                              separatorBuilder:
-                                                  (BuildContext context,
-                                                      int index,) {
+                                              separatorBuilder: (
+                                                BuildContext context,
+                                                int index,
+                                              ) {
                                                 return const Gap(8);
                                               },
                                             ),
-                                          ),);
-                                    },
-                                    onLongPress: () {
-                                      showPhotoPreviewDialog(
-                                        context: context,
-                                        photoUrl:
-                                            '${state.profileDetailsResponse?.userInfo?.profilePicture}',
-                                        appBarTitle:
-                                            '${state.profileDetailsResponse?.userInfo?.username}',
-                                      );
-                                    },
-                                    child: AdvancedAvatar(
-                                      size: 55,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: state.userMemories.isEmpty
-                                            ? null
-                                            : Border.all(
-                                                color: Colors.blue,
-                                                width: 3.0,
-                                              ),
-                                      ),
-                                      child: Padding(
-                                        padding: state.userMemories.isEmpty
-                                            ? EdgeInsets.zero
-                                            : const EdgeInsets.all(2),
-                                        child: ExtendedImage.network(
-                                          state.profileDetailsResponse?.userInfo
-                                                  ?.profilePicture ??
-                                              MockData.blankProfileAvatar,
-                                          shape: BoxShape.circle,
-                                          fit: BoxFit.cover,
-                                          enableLoadState: false,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Gap(8),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          '${state.profileDetailsResponse?.userInfo?.name}',
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        Text(
-                                          ' @${state.profileDetailsResponse?.userInfo?.username}',
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
                                           ),
-                                        ),
-                                        const Gap(8),
-                                      ],
-                                    ),
-                                  ),
-                                  Gap(12),
-                                  if (pageArgument?.isEditMode ==
-                                      true) ...<Widget>[
-                                    IconButton(
-                                      icon: const Iconify(
-                                        Ri.heart_add_fill,
-                                        size: 30,
-                                      ),
-                                      onPressed: () {
-                                        showContentUploadBottomSheet(
-                                          context,
-                                          postCreatorType: state
-                                                      .profileDetailsResponse
-                                                      ?.userInfo
-                                                      ?.isPortfolio ==
-                                                  true
-                                              ? EnumPostCreatorType.PORTFOLIO
-                                              : EnumPostCreatorType.ACCOUNT,
                                         );
                                       },
+                                      onLongPress: () {
+                                        showPhotoPreviewDialog(
+                                          context: context,
+                                          photoUrl:
+                                              '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                          appBarTitle:
+                                              '${state.profileDetailsResponse?.userInfo?.username}',
+                                        );
+                                      },
+                                      child: AdvancedAvatar(
+                                        size: 55,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: state.userMemories.isEmpty
+                                              ? null
+                                              : Border.all(
+                                                  color: Colors.blue,
+                                                  width: 3.0,
+                                                ),
+                                        ),
+                                        child: Padding(
+                                          padding: state.userMemories.isEmpty
+                                              ? EdgeInsets.zero
+                                              : const EdgeInsets.all(2),
+                                          child: ExtendedImage.network(
+                                            state
+                                                    .profileDetailsResponse
+                                                    ?.userInfo
+                                                    ?.profilePicture ??
+                                                MockData.blankProfileAvatar,
+                                            shape: BoxShape.circle,
+                                            fit: BoxFit.cover,
+                                            enableLoadState: false,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    IconButton(
-                                      icon: const Icon(Icons.menu),
-                                      onPressed: () {
-                                        showAppModalSheet(
+                                    const Gap(8),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            '${state.profileDetailsResponse?.userInfo?.name}',
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                          ),
+                                          Text(
+                                            ' @${state.profileDetailsResponse?.userInfo?.username}',
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          const Gap(8),
+                                        ],
+                                      ),
+                                    ),
+                                    Gap(12),
+                                    if (pageArgument?.isEditMode ==
+                                        true) ...<Widget>[
+                                      IconButton(
+                                        icon: const Iconify(
+                                          Ri.heart_add_fill,
+                                          size: 30,
+                                        ),
+                                        onPressed: () {
+                                          showContentUploadBottomSheet(
+                                            context,
+                                            postCreatorType: state
+                                                        .profileDetailsResponse
+                                                        ?.userInfo
+                                                        ?.isPortfolio ==
+                                                    true
+                                                ? EnumPostCreatorType.PORTFOLIO
+                                                : EnumPostCreatorType.ACCOUNT,
+                                          );
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.menu),
+                                        onPressed: () {
+                                          showAppModalSheet(
                                             flexibleSheet: false,
                                             child: Column(
                                               mainAxisSize: MainAxisSize.min,
@@ -338,7 +344,8 @@ class AccountPage extends StatelessWidget {
                                                   leading:
                                                       const Icon(Icons.edit),
                                                   title: const Text(
-                                                      'Edit Profile',),
+                                                    'Edit Profile',
+                                                  ),
                                                   onTap: () async {
                                                     Navigator.pop(context);
                                                     await AppNavigationService
@@ -354,14 +361,17 @@ class AccountPage extends StatelessWidget {
                                                     context
                                                         .read<AccountBloc>()
                                                         .add(
-                                                            AccountInitialEvent(),);
+                                                          AccountInitialEvent(),
+                                                        );
                                                   },
                                                 ),
                                                 ListTile(
                                                   leading: const Icon(
-                                                      Icons.settings,),
+                                                    Icons.settings,
+                                                  ),
                                                   title: const Text(
-                                                      'Manage Account',),
+                                                    'Manage Account',
+                                                  ),
                                                   onTap: () {
                                                     Navigator.pop(context);
                                                     AppNavigationService
@@ -373,14 +383,16 @@ class AccountPage extends StatelessWidget {
                                                   },
                                                 ),
                                               ],
-                                            ),);
-                                      },
-                                    ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ],
-                                ],
-                              ),
-                            );
-                          },),
+                                ),
+                              );
+                            },
+                          ),
                           const Gap(28),
                           PadHorizontal(
                             child: Row(
@@ -403,36 +415,52 @@ class AccountPage extends StatelessWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)}',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Networks',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        showUserRelationsDialog(
+                                          context: context,
+                                          userUid: (state.profileDetailsResponse
+                                              ?.userInfo?.uid)!,
+                                        );
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)}',
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          Text(
+                                            'Networks',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      )),
                                 ),
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}',
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                      Text(
-                                        'Connections',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        showUserRelationsDialog(
+                                          context: context,
+                                          userUid: (state.profileDetailsResponse
+                                              ?.userInfo?.uid)!,
+                                        );
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}',
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          Text(
+                                            'Connections',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      )),
                                 ),
                               ],
                             ),

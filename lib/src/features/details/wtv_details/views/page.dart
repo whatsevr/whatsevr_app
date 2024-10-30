@@ -3,8 +3,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfolow.dart';
 
 import '../../../../../config/api/methods/reactions.dart';
+import '../../../../../config/api/methods/user_relations.dart';
 import '../../../../../config/enums/reaction_type.dart';
 import '../../../../../config/mocks/mocks.dart';
 import '../../../../../config/services/auth_db.dart';
@@ -41,9 +43,11 @@ class WtvDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => WtvDetailsBloc()..add(InitialEvent(pageArgument)),
-      child: Builder(builder: (context) {
-        return buildPage(context);
-      },),
+      child: Builder(
+        builder: (context) {
+          return buildPage(context);
+        },
+      ),
     );
   }
 
@@ -187,70 +191,76 @@ class WtvDetailsPage extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Builder(builder: (context) {
-                                    if (state
-                                            .videoPostDetailsResponse
-                                            ?.videoPostDetails
-                                            ?.userComments
-                                            ?.isEmpty ??
-                                        true) {
-                                      return ListTile(
-                                        title: Text(
-                                          'Be the first to comment',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    return CarouselSlider.builder(
-                                      itemCount: state
-                                          .videoPostDetailsResponse
-                                          ?.videoPostDetails
-                                          ?.userComments
-                                          ?.length,
-                                      options: CarouselOptions(
-                                        height: 60,
-                                        viewportFraction: 1,
-                                        initialPage: 0,
-                                        enableInfiniteScroll: false,
-                                        autoPlay: true,
-                                        scrollDirection: Axis.horizontal,
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex,) {
+                                  Builder(
+                                    builder: (context) {
+                                      if (state
+                                              .videoPostDetailsResponse
+                                              ?.videoPostDetails
+                                              ?.userComments
+                                              ?.isEmpty ??
+                                          true) {
                                         return ListTile(
-                                          dense: true,
-                                          visualDensity: VisualDensity.compact,
-                                          leading: CircleAvatar(
-                                            radius: 15,
-                                            backgroundImage:
-                                                ExtendedNetworkImageProvider(
-                                              state
-                                                      .videoPostDetailsResponse
-                                                      ?.videoPostDetails
-                                                      ?.userComments?[index]
-                                                      .author
-                                                      ?.profilePicture ??
-                                                  MockData.blankProfileAvatar,
-                                            ),
-                                          ),
                                           title: Text(
-                                            '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          subtitle: Text(
-                                            '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                            'Be the first to comment',
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
                                           ),
                                         );
-                                      },
-                                    );
-                                  },),
+                                      }
+                                      return CarouselSlider.builder(
+                                        itemCount: state
+                                            .videoPostDetailsResponse
+                                            ?.videoPostDetails
+                                            ?.userComments
+                                            ?.length,
+                                        options: CarouselOptions(
+                                          height: 60,
+                                          viewportFraction: 1,
+                                          initialPage: 0,
+                                          enableInfiniteScroll: false,
+                                          autoPlay: true,
+                                          scrollDirection: Axis.horizontal,
+                                        ),
+                                        itemBuilder: (
+                                          BuildContext context,
+                                          int index,
+                                          int realIndex,
+                                        ) {
+                                          return ListTile(
+                                            dense: true,
+                                            visualDensity:
+                                                VisualDensity.compact,
+                                            leading: CircleAvatar(
+                                              radius: 15,
+                                              backgroundImage:
+                                                  ExtendedNetworkImageProvider(
+                                                state
+                                                        .videoPostDetailsResponse
+                                                        ?.videoPostDetails
+                                                        ?.userComments?[index]
+                                                        .author
+                                                        ?.profilePicture ??
+                                                    MockData.blankProfileAvatar,
+                                              ),
+                                            ),
+                                            title: Text(
+                                              '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].author?.name}',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            subtitle: Text(
+                                              '${state.videoPostDetailsResponse?.videoPostDetails?.userComments?[index].commentText}',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                 ],
                               ),
                             ),
@@ -310,11 +320,29 @@ class WtvDetailsPage extends StatelessWidget {
                             ),
                             Gap(8),
                             // Subscribe button
-                            WhatsevrButton.filled(
-                              shrink: true,
-                              miniButton: true,
-                              onPressed: () {},
-                              label: 'Follow',
+                            WhatsevrFollowButton(
+                              onFollow: (success) {
+                                UserRelationsApi.followUser(
+                                  followerUserUid:
+                                      AuthUserDb.getLastLoggedUserUid()!,
+                                  followeeUserUid: (state
+                                      .videoPostDetailsResponse
+                                      ?.videoPostDetails
+                                      ?.author
+                                      ?.uid)!,
+                                );
+                              },
+                              onUnFollowed: (success) {
+                                UserRelationsApi.unfollowUser(
+                                  followerUserUid:
+                                      AuthUserDb.getLastLoggedUserUid()!,
+                                  followeeUserUid: (state
+                                      .videoPostDetailsResponse
+                                      ?.videoPostDetails
+                                      ?.author
+                                      ?.uid)!,
+                                );
+                              },
                             ),
                           ],
                         ),

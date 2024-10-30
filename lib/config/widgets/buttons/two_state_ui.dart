@@ -28,13 +28,15 @@ class _WhatsevrTwoStateUiState extends State<WhatsevrTwoStateUi> {
   late bool _isSecondState;
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: _isSecondState
+    return GestureDetector(
+      child: _isSecondState
           ? AbsorbPointer(
-              child: widget.secondStateUi ?? const Icon(Icons.check_circle),)
+              child: widget.secondStateUi ?? const Icon(Icons.check_circle),
+            )
           : AbsorbPointer(
-              child: widget.firstStateUi ?? const Icon(Icons.circle_outlined),),
-      onPressed: () {
+              child: widget.firstStateUi ?? const Icon(Icons.circle_outlined),
+            ),
+      onTap: () {
         setState(() {
           _isSecondState = !_isSecondState;
         });

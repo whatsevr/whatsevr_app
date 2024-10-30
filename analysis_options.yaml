@@ -16,6 +16,7 @@ linter:
     - unawaited_futures
     - use_named_constants
     - use_super_parameters
+    - always_use_package_imports
 
 analyzer:
   exclude: [build/**]
