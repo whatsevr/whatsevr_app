@@ -28,7 +28,7 @@ class WhatsevrLongTaskController extends TaskHandler {
     if (data is Map<String, dynamic>) {
       try {
         // Deserialize the task data based on its type.
-        final LongRunningTask taskData = LongRunningTask.fromMap(data);
+        final taskData = LongRunningTask.fromMap(data);
 
         switch (taskData.taskType) {
           case 'new-video-post-task':
@@ -52,7 +52,7 @@ class WhatsevrLongTaskController extends TaskHandler {
       await ApiClient.init();
       FileUploadService.init();
       // Upload video and thumbnail
-      final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
+      final videoUrl = await FileUploadService.uploadFilesToSupabase(
         File(taskData.videoFilePath!),
         userUid: taskData.userUid!,
         fileRelatedTo: 'video-post',
@@ -61,7 +61,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         TalkerService.instance.error('Failed to upload video file.');
         return;
       }
-      final String? thumbnailUrl =
+      final thumbnailUrl =
           await FileUploadService.uploadFilesToSupabase(
         File(taskData.thumbnailFilePath!),
         userUid: taskData.userUid!,
@@ -72,7 +72,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         return;
       }
 
-      (String? message, int? statusCode)? response =
+      final response =
           await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: taskData.title,

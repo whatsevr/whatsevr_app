@@ -9,7 +9,7 @@ void handleBlocSideEffectsForFlipkart(
   if (sideEffects == null || sideEffects.isEmpty) {
     return;
   }
-  for (final BlocSideEffect sideEffect in sideEffects) {
+  for (final sideEffect in sideEffects) {
     if (sideEffect is BlocSideEffectShowSnackbar) {}
     if (sideEffect is BlocSideEffectShowToast) {}
 

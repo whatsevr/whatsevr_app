@@ -75,7 +75,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   image: imageBytes!,
                   controller: _controller,
                   onCropped: (Uint8List image) async {
-                    final File? file = await uint8BytesToFile(image);
+                    final file = await uint8BytesToFile(image);
                     if (file == null) {
                       TalkerService.instance
                           .error('Error converting bytes to file');
@@ -118,7 +118,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   separatorBuilder: (BuildContext context, int index) =>
                       const VerticalDivider(),
                   itemBuilder: (BuildContext context, int index) {
-                    final WhatsevrAspectRatio aspectRatio =
+                    final aspectRatio =
                         widget.pageArgument.aspectRatios[index];
                     return IconButton(
                       icon: Text(

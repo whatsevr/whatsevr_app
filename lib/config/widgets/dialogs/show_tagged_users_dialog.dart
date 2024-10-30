@@ -69,7 +69,7 @@ class _UiState extends State<_Ui> {
               return ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
-                  final User user = _multipleUserDetailsResponse!.users![index];
+                  final user = _multipleUserDetailsResponse!.users![index];
                   return Row(
                     children: <Widget>[
                       CircleAvatar(

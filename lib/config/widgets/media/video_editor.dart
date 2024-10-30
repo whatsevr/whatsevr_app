@@ -76,7 +76,7 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
     _exportingProgress.value = 0;
     _isExporting.value = true;
 
-    final VideoFFmpegVideoEditorConfig config = VideoFFmpegVideoEditorConfig(
+    final config = VideoFFmpegVideoEditorConfig(
       _controller,
     );
 
@@ -235,8 +235,8 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
           _controller.video,
         ]),
         builder: (_, __) {
-          final int duration = _controller.videoDuration.inSeconds;
-          final double pos = _controller.trimPosition * duration;
+          final duration = _controller.videoDuration.inSeconds;
+          final pos = _controller.trimPosition * duration;
 
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: baseHeight / 4),
@@ -450,7 +450,7 @@ class CropPage extends StatelessWidget {
 
 class ExportService {
   static Future<void> dispose() async {
-    final List<FFmpegSession> executions = await FFmpegKit.listSessions();
+    final executions = await FFmpegKit.listSessions();
     if (executions.isNotEmpty) await FFmpegKit.cancel();
   }
 
@@ -464,9 +464,9 @@ class ExportService {
     return FFmpegKit.executeAsync(
       execute.command,
       (FFmpegSession session) async {
-        final String state =
+        final state =
             FFmpegKitConfig.sessionStateToString(await session.getState());
-        final ReturnCode? code = await session.getReturnCode();
+        final code = await session.getReturnCode();
 
         if (ReturnCode.isSuccess(code)) {
           onCompleted(File(execute.outputPath));

@@ -53,7 +53,7 @@ class _MaskTextState extends State<MaskText> {
       return input;
     }
 
-    String maskedString = '';
+    var maskedString = '';
     if (maskFirstDigits) {
       maskedString = '*' * maskLength;
       maskedString += input.substring(maskLength);

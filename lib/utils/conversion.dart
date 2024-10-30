@@ -5,10 +5,10 @@ import '../dev/talker.dart';
 
 String? calculateAgeInYearsAndMonth(DateTime birthDate) {
   try {
-    final DateTime currentDate = DateTime.now();
-    final int years = currentDate.year - birthDate.year;
-    final int months = currentDate.month - birthDate.month;
-    final int days = currentDate.day - birthDate.day;
+    final currentDate = DateTime.now();
+    final years = currentDate.year - birthDate.year;
+    final months = currentDate.month - birthDate.month;
+    final days = currentDate.day - birthDate.day;
 
     if (years < 0) {
       return null;
@@ -68,9 +68,9 @@ String? formatCountToKMBTQ(int? count) {
 String? getDurationInText(int? duration) {
   if (duration == null) return null;
   try {
-    final int hours = duration ~/ 3600;
-    final int minutes = (duration % 3600) ~/ 60;
-    final int seconds = duration % 60;
+    final hours = duration ~/ 3600;
+    final minutes = (duration % 3600) ~/ 60;
+    final seconds = duration % 60;
     if (hours > 0) {
       return '$hours h ${minutes > 0 ? '$minutes m' : ''} ${seconds > 0 ? '$seconds sec' : ''}';
     } else if (minutes > 0) {

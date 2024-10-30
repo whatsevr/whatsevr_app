@@ -13,7 +13,7 @@ class DownloadService {
 
   static Future<void> downloadFile(String url, String filename) async {
     try {
-      final DownloadTask task = DownloadTask(
+      final task = DownloadTask(
         url: url,
         filename: filename,
         baseDirectory: BaseDirectory.applicationDocuments,
