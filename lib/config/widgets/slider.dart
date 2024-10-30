@@ -37,7 +37,7 @@ class _WhatsevrVideoPlayerSliderState extends State<WhatsevrVideoPlayerSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final SliderThemeData sliderThemeData = SliderTheme.of(context).copyWith(
+    final sliderThemeData = SliderTheme.of(context).copyWith(
       activeTrackColor: widget.color,
       inactiveTrackColor: widget.color.withOpacity(0.5),
       trackShape: RoundedRectSliderTrackShape(),

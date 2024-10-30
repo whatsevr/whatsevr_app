@@ -2,11 +2,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-
-import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 import '../../../../../utils/conversion.dart';
+import '../../bloc/account_bloc.dart';
 
 class AccountPageOffersView extends StatelessWidget {
   const AccountPageOffersView({super.key});
@@ -23,7 +21,7 @@ class AccountPageOffersView extends StatelessWidget {
           },
           itemCount: state.userOffers.length,
           itemBuilder: (BuildContext context, int index) {
-            OfferPost? userOfferPost = state.userOffers[index];
+            final userOfferPost = state.userOffers[index];
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -53,7 +51,7 @@ class AccountPageOffersView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          "${userOfferPost?.status}",
+                          '${userOfferPost?.status}',
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -77,7 +75,7 @@ class AccountPageOffersView extends StatelessWidget {
                           ...[
                             const Gap(4),
                             Icon(Icons.more_horiz),
-                          ]
+                          ],
                         ],
                       ),
                       if (userOfferPost?.filesData?.isEmpty ?? true) ...[
@@ -91,7 +89,7 @@ class AccountPageOffersView extends StatelessWidget {
                             color: Colors.grey,
                           ),
                         ),
-                      ]
+                      ],
                     ],
                   ),
                   if (userOfferPost?.filesData?.isNotEmpty ?? false) ...[
@@ -105,7 +103,7 @@ class AccountPageOffersView extends StatelessWidget {
                           return const Gap(8);
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          FilesDatum? fileData =
+                          final fileData =
                               userOfferPost?.filesData?[index];
                           if (fileData?.type == 'image' ||
                               fileData?.type == 'video') {
@@ -161,9 +159,9 @@ class AccountPageOffersView extends StatelessWidget {
                               record.$2,
                               size: 16,
                             ),
-                            const Gap(8)
+                            const Gap(8),
                           ],
-                        )
+                        ),
                     ],
                   ),
                 ],

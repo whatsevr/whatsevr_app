@@ -8,23 +8,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
-
 import '../../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
-
 import '../../../../../config/api/requests_model/create_memory.dart';
-
 import '../../../../../config/api/requests_model/sanity_check_new_memory.dart';
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
-
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-
+import '../../../../../utils/geopoint_wkb_parser.dart';
 import '../views/page.dart';
 
 part 'create_memory_event.dart';
@@ -42,7 +37,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     on<PickImageEvent>(_onPickImage);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities);
+        _onUpdateTaggedUsersAndCommunities,);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
     on<CreateVideoMemoryEvent>(_onCreateVideoMemory);
     on<CreateImageMemoryEvent>(_onCreateImageMemory);
@@ -59,13 +54,13 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
         onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed) {
+            isPermissionAllowed,) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
             emit(state.copyWith(
               userCurrentLocationLatLongWkb:
                   WKBUtil.getWkbString(lat: lat, long: long),
-            ));
+            ),);
           }
         },
       );
@@ -84,8 +79,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         throw BusinessException('Please select an image or video');
       }
       captionController.text = captionController.text.trim();
-      String hashtagsArea = captionController.text;
-      List<String> hashtags = [];
+      final hashtagsArea = captionController.text;
+      var hashtags = <String>[];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
           hashtagsArea,
@@ -100,7 +95,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       }
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewMemory(
+      final itm = await PostApi.sanityCheckNewMemory(
           request: SanityCheckNewMemoryRequest(
         mediaMetaData: MediaMetaData(
           videoDurationSec: state.videoMetaData?.durationInSec,
@@ -109,10 +104,10 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         postData: PostData(
           isVideo: state.isVideoMemory,
           isImage: state.isImageMemory,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           postCreatorType: state.pageArgument?.postCreatorType.value,
         ),
-      ));
+      ),);
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -121,11 +116,11 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       if (state.isVideoMemory == true) {
         add(CreateVideoMemoryEvent(
           hashtags: hashtags,
-        ));
+        ),);
       } else if (state.isImageMemory == true) {
         add(CreateImageMemoryEvent(
           hashtags: hashtags,
-        ));
+        ),);
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -139,7 +134,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     try {
       if (event.pickVideoFile == null) return;
       SmartDialog.showLoading(msg: 'Validating video...');
-      FileMetaData? videoMetaData =
+      final videoMetaData =
           await FileMetaData.fromFile(event.pickVideoFile);
       // Validate video metadata
       if (videoMetaData == null || videoMetaData.isVideo != true) {
@@ -150,12 +145,12 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         videoFile: event.pickVideoFile,
         isVideoMemory: true,
         isImageMemory: false,
-      ));
+      ),);
 
-      final File? thumbnailFile =
+      final thumbnailFile =
           await getThumbnailFile(videoFile: event.pickVideoFile!);
 
-      final FileMetaData? thumbnailMetaData =
+      final thumbnailMetaData =
           await FileMetaData.fromFile(thumbnailFile);
 
       emit(
@@ -201,13 +196,13 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateMemoryState> emit) async {
+      UpdatePostAddressEvent event, Emitter<CreateMemoryState> emit,) async {
     try {
       emit(
         state.copyWith(
           selectedAddress: event.address,
           selectedAddressLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude),
+              lat: event.addressLatitude, long: event.addressLongitude,),
         ),
       );
     } catch (e, stackTrace) {
@@ -217,28 +212,28 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateMemoryState> emit) {
+      Emitter<CreateMemoryState> emit,) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(
           taggedUsersUid: [],
           taggedCommunitiesUid: [],
-        ));
+        ),);
       } else {
-        List<String> taggedUsersUid = [
+        var taggedUsersUid = <String>[
           ...state.taggedUsersUid,
-          ...?event.taggedUsersUid
+          ...?event.taggedUsersUid,
         ];
-        List<String> taggedCommunitiesUid = [
+        var taggedCommunitiesUid = <String>[
           ...state.taggedCommunitiesUid,
-          ...?event.taggedCommunitiesUid
+          ...?event.taggedCommunitiesUid,
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
         emit(state.copyWith(
           taggedUsersUid: taggedUsersUid,
           taggedCommunitiesUid: taggedCommunitiesUid,
-        ));
+        ),);
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -246,21 +241,21 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreateMemoryState> emit) async {
+      PickImageEvent event, Emitter<CreateMemoryState> emit,) async {
     try {
       if (event.pickedImageFile == null) return;
       emit(state.copyWith(
         imageFile: event.pickedImageFile,
         isImageMemory: true,
         isVideoMemory: false,
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreateMemoryState> emit) {
+      RemoveVideoOrImageEvent event, Emitter<CreateMemoryState> emit,) {
     emit(CreateMemoryState(
       pageArgument: state.pageArgument,
       userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
@@ -270,11 +265,11 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       taggedCommunitiesUid: state.taggedCommunitiesUid,
       ctaAction: state.ctaAction,
       placesNearbyResponse: state.placesNearbyResponse,
-    ));
+    ),);
   }
 
   FutureOr<void> _onCreateVideoMemory(
-      CreateVideoMemoryEvent event, Emitter<CreateMemoryState> emit) async {
+      CreateVideoMemoryEvent event, Emitter<CreateMemoryState> emit,) async {
     try {
       if (state.videoFile == null) {
         throw BusinessException('Please select a video first');
@@ -283,26 +278,26 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         throw BusinessException('Please select a thumbnail for video');
       }
       SmartDialog.showLoading(msg: 'Uploading video...');
-      final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
+      final videoUrl = await FileUploadService.uploadFilesToSupabase(
         state.videoFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'memory-video',
       );
-      final String? thumbnailUrl =
+      final thumbnailUrl =
           await FileUploadService.uploadFilesToSupabase(
         state.thumbnailFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
+      final response = await PostApi.createMemory(
         post: CreateMemoryRequest(
           isVideo: true,
           caption: captionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           hashtags: event.hashtags.isEmpty
               ? null
-              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
+              : event.hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedAddress,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           imageUrl: thumbnailUrl,
@@ -331,26 +326,26 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onCreateImageMemory(
-      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit) async {
+      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit,) async {
     try {
       if (state.imageFile == null) {
         throw BusinessException('Please select an image first');
       }
       SmartDialog.showLoading(msg: 'Uploading image...');
-      final String? imageUrl = await FileUploadService.uploadFilesToSupabase(
+      final imageUrl = await FileUploadService.uploadFilesToSupabase(
         state.imageFile!,
-        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
+      final response = await PostApi.createMemory(
         post: CreateMemoryRequest(
           isImage: true,
           caption: captionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           hashtags: event.hashtags.isEmpty
               ? null
-              : event.hashtags.map((e) => e.replaceAll("#", '')).toList(),
+              : event.hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedAddress,
           postCreatorType: state.pageArgument?.postCreatorType.value,
           imageUrl: imageUrl,
@@ -377,12 +372,12 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onUpdateCtaAction(
-      UpdateCtaActionEvent event, Emitter<CreateMemoryState> emit) {
+      UpdateCtaActionEvent event, Emitter<CreateMemoryState> emit,) {
     emit(state.copyWith(ctaAction: event.ctaAction));
   }
 
   FutureOr<void> _onUpdateNoOfDays(
-      UpdateNoOfDaysEvent event, Emitter<CreateMemoryState> emit) {
+      UpdateNoOfDaysEvent event, Emitter<CreateMemoryState> emit,) {
     emit(state.copyWith(noOfDays: event.noOfDays));
   }
 }

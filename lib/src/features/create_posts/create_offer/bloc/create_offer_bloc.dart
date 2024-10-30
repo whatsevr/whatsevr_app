@@ -7,24 +7,19 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-
-import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 
 import '../../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
-
 import '../../../../../config/api/requests_model/create_offer.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_offer.dart';
 import '../../../../../config/routes/router.dart';
+import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
-
+import '../../../../../config/widgets/media/aspect_ratio.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
-
+import '../../../../../utils/geopoint_wkb_parser.dart';
 import '../views/page.dart';
 
 part 'create_offer_event.dart';
@@ -47,7 +42,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     on<PickImageEvent>(_onPickImage);
 
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities);
+        _onUpdateTaggedUsersAndCommunities,);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
     on<AddOrRemoveTargetAddressEvent>(_onAddOrRemoveTargetAddress);
     on<UpdateCtaActionEvent>(_onUpdateCtaAction);
@@ -59,13 +54,13 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   ) async {
     try {
       emit(state.copyWith(pageArgument: event.pageArgument));
-      (double, double)? currentGpsLatLong =
+      final currentGpsLatLong =
           await LocationService.getCurrentGpsLatLong();
       if (currentGpsLatLong != null) {
         emit(state.copyWith(
           userCurrentLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: currentGpsLatLong.$1, long: currentGpsLatLong.$2),
-        ));
+              lat: currentGpsLatLong.$1, long: currentGpsLatLong.$2,),
+        ),);
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -87,8 +82,8 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       if (statusController.text.isEmpty) {
         throw BusinessException('Status is required');
       }
-      String hashtagsArea = titleController.text + descriptionController.text;
-      List<String> hashtags = [];
+      final hashtagsArea = titleController.text + descriptionController.text;
+      var hashtags = <String>[];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
           hashtagsArea,
@@ -101,7 +96,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewOffer(
+      final itm = await PostApi.sanityCheckNewOffer(
           request: SanityCheckNewOfferRequest(
         mediaMetaData: [
           for (var e in state.uiFilesData)
@@ -112,20 +107,20 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
               ),
         ],
         postData: PostData(
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           postCreatorType: state.pageArgument?.postCreatorType.value,
         ),
-      ));
+      ),);
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
       SmartDialog.showLoading(msg: 'Creating post...');
-      (String?, int?)? response = await PostApi.createOffer(
+      final response = await PostApi.createOffer(
         post: CreateOfferRequest(
           title: titleController.text,
           description: descriptionController.text,
           status: statusController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           targetAreas: state.selectedTargetAddresses,
           targetGender: state.selectedTargetGender?.toLowerCase(),
           hashtags: hashtags,
@@ -140,13 +135,13 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
                       type: 'video',
                       videoUrl: await FileUploadService.uploadFilesToSupabase(
                         e.file!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        userUid: (AuthUserDb.getLastLoggedUserUid())!,
                         fileRelatedTo: 'offer-video',
                       ),
                       videoThumbnailUrl:
                           await FileUploadService.uploadFilesToSupabase(
                         e.thumbnailFile!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        userUid: (AuthUserDb.getLastLoggedUserUid())!,
                         fileRelatedTo: 'offer-thumbnail',
                       ),
                       videoDurationMs: e.fileMetaData?.durationInMs,
@@ -155,7 +150,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
                       type: 'image',
                       imageUrl: await FileUploadService.uploadFilesToSupabase(
                         e.file!,
-                        userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                        userUid: (AuthUserDb.getLastLoggedUserUid())!,
                         fileRelatedTo: 'offer-image',
                       ),
                     ),
@@ -183,32 +178,32 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      int videoCount = state.uiFilesData
+      final videoCount = state.uiFilesData
           .where((element) => element.type == UiFileTypes.video)
           .length;
       if (videoCount >= maxVideoCount) {
         throw BusinessException('You can only select $maxVideoCount videos');
       }
 
-      FileMetaData? videoMetaData =
+      final videoMetaData =
           await FileMetaData.fromFile(event.pickedVideoFile);
       if (videoMetaData == null ||
           videoMetaData.isVideo != true ||
           videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
         throw BusinessException(
-            'Video is not valid, it must be landscape or square');
+            'Video is not valid, it must be landscape or square',);
       }
-      final File? thumbnailFile =
+      final thumbnailFile =
           await getThumbnailFile(videoFile: event.pickedVideoFile!);
 
-      FileMetaData? thumbnailMetaData =
+      final thumbnailMetaData =
           await FileMetaData.fromFile(thumbnailFile);
       if (thumbnailMetaData == null ||
           thumbnailMetaData.isImage != true ||
           thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
               true) {
         throw BusinessException(
-            'Thumbnail is not valid, it must be landscape or square');
+            'Thumbnail is not valid, it must be landscape or square',);
       }
       emit(state.copyWith(
         uiFilesData: [
@@ -221,7 +216,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
             thumbnailMetaData: thumbnailMetaData,
           ),
         ],
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -232,14 +227,14 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      final FileMetaData? thumbnailMetaData =
+      final thumbnailMetaData =
           await FileMetaData.fromFile(event.pickedThumbnailFile);
       if (thumbnailMetaData == null ||
           thumbnailMetaData.isImage != true ||
           thumbnailMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare !=
               true) {
         throw BusinessException(
-            'Thumbnail is not valid, it must be landscape or square');
+            'Thumbnail is not valid, it must be landscape or square',);
       }
       emit(state.copyWith(
         uiFilesData: state.uiFilesData
@@ -248,9 +243,9 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
                     thumbnailFile: event.pickedThumbnailFile,
                     thumbnailMetaData: thumbnailMetaData,
                   )
-                : e)
+                : e,)
             .toList(),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -258,21 +253,21 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateOfferState> emit) {
+      Emitter<CreateOfferState> emit,) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(
           taggedUsersUid: [],
           taggedCommunitiesUid: [],
-        ));
+        ),);
       } else {
-        List<String> taggedUsersUid = [
+        var taggedUsersUid = <String>[
           ...state.taggedUsersUid,
-          ...?event.taggedUsersUid
+          ...?event.taggedUsersUid,
         ];
-        List<String> taggedCommunitiesUid = [
+        var taggedCommunitiesUid = <String>[
           ...state.taggedCommunitiesUid,
-          ...?event.taggedCommunitiesUid
+          ...?event.taggedCommunitiesUid,
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
@@ -289,15 +284,15 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreateOfferState> emit) async {
+      PickImageEvent event, Emitter<CreateOfferState> emit,) async {
     try {
-      FileMetaData? imageMetaData =
+      final imageMetaData =
           await FileMetaData.fromFile(event.pickedImageFile);
       if (imageMetaData == null ||
           imageMetaData.isImage != true ||
           imageMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
         throw BusinessException(
-            'Image is not valid, it must be landscape or square');
+            'Image is not valid, it must be landscape or square',);
       }
       emit(state.copyWith(
         uiFilesData: [
@@ -308,20 +303,20 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
             fileMetaData: imageMetaData,
           ),
         ],
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreateOfferState> emit) {
+      RemoveVideoOrImageEvent event, Emitter<CreateOfferState> emit,) {
     try {
       emit(state.copyWith(
         uiFilesData: state.uiFilesData
             .where((element) => element != event.uiFileData)
             .toList(),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -329,20 +324,20 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
   FutureOr<void> _onAddOrRemoveTargetAddress(
       AddOrRemoveTargetAddressEvent event,
-      Emitter<CreateOfferState> emit) async {
+      Emitter<CreateOfferState> emit,) async {
     try {
       if (event.removableTargetAddress != null) {
         emit(state.copyWith(
           selectedTargetAddresses: state.selectedTargetAddresses!
               .where((element) => element != event.removableTargetAddress)
               .toList(),
-        ));
+        ),);
         return;
       }
       if (event.countryName == null &&
           event.stateName == null &&
           event.cityName == null) return;
-      String address = '';
+      var address = '';
       if (event.countryName?.isNotEmpty ?? false) {
         address += '${event.countryName}';
       }
@@ -354,14 +349,14 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       }
       emit(state.copyWith(
         selectedTargetAddresses: state.selectedTargetAddresses! + [address],
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onUpdateCtaAction(
-      UpdateCtaActionEvent event, Emitter<CreateOfferState> emit) {
+      UpdateCtaActionEvent event, Emitter<CreateOfferState> emit,) {
     try {
       emit(state.copyWith(ctaAction: event.ctaAction));
     } catch (e, stackTrace) {
@@ -370,7 +365,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
   }
 
   FutureOr<void> _onUpdateTargetGender(
-      UpdateTargetGenderEvent event, Emitter<CreateOfferState> emit) {
+      UpdateTargetGenderEvent event, Emitter<CreateOfferState> emit,) {
     try {
       emit(state.copyWith(selectedTargetGender: event.targetGender));
     } catch (e, stackTrace) {

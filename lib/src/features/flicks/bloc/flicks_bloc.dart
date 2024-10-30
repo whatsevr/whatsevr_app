@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import '../../../../config/api/external/models/business_validation_exception.dart';
 
 import '../../../../config/api/external/models/pagination_data.dart';
 import '../../../../config/api/methods/public_recommendations.dart';
@@ -20,7 +20,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
             noMoreData: false,
           ),
           recommendationFlicks: [],
-        )) {
+        ),) {
     on<FlicksInitialEvent>(_onInitial);
     on<LoadFlicksEvent>(_loadFlicks);
     on<LoadMoreFlicksEvent>(_onLoadMoreFlicks);
@@ -34,9 +34,9 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   }
 
   FutureOr<void> _loadFlicks(
-      LoadFlicksEvent event, Emitter<FlicksState> emit) async {
+      LoadFlicksEvent event, Emitter<FlicksState> emit,) async {
     try {
-      RecommendationFlicksResponse? recommendationVideos =
+      final recommendationVideos =
           await RecommendationApi.publicFlickPosts(
         page: 1,
       );
@@ -55,7 +55,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   }
 
   FutureOr<void> _onLoadMoreFlicks(
-      LoadMoreFlicksEvent event, Emitter<FlicksState> emit) async {
+      LoadMoreFlicksEvent event, Emitter<FlicksState> emit,) async {
     if (state.flicksPaginationData?.isLoading == true ||
         state.flicksPaginationData?.noMoreData == true) return;
     try {
@@ -66,7 +66,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
           ),
         ),
       );
-      RecommendationFlicksResponse? recommendationVideos =
+      final recommendationVideos =
           await RecommendationApi.publicFlickPosts(
         page: event.page!,
       );

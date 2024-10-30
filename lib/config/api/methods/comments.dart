@@ -1,12 +1,7 @@
-import 'package:dio/dio.dart';
-
-import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
-import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart';
-
-import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
-
+import '../client.dart';
 import '../external/models/business_validation_exception.dart';
+import '../requests_model/comments/comment_and_reply.dart';
+import '../response_model/comments/get_comments.dart';
 
 class CommentsApi {
   static Future<GetCommentsResponse?> getComments({
@@ -20,7 +15,7 @@ class CommentsApi {
     String? pdfUid,
   }) async {
     try {
-      Response response =
+      final response =
           await ApiClient.client.get('/v1/get-comments', queryParameters: {
         'page': page,
         'page_size': pageSize,
@@ -30,7 +25,7 @@ class CommentsApi {
         'offer_post_uid': offerPostUid,
         'photo_post_uid': photoPostUid,
         'pdf_uid': pdfUid,
-      });
+      },);
       if (response.data != null) {
         return GetCommentsResponse.fromMap(response.data);
       }
@@ -43,7 +38,7 @@ class CommentsApi {
   static Future<(int? statusCode, String? message, String? newCommentUid)?>
       postCommentOrReply(CommentAndReplyRequest request) async {
     try {
-      Response response = await ApiClient.client
+      final response = await ApiClient.client
           .post('/v1/post-comment-or-reply', data: request.toJson());
       if (response.data != null) {
         return (

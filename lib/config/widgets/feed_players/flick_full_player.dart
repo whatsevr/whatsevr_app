@@ -2,13 +2,10 @@ import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-
 import '../../services/file_upload.dart';
+import '../media/aspect_ratio.dart';
 
 class FlicksFullPlayer extends StatefulWidget {
   final String? videoUrl;
@@ -19,7 +16,7 @@ class FlicksFullPlayer extends StatefulWidget {
       {super.key,
       required this.videoUrl,
       this.thumbnail,
-      this.onPlayerInitialized});
+      this.onPlayerInitialized,});
 
   @override
   State<FlicksFullPlayer> createState() => _FlicksFullPlayerState();
@@ -39,7 +36,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
     if (controller?.value.isPlaying == true) {
       return;
     }
-    String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
+    final adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
     controller =
@@ -116,7 +113,7 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
                     Align(
                       alignment: Alignment.center,
                       child: CupertinoActivityIndicator(),
-                    )
+                    ),
                   ],
                 );
               },

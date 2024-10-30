@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
+import '../../bloc/account_bloc.dart';
 
 class AccountPageServicesView extends StatelessWidget {
   const AccountPageServicesView({super.key});
@@ -15,7 +14,7 @@ class AccountPageServicesView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            UserService? userService =
+            final userService =
                 state.profileDetailsResponse?.userServices?[index];
             return Row(
               children: <Widget>[

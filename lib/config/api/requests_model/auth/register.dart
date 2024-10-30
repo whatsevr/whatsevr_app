@@ -33,16 +33,16 @@ class UserRegistrationRequest {
 
   factory UserRegistrationRequest.fromMap(Map<String, dynamic> json) =>
       UserRegistrationRequest(
-        userUid: json["user_uid"],
-        name: json["name"],
-        emailId: json["email_id"],
-        mobileNumber: json["mobile_number"],
+        userUid: json['user_uid'],
+        name: json['name'],
+        emailId: json['email_id'],
+        mobileNumber: json['mobile_number'],
       );
 
   Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "name": name,
-        "email_id": emailId,
-        "mobile_number": mobileNumber,
+        'user_uid': userUid,
+        'name': name,
+        'email_id': emailId,
+        'mobile_number': mobileNumber,
       };
 }

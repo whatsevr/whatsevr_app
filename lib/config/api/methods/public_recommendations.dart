@@ -1,14 +1,10 @@
-import 'package:dio/dio.dart';
-
-import 'package:whatsevr_app/config/api/client.dart';
-
-import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
-
+import '../client.dart';
 import '../external/models/business_validation_exception.dart';
 import '../response_model/recommendation_flicks.dart';
 import '../response_model/recommendation_memories.dart';
 import '../response_model/recommendation_offers.dart';
 import '../response_model/recommendation_photo_posts.dart';
+import '../response_model/recommendation_videos.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> publicVideoPosts({
@@ -16,9 +12,9 @@ class RecommendationApi {
     int pageSize = 5,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
           '/v1/public-recommendations/video-posts',
-          queryParameters: {'page': page, 'page_size': pageSize});
+          queryParameters: {'page': page, 'page_size': pageSize},);
       if (response.data != null) {
         return RecommendationVideosResponse.fromMap(response.data);
       }
@@ -33,7 +29,7 @@ class RecommendationApi {
     int pageSize = 5,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/public-recommendations/flick-posts',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
@@ -51,9 +47,9 @@ class RecommendationApi {
     int pageSize = 10,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
           '/v1/public-recommendations/memories',
-          queryParameters: {'page': page, 'page_size': pageSize});
+          queryParameters: {'page': page, 'page_size': pageSize},);
       if (response.data != null) {
         return RecommendationMemoriesResponse.fromMap(response.data);
       }
@@ -68,9 +64,9 @@ class RecommendationApi {
     int pageSize = 5,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
           '/v1/public-recommendations/offers',
-          queryParameters: {'page': page, 'page_size': pageSize});
+          queryParameters: {'page': page, 'page_size': pageSize},);
       if (response.data != null) {
         return RecommendationOffersResponse.fromMap(response.data);
       }
@@ -85,9 +81,9 @@ class RecommendationApi {
     int pageSize = 5,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
           '/v1/public-recommendations/photo-posts',
-          queryParameters: {'page': page, 'page_size': pageSize});
+          queryParameters: {'page': page, 'page_size': pageSize},);
       if (response.data != null) {
         return RecommendationPhotoPostsResponse.fromMap(response.data);
       }

@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
-import 'package:whatsevr_app/config/services/long_running_task/task_models/posts.dart';
-import 'package:whatsevr_app/dev/talker.dart';
 
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+
+import '../../../dev/talker.dart';
 import '../../api/client.dart';
 import '../../api/external/models/business_validation_exception.dart';
 import '../../api/methods/posts.dart';
 import '../../api/requests_model/create_video_post.dart';
-
 import '../file_upload.dart';
+import 'task_models/posts.dart';
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -28,7 +28,7 @@ class WhatsevrLongTaskController extends TaskHandler {
     if (data is Map<String, dynamic>) {
       try {
         // Deserialize the task data based on its type.
-        final LongRunningTask taskData = LongRunningTask.fromMap(data);
+        final taskData = LongRunningTask.fromMap(data);
 
         switch (taskData.taskType) {
           case 'new-video-post-task':
@@ -52,7 +52,7 @@ class WhatsevrLongTaskController extends TaskHandler {
       await ApiClient.init();
       FileUploadService.init();
       // Upload video and thumbnail
-      final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
+      final videoUrl = await FileUploadService.uploadFilesToSupabase(
         File(taskData.videoFilePath!),
         userUid: taskData.userUid!,
         fileRelatedTo: 'video-post',
@@ -61,7 +61,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         TalkerService.instance.error('Failed to upload video file.');
         return;
       }
-      final String? thumbnailUrl =
+      final thumbnailUrl =
           await FileUploadService.uploadFilesToSupabase(
         File(taskData.thumbnailFilePath!),
         userUid: taskData.userUid!,
@@ -72,7 +72,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         return;
       }
 
-      (String? message, int? statusCode)? response =
+      final response =
           await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: taskData.title,
@@ -156,7 +156,7 @@ class WhatsevrLongTaskController extends TaskHandler {
   static Future<void> startServiceWithTaskData(
       {required LongRunningTask taskData,
       required Function onTaskAssignFail,
-      required Function onTaskAssigned}) async {
+      required Function onTaskAssigned,}) async {
     try {
       if (await FlutterForegroundTask.isRunningService) {
         await FlutterForegroundTask.restartService();

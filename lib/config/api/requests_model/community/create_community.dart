@@ -36,16 +36,16 @@ class CreateCommunityRequest {
 
   factory CreateCommunityRequest.fromMap(Map<String, dynamic> json) =>
       CreateCommunityRequest(
-        adminUserUid: json["admin_user_uid"],
-        status: json["status"],
-        title: json["title"],
-        requireJoiningApproval: json["require_joining_approval"],
+        adminUserUid: json['admin_user_uid'],
+        status: json['status'],
+        title: json['title'],
+        requireJoiningApproval: json['require_joining_approval'],
       );
 
   Map<String, dynamic> toMap() => {
-        "admin_user_uid": adminUserUid,
-        "status": status,
-        "title": title,
-        "require_joining_approval": requireJoiningApproval,
+        'admin_user_uid': adminUserUid,
+        'status': status,
+        'title': title,
+        'require_joining_approval': requireJoiningApproval,
       };
 }

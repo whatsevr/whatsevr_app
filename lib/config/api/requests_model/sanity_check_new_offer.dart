@@ -25,20 +25,20 @@ class SanityCheckNewOfferRequest {
 
   factory SanityCheckNewOfferRequest.fromMap(Map<String, dynamic> json) =>
       SanityCheckNewOfferRequest(
-        mediaMetaData: json["media_meta_data"] == null
+        mediaMetaData: json['media_meta_data'] == null
             ? []
             : List<MediaMetaDatum>.from(
-                json["media_meta_data"]!.map((x) => MediaMetaDatum.fromMap(x))),
-        postData: json["post_data"] == null
+                json['media_meta_data']!.map((x) => MediaMetaDatum.fromMap(x)),),
+        postData: json['post_data'] == null
             ? null
-            : PostData.fromMap(json["post_data"]),
+            : PostData.fromMap(json['post_data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "media_meta_data": mediaMetaData == null
+        'media_meta_data': mediaMetaData == null
             ? []
             : List<dynamic>.from(mediaMetaData!.map((x) => x.toMap())),
-        "post_data": postData?.toMap(),
+        'post_data': postData?.toMap(),
       };
 }
 
@@ -66,13 +66,13 @@ class MediaMetaDatum {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaDatum.fromMap(Map<String, dynamic> json) => MediaMetaDatum(
-        videoDurationSec: json["video_duration_sec"],
-        sizeBytes: json["size_bytes"],
+        videoDurationSec: json['video_duration_sec'],
+        sizeBytes: json['size_bytes'],
       );
 
   Map<String, dynamic> toMap() => {
-        "video_duration_sec": videoDurationSec,
-        "size_bytes": sizeBytes,
+        'video_duration_sec': videoDurationSec,
+        'size_bytes': sizeBytes,
       };
 }
 
@@ -103,14 +103,14 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
-        userUid: json["user_uid"],
-        communityUid: json["community_uid"],
-        postCreatorType: json["post_creator_type"],
+        userUid: json['user_uid'],
+        communityUid: json['community_uid'],
+        postCreatorType: json['post_creator_type'],
       );
 
   Map<String, dynamic> toMap() => {
-        "user_uid": userUid,
-        "community_uid": communityUid,
-        "post_creator_type": postCreatorType,
+        'user_uid': userUid,
+        'community_uid': communityUid,
+        'post_creator_type': postCreatorType,
       };
 }

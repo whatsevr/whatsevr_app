@@ -13,7 +13,7 @@ class DownloadService {
 
   static Future<void> downloadFile(String url, String filename) async {
     try {
-      final DownloadTask task = DownloadTask(
+      final task = DownloadTask(
         url: url,
         filename: filename,
         baseDirectory: BaseDirectory.applicationDocuments,
@@ -22,7 +22,7 @@ class DownloadService {
         retries: 3,
         allowPause: true,
       );
-      var taskStatus = await FileDownloader().download(
+      final taskStatus = await FileDownloader().download(
         task,
         onProgress: (double progress) => print('Progress: ${progress * 100}%'),
         onStatus: (TaskStatus status) => print('Status: $status'),

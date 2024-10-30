@@ -3,9 +3,8 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
+import '../../../../../config/mocks/mocks.dart';
+import '../../bloc/account_bloc.dart';
 
 class AccountPageCoverVideoView extends StatelessWidget {
   AccountPageCoverVideoView({super.key});
@@ -38,7 +37,7 @@ class AccountPageCoverVideoView extends StatelessWidget {
                 itemCount:
                     state.profileDetailsResponse?.userCoverMedia?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
-                  UserCoverMedia? coverMedia =
+                  final coverMedia =
                       state.profileDetailsResponse?.userCoverMedia?[index];
                   if (coverMedia?.isVideo == true) {
                     return _CoverVideoUi(

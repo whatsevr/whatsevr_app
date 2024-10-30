@@ -9,22 +9,19 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-import 'package:whatsevr_app/app.dart';
-
-import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/services/file_upload.dart';
-
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/file_download.dart';
-import 'package:whatsevr_app/constants.dart';
-import 'package:whatsevr_app/dev/talker.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
-
+import 'app.dart';
+import 'config/api/client.dart';
+import 'config/services/auth_db.dart';
 import 'config/services/auth_user_service.dart';
 import 'config/services/device_info.dart';
+import 'config/services/file_download.dart';
+import 'config/services/file_upload.dart';
 import 'config/services/long_running_task/controller.dart';
 import 'config/services/notification.dart';
+import 'constants.dart';
+import 'dev/talker.dart';
 import 'firebase_options.dart';
+import 'utils/conversion.dart';
 
 Future<void> main() async {
   runZonedGuarded(

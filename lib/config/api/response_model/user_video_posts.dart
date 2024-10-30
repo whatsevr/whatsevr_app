@@ -33,20 +33,20 @@ class UserVideoPostsResponse {
 
   factory UserVideoPostsResponse.fromMap(Map<String, dynamic> json) =>
       UserVideoPostsResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        videoPosts: json["video_posts"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        videoPosts: json['video_posts'] == null
             ? []
             : List<VideoPost>.from(
-                json["video_posts"]!.map((x) => VideoPost.fromMap(x))),
+                json['video_posts']!.map((x) => VideoPost.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "video_posts": videoPosts == null
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'video_posts': videoPosts == null
             ? []
             : List<dynamic>.from(videoPosts!.map((x) => x.toMap())),
       };
@@ -172,75 +172,75 @@ class VideoPost {
   String toJson() => json.encode(toMap());
 
   factory VideoPost.fromMap(Map<String, dynamic> json) => VideoPost(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        uid: json["uid"],
-        title: json["title"],
-        description: json["description"],
-        hashtags: json["hashtags"] == null
+            : DateTime.parse(json['created_at']),
+        uid: json['uid'],
+        title: json['title'],
+        description: json['description'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUserUids: json["tagged_user_uids"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        taggedUserUids: json['tagged_user_uids'] == null
             ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        isDeleted: json["is_deleted"],
-        isArchived: json["is_archived"],
-        isActive: json["is_active"],
-        postCreatorType: json["post_creator_type"],
-        updatedAt: json["updated_at"] == null
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        isDeleted: json['is_deleted'],
+        isArchived: json['is_archived'],
+        isActive: json['is_active'],
+        postCreatorType: json['post_creator_type'],
+        updatedAt: json['updated_at'] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
-        userUid: json["user_uid"],
-        thumbnail: json["thumbnail"],
-        videoUrl: json["video_url"],
-        location: json["location"],
-        totalViews: json["total_views"],
-        totalLikes: json["total_likes"],
-        totalComments: json["total_comments"],
-        internalAiDescription: json["internal_ai_description"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedCommunityUids: json["tagged_community_uids"] == null
+            : DateTime.parse(json['updated_at']),
+        userUid: json['user_uid'],
+        thumbnail: json['thumbnail'],
+        videoUrl: json['video_url'],
+        location: json['location'],
+        totalViews: json['total_views'],
+        totalLikes: json['total_likes'],
+        totalComments: json['total_comments'],
+        internalAiDescription: json['internal_ai_description'],
+        addressLatLongWkb: json['address_lat_long_wkb'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        totalShares: json["total_shares"],
-        cumulativeScore: json["cumulative_score"],
-        videoDurationInSec: json["video_duration_in_sec"],
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        totalShares: json['total_shares'],
+        cumulativeScore: json['cumulative_score'],
+        videoDurationInSec: json['video_duration_in_sec'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "uid": uid,
-        "title": title,
-        "description": description,
-        "hashtags":
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'uid': uid,
+        'title': title,
+        'description': description,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_user_uids": taggedUserUids == null
+        'tagged_user_uids': taggedUserUids == null
             ? []
             : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "is_deleted": isDeleted,
-        "is_archived": isArchived,
-        "is_active": isActive,
-        "post_creator_type": postCreatorType,
-        "updated_at": updatedAt?.toIso8601String(),
-        "user_uid": userUid,
-        "thumbnail": thumbnail,
-        "video_url": videoUrl,
-        "location": location,
-        "total_views": totalViews,
-        "total_likes": totalLikes,
-        "total_comments": totalComments,
-        "internal_ai_description": internalAiDescription,
-        "address_lat_long_wkb": addressLatLongWkb,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_community_uids": taggedCommunityUids == null
+        'is_deleted': isDeleted,
+        'is_archived': isArchived,
+        'is_active': isActive,
+        'post_creator_type': postCreatorType,
+        'updated_at': updatedAt?.toIso8601String(),
+        'user_uid': userUid,
+        'thumbnail': thumbnail,
+        'video_url': videoUrl,
+        'location': location,
+        'total_views': totalViews,
+        'total_likes': totalLikes,
+        'total_comments': totalComments,
+        'internal_ai_description': internalAiDescription,
+        'address_lat_long_wkb': addressLatLongWkb,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "total_shares": totalShares,
-        "cumulative_score": cumulativeScore,
-        "video_duration_in_sec": videoDurationInSec,
+        'total_shares': totalShares,
+        'cumulative_score': cumulativeScore,
+        'video_duration_in_sec': videoDurationInSec,
       };
 }

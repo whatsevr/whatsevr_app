@@ -6,7 +6,7 @@ String getAUniqueUserName(String prefix, String type) {
   if (prefix.length > 8) {
     prefix = prefix.substring(0, 8);
   }
-  UsernameGenerator gen = UsernameGenerator();
+  final gen = UsernameGenerator();
   return gen.generate(
     prefix,
     suffix: '${type}_${DateTime.now().millisecondsSinceEpoch}',

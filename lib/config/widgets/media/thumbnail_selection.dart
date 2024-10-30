@@ -1,20 +1,20 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import '../app_bar.dart';
+import '../buttons/button.dart';
+import '../loading_indicator.dart';
+import '../pad_horizontal.dart';
+import 'aspect_ratio.dart';
+import 'asset_picker.dart';
 
 Future<File?> showWhatsevrThumbnailSelectionPage({
   required File videoFile,
@@ -87,14 +87,14 @@ class _UiState extends State<_Ui> {
       return;
     }
 
-    const int thumbnailCount = 20;
-    final int interval =
+    const thumbnailCount = 20;
+    final interval =
         videoDurationInMs ~/ thumbnailCount; // Ensure distinct intervals
 
-    for (int i = 0; i < thumbnailCount; i++) {
+    for (var i = 0; i < thumbnailCount; i++) {
       // Ensure distinct time points for each thumbnail
-      final int forDuration = interval * i;
-      final MemoryImage? thumbnailFile = await getThumbnailMemoryImage(
+      final forDuration = interval * i;
+      final thumbnailFile = await getThumbnailMemoryImage(
         videoFile: widget.videoFile,
         forDuration: forDuration,
       );
@@ -161,7 +161,7 @@ class _UiState extends State<_Ui> {
                 scrollDirection: Axis.horizontal,
                 itemCount: thumbnails.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final MemoryImage thumbnail = thumbnails[index];
+                  final thumbnail = thumbnails[index];
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -208,7 +208,7 @@ class _UiState extends State<_Ui> {
                   SmartDialog.showToast('Please select a thumbnail');
                   return;
                 }
-                File? file = await saveImageAsFile(selectedThumbnail!.bytes);
+                final file = await saveImageAsFile(selectedThumbnail!.bytes);
                 if (file != null) {
                   widget.onThumbnailSelected(file);
                 }
@@ -227,7 +227,7 @@ Future<MemoryImage?> getThumbnailMemoryImage({
 }) async {
   try {
     // Generate a thumbnail at the specified time in milliseconds
-    final String? tempPath = await VideoThumbnail.thumbnailFile(
+    final tempPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
 
       imageFormat: ImageFormat.JPEG,
@@ -240,12 +240,12 @@ Future<MemoryImage?> getThumbnailMemoryImage({
       return null;
     }
 
-    final File thumbnailFile = File(tempPath);
+    final thumbnailFile = File(tempPath);
     if (!await thumbnailFile.exists()) {
       print('Thumbnail file does not exist.');
       return null;
     }
-    MemoryImage? thumbnailData = MemoryImage(
+    final thumbnailData = MemoryImage(
       File(tempPath ?? '').readAsBytesSync(),
     );
     print('Thumbnail generated for duration: $forDuration');
@@ -264,14 +264,14 @@ Future<File?> getThumbnailFile({
   if (videoFile == null) return null;
   try {
     // Generate a thumbnail at the specified time in milliseconds
-    final String? tempPath = await VideoThumbnail.thumbnailFile(
+    final tempPath = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
       thumbnailPath: videoFile.parent.path,
       imageFormat: ImageFormat.JPEG,
       quality: 70,
       timeMs: forDuration, // Ensure this time is unique for each thumbnail
     );
-    MemoryImage? thumbnailData = MemoryImage(
+    final thumbnailData = MemoryImage(
       File(tempPath ?? '').readAsBytesSync(),
     );
     if (tempPath == null) {
@@ -279,7 +279,7 @@ Future<File?> getThumbnailFile({
       return null;
     }
 
-    final File thumbnailFile = File(tempPath);
+    final thumbnailFile = File(tempPath);
     if (!await thumbnailFile.exists()) {
       print('Thumbnail file does not exist.');
       return null;
@@ -295,13 +295,13 @@ Future<File?> getThumbnailFile({
 
 Future<File?> saveImageAsFile(Uint8List bytes) async {
   try {
-    Directory root = await getTemporaryDirectory();
-    String directoryPath = '${root.path}/appName';
+    final root = await getTemporaryDirectory();
+    final directoryPath = '${root.path}/appName';
     // Create the directory if it doesn't exist
     await Directory(directoryPath).create(recursive: true);
-    String filePath =
+    final filePath =
         '$directoryPath/${DateTime.now().millisecondsSinceEpoch}.jpg';
-    final File file = await File(filePath).writeAsBytes(bytes);
+    final file = await File(filePath).writeAsBytes(bytes);
     return file;
   } catch (e) {
     debugPrint(e.toString());

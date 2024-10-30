@@ -1,29 +1,25 @@
-import 'dart:io';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import 'package:whatsevr_app/config/api/response_model/common_data.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
-import 'package:whatsevr_app/config/widgets/label_container.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/previewers/video.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
-import 'package:whatsevr_app/config/widgets/mask_text.dart';
+import '../../../../config/api/response_model/common_data.dart';
+import '../../../../config/api/response_model/profile_details.dart';
+import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/app_bar.dart';
+import '../../../../config/widgets/dialogs/common_data_list.dart';
+import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../config/widgets/label_container.dart';
+import '../../../../config/widgets/mask_text.dart';
+import '../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../config/widgets/media/asset_picker.dart';
+import '../../../../config/widgets/media/media_pick_choice.dart';
+import '../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
+import '../../../../config/widgets/previewers/video.dart';
+import '../../../../config/widgets/textfield/super_textform_field.dart';
+import '../bloc/bloc.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {
@@ -124,7 +120,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     image: DecorationImage(
                                       image: state.profileImage != null
                                           ? ExtendedFileImageProvider(
-                                              state.profileImage!)
+                                              state.profileImage!,)
                                           : state.currentProfileDetailsResponse
                                                       ?.userInfo?.profilePicture !=
                                                   null
@@ -341,12 +337,12 @@ class ProfileUpdatePage extends StatelessWidget {
                                   onChoosingImageFromGallery: () {
                                     CustomAssetPicker.pickVideoFromGallery(
                                       onCompleted: (file) async {
-                                        File? thumbnail =
+                                        var thumbnail =
                                             await getThumbnailFile(
-                                                videoFile: file);
+                                                videoFile: file,);
                                         thumbnail =
                                             await showWhatsevrThumbnailSelectionPage(
-                                                videoFile: file);
+                                                videoFile: file,);
                                         context.read<ProfileBloc>().add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: thumbnail,
@@ -425,15 +421,15 @@ class ProfileUpdatePage extends StatelessWidget {
                             const Gap(8),
                             Builder(
                               builder: (BuildContext context) {
-                                TextEditingController schoolController =
+                                final schoolController =
                                     TextEditingController();
-                                TextEditingController degreeController =
+                                final degreeController =
                                     TextEditingController();
-                                TextEditingController degreeTypeController =
+                                final degreeTypeController =
                                     TextEditingController();
-                                TextEditingController startDateController =
+                                final startDateController =
                                     TextEditingController();
-                                TextEditingController endDateController =
+                                final endDateController =
                                     TextEditingController();
 
                                 return WhatsevrFormField.invokeCustomFunction(
@@ -555,7 +551,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                           ),
                                         ),
                                       ],
-                                    ));
+                                    ),);
                                   },
                                 );
                               },
@@ -604,15 +600,15 @@ class ProfileUpdatePage extends StatelessWidget {
 
                             Builder(
                               builder: (BuildContext context) {
-                                TextEditingController companyNameController =
+                                final companyNameController =
                                     TextEditingController();
-                                TextEditingController designationController =
+                                final designationController =
                                     TextEditingController();
-                                TextEditingController workingModeController =
+                                final workingModeController =
                                     TextEditingController();
-                                TextEditingController startDateController =
+                                final startDateController =
                                     TextEditingController();
-                                TextEditingController endDateController =
+                                final endDateController =
                                     TextEditingController();
 
                                 return WhatsevrFormField.invokeCustomFunction(
@@ -833,9 +829,9 @@ class ProfileUpdatePage extends StatelessWidget {
                             const Gap(12),
                             Builder(
                               builder: (BuildContext context) {
-                                TextEditingController titleController =
+                                final titleController =
                                     TextEditingController();
-                                TextEditingController descriptionController =
+                                final descriptionController =
                                     TextEditingController();
 
                                 return WhatsevrFormField.invokeCustomFunction(
@@ -964,7 +960,7 @@ class ProfileUpdatePage extends StatelessWidget {
                         context.read<ProfileBloc>().add(const SubmitProfile());
                       },
                       child: const Text('SAVE',
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white),),
                     ),
                   ],
                 );

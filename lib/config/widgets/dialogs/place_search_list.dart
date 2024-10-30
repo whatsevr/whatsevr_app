@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/external/models/similar_place_by_query.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
+import '../../api/external/models/similar_place_by_query.dart';
 import '../../services/location.dart';
+import '../textfield/super_textform_field.dart';
 
 class PlaceSearchByNamePage extends StatefulWidget {
   final bool scaffoldView;
   final Function(String placeName, double? latitude, double? longitude)
       onPlaceSelected;
   const PlaceSearchByNamePage(
-      {super.key, this.scaffoldView = false, required this.onPlaceSelected});
+      {super.key, this.scaffoldView = false, required this.onPlaceSelected,});
 
   @override
   State<PlaceSearchByNamePage> createState() => _PlaceSearchByNamePageState();
@@ -22,7 +22,7 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Widget child = Column(
+    final Widget child = Column(
       children: [
         WhatsevrFormField.textFieldWithClearIcon(
           controller: controller,
@@ -55,7 +55,7 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
               onTap: () async {
                 double? latitude;
                 double? longitude;
-                String? placeName = searchedItems[index]
+                final placeName = searchedItems[index]
                         .placePrediction
                         ?.structuredFormat
                         ?.secondaryText
@@ -86,15 +86,15 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
                           .mainText!
                           .text!,
                       latitude,
-                      longitude);
+                      longitude,);
                   Navigator.of(context).pop();
                 }
               },
               leading: const Icon(Icons.location_on),
               title: Text(
-                  '${searchedItems[index].placePrediction?.structuredFormat?.mainText?.text}'),
+                  '${searchedItems[index].placePrediction?.structuredFormat?.mainText?.text}',),
               subtitle: Text(
-                  '${searchedItems[index].placePrediction?.structuredFormat?.secondaryText?.text}'),
+                  '${searchedItems[index].placePrediction?.structuredFormat?.secondaryText?.text}',),
             );
           },
         ),

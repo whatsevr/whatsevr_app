@@ -2,18 +2,15 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:crop_your_image/crop_your_image.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-
-import 'package:whatsevr_app/utils/file.dart';
 
 import '../../../dev/talker.dart';
+import '../../../utils/file.dart';
+import '../../routes/router.dart';
+import '../app_bar.dart';
+import '../loading_indicator.dart';
+import 'aspect_ratio.dart';
 
 class ImageCropperPageArgument {
   final File imageFileToCrop;
@@ -78,7 +75,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   image: imageBytes!,
                   controller: _controller,
                   onCropped: (Uint8List image) async {
-                    final File? file = await uint8BytesToFile(image);
+                    final file = await uint8BytesToFile(image);
                     if (file == null) {
                       TalkerService.instance
                           .error('Error converting bytes to file');
@@ -121,7 +118,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   separatorBuilder: (BuildContext context, int index) =>
                       const VerticalDivider(),
                   itemBuilder: (BuildContext context, int index) {
-                    final WhatsevrAspectRatio aspectRatio =
+                    final aspectRatio =
                         widget.pageArgument.aspectRatios[index];
                     return IconButton(
                       icon: Text(

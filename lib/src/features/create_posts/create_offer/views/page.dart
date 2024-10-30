@@ -4,28 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/country_state_city.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
-import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/buttons/button.dart';
 import '../../../../../config/widgets/buttons/choice_chip.dart';
 import '../../../../../config/widgets/dialogs/common_data_list.dart';
-import '../../../../../config/widgets/dynamic_height_views.dart';
-import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/dialogs/place_search_list.dart';
-import '../../../../../config/widgets/product_guide/product_guides.dart';
+import '../../../../../config/widgets/dialogs/country_state_city.dart';
 import '../../../../../config/widgets/dialogs/search_and_tag.dart';
 import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/dynamic_height_views.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
+import '../../../../../config/widgets/media/asset_picker.dart';
+import '../../../../../config/widgets/media/media_pick_choice.dart';
+import '../../../../../config/widgets/media/thumbnail_selection.dart';
+import '../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../config/widgets/previewers/video.dart';
+import '../../../../../config/widgets/product_guide/product_guides.dart';
 import '../../../../../config/widgets/textfield/super_textform_field.dart';
-
 import '../bloc/create_offer_bloc.dart';
 
 class CreateOfferPageArgument {
@@ -108,7 +104,7 @@ class CreateOfferPage extends StatelessWidget {
                                           .read<CreateOfferBloc>()
                                           .add(RemoveVideoOrImageEvent(
                                             uiFileData: uiFileData,
-                                          ));
+                                          ),);
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -157,7 +153,7 @@ class CreateOfferPage extends StatelessWidget {
                                           .read<CreateOfferBloc>()
                                           .add(RemoveVideoOrImageEvent(
                                             uiFileData: uiFileData,
-                                          ));
+                                          ),);
                                     },
                                     icon: const Icon(
                                       Icons.clear_rounded,
@@ -183,7 +179,7 @@ class CreateOfferPage extends StatelessWidget {
                                               .add(ChangeVideoThumbnail(
                                                 pickedThumbnailFile: value,
                                                 uiFileData: uiFileData,
-                                              ));
+                                              ),);
                                         }
                                       });
                                     },
@@ -229,7 +225,7 @@ class CreateOfferPage extends StatelessWidget {
                       ),
                       color: Colors.black,
                       child: Text('Add Image or Video',
-                          style: TextStyle(color: Colors.white)),
+                          style: TextStyle(color: Colors.white),),
                     ),
                   );
                 },
@@ -292,7 +288,7 @@ class CreateOfferPage extends StatelessWidget {
                               .statusController
                               .text = professionalStatus.title ?? '';
                         },
-                      ));
+                      ),);
                 },
               ),
               const Gap(12),
@@ -311,9 +307,9 @@ class CreateOfferPage extends StatelessWidget {
                                 countryName: countryName,
                                 stateName: stateName,
                                 cityName: cityName,
-                              ));
+                              ),);
                         },
-                      ));
+                      ),);
                     },
                   ),
                   const Gap(12),
@@ -329,10 +325,10 @@ class CreateOfferPage extends StatelessWidget {
                                 .read<CreateOfferBloc>()
                                 .add(AddOrRemoveTargetAddressEvent(
                                   removableTargetAddress: address,
-                                ));
+                                ),);
                           },
                           child: const Icon(Icons.clear_rounded,
-                              color: Colors.red),
+                              color: Colors.red,),
                         ),
                       ],
                     ),
@@ -358,7 +354,7 @@ class CreateOfferPage extends StatelessWidget {
                           switchChoice: (value) {
                             context.read<CreateOfferBloc>().add(
                                 UpdateTargetGenderEvent(
-                                    targetGender: audience));
+                                    targetGender: audience,),);
                           },
                         ),
                         const Gap(4),
@@ -381,9 +377,9 @@ class CreateOfferPage extends StatelessWidget {
                             onCtaActionSelected: (ctaAction) {
                               context.read<CreateOfferBloc>().add(
                                   UpdateCtaActionEvent(
-                                      ctaAction: ctaAction.action));
+                                      ctaAction: ctaAction.action,),);
                             },
-                          ));
+                          ),);
                         },
                       ),
                       const Gap(12),
@@ -395,7 +391,7 @@ class CreateOfferPage extends StatelessWidget {
                         onChanged: (value) {
                           if (state.ctaAction == null) {
                             SmartDialog.showToast(
-                                'Please select a User action first');
+                                'Please select a User action first',);
                             context
                                 .read<CreateOfferBloc>()
                                 .ctaActionUrlController
@@ -421,7 +417,7 @@ class CreateOfferPage extends StatelessWidget {
                                       taggedUsersUid: selectedUsersUid,
                                       taggedCommunitiesUid:
                                           selectedCommunitiesUid,
-                                    ));
+                                    ),);
                               },
                             ),
                           );
@@ -434,7 +430,7 @@ class CreateOfferPage extends StatelessWidget {
                             Text('Tag', style: TextStyle(color: Colors.black)),
                             Spacer(),
                             Icon(Icons.arrow_right_rounded,
-                                color: Colors.black),
+                                color: Colors.black,),
                           ],
                         ),
                       ),
@@ -482,7 +478,7 @@ class CreateOfferPage extends StatelessWidget {
                               onTap: () {
                                 context.read<CreateOfferBloc>().add(
                                     const UpdateTaggedUsersAndCommunitiesEvent(
-                                        clearAll: true));
+                                        clearAll: true,),);
                               },
                               child: const Icon(
                                 Icons.clear_rounded,

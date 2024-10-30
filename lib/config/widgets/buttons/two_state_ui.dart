@@ -31,9 +31,9 @@ class _WhatsevrTwoStateUiState extends State<WhatsevrTwoStateUi> {
     return IconButton(
       icon: _isSecondState
           ? AbsorbPointer(
-              child: widget.secondStateUi ?? const Icon(Icons.check_circle))
+              child: widget.secondStateUi ?? const Icon(Icons.check_circle),)
           : AbsorbPointer(
-              child: widget.firstStateUi ?? const Icon(Icons.circle_outlined)),
+              child: widget.firstStateUi ?? const Icon(Icons.circle_outlined),),
       onPressed: () {
         setState(() {
           _isSecondState = !_isSecondState;

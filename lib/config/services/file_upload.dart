@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:supabase/supabase.dart';
-
 import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/foundation.dart';
-import 'package:whatsevr_app/constants.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+import 'package:supabase/supabase.dart';
 
+import '../../constants.dart';
+import '../../dev/talker.dart';
 import '../api/external/models/business_validation_exception.dart';
 
 class FileUploadService {
@@ -33,19 +32,19 @@ class FileUploadService {
     try {
       if (file.lengthSync() > kMaxMediaFileUploadSizeInGB * 1024 * 1000000) {
         throw BusinessException(
-            'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)');
+            'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)',);
       }
-      final String fileName =
+      final fileName =
           '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
 
-      final String uploadStorageResponse = await _supabaseStorageClient
+      final uploadStorageResponse = await _supabaseStorageClient
           .from('files') // Replace with your storage bucket name
           .upload(
             fileName,
             file,
             retryAttempts: 3,
           );
-      final String supabaseImageUrl =
+      final supabaseImageUrl =
           '${_supabaseStorageClient.url}/object/public/$uploadStorageResponse';
       TalkerService.instance.info('File uploaded to SST: $supabaseImageUrl');
       return supabaseImageUrl;
@@ -62,10 +61,10 @@ class FileUploadService {
     String? fileExtension,
   }) async {
     try {
-      final String fileName =
+      final fileName =
           '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
 
-      CloudinaryResponse response = await cloudinary.upload(
+      final response = await cloudinary.upload(
           file: file.path,
           fileBytes: file.readAsBytesSync(),
           resourceType: CloudinaryResourceType.auto,
@@ -74,7 +73,7 @@ class FileUploadService {
           fileName: fileName,
           progressCallback: (count, total) {
             debugPrint('Cloudinary.upload progress: $count/$total');
-          });
+          },);
 
       if (!response.isSuccessful || response.secureUrl == null) {
         throw BusinessException('Failed to upload file to Cloudinary');
@@ -114,7 +113,7 @@ String generateOptimizedCloudinaryVideoUrl({
   }
 
   // List to hold the transformations
-  List<String> transformations = [];
+  final transformations = <String>[];
 
   // Manual Quality Control
   if (quality != null) {
@@ -134,7 +133,7 @@ String generateOptimizedCloudinaryVideoUrl({
   }
 
   // Insert the transformations in the URL
-  String optimizedUrl = originalUrl.substring(0, uploadIndex + 8);
+  var optimizedUrl = originalUrl.substring(0, uploadIndex + 8);
   if (transformations.isNotEmpty) {
     optimizedUrl += '${transformations.join(',')}/';
   }

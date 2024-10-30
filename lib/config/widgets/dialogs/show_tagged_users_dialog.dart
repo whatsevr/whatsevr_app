@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import '../../api/methods/users.dart';
+import '../../api/response_model/multiple_user_details.dart';
+import '../../mocks/mocks.dart';
+import '../loading_indicator.dart';
 
 void showTaggedUsersBottomSheet(
   BuildContext context, {
@@ -70,7 +69,7 @@ class _UiState extends State<_Ui> {
               return ListView.separated(
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {
-                  final User user = _multipleUserDetailsResponse!.users![index];
+                  final user = _multipleUserDetailsResponse!.users![index];
                   return Row(
                     children: <Widget>[
                       CircleAvatar(

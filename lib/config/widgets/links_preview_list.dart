@@ -1,16 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/services/launch_url.dart';
 
-import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
+import '../services/launch_url.dart';
 
 class LinksPreviewListView extends StatefulWidget {
   final List<String> urls;
   final bool largePreview;
   const LinksPreviewListView(
-      {super.key, required this.urls, this.largePreview = true});
+      {super.key, required this.urls, this.largePreview = true,});
 
   @override
   State<LinksPreviewListView> createState() => _LinksPreviewListViewState();
@@ -92,7 +92,7 @@ class _LinksPreviewListViewState extends State<LinksPreviewListView> {
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(8),
                               width: double.infinity,
-                            )
+                            ),
                           ],
                           Gap(10),
                           Text(
@@ -127,8 +127,8 @@ class _LinksPreviewListViewState extends State<LinksPreviewListView> {
                             )
                           : null,
                     );
-                  }),
-                ));
+                  },),
+                ),);
           },
         ),
       ),

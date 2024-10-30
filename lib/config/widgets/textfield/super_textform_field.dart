@@ -94,7 +94,7 @@ class WhatsevrFormField extends StatefulWidget {
       suffixIcon: const Icon(Icons.calendar_today),
       readOnly: true,
       onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
+        final pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
@@ -125,19 +125,19 @@ class WhatsevrFormField extends StatefulWidget {
       suffixIcon: const Icon(Icons.calendar_today),
       readOnly: true,
       onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
+        final pickedDate = await showDatePicker(
           context: context,
           initialDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          TimeOfDay? pickedTime = await showTimePicker(
+          final pickedTime = await showTimePicker(
             context: context,
             initialTime: TimeOfDay.now(),
           );
           if (pickedTime != null) {
-            DateTime dateTime = DateTime(
+            final dateTime = DateTime(
               pickedDate.year,
               pickedDate.month,
               pickedDate.day,
@@ -171,7 +171,7 @@ class WhatsevrFormField extends StatefulWidget {
       suffixIcon: const Icon(Icons.access_time),
       readOnly: true,
       onTap: () async {
-        TimeOfDay? pickedTime = await showTimePicker(
+        final pickedTime = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),
         );
@@ -183,7 +183,6 @@ class WhatsevrFormField extends StatefulWidget {
     );
   }
   factory WhatsevrFormField.invokeCustomFunction({
-    required BuildContext context,
     String? headingTitle,
     TextEditingController? controller,
     String? hintText,
@@ -360,12 +359,12 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
 
   @override
   Widget build(BuildContext context) {
-    Color baseColor = Colors.grey.shade500;
-    EdgeInsets defaultContextPadding = const EdgeInsets.symmetric(
+    final baseColor = Colors.grey.shade500;
+    final defaultContextPadding = const EdgeInsets.symmetric(
       vertical: 10.0,
       horizontal: 12.0,
     );
-    OutlineInputBorder border = OutlineInputBorder(
+    final border = OutlineInputBorder(
       borderSide: BorderSide(color: baseColor),
       borderRadius: BorderRadius.circular(10),
     );

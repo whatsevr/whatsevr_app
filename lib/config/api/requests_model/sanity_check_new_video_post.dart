@@ -25,17 +25,17 @@ class SanityCheckNewVideoPostRequest {
 
   factory SanityCheckNewVideoPostRequest.fromMap(Map<String, dynamic> json) =>
       SanityCheckNewVideoPostRequest(
-        mediaMetaData: json["media_meta_data"] == null
+        mediaMetaData: json['media_meta_data'] == null
             ? null
-            : MediaMetaData.fromMap(json["media_meta_data"]),
-        postData: json["post_data"] == null
+            : MediaMetaData.fromMap(json['media_meta_data']),
+        postData: json['post_data'] == null
             ? null
-            : PostData.fromMap(json["post_data"]),
+            : PostData.fromMap(json['post_data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "media_meta_data": mediaMetaData?.toMap(),
-        "post_data": postData?.toMap(),
+        'media_meta_data': mediaMetaData?.toMap(),
+        'post_data': postData?.toMap(),
       };
 }
 
@@ -67,15 +67,15 @@ class MediaMetaData {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaData.fromMap(Map<String, dynamic> json) => MediaMetaData(
-        durationSec: json["duration_sec"],
-        sizeBytes: json["size_bytes"],
-        aspectRatio: json["aspect_ratio"]?.toDouble(),
+        durationSec: json['duration_sec'],
+        sizeBytes: json['size_bytes'],
+        aspectRatio: json['aspect_ratio']?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
-        "duration_sec": durationSec,
-        "size_bytes": sizeBytes,
-        "aspect_ratio": aspectRatio,
+        'duration_sec': durationSec,
+        'size_bytes': sizeBytes,
+        'aspect_ratio': aspectRatio,
       };
 }
 
@@ -102,12 +102,12 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
-        postCreatorType: json["post_creator_type"],
-        userUid: json["user_uid"],
+        postCreatorType: json['post_creator_type'],
+        userUid: json['user_uid'],
       );
 
   Map<String, dynamic> toMap() => {
-        "post_creator_type": postCreatorType,
-        "user_uid": userUid,
+        'post_creator_type': postCreatorType,
+        'user_uid': userUid,
       };
 }

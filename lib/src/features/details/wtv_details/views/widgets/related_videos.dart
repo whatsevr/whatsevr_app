@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/config/api/response_model/post_details/video.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/src/features/details/wtv_details/bloc/wtv_details_bloc.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
+import '../../../../../../config/mocks/mocks.dart';
+import '../../../../../../config/widgets/pad_horizontal.dart';
+import '../../../../../../utils/conversion.dart';
+import '../../bloc/wtv_details_bloc.dart';
 
 class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
   const WtvVideoDetailsRelatedVideosView({super.key});
@@ -24,7 +23,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            RelatedVideoPost? relatedVideoPost =
+            final relatedVideoPost =
                 state.videoPostDetailsResponse?.relatedVideoPosts?[index];
             return GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -80,7 +79,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
                             '${relatedVideoPost?.title}',
                             maxLines: 2,
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.bold,),
                           ),
                           Gap(8),
                           Text(
@@ -93,7 +92,7 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
                       ),
                     ),
                   ],
-                ));
+                ),);
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Gap(8);

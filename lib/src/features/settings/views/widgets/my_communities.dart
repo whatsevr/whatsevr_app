@@ -1,7 +1,7 @@
 part of 'package:whatsevr_app/src/features/settings/views/page.dart';
 
 class _YourCommunities extends StatelessWidget {
-  const _YourCommunities({super.key});
+  const _YourCommunities();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _YourCommunities extends StatelessWidget {
               height: 100,
               child: Builder(
                 builder: (BuildContext context) {
-                  List<Widget> children = <Widget>[
+                  final children = <Widget>[
                     //create community
                     Column(
                       children: [
@@ -30,12 +30,12 @@ class _YourCommunities extends StatelessWidget {
                             onTap: () {
                               AppNavigationService.newRoute(
                                   RoutesName.newCommunity,
-                                  extras: NewCommunityPageArgument());
+                                  extras: NewCommunityPageArgument(),);
                             },
                             child: CircleAvatar(
                               radius: 30,
                               child: Icon(Icons.add),
-                            )),
+                            ),),
                       ],
                     ),
                     for (Community? userCommunity

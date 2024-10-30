@@ -1,10 +1,6 @@
-import 'package:dio/dio.dart';
-
-import 'package:whatsevr_app/config/api/client.dart';
-
-import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart';
-
+import '../client.dart';
 import '../external/models/business_validation_exception.dart';
+import '../response_model/reactions/get_reactions.dart';
 
 class ReactionsApi {
   static Future<GetReactionsResponse?> getReactions({
@@ -18,7 +14,7 @@ class ReactionsApi {
     String? pdfUid,
   }) async {
     try {
-      Response response =
+      final response =
           await ApiClient.client.get('/v1/get-reactions', queryParameters: {
         'page': page,
         'page_size': pageSize,
@@ -28,7 +24,7 @@ class ReactionsApi {
         'offer_post_uid': offerPostUid,
         'photo_post_uid': photoPostUid,
         'pdf_uid': pdfUid,
-      });
+      },);
       if (response.data != null) {
         return GetReactionsResponse.fromMap(response.data);
       }
@@ -49,7 +45,7 @@ class ReactionsApi {
     String? pdfUid,
   }) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/record-reaction',
         data: {
           'reaction_type': reactionType,
@@ -84,7 +80,7 @@ class ReactionsApi {
     String? pdfUid,
   }) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/remove-reaction',
         data: {
           'user_uid': userUid,

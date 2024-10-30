@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/dev/routes/routes_name.dart';
+import '../config/routes/router.dart';
+import 'routes/routes_name.dart';
 
 enum AnchoringPosition {
   topLeft,
@@ -75,7 +75,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
     dragController?._addState(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final Size? widgetSize = getWidgetSize(key);
+      final widgetSize = getWidgetSize(key);
       if (widgetSize != null) {
         setState(() {
           widgetHeight = widgetSize.height;
@@ -174,7 +174,7 @@ class _DraggableWidgetState extends State<DraggableWidget>
                           child: IconButton(
                             style: ButtonStyle(
                               backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.red),
+                                  WidgetStateProperty.all<Color>(Colors.red),
                             ),
                             color: Colors.white,
                             onPressed: () {
@@ -195,8 +195,8 @@ class _DraggableWidgetState extends State<DraggableWidget>
   }
 
   AnchoringPosition determineDocker(double x, double y) {
-    final double totalHeight = boundary;
-    final double totalWidth = MediaQuery.of(context).size.width;
+    final totalHeight = boundary;
+    final totalWidth = MediaQuery.of(context).size.width;
 
     if (x <= totalWidth / 2 && y <= totalHeight / 2) {
       return AnchoringPosition.topLeft;
@@ -210,8 +210,8 @@ class _DraggableWidgetState extends State<DraggableWidget>
   }
 
   void animateWidget(AnchoringPosition docker) {
-    final double totalHeight = boundary;
-    final double totalWidth = MediaQuery.of(context).size.width;
+    final totalHeight = boundary;
+    final totalWidth = MediaQuery.of(context).size.width;
 
     setState(() {
       switch (docker) {
@@ -243,9 +243,9 @@ class _DraggableWidgetState extends State<DraggableWidget>
   }
 
   Size? getWidgetSize(GlobalKey key) {
-    final BuildContext? keyContext = key.currentContext;
+    final keyContext = key.currentContext;
     if (keyContext != null) {
-      final RenderBox box = keyContext.findRenderObject() as RenderBox;
+      final box = keyContext.findRenderObject() as RenderBox;
       return box.size;
     }
     return null;

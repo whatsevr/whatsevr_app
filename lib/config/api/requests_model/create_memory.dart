@@ -90,57 +90,57 @@ class CreateMemoryRequest {
 
   factory CreateMemoryRequest.fromMap(Map<String, dynamic> json) =>
       CreateMemoryRequest(
-        caption: json["caption"],
-        expiresAt: json["expires_at"] == null
+        caption: json['caption'],
+        expiresAt: json['expires_at'] == null
             ? null
-            : DateTime.parse(json["expires_at"]),
-        userUid: json["user_uid"],
-        imageUrl: json["image_url"],
-        videoUrl: json["video_url"],
-        isVideo: json["is_video"],
-        ctaAction: json["cta_action"],
-        ctaActionUrl: json["cta_action_url"],
-        isImage: json["is_image"],
-        isText: json["is_text"],
-        location: json["location"],
-        hashtags: json["hashtags"] == null
+            : DateTime.parse(json['expires_at']),
+        userUid: json['user_uid'],
+        imageUrl: json['image_url'],
+        videoUrl: json['video_url'],
+        isVideo: json['is_video'],
+        ctaAction: json['cta_action'],
+        ctaActionUrl: json['cta_action_url'],
+        isImage: json['is_image'],
+        isText: json['is_text'],
+        location: json['location'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        postCreatorType: json["post_creator_type"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedUserUids: json["tagged_user_uids"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        postCreatorType: json['post_creator_type'],
+        addressLatLongWkb: json['address_lat_long_wkb'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedUserUids: json['tagged_user_uids'] == null
             ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        taggedCommunityUids: json["tagged_community_uids"] == null
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        videoDurationMs: json["video_duration_ms"],
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        videoDurationMs: json['video_duration_ms'],
       );
 
   Map<String, dynamic> toMap() => {
-        "caption": caption,
-        "expires_at": expiresAt?.toIso8601String(),
-        "user_uid": userUid,
-        "image_url": imageUrl,
-        "video_url": videoUrl,
-        "is_video": isVideo,
-        "cta_action": ctaAction,
-        "cta_action_url": ctaActionUrl,
-        "is_image": isImage,
-        "is_text": isText,
-        "location": location,
-        "hashtags":
+        'caption': caption,
+        'expires_at': expiresAt?.toIso8601String(),
+        'user_uid': userUid,
+        'image_url': imageUrl,
+        'video_url': videoUrl,
+        'is_video': isVideo,
+        'cta_action': ctaAction,
+        'cta_action_url': ctaActionUrl,
+        'is_image': isImage,
+        'is_text': isText,
+        'location': location,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "post_creator_type": postCreatorType,
-        "address_lat_long_wkb": addressLatLongWkb,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_user_uids": taggedUserUids == null
+        'post_creator_type': postCreatorType,
+        'address_lat_long_wkb': addressLatLongWkb,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_user_uids': taggedUserUids == null
             ? []
             : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "tagged_community_uids": taggedCommunityUids == null
+        'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "video_duration_ms": videoDurationMs,
+        'video_duration_ms': videoDurationMs,
       };
 }

@@ -5,7 +5,7 @@ class WhatsevrChoiceChip extends StatelessWidget {
   final Function(bool)? switchChoice;
   final String label;
 
-  WhatsevrChoiceChip({
+  const WhatsevrChoiceChip({super.key, 
     required this.label,
     this.choiced = false,
     this.switchChoice,

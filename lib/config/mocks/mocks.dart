@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class MockData {
   static String randomImage([String? hw, int? index]) {
-    String url =
+    final url =
         'https://picsum.photos/${hw ?? '800/800'}?random=${index ?? Random().nextInt(100)}';
 
     return url;

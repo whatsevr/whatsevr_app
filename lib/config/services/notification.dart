@@ -66,7 +66,7 @@ class NotificationService {
   }
 
   Future<void> showBigPictureNotification(
-      String title, String body, String imageUrl) async {
+      String title, String body, String imageUrl,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
@@ -80,7 +80,7 @@ class NotificationService {
   }
 
   Future<void> showMediaNotification(
-      String title, String body, String imageUrl) async {
+      String title, String body, String imageUrl,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
@@ -116,7 +116,7 @@ class NotificationService {
   }
 
   Future<void> showInboxNotification(
-      String title, List<String> messages) async {
+      String title, List<String> messages,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
@@ -124,15 +124,15 @@ class NotificationService {
         title: title,
         body: messages.join('\n'),
         notificationLayout: NotificationLayout.Inbox,
-        payload: {"messages": messages.join(', ')},
+        payload: {'messages': messages.join(', ')},
       ),
     );
   }
 
   Future<void> showMessagingNotification(String groupKey, String chatTitle,
-      List<Map<String, String>> messages) async {
+      List<Map<String, String>> messages,) async {
     // Formatting the messages as a string for the payload
-    String formattedMessages =
+    final formattedMessages =
         messages.map((msg) => '${msg['sender']}: ${msg['message']}').join('\n');
 
     await AwesomeNotifications().createNotification(
@@ -143,7 +143,7 @@ class NotificationService {
         body: 'You have new messages',
         groupKey: groupKey,
         notificationLayout: NotificationLayout.Messaging,
-        payload: {"messages": formattedMessages},
+        payload: {'messages': formattedMessages},
       ),
       actionButtons: [
         NotificationActionButton(
@@ -156,7 +156,7 @@ class NotificationService {
   }
 
   Future<void> showNotificationWithActionButtons(
-      String title, String body) async {
+      String title, String body,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
@@ -179,7 +179,7 @@ class NotificationService {
   }
 
   Future<void> showScheduledNotification(
-      String title, String body, DateTime scheduledDate) async {
+      String title, String body, DateTime scheduledDate,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),
@@ -192,7 +192,7 @@ class NotificationService {
   }
 
   Future<void> showProgressNotification(
-      String title, String body, int progress) async {
+      String title, String body, int progress,) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: createUniqueId(),

@@ -173,7 +173,7 @@ class Info {
 
   String toJson() => json.encode(toMap());
 
-  factory Info.fromMap(Map<String, dynamic> json) => Info();
+  factory Info.fromMap() => Info();
 
   Map<String, dynamic> toMap() => <String, dynamic>{};
 }

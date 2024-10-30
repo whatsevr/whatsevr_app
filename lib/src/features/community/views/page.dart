@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:video_player/video_player.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import '../../../../config/mocks/mocks.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
+import '../../../../config/widgets/tab_bar.dart';
 
 class CommunityPageX extends StatelessWidget {
   CommunityPageX({super.key});

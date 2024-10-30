@@ -1,9 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/generated/assets.dart';
+
+import '../../../generated/assets.dart';
+import '../dialogs/showAppModalSheet.dart';
+import '../textfield/super_textform_field.dart';
 
 class AiButton extends StatelessWidget {
   final bool showLabel;

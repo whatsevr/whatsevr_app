@@ -25,17 +25,17 @@ class SanityCheckNewMemoryRequest {
 
   factory SanityCheckNewMemoryRequest.fromMap(Map<String, dynamic> json) =>
       SanityCheckNewMemoryRequest(
-        mediaMetaData: json["media_meta_data"] == null
+        mediaMetaData: json['media_meta_data'] == null
             ? null
-            : MediaMetaData.fromMap(json["media_meta_data"]),
-        postData: json["post_data"] == null
+            : MediaMetaData.fromMap(json['media_meta_data']),
+        postData: json['post_data'] == null
             ? null
-            : PostData.fromMap(json["post_data"]),
+            : PostData.fromMap(json['post_data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "media_meta_data": mediaMetaData?.toMap(),
-        "post_data": postData?.toMap(),
+        'media_meta_data': mediaMetaData?.toMap(),
+        'post_data': postData?.toMap(),
       };
 }
 
@@ -63,13 +63,13 @@ class MediaMetaData {
   String toJson() => json.encode(toMap());
 
   factory MediaMetaData.fromMap(Map<String, dynamic> json) => MediaMetaData(
-        videoDurationSec: json["video_duration_sec"],
-        sizeBytes: json["size_bytes"],
+        videoDurationSec: json['video_duration_sec'],
+        sizeBytes: json['size_bytes'],
       );
 
   Map<String, dynamic> toMap() => {
-        "video_duration_sec": videoDurationSec,
-        "size_bytes": sizeBytes,
+        'video_duration_sec': videoDurationSec,
+        'size_bytes': sizeBytes,
       };
 }
 
@@ -105,16 +105,16 @@ class PostData {
   String toJson() => json.encode(toMap());
 
   factory PostData.fromMap(Map<String, dynamic> json) => PostData(
-        isVideo: json["is_video"],
-        isImage: json["is_image"],
-        userUid: json["user_uid"],
-        postCreatorType: json["post_creator_type"],
+        isVideo: json['is_video'],
+        isImage: json['is_image'],
+        userUid: json['user_uid'],
+        postCreatorType: json['post_creator_type'],
       );
 
   Map<String, dynamic> toMap() => {
-        "is_video": isVideo,
-        "is_image": isImage,
-        "user_uid": userUid,
-        "post_creator_type": postCreatorType,
+        'is_video': isVideo,
+        'is_image': isImage,
+        'user_uid': userUid,
+        'post_creator_type': postCreatorType,
       };
 }

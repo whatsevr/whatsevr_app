@@ -6,16 +6,17 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:pro_image_editor/models/editor_callbacks/pro_image_editor_callbacks.dart';
 import 'package:pro_image_editor/models/editor_configs/pro_image_editor_configs.dart';
 import 'package:pro_image_editor/modules/main_editor/main_editor.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
-import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/dev/talker.dart';
-import 'package:whatsevr_app/utils/file.dart';
+
+import '../../../dev/talker.dart';
+import '../../../utils/file.dart';
+import '../../routes/router.dart';
+import '../app_bar.dart';
 
 class ImageEditorPageArgument {
   final File imageFileToEdit;
   final Function(File file) onCompleted;
   ImageEditorPageArgument(
-      {required this.imageFileToEdit, required this.onCompleted});
+      {required this.imageFileToEdit, required this.onCompleted,});
 }
 
 class ImageEditorPage extends StatelessWidget {
@@ -30,7 +31,7 @@ class ImageEditorPage extends StatelessWidget {
         pageArgument.imageFileToEdit,
         callbacks: ProImageEditorCallbacks(
           onImageEditingComplete: (Uint8List bytes) async {
-            File? fileFromBytes = await uint8BytesToFile(bytes);
+            final fileFromBytes = await uint8BytesToFile(bytes);
             if (fileFromBytes == null) {
               TalkerService.instance
                   .error('Error converting bytes to file in ImageEditorPage');

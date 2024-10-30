@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
 
-import 'package:whatsevr_app/config/api/client.dart';
+import '../client.dart';
 
 import '../external/models/business_validation_exception.dart';
 import '../response_model/text_search_users_communities.dart';
@@ -12,7 +11,7 @@ class TextSearchApi {
       return null;
     }
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/search/users_communities',
         queryParameters: {'input_text': query},
       );

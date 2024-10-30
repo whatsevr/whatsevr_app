@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_region/device_region.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+
+import '../../dev/talker.dart';
+import '../api/external/models/business_validation_exception.dart';
 
 class DeviceInfo {
   DeviceInfo({
@@ -54,10 +55,10 @@ class DeviceInfoService {
   }
 
   static Future<void> _setAndroidDeviceInfo() async {
-    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    final deviceInfoPlugin = DeviceInfoPlugin();
     try {
-      final AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-      final String? countryCode = await _getCurrentCountryCode();
+      final androidInfo = await deviceInfoPlugin.androidInfo;
+      final countryCode = await _getCurrentCountryCode();
       _currentDeviceInfo = DeviceInfo(
         deviceName: androidInfo.model,
         countryCode: countryCode,
@@ -70,10 +71,10 @@ class DeviceInfoService {
   }
 
   static Future<void> _setIOSDeviceInfo() async {
-    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    final deviceInfoPlugin = DeviceInfoPlugin();
     try {
-      final IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      final String? countryCode = await _getCurrentCountryCode();
+      final iosInfo = await deviceInfoPlugin.iosInfo;
+      final countryCode = await _getCurrentCountryCode();
       _currentDeviceInfo = DeviceInfo(
         deviceName: iosInfo.utsname.machine,
         countryCode: countryCode,
@@ -87,7 +88,7 @@ class DeviceInfoService {
 
   static Future<String?> _getCurrentCountryCode() async {
     try {
-      final String? countryCode = await DeviceRegion.getSIMCountryCode();
+      final countryCode = await DeviceRegion.getSIMCountryCode();
       return countryCode;
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ant_design.dart';
 import 'package:iconify_flutter/icons/la.dart';
 import 'package:iconify_flutter/icons/octicon.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:like_button/like_button.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ant_design.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
-import 'package:whatsevr_app/config/widgets/stack_toast.dart';
-import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
-import 'package:whatsevr_app/utils/conversion.dart';
+
+import '../../../utils/conversion.dart';
+import '../../themes/theme.dart';
+import '../stack_toast.dart';
+import 'two_state_ui.dart';
 
 class WhatsevrReactButton extends StatefulWidget {
   final bool? initiallyReacted;
@@ -29,7 +29,7 @@ class WhatsevrReactButton extends StatefulWidget {
       this.firstColor,
       this.onReact,
       this.onUnreact,
-      this.onTapSide});
+      this.onTapSide,});
 
   @override
   State<WhatsevrReactButton> createState() => _WhatsevrReactButtonState();
@@ -96,7 +96,7 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                   ),
               ],
             ),
-          )),
+          ),),
     );
   }
 }
@@ -114,11 +114,11 @@ class WhatsevrBookmarkButton extends StatelessWidget {
       this.onBookmarked,
       this.onUnBookmarkRemoved,
       this.firstStateColor,
-      this.secondStateColor});
+      this.secondStateColor,});
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = context.whatsevrTheme;
+    final theme = context.whatsevrTheme;
     return WhatsevrTwoStateUi(
       isSecondState: isBookmarked ?? false,
       onStateChanged: (isSecondState, isFirstState) {
@@ -131,7 +131,7 @@ class WhatsevrBookmarkButton extends StatelessWidget {
         }
       },
       firstStateUi: Iconify(Ph.bookmark_simple_thin,
-          color: firstStateColor ?? theme.icon),
+          color: firstStateColor ?? theme.icon,),
       secondStateUi:
           Iconify(Ph.bookmark_fill, color: secondStateColor ?? theme.icon),
     );
@@ -146,7 +146,7 @@ class WhatsevrCommentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = context.whatsevrTheme;
+    final theme = context.whatsevrTheme;
     return IconButton(
       onPressed: () {
         onTapComment?.call();
@@ -164,7 +164,7 @@ class WhatsevrShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = context.whatsevrTheme;
+    final theme = context.whatsevrTheme;
     return IconButton(
       onPressed: () {
         onTapShare?.call();
@@ -185,7 +185,7 @@ class Whatsevr3DotMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppTheme theme = context.whatsevrTheme;
+    final theme = context.whatsevrTheme;
     return IconButton(
       onPressed: () {
         onTapMenu?.call();

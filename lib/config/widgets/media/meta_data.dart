@@ -1,15 +1,15 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:media_info/media_info.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-import 'package:whatsevr_app/dev/talker.dart';
-
 import '../../../constants.dart';
+import '../../../dev/talker.dart';
 import '../../../utils/conversion.dart';
+import '../dialogs/showAppModalSheet.dart';
 
 class FileMetaData {
   final String name;
@@ -100,10 +100,10 @@ class FileMetaData {
         mediaInfo = await MediaInfo().getMediaInfo(file.path);
       } catch (e) {
         TalkerService.instance.error(
-            'Error getting media info so trying to get media info for renamed file');
+            'Error getting media info so trying to get media info for renamed file',);
 
         ///in case package:media_info was unable to get media info for the file for complex file name
-        File? renamedFile = await _simplifyFileNameAndPutToTempDir(
+        final renamedFile = await _simplifyFileNameAndPutToTempDir(
           file.path,
         );
         mediaInfo = await MediaInfo().getMediaInfo(renamedFile!.path);
@@ -123,10 +123,10 @@ class FileMetaData {
       final sizeInText = getFileSize(size);
       final (sec, min, hour) =
           getDurationInSecMinHour(mediaInfo['durationMs'] as int?);
-      final int? durationInSec = sec;
-      final int? durationInMin = min;
-      final int? durationInHour = hour;
-      FileMetaData fileMetaData = FileMetaData(
+      final durationInSec = sec;
+      final durationInMin = min;
+      final durationInHour = hour;
+      final fileMetaData = FileMetaData(
         name: file.path.split('/').last,
         path: file.path,
         extension: file.path.split('.').last,
@@ -161,11 +161,11 @@ class FileMetaData {
   }
 
   static (int? sec, int? min, int? hour) getDurationInSecMinHour(
-      int? duration) {
+      int? duration,) {
     if (duration == null) return (null, null, null);
-    final int sec = duration ~/ 1000;
-    final int min = sec ~/ 60;
-    final int hour = min ~/ 60;
+    final sec = duration ~/ 1000;
+    final min = sec ~/ 60;
+    final hour = min ~/ 60;
     return (sec, min, hour);
   }
 
@@ -186,16 +186,16 @@ class FileMetaData {
       'PB',
       'EB',
       'ZB',
-      'YB'
+      'YB',
     ];
-    int i = (log(bytes) / log(1024)).floor();
+    final i = (log(bytes) / log(1024)).floor();
     return '${(bytes / pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
   }
 
-  static showMetaData(FileMetaData? metaData) {
+  static void showMetaData(FileMetaData? metaData) {
     if (!kTestingMode) return;
     if (metaData == null) return;
-    Map<String, dynamic> data = metaData.toMap();
+    final data = metaData.toMap();
     showAppModalSheet(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -236,18 +236,18 @@ Future<File?> _simplifyFileNameAndPutToTempDir(String sourceFilePath) async {
   try {
     // Check if the source file exists
     final sourceFile = File(sourceFilePath);
-    String fileExtension = sourceFile.path.split('.').last;
+    final fileExtension = sourceFile.path.split('.').last;
     if (!await sourceFile.exists()) {
       debugPrint('Source file does not exist.');
       return null;
     }
 
     // Get the temporary directory
-    final Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
+    final tempDir = await getTemporaryDirectory();
+    final tempPath = tempDir.path;
 
     // Create a unique filename using the current timestamp
-    String newFileName =
+    final newFileName =
         'temp_whatsevr_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
 
     // Create the new file path in the temporary directory

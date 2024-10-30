@@ -2,24 +2,21 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/routes/routes_name.dart';
 import '../../../../../config/widgets/app_bar.dart';
 import '../../../../../config/widgets/buttons/button.dart';
+import '../../../../../config/widgets/dialogs/place_search_list.dart';
+import '../../../../../config/widgets/dialogs/search_and_tag.dart';
+import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import '../../../../../config/widgets/media/aspect_ratio.dart';
 import '../../../../../config/widgets/media/asset_picker.dart';
 import '../../../../../config/widgets/media/meta_data.dart';
 import '../../../../../config/widgets/media/thumbnail_selection.dart';
 import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/dialogs/place_search_list.dart';
 import '../../../../../config/widgets/previewers/video.dart';
 import '../../../../../config/widgets/product_guide/product_guides.dart';
-import '../../../../../config/widgets/dialogs/search_and_tag.dart';
-import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
 import '../../../../../config/widgets/textfield/super_textform_field.dart';
-
 import '../bloc/create_flick_bloc.dart';
 
 class CreateFlickPostPageArgument {
@@ -67,7 +64,7 @@ class CreateFlickPostPage extends StatelessWidget {
                     aspectRatio: state.videoMetaData?.aspectRatio ?? 9 / 12,
                     child: Builder(
                       builder: (BuildContext context) {
-                        double baseHeight = double.infinity;
+                        final baseHeight = double.infinity;
                         if (state.thumbnailFile != null) {
                           return Stack(
                             children: <Widget>[
@@ -101,7 +98,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () {
                                     FileMetaData.showMetaData(
-                                        state.videoMetaData);
+                                        state.videoMetaData,);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
@@ -137,7 +134,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                       .read<CreateFlickPostBloc>()
                                       .add(PickThumbnailEvent(
                                         pickedThumbnailFile: value,
-                                      ));
+                                      ),);
                                 }
                               });
                             },
@@ -173,9 +170,9 @@ class CreateFlickPostPage extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Icon(Icons.video_file_rounded,
-                                    color: Colors.white, size: 50),
+                                    color: Colors.white, size: 50,),
                                 Text('Add a video',
-                                    style: TextStyle(color: Colors.white)),
+                                    style: TextStyle(color: Colors.white),),
                               ],
                             ),
                           ),
@@ -202,7 +199,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                       .read<CreateFlickPostBloc>()
                                       .add(PickThumbnailEvent(
                                         pickedThumbnailFile: value,
-                                      ));
+                                      ),);
                                 }
                               });
                             },
@@ -223,7 +220,7 @@ class CreateFlickPostPage extends StatelessWidget {
                               );
                             },
                             label: 'Change Video',
-                          )
+                          ),
                         ],
                       ],
                     ),
@@ -269,9 +266,9 @@ class CreateFlickPostPage extends StatelessWidget {
                                 address: placeName,
                                 addressLatitude: lat,
                                 addressLongitude: long,
-                              ));
+                              ),);
                         },
-                      ));
+                      ),);
                     },
                   ),
                   if (state.placesNearbyResponse?.places?.isNotEmpty ??
@@ -294,7 +291,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                         ?.places?[index].location?.latitude,
                                     addressLongitude: state.placesNearbyResponse
                                         ?.places?[index].location?.longitude,
-                                  ));
+                                  ),);
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -338,7 +335,7 @@ class CreateFlickPostPage extends StatelessWidget {
                                 .add(UpdateTaggedUsersAndCommunitiesEvent(
                                   taggedUsersUid: selectedUsersUid,
                                   taggedCommunitiesUid: selectedCommunitiesUid,
-                                ));
+                                ),);
                           },
                         ),
                       );
@@ -349,7 +346,7 @@ class CreateFlickPostPage extends StatelessWidget {
                         Icon(Icons.person, color: Colors.black),
                         Gap(4),
                         Text('Tag People',
-                            style: TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.black),),
                         Spacer(),
                         Icon(Icons.arrow_right_rounded, color: Colors.black),
                       ],
@@ -396,7 +393,7 @@ class CreateFlickPostPage extends StatelessWidget {
                           onTap: () {
                             context.read<CreateFlickPostBloc>().add(
                                 const UpdateTaggedUsersAndCommunitiesEvent(
-                                    clearAll: true));
+                                    clearAll: true,),);
                           },
                           child: const Icon(
                             Icons.clear_rounded,

@@ -2,11 +2,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
-
-import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 import '../../../../../utils/conversion.dart';
+import '../../bloc/account_bloc.dart';
 
 class AccountPageFlicksView extends StatelessWidget {
   const AccountPageFlicksView({super.key});
@@ -26,7 +24,7 @@ class AccountPageFlicksView extends StatelessWidget {
           ),
           itemCount: state.userFlicks.length,
           itemBuilder: (BuildContext context, int index) {
-            Flick? userVideoPost = state.userFlicks[index];
+            final userVideoPost = state.userFlicks[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -113,7 +111,7 @@ class AccountPageFlicksView extends StatelessWidget {
                           ...[
                             const Gap(4),
                             Icon(Icons.more_horiz),
-                          ]
+                          ],
                         ],
                       ),
                       Text(

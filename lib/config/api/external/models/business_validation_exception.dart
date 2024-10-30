@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/dev/talker.dart';
+import '../../../../dev/talker.dart';
 
 class BusinessException implements Exception {
   final String message;
@@ -59,7 +59,7 @@ void lowLevelCatch(dynamic e, StackTrace stackTrace) {
       throw BusinessException('Internal server error: $errorMessage');
     } else {
       throw BusinessException(
-          'HTTP error: $errorMessage (Status code: $statusCode)');
+          'HTTP error: $errorMessage (Status code: $statusCode)',);
     }
   }
 

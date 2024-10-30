@@ -1,18 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
-import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 
-import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
-import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
-
-import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
+import '../../../../../../../config/api/response_model/recommendation_offers.dart';
+import '../../../../../../../config/widgets/dialogs/comments_view.dart';
+import '../../../../../../../config/widgets/dialogs/show_tagged_users_dialog.dart';
+import '../../../../../../../config/widgets/loading_indicator.dart';
+import '../../../../../../../config/widgets/max_scroll_listener.dart';
 import '../../../../../../../config/widgets/posts_frame/offer.dart';
+import '../../../../../../../config/widgets/refresh_indicator.dart';
+import '../../../../bloc/explore_bloc.dart';
 
 class ExplorePageOffersPage extends StatelessWidget {
   const ExplorePageOffersPage({super.key, this.scrollController});
@@ -29,7 +27,7 @@ class ExplorePageOffersPage extends StatelessWidget {
                       .videoPaginationData!
                       .currentPage +
                   1,
-            ));
+            ),);
       },
     );
 
@@ -49,7 +47,7 @@ class ExplorePageOffersPage extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
             itemBuilder: (BuildContext context, int index) {
-              RecommendedOffer offer = data![index];
+              final offer = data![index];
 
               return Column(
                 children: [

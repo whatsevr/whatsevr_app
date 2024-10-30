@@ -1,11 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:async';
-
-import 'package:whatsevr_app/config/api/methods/common_data.dart';
-import 'package:whatsevr_app/config/api/response_model/common_data.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import '../../api/methods/common_data.dart';
+import '../../api/response_model/common_data.dart';
+import '../textfield/super_textform_field.dart';
 
 class CommonDataSearchSelectPage extends StatefulWidget {
   final bool scaffoldView;
@@ -77,7 +77,7 @@ class _CommonDataSearchSelectPageState
   // Fetch data using CommonDataApi with error handling and loading state
   Future<void> _fetchCommonData() async {
     try {
-      CommonDataResponse? response = await CommonDataApi.getAllCommonData();
+      final response = await CommonDataApi.getAllCommonData();
 
       if (response != null) {
         setState(() {
@@ -123,7 +123,7 @@ class _CommonDataSearchSelectPageState
   }
 
   void _filterList() {
-    final String query = _searchController.text.toLowerCase();
+    final query = _searchController.text.toLowerCase();
 
     setState(() {
       if (_commonData != null) {
@@ -182,7 +182,7 @@ class _CommonDataSearchSelectPageState
 
   @override
   Widget build(BuildContext context) {
-    Widget child = _isLoading
+    final child = _isLoading
         ? const Center(child: CupertinoActivityIndicator())
         : _errorMessage.isNotEmpty
             ? Center(child: Text(_errorMessage)) // Show error message

@@ -1,23 +1,12 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-
-import 'package:iconify_flutter/icons/la.dart';
-
-import 'package:iconify_flutter/icons/octicon.dart';
-
-import 'package:iconify_flutter/icons/ph.dart';
-
-import 'package:iconify_flutter/icons/system_uicons.dart';
-
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../utils/conversion.dart';
-import '../buttons/two_state_ui.dart';
+import '../../mocks/mocks.dart';
+import '../buttons/animated_like_icon_button.dart';
+import '../feed_players/wtv_mini_player.dart';
+import '../pad_horizontal.dart';
 
 class WtvVideoPostFrame extends StatelessWidget {
   final String? title;
@@ -174,7 +163,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                     const WhatsevrReactButton(),
                     Text(likes == null || likes == 0
                         ? ''
-                        : formatCountToKMBTQ(likes) ?? ''),
+                        : formatCountToKMBTQ(likes) ?? '',),
                     WhatsevrCommentButton(
                       onTapComment: () {
                         onTapComment?.call();
@@ -182,13 +171,13 @@ class WtvVideoPostFrame extends StatelessWidget {
                     ),
                     Text(comments == null || comments == 0
                         ? ''
-                        : formatCountToKMBTQ(comments) ?? ''),
+                        : formatCountToKMBTQ(comments) ?? '',),
                     WhatsevrShareButton(
                       onTapShare: () {},
                     ),
                     Text(shares == null || shares == 0
                         ? ''
-                        : formatCountToKMBTQ(shares) ?? ''),
+                        : formatCountToKMBTQ(shares) ?? '',),
                     const Spacer(),
                     WhatsevrBookmarkButton(),
                     Whatsevr3DotMenuButton(),

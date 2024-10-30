@@ -7,24 +7,18 @@ import 'package:detectable_text_field/detector/text_pattern_detector.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
-
-import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 
 import '../../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../../config/api/external/models/places_nearby.dart';
 import '../../../../../config/api/methods/posts.dart';
-
 import '../../../../../config/api/requests_model/create_photo_post.dart';
 import '../../../../../config/api/requests_model/sanity_check_new_photo_posts.dart';
 import '../../../../../config/routes/router.dart';
+import '../../../../../config/services/auth_db.dart';
 import '../../../../../config/services/file_upload.dart';
 import '../../../../../config/services/location.dart';
-
 import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
-
+import '../../../../../utils/geopoint_wkb_parser.dart';
 import '../views/page.dart';
 
 part 'create_photo_post_event.dart';
@@ -46,7 +40,7 @@ class CreatePhotoPostBloc
     on<PickImageEvent>(_onPickImage);
 
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities);
+        _onUpdateTaggedUsersAndCommunities,);
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
   }
   FutureOr<void> _onInitial(
@@ -59,13 +53,13 @@ class CreatePhotoPostBloc
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
         onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed) {
+            isPermissionAllowed,) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
             emit(state.copyWith(
               userCurrentLocationLatLongWkb:
                   WKBUtil.getWkbString(lat: lat, long: long),
-            ));
+            ),);
           }
         },
       );
@@ -76,13 +70,13 @@ class CreatePhotoPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreatePhotoPostState> emit) async {
+      UpdatePostAddressEvent event, Emitter<CreatePhotoPostState> emit,) async {
     try {
       emit(
         state.copyWith(
           selectedPostLocation: event.address,
           selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude),
+              lat: event.addressLatitude, long: event.addressLongitude,),
         ),
       );
     } catch (e, stackTrace) {
@@ -103,8 +97,8 @@ class CreatePhotoPostBloc
         throw BusinessException('Description is required');
       }
 
-      String hashtagsArea = titleController.text + descriptionController.text;
-      List<String> hashtags = [];
+      final hashtagsArea = titleController.text + descriptionController.text;
+      var hashtags = <String>[];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
           hashtagsArea,
@@ -117,7 +111,7 @@ class CreatePhotoPostBloc
 
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
-      (String?, int?)? itm = await PostApi.sanityCheckNewPhotoPost(
+      final itm = await PostApi.sanityCheckNewPhotoPost(
           request: SanityCheckNewPhotoPostRequest(
         mediaMetaData: [
           for (var e in state.uiImageData)
@@ -126,19 +120,19 @@ class CreatePhotoPostBloc
             ),
         ],
         postData: PostData(
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           postCreatorType: state.pageArgument?.postCreatorType.value,
         ),
-      ));
+      ),);
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
       SmartDialog.showLoading(msg: 'Creating post...');
-      (String?, int?)? response = await PostApi.createPhotoPost(
+      final response = await PostApi.createPhotoPost(
         post: CreatePhotoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
-          userUid: await AuthUserDb.getLastLoggedUserUid(),
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           location: state.selectedPostLocation,
           addressLatLongWkb: state.selectedPostLocationLatLongWkb,
           hashtags: hashtags,
@@ -152,10 +146,10 @@ class CreatePhotoPostBloc
                 type: 'image',
                 imageUrl: await FileUploadService.uploadFilesToSupabase(
                   e.file!,
-                  userUid: (await AuthUserDb.getLastLoggedUserUid())!,
+                  userUid: (AuthUserDb.getLastLoggedUserUid())!,
                   fileRelatedTo: 'photo-post-image',
                 ),
-              )
+              ),
           ],
         ),
       );
@@ -171,21 +165,21 @@ class CreatePhotoPostBloc
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
       UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreatePhotoPostState> emit) {
+      Emitter<CreatePhotoPostState> emit,) {
     try {
       if (event.clearAll == true) {
         emit(state.copyWith(
           taggedUsersUid: [],
           taggedCommunitiesUid: [],
-        ));
+        ),);
       } else {
-        List<String> taggedUsersUid = [
+        var taggedUsersUid = <String>[
           ...state.taggedUsersUid,
-          ...?event.taggedUsersUid
+          ...?event.taggedUsersUid,
         ];
-        List<String> taggedCommunitiesUid = [
+        var taggedCommunitiesUid = <String>[
           ...state.taggedCommunitiesUid,
-          ...?event.taggedCommunitiesUid
+          ...?event.taggedCommunitiesUid,
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
@@ -202,9 +196,9 @@ class CreatePhotoPostBloc
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreatePhotoPostState> emit) async {
+      PickImageEvent event, Emitter<CreatePhotoPostState> emit,) async {
     try {
-      FileMetaData? imageMetaData =
+      final imageMetaData =
           await FileMetaData.fromFile(event.pickedImageFile);
       if (imageMetaData == null || imageMetaData.isImage != true) {
         throw BusinessException('Image is not valid');
@@ -217,20 +211,20 @@ class CreatePhotoPostBloc
             fileMetaData: imageMetaData,
           ),
         ],
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreatePhotoPostState> emit) {
+      RemoveVideoOrImageEvent event, Emitter<CreatePhotoPostState> emit,) {
     try {
       emit(state.copyWith(
         uiFilesData: state.uiImageData
             .where((element) => element != event.uiFileData)
             .toList(),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

@@ -3,16 +3,16 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/api/methods/text_search.dart';
-import 'package:whatsevr_app/config/api/response_model/text_search_users_communities.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import '../../api/methods/text_search.dart';
+import '../../api/response_model/text_search_users_communities.dart';
+import '../../mocks/mocks.dart';
+import '../buttons/button.dart';
+import '../textfield/super_textform_field.dart';
 
 class SearchAndTagUsersAndCommunityPage extends StatefulWidget {
   final bool scaffoldView;
   final Function(
-          List<String> selectedUsersUid, List<String> selectedCommunitiesUid)?
+          List<String> selectedUsersUid, List<String> selectedCommunitiesUid,)?
       onDone;
   const SearchAndTagUsersAndCommunityPage({
     super.key,
@@ -38,7 +38,7 @@ class _SearchAndTagUsersAndCommunityPageState
         'search-users-community-6425254',
         const Duration(milliseconds: 600),
         () async {
-          TextSearchUsersAndCommunitiesResponse? response =
+          final response =
               await TextSearchApi.searchUsersAndCommunities(query: inputText);
 
           if (response != null) {
@@ -59,7 +59,7 @@ class _SearchAndTagUsersAndCommunityPageState
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Widget child = Column(
+    final Widget child = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         WhatsevrFormField.textFieldWithClearIcon(
@@ -82,7 +82,7 @@ class _SearchAndTagUsersAndCommunityPageState
               return const Gap(4);
             },
             itemBuilder: (BuildContext context, int index) {
-              User? user = searchedItems?.users?[index];
+              final user = searchedItems?.users?[index];
               return ListTile(
                 dense: true,
                 visualDensity: VisualDensity.compact,
@@ -96,7 +96,7 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      user?.profilePicture ?? MockData.blankProfileAvatar),
+                      user?.profilePicture ?? MockData.blankProfileAvatar,),
                 ),
                 title: Text(
                   '${user?.name}',
@@ -108,7 +108,7 @@ class _SearchAndTagUsersAndCommunityPageState
                     : const Icon(Icons.circle_outlined),
               );
             },
-          )
+          ),
         ],
         if (searchedItems?.communities?.isNotEmpty ?? false) ...[
           const Gap(8),
@@ -122,7 +122,7 @@ class _SearchAndTagUsersAndCommunityPageState
               return const Gap(4);
             },
             itemBuilder: (BuildContext context, int index) {
-              Community? community = searchedItems?.communities?[index];
+              final community = searchedItems?.communities?[index];
               return ListTile(
                 dense: true,
                 visualDensity: VisualDensity.compact,
@@ -136,7 +136,7 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      community?.profilePicture ?? MockData.blankProfileAvatar),
+                      community?.profilePicture ?? MockData.blankProfileAvatar,),
                 ),
                 title: Text(
                   '${community?.title}',

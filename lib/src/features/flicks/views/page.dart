@@ -1,30 +1,22 @@
 import 'package:cached_video_player_plus/cached_video_player_plus.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:preload_page_view/preload_page_view.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-import 'package:whatsevr_app/app.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
-
-import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:gap/gap.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
-import 'package:whatsevr_app/config/widgets/content_mask.dart';
-import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
-
-import '../../../../config/widgets/feed_players/flick_full_player.dart';
+import '../../../../config/api/response_model/recommendation_flicks.dart';
+import '../../../../config/mocks/mocks.dart';
+import '../../../../config/themes/theme.dart';
+import '../../../../config/widgets/buttons/animated_like_icon_button.dart';
+import '../../../../config/widgets/buttons/button.dart';
 import '../../../../config/widgets/buttons/two_state_ui.dart';
+import '../../../../config/widgets/content_mask.dart';
+import '../../../../config/widgets/dialogs/comments_view.dart';
+import '../../../../config/widgets/feed_players/flick_full_player.dart';
+import '../../../../config/widgets/max_scroll_listener.dart';
+import '../../../../config/widgets/pad_horizontal.dart';
 import '../bloc/flicks_bloc.dart';
 
 class FlicksPage extends StatefulWidget {
@@ -41,7 +33,7 @@ class _FlicksPageState extends State<FlicksPage> {
       create: (context) => FlicksBloc()..add(FlicksInitialEvent()),
       child: Builder(builder: (context) {
         return _buildBody(context);
-      }),
+      },),
     );
   }
 
@@ -57,8 +49,8 @@ class _FlicksPageState extends State<FlicksPage> {
                     .flicksPaginationData!
                     .currentPage +
                 1,
-          ));
-    });
+          ),);
+    },);
 
     return BlocSelector<FlicksBloc, FlicksState, List<RecommendedFlick>?>(
       selector: (FlicksState state) => state.recommendationFlicks,
@@ -74,7 +66,7 @@ class _FlicksPageState extends State<FlicksPage> {
                 scrollDirection: Axis.vertical,
                 itemCount: data?.length,
                 itemBuilder: (BuildContext context, int index) {
-                  RecommendedFlick? flick = data?[index];
+                  final flick = data?[index];
 
                   return Stack(
                     alignment: Alignment.center,
@@ -117,11 +109,11 @@ class _FlicksPageState extends State<FlicksPage> {
                                         Icons.link,
                                         size: 30,
                                         color: Colors.white,
-                                      )),
+                                      ),),
                                   const Gap(16),
                                   WhatsevrShareButton(
                                     iconColor: DarkTheme().icon,
-                                  )
+                                  ),
                                 ],
                               ),
                               const Gap(16),
@@ -134,7 +126,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                         backgroundImage:
                                             ExtendedNetworkImageProvider(flick
                                                     ?.user?.profilePicture ??
-                                                MockData.blankProfileAvatar),
+                                                MockData.blankProfileAvatar,),
                                       ),
                                       const SizedBox(width: 8),
                                       Expanded(
@@ -184,14 +176,14 @@ class _FlicksPageState extends State<FlicksPage> {
                                       Gap(12),
                                       Whatsevr3DotMenuButton(
                                         iconColor: DarkTheme().icon,
-                                      )
+                                      ),
                                     ],
                                   ),
                                   const Gap(8),
                                   GestureDetector(
                                       onTap: () {
                                         showCommentsDialog(
-                                            flickPostUid: flick?.uid);
+                                            flickPostUid: flick?.uid,);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
@@ -215,7 +207,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                           ),
                                           itemBuilder: (BuildContext context,
                                                   int itemIndex,
-                                                  int pageViewIndex) =>
+                                                  int pageViewIndex,) =>
                                               Row(
                                             children: <Widget>[
                                               const Gap(8),
@@ -223,7 +215,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                                 radius: 10,
                                                 backgroundImage: NetworkImage(
                                                     MockData
-                                                        .blankProfileAvatar),
+                                                        .blankProfileAvatar,),
                                               ),
                                               const Gap(8),
                                               const Expanded(
@@ -237,7 +229,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                             ],
                                           ),
                                         ),
-                                      )),
+                                      ),),
                                 ],
                               ),
                               const Gap(16),
@@ -250,7 +242,7 @@ class _FlicksPageState extends State<FlicksPage> {
                 },
               ),
             );
-          }),
+          },),
           //show video progress
           bottomNavigationBar: currentVideoController == null
               ? null

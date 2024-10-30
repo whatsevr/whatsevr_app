@@ -14,13 +14,13 @@ class PlacesNearbyResponse {
 
   factory PlacesNearbyResponse.fromMap(Map<String, dynamic> json) =>
       PlacesNearbyResponse(
-        places: json["places"] == null
+        places: json['places'] == null
             ? []
-            : List<Place>.from(json["places"]!.map((x) => Place.fromMap(x))),
+            : List<Place>.from(json['places']!.map((x) => Place.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "places": places == null
+        'places': places == null
             ? []
             : List<dynamic>.from(places!.map((x) => x.toMap())),
       };
@@ -44,21 +44,21 @@ class Place {
   String toJson() => json.encode(toMap());
 
   factory Place.fromMap(Map<String, dynamic> json) => Place(
-        name: json["name"],
-        location: json["location"] == null
+        name: json['name'],
+        location: json['location'] == null
             ? null
-            : Location.fromMap(json["location"]),
-        userRatingCount: json["userRatingCount"],
-        displayName: json["displayName"] == null
+            : Location.fromMap(json['location']),
+        userRatingCount: json['userRatingCount'],
+        displayName: json['displayName'] == null
             ? null
-            : DisplayName.fromMap(json["displayName"]),
+            : DisplayName.fromMap(json['displayName']),
       );
 
   Map<String, dynamic> toMap() => {
-        "name": name,
-        "location": location?.toMap(),
-        "userRatingCount": userRatingCount,
-        "displayName": displayName?.toMap(),
+        'name': name,
+        'location': location?.toMap(),
+        'userRatingCount': userRatingCount,
+        'displayName': displayName?.toMap(),
       };
 }
 
@@ -75,11 +75,11 @@ class DisplayName {
   String toJson() => json.encode(toMap());
 
   factory DisplayName.fromMap(Map<String, dynamic> json) => DisplayName(
-        text: json["text"],
+        text: json['text'],
       );
 
   Map<String, dynamic> toMap() => {
-        "text": text,
+        'text': text,
       };
 }
 
@@ -97,12 +97,12 @@ class Location {
   String toJson() => json.encode(toMap());
 
   factory Location.fromMap(Map<String, dynamic> json) => Location(
-        latitude: json["latitude"]?.toDouble(),
-        longitude: json["longitude"]?.toDouble(),
+        latitude: json['latitude']?.toDouble(),
+        longitude: json['longitude']?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
-        "latitude": latitude,
-        "longitude": longitude,
+        'latitude': latitude,
+        'longitude': longitude,
       };
 }

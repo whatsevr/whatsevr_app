@@ -91,9 +91,9 @@ class WhatsevrButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Colors are fixed based on the button's style (filled/outlined) and color scheme (black/white)
-    final Color buttonColor = isOutlined ? Colors.white : Colors.black;
-    final Color textColor = isOutlined ? Colors.black : Colors.white;
-    final Color? borderColor = isOutlined ? Colors.black : null;
+    final buttonColor = isOutlined ? Colors.white : Colors.black;
+    final textColor = isOutlined ? Colors.black : Colors.white;
+    final borderColor = isOutlined ? Colors.black : null;
 
     return MaterialButton(
       elevation: 0,
@@ -102,7 +102,7 @@ class WhatsevrButton extends StatelessWidget {
       onPressed: onPressed,
       color: buttonColor,
       padding: EdgeInsets.symmetric(
-          vertical: miniButton ? 8 : 10.0, horizontal: miniButton ? 14 : 22.0),
+          vertical: miniButton ? 8 : 10.0, horizontal: miniButton ? 14 : 22.0,),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(miniButton ? 4 : 8.0),
         side: borderColor == null

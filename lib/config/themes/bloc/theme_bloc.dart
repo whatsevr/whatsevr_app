@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
+import '../theme.dart';
 
 part 'theme_event.dart';
 part 'theme_state.dart';

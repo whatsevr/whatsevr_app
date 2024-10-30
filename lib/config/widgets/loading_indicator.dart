@@ -14,7 +14,7 @@ class WhatsevrLoadingIndicator extends StatelessWidget {
             shape: BoxShape.circle,
             color: showBorder ? CupertinoColors.white : null,
           ),
-          child: CupertinoActivityIndicator()),
+          child: CupertinoActivityIndicator(),),
     );
   }
 }

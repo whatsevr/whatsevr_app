@@ -1,25 +1,21 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
-
-import 'package:whatsevr_app/config/api/client.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
-import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-
-import 'package:whatsevr_app/config/api/response_model/user_details.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
-
+import '../client.dart';
 import '../external/models/business_validation_exception.dart';
+import '../requests_model/update_user_cover_media.dart';
+import '../requests_model/update_user_profile_picture.dart';
+import '../requests_model/user/update_user_educations.dart';
+import '../requests_model/user/update_user_info.dart';
+import '../requests_model/user/update_user_portfolio_info.dart';
+import '../requests_model/user/update_user_services.dart';
+import '../requests_model/user/update_user_work_experiences.dart';
+import '../response_model/multiple_user_details.dart';
+import '../response_model/profile_details.dart';
+import '../response_model/user_details.dart';
 import '../response_model/user_flicks.dart';
+import '../response_model/user_memories.dart';
+import '../response_model/user_offers.dart';
+import '../response_model/user_photo_posts.dart';
 import '../response_model/user_video_posts.dart';
 
 class UsersApi {
@@ -27,7 +23,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-details',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -44,7 +40,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/get-user-supportive-data',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -61,7 +57,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-profile-details',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -78,7 +74,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-video-posts',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -95,7 +91,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-flicks',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -112,7 +108,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-memories',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -129,7 +125,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-photo-posts',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -146,7 +142,7 @@ class UsersApi {
     required String userUid,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final response = await ApiClient.client.get(
         '/v1/user-offer-posts',
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
@@ -163,7 +159,7 @@ class UsersApi {
     required List<String> userUids,
   }) async {
     try {
-      Response response = await ApiClient.client.get(
+      final var response = await ApiClient.client.get(
         '/v1/multiple-user-details',
         queryParameters: <String, dynamic>{'user_uids': jsonEncode(userUids)},
       );
@@ -180,7 +176,7 @@ class UsersApi {
     ProfilePictureUpdateRequest request,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-profile-picture',
         data: request.toMap(),
       );
@@ -193,9 +189,9 @@ class UsersApi {
   }
 
   static Future<(int? statusCode, String? message)?> updateUserInfo(
-      UpdateUserInfoRequest request) async {
+      UpdateUserInfoRequest request,) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-info',
         data: request.toMap(),
       );
@@ -207,9 +203,9 @@ class UsersApi {
   }
 
   static Future<(int? statusCode, String? message)?> updateUserPortfolioInfo(
-      UpdateUserPortfolioInfoRequest request) async {
+      UpdateUserPortfolioInfoRequest request,) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/update-user-portfolio-info',
         data: request.toMap(),
       );
@@ -224,7 +220,7 @@ class UsersApi {
     UpdateUserEducationsRequest request,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-educations',
         data: request.toMap(),
       );
@@ -239,7 +235,7 @@ class UsersApi {
     UpdateUserWorkExperiencesRequest request,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-work-experiences',
         data: request.toMap(),
       );
@@ -254,7 +250,7 @@ class UsersApi {
     UpdateUserServicesRequest request,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-services',
         data: request.toMap(),
       );
@@ -269,7 +265,7 @@ class UsersApi {
     UpdateUserCoverMediaRequest request,
   ) async {
     try {
-      Response response = await ApiClient.client.post(
+      final response = await ApiClient.client.post(
         '/v1/user-cover-media',
         data: request.toMap(),
       );

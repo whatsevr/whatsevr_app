@@ -33,20 +33,20 @@ class RecommendationOffersResponse {
 
   factory RecommendationOffersResponse.fromMap(Map<String, dynamic> json) =>
       RecommendationOffersResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        recommendedOffers: json["recommended_offers"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        recommendedOffers: json['recommended_offers'] == null
             ? []
-            : List<RecommendedOffer>.from(json["recommended_offers"]!
-                .map((x) => RecommendedOffer.fromMap(x))),
+            : List<RecommendedOffer>.from(json['recommended_offers']!
+                .map((x) => RecommendedOffer.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "recommended_offers": recommendedOffers == null
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'recommended_offers': recommendedOffers == null
             ? []
             : List<dynamic>.from(recommendedOffers!.map((x) => x.toMap())),
       };
@@ -178,85 +178,85 @@ class RecommendedOffer {
 
   factory RecommendedOffer.fromMap(Map<String, dynamic> json) =>
       RecommendedOffer(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        uid: json["uid"],
-        title: json["title"],
-        description: json["description"],
-        hashtags: json["hashtags"] == null
+            : DateTime.parse(json['created_at']),
+        uid: json['uid'],
+        title: json['title'],
+        description: json['description'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUserUids: json["tagged_user_uids"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        taggedUserUids: json['tagged_user_uids'] == null
             ? []
-            : List<String>.from(json["tagged_user_uids"]!.map((x) => x)),
-        isDeleted: json["is_deleted"],
-        isArchived: json["is_archived"],
-        isActive: json["is_active"],
-        postCreatorType: json["post_creator_type"],
-        userUid: json["user_uid"],
-        totalImpressions: json["total_impressions"],
-        totalLikes: json["total_likes"],
-        totalComments: json["total_comments"],
-        internalAiDescription: json["internal_ai_description"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedCommunityUids: json["tagged_community_uids"] == null
+            : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
+        isDeleted: json['is_deleted'],
+        isArchived: json['is_archived'],
+        isActive: json['is_active'],
+        postCreatorType: json['post_creator_type'],
+        userUid: json['user_uid'],
+        totalImpressions: json['total_impressions'],
+        totalLikes: json['total_likes'],
+        totalComments: json['total_comments'],
+        internalAiDescription: json['internal_ai_description'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json["tagged_community_uids"]!.map((x) => x)),
-        totalShares: json["total_shares"],
-        cumulativeScore: json["cumulative_score"],
-        ctaAction: json["cta_action"],
-        ctaActionUrl: json["cta_action_url"],
-        filesData: json["files_data"] == null
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+        totalShares: json['total_shares'],
+        cumulativeScore: json['cumulative_score'],
+        ctaAction: json['cta_action'],
+        ctaActionUrl: json['cta_action_url'],
+        filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
-        status: json["status"],
-        targetGender: json["target_gender"],
-        targetAreas: json["target_areas"] == null
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+        status: json['status'],
+        targetGender: json['target_gender'],
+        targetAreas: json['target_areas'] == null
             ? []
-            : List<String>.from(json["target_areas"]!.map((x) => x)),
-        user: json["user"] == null ? null : User.fromMap(json["user"]),
+            : List<String>.from(json['target_areas']!.map((x) => x)),
+        user: json['user'] == null ? null : User.fromMap(json['user']),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "uid": uid,
-        "title": title,
-        "description": description,
-        "hashtags":
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'uid': uid,
+        'title': title,
+        'description': description,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_user_uids": taggedUserUids == null
+        'tagged_user_uids': taggedUserUids == null
             ? []
             : List<dynamic>.from(taggedUserUids!.map((x) => x)),
-        "is_deleted": isDeleted,
-        "is_archived": isArchived,
-        "is_active": isActive,
-        "post_creator_type": postCreatorType,
-        "user_uid": userUid,
-        "total_impressions": totalImpressions,
-        "total_likes": totalLikes,
-        "total_comments": totalComments,
-        "internal_ai_description": internalAiDescription,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_community_uids": taggedCommunityUids == null
+        'is_deleted': isDeleted,
+        'is_archived': isArchived,
+        'is_active': isActive,
+        'post_creator_type': postCreatorType,
+        'user_uid': userUid,
+        'total_impressions': totalImpressions,
+        'total_likes': totalLikes,
+        'total_comments': totalComments,
+        'internal_ai_description': internalAiDescription,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
-        "total_shares": totalShares,
-        "cumulative_score": cumulativeScore,
-        "cta_action": ctaAction,
-        "cta_action_url": ctaActionUrl,
-        "files_data": filesData == null
+        'total_shares': totalShares,
+        'cumulative_score': cumulativeScore,
+        'cta_action': ctaAction,
+        'cta_action_url': ctaActionUrl,
+        'files_data': filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-        "status": status,
-        "target_gender": targetGender,
-        "target_areas": targetAreas == null
+        'status': status,
+        'target_gender': targetGender,
+        'target_areas': targetAreas == null
             ? []
             : List<dynamic>.from(targetAreas!.map((x) => x)),
-        "user": user?.toMap(),
+        'user': user?.toMap(),
       };
 }
 
@@ -296,19 +296,19 @@ class FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: json["type"],
-        imageUrl: json["image_url"],
-        videoUrl: json["video_url"],
-        videoDurationMs: json["video_duration_ms"],
-        videoThumbnailUrl: json["video_thumbnail_url"],
+        type: json['type'],
+        imageUrl: json['image_url'],
+        videoUrl: json['video_url'],
+        videoDurationMs: json['video_duration_ms'],
+        videoThumbnailUrl: json['video_thumbnail_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "image_url": imageUrl,
-        "video_url": videoUrl,
-        "video_duration_ms": videoDurationMs,
-        "video_thumbnail_url": videoThumbnailUrl,
+        'type': type,
+        'image_url': imageUrl,
+        'video_url': videoUrl,
+        'video_duration_ms': videoDurationMs,
+        'video_thumbnail_url': videoThumbnailUrl,
       };
 }
 
@@ -435,69 +435,69 @@ class User {
   String toJson() => json.encode(toMap());
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-        id: json["id"],
-        bio: json["bio"],
-        dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
-        uid: json["uid"],
-        name: json["name"],
-        gender: json["gender"],
-        address: json["address"],
-        isSpam: json["is_spam"],
-        emailId: json["email_id"],
-        username: json["username"],
-        isActive: json["is_active"],
-        isBanned: json["is_banned"],
-        isOnline: json["is_online"],
-        isPortfolio: json["is_portfolio"],
-        mobileNumber: json["mobile_number"],
-        registeredOn: json["registered_on"] == null
+        id: json['id'],
+        bio: json['bio'],
+        dob: json['dob'] == null ? null : DateTime.parse(json['dob']),
+        uid: json['uid'],
+        name: json['name'],
+        gender: json['gender'],
+        address: json['address'],
+        isSpam: json['is_spam'],
+        emailId: json['email_id'],
+        username: json['username'],
+        isActive: json['is_active'],
+        isBanned: json['is_banned'],
+        isOnline: json['is_online'],
+        isPortfolio: json['is_portfolio'],
+        mobileNumber: json['mobile_number'],
+        registeredOn: json['registered_on'] == null
             ? null
-            : DateTime.parse(json["registered_on"]),
-        isDeactivated: json["is_deactivated"],
-        lastActiveAt: json["last_active_at"] == null
+            : DateTime.parse(json['registered_on']),
+        isDeactivated: json['is_deactivated'],
+        lastActiveAt: json['last_active_at'] == null
             ? null
-            : DateTime.parse(json["last_active_at"]),
-        portfolioTitle: json["portfolio_title"],
-        profilePicture: json["profile_picture"],
-        totalFollowers: json["total_followers"],
-        portfolioStatus: json["portfolio_status"],
-        totalFollowings: json["total_followings"],
-        totalPostLikes: json["total_post_likes"],
-        portfolioCreatedAt: json["portfolio_created_at"] == null
+            : DateTime.parse(json['last_active_at']),
+        portfolioTitle: json['portfolio_title'],
+        profilePicture: json['profile_picture'],
+        totalFollowers: json['total_followers'],
+        portfolioStatus: json['portfolio_status'],
+        totalFollowings: json['total_followings'],
+        totalPostLikes: json['total_post_likes'],
+        portfolioCreatedAt: json['portfolio_created_at'] == null
             ? null
-            : DateTime.parse(json["portfolio_created_at"]),
-        portfolioDescription: json["portfolio_description"],
-        userLastLatLongWkb: json["user_last_lat_long_wkb"],
+            : DateTime.parse(json['portfolio_created_at']),
+        portfolioDescription: json['portfolio_description'],
+        userLastLatLongWkb: json['user_last_lat_long_wkb'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "bio": bio,
-        "dob":
+        'id': id,
+        'bio': bio,
+        'dob':
             "${dob!.year.toString().padLeft(4, '0')}-${dob!.month.toString().padLeft(2, '0')}-${dob!.day.toString().padLeft(2, '0')}",
-        "uid": uid,
-        "name": name,
-        "gender": gender,
-        "address": address,
-        "is_spam": isSpam,
-        "email_id": emailId,
-        "username": username,
-        "is_active": isActive,
-        "is_banned": isBanned,
-        "is_online": isOnline,
-        "is_portfolio": isPortfolio,
-        "mobile_number": mobileNumber,
-        "registered_on": registeredOn?.toIso8601String(),
-        "is_deactivated": isDeactivated,
-        "last_active_at": lastActiveAt?.toIso8601String(),
-        "portfolio_title": portfolioTitle,
-        "profile_picture": profilePicture,
-        "total_followers": totalFollowers,
-        "portfolio_status": portfolioStatus,
-        "total_followings": totalFollowings,
-        "total_post_likes": totalPostLikes,
-        "portfolio_created_at": portfolioCreatedAt?.toIso8601String(),
-        "portfolio_description": portfolioDescription,
-        "user_last_lat_long_wkb": userLastLatLongWkb,
+        'uid': uid,
+        'name': name,
+        'gender': gender,
+        'address': address,
+        'is_spam': isSpam,
+        'email_id': emailId,
+        'username': username,
+        'is_active': isActive,
+        'is_banned': isBanned,
+        'is_online': isOnline,
+        'is_portfolio': isPortfolio,
+        'mobile_number': mobileNumber,
+        'registered_on': registeredOn?.toIso8601String(),
+        'is_deactivated': isDeactivated,
+        'last_active_at': lastActiveAt?.toIso8601String(),
+        'portfolio_title': portfolioTitle,
+        'profile_picture': profilePicture,
+        'total_followers': totalFollowers,
+        'portfolio_status': portfolioStatus,
+        'total_followings': totalFollowings,
+        'total_post_likes': totalPostLikes,
+        'portfolio_created_at': portfolioCreatedAt?.toIso8601String(),
+        'portfolio_description': portfolioDescription,
+        'user_last_lat_long_wkb': userLastLatLongWkb,
       };
 }
