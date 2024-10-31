@@ -3,7 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:whatsevr_app/config/widgets/buttons/follow_unfolow.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 
 import '../../../../../config/api/methods/reactions.dart';
 import '../../../../../config/api/methods/user_relations.dart';
@@ -321,28 +321,8 @@ class WtvDetailsPage extends StatelessWidget {
                             Gap(8),
                             // Subscribe button
                             WhatsevrFollowButton(
-                              onFollow: (success) {
-                                UserRelationsApi.followUser(
-                                  followerUserUid:
-                                      AuthUserDb.getLastLoggedUserUid()!,
-                                  followeeUserUid: (state
-                                      .videoPostDetailsResponse
-                                      ?.videoPostDetails
-                                      ?.author
-                                      ?.uid)!,
-                                );
-                              },
-                              onUnFollowed: (success) {
-                                UserRelationsApi.unfollowUser(
-                                  followerUserUid:
-                                      AuthUserDb.getLastLoggedUserUid()!,
-                                  followeeUserUid: (state
-                                      .videoPostDetailsResponse
-                                      ?.videoPostDetails
-                                      ?.author
-                                      ?.uid)!,
-                                );
-                              },
+                              followeeUserUid: state.videoPostDetailsResponse
+                                  ?.videoPostDetails?.author?.uid,
                             ),
                           ],
                         ),

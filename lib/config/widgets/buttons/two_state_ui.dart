@@ -37,9 +37,11 @@ class _WhatsevrTwoStateUiState extends State<WhatsevrTwoStateUi> {
               child: widget.firstStateUi ?? const Icon(Icons.circle_outlined),
             ),
       onTap: () {
-        setState(() {
-          _isSecondState = !_isSecondState;
-        });
+        if (mounted && context.mounted) {
+          setState(() {
+            _isSecondState = !_isSecondState;
+          });
+        }
         widget.onStateChanged?.call(_isSecondState, !_isSecondState);
       },
     );

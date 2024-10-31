@@ -160,24 +160,27 @@ class WtvVideoPostFrame extends StatelessWidget {
                 const Gap(8),
                 Row(
                   children: <Widget>[
-                    const WhatsevrReactButton(),
-                    Text(likes == null || likes == 0
-                        ? ''
-                        : formatCountToKMBTQ(likes) ?? '',),
+                    WhatsevrReactButton(
+                      reactionCount: likes,
+                    ),
                     WhatsevrCommentButton(
                       onTapComment: () {
                         onTapComment?.call();
                       },
                     ),
-                    Text(comments == null || comments == 0
-                        ? ''
-                        : formatCountToKMBTQ(comments) ?? '',),
+                    Text(
+                      comments == null || comments == 0
+                          ? ''
+                          : formatCountToKMBTQ(comments) ?? '',
+                    ),
                     WhatsevrShareButton(
                       onTapShare: () {},
                     ),
-                    Text(shares == null || shares == 0
-                        ? ''
-                        : formatCountToKMBTQ(shares) ?? '',),
+                    Text(
+                      shares == null || shares == 0
+                          ? ''
+                          : formatCountToKMBTQ(shares) ?? '',
+                    ),
                     const Spacer(),
                     WhatsevrBookmarkButton(),
                     Whatsevr3DotMenuButton(),

@@ -1,11 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import '../../mocks/mocks.dart';
-import '../../services/auth_db.dart';
-import '../app_bar.dart';
-import '../tab_bar.dart';
-import '../../api/methods/user_relations.dart';
-import '../../api/response_model/user_relations/user_relations.dart';
+import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/api/methods/user_relations.dart';
+import 'package:whatsevr_app/config/api/response_model/user_relations/user_relations.dart';
+
+import '../buttons/follow_unfollow.dart';
 
 void showUserRelationsDialog(
     {required BuildContext context, required String userUid}) {
@@ -56,64 +61,76 @@ class _UserRelationsPageState extends State<_UserRelationsPage>
           ('Following', FollowingTab(userUid: widget.userUid)),
           if (AuthUserDb.getLastLoggedUserUid() != widget.userUid)
             ('Mutual Followings', MutualFollowings(userUid: widget.userUid)),
-          if (AuthUserDb.getLastLoggedUserUid() != widget.userUid)
-            ('Connections', ConnectionsTab(userUid: widget.userUid)),
+          ('Connections', ConnectionsTab(userUid: widget.userUid)),
         ],
       ),
     );
   }
 }
 
-class UserCard extends StatelessWidget {
+class _UserInfo extends StatelessWidget {
+  final bool isCard;
   final User user;
   final VoidCallback onFollow;
 
-  const UserCard({
+  const _UserInfo({
     Key? key,
+    this.isCard = false,
     required this.user,
     required this.onFollow,
   }) : super(key: key);
 
+  Widget followButton() {
+    return WhatsevrFollowButton(
+      followeeUserUid: user.uid,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      elevation: 4.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: ExtendedNetworkImageProvider(
-                user.profilePicture ?? MockData.blankProfileAvatar,
+    if (isCard) {
+      return Card(
+        margin: const EdgeInsets.all(8.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        elevation: 4.0,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: ExtendedNetworkImageProvider(
+                  user.profilePicture ?? MockData.blankProfileAvatar,
+                ),
+                radius: 30,
               ),
-              radius: 30,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              user.name ?? 'Unknown',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: onFollow,
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+              const SizedBox(height: 8),
+              Text(
+                user.name ?? 'Unknown',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              child: const Text('Follow'),
-            ),
-          ],
+              const SizedBox(height: 8),
+              followButton(),
+            ],
+          ),
+        ),
+      );
+    }
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: ExtendedNetworkImageProvider(
+          user.profilePicture ?? MockData.blankProfileAvatar,
         ),
       ),
+      title: Text(user.name ?? 'Unknown'),
+      subtitle: Text(user.username ?? 'Unknown',
+          style: const TextStyle(fontSize: 12)),
+      trailing: followButton(),
     );
   }
 }
@@ -137,15 +154,21 @@ class _FollowersTabState extends State<FollowersTab> {
     _fetchFollowers();
   }
 
+  void updateState() {
+    if (mounted && context.mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _fetchFollowers() async {
     final response = await UserRelationsApi.getAllFollowers(
       userUid: widget.userUid,
       page: 1,
     );
-    setState(() {
-      _followers = response?.data ?? [];
-      _isLoading = false;
-    });
+
+    _followers = response?.data ?? [];
+    _isLoading = false;
+    updateState();
   }
 
   @override
@@ -154,22 +177,38 @@ class _FollowersTabState extends State<FollowersTab> {
         ? const Center(child: CircularProgressIndicator())
         : _followers.isEmpty
             ? const Center(child: Text('No Followers'))
-            : GridView.builder(
+            : ListView.separated(
                 padding: const EdgeInsets.all(8.0),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3 / 4,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
+                separatorBuilder: (context, index) => Gap(8.0),
                 itemCount: _followers.length,
                 itemBuilder: (context, index) {
-                  return UserCard(
-                    user: _followers[index].user!,
-                    onFollow: () {
-                      // Handle follow action
-                    },
-                  );
+                  return GestureDetector(
+                      onTap: () {
+                        showAppModalSheet(
+                            flexibleSheet: false,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                WhatsevrButton.text(
+                                  label: 'Remove Follower',
+                                  onPressed: () {
+                                    UserRelationsApi.removeFollower(
+                                      followeeUserUid:
+                                          AuthUserDb.getLastLoggedUserUid()!,
+                                      followerUserUid:
+                                          _followers[index].user!.uid!,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ));
+                      },
+                      child: _UserInfo(
+                        user: _followers[index].user!,
+                        onFollow: () {
+                          // Handle follow action
+                        },
+                      ));
                 },
               );
   }
@@ -194,15 +233,22 @@ class _FollowingTabState extends State<FollowingTab> {
     _fetchFollowing();
   }
 
+  void updateState() {
+    if (mounted && context.mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _fetchFollowing() async {
     final response = await UserRelationsApi.getAllFollowing(
       userUid: widget.userUid,
       page: 1,
     );
-    setState(() {
-      _following = response?.data ?? [];
-      _isLoading = false;
-    });
+
+    _following = response?.data ?? [];
+    _isLoading = false;
+
+    updateState();
   }
 
   @override
@@ -211,17 +257,12 @@ class _FollowingTabState extends State<FollowingTab> {
         ? const Center(child: CircularProgressIndicator())
         : _following.isEmpty
             ? const Center(child: Text('No Following'))
-            : GridView.builder(
+            : ListView.separated(
                 padding: const EdgeInsets.all(8.0),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3 / 4,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
+                separatorBuilder: (context, index) => Gap(8.0),
                 itemCount: _following.length,
                 itemBuilder: (context, index) {
-                  return UserCard(
+                  return _UserInfo(
                     user: _following[index].user!,
                     onFollow: () {
                       // Handle follow action
@@ -251,15 +292,21 @@ class _ConnectionsTabState extends State<ConnectionsTab> {
     _fetchConnections();
   }
 
+  void updateState() {
+    if (mounted && context.mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _fetchConnections() async {
     final response = await UserRelationsApi.getMutualConnections(
       userUid: widget.userUid,
       page: 1,
     );
-    setState(() {
-      _connections = response?.data ?? [];
-      _isLoading = false;
-    });
+
+    _connections = response?.data ?? [];
+    _isLoading = false;
+    updateState();
   }
 
   @override
@@ -278,7 +325,8 @@ class _ConnectionsTabState extends State<ConnectionsTab> {
                 ),
                 itemCount: _connections.length,
                 itemBuilder: (context, index) {
-                  return UserCard(
+                  return _UserInfo(
+                    isCard: true,
                     user: _connections[index].user!,
                     onFollow: () {
                       // Handle follow action
@@ -308,16 +356,22 @@ class _MutualFollowingsState extends State<MutualFollowings> {
     _fetchMutualFollowings();
   }
 
+  void updateState() {
+    if (mounted && context.mounted) {
+      setState(() {});
+    }
+  }
+
   Future<void> _fetchMutualFollowings() async {
     final response = await UserRelationsApi.getMutualFollowing(
       userUid1: AuthUserDb.getLastLoggedUserUid()!,
       userUid2: widget.userUid,
       page: 1,
     );
-    setState(() {
-      _mutualFollowings = response?.data ?? [];
-      _isLoading = false;
-    });
+
+    _mutualFollowings = response?.data ?? [];
+    _isLoading = false;
+    updateState();
   }
 
   @override
@@ -336,7 +390,7 @@ class _MutualFollowingsState extends State<MutualFollowings> {
                 ),
                 itemCount: _mutualFollowings.length,
                 itemBuilder: (context, index) {
-                  return UserCard(
+                  return _UserInfo(
                     user: _mutualFollowings[index].user!,
                     onFollow: () {
                       // Handle follow action

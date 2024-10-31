@@ -6,14 +6,13 @@ linter:
     - avoid_unused_constructor_parameters
     - directives_ordering
     - prefer_final_locals
-    - prefer_relative_imports
     - prefer_single_quotes
     - require_trailing_commas
     - sized_box_for_whitespace
     - sort_child_properties_last
     - sort_pub_dependencies
     - type_annotate_public_apis
-    - unawaited_futures
+    - await_only_futures
     - use_named_constants
     - use_super_parameters
     - always_use_package_imports

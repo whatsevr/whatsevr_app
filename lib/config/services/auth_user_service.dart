@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
+import 'package:whatsevr_app/config/services/follow_unfollow_middleware.dart';
 
 import '../../dev/talker.dart';
 import '../api/external/models/business_validation_exception.dart';
@@ -53,24 +54,24 @@ class AuthUserService {
 
         if (result['data'] != null) {
           final OtpLessSuccessResponse authServiceUserResponse =
-              OtpLessSuccessResponse.fromMap(result);
-          if (authServiceUserResponse.data?.userId == null) {
+              OtpLessSuccessResponse.fromMap(result['data']);
+          if (authServiceUserResponse.userId == null) {
             onLoginFailed('User id is received as null from auth service');
             return;
           }
-          final String? emailId = authServiceUserResponse.data?.identities
+          final String? emailId = authServiceUserResponse.identities
               ?.firstWhereOrNull(
                 (element) => element.identityType == 'EMAIL',
               )
               ?.identityValue;
-          final String? mobileNumber = authServiceUserResponse.data?.identities
+          final String? mobileNumber = authServiceUserResponse.identities
               ?.firstWhereOrNull(
                 (element) => element.identityType == 'MOBILE',
               )
               ?.identityValue;
           TalkerService.instance.log({
             'event': 'login_with_otpless',
-            'user_uid': authServiceUserResponse.data!.userId!,
+            'user_uid': authServiceUserResponse.userId!,
             'mobile_number': mobileNumber,
             'email_id': emailId,
           });
@@ -79,7 +80,10 @@ class AuthUserService {
             return;
           }
           onLoginSuccess(
-              authServiceUserResponse.data!.userId!, mobileNumber, emailId,);
+            authServiceUserResponse.userId!,
+            mobileNumber,
+            emailId,
+          );
         } else {
           onLoginFailed('${result['errorMessage']}');
         }
@@ -88,10 +92,11 @@ class AuthUserService {
     );
   }
 
-  static Future<void> loginToApp(
-      {required String userUid,
-      required String? mobileNumber,
-      required String? emailId,}) async {
+  static Future<void> loginToApp({
+    required String userUid,
+    required String? mobileNumber,
+    required String? emailId,
+  }) async {
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid,
       mobileNumber,
@@ -121,6 +126,7 @@ class AuthUserService {
           'email_id': loginInfo?.$3?.userInfo?.emailId,
         },
       );
+      FollowUnfollowMiddleware.fetchAndCacheAllFollowedUsers();
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     } else {
       if (loginInfo?.$1 == HttpStatus.notAcceptable) {
@@ -159,16 +165,17 @@ class AuthUserService {
   }
 
   static Future<void> getSupportiveDataForLoggedUser() async {
-    print('53426327');
     final String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
     try {
       if (currentlyLoggedUserUid != null) {
         (int?, dynamic)? supportiveDataResponse =
             await UsersApi.getSupportiveUserData(
-                userUid: currentlyLoggedUserUid,);
+          userUid: currentlyLoggedUserUid,
+        );
         if (supportiveDataResponse?.$1 != HttpStatus.ok) {
           throw BusinessException('Failed to fetch logged user data');
         }
+        FollowUnfollowMiddleware.fetchAndCacheAllFollowedUsers();
       }
     } catch (e, stackTrace) {
       AuthUserDb.clearLastLoggedUserUid();

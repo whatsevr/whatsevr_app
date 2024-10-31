@@ -20,16 +20,18 @@ class WhatsevrReactButton extends StatefulWidget {
   final Function(bool isLiked)? onReact;
   final Function(bool isUnLiked)? onUnreact;
   final Function()? onTapSide;
-
-  const WhatsevrReactButton(
-      {super.key,
-      this.initiallyReacted,
-      this.reactionCount,
-      this.size,
-      this.firstColor,
-      this.onReact,
-      this.onUnreact,
-      this.onTapSide,});
+  final bool arrangeVertically;
+  const WhatsevrReactButton({
+    super.key,
+    this.initiallyReacted,
+    this.reactionCount,
+    this.size,
+    this.firstColor,
+    this.onReact,
+    this.onUnreact,
+    this.onTapSide,
+    this.arrangeVertically = false,
+  });
 
   @override
   State<WhatsevrReactButton> createState() => _WhatsevrReactButtonState();
@@ -50,14 +52,15 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
   Widget build(BuildContext context) {
     return UnconstrainedBox(
       child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            widget.onTapSide?.call();
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children: [
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          widget.onTapSide?.call();
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Builder(
+            builder: (context) {
+              final List<Widget> children = [
                 LikeButton(
                   size: widget.size ?? 26,
                   padding: const EdgeInsets.all(6),
@@ -92,11 +95,21 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                 if (_reactionCount != 0)
                   Text(
                     '${formatCountToKMBTQ(_reactionCount)}',
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: widget.firstColor ?? Colors.black),
                   ),
-              ],
-            ),
-          ),),
+              ];
+              if (widget.arrangeVertically) {
+                return Column(
+                  children: children,
+                );
+              }
+              return Row(
+                children: children,
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
@@ -108,13 +121,14 @@ class WhatsevrBookmarkButton extends StatelessWidget {
   final Function(bool? actionSuccess)? onBookmarked;
   final Function(bool? actionSuccess)? onUnBookmarkRemoved;
 
-  const WhatsevrBookmarkButton(
-      {super.key,
-      this.isBookmarked,
-      this.onBookmarked,
-      this.onUnBookmarkRemoved,
-      this.firstStateColor,
-      this.secondStateColor,});
+  const WhatsevrBookmarkButton({
+    super.key,
+    this.isBookmarked,
+    this.onBookmarked,
+    this.onUnBookmarkRemoved,
+    this.firstStateColor,
+    this.secondStateColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -130,8 +144,10 @@ class WhatsevrBookmarkButton extends StatelessWidget {
           onUnBookmarkRemoved?.call(null);
         }
       },
-      firstStateUi: Iconify(Ph.bookmark_simple_thin,
-          color: firstStateColor ?? theme.icon,),
+      firstStateUi: Iconify(
+        Ph.bookmark_simple_thin,
+        color: firstStateColor ?? theme.icon,
+      ),
       secondStateUi:
           Iconify(Ph.bookmark_fill, color: secondStateColor ?? theme.icon),
     );

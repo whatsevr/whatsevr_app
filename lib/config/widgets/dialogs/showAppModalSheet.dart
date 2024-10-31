@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import '../../routes/router.dart';
 import '../pad_horizontal.dart';
@@ -36,8 +38,9 @@ Future<void> showAppModalSheet({
     ),
     barrierColor:
         transparentMask ? Colors.transparent : Colors.white.withOpacity(0.5),
-    backgroundColor: Colors.white,
+    backgroundColor: context.whatsevrTheme.background,
     context: context,
+
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(20),
@@ -54,21 +57,24 @@ Future<void> showAppModalSheet({
               ? MediaQuery.of(context).viewInsets.bottom
               : 0.0, // Keyboard adjustment
         ),
-        child: Builder(builder: (context) {
-          if (!flexibleSheet) {
-            return PadHorizontal(child: child ?? const SizedBox.shrink());
-          }
-          return DraggableScrollableSheet(
-            expand: false,
-            initialChildSize: 0.6,
-            builder: (BuildContext context, ScrollController scrollController) {
-              return SingleChildScrollView(
-                controller: scrollController,
-                child: PadHorizontal(child: child ?? const SizedBox.shrink()),
-              );
-            },
-          );
-        },),
+        child: Builder(
+          builder: (context) {
+            if (!flexibleSheet) {
+              return PadHorizontal(child: child ?? const SizedBox.shrink());
+            }
+            return DraggableScrollableSheet(
+              expand: false,
+              initialChildSize: 0.6,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return SingleChildScrollView(
+                  controller: scrollController,
+                  child: PadHorizontal(child: child ?? const SizedBox.shrink()),
+                );
+              },
+            );
+          },
+        ),
       );
     },
   );

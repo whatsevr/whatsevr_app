@@ -416,6 +416,7 @@ class AccountPage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
                                       onTap: () {
                                         showUserRelationsDialog(
                                           context: context,
@@ -440,6 +441,7 @@ class AccountPage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: GestureDetector(
+                                      behavior: HitTestBehavior.translucent,
                                       onTap: () {
                                         showUserRelationsDialog(
                                           context: context,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 
 import '../../../../config/api/response_model/recommendation_flicks.dart';
 import '../../../../config/mocks/mocks.dart';
@@ -31,9 +32,11 @@ class _FlicksPageState extends State<FlicksPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FlicksBloc()..add(FlicksInitialEvent()),
-      child: Builder(builder: (context) {
-        return _buildBody(context);
-      },),
+      child: Builder(
+        builder: (context) {
+          return _buildBody(context);
+        },
+      ),
     );
   }
 
@@ -41,149 +44,144 @@ class _FlicksPageState extends State<FlicksPage> {
   final PreloadPageController scrollController = PreloadPageController();
 
   Widget _buildBody(BuildContext context) {
-    onReachingEndOfTheList(scrollController, execute: () {
-      context.read<FlicksBloc>().add(LoadMoreFlicksEvent(
-            page: context
-                    .read<FlicksBloc>()
-                    .state
-                    .flicksPaginationData!
-                    .currentPage +
-                1,
-          ),);
-    },);
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
+        context.read<FlicksBloc>().add(
+              LoadMoreFlicksEvent(
+                page: context
+                        .read<FlicksBloc>()
+                        .state
+                        .flicksPaginationData!
+                        .currentPage +
+                    1,
+              ),
+            );
+      },
+    );
 
     return BlocSelector<FlicksBloc, FlicksState, List<RecommendedFlick>?>(
       selector: (FlicksState state) => state.recommendationFlicks,
       builder: (context, data) {
         return Scaffold(
           backgroundColor: Colors.black,
-          body: Builder(builder: (context) {
-            return ContentMask(
-              showMask: data == null || data.isEmpty,
-              child: PreloadPageView.builder(
-                controller: scrollController,
-                preloadPagesCount: 5,
-                scrollDirection: Axis.vertical,
-                itemCount: data?.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final RecommendedFlick? flick = data?[index];
+          body: Builder(
+            builder: (context) {
+              return ContentMask(
+                showMask: data == null || data.isEmpty,
+                child: PreloadPageView.builder(
+                  controller: scrollController,
+                  preloadPagesCount: 5,
+                  scrollDirection: Axis.vertical,
+                  itemCount: data?.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final RecommendedFlick? flick = data?[index];
 
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      //Reels
-                      FlicksFullPlayer(
-                        videoUrl: flick?.videoUrl,
-                        thumbnail: flick?.thumbnail,
-                        onPlayerInitialized: (controller) {
-                          currentVideoController = controller;
-                          setState(() {});
-                          currentVideoController?.addListener(() {
-                            if (currentVideoController?.value.isPlaying ==
-                                true) {
-                              setState(() {});
-                            }
-                          });
-                        },
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: PadHorizontal(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  WhatsevrReactButton(
-                                    size: 30,
-                                    firstColor: DarkTheme().icon,
-                                  ),
-                                  const Gap(16),
-                                  IconButton(
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        //Reels
+                        FlicksFullPlayer(
+                          videoUrl: flick?.videoUrl,
+                          thumbnail: flick?.thumbnail,
+                          onPlayerInitialized: (controller) {
+                            currentVideoController = controller;
+                            setState(() {});
+                            currentVideoController?.addListener(() {
+                              if (currentVideoController?.value.isPlaying ==
+                                  true) {
+                                setState(() {});
+                              }
+                            });
+                          },
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: PadHorizontal(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    WhatsevrReactButton(
+                                      size: 30,
+                                      firstColor: DarkTheme().icon,
+                                      arrangeVertically: true,
+                                    ),
+                                    const Gap(16),
+                                    IconButton(
                                       onPressed: () {},
                                       icon: const Icon(
                                         Icons.link,
                                         size: 30,
                                         color: Colors.white,
-                                      ),),
-                                  const Gap(16),
-                                  WhatsevrShareButton(
-                                    iconColor: DarkTheme().icon,
-                                  ),
-                                ],
-                              ),
-                              const Gap(16),
-                              Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        radius: 30,
-                                        backgroundImage:
-                                            ExtendedNetworkImageProvider(flick
-                                                    ?.user?.profilePicture ??
-                                                MockData.blankProfileAvatar,),
                                       ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              '${flick?.user?.username}',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            Text(
-                                              '${flick?.title} ${flick?.description}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Gap(8),
-                                      //follow
-                                      WhatsevrTwoStateUi(
-                                        firstStateUi: AbsorbPointer(
-                                          child: WhatsevrButton.outlined(
-                                            miniButton: true,
-                                            shrink: true,
-                                            label: 'Follow',
-                                            onPressed: () {},
+                                    ),
+                                    const Gap(16),
+                                    WhatsevrShareButton(
+                                      iconColor: DarkTheme().icon,
+                                    ),
+                                  ],
+                                ),
+                                const Gap(16),
+                                Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage:
+                                              ExtendedNetworkImageProvider(
+                                            flick?.user?.profilePicture ??
+                                                MockData.blankProfileAvatar,
                                           ),
                                         ),
-                                        secondStateUi: AbsorbPointer(
-                                          child: WhatsevrButton.outlined(
-                                            miniButton: true,
-                                            shrink: true,
-                                            label: 'Following',
-                                            onPressed: () {},
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                '${flick?.user?.username}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${flick?.title} ${flick?.description}',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
+                                        Gap(8),
+                                        //follow
+                                        WhatsevrFollowButton(
+                                          followeeUserUid: flick?.user?.uid,
+                                        ),
 
-                                      Gap(12),
-                                      Whatsevr3DotMenuButton(
-                                        iconColor: DarkTheme().icon,
-                                      ),
-                                    ],
-                                  ),
-                                  const Gap(8),
-                                  GestureDetector(
+                                        Gap(12),
+                                        Whatsevr3DotMenuButton(
+                                          iconColor: DarkTheme().icon,
+                                        ),
+                                      ],
+                                    ),
+                                    const Gap(8),
+                                    GestureDetector(
                                       onTap: () {
                                         showCommentsDialog(
-                                            flickPostUid: flick?.uid,);
+                                          flickPostUid: flick?.uid,
+                                        );
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
@@ -205,17 +203,19 @@ class _FlicksPageState extends State<FlicksPage> {
                                             autoPlay: true,
                                             scrollDirection: Axis.horizontal,
                                           ),
-                                          itemBuilder: (BuildContext context,
-                                                  int itemIndex,
-                                                  int pageViewIndex,) =>
+                                          itemBuilder: (
+                                            BuildContext context,
+                                            int itemIndex,
+                                            int pageViewIndex,
+                                          ) =>
                                               Row(
                                             children: <Widget>[
                                               const Gap(8),
                                               CircleAvatar(
                                                 radius: 10,
                                                 backgroundImage: NetworkImage(
-                                                    MockData
-                                                        .blankProfileAvatar,),
+                                                  MockData.blankProfileAvatar,
+                                                ),
                                               ),
                                               const Gap(8),
                                               const Expanded(
@@ -229,20 +229,22 @@ class _FlicksPageState extends State<FlicksPage> {
                                             ],
                                           ),
                                         ),
-                                      ),),
-                                ],
-                              ),
-                              const Gap(16),
-                            ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Gap(16),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            );
-          },),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
+          ),
           //show video progress
           bottomNavigationBar: currentVideoController == null
               ? null

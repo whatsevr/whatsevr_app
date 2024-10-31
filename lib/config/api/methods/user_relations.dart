@@ -152,7 +152,7 @@ class UserRelationsApi {
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/get-user-connections',
+        '/v1/get-mutual-connections',
         queryParameters: {
           'user_uid': userUid,
           'page': page,
