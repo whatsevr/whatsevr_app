@@ -34,7 +34,7 @@ class FollowUnfollowBloc
   // Fetch and cache all followed user UIDs (One-time on app launch)
   Future<void> _onFetchFollowedUsers(
       FetchFollowedUsers event, Emitter<FollowUnfollowState> emit) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true, error: null, followedUserIds: {}));
 
     try {
       final box = await _getBox();

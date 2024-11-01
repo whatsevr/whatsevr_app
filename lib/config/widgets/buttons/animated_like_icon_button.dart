@@ -10,6 +10,7 @@ import 'package:like_button/like_button.dart';
 import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/reactions_view.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 
 class WhatsevrReactButton extends StatefulWidget {
@@ -24,7 +25,7 @@ class WhatsevrReactButton extends StatefulWidget {
   final String? pdfUid;
   final Function(bool isLiked)? onReact;
   final Function(bool isUnLiked)? onUnreact;
-  final Function()? onTapSide;
+
   final bool arrangeVertically;
 
   const WhatsevrReactButton({
@@ -40,7 +41,6 @@ class WhatsevrReactButton extends StatefulWidget {
     this.pdfUid,
     this.onReact,
     this.onUnreact,
-    this.onTapSide,
     this.arrangeVertically = false,
   });
 
@@ -90,7 +90,14 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          widget.onTapSide?.call();
+          showReactionsDialog(
+            videoPostUid: widget.videoPostUid,
+            flickPostUid: widget.flickPostUid,
+            memoryUid: widget.memoryUid,
+            offerPostUid: widget.offerPostUid,
+            photoPostUid: widget.photoPostUid,
+            pdfUid: widget.pdfUid,
+          );
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),

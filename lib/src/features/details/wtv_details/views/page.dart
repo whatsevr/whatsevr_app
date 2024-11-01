@@ -336,12 +336,6 @@ class WtvDetailsPage extends StatelessWidget {
                               WhatsevrReactButton(
                                 videoPostUid: state.videoPostDetailsResponse
                                     ?.videoPostDetails?.uid,
-                                onTapSide: () {
-                                  showReactionsDialog(
-                                    videoPostUid: state.videoPostDetailsResponse
-                                        ?.videoPostDetails?.uid,
-                                  );
-                                },
                                 reactionCount: state.videoPostDetailsResponse
                                     ?.videoPostDetails?.totalReactions,
                                 onReact: (isLiked) {

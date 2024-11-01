@@ -10,14 +10,14 @@ class ExploreState extends Equatable {
   final PaginationData? photoPostPaginationData;
   final List<RecommendedPhotoPost>? recommendationPhotoPosts;
   const ExploreState({
-    this.recommendationVideos,
+    this.recommendationVideos = const [],
     this.videoPaginationData,
-    this.recommendationMemories,
+    this.recommendationMemories = const [],
     this.memoryPaginationData,
     this.offersPaginationData,
-    this.recommendationOffers,
+    this.recommendationOffers = const [],
     this.photoPostPaginationData,
-    this.recommendationPhotoPosts,
+    this.recommendationPhotoPosts = const [],
   });
 
   @override

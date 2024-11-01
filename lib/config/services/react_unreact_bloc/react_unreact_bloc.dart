@@ -12,7 +12,7 @@ part 'react_unreact_state.dart';
 class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   static const String _totalPagesKey = 'totalPages';
   static const int _pageSize = 500;
-  String? _reactionsBox;
+  String? _reactedItemsBox;
   Set<String> _reactedItemIds = {};
 
   ReactUnreactBloc() : super(const ReactUnreactState(reactedItemIds: {})) {
@@ -23,11 +23,11 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   Future<Box?> _getBox() async {
     final String? userUid = AuthUserDb.getLastLoggedUserUid();
     if (userUid == null) return null;
-    _reactionsBox = 'reactedItemsBox_$userUid';
-    if (!Hive.isBoxOpen(_reactionsBox!)) {
-      await Hive.openBox(_reactionsBox!);
+    _reactedItemsBox = 'reactedItemsBox_$userUid';
+    if (!Hive.isBoxOpen(_reactedItemsBox!)) {
+      await Hive.openBox(_reactedItemsBox!);
     }
-    return Hive.box(_reactionsBox!);
+    return Hive.box(_reactedItemsBox!);
   }
 
   Future<void> _onFetchReactions(
@@ -36,6 +36,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
 
     try {
       _reactedItemIds.clear();
+      emit(state.copyWith(reactedItemIds: _reactedItemIds));
       final box = await _getBox();
       if (box != null) {
         await _loadCachedReactions(box);
@@ -64,7 +65,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
 
       allReactions.addAll(currentPageReactions);
       await box.put(
-          '$_reactionsBox$page', currentPageReactions); // Cache by page
+          '$_reactedItemsBox$page', currentPageReactions); // Cache by page
       page++;
     }
 
@@ -77,7 +78,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
     final List<String> allReactions = [];
 
     for (int page = 1; page <= totalPages; page++) {
-      final List<dynamic>? pageData = box.get('$_reactionsBox$page');
+      final List<dynamic>? pageData = box.get('$_reactedItemsBox$page');
       if (pageData != null) {
         allReactions.addAll(pageData.cast<String>());
       }
