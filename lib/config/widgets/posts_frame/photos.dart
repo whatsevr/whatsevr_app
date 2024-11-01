@@ -14,6 +14,7 @@ import '../dynamic_height_views.dart';
 import '../pad_horizontal.dart';
 
 class PhotosPostFrame extends StatelessWidget {
+  final String? photoPostUid;
   final String? title;
   final String? description;
 
@@ -34,6 +35,7 @@ class PhotosPostFrame extends StatelessWidget {
 
   const PhotosPostFrame({
     super.key,
+    this.photoPostUid,
     this.title,
     this.description,
     this.filesData,
@@ -200,26 +202,34 @@ class PhotosPostFrame extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(8),
-              const WhatsevrReactButton(),
-              Text(likes == null || likes == 0
-                  ? ''
-                  : formatCountToKMBTQ(likes) ?? '',),
+              WhatsevrReactButton(
+                photoPostUid: photoPostUid,
+              ),
+              Text(
+                likes == null || likes == 0
+                    ? ''
+                    : formatCountToKMBTQ(likes) ?? '',
+              ),
               IconButton(
                 icon: const Iconify(Octicon.comment_24),
                 onPressed: () {
                   onTapComment?.call();
                 },
               ),
-              Text(comments == null || comments == 0
-                  ? ''
-                  : formatCountToKMBTQ(comments) ?? '',),
+              Text(
+                comments == null || comments == 0
+                    ? ''
+                    : formatCountToKMBTQ(comments) ?? '',
+              ),
               IconButton(
                 icon: const Iconify(La.share),
                 onPressed: () {},
               ),
-              Text(shares == null || shares == 0
-                  ? ''
-                  : formatCountToKMBTQ(shares) ?? '',),
+              Text(
+                shares == null || shares == 0
+                    ? ''
+                    : formatCountToKMBTQ(shares) ?? '',
+              ),
               const Spacer(),
               const WhatsevrBookmarkButton(),
               IconButton(

@@ -5,20 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
-
-import '../../../../config/api/response_model/recommendation_flicks.dart';
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/themes/theme.dart';
-import '../../../../config/widgets/buttons/animated_like_icon_button.dart';
-import '../../../../config/widgets/buttons/button.dart';
-import '../../../../config/widgets/buttons/two_state_ui.dart';
-import '../../../../config/widgets/content_mask.dart';
-import '../../../../config/widgets/dialogs/comments_view.dart';
-import '../../../../config/widgets/feed_players/flick_full_player.dart';
-import '../../../../config/widgets/max_scroll_listener.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../bloc/flicks_bloc.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/flick_full_player.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/src/features/flicks/bloc/flicks_bloc.dart';
 
 class FlicksPage extends StatefulWidget {
   const FlicksPage({super.key});
@@ -108,6 +105,7 @@ class _FlicksPageState extends State<FlicksPage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     WhatsevrReactButton(
+                                      flickPostUid: flick?.uid,
                                       size: 30,
                                       firstColor: DarkTheme().icon,
                                       arrangeVertically: true,

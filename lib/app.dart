@@ -8,6 +8,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:whatsevr_app/config/services/follow_unfollow_bloc/follow_unfollow_bloc.dart';
+import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 
 import 'config/routes/router.dart';
 import 'config/themes/bloc/theme_bloc.dart';
@@ -49,6 +51,12 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       providers: [
         BlocProvider<ThemeBloc>(
           create: (context) => ThemeBloc(),
+        ),
+        BlocProvider<ReactUnreactBloc>(
+          create: (context) => ReactUnreactBloc()..add(FetchReactions()),
+        ),
+        BlocProvider<FollowUnfollowBloc>(
+          create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
@@ -105,37 +113,39 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
 Center _loaderUi(String msg) {
   return Center(
     child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CupertinoActivityIndicator(),
-            const Gap(12),
-            Text(msg),
-          ],
-        ),),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const CupertinoActivityIndicator(),
+          const Gap(12),
+          Text(msg),
+        ],
+      ),
+    ),
   );
 }
 
 Container _toastUi(String msg) {
   return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Text(msg),);
+    margin: const EdgeInsets.all(16),
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: const <BoxShadow>[
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 4,
+          offset: Offset(0, 4),
+        ),
+      ],
+    ),
+    child: Text(msg),
+  );
 }

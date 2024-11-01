@@ -20,14 +20,16 @@ class ExplorePagePhotosPage extends StatelessWidget {
     onReachingEndOfTheList(
       scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(LoadMorePhotoPostsEvent(
-              page: context
-                      .read<ExploreBloc>()
-                      .state
-                      .videoPaginationData!
-                      .currentPage +
-                  1,
-            ),);
+        context.read<ExploreBloc>().add(
+              LoadMorePhotoPostsEvent(
+                page: context
+                        .read<ExploreBloc>()
+                        .state
+                        .videoPaginationData!
+                        .currentPage +
+                    1,
+              ),
+            );
       },
     );
 
@@ -52,6 +54,7 @@ class ExplorePagePhotosPage extends StatelessWidget {
               return Column(
                 children: [
                   PhotosPostFrame(
+                    photoPostUid: offer.uid,
                     avatarUrl: offer.user?.profilePicture,
                     username: data[index].user?.username,
                     fullName: data[index].user?.name,

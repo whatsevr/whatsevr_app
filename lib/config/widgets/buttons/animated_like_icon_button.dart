@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ant_design.dart';
 import 'package:iconify_flutter/icons/la.dart';
@@ -6,16 +7,10 @@ import 'package:iconify_flutter/icons/octicon.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:like_button/like_button.dart';
-import 'package:whatsevr_app/config/enums/reaction_type.dart';
-
-import '../../../utils/conversion.dart';
-import '../../themes/theme.dart';
-import '../stack_toast.dart';
-import 'two_state_ui.dart';
-
-import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/services/react_unreact_middleware.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
+import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 
 class WhatsevrReactButton extends StatefulWidget {
   final int? reactionCount;
@@ -60,19 +55,33 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
   @override
   void initState() {
     super.initState();
-    // Check initial reaction status based on UIDs
-    _isReacted = ReactUnreactMiddleware.hasReacted(
-      widget.videoPostUid ??
-          widget.flickPostUid ??
-          widget.memoryUid ??
-          widget.offerPostUid ??
-          widget.photoPostUid ??
-          widget.pdfUid,
-    );
     _reactionCount = widget.reactionCount ?? 0;
-    if (mounted && context.mounted) {
-      setState(() {});
-    }
+    _isReacted = BlocProvider.of<ReactUnreactBloc>(context)
+        .state
+        .reactedItemIds
+        .contains(_getReactionUid());
+  }
+
+  String? _getReactionUid() {
+    //assure only one of the uid is passed
+    assert(
+      [
+            widget.videoPostUid,
+            widget.flickPostUid,
+            widget.memoryUid,
+            widget.offerPostUid,
+            widget.photoPostUid,
+            widget.pdfUid
+          ].where((element) => element != null).length ==
+          1,
+      'Only one of the uid should be passed',
+    );
+    return widget.videoPostUid ??
+        widget.flickPostUid ??
+        widget.memoryUid ??
+        widget.offerPostUid ??
+        widget.photoPostUid ??
+        widget.pdfUid;
   }
 
   @override
@@ -85,8 +94,11 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Builder(
-            builder: (context) {
+          child: BlocBuilder<ReactUnreactBloc, ReactUnreactState>(
+            builder: (context, state) {
+              final reactionUid = _getReactionUid();
+              _isReacted = state.reactedItemIds.contains(reactionUid);
+
               final List<Widget> children = [
                 LikeButton(
                   size: widget.size ?? 26,
@@ -103,31 +115,30 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                   },
                   isLiked: _isReacted,
                   onTap: (isReacted) async {
-                    // Toggle reaction state
-                    if (isReacted) {
-                      widget.onUnreact?.call(isReacted);
-                    } else {
-                      widget.onReact?.call(isReacted);
-                    }
-                    ReactUnreactMiddleware.toggleReaction(
-                      reactionType: ReactionType.like.reactionType,
+                    final bloc = BlocProvider.of<ReactUnreactBloc>(context);
+
+                    bloc.add(ToggleReaction(
+                      reactionType:
+                          'like', // or other reaction type if available
                       videoPostUid: widget.videoPostUid,
                       flickPostUid: widget.flickPostUid,
                       memoryUid: widget.memoryUid,
                       offerPostUid: widget.offerPostUid,
                       photoPostUid: widget.photoPostUid,
                       pdfUid: widget.pdfUid,
-                    );
+                    ));
+
                     setState(() {
-                      _isReacted = !isReacted;
-                      _reactionCount += isReacted ? -1 : 1;
+                      _isReacted = !_isReacted;
+                      _reactionCount += _isReacted ? 1 : -1;
                     });
+
                     return !_isReacted;
                   },
                 ),
                 if (_reactionCount != 0)
                   Text(
-                    '${formatCountToKMBTQ(_reactionCount)}',
+                    '${_reactionCount}',
                     style: TextStyle(color: widget.firstColor ?? Colors.black),
                   ),
               ];

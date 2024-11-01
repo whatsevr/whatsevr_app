@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/services/follow_unfollow_middleware.dart';
-import 'package:whatsevr_app/config/services/react_unreact_middleware.dart';
+
+import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 
 import '../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../config/api/methods/common_data.dart';

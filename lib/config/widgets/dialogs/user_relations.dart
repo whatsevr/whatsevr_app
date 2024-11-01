@@ -82,7 +82,7 @@ class _UserInfo extends StatelessWidget {
 
   Widget followButton() {
     return WhatsevrFollowButton(
-      followeeUserUid: user.uid,
+      followeeUserUid: user.uid!,
     );
   }
 
