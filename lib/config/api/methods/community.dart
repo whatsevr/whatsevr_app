@@ -9,11 +9,13 @@ import '../response_model/community/user_communities.dart';
 class CommunityApi {
   static Future<TopCommunitiesResponse?> topCommunities({
     required int page,
-    int pageSize = 20,
+    int pageSize = 30,
   }) async {
     try {
-      final Response response = await ApiClient.client.get('/v1/top-communities',
-          queryParameters: {'page': page, 'page_size': pageSize},);
+      final Response response = await ApiClient.client.get(
+        '/v1/top-communities',
+        queryParameters: {'page': page, 'page_size': pageSize},
+      );
       if (response.data != null) {
         return TopCommunitiesResponse.fromMap(response.data);
       }

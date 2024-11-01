@@ -9,6 +9,7 @@ import '../feed_players/wtv_mini_player.dart';
 import '../pad_horizontal.dart';
 
 class WtvVideoPostFrame extends StatelessWidget {
+  final String? videoPostUid;
   final String? title;
   final String? description;
   final String? videoUrl;
@@ -27,6 +28,7 @@ class WtvVideoPostFrame extends StatelessWidget {
   final VoidCallback? onTapComment;
   const WtvVideoPostFrame({
     super.key,
+    this.videoPostUid,
     this.title,
     this.description,
     this.videoUrl,
@@ -161,6 +163,7 @@ class WtvVideoPostFrame extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     WhatsevrReactButton(
+                      videoPostUid: videoPostUid,
                       reactionCount: likes,
                     ),
                     WhatsevrCommentButton(

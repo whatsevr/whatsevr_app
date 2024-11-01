@@ -34,7 +34,7 @@ class _WhatsevrFollowButtonState extends State<WhatsevrFollowButton> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && context.mounted) {
         isFollowed =
-            FollowUnfollowMiddleware.isFollowed(widget.followeeUserUid!);
+            FollowUnfollowMiddleware.isFollowed(widget.followeeUserUid);
         if (isFollowed == true) print('${widget.followeeUserUid} Followed');
         setState(() {});
       }

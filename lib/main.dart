@@ -8,6 +8,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:whatsevr_app/config/services/permission.dart';
 
 import 'app.dart';
 import 'config/api/client.dart';
@@ -38,13 +39,12 @@ Future<void> main() async {
         return true;
       };
       TalkerService.init();
-      DeviceInfoService.setDeviceInfo();
+      await DeviceInfoService.setDeviceInfo();
       WakelockPlus.enable();
       await AuthUserDb.initDB();
       await ApiClient.init();
       FileUploadService.init();
       DownloadService.init();
-
       FlutterForegroundTask.initCommunicationPort();
       runApp(const WhatsevrApp());
       afterRunAppServices();
@@ -77,11 +77,12 @@ void catchUnhandledExceptions(Object error, StackTrace? stack) {
   }
 }
 
-void afterLoginServices() {
+void afterLoginServices() async {
   TalkerService.instance.info('Executing after login services.');
+  AuthUserService.getSupportiveDataForLoggedUser();
+  await PermissionService.requestAllPermissions();
   WhatsevrLongTaskController.registerNotificationChannel();
   NotificationService().init();
-  AuthUserService.getSupportiveDataForLoggedUser();
 }
 
 void afterRunAppServices() {

@@ -6,27 +6,43 @@ import 'package:iconify_flutter/icons/octicon.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:like_button/like_button.dart';
+import 'package:whatsevr_app/config/enums/reaction_type.dart';
 
 import '../../../utils/conversion.dart';
 import '../../themes/theme.dart';
 import '../stack_toast.dart';
 import 'two_state_ui.dart';
 
+import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/services/react_unreact_middleware.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+
 class WhatsevrReactButton extends StatefulWidget {
-  final bool? initiallyReacted;
   final int? reactionCount;
   final Color? firstColor;
   final double? size;
+  final String? videoPostUid;
+  final String? flickPostUid;
+  final String? memoryUid;
+  final String? offerPostUid;
+  final String? photoPostUid;
+  final String? pdfUid;
   final Function(bool isLiked)? onReact;
   final Function(bool isUnLiked)? onUnreact;
   final Function()? onTapSide;
   final bool arrangeVertically;
+
   const WhatsevrReactButton({
     super.key,
-    this.initiallyReacted,
     this.reactionCount,
     this.size,
     this.firstColor,
+    this.videoPostUid,
+    this.flickPostUid,
+    this.memoryUid,
+    this.offerPostUid,
+    this.photoPostUid,
+    this.pdfUid,
     this.onReact,
     this.onUnreact,
     this.onTapSide,
@@ -44,8 +60,19 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
   @override
   void initState() {
     super.initState();
-    _isReacted = widget.initiallyReacted ?? false;
+    // Check initial reaction status based on UIDs
+    _isReacted = ReactUnreactMiddleware.hasReacted(
+      widget.videoPostUid ??
+          widget.flickPostUid ??
+          widget.memoryUid ??
+          widget.offerPostUid ??
+          widget.photoPostUid ??
+          widget.pdfUid,
+    );
     _reactionCount = widget.reactionCount ?? 0;
+    if (mounted && context.mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -75,21 +102,27 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                     );
                   },
                   isLiked: _isReacted,
-                  onTap: (isReacted) {
+                  onTap: (isReacted) async {
+                    // Toggle reaction state
                     if (isReacted) {
                       widget.onUnreact?.call(isReacted);
                     } else {
                       widget.onReact?.call(isReacted);
                     }
+                    ReactUnreactMiddleware.toggleReaction(
+                      reactionType: ReactionType.like.reactionType,
+                      videoPostUid: widget.videoPostUid,
+                      flickPostUid: widget.flickPostUid,
+                      memoryUid: widget.memoryUid,
+                      offerPostUid: widget.offerPostUid,
+                      photoPostUid: widget.photoPostUid,
+                      pdfUid: widget.pdfUid,
+                    );
                     setState(() {
                       _isReacted = !isReacted;
-                      if (isReacted) {
-                        _reactionCount--;
-                      } else {
-                        _reactionCount++;
-                      }
+                      _reactionCount += isReacted ? -1 : 1;
                     });
-                    return Future.value(!isReacted);
+                    return !_isReacted;
                   },
                 ),
                 if (_reactionCount != 0)
@@ -98,14 +131,9 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                     style: TextStyle(color: widget.firstColor ?? Colors.black),
                   ),
               ];
-              if (widget.arrangeVertically) {
-                return Column(
-                  children: children,
-                );
-              }
-              return Row(
-                children: children,
-              );
+              return widget.arrangeVertically
+                  ? Column(children: children)
+                  : Row(children: children);
             },
           ),
         ),

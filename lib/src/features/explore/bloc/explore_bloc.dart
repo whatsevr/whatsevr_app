@@ -16,16 +16,18 @@ part 'explore_state.dart';
 
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   ExploreBloc()
-      : super(const ExploreState(
-          recommendationVideos: [],
-          recommendationMemories: [],
-          recommendationOffers: [],
-          recommendationPhotoPosts: [],
-          videoPaginationData: PaginationData(),
-          memoryPaginationData: PaginationData(),
-          offersPaginationData: PaginationData(),
-          photoPostPaginationData: PaginationData(),
-        ),) {
+      : super(
+          const ExploreState(
+            recommendationVideos: [],
+            recommendationMemories: [],
+            recommendationOffers: [],
+            recommendationPhotoPosts: [],
+            videoPaginationData: PaginationData(),
+            memoryPaginationData: PaginationData(),
+            offersPaginationData: PaginationData(),
+            photoPostPaginationData: PaginationData(),
+          ),
+        ) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
@@ -48,7 +50,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadVideos(
-      LoadVideosEvent event, Emitter<ExploreState> emit,) async {
+    LoadVideosEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     try {
       final RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
@@ -70,29 +74,34 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreVideos(
-      LoadMoreVideosEvent event, Emitter<ExploreState> emit,) async {
+    LoadMoreVideosEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     if (state.videoPaginationData?.isLoading == true ||
         state.videoPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
-            videoPaginationData:
-                state.videoPaginationData?.copyWith(isLoading: true),),
+          videoPaginationData:
+              state.videoPaginationData?.copyWith(isLoading: true),
+        ),
       );
       final RecommendationVideosResponse? recommendationVideos =
           await RecommendationApi.publicVideoPosts(
         page: event.page!,
       );
 
-      emit(state.copyWith(
-        recommendationVideos: state.recommendationVideos! +
-            (recommendationVideos?.recommendedVideos ?? []),
-        videoPaginationData: state.videoPaginationData?.copyWith(
-          currentPage: event.page,
-          isLoading: false,
-          noMoreData: recommendationVideos?.lastPage,
+      emit(
+        state.copyWith(
+          recommendationVideos: state.recommendationVideos! +
+              (recommendationVideos?.recommendedVideos ?? []),
+          videoPaginationData: state.videoPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: recommendationVideos?.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -106,7 +115,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadMemories(
-      LoadMemoriesEvent event, Emitter<ExploreState> emit,) async {
+    LoadMemoriesEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     try {
       final RecommendationMemoriesResponse? recommendationMemories =
           await RecommendationApi.publicMemories(
@@ -128,29 +139,34 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreMemories(
-      LoadMoreMemoriesEvent event, Emitter<ExploreState> emit,) async {
+    LoadMoreMemoriesEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     if (state.memoryPaginationData?.isLoading == true ||
         state.memoryPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
-            memoryPaginationData:
-                state.memoryPaginationData?.copyWith(isLoading: true),),
+          memoryPaginationData:
+              state.memoryPaginationData?.copyWith(isLoading: true),
+        ),
       );
       final RecommendationMemoriesResponse? recommendationMemories =
           await RecommendationApi.publicMemories(
         page: event.page!,
       );
 
-      emit(state.copyWith(
-        recommendationMemories: state.recommendationMemories! +
-            (recommendationMemories?.recommendedMemories ?? []),
-        memoryPaginationData: state.memoryPaginationData?.copyWith(
-          currentPage: event.page,
-          isLoading: false,
-          noMoreData: recommendationMemories?.lastPage,
+      emit(
+        state.copyWith(
+          recommendationMemories: state.recommendationMemories! +
+              (recommendationMemories?.recommendedMemories ?? []),
+          memoryPaginationData: state.memoryPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: recommendationMemories?.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -164,7 +180,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadOffers(
-      LoadOffersEvent event, Emitter<ExploreState> emit,) async {
+    LoadOffersEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     try {
       final RecommendationOffersResponse? recommendationOffers =
           await RecommendationApi.publicOffers(
@@ -186,29 +204,34 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMoreOffers(
-      LoadMoreOffersEvent event, Emitter<ExploreState> emit,) async {
+    LoadMoreOffersEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     if (state.offersPaginationData?.isLoading == true ||
         state.offersPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
-            offersPaginationData:
-                state.offersPaginationData?.copyWith(isLoading: true),),
+          offersPaginationData:
+              state.offersPaginationData?.copyWith(isLoading: true),
+        ),
       );
       final RecommendationOffersResponse? recommendationOffers =
           await RecommendationApi.publicOffers(
         page: event.page!,
       );
 
-      emit(state.copyWith(
-        recommendationOffers: state.recommendationOffers! +
-            (recommendationOffers?.recommendedOffers ?? []),
-        offersPaginationData: state.offersPaginationData?.copyWith(
-          currentPage: event.page,
-          isLoading: false,
-          noMoreData: recommendationOffers?.lastPage,
+      emit(
+        state.copyWith(
+          recommendationOffers: state.recommendationOffers! +
+              (recommendationOffers?.recommendedOffers ?? []),
+          offersPaginationData: state.offersPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: recommendationOffers?.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
       emit(
         state.copyWith(
@@ -222,7 +245,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _loadPhotoPosts(
-      LoadPhotoPostsEvent event, Emitter<ExploreState> emit,) async {
+    LoadPhotoPostsEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     try {
       final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await RecommendationApi.publicPhotoPosts(
@@ -245,29 +270,34 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   FutureOr<void> _onLoadMorePhotoPosts(
-      LoadMorePhotoPostsEvent event, Emitter<ExploreState> emit,) async {
+    LoadMorePhotoPostsEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
     if (state.photoPostPaginationData?.isLoading == true ||
         state.photoPostPaginationData?.noMoreData == true) return;
     try {
       emit(
         state.copyWith(
-            photoPostPaginationData:
-                state.photoPostPaginationData?.copyWith(isLoading: true),),
+          photoPostPaginationData:
+              state.photoPostPaginationData?.copyWith(isLoading: true),
+        ),
       );
       final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await RecommendationApi.publicPhotoPosts(
         page: event.page!,
       );
 
-      emit(state.copyWith(
-        recommendationPhotoPosts: state.recommendationPhotoPosts! +
-            (recommendationPhotoPosts?.recommendedPhotoPosts ?? []),
-        photoPostPaginationData: state.photoPostPaginationData?.copyWith(
-          currentPage: event.page,
-          isLoading: false,
-          noMoreData: recommendationPhotoPosts?.lastPage,
+      emit(
+        state.copyWith(
+          recommendationPhotoPosts: state.recommendationPhotoPosts! +
+              (recommendationPhotoPosts?.recommendedPhotoPosts ?? []),
+          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: recommendationPhotoPosts?.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
       emit(
         state.copyWith(

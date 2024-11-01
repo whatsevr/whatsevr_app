@@ -334,6 +334,8 @@ class WtvDetailsPage extends StatelessWidget {
                           child: Row(
                             children: <Widget>[
                               WhatsevrReactButton(
+                                videoPostUid: state.videoPostDetailsResponse
+                                    ?.videoPostDetails?.uid,
                                 onTapSide: () {
                                   showReactionsDialog(
                                     videoPostUid: state.videoPostDetailsResponse

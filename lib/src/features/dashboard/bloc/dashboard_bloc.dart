@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/services/follow_unfollow_middleware.dart';
+import 'package:whatsevr_app/config/services/react_unreact_middleware.dart';
 
 import '../../../../config/api/external/models/business_validation_exception.dart';
 import '../../../../config/api/methods/common_data.dart';
@@ -25,7 +27,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     DashboardInitialEvent event,
     Emitter<DashboardState> emit,
   ) async {
-    await PermissionService.requestAllPermissions();
     afterLoginServices();
     _preloadApiIntoCache();
   }
@@ -47,6 +48,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         RecommendationApi.publicFlickPosts(page: 1),
         RecommendationApi.publicFlickPosts(page: 2),
         RecommendationApi.publicFlickPosts(page: 3),
+        RecommendationApi.publicOffers(page: 1),
+        RecommendationApi.publicOffers(page: 2),
+        RecommendationApi.publicOffers(page: 3),
+        RecommendationApi.publicPhotoPosts(page: 1),
+        RecommendationApi.publicPhotoPosts(page: 2),
+        RecommendationApi.publicPhotoPosts(page: 3),
+        RecommendationApi.publicMemories(page: 1),
+        RecommendationApi.publicMemories(page: 2),
+        RecommendationApi.publicMemories(page: 3),
         UsersApi.getProfileDetails(userUid: userUid!),
       ]);
 

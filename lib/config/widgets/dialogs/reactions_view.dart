@@ -6,8 +6,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import '../../api/external/models/pagination_data.dart';
 import '../../api/methods/reactions.dart';
 import '../../api/methods/users.dart';
-import '../../api/response_model/reactions/get_reactions.dart'
-    as m1;
+import '../../api/response_model/reactions/get_reactions.dart' as m1;
 import '../../api/response_model/user_details.dart';
 import '../../enums/reaction_type.dart';
 import '../../mocks/mocks.dart';
@@ -39,18 +38,19 @@ void showReactionsDialog({
     throw ArgumentError('Only one parameter should be non-null');
   }
   showAppModalSheet(
-      transparentMask: true,
-      flexibleSheet: false,
-      resizeToAvoidBottomInset: false,
-      maxSheetHeight: 0.8,
-      child: _Ui(
-        videoPostUid: videoPostUid,
-        photoPostUid: photoPostUid,
-        pdfUid: pdfUid,
-        memoryUid: memoryUid,
-        offerPostUid: offerPostUid,
-        flickPostUid: flickPostUid,
-      ),);
+    transparentMask: true,
+    flexibleSheet: false,
+    resizeToAvoidBottomInset: false,
+    maxSheetHeight: 0.8,
+    child: _Ui(
+      videoPostUid: videoPostUid,
+      photoPostUid: photoPostUid,
+      pdfUid: pdfUid,
+      memoryUid: memoryUid,
+      offerPostUid: offerPostUid,
+      flickPostUid: flickPostUid,
+    ),
+  );
 }
 
 class _Ui extends StatefulWidget {
@@ -89,9 +89,12 @@ class _UiState extends State<_Ui> {
     super.initState();
     getCurrentUserDetails();
     getReactions(1);
-    onReachingEndOfTheList(scrollController, execute: () {
-      getReactions((reactionsPaginationData?.currentPage ?? 0) + 1);
-    },);
+    onReachingEndOfTheList(
+      scrollController,
+      execute: () {
+        getReactions((reactionsPaginationData?.currentPage ?? 0) + 1);
+      },
+    );
   }
 
   @override
@@ -116,7 +119,8 @@ class _UiState extends State<_Ui> {
     }
     reactionsPaginationData =
         reactionsPaginationData?.copyWith(isLoading: true);
-    final m1.GetReactionsResponse? response = await ReactionsApi.getReactions(
+    final m1.GetReactionsResponse? response =
+        await ReactionsApi.getContentReactions(
       page: page,
       videoPostUid: widget.videoPostUid,
       photoPostUid: widget.photoPostUid,
@@ -151,24 +155,25 @@ class _UiState extends State<_Ui> {
               children: [
                 for (ReactionType reactionType in ReactionType.values) ...[
                   WhatsevrChoiceChip(
-                      choiced: selectedReactionType == reactionType,
-                      switchChoice: (bool selected) {
-                        if (_reactions.isEmpty) return;
+                    choiced: selectedReactionType == reactionType,
+                    switchChoice: (bool selected) {
+                      if (_reactions.isEmpty) return;
 
-                        setState(() {
-                          selectedReactionType = selected ? reactionType : null;
-                          // isTopComments = selected;
-                          // if (isTopComments) {
-                          //   _comments.sort((a, b) => a.user!.totalFollowers!
-                          //       .compareTo(b.user!.totalFollowers!));
-                          // } else {
-                          //   _comments.sort(
-                          //       (a, b) => a.createdAt!.compareTo(b.createdAt!));
-                          // }
-                          // _comments = _comments.reversed.toList();
-                        });
-                      },
-                      label: reactionType.emoji,),
+                      setState(() {
+                        selectedReactionType = selected ? reactionType : null;
+                        // isTopComments = selected;
+                        // if (isTopComments) {
+                        //   _comments.sort((a, b) => a.user!.totalFollowers!
+                        //       .compareTo(b.user!.totalFollowers!));
+                        // } else {
+                        //   _comments.sort(
+                        //       (a, b) => a.createdAt!.compareTo(b.createdAt!));
+                        // }
+                        // _comments = _comments.reversed.toList();
+                      });
+                    },
+                    label: reactionType.emoji,
+                  ),
                   Gap(8),
                 ],
               ],
@@ -176,37 +181,38 @@ class _UiState extends State<_Ui> {
           ),
           const Gap(8),
           Expanded(
-            child: Builder(builder: (context) {
-              if (_reactions.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'Waiting for reactions...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+            child: Builder(
+              builder: (context) {
+                if (_reactions.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Waiting for reactions...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
+                  );
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: _reactions.length,
+                  controller: scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
                   ),
-                );
-              }
-              return GridView.builder(
-                shrinkWrap: true,
-                itemCount: _reactions.length,
-                controller: scrollController,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                ),
-                itemBuilder: (context, index) {
-                  final m1.Reaction reaction = _reactions[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          child: GestureDetector(
+                  itemBuilder: (context, index) {
+                    final m1.Reaction reaction = _reactions[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: GestureDetector(
                               onTap: () {
                                 showPhotoPreviewDialog(
                                   context: context,
@@ -253,41 +259,44 @@ class _UiState extends State<_Ui> {
                                     ),
                                   ),
                                 ],
-                              ),),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: context.whatsevrTheme.accent,
-                            borderRadius: BorderRadius.vertical(
-                              bottom: Radius.circular(12),
+                              ),
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                reaction.user?.name ?? 'Anonymous',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: context.whatsevrTheme.accent,
+                              borderRadius: BorderRadius.vertical(
+                                bottom: Radius.circular(12),
                               ),
-                              Text(
-                                GetTimeAgo.parse(reaction.createdAt!) ?? '',
-                                style: const TextStyle(
-                                  fontSize: 12,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  reaction.user?.name ?? 'Anonymous',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  GetTimeAgo.parse(reaction.createdAt!) ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),

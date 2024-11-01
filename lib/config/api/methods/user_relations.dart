@@ -83,7 +83,7 @@ class UserRelationsApi {
   static Future<UsersRelationResponse?> getAllFollowing({
     required String userUid,
     required int page,
-    int pageSize = 10,
+    int pageSize = 20,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
@@ -104,7 +104,7 @@ class UserRelationsApi {
   static Future<UsersRelationResponse?> getAllFollowers({
     required String userUid,
     required int page,
-    int pageSize = 10,
+    int pageSize = 20,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
@@ -126,7 +126,7 @@ class UserRelationsApi {
     required String userUid1,
     required String userUid2,
     required int page,
-    int pageSize = 10,
+    int pageSize = 20,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
@@ -148,7 +148,7 @@ class UserRelationsApi {
   static Future<UsersRelationResponse?> getMutualConnections({
     required String userUid,
     required int page,
-    int pageSize = 10,
+    int pageSize = 20,
   }) async {
     try {
       final Response response = await ApiClient.client.get(

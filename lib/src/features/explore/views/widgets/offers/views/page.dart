@@ -20,14 +20,16 @@ class ExplorePageOffersPage extends StatelessWidget {
     onReachingEndOfTheList(
       scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(LoadMoreOffersEvent(
-              page: context
-                      .read<ExploreBloc>()
-                      .state
-                      .videoPaginationData!
-                      .currentPage +
-                  1,
-            ),);
+        context.read<ExploreBloc>().add(
+              LoadMoreOffersEvent(
+                page: context
+                        .read<ExploreBloc>()
+                        .state
+                        .videoPaginationData!
+                        .currentPage +
+                    1,
+              ),
+            );
       },
     );
 
@@ -52,6 +54,7 @@ class ExplorePageOffersPage extends StatelessWidget {
               return Column(
                 children: [
                   OfferPostFrame(
+                    offerPostUid: offer.uid,
                     avatarUrl: offer.user?.profilePicture,
                     username: data[index].user?.username,
                     fullName: data[index].user?.name,

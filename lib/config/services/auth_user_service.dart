@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:whatsevr_app/config/services/follow_unfollow_middleware.dart';
+import 'package:whatsevr_app/config/services/react_unreact_middleware.dart';
 
 import '../../dev/talker.dart';
 import '../api/external/models/business_validation_exception.dart';
@@ -168,6 +169,8 @@ class AuthUserService {
     final String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
     try {
       if (currentlyLoggedUserUid != null) {
+        ReactUnreactMiddleware.fetchAndCacheReactions();
+        FollowUnfollowMiddleware.fetchAndCacheAllFollowedUsers();
         (int?, dynamic)? supportiveDataResponse =
             await UsersApi.getSupportiveUserData(
           userUid: currentlyLoggedUserUid,
@@ -175,7 +178,6 @@ class AuthUserService {
         if (supportiveDataResponse?.$1 != HttpStatus.ok) {
           throw BusinessException('Failed to fetch logged user data');
         }
-        FollowUnfollowMiddleware.fetchAndCacheAllFollowedUsers();
       }
     } catch (e, stackTrace) {
       AuthUserDb.clearLastLoggedUserUid();

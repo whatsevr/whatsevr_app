@@ -11,6 +11,7 @@ import '../feed_players/wtv_mini_player.dart';
 import '../pad_horizontal.dart';
 
 class OfferPostFrame extends StatelessWidget {
+  final String? offerPostUid;
   final String? title;
   final String? description;
   final String? status;
@@ -33,6 +34,7 @@ class OfferPostFrame extends StatelessWidget {
 
   const OfferPostFrame({
     super.key,
+    this.offerPostUid,
     this.title,
     this.description,
     this.status,
@@ -232,22 +234,30 @@ class OfferPostFrame extends StatelessWidget {
           Row(
             children: <Widget>[
               Gap(8),
-              const WhatsevrReactButton(),
-              Text(likes == null || likes == 0
-                  ? ''
-                  : formatCountToKMBTQ(likes) ?? '',),
+              WhatsevrReactButton(
+                offerPostUid: offerPostUid,
+              ),
+              Text(
+                likes == null || likes == 0
+                    ? ''
+                    : formatCountToKMBTQ(likes) ?? '',
+              ),
               WhatsevrCommentButton(
                 onTapComment: () {
                   onTapComment?.call();
                 },
               ),
-              Text(comments == null || comments == 0
-                  ? ''
-                  : formatCountToKMBTQ(comments) ?? '',),
+              Text(
+                comments == null || comments == 0
+                    ? ''
+                    : formatCountToKMBTQ(comments) ?? '',
+              ),
               WhatsevrShareButton(),
-              Text(shares == null || shares == 0
-                  ? ''
-                  : formatCountToKMBTQ(shares) ?? '',),
+              Text(
+                shares == null || shares == 0
+                    ? ''
+                    : formatCountToKMBTQ(shares) ?? '',
+              ),
               const Spacer(),
               const WhatsevrBookmarkButton(),
               WhatsevrShareButton(

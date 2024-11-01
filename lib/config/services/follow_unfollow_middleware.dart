@@ -4,22 +4,27 @@ import 'package:whatsevr_app/config/api/response_model/user_relations/user_relat
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
 class FollowUnfollowMiddleware {
-  static const String _followedUsersBox = 'followedUsersBox';
+  static String? _followedUsersBox;
   static const String _totalPagesKey = 'totalPages';
-  static const int _pageSize = 300;
+  static const int _pageSize = 500;
   static Set<String> followedUserUids = {};
 
   // Lazy initialization for Hive Box
-  static Future<Box> _getBox() async {
-    if (!Hive.isBoxOpen(_followedUsersBox)) {
-      await Hive.openBox(_followedUsersBox);
+  static Future<Box?> _getBox() async {
+    final String? userUid = AuthUserDb.getLastLoggedUserUid();
+    if (userUid == null) return null;
+    _followedUsersBox = 'followedUsersBox_$userUid';
+    if (!Hive.isBoxOpen(_followedUsersBox!)) {
+      await Hive.openBox(_followedUsersBox!);
     }
-    return Hive.box(_followedUsersBox);
+    return Hive.box(_followedUsersBox!);
   }
 
   // Fetch and cache all followed user UIDs (One-time on app launch)
   static Future<void> fetchAndCacheAllFollowedUsers() async {
+    followedUserUids.clear();
     final box = await _getBox();
+    if (box == null) return;
     await _loadCachedFollowedUsers(); // Load from cache first
 
     int page = 1;
@@ -43,6 +48,7 @@ class FollowUnfollowMiddleware {
   // Load cached followed users on app restart
   static Future<void> _loadCachedFollowedUsers() async {
     final box = await _getBox();
+    if (box == null) return;
     final int totalPages = box.get(_totalPagesKey, defaultValue: 0);
     final List<String> allFollowedUids = [];
 
@@ -65,7 +71,10 @@ class FollowUnfollowMiddleware {
         page: page,
         pageSize: _pageSize,
       );
-      return response?.data?.map((e) => e.user!.uid!).toList() ?? [];
+      List<String?> uids =
+          response?.data?.map((e) => e.user?.uid).toList() ?? [];
+      uids = uids.toSet().toList();
+      return uids.whereType<String>().toList();
     } catch (e) {
       print('Error fetching followed users from API: $e');
       return [];
@@ -75,7 +84,7 @@ class FollowUnfollowMiddleware {
   // Toggle follow/unfollow for a user and persist the change
   static Future<void> toggleFollow(String userUid) async {
     final box = await _getBox();
-
+    if (box == null) return;
     if (followedUserUids.contains(userUid)) {
       followedUserUids.remove(userUid);
       await _handleUnfollow(userUid);
@@ -113,12 +122,14 @@ class FollowUnfollowMiddleware {
   }
 
   // Check if a user is followed
-  static bool isFollowed(String userUid) {
+  static bool isFollowed(String? userUid) {
+    if (userUid == null) return false;
     return followedUserUids.contains(userUid);
   }
 
   // Persist the followed users list to cache (batch updates)
-  static Future<void> _persistFollowedUsers(Box box) async {
+  static Future<void> _persistFollowedUsers(Box? box) async {
+    if (box == null) return;
     try {
       await box.put('followedUserUids', followedUserUids.toList());
     } catch (e) {

@@ -24,14 +24,16 @@ class ExplorePageWtvPage extends StatelessWidget {
     onReachingEndOfTheList(
       scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(LoadMoreVideosEvent(
-              page: context
-                      .read<ExploreBloc>()
-                      .state
-                      .videoPaginationData!
-                      .currentPage +
-                  1,
-            ),);
+        context.read<ExploreBloc>().add(
+              LoadMoreVideosEvent(
+                page: context
+                        .read<ExploreBloc>()
+                        .state
+                        .videoPaginationData!
+                        .currentPage +
+                    1,
+              ),
+            );
       },
     );
 
@@ -105,6 +107,7 @@ class ExplorePageWtvPage extends StatelessWidget {
                 return Column(
                   children: [
                     WtvVideoPostFrame(
+                      videoPostUid: video.uid,
                       avatarUrl: video.user?.profilePicture,
                       username: data[index].user?.username,
                       title: data[index].title,
@@ -127,12 +130,14 @@ class ExplorePageWtvPage extends StatelessWidget {
                       shares: data[index].totalShares,
                       views: data[index].totalViews,
                       onRequestOfVideoDetails: () {
-                        AppNavigationService.newRoute(RoutesName.wtvDetails,
-                            extras: WtvDetailsPageArgument(
-                              videoPostUid: data[index].uid,
-                              thumbnail: data[index].thumbnail,
-                              videoUrl: data[index].videoUrl,
-                            ),);
+                        AppNavigationService.newRoute(
+                          RoutesName.wtvDetails,
+                          extras: WtvDetailsPageArgument(
+                            videoPostUid: data[index].uid,
+                            thumbnail: data[index].thumbnail,
+                            videoUrl: data[index].videoUrl,
+                          ),
+                        );
                       },
                       onTapComment: () {
                         showCommentsDialog(videoPostUid: data[index].uid);
