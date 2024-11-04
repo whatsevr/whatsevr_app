@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+
+import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
 import '../../../../config/widgets/pad_horizontal.dart';
 import '../../../../config/widgets/tab_bar.dart';
@@ -25,6 +29,12 @@ class ExplorePage extends StatelessWidget {
               'Search for Memories',
               'Search for Flicks',
             ],
+            readOnly: true,
+            onTap: () {
+              AppNavigationService.newRoute(
+                RoutesName.accountSearch,
+              );
+            },
           ),
         ),
         Expanded(

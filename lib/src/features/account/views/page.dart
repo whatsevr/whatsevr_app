@@ -7,33 +7,34 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
+import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
-import '../../../../config/api/response_model/user_memories.dart';
-import '../../../../config/enums/post_creator_type.dart';
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
-import '../../../../config/widgets/content_mask.dart';
-import '../../../../config/widgets/dialogs/content_upload_button_sheet.dart';
-import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/previewers/photo.dart';
-import '../../../../config/widgets/refresh_indicator.dart';
-import '../../../../config/widgets/tab_bar.dart';
-import '../../../../config/widgets/textfield/animated_search_field.dart';
-import '../../../../utils/conversion.dart';
-import '../../details/memory/views/memories.dart';
-import '../../search_pages/account/views/page.dart';
-import '../../settings/views/page.dart';
-import '../../update_profile/views/page.dart';
-import '../bloc/account_bloc.dart';
-import 'widgets/about.dart';
-import 'widgets/cover_media.dart';
-import 'widgets/flicks.dart';
-import 'widgets/offers.dart';
-import 'widgets/pdfs.dart';
-import 'widgets/services.dart';
-import 'widgets/videos.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
+
+import 'package:whatsevr_app/src/features/settings/views/page.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/flicks.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/offers.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/pdfs.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/services.dart';
+import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
 
 class AccountPageArgument {
   final bool isEditMode;
@@ -69,13 +70,6 @@ class AccountPage extends StatelessWidget {
                     onTap: () {
                       AppNavigationService.newRoute(
                         RoutesName.accountSearch,
-                        extras: const AccountSearchPage(
-                          hintTexts: <String>[
-                            'Search for Account',
-                            'Search for Portfolio',
-                            'Search for Community',
-                          ],
-                        ),
                       );
                     },
                   ),

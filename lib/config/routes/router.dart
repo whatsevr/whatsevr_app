@@ -4,29 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../constants.dart';
-import '../../dev/routes/routes.dart';
-import '../../dev/talker.dart';
-import '../../src/features/account/views/page.dart';
-import '../../src/features/community/views/page.dart';
-import '../../src/features/create_posts/create_flick_post/views/page.dart';
-import '../../src/features/create_posts/create_memory/views/page.dart';
-import '../../src/features/create_posts/create_offer/views/page.dart';
-import '../../src/features/create_posts/create_photo_post/views/page.dart';
-import '../../src/features/create_posts/create_video_post/views/page.dart';
-import '../../src/features/create_posts/upload_pdf/views/page.dart';
-import '../../src/features/dashboard/views/page.dart';
-import '../../src/features/details/wtv_details/views/page.dart';
-import '../../src/features/new_community/views/page.dart';
-import '../../src/features/search_pages/account/views/page.dart';
-import '../../src/features/settings/views/page.dart';
-import '../../src/features/splash/views/page.dart';
-import '../../src/features/update_profile/views/page.dart';
-import '../widgets/media/camera_surface.dart';
-import '../widgets/media/image_cropper.dart';
-import '../widgets/media/image_editor.dart';
-import '../widgets/media/video_editor.dart';
-import 'routes_name.dart';
+import 'package:whatsevr_app/constants.dart';
+import 'package:whatsevr_app/dev/routes/routes.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:whatsevr_app/src/features/community/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_offer/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_photo_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/upload_pdf/views/page.dart';
+import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
+import 'package:whatsevr_app/src/features/new_community/views/page.dart';
+import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
+import 'package:whatsevr_app/src/features/settings/views/page.dart';
+import 'package:whatsevr_app/src/features/splash/views/page.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
+import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
+import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
+import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();
@@ -106,11 +106,9 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.accountSearch,
         builder: (BuildContext context, GoRouterState state) {
-          final AccountSearchPage? accountSearchPage =
-              state.extra as AccountSearchPage?;
-          return AccountSearchPage(
-            hintTexts: accountSearchPage?.hintTexts,
-          );
+          final AllSearchPage? accountSearchPage =
+              state.extra as AllSearchPage?;
+          return AllSearchPage();
         },
       ),
       GoRoute(

@@ -5,6 +5,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:iconify_flutter/icons/heroicons.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import '../../../../../config/mocks/mocks.dart';
 import '../../../../../config/routes/router.dart';
@@ -13,11 +14,9 @@ import '../../../../../config/widgets/tab_bar.dart';
 import '../../../../../config/widgets/textfield/animated_search_field.dart';
 import '../../../account/views/page.dart';
 
-class AccountSearchPage extends StatelessWidget {
-  final List<String>? hintTexts;
-  const AccountSearchPage({
+class AllSearchPage extends StatelessWidget {
+  const AllSearchPage({
     super.key,
-    this.hintTexts,
   });
 
   @override
@@ -30,9 +29,14 @@ class AccountSearchPage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.only(left: PadHorizontal.paddingValue),
                   child: WhatsevrAnimatedSearchField(
-                    hintTexts: hintTexts ?? <String>[],
+                    hintTexts: <String>[
+                      'Search User, Portfolio',
+                      'Search Community',
+                      'Search Wtv, Offers',
+                      'Search Posts, Memories',
+                    ],
                     showBackButton: true,
                   ),
                 ),
@@ -152,11 +156,15 @@ class AccountSearchPage extends StatelessWidget {
               tabAlignment: TabAlignment.start,
               isTabsScrollable: true,
               tabViews: [
-                ('Recents', _RecentView()),
+                ('Recent', _RecentView()),
                 ('Accounts', _AccountsView()),
                 ('Portfolio', _PortfolioView()),
                 ('Community', _CommunityView()),
                 ('Offers', _OffersView()),
+                ('Wtv', _OffersView()),
+                ('Flicks', _OffersView()),
+                ('Photos', _OffersView()),
+                ('Pdfs', _OffersView()),
               ],
             ),
           ),
