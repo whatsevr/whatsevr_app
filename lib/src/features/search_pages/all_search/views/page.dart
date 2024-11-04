@@ -7,6 +7,8 @@ import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:iconify_flutter/icons/heroicons.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
+import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
+// widget
 import '../../../../../config/mocks/mocks.dart';
 import '../../../../../config/routes/router.dart';
 import '../../../../../config/routes/routes_name.dart';
@@ -161,10 +163,10 @@ class AllSearchPage extends StatelessWidget {
                 ('Portfolio', _PortfolioView()),
                 ('Community', _CommunityView()),
                 ('Offers', _OffersView()),
-                ('Wtv', _OffersView()),
-                ('Flicks', _OffersView()),
-                ('Photos', _OffersView()),
-                ('Pdfs', _OffersView()),
+                ('Wtv', _WtvView()),
+                ('Flicks', _FlicksView()),
+                ('Photos', _PhotosView()),
+                ('Pdfs', _PdfsView()),
               ],
             ),
           ),
@@ -179,95 +181,163 @@ class _OffersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> offers = List.generate(20, (int index) {
+      return {
+        'status': 'Active',
+        'title': 'Offer Title $index',
+        'description': 'Offer Description $index',
+        'filesData': [
+          {'type': 'image', 'imageUrl': MockData.randomImage()},
+          {'type': 'video', 'videoThumbnailUrl': MockData.randomImage()}
+        ],
+        'totalImpressions': 1000,
+        'totalLikes': 100,
+        'totalComments': 10,
+        'totalShares': 20,
+      };
+    });
+
     return ListView.separated(
       shrinkWrap: true,
-      itemCount: 20,
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      separatorBuilder: (BuildContext context, int index) {
+        return const Gap(4);
+      },
+      itemCount: offers.length,
       itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                const Gap(16),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey,
-                  backgroundImage: ExtendedNetworkImageProvider(
-                    MockData.randomImageAvatar(),
-                  ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Username',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      Text(
-                        'Location',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        final Map<String, dynamic> offer = offers[index];
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.grey[300]!,
             ),
-            const Gap(8),
-            Stack(
-              children: <Widget>[
-                ExtendedImage.network(
-                  MockData.randomImageAvatar(),
-                  width: double.infinity,
-                  height: 250,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  bottom: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'Freelancer',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Colors.white,
-                          ),
+                      offer['status'],
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Gap(8),
-            Row(
-              children: <Widget>[
-                const Gap(8),
-                const Expanded(
-                  child: Column(
+                  const Gap(4),
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Caption'),
-                      Text('Joined On 4 April, MU 334'),
-                      Text('#tag1 #tag2 #tag3'),
+                    children: [
+                      Expanded(
+                        child: Text(
+                          offer['title'],
+                          maxLines: 2,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      const Gap(4),
+                      const Icon(Icons.more_horiz),
                     ],
                   ),
-                ),
+                  if (offer['filesData'].isEmpty) ...[
+                    const Gap(4),
+                    Text(
+                      offer['description'],
+                      maxLines: 8,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              if (offer['filesData'].isNotEmpty) ...[
                 const Gap(8),
-                IconButton(
-                  icon: const Icon(Icons.bookmark_border),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.more_vert_rounded),
-                  onPressed: () {},
+                SizedBox(
+                  height: 120,
+                  child: ListView.separated(
+                    itemCount: offer['filesData'].length,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Gap(8);
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      final Map<String, dynamic> fileData =
+                          offer['filesData'][index];
+                      if (fileData['type'] == 'image' ||
+                          fileData['type'] == 'video') {
+                        return ExtendedImage.network(
+                          fileData['imageUrl'] ??
+                              fileData['videoThumbnailUrl'] ??
+                              '',
+                          fit: BoxFit.cover,
+                          enableLoadState: false,
+                          cache: true,
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                  ),
                 ),
               ],
-            ),
-          ],
+              const Gap(12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for (final record in [
+                    (
+                      offer['totalImpressions'].toString(),
+                      Icons.remove_red_eye
+                    ),
+                    (offer['totalLikes'].toString(), Icons.thumb_up_sharp),
+                    (offer['totalComments'].toString(), Icons.comment),
+                    (offer['totalShares'].toString(), Icons.share_sharp),
+                  ])
+                    Row(
+                      children: [
+                        Text(
+                          record.$1,
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                        const Gap(4),
+                        Icon(
+                          record.$2,
+                          size: 16,
+                        ),
+                        const Gap(8),
+                      ],
+                    ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
@@ -787,6 +857,419 @@ class _RecentView extends StatelessWidget {
                   onPressed: () {},
                 ),
               ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _WtvView extends StatelessWidget {
+  const _WtvView();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: 20,
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                ExtendedImage.network(
+                  MockData.randomImageAvatar(),
+                  borderRadius: BorderRadius.circular(8),
+                  shape: BoxShape.rectangle,
+                  fit: BoxFit.cover,
+                  height: 120,
+                  width: 170,
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'Duration',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Views',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Gap(4),
+                        const Icon(
+                          Icons.remove_red_eye,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Video Title $index',
+                          maxLines: 3,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      const Gap(4),
+                      Icon(Icons.more_horiz),
+                    ],
+                  ),
+                  Text(
+                    '100 likes • 10 comments',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    '20 shares • 5 tagged',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    '2 hours ago',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _FlicksView extends StatelessWidget {
+  const _FlicksView();
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 9 / 21,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
+      itemCount: 20,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            AspectRatio(
+              aspectRatio: 9 / 16,
+              child: Stack(
+                children: <Widget>[
+                  ExtendedImage.network(
+                    MockData.randomImageAvatar(),
+                    borderRadius: BorderRadius.circular(8),
+                    shape: BoxShape.rectangle,
+                    fit: BoxFit.cover,
+                    enableLoadState: false,
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'Duration',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Views',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Gap(4),
+                          const Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Gap(8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Title',
+                          maxLines: 3,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      const Gap(4),
+                      Icon(Icons.more_horiz),
+                    ],
+                  ),
+                  Text(
+                    'Likes • Comments',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    'Shares • Tagged',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    'Date',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PhotosView extends StatelessWidget {
+  const _PhotosView();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: 20,
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {},
+              child: ExtendedImage.network(
+                MockData.randomImageAvatar(),
+                width: double.infinity,
+                fit: BoxFit.cover,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const Gap(8),
+            Row(
+              children: <Widget>[
+                CircleAvatar(
+                  backgroundImage:
+                      ExtendedNetworkImageProvider(MockData.blankProfileAvatar),
+                ),
+                const Gap(8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <StatelessWidget>[
+                      Text(
+                        'Title',
+                        maxLines: 2,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        'Updated on Date',
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8),
+            Text(
+              'Description',
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PdfsView extends StatelessWidget {
+  const _PdfsView();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: 20,
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {},
+              child: ExtendedImage.network(
+                MockData.randomImageAvatar(),
+                width: double.infinity,
+                fit: BoxFit.cover,
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const Gap(8),
+            Row(
+              children: <Widget>[
+                const Iconify(
+                  VscodeIcons.file_type_pdf2,
+                  size: 45,
+                ),
+                const Gap(8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <StatelessWidget>[
+                      Text(
+                        'Title',
+                        maxLines: 2,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        'Updated on Date',
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Gap(8),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.download,
+                    size: 30,
+                  ),
+                ),
+              ],
+            ),
+            const Gap(8),
+            Text(
+              'Description',
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.grey,
+              ),
             ),
           ],
         );
