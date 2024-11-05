@@ -8,6 +8,7 @@ import 'package:iconify_flutter/icons/heroicons.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
 // widget
 import '../../../../../config/mocks/mocks.dart';
 import '../../../../../config/routes/router.dart';
@@ -921,7 +922,7 @@ class _WtvView extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          'Views',
+                          '${formatCountToKMBTQ(3532626)}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -1020,6 +1021,7 @@ class _FlicksView extends StatelessWidget {
                     MockData.randomImageAvatar(),
                     borderRadius: BorderRadius.circular(8),
                     shape: BoxShape.rectangle,
+                    height: double.infinity,
                     fit: BoxFit.cover,
                     enableLoadState: false,
                   ),
@@ -1056,7 +1058,7 @@ class _FlicksView extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            'Views',
+                            '${formatCountToKMBTQ(3532626)}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,

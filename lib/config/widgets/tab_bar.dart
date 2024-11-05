@@ -76,8 +76,8 @@ class WhatsevrTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBar(
       onTap: onTabChange,
-      tabAlignment: tabAlignment,
-      isScrollable: isScrollable ?? false,
+      tabAlignment: tabAlignment ?? TabAlignment.start,
+      isScrollable: isScrollable ?? true,
       indicatorColor: Colors.blue,
       labelColor: Colors.black,
       tabs: tabs.map((String e) => Tab(text: e)).toList(),
