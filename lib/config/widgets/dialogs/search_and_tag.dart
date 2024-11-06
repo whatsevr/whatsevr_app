@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import '../../api/methods/text_search.dart';
-import '../../api/response_model/text_search_users_communities.dart';
+import '../../api/response_model/search/search_users_communities.dart';
 import '../../mocks/mocks.dart';
 import '../buttons/button.dart';
 import '../textfield/super_textform_field.dart';
@@ -12,8 +12,9 @@ import '../textfield/super_textform_field.dart';
 class SearchAndTagUsersAndCommunityPage extends StatefulWidget {
   final bool scaffoldView;
   final Function(
-          List<String> selectedUsersUid, List<String> selectedCommunitiesUid,)?
-      onDone;
+    List<String> selectedUsersUid,
+    List<String> selectedCommunitiesUid,
+  )? onDone;
   const SearchAndTagUsersAndCommunityPage({
     super.key,
     this.scaffoldView = false,
@@ -38,7 +39,7 @@ class _SearchAndTagUsersAndCommunityPageState
         'search-users-community-6425254',
         const Duration(milliseconds: 600),
         () async {
-          final TextSearchUsersAndCommunitiesResponse? response =
+          final SearchedUsersAndCommunitiesResponse? response =
               await TextSearchApi.searchUsersAndCommunities(query: inputText);
 
           if (response != null) {
@@ -53,7 +54,7 @@ class _SearchAndTagUsersAndCommunityPageState
     }
   }
 
-  TextSearchUsersAndCommunitiesResponse? searchedItems;
+  SearchedUsersAndCommunitiesResponse? searchedItems;
   List<String> selectedUsersUid = [];
   List<String> selectedCommunitiesUid = [];
   TextEditingController controller = TextEditingController();
@@ -96,7 +97,8 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      user?.profilePicture ?? MockData.blankProfileAvatar,),
+                    user?.profilePicture ?? MockData.blankProfileAvatar,
+                  ),
                 ),
                 title: Text(
                   '${user?.name}',
@@ -136,7 +138,8 @@ class _SearchAndTagUsersAndCommunityPageState
                 },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      community?.profilePicture ?? MockData.blankProfileAvatar,),
+                    community?.profilePicture ?? MockData.blankProfileAvatar,
+                  ),
                 ),
                 title: Text(
                   '${community?.title}',

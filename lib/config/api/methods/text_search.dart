@@ -3,11 +3,11 @@ import 'package:dio/dio.dart';
 import '../client.dart';
 
 import '../external/models/business_validation_exception.dart';
-import '../response_model/text_search_users_communities.dart';
+import '../response_model/search/search_users_communities.dart';
 
 class TextSearchApi {
-  static Future<TextSearchUsersAndCommunitiesResponse?>
-      searchUsersAndCommunities({required String query}) async {
+  static Future<SearchedUsersAndCommunitiesResponse?> searchUsersAndCommunities(
+      {required String query}) async {
     if (query.length < 4) {
       return null;
     }
@@ -18,7 +18,7 @@ class TextSearchApi {
       );
 
       if (response.data != null) {
-        return TextSearchUsersAndCommunitiesResponse.fromMap(response.data);
+        return SearchedUsersAndCommunitiesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
