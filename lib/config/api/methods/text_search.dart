@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import '../client.dart';
 
 import '../external/models/business_validation_exception.dart';
-import '../response_model/search/search_users_communities.dart';
+import '../response_model/search/searched_users_communities.dart';
 
 class TextSearchApi {
   static Future<SearchedUsersAndCommunitiesResponse?> searchUsersAndCommunities(

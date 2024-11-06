@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import '../../api/methods/text_search.dart';
-import '../../api/response_model/search/search_users_communities.dart';
+import '../../api/response_model/search/searched_users_communities.dart';
 import '../../mocks/mocks.dart';
 import '../buttons/button.dart';
 import '../textfield/super_textform_field.dart';
