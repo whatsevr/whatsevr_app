@@ -1,44 +1,98 @@
 import 'dart:async';
-
 import 'package:equatable/equatable.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/text_search.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_users_communities.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SearchAndTagUsersAndCommunityPage extends StatefulWidget {
+class SearchAndTagUsersAndCommunityPage extends StatelessWidget {
   final bool scaffoldView;
   final Function(
-    List<String> selectedUsersUid,
-    List<String> selectedCommunitiesUid,
-  )? onDone;
+          List<String> selectedUsersUid, List<String> selectedCommunitiesUid)?
+      onDone;
+
   const SearchAndTagUsersAndCommunityPage({
     super.key,
     this.scaffoldView = false,
     required this.onDone,
   });
 
-  @override
-  State<SearchAndTagUsersAndCommunityPage> createState() =>
-      _SearchAndTagUsersAndCommunityPageState();
-}
+  Widget _buildUsersList(BuildContext context, SearchState state) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.searchedUsersCommunities?.users?.length ?? 0,
+      separatorBuilder: (context, index) => const Gap(4),
+      itemBuilder: (context, index) {
+        final user = state.searchedUsersCommunities?.users?[index];
+        return ListTile(
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          onTap: () {
+            context
+                .read<SearchBloc>()
+                .add(UpdateSelectedUsers(user?.uid ?? ''));
+          },
+          leading: CircleAvatar(
+            backgroundImage: ExtendedNetworkImageProvider(
+              user?.profilePicture ?? MockData.blankProfileAvatar,
+            ),
+          ),
+          title: Text(
+            '${user?.name}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('@${user?.username}'),
+          trailing: state.selectedUsersUid.contains(user?.uid)
+              ? const Icon(Icons.check_circle, color: Colors.green)
+              : const Icon(Icons.circle_outlined),
+        );
+      },
+    );
+  }
 
-class _SearchAndTagUsersAndCommunityPageState
-    extends State<SearchAndTagUsersAndCommunityPage> {
-  List<String> selectedUsersUid = [];
-  List<String> selectedCommunitiesUid = [];
+  Widget _buildCommunitiesList(BuildContext context, SearchState state) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.searchedUsersCommunities?.communities?.length ?? 0,
+      separatorBuilder: (context, index) => const Gap(4),
+      itemBuilder: (context, index) {
+        final community = state.searchedUsersCommunities?.communities?[index];
+        return ListTile(
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          onTap: () {
+            context
+                .read<SearchBloc>()
+                .add(UpdateSelectedCommunities(community?.uid ?? ''));
+          },
+          leading: CircleAvatar(
+            backgroundImage: ExtendedNetworkImageProvider(
+              community?.profilePicture ?? MockData.blankCommunityAvatar,
+            ),
+          ),
+          title: Text(
+            '${community?.title}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Text('@${community?.username}'),
+          trailing: state.selectedCommunitiesUid.contains(community?.uid)
+              ? const Icon(Icons.check_circle, color: Colors.green)
+              : const Icon(Icons.circle_outlined),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,175 +100,144 @@ class _SearchAndTagUsersAndCommunityPageState
       create: (context) => SearchBloc(),
       child: Builder(
         builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          final ScrollController _usersScrollController = ScrollController();
+          _usersScrollController.addListener(() {
+            if (_usersScrollController.position.pixels >=
+                _usersScrollController.position.maxScrollExtent) {
+              context.read<SearchBloc>().add(LoadMoreResults());
+            }
+          });
+          return ListView(
+            controller: _usersScrollController,
             children: [
               WhatsevrFormField.textFieldWithClearIcon(
                 controller: context.read<SearchBloc>().searchController,
                 hintText: 'Search for users or communities',
-                onChanged: (String value) {
+                onChanged: (value) {
                   context
                       .read<SearchBloc>()
                       .add(SearchUsersAndCommunities(value));
                 },
               ),
-              const Gap(8),
               BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
-                  final searchedItems = state.results;
                   return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (searchedItems?.users?.isNotEmpty ?? false) ...[
+                      if (state.selectedUsersUid.isNotEmpty ||
+                          state.selectedCommunitiesUid.isNotEmpty) ...[
                         const Gap(8),
-                        const Text('Users'),
-                        const Gap(8),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: searchedItems?.users?.length ?? 0,
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const Gap(4);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final User? user = searchedItems?.users?[index];
-                            return ListTile(
-                              dense: true,
-                              visualDensity: VisualDensity.compact,
-                              onTap: () {
-                                if (selectedUsersUid.contains(user?.uid)) {
-                                  selectedUsersUid.remove(user?.uid);
-                                } else {
-                                  selectedUsersUid.add(user?.uid ?? '');
-                                }
-                                setState(() {});
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage: ExtendedNetworkImageProvider(
-                                  user?.profilePicture ??
-                                      MockData.blankProfileAvatar,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Selected ',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              if (state.selectedUsersUid.isNotEmpty) ...[
+                                TextSpan(
+                                  text:
+                                      '${state.selectedUsersUid.length} users',
+                                  style: const TextStyle(color: Colors.blue),
                                 ),
-                              ),
-                              title: Text(
-                                '${user?.name}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text('@${user?.username}'),
-                              trailing: selectedUsersUid.contains(user?.uid)
-                                  ? const Icon(Icons.check_circle,
-                                      color: Colors.green)
-                                  : const Icon(Icons.circle_outlined),
+                              ],
+                              if (state.selectedUsersUid.isNotEmpty &&
+                                  state.selectedCommunitiesUid.isNotEmpty)
+                                const TextSpan(
+                                  text: ' and ',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              if (state.selectedCommunitiesUid.isNotEmpty) ...[
+                                TextSpan(
+                                  text:
+                                      '${state.selectedCommunitiesUid.length} communities',
+                                  style: const TextStyle(color: Colors.blue),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const Gap(8),
+                        WhatsevrButton.filled(
+                          label: 'Done',
+                          onPressed: () {
+                            onDone?.call(
+                              state.selectedUsersUid,
+                              state.selectedCommunitiesUid,
                             );
+                            Navigator.pop(context);
                           },
                         ),
                       ],
-                      if (searchedItems?.communities?.isNotEmpty ?? false) ...[
-                        const Gap(8),
-                        const Text('Communities'),
-                        const Gap(8),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: searchedItems?.communities?.length ?? 0,
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const Gap(4);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            final Community? community =
-                                searchedItems?.communities?[index];
-                            return ListTile(
-                              dense: true,
-                              visualDensity: VisualDensity.compact,
-                              onTap: () {
-                                if (selectedCommunitiesUid
-                                    .contains(community?.uid)) {
-                                  selectedCommunitiesUid.remove(community?.uid);
-                                } else {
-                                  selectedCommunitiesUid
-                                      .add(community?.uid ?? '');
-                                }
-                                setState(() {});
-                              },
-                              leading: CircleAvatar(
-                                backgroundImage: ExtendedNetworkImageProvider(
-                                  community?.profilePicture ??
-                                      MockData.blankCommunityAvatar,
-                                ),
-                              ),
-                              title: Text(
-                                '${community?.title}',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text('@${community?.username}'),
-                              trailing: selectedCommunitiesUid
-                                      .contains(community?.uid)
-                                  ? const Icon(Icons.check_circle,
-                                      color: Colors.green)
-                                  : const Icon(Icons.circle_outlined),
-                            );
-                          },
-                        ),
-                      ],
+                      const Gap(8),
+                      WhatsevrTabBarWithViews(
+                        shrinkViews: true,
+                        tabViews: [
+                          ('Users', _buildUsersList(context, state)),
+                          (
+                            'Communities',
+                            _buildCommunitiesList(context, state)
+                          ),
+                        ],
+                      ),
                     ],
                   );
                 },
               ),
-              const Gap(8),
-              if (selectedUsersUid.isNotEmpty ||
-                  selectedCommunitiesUid.isNotEmpty) ...[
-                const Gap(50),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'Selected ',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      if (selectedUsersUid.isNotEmpty) ...[
-                        TextSpan(
-                          text: '${selectedUsersUid.length} users',
-                          style: const TextStyle(color: Colors.blue),
-                        ),
-                      ],
-                      if (selectedUsersUid.isNotEmpty &&
-                          selectedCommunitiesUid.isNotEmpty)
-                        const TextSpan(
-                          text: ' and ',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      if (selectedCommunitiesUid.isNotEmpty) ...[
-                        TextSpan(
-                          text: '${selectedCommunitiesUid.length} communities',
-                          style: const TextStyle(color: Colors.blue),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                const Gap(8),
-                WhatsevrButton.filled(
-                  label: 'Done',
-                  onPressed: () {
-                    widget.onDone
-                        ?.call(selectedUsersUid, selectedCommunitiesUid);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
             ],
           );
         },
       ),
     );
-    if (widget.scaffoldView) {
-      return Scaffold(
-        body: child,
-      );
+
+    if (scaffoldView) {
+      return Scaffold(body: child);
     }
     return child;
   }
+}
+
+class SearchState extends Equatable {
+  final SearchedUsersAndCommunitiesResponse? searchedUsersCommunities;
+  final PaginationData usersAndCommunitiesPagination;
+  final int selectedViewIndex;
+  final List<String> selectedUsersUid;
+  final List<String> selectedCommunitiesUid;
+
+  const SearchState({
+    this.searchedUsersCommunities,
+    this.usersAndCommunitiesPagination = const PaginationData(),
+    this.selectedViewIndex = 0,
+    this.selectedUsersUid = const [],
+    this.selectedCommunitiesUid = const [],
+  });
+
+  SearchState copyWith({
+    SearchedUsersAndCommunitiesResponse? searchedUsersCommunities,
+    PaginationData? usersAndCommunitiesPagination,
+    int? selectedViewIndex,
+    List<String>? selectedUsersUid,
+    List<String>? selectedCommunitiesUid,
+  }) {
+    return SearchState(
+      searchedUsersCommunities:
+          searchedUsersCommunities ?? this.searchedUsersCommunities,
+      usersAndCommunitiesPagination:
+          usersAndCommunitiesPagination ?? this.usersAndCommunitiesPagination,
+      selectedViewIndex: selectedViewIndex ?? this.selectedViewIndex,
+      selectedUsersUid: selectedUsersUid ?? this.selectedUsersUid,
+      selectedCommunitiesUid:
+          selectedCommunitiesUid ?? this.selectedCommunitiesUid,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        searchedUsersCommunities,
+        usersAndCommunitiesPagination,
+        selectedViewIndex,
+        selectedUsersUid,
+        selectedCommunitiesUid,
+      ];
 }
 
 abstract class SearchEvent extends Equatable {
@@ -233,31 +256,65 @@ class SearchUsersAndCommunities extends SearchEvent {
   List<Object> get props => [query];
 }
 
-class LoadMoreResults extends SearchEvent {}
+class LoadMoreResults extends SearchEvent {
+  const LoadMoreResults();
 
-// 1. Debouncing Search
-// Currently missing debounce logic which could lead to excessive API calls
+  @override
+  List<Object> get props => [];
+}
+
+class ChangeTab extends SearchEvent {
+  final int index;
+
+  const ChangeTab(this.index);
+
+  @override
+  List<Object> get props => [index];
+}
+
+class UpdateSelectedUsers extends SearchEvent {
+  final String userUid;
+
+  const UpdateSelectedUsers(this.userUid);
+
+  @override
+  List<Object> get props => [userUid];
+}
+
+class UpdateSelectedCommunities extends SearchEvent {
+  final String communityUid;
+
+  const UpdateSelectedCommunities(this.communityUid);
+
+  @override
+  List<Object> get props => [communityUid];
+}
+
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final TextEditingController searchController = TextEditingController();
   static const _debounceDuration = Duration(milliseconds: 300);
 
   SearchBloc() : super(const SearchState()) {
-    on<SearchUsersAndCommunities>(_mapSearchUsersAndCommunities,
-        transformer: (events, mapper) =>
-            events.debounceTime(_debounceDuration).asyncExpand(mapper));
-    on<LoadMoreResults>(_mapLoadMoreResults);
+    on<SearchUsersAndCommunities>(
+      _onSearchUsersAndCommunities,
+      transformer: (events, mapper) =>
+          events.debounceTime(_debounceDuration).asyncExpand(mapper),
+    );
+    on<LoadMoreResults>(_onLoadMore);
+    on<ChangeTab>(_onChangeTab);
+    on<UpdateSelectedUsers>(_onUpdateSelectedUsers);
+    on<UpdateSelectedCommunities>(_onUpdateSelectedCommunities);
   }
 
-  // 2. Error Handling
-  FutureOr<void> _mapSearchUsersAndCommunities(
-      SearchUsersAndCommunities event, Emitter<SearchState> emit) async {
+  FutureOr<void> _onSearchUsersAndCommunities(
+    SearchUsersAndCommunities event,
+    Emitter<SearchState> emit,
+  ) async {
     try {
       if (event.query.trim().isEmpty) {
-        emit(state.copyWith(results: null));
+        emit(state.copyWith(searchedUsersCommunities: null));
         return;
       }
-
-      emit(state.copyWith(isLoading: true, error: null));
 
       final response = await TextSearchApi.searchUsersAndCommunities(
         query: event.query,
@@ -265,101 +322,88 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
 
       emit(state.copyWith(
-        results: response,
-        isLoading: false,
-        paginationData: PaginationData(
+        searchedUsersCommunities: response,
+        usersAndCommunitiesPagination: PaginationData(
           currentPage: 1,
-          noMoreData: response == null ||
-              (response.users?.isEmpty ??
-                  true && (response.communities?.isEmpty ?? true)),
+          noMoreData: response?.users?.isEmpty ?? true,
         ),
       ));
-    } catch (e) {
-      emit(state.copyWith(
-          isLoading: false, error: 'Search failed: ${e.toString()}'));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
     }
   }
 
-  // 3. Improved Pagination Logic
-  FutureOr<void> _mapLoadMoreResults(
-      LoadMoreResults event, Emitter<SearchState> emit) async {
-    if (state.paginationData.noMoreData || state.isLoading) return;
+  FutureOr<void> _onLoadMore(
+    LoadMoreResults event,
+    Emitter<SearchState> emit,
+  ) async {
+    final currentPagination = state.usersAndCommunitiesPagination;
+
+    if (currentPagination.noMoreData) return;
 
     try {
-      emit(state.copyWith(isLoadingMore: true));
-
-      final nextPage = state.paginationData.currentPage + 1;
+      final nextPage = currentPagination.currentPage + 1;
       final response = await TextSearchApi.searchUsersAndCommunities(
         query: searchController.text,
         page: nextPage,
       );
 
-      final bool noMoreData = response == null ||
-          (response.users?.isEmpty ??
-              true && (response.communities?.isEmpty ?? true));
-
-      if (noMoreData) {
+      if (response == null) {
         emit(state.copyWith(
-          isLoadingMore: false,
-          paginationData: state.paginationData.copyWith(noMoreData: true),
+          usersAndCommunitiesPagination:
+              state.usersAndCommunitiesPagination.copyWith(noMoreData: true),
         ));
         return;
       }
 
-      final updatedResults = state.results?.copyWith(
-        users: [...(state.results?.users ?? []), ...(response.users ?? [])],
-        communities: [
-          ...(state.results?.communities ?? []),
-          ...(response.communities ?? [])
-        ],
-      );
-
       emit(state.copyWith(
-        results: updatedResults,
-        isLoadingMore: false,
-        paginationData: state.paginationData.copyWith(currentPage: nextPage),
-      ));
-    } catch (e) {
-      emit(state.copyWith(
-          isLoadingMore: false,
-          error: 'Failed to load more results: ${e.toString()}'));
+          searchedUsersCommunities: state.searchedUsersCommunities?.copyWith(
+            users: [
+              ...(state.searchedUsersCommunities?.users ?? []),
+              ...(response.users ?? [])
+            ],
+            communities: [
+              ...(state.searchedUsersCommunities?.communities ?? []),
+              ...(response.communities ?? [])
+            ],
+          ),
+          usersAndCommunitiesPagination: state.usersAndCommunitiesPagination
+              .copyWith(currentPage: nextPage)));
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
-}
 
-// 4. Enhanced State Management
-class SearchState extends Equatable {
-  final SearchedUsersAndCommunitiesResponse? results;
-  final PaginationData paginationData;
-  final bool isLoading;
-  final bool isLoadingMore;
-  final String? error;
-
-  const SearchState({
-    this.results,
-    this.paginationData = const PaginationData(),
-    this.isLoading = false,
-    this.isLoadingMore = false,
-    this.error,
-  });
-
-  SearchState copyWith({
-    SearchedUsersAndCommunitiesResponse? results,
-    PaginationData? paginationData,
-    bool? isLoading,
-    bool? isLoadingMore,
-    String? error,
-  }) {
-    return SearchState(
-      results: results ?? this.results,
-      paginationData: paginationData ?? this.paginationData,
-      isLoading: isLoading ?? this.isLoading,
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      error: error,
-    );
+  FutureOr<void> _onChangeTab(
+    ChangeTab event,
+    Emitter<SearchState> emit,
+  ) {
+    emit(state.copyWith(selectedViewIndex: event.index));
   }
 
-  @override
-  List<Object?> get props =>
-      [results, paginationData, isLoading, isLoadingMore, error];
+  FutureOr<void> _onUpdateSelectedUsers(
+    UpdateSelectedUsers event,
+    Emitter<SearchState> emit,
+  ) {
+    final updatedList = List<String>.from(state.selectedUsersUid);
+    if (updatedList.contains(event.userUid)) {
+      updatedList.remove(event.userUid);
+    } else {
+      updatedList.add(event.userUid);
+    }
+    emit(state.copyWith(selectedUsersUid: updatedList));
+  }
+
+  FutureOr<void> _onUpdateSelectedCommunities(
+    UpdateSelectedCommunities event,
+    Emitter<SearchState> emit,
+  ) {
+    final updatedList = List<String>.from(state.selectedCommunitiesUid);
+    if (updatedList.contains(event.communityUid)) {
+      updatedList.remove(event.communityUid);
+    } else {
+      updatedList.add(event.communityUid);
+    }
+    emit(state.copyWith(selectedCommunitiesUid: updatedList));
+  }
 }
