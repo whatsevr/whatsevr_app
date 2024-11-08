@@ -59,7 +59,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           events.debounceTime(_debounceDuration).asyncExpand(mapper),
     );
     on<SearchMoreVideoPosts>(_onSearchMoreVideoPosts);
-    on<ChangeTab>(_onChangeTab);
+    on<TabChangedEvent>(_onChangeTab);
   }
 
   FutureOr<void> _onSearchFlickPosts(
@@ -393,7 +393,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
   }
 
   FutureOr<void> _onChangeTab(
-    ChangeTab event,
+    TabChangedEvent event,
     Emitter<AllSearchState> emit,
   ) {
     emit(state.copyWith(selectedViewIndex: event.index));

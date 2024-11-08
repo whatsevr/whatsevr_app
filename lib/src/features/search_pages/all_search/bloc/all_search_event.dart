@@ -85,10 +85,10 @@ class SearchMoreVideoPosts extends AllSearchEvent {
   const SearchMoreVideoPosts();
 }
 
-class ChangeTab extends AllSearchEvent {
+class TabChangedEvent extends AllSearchEvent {
   final int index;
 
-  const ChangeTab(this.index);
+  const TabChangedEvent(this.index);
 
   @override
   List<Object> get props => [index];

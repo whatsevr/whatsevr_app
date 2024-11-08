@@ -4,15 +4,17 @@ import 'package:gap/gap.dart';
 class WhatsevrTabBarWithViews extends StatefulWidget {
   final bool? shrinkViews;
   final bool? isTabsScrollable;
-
   final List<(String tabName, Widget view)> tabViews;
   final TabAlignment? tabAlignment;
+  final Function(int)? onTabChanged;
+
   const WhatsevrTabBarWithViews({
     super.key,
     this.shrinkViews,
     required this.tabViews,
     this.isTabsScrollable,
     this.tabAlignment,
+    this.onTabChanged,
   });
 
   @override
@@ -23,6 +25,7 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
 class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
   void onTabChange(int index) {
     if (widget.shrinkViews == true) setState(() {});
+    if (widget.onTabChanged != null) widget.onTabChanged!(index);
   }
 
   @override
@@ -64,6 +67,7 @@ class WhatsevrTabBar extends StatelessWidget {
   final List<String> tabs;
   final TabAlignment? tabAlignment;
   final Function(int)? onTabChange;
+
   const WhatsevrTabBar({
     super.key,
     required this.tabs,
