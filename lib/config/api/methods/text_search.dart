@@ -10,7 +10,7 @@ class TextSearchApi {
       searchUsersAndCommunities({
     required String query,
     int page = 1,
-    int pageSize = 20,
+    int pageSize = 5,
   }) async {
     if (query.length < 4) {
       return null;
@@ -18,7 +18,11 @@ class TextSearchApi {
     try {
       final Response response = await ApiClient.client.get(
         '/v1/search/users_communities',
-        queryParameters: {'input_text': query},
+        queryParameters: {
+          'input_text': query,
+          'page': page,
+          'page_size': pageSize
+        },
       );
 
       if (response.data != null) {
