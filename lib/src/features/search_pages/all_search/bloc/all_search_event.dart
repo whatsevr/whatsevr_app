@@ -169,6 +169,18 @@ class SearchVideoPosts extends AllSearchEvent {
   List<Object> get props => [query];
 }
 
+class SearchMoreUsers extends AllSearchEvent {
+  const SearchMoreUsers();
+}
+
+class SearchMorePortfolios extends AllSearchEvent {
+  const SearchMorePortfolios();
+}
+
+class SearchMoreCommunities extends AllSearchEvent {
+  const SearchMoreCommunities();
+}
+
 class SearchMoreFlickPosts extends AllSearchEvent {
   const SearchMoreFlickPosts();
 }

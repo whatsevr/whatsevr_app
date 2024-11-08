@@ -4,26 +4,26 @@ class SearchedPortfoliosResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<User>? users;
+  final List<Portfolio>? portfolios;
 
   SearchedPortfoliosResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.users,
+    this.portfolios,
   });
 
   SearchedPortfoliosResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<User>? users,
+    List<Portfolio>? portfolios,
   }) =>
       SearchedPortfoliosResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        users: users ?? this.users,
+        portfolios: portfolios ?? this.portfolios,
       );
 
   factory SearchedPortfoliosResponse.fromJson(String str) =>
@@ -36,22 +36,23 @@ class SearchedPortfoliosResponse {
         message: json["message"],
         page: json["page"],
         lastPage: json["last_page"],
-        users: json["users"] == null
+        portfolios: json["users"] == null
             ? []
-            : List<User>.from(json["users"]!.map((x) => User.fromMap(x))),
+            : List<Portfolio>.from(
+                json["users"]!.map((x) => Portfolio.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "message": message,
         "page": page,
         "last_page": lastPage,
-        "users": users == null
+        "users": portfolios == null
             ? []
-            : List<dynamic>.from(users!.map((x) => x.toMap())),
+            : List<dynamic>.from(portfolios!.map((x) => x.toMap())),
       };
 }
 
-class User {
+class Portfolio {
   final DateTime? registeredOn;
   final String? uid;
   final String? username;
@@ -82,7 +83,7 @@ class User {
   final String? publicEmailId;
   final String? seoDataWeighted;
 
-  User({
+  Portfolio({
     this.registeredOn,
     this.uid,
     this.username,
@@ -114,7 +115,7 @@ class User {
     this.seoDataWeighted,
   });
 
-  User copyWith({
+  Portfolio copyWith({
     DateTime? registeredOn,
     String? uid,
     String? username,
@@ -145,7 +146,7 @@ class User {
     String? publicEmailId,
     String? seoDataWeighted,
   }) =>
-      User(
+      Portfolio(
         registeredOn: registeredOn ?? this.registeredOn,
         uid: uid ?? this.uid,
         username: username ?? this.username,
@@ -177,11 +178,11 @@ class User {
         seoDataWeighted: seoDataWeighted ?? this.seoDataWeighted,
       );
 
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
+  factory Portfolio.fromJson(String str) => Portfolio.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory Portfolio.fromMap(Map<String, dynamic> json) => Portfolio(
         registeredOn: json["registered_on"] == null
             ? null
             : DateTime.parse(json["registered_on"]),

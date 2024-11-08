@@ -40,6 +40,9 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
     on<SearchPdfsEvent>(_onSearchPdfs);
     on<SearchPhotoPostsEvent>(_onSearchPhotoPosts);
     on<SearchVideoPostsEvent>(_onSearchVideoPosts);
+    on<SearchMoreUsers>(_onSearchMoreUsers);
+    on<SearchMorePortfolios>(_onSearchMorePortfolios);
+    on<SearchMoreCommunities>(_onSearchMoreCommunities);
     on<SearchMoreFlickPosts>(_onSearchMoreFlickPosts);
     on<SearchMoreMemories>(_onSearchMoreMemories);
     on<SearchMoreOffers>(_onSearchMoreOffers);
@@ -242,6 +245,91 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
       );
 
       emit(state.copyWith(searchedVideoPosts: response));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onSearchMoreUsers(
+    SearchMoreUsers event,
+    Emitter<AllSearchState> emit,
+  ) async {
+    try {
+      if (state.usersPagination.noMoreData) return;
+      final currentPage = state.usersPagination.currentPage;
+      final response = await TextSearchApi.searchUsers(
+        query: searchController.text,
+        page: currentPage + 1,
+      );
+
+      emit(state.copyWith(
+        searchedUsers: state.searchedUsers?.copyWith(
+          users: [
+            ...state.searchedUsers?.users ?? [],
+            ...response?.users ?? [],
+          ],
+        ),
+        usersPagination: PaginationData(
+          currentPage: currentPage + 1,
+          noMoreData: response?.lastPage ?? false,
+        ),
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onSearchMorePortfolios(
+    SearchMorePortfolios event,
+    Emitter<AllSearchState> emit,
+  ) async {
+    try {
+      final currentPage = state.portfoliosPagination.currentPage;
+      final response = await TextSearchApi.searchPortfolios(
+        query: searchController.text,
+        page: currentPage + 1,
+      );
+
+      emit(state.copyWith(
+        searchedPortfolios: state.searchedPortfolios?.copyWith(
+          portfolios: [
+            ...state.searchedPortfolios?.portfolios ?? [],
+            ...response?.portfolios ?? [],
+          ],
+        ),
+        portfoliosPagination: PaginationData(
+          currentPage: currentPage + 1,
+          noMoreData: response?.lastPage ?? false,
+        ),
+      ));
+    } catch (e, stackTrace) {
+      highLevelCatch(e, stackTrace);
+    }
+  }
+
+  FutureOr<void> _onSearchMoreCommunities(
+    SearchMoreCommunities event,
+    Emitter<AllSearchState> emit,
+  ) async {
+    try {
+      final currentPage = state.communitiesPagination.currentPage;
+      final response = await TextSearchApi.searchCommunities(
+        query: searchController.text,
+        page: currentPage + 1,
+      );
+
+      emit(state.copyWith(
+        searchedCommunities: state.searchedCommunities?.copyWith(
+          communities: [
+            ...state.searchedCommunities?.communities ?? [],
+            ...response?.communities ?? [],
+          ],
+        ),
+        communitiesPagination: PaginationData(
+          currentPage: currentPage + 1,
+          noMoreData: response?.lastPage ?? false,
+        ),
+      ));
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
