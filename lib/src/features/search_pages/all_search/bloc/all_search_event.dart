@@ -7,6 +7,114 @@ sealed class AllSearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SearchTextChangedEvent extends AllSearchEvent {
+  final String query;
+
+  const SearchTextChangedEvent(this.query);
+
+  @override
+  List<Object> get props => [query];
+}
+
+class SearchUsersEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchUsersEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchPortfoliosEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchPortfoliosEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchCommunitiesEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchCommunitiesEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchFlickPostsEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchFlickPostsEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchMemoriesEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchMemoriesEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchOffersEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchOffersEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchPdfsEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchPdfsEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchPhotoPostsEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchPhotoPostsEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
+class SearchVideoPostsEvent extends AllSearchEvent {
+  final String query;
+  final int page;
+  final int pageSize;
+
+  const SearchVideoPostsEvent(this.query, {this.page = 1, this.pageSize = 20});
+
+  @override
+  List<Object> get props => [query, page, pageSize];
+}
+
 class SearchFlickPosts extends AllSearchEvent {
   final String query;
 

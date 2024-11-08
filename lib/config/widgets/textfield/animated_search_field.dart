@@ -12,6 +12,7 @@ class WhatsevrAnimatedSearchField extends StatefulWidget {
   final void Function()? onTap;
   final List<String> hintTexts;
   TextEditingController? controller;
+  final void Function(String value)? onChanged;
   WhatsevrAnimatedSearchField({
     this.hideOnScrollController,
     super.key,
@@ -20,6 +21,7 @@ class WhatsevrAnimatedSearchField extends StatefulWidget {
     this.onTap,
     this.showBackButton,
     this.controller,
+    this.onChanged,
   });
 
   @override
@@ -73,6 +75,7 @@ class _WhatsevrAnimatedSearchFieldState
                 controller: widget.controller,
                 onChanged: (String value) {
                   setState(() {});
+                  widget.onChanged?.call(value);
                 },
                 style: const TextStyle(
                   color: Colors.black,

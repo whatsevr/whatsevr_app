@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:whatsevr_app/config/api/response_model/search/searched_communities.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_flick_posts.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_memories.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_offers.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_pdfs.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/search/searched_portfolios.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_users.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_video_posts.dart';
 
@@ -68,7 +70,34 @@ class TextSearchApi {
     return null;
   }
 
-  static Future<SearchedUsersResponse?> searchCommunities({
+  static Future<SearchedPortfoliosResponse?> searchPortfolios({
+    required String query,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
+    if (query.length < 4) {
+      return null;
+    }
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/search-portfolios',
+        queryParameters: {
+          'input_text': query,
+          'page': page,
+          'page_size': pageSize
+        },
+      );
+
+      if (response.data != null) {
+        return SearchedPortfoliosResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<SearchedCommunitiesResponse?> searchCommunities({
     required String query,
     int page = 1,
     int pageSize = 20,
@@ -87,7 +116,7 @@ class TextSearchApi {
       );
 
       if (response.data != null) {
-        return SearchedUsersResponse.fromMap(response.data);
+        return SearchedCommunitiesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -186,7 +215,7 @@ class TextSearchApi {
     }
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/search-flick-posts',
+        '/v1/search-photo-posts',
         queryParameters: {
           'input_text': query,
           'page': page,
@@ -213,7 +242,7 @@ class TextSearchApi {
     }
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/search-flick-posts',
+        '/v1/search-memories',
         queryParameters: {
           'input_text': query,
           'page': page,
@@ -240,7 +269,7 @@ class TextSearchApi {
     }
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/search-flick-posts',
+        '/v1/search-pdfs',
         queryParameters: {
           'input_text': query,
           'page': page,
