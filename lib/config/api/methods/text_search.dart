@@ -6,8 +6,12 @@ import '../external/models/business_validation_exception.dart';
 import '../response_model/search/searched_users_communities.dart';
 
 class TextSearchApi {
-  static Future<SearchedUsersAndCommunitiesResponse?> searchUsersAndCommunities(
-      {required String query}) async {
+  static Future<SearchedUsersAndCommunitiesResponse?>
+      searchUsersAndCommunities({
+    required String query,
+    int page = 1,
+    int pageSize = 20,
+  }) async {
     if (query.length < 4) {
       return null;
     }

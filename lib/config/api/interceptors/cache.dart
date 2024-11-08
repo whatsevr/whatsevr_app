@@ -17,6 +17,7 @@ class ApiCacheInterceptor extends DioCacheInterceptor {
             ),
             policy: CachePolicy.request,
             hitCacheOnErrorExcept: <int>[
+              HttpStatus.badRequest,
               HttpStatus.unauthorized,
               HttpStatus.forbidden,
             ],
