@@ -47,7 +47,7 @@ class _OffersView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          'offer[status]',
+                          '${offer?.status}',
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -60,7 +60,7 @@ class _OffersView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              'offer[title]',
+                              '${offer?.title}',
                               maxLines: 2,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -86,20 +86,19 @@ class _OffersView extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (offer['filesData'].isNotEmpty) ...[
+                  if (offer?.filesData?.isNotEmpty ?? false) ...[
                     const Gap(8),
                     SizedBox(
                       height: 120,
                       child: ListView.separated(
                         controller: _scrollController,
-                        itemCount: offer['filesData'].length,
+                        itemCount: offer?.filesData?.length ?? 0,
                         scrollDirection: Axis.horizontal,
                         separatorBuilder: (BuildContext context, int index) {
                           return const Gap(8);
                         },
                         itemBuilder: (BuildContext context, int index) {
-                          final Map<String, dynamic> fileData =
-                              offer['filesData'][index];
+                          final fileData = offer?.filesData?[index];
                           if (fileData['type'] == 'image' ||
                               fileData['type'] == 'video') {
                             return ExtendedImage.network(
@@ -125,17 +124,14 @@ class _OffersView extends StatelessWidget {
                     children: [
                       for (final record in [
                         (
-                          offer['totalImpressions'].toString(),
+                          offer?.totalImpressions.toString(),
                           Icons.remove_red_eye
                         ),
-                        (offer['totalLikes'].toString(), Icons.thumb_up_sharp),
-                        (offer['totalComments'].toString(), Icons.comment),
-                        (offer['totalShares'].toString(), Icons.share_sharp),
                       ])
                         Row(
                           children: [
                             Text(
-                              record.$1,
+                              '${record.$1}',
                               style: const TextStyle(
                                 fontSize: 12,
                               ),

@@ -75,7 +75,7 @@ class CreateOfferPage extends StatelessWidget {
               Builder(
                 builder: (context) {
                   if (state.uiFilesData.isNotEmpty) {
-                    return SwipeAbleDynamicHeightViews(
+                    return WhatsevrLoosePageView(
                       selectedViewIndex: selectedSwipeAbleViewIndex,
                       onViewIndexChanged: (index) {
                         selectedSwipeAbleViewIndex = index;

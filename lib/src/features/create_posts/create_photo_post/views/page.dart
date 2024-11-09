@@ -61,7 +61,7 @@ class CreatePhotoPostPage extends StatelessWidget {
               Builder(
                 builder: (context) {
                   if (state.uiImageData.isNotEmpty) {
-                    return SwipeAbleDynamicHeightViews(
+                    return WhatsevrLoosePageView(
                       selectedViewIndex: selectedSwipeAbleViewIndex,
                       onViewIndexChanged: (index) {
                         selectedSwipeAbleViewIndex = index;

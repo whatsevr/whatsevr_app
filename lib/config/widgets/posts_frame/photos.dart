@@ -93,7 +93,7 @@ class PhotosPostFrame extends StatelessWidget {
             const Gap(8),
             Stack(
               children: <Widget>[
-                SwipeAbleDynamicHeightViews(
+                WhatsevrLoosePageView(
                   key: UniqueKey(),
                   children: [
                     if (filesData != null && filesData!.isNotEmpty)

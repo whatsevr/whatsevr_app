@@ -1,13 +1,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
-class SwipeAbleDynamicHeightViews extends StatefulWidget {
+class WhatsevrLoosePageView extends StatefulWidget {
   ///PASS UniqueKey() TO REBUILD THE WIDGET WHENEVER NEEDED
   final List<Widget>? children;
   final Function(int)? onViewIndexChanged;
   final int? selectedViewIndex;
   final bool showDotIndicator;
-  const SwipeAbleDynamicHeightViews({
+  const WhatsevrLoosePageView({
     super.key,
     this.children,
     this.onViewIndexChanged,
@@ -16,14 +16,12 @@ class SwipeAbleDynamicHeightViews extends StatefulWidget {
   });
 
   @override
-  State<SwipeAbleDynamicHeightViews> createState() =>
-      _SwipeAbleDynamicHeightViewsState();
+  State<WhatsevrLoosePageView> createState() => _WhatsevrLoosePageViewState();
 }
 
 bool currentSwipeIsLeft = false;
 
-class _SwipeAbleDynamicHeightViewsState
-    extends State<SwipeAbleDynamicHeightViews> {
+class _WhatsevrLoosePageViewState extends State<WhatsevrLoosePageView> {
   List<Widget> _children = <Widget>[
     Container(
       height: 300,
@@ -93,18 +91,27 @@ class _SwipeAbleDynamicHeightViewsState
       },
       child: Column(
         children: [
-          if (currentSwipeIsLeft)
-            SlideInRight(
-              key: UniqueKey(),
-              duration: const Duration(milliseconds: 200),
-              child: _children[currentIndex],
-            )
-          else
-            SlideInLeft(
-              key: UniqueKey(),
-              duration: const Duration(milliseconds: 200),
-              child: _children[currentIndex],
-            ),
+          Builder(
+            builder: (context) {
+              if (_children.length == 1) return _children[currentIndex];
+              if (currentSwipeIsLeft) {
+                return SlideInRight(
+                  key: UniqueKey(),
+                  duration: const Duration(milliseconds: 200),
+                  child: _children[currentIndex],
+                );
+              }
+              if (currentSwipeIsLeft == false) {
+                return SlideInLeft(
+                  key: UniqueKey(),
+                  duration: const Duration(milliseconds: 200),
+                  child: _children[currentIndex],
+                );
+              }
+              return SizedBox();
+            },
+          ),
+
           //dot indicator
           if (widget.showDotIndicator && _children.length > 1)
             Row(

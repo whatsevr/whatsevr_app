@@ -5,27 +5,32 @@ class _PhotosView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    onReachingEndOfTheList(_scrollController, execute: () {
+      context.read<AllSearchBloc>().add(SearchMorePhotoPosts());
+    });
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
           controller: _scrollController,
           shrinkWrap: true,
-          itemCount: 20,
+          itemCount: state.searchedPhotoPosts?.photoPosts?.length ?? 0,
           separatorBuilder: (BuildContext context, int index) =>
               const Divider(),
           itemBuilder: (BuildContext context, int index) {
+            final photoPost = state.searchedPhotoPosts?.photoPosts?[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {},
-                  child: ExtendedImage.network(
-                    MockData.randomImageAvatar(),
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                WhatsevrLoosePageView(
+                  children: [
+                    for (FilesDatum image in photoPost?.filesData ?? [])
+                      ExtendedImage.network(
+                        image.imageUrl ?? MockData.imagePlaceholder('Image'),
+                        width: double.infinity,
+                        fit: BoxFit.contain,
+                        enableLoadState: false,
+                      ),
+                  ],
                 ),
                 const Gap(8),
                 Row(
@@ -40,7 +45,7 @@ class _PhotosView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <StatelessWidget>[
                           Text(
-                            'Title',
+                            '${photoPost?.title}',
                             maxLines: 2,
                             style: const TextStyle(
                               fontSize: 16,
@@ -49,7 +54,7 @@ class _PhotosView extends StatelessWidget {
                           ),
                           const Gap(8),
                           Text(
-                            'Updated on Date',
+                            '${GetTimeAgo.parse(photoPost!.createdAt!)}',
                             style: const TextStyle(
                               fontSize: 12,
                             ),
@@ -61,7 +66,7 @@ class _PhotosView extends StatelessWidget {
                 ),
                 const Gap(8),
                 Text(
-                  'Description',
+                  '${photoPost.description}',
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.grey,

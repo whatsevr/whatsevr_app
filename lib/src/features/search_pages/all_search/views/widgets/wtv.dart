@@ -5,22 +5,28 @@ class _WtvView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    onReachingEndOfTheList(_scrollController, execute: () {
+      context.read<AllSearchBloc>().add(SearchMoreVideoPosts());
+    });
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
+          padding: PadHorizontal.padding,
           controller: _scrollController,
           shrinkWrap: true,
-          itemCount: 20,
+          itemCount: state.searchedVideoPosts?.videoPosts?.length ?? 0,
           separatorBuilder: (BuildContext context, int index) =>
               const Divider(),
           itemBuilder: (BuildContext context, int index) {
+            final video = state.searchedVideoPosts?.videoPosts?[index];
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Stack(
                   children: <Widget>[
                     ExtendedImage.network(
-                      MockData.randomImageAvatar(),
+                      video?.thumbnail ??
+                          MockData.imagePlaceholder('Thumbnail'),
                       borderRadius: BorderRadius.circular(8),
                       shape: BoxShape.rectangle,
                       fit: BoxFit.cover,
@@ -37,7 +43,7 @@ class _WtvView extends StatelessWidget {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          'Duration',
+                          '${getDurationInText(video?.videoDurationInSec)}',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -88,7 +94,7 @@ class _WtvView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              'Video Title $index',
+                              '${video?.title}',
                               maxLines: 3,
                               style: const TextStyle(
                                 fontSize: 16,
@@ -100,7 +106,7 @@ class _WtvView extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        '100 likes • 10 comments',
+                        '${formatCountToKMBTQ(video?.totalLikes)} likes • ${formatCountToKMBTQ(video?.totalComments)} comments',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -108,7 +114,7 @@ class _WtvView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '20 shares • 5 tagged',
+                        '${formatCountToKMBTQ(video?.totalShares)} shares • ${formatCountToKMBTQ(video?.totalViews)} views',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -116,7 +122,7 @@ class _WtvView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '2 hours ago',
+                        GetTimeAgo.parse(video!.createdAt!),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

@@ -5,10 +5,14 @@ class _FlicksView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
+    onReachingEndOfTheList(_scrollController, execute: () {
+      context.read<AllSearchBloc>().add(SearchMoreFlickPosts());
+    });
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return GridView.builder(
           controller: _scrollController,
+          padding: PadHorizontal.padding,
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -16,8 +20,9 @@ class _FlicksView extends StatelessWidget {
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
-          itemCount: 20,
+          itemCount: state.searchedFlickPosts?.flicks?.length ?? 0,
           itemBuilder: (BuildContext context, int index) {
+            final flick = state.searchedFlickPosts?.flicks?[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -26,7 +31,8 @@ class _FlicksView extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       ExtendedImage.network(
-                        MockData.randomImageAvatar(),
+                        flick?.thumbnail ??
+                            MockData.imagePlaceholder('Thumbnail'),
                         borderRadius: BorderRadius.circular(8),
                         shape: BoxShape.rectangle,
                         height: double.infinity,
@@ -43,7 +49,7 @@ class _FlicksView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
-                            'Duration',
+                            '${getDurationInText(flick?.videoDurationInSec)}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -95,7 +101,7 @@ class _FlicksView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              'Title',
+                              '${flick?.title}',
                               maxLines: 3,
                               style: const TextStyle(
                                 fontSize: 16,
@@ -107,7 +113,7 @@ class _FlicksView extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        'Likes • Comments',
+                        '${formatCountToKMBTQ(flick?.totalViews)} Views',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -115,7 +121,7 @@ class _FlicksView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Shares • Tagged',
+                        '${formatCountToKMBTQ(flick?.totalLikes)} Likes • ${formatCountToKMBTQ(flick?.totalComments)} Comments',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -123,7 +129,7 @@ class _FlicksView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Date',
+                        '${GetTimeAgo.parse(flick!.createdAt!)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

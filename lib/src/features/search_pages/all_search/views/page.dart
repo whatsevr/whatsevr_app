@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
@@ -19,6 +20,9 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
+
+import '../../../../../config/api/response_model/search/searched_photo_posts.dart';
+import '../../../../../config/widgets/dynamic_height_views.dart';
 part 'widgets/recents.dart';
 part 'widgets/users.dart';
 part 'widgets/portfolios.dart';
