@@ -20,7 +20,9 @@ class _CommunityView extends StatelessWidget {
             final community = state.searchedCommunities?.communities?[index];
             return InkWell(
               onTap: () {
-                AppNavigationService.newRoute(RoutesName.community);
+                AppNavigationService.newRoute(
+                  RoutesName.community,
+                );
               },
               child: Column(
                 children: <Widget>[

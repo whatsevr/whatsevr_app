@@ -1,6 +1,8 @@
 part of 'account_bloc.dart';
 
 class AccountState extends Equatable {
+  final String? userUid;
+  final bool isEditMode;
   final ProfileDetailsResponse? profileDetailsResponse;
   final List<VideoPost?> userVideoPosts;
   final List<Flick?> userFlicks;
@@ -8,6 +10,8 @@ class AccountState extends Equatable {
   final List<OfferPost?> userOffers;
 
   const AccountState({
+    this.userUid,
+    this.isEditMode = false,
     this.profileDetailsResponse,
     this.userVideoPosts = const [],
     this.userFlicks = const [],
@@ -25,6 +29,8 @@ class AccountState extends Equatable {
       ];
 
   AccountState copyWith({
+    String? userUid,
+    bool? isEditMode,
     ProfileDetailsResponse? profileDetailsResponse,
     List<VideoPost>? userVideoPosts,
     List<Flick>? userFlicks,
@@ -32,6 +38,8 @@ class AccountState extends Equatable {
     List<OfferPost>? userOffers,
   }) {
     return AccountState(
+      userUid: userUid ?? this.userUid,
+      isEditMode: isEditMode ?? this.isEditMode,
       profileDetailsResponse:
           profileDetailsResponse ?? this.profileDetailsResponse,
       userVideoPosts: userVideoPosts ?? this.userVideoPosts,

@@ -7,10 +7,12 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/akar_icons.dart';
 import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:iconify_flutter/icons/heroicons.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 import 'package:colorful_iconify_flutter/icons/vscode_icons.dart';
+import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/bloc/all_search_bloc.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 

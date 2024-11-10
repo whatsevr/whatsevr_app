@@ -8,6 +8,7 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
 import '../../../../../config/widgets/dialogs/auth_dialogs.dart';
@@ -37,7 +38,8 @@ class _DashboardPageBottomNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-    final List<(Widget icon, VoidCallback? onTap, VoidCallback? onLongTap)> items = [
+    final List<(Widget icon, VoidCallback? onTap, VoidCallback? onLongTap)>
+        items = [
       (
         const Iconify(MaterialSymbols.explore, size: 30),
         () {
@@ -111,6 +113,7 @@ class _DashboardPageBottomNavigationBarState
                   newView: AccountPage(
                     pageArgument: AccountPageArgument(
                       isEditMode: true,
+                      userUid: AuthUserDb.getLastLoggedUserUid(),
                     ),
                   ),
                 ),

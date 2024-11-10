@@ -22,7 +22,8 @@ class _PortfolioView extends StatelessWidget {
               onTap: () {
                 AppNavigationService.newRoute(
                   RoutesName.account,
-                  extras: AccountPageArgument(isEditMode: false),
+                  extras: AccountPageArgument(
+                      isEditMode: false, userUid: portfolio?.uid),
                 );
               },
               child: Column(
@@ -86,15 +87,9 @@ class _PortfolioView extends StatelessWidget {
                         ),
                       ),
                       const Gap(8),
-                      MaterialButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () {},
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        child: const Text('Add Friend'),
+                      WhatsevrFollowButton(
+                        followeeUserUid: portfolio?.uid,
+                        filledButton: false,
                       ),
                       const Gap(8),
                     ],

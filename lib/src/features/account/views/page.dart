@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
@@ -40,7 +41,7 @@ class AccountPageArgument {
   final bool isEditMode;
   final String? userUid;
 
-  AccountPageArgument({required this.isEditMode, this.userUid});
+  AccountPageArgument({this.isEditMode = false, required this.userUid});
 }
 
 class AccountPage extends StatelessWidget {
@@ -51,8 +52,10 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          AccountBloc()..add(AccountInitialEvent()),
+      create: (BuildContext context) => AccountBloc()
+        ..add(AccountInitialEvent(
+          accountPageArgument: pageArgument,
+        )),
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
           return Scaffold(
@@ -78,7 +81,7 @@ class AccountPage extends StatelessWidget {
                 Expanded(
                   child: MyRefreshIndicator(
                     onPullDown: () async {
-                      context.read<AccountBloc>().add(AccountInitialEvent());
+                      context.read<AccountBloc>().add(LoadAccountData());
                       await Future<void>.delayed(const Duration(seconds: 2));
                     },
                     child: ContentMask(
@@ -355,7 +358,7 @@ class AccountPage extends StatelessWidget {
                                                     context
                                                         .read<AccountBloc>()
                                                         .add(
-                                                          AccountInitialEvent(),
+                                                          LoadAccountData(),
                                                         );
                                                   },
                                                 ),

@@ -120,7 +120,7 @@ flutter_launcher_icons:
 #dart run flutter_launcher_icons
   android: "launcher_icon"
   ios: true
-  image_path: assets/images/whatsevr_app_logo.jpg
+  image_path: "assets/images/whatsevr_app_logo.jpg"
 
 flutter_native_splash:
 #dart run flutter_native_splash:create
