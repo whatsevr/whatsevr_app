@@ -32,7 +32,7 @@ class ExplorePage extends StatelessWidget {
             readOnly: true,
             onTap: () {
               AppNavigationService.newRoute(
-                RoutesName.accountSearch,
+                RoutesName.allSearch,
               );
             },
           ),

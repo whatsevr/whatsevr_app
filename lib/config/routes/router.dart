@@ -104,7 +104,7 @@ class AppNavigationService {
         },
       ),
       GoRoute(
-        path: RoutesName.accountSearch,
+        path: RoutesName.allSearch,
         builder: (BuildContext context, GoRouterState state) {
           final AllSearchPage? accountSearchPage =
               state.extra as AllSearchPage?;
