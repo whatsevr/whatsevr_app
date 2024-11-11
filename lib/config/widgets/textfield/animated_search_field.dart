@@ -2,6 +2,7 @@ import 'package:animated_hint_textfield/animated_hint_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hidable/hidable.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import '../../routes/router.dart';
 
@@ -45,7 +46,7 @@ class _WhatsevrAnimatedSearchFieldState
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.whatsevrTheme.surface,
           border: Border.all(color: Colors.grey[400]!),
           borderRadius: BorderRadius.circular(10),
         ),

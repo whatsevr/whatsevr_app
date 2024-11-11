@@ -50,7 +50,6 @@ class DashboardPage extends StatelessWidget {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (BuildContext context, DashboardState state) {
         return Scaffold(
-          backgroundColor: Colors.white,
           body: state.currentDashboardView,
           bottomNavigationBar: const DashboardPageBottomNavigationBar(),
         );

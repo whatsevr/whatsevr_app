@@ -28,7 +28,6 @@ class SplashPage extends StatelessWidget {
 
   Widget buildPage(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,23 +46,24 @@ class SplashPage extends StatelessWidget {
                   return const WhatsevrLoadingIndicator();
                 }
                 return WhatsevrButton.filled(
-                    shrink: true,
-                    label: 'Login',
-                    onPressed: () {
-                      final List<String> localUids =
-                          AuthUserDb.getAllAuthorisedUserUid();
-                      if (localUids.isNotEmpty ?? false) {
-                        showAppModalSheet(
-                          dismissPrevious: true,
-                          flexibleSheet: false,
-                          child: SwitchUserDialogUi(),
-                        );
-                      } else {
-                        context
-                            .read<SplashBloc>()
-                            .add(const InitiateAuthServiceEvent());
-                      }
-                    },);
+                  shrink: true,
+                  label: 'Login',
+                  onPressed: () {
+                    final List<String> localUids =
+                        AuthUserDb.getAllAuthorisedUserUid();
+                    if (localUids.isNotEmpty ?? false) {
+                      showAppModalSheet(
+                        dismissPrevious: true,
+                        flexibleSheet: false,
+                        child: SwitchUserDialogUi(),
+                      );
+                    } else {
+                      context
+                          .read<SplashBloc>()
+                          .add(const InitiateAuthServiceEvent());
+                    }
+                  },
+                );
               },
             ),
             const Gap(30),

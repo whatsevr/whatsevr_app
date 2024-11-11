@@ -53,7 +53,6 @@ class NewCommunityPage extends StatelessWidget {
           },
         );
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: WhatsevrAppBar(title: 'New Community'),
           body: ListView(
             padding: PadHorizontal.padding,

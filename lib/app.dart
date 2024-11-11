@@ -115,7 +115,7 @@ Center _loaderUi(String msg) {
     child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppNavigationService.currentContext?.whatsevrTheme.surface,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -136,7 +136,7 @@ Container _toastUi(String msg) {
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: AppNavigationService.currentContext?.whatsevrTheme.surface,
       borderRadius: BorderRadius.circular(8),
       boxShadow: const <BoxShadow>[
         BoxShadow(

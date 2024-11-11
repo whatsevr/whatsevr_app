@@ -9,6 +9,7 @@ import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import '../../../../../config/enums/post_creator_type.dart';
 import '../../../../../config/widgets/dialogs/auth_dialogs.dart';
@@ -126,7 +127,7 @@ class _DashboardPageBottomNavigationBarState
     ];
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.whatsevrTheme.surface,
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),

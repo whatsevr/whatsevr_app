@@ -10,8 +10,11 @@ class PlaceSearchByNamePage extends StatefulWidget {
   final bool scaffoldView;
   final Function(String placeName, double? latitude, double? longitude)
       onPlaceSelected;
-  const PlaceSearchByNamePage(
-      {super.key, this.scaffoldView = false, required this.onPlaceSelected,});
+  const PlaceSearchByNamePage({
+    super.key,
+    this.scaffoldView = false,
+    required this.onPlaceSelected,
+  });
 
   @override
   State<PlaceSearchByNamePage> createState() => _PlaceSearchByNamePageState();
@@ -80,21 +83,24 @@ class _PlaceSearchByNamePageState extends State<PlaceSearchByNamePage> {
                   }
                   SmartDialog.dismiss();
                   widget.onPlaceSelected(
-                      searchedItems[index]
-                          .placePrediction!
-                          .structuredFormat!
-                          .mainText!
-                          .text!,
-                      latitude,
-                      longitude,);
+                    searchedItems[index]
+                        .placePrediction!
+                        .structuredFormat!
+                        .mainText!
+                        .text!,
+                    latitude,
+                    longitude,
+                  );
                   Navigator.of(context).pop();
                 }
               },
               leading: const Icon(Icons.location_on),
               title: Text(
-                  '${searchedItems[index].placePrediction?.structuredFormat?.mainText?.text}',),
+                '${searchedItems[index].placePrediction?.structuredFormat?.mainText?.text}',
+              ),
               subtitle: Text(
-                  '${searchedItems[index].placePrediction?.structuredFormat?.secondaryText?.text}',),
+                '${searchedItems[index].placePrediction?.structuredFormat?.secondaryText?.text}',
+              ),
             );
           },
         ),

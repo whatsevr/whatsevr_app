@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import '../../../../../config/api/response_model/user_offers.dart';
 import '../../../../../utils/conversion.dart';
@@ -29,7 +30,7 @@ class AccountPageOffersView extends StatelessWidget {
                 vertical: 8,
               ),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: context.whatsevrTheme.surface,
                 border: Border.all(
                   color: Colors.grey[300]!,
                 ),

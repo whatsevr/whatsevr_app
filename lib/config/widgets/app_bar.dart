@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'buttons/ai_button.dart';
 
 class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -50,7 +51,7 @@ class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
         leading: leading,
 
-        backgroundColor: backgroundColor ?? Colors.white,
+        backgroundColor: backgroundColor ?? context.whatsevrTheme.surface,
         elevation: 0.0, // iOS-style flat design
         centerTitle: true,
         surfaceTintColor: Colors.white, // Center the title like iOS

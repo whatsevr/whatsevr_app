@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import '../../../../../config/api/response_model/profile_details.dart';
 import '../../../../../utils/conversion.dart';
@@ -27,7 +28,7 @@ class AccountPageAboutView extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: Colors.white,
+                    color: context.whatsevrTheme.surface,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -62,7 +63,7 @@ class AccountPageAboutView extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: Colors.white,
+                    color: context.whatsevrTheme.surface,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),

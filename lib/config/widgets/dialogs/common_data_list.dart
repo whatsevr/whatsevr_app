@@ -77,7 +77,8 @@ class _CommonDataSearchSelectPageState
   // Fetch data using CommonDataApi with error handling and loading state
   Future<void> _fetchCommonData() async {
     try {
-      final CommonDataResponse? response = await CommonDataApi.getAllCommonData();
+      final CommonDataResponse? response =
+          await CommonDataApi.getAllCommonData();
 
       if (response != null) {
         setState(() {
@@ -189,7 +190,6 @@ class _CommonDataSearchSelectPageState
             : _buildBody();
     if (widget.scaffoldView) {
       return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Search and Select'),
         ),

@@ -20,8 +20,11 @@ class VideoEditorPageArgument {
   final File videoFile;
   final WhatsevrAspectRatio? aspectRatio;
   final Function(File? file) onCompleted;
-  VideoEditorPageArgument(
-      {required this.videoFile, required this.onCompleted, this.aspectRatio,});
+  VideoEditorPageArgument({
+    required this.videoFile,
+    required this.onCompleted,
+    this.aspectRatio,
+  });
 }
 
 class VideoEditorPage extends StatefulWidget {
@@ -101,7 +104,6 @@ class _VideoEditorPageState extends State<VideoEditorPage> {
     return PopScope(
       canPop: !_isExporting.value,
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: WhatsevrAppBar(
           title: 'Edit',
           actions: <Widget>[
@@ -357,7 +359,8 @@ class CropPage extends StatelessWidget {
                                         Icons.panorama_vertical_select_rounded,
                                       )
                                     : const Icon(
-                                        Icons.panorama_vertical_rounded,),
+                                        Icons.panorama_vertical_rounded,
+                                      ),
                               ),
                               IconButton(
                                 onPressed: () =>
@@ -374,7 +377,8 @@ class CropPage extends StatelessWidget {
                                             .panorama_horizontal_select_rounded,
                                       )
                                     : const Icon(
-                                        Icons.panorama_horizontal_rounded,),
+                                        Icons.panorama_horizontal_rounded,
+                                      ),
                               ),
                             ],
                           ),
@@ -387,7 +391,9 @@ class CropPage extends StatelessWidget {
                                 Fraction.fromString('9/16'),
                               ),
                               _buildCropButton(
-                                  context, Fraction.fromString('3/4'),),
+                                context,
+                                Fraction.fromString('3/4'),
+                              ),
                             ],
                           ),
                         ],

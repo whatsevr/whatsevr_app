@@ -7,8 +7,11 @@ class CountryStateCityPage extends StatefulWidget {
   final bool scaffoldView;
   final Function(String? countryName, String? stateName, String? cityName)
       onPlaceSelected;
-  const CountryStateCityPage(
-      {super.key, this.scaffoldView = false, required this.onPlaceSelected,});
+  const CountryStateCityPage({
+    super.key,
+    this.scaffoldView = false,
+    required this.onPlaceSelected,
+  });
 
   @override
   State<CountryStateCityPage> createState() => _CountryStateCityPageState();
