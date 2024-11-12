@@ -1,497 +1,524 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
+import 'package:get_time_ago/get_time_ago.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
+import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
-class CommunityPageX extends StatelessWidget {
-  CommunityPageX({super.key});
-  final PageController controller = PageController();
+import 'package:whatsevr_app/src/features/settings/views/page.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/about.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/cover_media.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/flicks.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/pdfs.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/services.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/videos.dart';
+
+class CommunityPageArgument {
+  final bool isEditMode;
+  final String? communityUid;
+
+  CommunityPageArgument({this.isEditMode = false, required this.communityUid});
+}
+
+class CommunityPage extends StatelessWidget {
+  final CommunityPageArgument? pageArgument;
+
+  const CommunityPage({super.key, required this.pageArgument});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                Stack(
+    return BlocProvider(
+      create: (BuildContext context) => CommunityBloc()
+        ..add(InitialEvent(
+          accountPageArgument: pageArgument,
+        )),
+      child: BlocBuilder<CommunityBloc, CommunityState>(
+        builder: (BuildContext context, CommunityState state) {
+          return Scaffold(
+            body: MyRefreshIndicator(
+              onPullDown: () async {
+                context.read<CommunityBloc>().add(LoadCommunityData());
+                await Future<void>.delayed(const Duration(seconds: 2));
+              },
+              child: ContentMask(
+                showMask: state.profileDetailsResponse == null,
+                child: ListView(
+                  shrinkWrap: true,
                   children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: PageView(
-                        controller: controller,
-                        children: <Widget>[
-                          CoverVideo(videoUrl: MockData.demoVideo),
-                          CoverVideo(videoUrl: MockData.demoVideo),
-                          ExtendedImage.network(
-                            MockData.randomImage(),
-                            width: double.infinity,
-                            height: 300,
-                            fit: BoxFit.cover,
-                            enableLoadState: false,
-                          ),
-                          ExtendedImage.network(
-                            MockData.randomImage(),
-                            width: double.infinity,
-                            height: 300,
-                            fit: BoxFit.cover,
-                            enableLoadState: false,
-                          ),
-                          ExtendedImage.network(
-                            MockData.randomImage(),
-                            width: double.infinity,
-                            height: 300,
-                            fit: BoxFit.cover,
-                            enableLoadState: false,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    ///3 dot
-                    Positioned(
-                      right: 0,
-                      left: 0,
-                      bottom: 8,
-                      child: UnconstrainedBox(
-                        child: SmoothPageIndicator(
-                          controller: controller, // PageController
-                          count: 5,
-                          effect: const WormEffect(
-                            dotWidth: 8.0,
-                            dotHeight: 8.0,
-                            activeDotColor: Colors.black,
-                            dotColor: Colors.white,
-                          ), // your preferred effect
-                          onDotClicked: (int index) {},
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      left: 20,
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundImage: ExtendedImage.network(
-                          MockData.randomImageAvatar(),
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          enableLoadState: false,
-                        ).image,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(8),
-                PadHorizontal(
-                  child: Row(
-                    children: <Widget>[
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('Community X', style: TextStyle(fontSize: 24)),
-                            Text(
-                              ' @Communityx',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Gap(8),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add_box_rounded),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.menu),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                const PadHorizontal(
-                  child: Text(
-                    'Community title xxxxxx xxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxx',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const Gap(8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: PadHorizontal.paddingValue,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey.withOpacity(0.15),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '2.5 Million Members',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const Gap(8),
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(Icons.circle_rounded, size: 16, color: Colors.green),
-                    Gap(8),
-                    Text(
-                      '230K Online',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(8),
-                const PadHorizontal(
-                  child: Row(
-                    children: <Widget>[
-                      Text('Suggestions', style: TextStyle(fontSize: 14)),
-                      Spacer(),
-                      Text('See All', style: TextStyle(fontSize: 14)),
-                    ],
-                  ),
-                ),
-                const Gap(8),
-                SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                left: index == 0 ? 8 : 0,
-                                right: 8,
-                              ),
-                              width: 150,
+                    Stack(
+                      children: [
+                        CommunityPageCoverVideoView(),
+                        //avatar
+                        Positioned(
+                          bottom: 12,
+                          left: 12,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (state.userMemories.isEmpty) {
+                                return;
+                              }
+                              showAppModalSheet(
+                                flexibleSheet: false,
+                                child: SizedBox(
+                                  height: 220,
+                                  child: ListView.separated(
+                                    itemCount: state.userMemories.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (
+                                      BuildContext context,
+                                      int index,
+                                    ) {
+                                      final Memory? memory =
+                                          state.userMemories[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          showMemoriesPlayer(
+                                            context,
+                                            uiMemoryGroups: [
+                                              UiMemoryGroup(
+                                                userUid: state
+                                                    .profileDetailsResponse
+                                                    ?.userInfo
+                                                    ?.uid,
+                                                username: state
+                                                    .profileDetailsResponse
+                                                    ?.userInfo
+                                                    ?.username,
+                                                profilePicture: state
+                                                    .profileDetailsResponse
+                                                    ?.userInfo
+                                                    ?.profilePicture,
+                                                uiMemoryGroupItems: [
+                                                  for (Memory? memory
+                                                      in state.userMemories)
+                                                    UiMemoryGroupItems(
+                                                      isImage: memory?.isImage,
+                                                      imageUrl:
+                                                          memory?.imageUrl,
+                                                      isVideo: memory?.isVideo,
+                                                      videoUrl:
+                                                          memory?.videoUrl,
+                                                      videoDurationMs: memory
+                                                          ?.videoDurationMs,
+                                                      ctaAction:
+                                                          memory?.ctaAction,
+                                                      ctaActionUrl:
+                                                          memory?.ctaActionUrl,
+                                                      caption: memory?.caption,
+                                                      createdAt:
+                                                          memory?.createdAt,
+                                                    ),
+                                                ],
+                                              ),
+                                            ],
+                                            startGroupIndex: 0,
+                                            startMemoryIndex: index,
+                                          );
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              GetTimeAgo.parse(
+                                                memory!.createdAt!,
+                                              ),
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            Gap(8),
+                                            Expanded(
+                                              child: Container(
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    8,
+                                                  ),
+                                                  border: Border.all(
+                                                    color: Colors.black,
+                                                  ),
+                                                  image: DecorationImage(
+                                                    image:
+                                                        ExtendedNetworkImageProvider(
+                                                      '${memory.imageUrl}',
+                                                      cache: true,
+                                                    ),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Gap(8),
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.remove_red_eye,
+                                                  size: 16,
+                                                ),
+                                                const Gap(4),
+                                                Text(
+                                                  '${formatCountToKMBTQ(memory.totalViews)}',
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Gap(8),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder: (
+                                      BuildContext context,
+                                      int index,
+                                    ) {
+                                      return const Gap(8);
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                            onLongPress: () {
+                              showPhotoPreviewDialog(
+                                context: context,
+                                photoUrl:
+                                    '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                appBarTitle:
+                                    '${state.profileDetailsResponse?.userInfo?.username}',
+                              );
+                            },
+                            child: AdvancedAvatar(
+                              size: 65,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.black),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: state.userMemories.isEmpty
+                                      ? Colors.white
+                                      : Colors.blue,
+                                  width: 3.0,
+                                ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Gap(8),
-                                  Expanded(
-                                    child: ExtendedImage.network(
-                                      MockData.randomImageAvatar(),
-                                      shape: BoxShape.circle,
-                                      fit: BoxFit.cover,
-                                      enableLoadState: false,
-                                    ),
-                                  ),
-                                  const Gap(8),
-                                  const Text(
-                                    'John Doe',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                              child: Padding(
+                                padding: state.userMemories.isEmpty
+                                    ? EdgeInsets.zero
+                                    : const EdgeInsets.all(2),
+                                child: ExtendedImage.network(
+                                  state.profileDetailsResponse?.userInfo
+                                          ?.profilePicture ??
+                                      MockData.blankProfileAvatar,
+                                  shape: BoxShape.circle,
+                                  fit: BoxFit.cover,
+                                  enableLoadState: false,
+                                ),
                               ),
                             ),
                           ),
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            minWidth: 150,
-                            color: Colors.blue,
-                            onPressed: () {},
-                            child: const Text('Follow'),
-                          ),
-                        ],
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Gap(8);
-                    },
-                    itemCount: 10,
-                  ),
-                ),
-                const Gap(8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: PadHorizontal.paddingValue,
-                  ),
-                  decoration: const BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(12)),
-                  ),
-                  child: const DefaultTabController(
-                    length: 7,
-                    child: Column(
-                      children: <Widget>[
-                        Gap(12),
-                        WhatsevrTabBarWithViews(
-                          shrinkViews: true,
-                          tabAlignment: TabAlignment.start,
-                          isTabsScrollable: true,
-                          tabViews: [
-                            ('About', _AboutView()),
-                            ('Media', _AboutView()),
-                            ('Wtv', _AboutView()),
-                            ('Services', _AboutView()),
-                            ('Flicks', _AboutView()),
-                            ('Offerings', _AboutView()),
-                            ('Tags', _AboutView()),
-                            ('Pdf', _AboutView()),
-                          ],
                         ),
                       ],
                     ),
-                  ),
+                    ...[
+                      const Gap(8),
+                      PadHorizontal(
+                        child: Text(
+                          '${state.profileDetailsResponse?.userInfo?.name}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const Gap(4),
+                    Builder(
+                      builder: (context) {
+                        return PadHorizontal(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      ' @${state.profileDetailsResponse?.userInfo?.username}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    const Gap(8),
+                                  ],
+                                ),
+                              ),
+                              Gap(12),
+                              if (pageArgument?.isEditMode == true) ...<Widget>[
+                                IconButton(
+                                  icon: const Iconify(
+                                    Ri.heart_add_fill,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    showContentUploadBottomSheet(
+                                      context,
+                                      postCreatorType:
+                                          EnumPostCreatorType.COMMUNITY,
+                                    );
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.menu),
+                                  onPressed: () {
+                                    showAppModalSheet(
+                                      flexibleSheet: false,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            leading: const Icon(Icons.edit),
+                                            title: const Text(
+                                              'Edit Profile',
+                                            ),
+                                            onTap: () async {
+                                              Navigator.pop(context);
+                                              await AppNavigationService
+                                                  .newRoute(
+                                                RoutesName.updateProfile,
+                                                extras:
+                                                    ProfileUpdatePageArgument(
+                                                  profileDetailsResponse: state
+                                                      .profileDetailsResponse,
+                                                ),
+                                              );
+                                              context.read<CommunityBloc>().add(
+                                                    LoadCommunityData(),
+                                                  );
+                                            },
+                                          ),
+                                          ListTile(
+                                            leading: const Icon(
+                                              Icons.settings,
+                                            ),
+                                            title: const Text(
+                                              'Manage Community',
+                                            ),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              AppNavigationService.newRoute(
+                                                RoutesName.settings,
+                                                extras: SettingsPageArgument(),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    const Gap(28),
+                    GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onTap: () {
+                          showUserRelationsDialog(
+                            context: context,
+                            userUid:
+                                (state.profileDetailsResponse?.userInfo?.uid)!,
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: PadHorizontal.paddingValue,
+                            vertical: 8,
+                          ),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: context.whatsevrTheme.shadow,
+                          ),
+                          child: Text(
+                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)} Members',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )),
+                    const Gap(8),
+                    if (pageArgument?.isEditMode != true) ...<Widget>[
+                      PadHorizontal(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                color: Colors.black,
+                                onPressed: () {},
+                                child: const Text('Join',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            ),
+                            const Gap(8),
+                            Expanded(
+                              child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {},
+                                child: const Text(
+                                  'Message',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const PadHorizontal(
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              'Suggestions',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            Spacer(),
+                            Text(
+                              'See All',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Gap(8),
+                      SizedBox(
+                        height: 200,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      left: index == 0 ? 8 : 0,
+                                      right: 8,
+                                    ),
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(color: Colors.black),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        const Gap(8),
+                                        Expanded(
+                                          child: ExtendedImage.network(
+                                            MockData.randomImageAvatar(),
+                                            shape: BoxShape.circle,
+                                            fit: BoxFit.cover,
+                                            enableLoadState: false,
+                                          ),
+                                        ),
+                                        const Gap(8),
+                                        const Text(
+                                          'John Doe',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  minWidth: 150,
+                                  color: Colors.blue,
+                                  onPressed: () {},
+                                  child: const Text('Join'),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const Gap(8);
+                          },
+                          itemCount: 10,
+                        ),
+                      ),
+                      const Gap(8),
+                    ],
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: PadHorizontal.paddingValue,
+                      ),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                      ),
+                      child: const Column(
+                        children: <Widget>[
+                          Gap(12),
+                          WhatsevrTabBarWithViews(
+                            shrinkViews: true,
+                            tabAlignment: TabAlignment.start,
+                            isTabsScrollable: true,
+                            tabViews: [
+                              ('About', CommunityPageAboutView()),
+                              ('Services', CommunityPageServicesView()),
+                              ('Media', Text('Media')),
+                              ('Videos', CommunityPageVideosView()),
+                              ('Flicks', CommunityPageFlicksView()),
+                              ('Offerings', CommunityPageOffersView()),
+                              ('Pdf', CommunityPagePdfsView()),
+                              ('Tags', Text('Tags')),
+                            ],
+                          ),
+                          Gap(50),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          );
+        },
       ),
-    );
-  }
-}
-
-class _AboutView extends StatelessWidget {
-  const _AboutView();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Gap(8),
-
-        ///Join and Leave
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                color: Colors.black,
-                onPressed: () {},
-                child:
-                    const Text('Join', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            const Gap(8),
-            Expanded(
-              child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                color: Colors.blue,
-                onPressed: () {},
-                child: const Text(
-                  'Message',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Gap(8),
-                  Text(
-                    'Status',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Gap(8),
-                ],
-              ),
-            ),
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Gap(8),
-                  Text(
-                    'Serve',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscinquam.',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Gap(8),
-                ],
-              ),
-            ),
-          ),
-        ),
-        for ((String?, String) item in <(String?, String)>[
-          ('Bio', 'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'),
-          (
-            'Invite Link',
-            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
-          ),
-          (
-            'Location',
-            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
-          ),
-          (
-            'Last seen of Admin',
-            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
-          ),
-          (
-            'Description',
-            'Lorem ipsum dolor sit amet, consectetur adipiscinquam.'
-          ),
-          ('Total Post', '2355'),
-        ])
-          CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            checkColor: Colors.white,
-            activeColor: Colors.black,
-            value: false,
-            onChanged: (bool? value) {},
-            title: Text(
-              '${item.$1}',
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              item.$2,
-            ),
-            isThreeLine: true,
-          ),
-      ],
-    );
-  }
-}
-
-class CoverVideo extends StatefulWidget {
-  final String? videoUrl;
-  const CoverVideo({super.key, required this.videoUrl});
-
-  @override
-  State<CoverVideo> createState() => _CoverVideoState();
-}
-
-class _CoverVideoState extends State<CoverVideo> {
-  late VideoPlayerController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller =
-        VideoPlayerController.networkUrl(Uri.parse('${widget.videoUrl}'))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-          });
-
-    controller.addListener(() {
-      if (controller.value.position == controller.value.duration) {
-        controller.seekTo(Duration.zero);
-        controller.play();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            setState(() {
-              if (controller.value.isPlaying) {
-                controller.pause();
-              } else {
-                controller.play();
-              }
-            });
-          },
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: Builder(
-              builder: (BuildContext context) {
-                if (controller.value.position == Duration.zero &&
-                    !controller.value.isPlaying) {
-                  return ExtendedImage.network(
-                    MockData.randomImage(),
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                    enableLoadState: false,
-                  );
-                }
-                return VideoPlayer(controller);
-              },
-            ),
-          ),
-        ),
-        if (!controller.value.isPlaying)
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(
-              icon: const Icon(
-                Icons.play_arrow,
-                size: 40,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                setState(() {
-                  if (controller.value.isPlaying) {
-                    controller.pause();
-                  } else {
-                    controller.play();
-                  }
-                });
-              },
-            ),
-          ),
-      ],
     );
   }
 }

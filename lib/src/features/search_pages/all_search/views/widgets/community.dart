@@ -22,6 +22,7 @@ class _CommunityView extends StatelessWidget {
               onTap: () {
                 AppNavigationService.newRoute(
                   RoutesName.community,
+                  extras: CommunityPageArgument(communityUid: community?.uid),
                 );
               },
               child: Column(

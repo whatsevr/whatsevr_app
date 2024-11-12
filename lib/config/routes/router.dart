@@ -8,7 +8,7 @@ import 'package:whatsevr_app/constants.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
-import 'package:whatsevr_app/src/features/community/views/page.dart';
+
 import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_offer/views/page.dart';
@@ -27,6 +27,8 @@ import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
 import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+
+import '../../src/features/community/views/page.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();
@@ -124,7 +126,9 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.community,
         builder: (BuildContext context, GoRouterState state) {
-          return CommunityPageX();
+          return CommunityPage(
+            pageArgument: state.extra as CommunityPageArgument?,
+          );
         },
       ),
       GoRoute(

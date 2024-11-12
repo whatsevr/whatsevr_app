@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/src/features/community/views/page.dart';
 
 import '../../../../config/api/response_model/community/user_communities.dart';
 import '../../../../config/mocks/mocks.dart';
