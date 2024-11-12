@@ -5,9 +5,9 @@ sealed class CommunityEvent extends Equatable {
 }
 
 class InitialEvent extends CommunityEvent {
-  final CommunityPageArgument? accountPageArgument;
+  final CommunityPageArgument? communityPageArgument;
 
-  const InitialEvent({required this.accountPageArgument});
+  const InitialEvent({required this.communityPageArgument});
 
   @override
   List<Object> get props => <Object>[];

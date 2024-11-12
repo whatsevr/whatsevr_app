@@ -3,7 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../../../../config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import '../../../../../config/mocks/mocks.dart';
 import '../../bloc/bloc.dart';
 
@@ -15,7 +15,8 @@ class CommunityPageCoverVideoView extends StatelessWidget {
     return BlocBuilder<CommunityBloc, CommunityState>(
       builder: (BuildContext context, CommunityState state) {
         //show empty container if there is no cover media
-        if (state.profileDetailsResponse?.userCoverMedia?.isEmpty ?? true) {
+        if (state.communityDetailsResponse?.communityCoverMedia?.isEmpty ??
+            true) {
           return Container(
             height: 120,
             decoration: BoxDecoration(
@@ -35,11 +36,12 @@ class CommunityPageCoverVideoView extends StatelessWidget {
               aspectRatio: 16 / 9,
               child: PageView.builder(
                 controller: controller,
-                itemCount:
-                    state.profileDetailsResponse?.userCoverMedia?.length ?? 0,
+                itemCount: state.communityDetailsResponse?.communityCoverMedia
+                        ?.length ??
+                    0,
                 itemBuilder: (BuildContext context, int index) {
-                  final UserCoverMedia? coverMedia =
-                      state.profileDetailsResponse?.userCoverMedia?[index];
+                  final CommunityCoverMedia? coverMedia = state
+                      .communityDetailsResponse?.communityCoverMedia?[index];
                   if (coverMedia?.isVideo == true) {
                     return _CoverVideoUi(
                       videoUrl: coverMedia?.videoUrl,
@@ -65,8 +67,9 @@ class CommunityPageCoverVideoView extends StatelessWidget {
               child: UnconstrainedBox(
                 child: SmoothPageIndicator(
                   controller: controller, // PageController
-                  count:
-                      state.profileDetailsResponse?.userCoverMedia?.length ?? 0,
+                  count: state.communityDetailsResponse?.communityCoverMedia
+                          ?.length ??
+                      0,
                   effect: const WormEffect(
                     dotWidth: 8.0,
                     dotHeight: 8.0,

@@ -1,51 +1,42 @@
 part of 'bloc.dart';
 
 class CommunityState extends Equatable {
-  final String? userUid;
+  final String? communityUid;
   final bool isEditMode;
-  final ProfileDetailsResponse? profileDetailsResponse;
-  final List<VideoPost?> userVideoPosts;
-  final List<Flick?> userFlicks;
-  final List<Memory?> userMemories;
-  final List<OfferPost?> userOffers;
+  final CommunityProfileDataResponse? communityDetailsResponse;
+  final List<VideoPost?> communityVideoPosts;
+
+  final List<Memory?> communityMemories;
 
   const CommunityState({
-    this.userUid,
+    this.communityUid,
     this.isEditMode = false,
-    this.profileDetailsResponse,
-    this.userVideoPosts = const [],
-    this.userFlicks = const [],
-    this.userMemories = const [],
-    this.userOffers = const [],
+    this.communityDetailsResponse,
+    this.communityVideoPosts = const [],
+    this.communityMemories = const [],
   });
 
   @override
   List<Object?> get props => <Object?>[
-        profileDetailsResponse,
-        userVideoPosts,
-        userFlicks,
-        userMemories,
-        userOffers,
+        communityDetailsResponse,
+        communityVideoPosts,
+        communityMemories,
       ];
 
   CommunityState copyWith({
-    String? userUid,
+    String? communityUid,
     bool? isEditMode,
-    ProfileDetailsResponse? profileDetailsResponse,
-    List<VideoPost>? userVideoPosts,
-    List<Flick>? userFlicks,
-    List<Memory>? userMemories,
-    List<OfferPost>? userOffers,
+    CommunityProfileDataResponse? communityDetailsResponse,
+    List<VideoPost>? communityVideoPosts,
+    List<Memory>? communityMemories,
   }) {
     return CommunityState(
-      userUid: userUid ?? this.userUid,
+      communityUid: communityUid ?? this.communityUid,
       isEditMode: isEditMode ?? this.isEditMode,
-      profileDetailsResponse:
-          profileDetailsResponse ?? this.profileDetailsResponse,
-      userVideoPosts: userVideoPosts ?? this.userVideoPosts,
-      userFlicks: userFlicks ?? this.userFlicks,
-      userMemories: userMemories ?? this.userMemories,
-      userOffers: userOffers ?? this.userOffers,
+      communityDetailsResponse:
+          communityDetailsResponse ?? this.communityDetailsResponse,
+      communityVideoPosts: communityVideoPosts ?? this.communityVideoPosts,
+      communityMemories: communityMemories ?? this.communityMemories,
     );
   }
 }

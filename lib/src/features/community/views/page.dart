@@ -32,9 +32,7 @@ import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/cover_media.dart';
-import 'package:whatsevr_app/src/features/community/views/widgets/flicks.dart';
-import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
-import 'package:whatsevr_app/src/features/community/views/widgets/pdfs.dart';
+
 import 'package:whatsevr_app/src/features/community/views/widgets/services.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/videos.dart';
 
@@ -55,7 +53,7 @@ class CommunityPage extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => CommunityBloc()
         ..add(InitialEvent(
-          accountPageArgument: pageArgument,
+          communityPageArgument: pageArgument,
         )),
       child: BlocBuilder<CommunityBloc, CommunityState>(
         builder: (BuildContext context, CommunityState state) {
@@ -66,7 +64,7 @@ class CommunityPage extends StatelessWidget {
                 await Future<void>.delayed(const Duration(seconds: 2));
               },
               child: ContentMask(
-                showMask: state.profileDetailsResponse == null,
+                showMask: state.communityDetailsResponse == null,
                 child: ListView(
                   shrinkWrap: true,
                   children: <Widget>[
@@ -79,7 +77,7 @@ class CommunityPage extends StatelessWidget {
                           left: 12,
                           child: GestureDetector(
                             onTap: () {
-                              if (state.userMemories.isEmpty) {
+                              if (state.communityMemories.isEmpty) {
                                 return;
                               }
                               showAppModalSheet(
@@ -87,14 +85,14 @@ class CommunityPage extends StatelessWidget {
                                 child: SizedBox(
                                   height: 220,
                                   child: ListView.separated(
-                                    itemCount: state.userMemories.length,
+                                    itemCount: state.communityMemories.length,
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (
                                       BuildContext context,
                                       int index,
                                     ) {
                                       final Memory? memory =
-                                          state.userMemories[index];
+                                          state.communityMemories[index];
                                       return GestureDetector(
                                         onTap: () {
                                           showMemoriesPlayer(
@@ -102,20 +100,20 @@ class CommunityPage extends StatelessWidget {
                                             uiMemoryGroups: [
                                               UiMemoryGroup(
                                                 userUid: state
-                                                    .profileDetailsResponse
-                                                    ?.userInfo
+                                                    .communityDetailsResponse
+                                                    ?.communityInfo
                                                     ?.uid,
                                                 username: state
-                                                    .profileDetailsResponse
-                                                    ?.userInfo
+                                                    .communityDetailsResponse
+                                                    ?.communityInfo
                                                     ?.username,
                                                 profilePicture: state
-                                                    .profileDetailsResponse
-                                                    ?.userInfo
+                                                    .communityDetailsResponse
+                                                    ?.communityInfo
                                                     ?.profilePicture,
                                                 uiMemoryGroupItems: [
-                                                  for (Memory? memory
-                                                      in state.userMemories)
+                                                  for (Memory? memory in state
+                                                      .communityMemories)
                                                     UiMemoryGroupItems(
                                                       isImage: memory?.isImage,
                                                       imageUrl:
@@ -208,28 +206,29 @@ class CommunityPage extends StatelessWidget {
                               showPhotoPreviewDialog(
                                 context: context,
                                 photoUrl:
-                                    '${state.profileDetailsResponse?.userInfo?.profilePicture}',
+                                    '${state.communityDetailsResponse?.communityInfo?.profilePicture}',
                                 appBarTitle:
-                                    '${state.profileDetailsResponse?.userInfo?.username}',
+                                    '${state.communityDetailsResponse?.communityInfo?.username}',
                               );
                             },
                             child: AdvancedAvatar(
                               size: 65,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                color: Colors.white,
                                 border: Border.all(
-                                  color: state.userMemories.isEmpty
+                                  color: state.communityMemories.isEmpty
                                       ? Colors.white
                                       : Colors.blue,
                                   width: 3.0,
                                 ),
                               ),
                               child: Padding(
-                                padding: state.userMemories.isEmpty
+                                padding: state.communityMemories.isEmpty
                                     ? EdgeInsets.zero
                                     : const EdgeInsets.all(2),
                                 child: ExtendedImage.network(
-                                  state.profileDetailsResponse?.userInfo
+                                  state.communityDetailsResponse?.communityInfo
                                           ?.profilePicture ??
                                       MockData.blankProfileAvatar,
                                   shape: BoxShape.circle,
@@ -246,7 +245,7 @@ class CommunityPage extends StatelessWidget {
                       const Gap(8),
                       PadHorizontal(
                         child: Text(
-                          '${state.profileDetailsResponse?.userInfo?.name}',
+                          '${state.communityDetailsResponse?.communityInfo?.title}',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -265,7 +264,7 @@ class CommunityPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      ' @${state.profileDetailsResponse?.userInfo?.username}',
+                                      ' @${state.communityDetailsResponse?.communityInfo?.username}',
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey,
@@ -301,37 +300,22 @@ class CommunityPage extends StatelessWidget {
                                           ListTile(
                                             leading: const Icon(Icons.edit),
                                             title: const Text(
-                                              'Edit Profile',
+                                              'Manage Community',
                                             ),
                                             onTap: () async {
                                               Navigator.pop(context);
-                                              await AppNavigationService
-                                                  .newRoute(
-                                                RoutesName.updateProfile,
-                                                extras:
-                                                    ProfileUpdatePageArgument(
-                                                  profileDetailsResponse: state
-                                                      .profileDetailsResponse,
-                                                ),
-                                              );
-                                              context.read<CommunityBloc>().add(
-                                                    LoadCommunityData(),
-                                                  );
-                                            },
-                                          ),
-                                          ListTile(
-                                            leading: const Icon(
-                                              Icons.settings,
-                                            ),
-                                            title: const Text(
-                                              'Manage Community',
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              AppNavigationService.newRoute(
-                                                RoutesName.settings,
-                                                extras: SettingsPageArgument(),
-                                              );
+                                              // await AppNavigationService
+                                              //     .newRoute(
+                                              //   RoutesName.updateProfile,
+                                              //   extras:
+                                              //       ProfileUpdatePageArgument(
+                                              //     profileDetailsResponse: state
+                                              //         .communityDetailsResponse,
+                                              //   ),
+                                              // );
+                                              // context.read<CommunityBloc>().add(
+                                              //       LoadCommunityData(),
+                                              //     );
                                             },
                                           ),
                                         ],
@@ -351,8 +335,8 @@ class CommunityPage extends StatelessWidget {
                         onTap: () {
                           showUserRelationsDialog(
                             context: context,
-                            userUid:
-                                (state.profileDetailsResponse?.userInfo?.uid)!,
+                            userUid: (state
+                                .communityDetailsResponse?.communityInfo?.uid)!,
                           );
                         },
                         child: Container(
@@ -365,7 +349,7 @@ class CommunityPage extends StatelessWidget {
                             color: context.whatsevrTheme.shadow,
                           ),
                           child: Text(
-                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)} Members',
+                            '${formatCountToKMBTQ(state.communityDetailsResponse?.communityInfo?.totalMembers)} Members',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -397,7 +381,7 @@ class CommunityPage extends StatelessWidget {
                                 color: Colors.blue,
                                 onPressed: () {},
                                 child: const Text(
-                                  'Message',
+                                  'Chat',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
@@ -502,10 +486,6 @@ class CommunityPage extends StatelessWidget {
                               ('Services', CommunityPageServicesView()),
                               ('Media', Text('Media')),
                               ('Videos', CommunityPageVideosView()),
-                              ('Flicks', CommunityPageFlicksView()),
-                              ('Offerings', CommunityPageOffersView()),
-                              ('Pdf', CommunityPagePdfsView()),
-                              ('Tags', Text('Tags')),
                             ],
                           ),
                           Gap(50),

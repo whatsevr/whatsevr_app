@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../../config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
+
 import '../../bloc/bloc.dart';
 
 class CommunityPageServicesView extends StatelessWidget {
@@ -15,8 +16,8 @@ class CommunityPageServicesView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final UserService? userService =
-                state.profileDetailsResponse?.userServices?[index];
+            final CommunityService? userService =
+                state.communityDetailsResponse?.communityServices?[index];
             return Row(
               children: <Widget>[
                 Expanded(
@@ -47,7 +48,8 @@ class CommunityPageServicesView extends StatelessWidget {
           separatorBuilder: (BuildContext context, int index) {
             return const Divider();
           },
-          itemCount: state.profileDetailsResponse?.userServices?.length ?? 0,
+          itemCount:
+              state.communityDetailsResponse?.communityServices?.length ?? 0,
         );
       },
     );

@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
@@ -30,9 +32,8 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
   ) async {
     try {
       emit(state.copyWith(
-        isEditMode: event.accountPageArgument?.isEditMode ?? false,
-        // userUid: event.accountPageArgument?.communityUid ??
-        userUid: AuthUserDb.getLastLoggedUserUid(),
+        isEditMode: event.communityPageArgument?.isEditMode ?? false,
+        communityUid: event.communityPageArgument?.communityUid,
       ));
 
       add(LoadCommunityData());
@@ -44,28 +45,24 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
   FutureOr<void> _onLoadCommunityData(
       LoadCommunityData event, Emitter<CommunityState> emit) async {
     try {
-      final ProfileDetailsResponse? profileDetailsResponse =
-          await UsersApi.getProfileDetails(userUid: state.userUid!);
+      final CommunityProfileDataResponse? profileDetailsResponse =
+          await CommunityApi.getCommunityDetails(
+              communityUid: state.communityUid!);
       emit(
         state.copyWith(
-          profileDetailsResponse: profileDetailsResponse,
+          communityDetailsResponse: profileDetailsResponse,
         ),
       );
       final UserVideoPostsResponse? userVideoPostsResponse =
-          await UsersApi.getVideoPosts(userUid: state.userUid!);
-      final UserFlicksResponse? userFlicksResponse =
-          await UsersApi.getFLicks(userUid: state.userUid!);
+          await UsersApi.getVideoPosts(userUid: state.communityUid!);
+
       final UserMemoriesResponse? userMemoriesResponse =
-          await UsersApi.getMemories(userUid: state.userUid!);
-      final UserOffersResponse? userOffersResponse =
-          await UsersApi.getOfferPosts(userUid: state.userUid!);
+          await UsersApi.getMemories(userUid: state.communityUid!);
 
       emit(
         state.copyWith(
-          userVideoPosts: userVideoPostsResponse?.videoPosts ?? [],
-          userFlicks: userFlicksResponse?.flicks ?? [],
-          userMemories: userMemoriesResponse?.memories ?? [],
-          userOffers: userOffersResponse?.offerPosts ?? [],
+          communityVideoPosts: userVideoPostsResponse?.videoPosts ?? [],
+          communityMemories: userMemoriesResponse?.memories ?? [],
         ),
       );
     } catch (e, s) {

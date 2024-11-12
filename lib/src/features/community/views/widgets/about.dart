@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../../../../config/api/response_model/profile_details.dart';
+import '../../../../../config/api/response_model/community/community_details.dart';
 import '../../../../../utils/conversion.dart';
 import '../../bloc/bloc.dart';
 
@@ -20,169 +20,27 @@ class CommunityPageAboutView extends StatelessWidget {
         return Column(
           children: <Widget>[
             const Gap(12),
-            if (state.profileDetailsResponse?.userInfo?.isPortfolio ==
-                true) ...<Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: context.whatsevrTheme.surface,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Gap(8),
-                        const Text(
-                          'Status',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Text(
-                          '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const Gap(8),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: context.whatsevrTheme.surface,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Gap(8),
-                        const Row(
-                          children: <StatelessWidget>[
-                            Text(
-                              'Serve',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              'All Services>>',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                        Gap(8),
-                        Wrap(
-                          spacing: 8,
-                          children: <Widget>[
-                            for (UserService? service
-                                in state.profileDetailsResponse?.userServices ??
-                                    <UserService?>[])
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  '${service?.title}',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                          ],
-                        ),
-                        const Gap(8),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
             for ((String label, String info) itm in <(String, String)>[
-              if (state.profileDetailsResponse?.userInfo?.bio?.isNotEmpty ??
+              if (state.communityDetailsResponse?.communityInfo?.bio
+                      ?.isNotEmpty ??
                   false)
-                ('Bio', '${state.profileDetailsResponse?.userInfo?.bio}'),
-              if (state.profileDetailsResponse?.userInfo?.address?.isNotEmpty ??
+                (
+                  'Bio',
+                  '${state.communityDetailsResponse?.communityInfo?.bio}'
+                ),
+              if (state.communityDetailsResponse?.communityInfo?.location
+                      ?.isNotEmpty ??
                   false)
                 (
                   'Address',
-                  '${state.profileDetailsResponse?.userInfo?.address}'
+                  '${state.communityDetailsResponse?.communityInfo?.location}'
                 ),
-              if (state.profileDetailsResponse?.userEducations?.isNotEmpty ??
-                  false)
+              if (state.communityDetailsResponse?.communityInfo?.createdAt !=
+                  null)
                 (
-                  'Education',
-                  '${state.profileDetailsResponse?.userEducations?.map((UserEducation? e) => '${e?.title} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
+                  'Created On',
+                  '${ddMonthyy(state.communityDetailsResponse?.communityInfo?.createdAt)}'
                 ),
-              if (state.profileDetailsResponse?.userWorkExperiences
-                      ?.isNotEmpty ??
-                  false)
-                (
-                  'Working Experience',
-                  '${state.profileDetailsResponse?.userWorkExperiences?.map((UserWorkExperience? e) => '${e?.companyName} - ${e?.designation} (${DateFormat('yyyy').format(e!.endDate!)})').join(', ')}',
-                ),
-              if (state.profileDetailsResponse?.userInfo?.publicEmailId
-                      ?.isNotEmpty ??
-                  false)
-                (
-                  'Email',
-                  (state.profileDetailsResponse?.userInfo?.publicEmailId ?? '')
-                ),
-              if (state.profileDetailsResponse?.userInfo?.dob != null)
-                (
-                  'Birthday',
-                  '${DateFormat('dd MMM,yyyy').format(state.profileDetailsResponse!.userInfo!.dob!)} (Age: ${calculateAgeInYearsAndMonth(state.profileDetailsResponse!.userInfo!.dob!)})',
-                ),
-              if (state.profileDetailsResponse?.userInfo?.registeredOn != null)
-                (
-                  'Join On',
-                  '${ddMonthyy(state.profileDetailsResponse?.userInfo?.registeredOn)}'
-                ),
-              (
-                state.profileDetailsResponse?.userInfo?.isPortfolio == true
-                    ? 'Portfolio link'
-                    : 'Account link',
-                'https://app.whatsevr.com/${state.profileDetailsResponse?.userInfo?.username}'
-              ),
-              if (state.profileDetailsResponse?.userInfo?.isPortfolio == true &&
-                  state.profileDetailsResponse?.userInfo?.portfolioCreatedAt !=
-                      null)
-                (
-                  'Portfolio Created On',
-                  '${ddMonthyy(state.profileDetailsResponse?.userInfo?.portfolioCreatedAt)}'
-                ),
-              if (state.profileDetailsResponse?.userInfo?.portfolioDescription
-                      ?.isNotEmpty ??
-                  false)
-                (
-                  'Description',
-                  '${state.profileDetailsResponse?.userInfo?.portfolioDescription}'
-                ),
-              (
-                'Total Connection',
-                '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}'
-              ),
               ('Total Post', '0'),
             ])
               ListTile(

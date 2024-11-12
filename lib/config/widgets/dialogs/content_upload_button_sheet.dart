@@ -66,7 +66,7 @@ class _Ui extends StatelessWidget {
             children: <Widget>[
               Iconify(Ic.round_history_toggle_off),
               Gap(8),
-              Text('Post Memories'),
+              Text('Create Memory'),
             ],
           ),
         ),
@@ -91,7 +91,7 @@ class _Ui extends StatelessWidget {
             children: <Widget>[
               Iconify(Mdi.camera_image),
               Gap(8),
-              Text('Upload Photo'),
+              Text('Upload Photos'),
             ],
           ),
         ),
@@ -116,36 +116,39 @@ class _Ui extends StatelessWidget {
             children: <Widget>[
               Iconify(Ic.sharp_slow_motion_video),
               Gap(8),
-              Text('Create Wtv Video'),
+              Text('Create Video Post'),
             ],
           ),
         ),
-        const Gap(8),
-        MaterialButton(
-          elevation: 0,
-          color: Colors.blueGrey.withOpacity(0.2),
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-            AppNavigationService.newRoute(
-              RoutesName.createFlick,
-              extras: CreateFlickPostPageArgument(
-                postCreatorType: postCreatorType,
-              ),
-            );
-          },
-          child: const Row(
-            children: <Widget>[
-              Iconify(Pepicons.play_print),
-              Gap(8),
-              Text('Create Flick'),
-            ],
-          ),
-        ),
-        if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...<Widget>[
+        if (postCreatorType == EnumPostCreatorType.ACCOUNT ||
+            postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
+          const Gap(8),
+          MaterialButton(
+            elevation: 0,
+            color: Colors.blueGrey.withOpacity(0.2),
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            onPressed: () async {
+              Navigator.pop(context);
+              AppNavigationService.newRoute(
+                RoutesName.createFlick,
+                extras: CreateFlickPostPageArgument(
+                  postCreatorType: postCreatorType,
+                ),
+              );
+            },
+            child: const Row(
+              children: <Widget>[
+                Iconify(Pepicons.play_print),
+                Gap(8),
+                Text('Create Flick'),
+              ],
+            ),
+          )
+        ],
+        if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...<Widget>[
           const Gap(8),
           MaterialButton(
             elevation: 0,
@@ -172,7 +175,7 @@ class _Ui extends StatelessWidget {
             ),
           ),
         ],
-        if (postCreatorType != EnumPostCreatorType.ACCOUNT) ...<Widget>[
+        if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...<Widget>[
           const Gap(8),
           MaterialButton(
             elevation: 0,

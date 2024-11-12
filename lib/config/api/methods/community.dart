@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../client.dart';
 import '../external/models/business_validation_exception.dart';
 import '../requests_model/community/create_community.dart';
+import '../response_model/community/community_details.dart';
 import '../response_model/community/top_communities.dart';
 import '../response_model/community/user_communities.dart';
 
@@ -51,6 +52,23 @@ class CommunityApi {
       );
       if (response.data != null) {
         return UserCommunitiesResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<CommunityProfileDataResponse?> getCommunityDetails({
+    required String communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-community-profile-data',
+        queryParameters: <String, dynamic>{'community_uid': communityUid},
+      );
+      if (response.data != null) {
+        return CommunityProfileDataResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

@@ -18,7 +18,7 @@ class CommunityPageVideosView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final VideoPost? userVideoPost = state.userVideoPosts[index];
+            final VideoPost? userVideoPost = state.communityVideoPosts[index];
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -137,7 +137,7 @@ class CommunityPageVideosView extends StatelessWidget {
           separatorBuilder: (BuildContext context, int index) {
             return const Gap(8);
           },
-          itemCount: state.userVideoPosts.length,
+          itemCount: state.communityVideoPosts.length,
         );
       },
     );
