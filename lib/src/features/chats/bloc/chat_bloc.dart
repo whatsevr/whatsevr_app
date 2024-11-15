@@ -14,12 +14,14 @@ import 'package:whatsevr_app/src/features/chats/models/user.dart';
 part 'chat_event.dart';
 part 'chat_state.dart';
 
-class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
+class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final SupabaseClient _supabase = SupabaseClient(
-      'https://dxvbdpxfzdpgiscphujy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dmJkcHhmemRwZ2lzY3BodWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3ODQ3NzksImV4cCI6MjAyNjM2MDc3OX0.9I-obmOReMg-jCrgzpGHTNVqtHSp8VCh1mYyaTjFG-A',);
+    'https://dxvbdpxfzdpgiscphujy.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dmJkcHhmemRwZ2lzY3BodWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3ODQ3NzksImV4cCI6MjAyNjM2MDc3OX0.9I-obmOReMg-jCrgzpGHTNVqtHSp8VCh1mYyaTjFG-A',
+  );
   final String _currentUserUid;
-  StreamSubscription? _chatSubscription;
+  StreamSubscription? _chatSubscription1;
+  StreamSubscription? _chatSubscription2;
   StreamSubscription? _messageSubscription;
   StreamSubscription? _typingSubscription;
   final _typingStatusController = PublishSubject<SetTypingStatus>();
@@ -45,10 +47,36 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
         .listen((event) => _updateTypingStatus(event));
   }
   Future<void> _onInitialEvent(
-      InitialEvent event, Emitter<ChatState> emit,) async {
+    InitialEvent event,
+    Emitter<ChatState> emit,
+  ) async {
     print('Initializing ChatBloc');
 
-    add(LoadChats());
+    await _chatSubscription1?.cancel();
+
+    await _chatSubscription2?.cancel();
+    _chatSubscription1 = _supabase
+        .from('private_chats')
+        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
+        .eq('user1_uid', _currentUserUid)
+        .order('last_message_at', ascending: false)
+        .listen(
+          (chats) => add(LoadChats()),
+          onError: (error) {
+            highLevelCatch(error, StackTrace.current);
+          },
+        );
+    _chatSubscription2 = _supabase
+        .from('private_chats')
+        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
+        .eq('user2_uid', _currentUserUid)
+        .order('last_message_at', ascending: false)
+        .listen(
+          (chats) => add(LoadChats()),
+          onError: (error) {
+            highLevelCatch(error, StackTrace.current);
+          },
+        );
   }
 
   Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
@@ -57,44 +85,37 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       final response = await _supabase
           .from('private_chats')
           .select(
-              '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',)
+            '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',
+          )
+          .or('user1_uid.eq.$_currentUserUid,user2_uid.eq.$_currentUserUid')
           .order('last_message_at', ascending: false);
 
       final List<PrivateChat> privateChats =
           response.map((row) => PrivateChat.fromMap(row)).toList();
 
-      emit(state.copyWith(
-        privateChats: privateChats,
-      ),);
+      emit(
+        state.copyWith(
+          privateChats: privateChats,
+        ),
+      );
       // Cancel any existing subscription
-      await _chatSubscription?.cancel();
-
-      _chatSubscription = _supabase
-          .from('private_chats')
-          .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-          .order('last_message_at', ascending: false)
-          .map((rows) {
-            return rows.map((row) => PrivateChat.fromMap(row)).toList();
-          })
-          .listen(
-            (chats) => add(UpdateChats(chats)),
-            onError: (error) {
-              highLevelCatch(error, StackTrace.current);
-            },
-          );
     } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
 
   Future<void> _onLoadMessages(
-      LoadMessages event, Emitter<ChatState> emit,) async {
+    LoadMessages event,
+    Emitter<ChatState> emit,
+  ) async {
     try {
       if (!event.loadMore) {
-        emit(state.copyWith(
-          messageStatus: MessageStatus.loading,
-          messages: [],
-        ),);
+        emit(
+          state.copyWith(
+            messageStatus: MessageStatus.loading,
+            messages: [],
+          ),
+        );
       }
 
       // Cancel existing subscription
@@ -116,14 +137,18 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
             },
           );
     } catch (error) {
-      emit(state.copyWith(
-        messageStatus: MessageStatus.error,
-      ),);
+      emit(
+        state.copyWith(
+          messageStatus: MessageStatus.error,
+        ),
+      );
     }
   }
 
   Future<void> _onSendMessage(
-      SendMessage event, Emitter<ChatState> emit,) async {
+    SendMessage event,
+    Emitter<ChatState> emit,
+  ) async {
     try {
       emit(state.copyWith(messageStatus: MessageStatus.sending));
 
@@ -172,16 +197,20 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
           .from('chats')
           .update({'last_message': response}).eq('uid', event.chatId);
 
-      emit(state.copyWith(
-        messageStatus: MessageStatus.sent,
-        messages: newMessages,
-      ),);
+      emit(
+        state.copyWith(
+          messageStatus: MessageStatus.sent,
+          messages: newMessages,
+        ),
+      );
     } catch (error) {
       // Remove optimistic message on error
 
-      emit(state.copyWith(
-        messageStatus: MessageStatus.error,
-      ),);
+      emit(
+        state.copyWith(
+          messageStatus: MessageStatus.error,
+        ),
+      );
     }
   }
 
@@ -195,14 +224,18 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
           .from('chats')
           .select('*, chat_participants(*)')
           .eq('is_group', false)
-          .contains('chat_participants',
-              [_currentUserUid, event.otherUserId],).maybeSingle();
+          .contains(
+        'chat_participants',
+        [_currentUserUid, event.otherUserId],
+      ).maybeSingle();
 
       if (existingChat != null) {
         final chat = PrivateChat.fromMap(existingChat);
-        emit(state.copyWith(
-          selectedChat: chat,
-        ),);
+        emit(
+          state.copyWith(
+            selectedChat: chat,
+          ),
+        );
         return;
       }
 
@@ -231,9 +264,11 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       ]);
 
       final chat = PrivateChat.fromMap(response);
-      emit(state.copyWith(
-        selectedChat: chat,
-      ),);
+      emit(
+        state.copyWith(
+          selectedChat: chat,
+        ),
+      );
     } catch (error) {}
   }
 
@@ -255,19 +290,23 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
       // Add participants
       final participants = event.participantIds
-          .map((userId) => {
-                'chat_id': response['uid'], // Ensure 'uid' is used
-                'user_id': userId,
-                'is_admin': userId == _currentUserUid, // Use  _currentUserUid,
-              },)
+          .map(
+            (userId) => {
+              'chat_id': response['uid'], // Ensure 'uid' is used
+              'user_id': userId,
+              'is_admin': userId == _currentUserUid, // Use  _currentUserUid,
+            },
+          )
           .toList();
 
       await _supabase.from('chat_participants').insert(participants);
 
       final chat = PrivateChat.fromMap(response);
-      emit(state.copyWith(
-        selectedChat: chat,
-      ),);
+      emit(
+        state.copyWith(
+          selectedChat: chat,
+        ),
+      );
     } catch (error) {}
   }
 
@@ -321,10 +360,12 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       final currentMessages = state.messages;
 
       // Update state with message removed
-      emit(state.copyWith(
-        messages:
-            state.messages.where((m) => m.uid != event.messageId).toList(),
-      ),);
+      emit(
+        state.copyWith(
+          messages:
+              state.messages.where((m) => m.uid != event.messageId).toList(),
+        ),
+      );
 
       // Actually delete the message
       await _supabase
@@ -363,9 +404,11 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       );
 
       // Update state
-      emit(state.copyWith(
-        messages: updatedMessages,
-      ),);
+      emit(
+        state.copyWith(
+          messages: updatedMessages,
+        ),
+      );
 
       // Actually update the message
       await _supabase
@@ -386,23 +429,29 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
   }
 
   void _onUpdateChats(UpdateChats event, Emitter<ChatState> emit) {
-    emit(state.copyWith(
-      privateChats: event.chats,
-    ),);
+    emit(
+      state.copyWith(
+        privateChats: event.chats,
+      ),
+    );
   }
 
   void _onUpdateMessages(UpdateMessages event, Emitter<ChatState> emit) {
     if (event.isLoadMore) {
-      emit(state.copyWith(
-        messages: [...state.messages, ...event.messages],
-        messageStatus: MessageStatus.sent,
-        isLoadingMore: false,
-      ),);
+      emit(
+        state.copyWith(
+          messages: [...state.messages, ...event.messages],
+          messageStatus: MessageStatus.sent,
+          isLoadingMore: false,
+        ),
+      );
     } else {
-      emit(state.copyWith(
-        messages: event.messages,
-        messageStatus: MessageStatus.sent,
-      ),);
+      emit(
+        state.copyWith(
+          messages: event.messages,
+          messageStatus: MessageStatus.sent,
+        ),
+      );
     }
   }
 
@@ -430,7 +479,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() {
-    _chatSubscription?.cancel();
+    _chatSubscription1?.cancel();
     _messageSubscription?.cancel();
     _typingSubscription?.cancel();
     _typingStatusController.close();
