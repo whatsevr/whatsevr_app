@@ -22,7 +22,7 @@ class ChatsPageChatsView extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final chat = state.privateChats[index];
               final otherUser = context
-                  .watch<ChatBloc>()
+                  .read<ChatBloc>()
                   .getTheOtherUser(chat.user1, chat.user2);
               return ListTile(
                 leading: CircleAvatar(

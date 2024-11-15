@@ -118,7 +118,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     } catch (error) {
       emit(state.copyWith(
         messageStatus: MessageStatus.error,
-        error: error.toString(),
       ));
     }
   }
@@ -182,7 +181,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
       emit(state.copyWith(
         messageStatus: MessageStatus.error,
-        error: error.toString(),
       ));
     }
   }
@@ -236,11 +234,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       emit(state.copyWith(
         selectedChat: chat,
       ));
-    } catch (error) {
-      emit(state.copyWith(
-        error: error.toString(),
-      ));
-    }
+    } catch (error) {}
   }
 
   Future<void> _onCreateGroupChat(
@@ -274,11 +268,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       emit(state.copyWith(
         selectedChat: chat,
       ));
-    } catch (error) {
-      emit(state.copyWith(
-        error: error.toString(),
-      ));
-    }
+    } catch (error) {}
   }
 
   Future<void> _onLoadAvailableUsers(
@@ -294,11 +284,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       final users = response.map((row) => WhatsevrUser.fromMap(row)).toList();
 
       emit(state.copyWith(availableUsers: users));
-    } catch (error) {
-      emit(state.copyWith(
-        error: error.toString(),
-      ));
-    }
+    } catch (error) {}
   }
 
   void _onSelectChat(SelectChat event, Emitter<ChatState> emit) {
@@ -351,9 +337,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
           ); // Ensure user owns message
     } catch (error) {
       // Restore messages on error
-      emit(state.copyWith(
-        error: error.toString(),
-      ));
     }
   }
 
@@ -399,9 +382,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
           ); // Ensure user owns message
     } catch (error) {
       // Restore messages on error
-      emit(state.copyWith(
-        error: error.toString(),
-      ));
     }
   }
 

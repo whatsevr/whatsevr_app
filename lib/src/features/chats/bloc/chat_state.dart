@@ -16,7 +16,7 @@ class ChatState extends Equatable {
   final Map<String, int> unreadCounts;
   final List<WhatsevrUser> availableUsers;
   final MessageStatus messageStatus;
-  final String? error;
+
   final bool isLoadingMore;
   final bool hasReachedEnd;
   final Map<String, bool> messagesSendingStatus;
@@ -30,7 +30,6 @@ class ChatState extends Equatable {
     this.unreadCounts = const {},
     this.availableUsers = const [],
     this.messageStatus = MessageStatus.initial,
-    this.error,
     this.isLoadingMore = false,
     this.hasReachedEnd = false,
     this.messagesSendingStatus = const {},
@@ -45,7 +44,6 @@ class ChatState extends Equatable {
     Map<String, int>? unreadCounts,
     List<WhatsevrUser>? availableUsers,
     MessageStatus? messageStatus,
-    String? error,
     bool? isLoadingMore,
     bool? hasReachedEnd,
     Map<String, bool>? messagesSendingStatus,
@@ -59,7 +57,6 @@ class ChatState extends Equatable {
       unreadCounts: unreadCounts ?? this.unreadCounts,
       availableUsers: availableUsers ?? this.availableUsers,
       messageStatus: messageStatus ?? this.messageStatus,
-      error: error,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       messagesSendingStatus:
@@ -77,7 +74,6 @@ class ChatState extends Equatable {
       'unreadCounts': unreadCounts,
       'availableUsers': availableUsers.map((e) => e.toJson()).toList(),
       'messageStatus': messageStatus.index,
-      'error': error,
       'isLoadingMore': isLoadingMore,
       'hasReachedEnd': hasReachedEnd,
       'messagesSendingStatus': messagesSendingStatus,
@@ -104,7 +100,6 @@ class ChatState extends Equatable {
           .map((e) => WhatsevrUser.fromJson(e))
           .toList(),
       messageStatus: MessageStatus.values[json['messageStatus']],
-      error: json['error'],
       isLoadingMore: json['isLoadingMore'],
       hasReachedEnd: json['hasReachedEnd'],
       messagesSendingStatus:
@@ -123,7 +118,6 @@ class ChatState extends Equatable {
         unreadCounts,
         availableUsers,
         messageStatus,
-        error,
         isLoadingMore,
         hasReachedEnd,
         messagesSendingStatus,
@@ -137,7 +131,7 @@ class ChatState extends Equatable {
     selectedChat: ${selectedChat?.uid},
     messages: ${messages.length} messages,
     messageStatus: $messageStatus,
-    error: $error,
+ 
     isLoadingMore: $isLoadingMore,
     hasReachedEnd: $hasReachedEnd
   }''';
