@@ -1,0 +1,456 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase/supabase.dart' hide User;
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:retry/retry.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:whatsevr_app/src/features/chats/models/private_chat.dart';
+import 'package:whatsevr_app/src/features/chats/models/message.dart';
+import 'package:whatsevr_app/src/features/chats/models/user.dart';
+part 'chat_event.dart';
+part 'chat_state.dart';
+
+class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
+  final SupabaseClient _supabase = SupabaseClient(
+      'https://dxvbdpxfzdpgiscphujy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dmJkcHhmemRwZ2lzY3BodWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3ODQ3NzksImV4cCI6MjAyNjM2MDc3OX0.9I-obmOReMg-jCrgzpGHTNVqtHSp8VCh1mYyaTjFG-A');
+  final String _currentUserUid;
+  StreamSubscription? _chatSubscription;
+  StreamSubscription? _messageSubscription;
+  StreamSubscription? _typingSubscription;
+  final _typingStatusController = PublishSubject<SetTypingStatus>();
+
+  ChatBloc(this._currentUserUid) : super(const ChatState()) {
+    on<LoadChats>(_onLoadChats);
+    on<LoadMessages>(_onLoadMessages);
+    on<SendMessage>(_onSendMessage);
+    on<CreateDirectChat>(_onCreateDirectChat);
+    on<CreateGroupChat>(_onCreateGroupChat);
+    on<SelectChat>(_onSelectChat);
+    on<SetTypingStatus>(_onSetTypingStatus);
+    on<DeleteMessage>(_onDeleteMessage);
+    on<EditMessage>(_onEditMessage);
+    on<LoadAvailableUsers>(_onLoadAvailableUsers);
+    on<UpdateChats>(_onUpdateChats);
+    on<UpdateMessages>(_onUpdateMessages);
+    on<UpdateTypingUsers>(_onUpdateTypingUsers);
+    on<ChatError>(_onChatError);
+
+    _typingStatusController
+        .debounceTime(Duration(milliseconds: 500))
+        .listen((event) => _updateTypingStatus(event));
+  }
+
+  Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
+    try {
+      emit(state.copyWith(status: ChatStatus.loading));
+
+      // Cancel any existing subscription
+      await _chatSubscription?.cancel();
+
+      _chatSubscription = _supabase
+          .from('private_chats')
+          .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
+          .order('updated_at', ascending: false)
+          .map((rows) {
+            return rows.map((row) => PrivateChat.fromMap(row)).toList();
+          })
+          .listen(
+            (chats) => add(UpdateChats(chats)),
+            onError: (error) => add(ChatError(error.toString())),
+          );
+    } catch (error) {
+      emit(state.copyWith(
+        status: ChatStatus.error,
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onLoadMessages(
+      LoadMessages event, Emitter<ChatState> emit) async {
+    try {
+      if (!event.loadMore) {
+        emit(state.copyWith(
+          messageStatus: MessageStatus.loading,
+          messages: [],
+        ));
+      }
+
+      // Cancel existing subscription
+      await _messageSubscription?.cancel();
+
+      _messageSubscription = _supabase
+          .from('chat_messages') // Ensure table name is 'chat_messages'
+          .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
+          .eq('chat_id', event.chatId)
+          .order('created_at', ascending: false)
+          .limit(50)
+          .map((rows) {
+            return rows.map((row) => ChatMessage.fromMap(row)).toList();
+          })
+          .listen(
+            (messages) => add(UpdateMessages(messages, event.loadMore)),
+            onError: (error) => add(ChatError(error.toString())),
+          );
+    } catch (error) {
+      emit(state.copyWith(
+        messageStatus: MessageStatus.error,
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onSendMessage(
+      SendMessage event, Emitter<ChatState> emit) async {
+    try {
+      emit(state.copyWith(messageStatus: MessageStatus.sending));
+
+      // Create optimistic message
+      final optimisticMessage = ChatMessage(
+        uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
+        chatType: event.chatType, // Use event.chatType
+        senderUid: _currentUserUid,
+        message: event.content,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+
+        // Add this line
+      );
+
+      // Add optimistic message to state
+      final updatedMessages = [optimisticMessage, ...state.messages];
+      emit(state.copyWith(messages: updatedMessages));
+
+      // Actually send the message with retry mechanism
+      final response = await retry(
+        () => _supabase
+            .from('chat_messages') // Ensure table name is 'chat_messages'
+            .insert({
+              'chat_type': event.chatType, // Use event.chatType
+              'sender_uid': _currentUserUid,
+              'message': event.content,
+              'created_at': DateTime.now().toIso8601String(),
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .select()
+            .single()
+            .timeout(Duration(seconds: 5)),
+        retryIf: (e) => e is TimeoutException || e is SocketException,
+      );
+
+      // Remove optimistic message and add real message
+      final realMessage = ChatMessage.fromMap(response);
+      final newMessages = [
+        ...state.messages.where((m) => m.uid != optimisticMessage.uid),
+        realMessage,
+      ];
+
+      // Update chat's last_message
+      await _supabase
+          .from('chats')
+          .update({'last_message': response}).eq('uid', event.chatId);
+
+      emit(state.copyWith(
+        messageStatus: MessageStatus.sent,
+        messages: newMessages,
+      ));
+    } catch (error) {
+      // Remove optimistic message on error
+
+      emit(state.copyWith(
+        messageStatus: MessageStatus.error,
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onCreateDirectChat(
+    CreateDirectChat event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(status: ChatStatus.loading));
+
+      // Check if chat already exists
+      final existingChat = await _supabase
+          .from('chats')
+          .select('*, chat_participants(*)')
+          .eq('is_group', false)
+          .contains('chat_participants',
+              [_currentUserUid, event.otherUserId]).maybeSingle();
+
+      if (existingChat != null) {
+        final chat = PrivateChat.fromMap(existingChat);
+        emit(state.copyWith(
+          status: ChatStatus.loaded,
+          selectedChat: chat,
+        ));
+        return;
+      }
+
+      // Create new chat
+      final response = await _supabase
+          .from('chats')
+          .insert({
+            'created_by': _currentUserUid,
+            'is_group': false,
+          })
+          .select()
+          .single();
+
+      // Add participants
+      await _supabase.from('chat_participants').insert([
+        {
+          'chat_id': response['id'],
+          'user_id': _currentUserUid,
+          'is_admin': true,
+        },
+        {
+          'chat_id': response['id'],
+          'user_id': event.otherUserId,
+          'is_admin': false,
+        },
+      ]);
+
+      final chat = PrivateChat.fromMap(response);
+      emit(state.copyWith(
+        status: ChatStatus.loaded,
+        selectedChat: chat,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: ChatStatus.error,
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onCreateGroupChat(
+    CreateGroupChat event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(status: ChatStatus.loading));
+
+      // Create new group chat
+      final response = await _supabase
+          .from('chats')
+          .insert({
+            'created_by': _currentUserUid,
+            'chat_name': event.name,
+            'is_group': true,
+          })
+          .select()
+          .single();
+
+      // Add participants
+      final participants = event.participantIds
+          .map((userId) => {
+                'chat_id': response['uid'], // Ensure 'uid' is used
+                'user_id': userId,
+                'is_admin': userId == _currentUserUid, // Use  _currentUserUid,
+              })
+          .toList();
+
+      await _supabase.from('chat_participants').insert(participants);
+
+      final chat = PrivateChat.fromMap(response);
+      emit(state.copyWith(
+        status: ChatStatus.loaded,
+        selectedChat: chat,
+      ));
+    } catch (error) {
+      emit(state.copyWith(
+        status: ChatStatus.error,
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onLoadAvailableUsers(
+    LoadAvailableUsers event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      final response = await _supabase.from('users').select().neq(
+            'id',
+            _currentUserUid,
+          );
+
+      final users = response.map((row) => WhatsevrUser.fromMap(row)).toList();
+
+      emit(state.copyWith(availableUsers: users));
+    } catch (error) {
+      emit(state.copyWith(
+        error: error.toString(),
+      ));
+    }
+  }
+
+  void _onSelectChat(SelectChat event, Emitter<ChatState> emit) {
+    emit(state.copyWith(selectedChat: event.chat));
+    add(LoadMessages(event.chat.uid!));
+  }
+
+  Future<void> _onSetTypingStatus(
+    SetTypingStatus event,
+    Emitter<ChatState> emit,
+  ) async {
+    _typingStatusController.add(event);
+  }
+
+  Future<void> _updateTypingStatus(SetTypingStatus event) async {
+    try {
+      await _supabase.from('typing_status').upsert({
+        'chat_id': event.chatId,
+        'user_id': _currentUserUid,
+        'is_typing': event.isTyping,
+      });
+    } catch (error) {
+      // Silently fail typing status updates
+      print('Error updating typing status: $error');
+    }
+  }
+
+  Future<void> _onDeleteMessage(
+    DeleteMessage event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      // Store current messages for potential rollback
+      final currentMessages = state.messages;
+
+      // Update state with message removed
+      emit(state.copyWith(
+        messages:
+            state.messages.where((m) => m.uid != event.messageId).toList(),
+      ));
+
+      // Actually delete the message
+      await _supabase
+          .from('chat_messages') // Ensure table name is 'chat_messages'
+          .delete()
+          .eq('uid', event.messageId) // Ensure 'uid' is used
+          .eq(
+            'sender_uid',
+            _currentUserUid,
+          ); // Ensure user owns message
+    } catch (error) {
+      // Restore messages on error
+      emit(state.copyWith(
+        error: error.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onEditMessage(
+    EditMessage event,
+    Emitter<ChatState> emit,
+  ) async {
+    try {
+      // Store current messages for potential rollback
+      final currentMessages = [...state.messages];
+      final messageIndex =
+          currentMessages.indexWhere((m) => m.uid == event.messageId);
+
+      if (messageIndex == -1) {
+        throw Exception('Message not found');
+      }
+
+      // Create updated message list
+      final updatedMessages = [...currentMessages];
+      updatedMessages[messageIndex] = updatedMessages[messageIndex].copyWith(
+        message: event.newContent,
+        isEdited: true,
+        updatedAt: DateTime.now(),
+      );
+
+      // Update state
+      emit(state.copyWith(
+        messages: updatedMessages,
+      ));
+
+      // Actually update the message
+      await _supabase
+          .from('messages')
+          .update({
+            'content': event.newContent,
+            'is_edited': true,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', event.messageId)
+          .eq(
+            'sender_uid',
+            _currentUserUid,
+          ); // Ensure user owns message
+    } catch (error) {
+      // Restore messages on error
+      emit(state.copyWith(
+        error: error.toString(),
+      ));
+    }
+  }
+
+  void _onUpdateChats(UpdateChats event, Emitter<ChatState> emit) {
+    emit(state.copyWith(
+      status: ChatStatus.loaded,
+      chats: event.chats,
+    ));
+  }
+
+  void _onUpdateMessages(UpdateMessages event, Emitter<ChatState> emit) {
+    if (event.isLoadMore) {
+      emit(state.copyWith(
+        messages: [...state.messages, ...event.messages],
+        messageStatus: MessageStatus.sent,
+        isLoadingMore: false,
+      ));
+    } else {
+      emit(state.copyWith(
+        messages: event.messages,
+        messageStatus: MessageStatus.sent,
+      ));
+    }
+  }
+
+  void _onUpdateTypingUsers(UpdateTypingUsers event, Emitter<ChatState> emit) {
+    final updatedTypingUsers =
+        Map<String, List<WhatsevrUser>>.from(state.typingUsers);
+    updatedTypingUsers[event.chatId] = event.users;
+
+    emit(state.copyWith(typingUsers: updatedTypingUsers));
+  }
+
+  void _onChatError(ChatError event, Emitter<ChatState> emit) {
+    emit(state.copyWith(
+      status: ChatStatus.error,
+      error: event.message,
+    ));
+  }
+
+  @override
+  ChatState fromJson(Map<String, dynamic> json) {
+    try {
+      return ChatState.fromJson(json);
+    } catch (_) {
+      return const ChatState();
+    }
+  }
+
+  @override
+  Map<String, dynamic> toJson(ChatState state) {
+    return state.toJson();
+  }
+
+  @override
+  Future<void> close() {
+    _chatSubscription?.cancel();
+    _messageSubscription?.cancel();
+    _typingSubscription?.cancel();
+    _typingStatusController.close();
+    return super.close();
+  }
+}

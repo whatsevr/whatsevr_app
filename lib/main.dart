@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+
+import 'package:path_provider/path_provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/api/client.dart';
@@ -45,7 +47,11 @@ Future<void> main() async {
       FileUploadService.init();
       DownloadService.init();
       FlutterForegroundTask.initCommunicationPort();
-      runApp(const WhatsevrApp());
+      final storage = await HydratedStorage.build(
+        storageDirectory: await getApplicationDocumentsDirectory(),
+      );
+      runApp(WhatsevrApp());
+
       afterRunAppServices();
     },
     catchUnhandledExceptions,
