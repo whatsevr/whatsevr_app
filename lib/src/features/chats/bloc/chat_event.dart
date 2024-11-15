@@ -7,6 +7,11 @@ abstract class ChatEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class InitialEvent extends ChatEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 // Load Events
 class LoadChats extends ChatEvent {}
 
@@ -137,14 +142,4 @@ class UpdateTypingUsers extends ChatEvent {
 
   @override
   List<Object?> get props => [chatId, users];
-}
-
-// Error Event
-class ChatError extends ChatEvent {
-  final String message;
-
-  const ChatError(this.message);
-
-  @override
-  List<Object?> get props => [message];
 }

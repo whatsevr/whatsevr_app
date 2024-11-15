@@ -50,6 +50,7 @@ Future<void> main() async {
       final storage = await HydratedStorage.build(
         storageDirectory: await getApplicationDocumentsDirectory(),
       );
+      HydratedBloc.storage = storage;
       runApp(WhatsevrApp());
 
       afterRunAppServices();

@@ -19,16 +19,14 @@ class ChatsPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ChatBloc(
         AuthUserDb.getLastLoggedUserUid()!,
-      ),
+      )..add(InitialEvent()),
       child: Column(
         children: <Widget>[
           PadHorizontal(
             child: WhatsevrAnimatedSearchField(
               hintTexts: const <String>[
                 'Search for chats',
-                'Search for communities',
-                'Search for calls',
-                'Search for requests',
+                'Search for messages',
               ],
             ),
           ),

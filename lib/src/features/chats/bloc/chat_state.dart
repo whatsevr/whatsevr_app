@@ -1,12 +1,5 @@
 part of 'chat_bloc.dart';
 
-enum ChatStatus {
-  initial,
-  loading,
-  loaded,
-  error,
-}
-
 enum MessageStatus {
   initial,
   loading,
@@ -16,8 +9,7 @@ enum MessageStatus {
 }
 
 class ChatState extends Equatable {
-  final ChatStatus status;
-  final List<PrivateChat> chats;
+  final List<PrivateChat> privateChats;
   final PrivateChat? selectedChat;
   final List<ChatMessage> messages;
   final Map<String, ChatMessage> lastMessages;
@@ -31,8 +23,7 @@ class ChatState extends Equatable {
   final Map<String, List<WhatsevrUser>> typingUsers;
 
   const ChatState({
-    this.status = ChatStatus.initial,
-    this.chats = const [],
+    this.privateChats = const [],
     this.selectedChat,
     this.messages = const [],
     this.lastMessages = const {},
@@ -47,8 +38,7 @@ class ChatState extends Equatable {
   });
 
   ChatState copyWith({
-    ChatStatus? status,
-    List<PrivateChat>? chats,
+    List<PrivateChat>? privateChats,
     PrivateChat? selectedChat,
     List<ChatMessage>? messages,
     Map<String, ChatMessage>? lastMessages,
@@ -62,8 +52,7 @@ class ChatState extends Equatable {
     Map<String, List<WhatsevrUser>>? typingUsers,
   }) {
     return ChatState(
-      status: status ?? this.status,
-      chats: chats ?? this.chats,
+      privateChats: privateChats ?? this.privateChats,
       selectedChat: selectedChat ?? this.selectedChat,
       messages: messages ?? this.messages,
       lastMessages: lastMessages ?? this.lastMessages,
@@ -81,8 +70,7 @@ class ChatState extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'status': status.index,
-      'chats': chats.map((e) => e.toJson()).toList(),
+      'privateChats': privateChats.map((e) => e.toJson()).toList(),
       'selectedChat': selectedChat?.toJson(),
       'messages': messages.map((e) => e.toJson()).toList(),
       'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
@@ -100,9 +88,9 @@ class ChatState extends Equatable {
 
   static ChatState fromJson(Map<String, dynamic> json) {
     return ChatState(
-      status: ChatStatus.values[json['status']],
-      chats:
-          (json['chats'] as List).map((e) => PrivateChat.fromJson(e)).toList(),
+      privateChats: (json['privateChats'] as List)
+          .map((e) => PrivateChat.fromJson(e))
+          .toList(),
       selectedChat: json['selectedChat'] != null
           ? PrivateChat.fromJson(json['selectedChat'])
           : null,
@@ -128,8 +116,7 @@ class ChatState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        chats,
+        privateChats,
         selectedChat,
         messages,
         lastMessages,
@@ -145,8 +132,8 @@ class ChatState extends Equatable {
 
   @override
   String toString() => '''ChatState {
-    status: $status,
-    chats: ${chats.length} chats,
+  
+    privateChats: ${privateChats.length} chats,
     selectedChat: ${selectedChat?.uid},
     messages: ${messages.length} messages,
     messageStatus: $messageStatus,

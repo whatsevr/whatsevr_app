@@ -6,9 +6,11 @@ import 'package:supabase/supabase.dart' hide User;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/src/features/chats/models/private_chat.dart';
 import 'package:whatsevr_app/src/features/chats/models/message.dart';
 import 'package:whatsevr_app/src/features/chats/models/user.dart';
+
 part 'chat_event.dart';
 part 'chat_state.dart';
 
@@ -23,6 +25,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
   final _typingStatusController = PublishSubject<SetTypingStatus>();
 
   ChatBloc(this._currentUserUid) : super(const ChatState()) {
+    on<InitialEvent>(_onInitialEvent);
     on<LoadChats>(_onLoadChats);
     on<LoadMessages>(_onLoadMessages);
     on<SendMessage>(_onSendMessage);
@@ -36,36 +39,51 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     on<UpdateChats>(_onUpdateChats);
     on<UpdateMessages>(_onUpdateMessages);
     on<UpdateTypingUsers>(_onUpdateTypingUsers);
-    on<ChatError>(_onChatError);
 
     _typingStatusController
         .debounceTime(Duration(milliseconds: 500))
         .listen((event) => _updateTypingStatus(event));
   }
+  Future<void> _onInitialEvent(
+      InitialEvent event, Emitter<ChatState> emit) async {
+    print('Initializing ChatBloc');
+
+    add(LoadChats());
+  }
 
   Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
     try {
-      emit(state.copyWith(status: ChatStatus.loading));
+      //get all chats
+      final response = await _supabase
+          .from('private_chats')
+          .select(
+              '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)')
+          .order('last_message_at', ascending: false);
 
+      final List<PrivateChat> privateChats =
+          response.map((row) => PrivateChat.fromMap(row)).toList();
+
+      emit(state.copyWith(
+        privateChats: privateChats,
+      ));
       // Cancel any existing subscription
       await _chatSubscription?.cancel();
 
       _chatSubscription = _supabase
           .from('private_chats')
           .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-          .order('updated_at', ascending: false)
+          .order('last_message_at', ascending: false)
           .map((rows) {
             return rows.map((row) => PrivateChat.fromMap(row)).toList();
           })
           .listen(
             (chats) => add(UpdateChats(chats)),
-            onError: (error) => add(ChatError(error.toString())),
+            onError: (error) {
+              highLevelCatch(error, StackTrace.current);
+            },
           );
-    } catch (error) {
-      emit(state.copyWith(
-        status: ChatStatus.error,
-        error: error.toString(),
-      ));
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
 
@@ -93,7 +111,9 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
           })
           .listen(
             (messages) => add(UpdateMessages(messages, event.loadMore)),
-            onError: (error) => add(ChatError(error.toString())),
+            onError: (error) {
+              highLevelCatch(error, StackTrace.current);
+            },
           );
     } catch (error) {
       emit(state.copyWith(
@@ -172,8 +192,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: ChatStatus.loading));
-
       // Check if chat already exists
       final existingChat = await _supabase
           .from('chats')
@@ -185,7 +203,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
       if (existingChat != null) {
         final chat = PrivateChat.fromMap(existingChat);
         emit(state.copyWith(
-          status: ChatStatus.loaded,
           selectedChat: chat,
         ));
         return;
@@ -217,12 +234,10 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
       final chat = PrivateChat.fromMap(response);
       emit(state.copyWith(
-        status: ChatStatus.loaded,
         selectedChat: chat,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ChatStatus.error,
         error: error.toString(),
       ));
     }
@@ -233,8 +248,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) async {
     try {
-      emit(state.copyWith(status: ChatStatus.loading));
-
       // Create new group chat
       final response = await _supabase
           .from('chats')
@@ -259,12 +272,10 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
       final chat = PrivateChat.fromMap(response);
       emit(state.copyWith(
-        status: ChatStatus.loaded,
         selectedChat: chat,
       ));
     } catch (error) {
       emit(state.copyWith(
-        status: ChatStatus.error,
         error: error.toString(),
       ));
     }
@@ -375,7 +386,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
       // Actually update the message
       await _supabase
-          .from('messages')
+          .from('chat_messages')
           .update({
             'content': event.newContent,
             'is_edited': true,
@@ -396,8 +407,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
   void _onUpdateChats(UpdateChats event, Emitter<ChatState> emit) {
     emit(state.copyWith(
-      status: ChatStatus.loaded,
-      chats: event.chats,
+      privateChats: event.chats,
     ));
   }
 
@@ -424,13 +434,6 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     emit(state.copyWith(typingUsers: updatedTypingUsers));
   }
 
-  void _onChatError(ChatError event, Emitter<ChatState> emit) {
-    emit(state.copyWith(
-      status: ChatStatus.error,
-      error: event.message,
-    ));
-  }
-
   @override
   ChatState fromJson(Map<String, dynamic> json) {
     try {
@@ -452,5 +455,16 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     _typingSubscription?.cancel();
     _typingStatusController.close();
     return super.close();
+  }
+
+  User? getTheOtherUser(User? user1, User? user2) {
+    if (user1 == null || user2 == null) {
+      return null;
+    }
+    if (user1.uid == _currentUserUid) {
+      return user2;
+    } else {
+      return user1;
+    }
   }
 }
