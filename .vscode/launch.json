@@ -5,10 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "whatsevr_app",
+            "name": "whatsevr_app (dev mode)",
+            "request": "launch",
+            "type": "dart",
+            "noDebug": true,
+            "deviceId": "emulator-5554"
+        },
+        {
+            "name": "whatsevr_app (debug)",
             "request": "launch",
             "type": "dart"
         },
+   
         {
             "name": "whatsevr_app (profile mode)",
             "request": "launch",

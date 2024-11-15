@@ -133,6 +133,7 @@ class DeviceInfo {
   DeviceInfo copyWith({
     String? userAgent,
     String? platform,
+    
     String? vendor,
     String? browser,
     String? connection,
