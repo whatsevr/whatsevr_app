@@ -11,12 +11,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:whatsevr_app/config/services/follow_unfollow_bloc/follow_unfollow_bloc.dart';
 import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 
-import 'config/routes/router.dart';
-import 'config/themes/bloc/theme_bloc.dart';
-import 'config/themes/theme.dart';
-import 'config/widgets/stack_toast.dart';
-import 'constants.dart';
-import 'dev/dragable_bubble.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/stack_toast.dart';
+import 'package:whatsevr_app/constants.dart';
+import 'package:whatsevr_app/dev/dragable_bubble.dart';
 
 class WhatsevrApp extends StatefulWidget {
   const WhatsevrApp({super.key});

@@ -105,7 +105,7 @@ class ChatState extends Equatable {
       messagesSendingStatus:
           Map<String, bool>.from(json['messagesSendingStatus']),
       typingUsers: (json['typingUsers'] as Map).map((k, v) => MapEntry(
-          k, (v as List).map((e) => WhatsevrUser.fromJson(e)).toList())),
+          k, (v as List).map((e) => WhatsevrUser.fromJson(e)).toList(),),),
     );
   }
 

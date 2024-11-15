@@ -8,26 +8,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../config/api/methods/users.dart';
-import '../../../../config/api/requests_model/update_user_cover_media.dart';
-import '../../../../config/api/requests_model/update_user_profile_picture.dart';
-import '../../../../config/api/requests_model/user/update_user_educations.dart';
-import '../../../../config/api/requests_model/user/update_user_info.dart';
-import '../../../../config/api/requests_model/user/update_user_portfolio_info.dart';
-import '../../../../config/api/requests_model/user/update_user_services.dart';
-import '../../../../config/api/requests_model/user/update_user_work_experiences.dart';
-import '../../../../config/api/response_model/profile_details.dart'
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
     hide
         UserInfo,
         UserEducation,
         UserWorkExperience,
         UserService,
         UserCoverMedia;
-import '../../../../config/routes/router.dart';
-import '../../../../config/services/auth_db.dart';
-import '../../../../config/services/file_upload.dart';
-import '../views/page.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
 
 part 'event.dart';
 part 'state.dart';

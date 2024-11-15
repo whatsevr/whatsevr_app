@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart';
 
-import '../external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class ApiEncryptionInterceptor extends Interceptor {
   final String encryptionKey;

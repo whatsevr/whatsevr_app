@@ -273,7 +273,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -301,7 +301,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -329,7 +329,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -357,7 +357,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -385,7 +385,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -413,7 +413,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -441,7 +441,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -469,7 +469,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -497,7 +497,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
           currentPage: currentPage + 1,
           noMoreData: response?.lastPage ?? false,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -511,7 +511,7 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
   }
 
   FutureOr<void> _onSearchTextChanged(
-      SearchTextChangedEvent event, Emitter<AllSearchState> emit) async {
+      SearchTextChangedEvent event, Emitter<AllSearchState> emit,) async {
     if (event.query.trim().isEmpty || event.query.length < 4) {
       return;
     }

@@ -4,19 +4,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../config/api/response_model/community/top_communities.dart';
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/app_bar.dart';
-import '../../../../config/widgets/buttons/button.dart';
-import '../../../../config/widgets/buttons/choice_chip.dart';
-import '../../../../config/widgets/buttons/two_state_ui.dart';
-import '../../../../config/widgets/content_mask.dart';
-import '../../../../config/widgets/dialogs/common_data_list.dart';
-import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
-import '../../../../config/widgets/max_scroll_listener.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/textfield/super_textform_field.dart';
-import '../bloc/new_community_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import 'package:whatsevr_app/src/features/new_community/bloc/new_community_bloc.dart';
 
 class NewCommunityPageArgument {
   NewCommunityPageArgument();
@@ -234,7 +234,7 @@ class NewCommunityPage extends StatelessWidget {
                                   choiced: state.approveJoiningRequest ?? false,
                                   switchChoice: (value) {
                                     context.read<NewCommunityBloc>().add(
-                                        ChangeApproveJoiningRequestEvent());
+                                        ChangeApproveJoiningRequestEvent(),);
                                   },
                                 ),
                                 Gap(4),
@@ -244,7 +244,7 @@ class NewCommunityPage extends StatelessWidget {
                                       !(state.approveJoiningRequest ?? false),
                                   switchChoice: (value) {
                                     context.read<NewCommunityBloc>().add(
-                                        ChangeApproveJoiningRequestEvent());
+                                        ChangeApproveJoiningRequestEvent(),);
                                   },
                                 ),
                               ],

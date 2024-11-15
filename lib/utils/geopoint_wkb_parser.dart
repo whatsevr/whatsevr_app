@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:geobase/geobase.dart';
 
-import '../dev/talker.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 class WKBUtil {
   WKBUtil._();

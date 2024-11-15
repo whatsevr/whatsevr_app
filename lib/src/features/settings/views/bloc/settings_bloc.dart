@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../../config/api/methods/community.dart';
-import '../../../../../config/api/response_model/community/user_communities.dart';
-import '../../../../../config/services/auth_db.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';

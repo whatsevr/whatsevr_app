@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../response_model/recommendation_flicks.dart';
-import '../response_model/recommendation_memories.dart';
-import '../response_model/recommendation_offers.dart';
-import '../response_model/recommendation_photo_posts.dart';
-import '../response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
 class RecommendationApi {
   static Future<RecommendationVideosResponse?> publicVideoPosts({

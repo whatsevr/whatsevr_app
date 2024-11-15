@@ -1,6 +1,6 @@
 import 'package:background_downloader/background_downloader.dart';
 
-import '../api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class DownloadService {
   static void init() {

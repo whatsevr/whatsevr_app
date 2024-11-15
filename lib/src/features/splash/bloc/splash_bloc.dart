@@ -5,11 +5,11 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
-import '../../../../config/services/auth_db.dart';
-import '../../../../config/services/auth_user_service.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';

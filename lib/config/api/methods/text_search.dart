@@ -9,10 +9,10 @@ import 'package:whatsevr_app/config/api/response_model/search/searched_portfolio
 import 'package:whatsevr_app/config/api/response_model/search/searched_users.dart';
 import 'package:whatsevr_app/config/api/response_model/search/searched_video_posts.dart';
 
-import '../client.dart';
+import 'package:whatsevr_app/config/api/client.dart';
 
-import '../external/models/business_validation_exception.dart';
-import '../response_model/search/searched_users_communities.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/search/searched_users_communities.dart';
 
 class TextSearchApi {
   static Future<SearchedUsersAndCommunitiesResponse?>
@@ -30,7 +30,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -57,7 +57,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -84,7 +84,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -111,7 +111,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -138,7 +138,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -165,7 +165,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -192,7 +192,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -219,7 +219,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -246,7 +246,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 
@@ -273,7 +273,7 @@ class TextSearchApi {
         queryParameters: {
           'input_text': query,
           'page': page,
-          'page_size': pageSize
+          'page_size': pageSize,
         },
       );
 

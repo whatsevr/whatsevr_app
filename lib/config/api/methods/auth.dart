@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../requests_model/auth/register.dart';
-import '../response_model/auth/login.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/requests_model/auth/register.dart';
+import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
 
 class AuthApi {
   static Future<

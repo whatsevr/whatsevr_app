@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 
-import '../../services/file_upload.dart';
-import '../dialogs/showAppModalSheet.dart';
-import '../slider.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/slider.dart';
 
 class WtvFullPlayer extends StatefulWidget {
   const WtvFullPlayer({

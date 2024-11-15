@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../config/api/external/models/pagination_data.dart';
-import '../../../../config/api/methods/public_recommendations.dart';
-import '../../../../config/api/response_model/recommendation_memories.dart';
-import '../../../../config/api/response_model/recommendation_offers.dart';
-import '../../../../config/api/response_model/recommendation_photo_posts.dart';
-import '../../../../config/api/response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
+import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';

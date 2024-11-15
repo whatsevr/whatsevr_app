@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
-import '../../../../../config/mocks/mocks.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/post_tiles/flick.dart';
-import '../../../../../config/widgets/post_tiles/photo.dart';
-import '../../../../../config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 
 class HomePageForYouPage extends StatelessWidget {
   const HomePageForYouPage({

@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
-import '../../api/external/models/pagination_data.dart';
-import '../../api/methods/reactions.dart';
-import '../../api/methods/users.dart';
-import '../../api/response_model/reactions/get_reactions.dart' as m1;
-import '../../api/response_model/user_details.dart';
-import '../../enums/reaction_type.dart';
-import '../../mocks/mocks.dart';
-import '../../services/auth_db.dart';
-import '../../themes/theme.dart';
-import '../buttons/choice_chip.dart';
-import '../max_scroll_listener.dart';
-import '../previewers/photo.dart';
-import 'showAppModalSheet.dart';
+import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
+import 'package:whatsevr_app/config/api/methods/reactions.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart' as m1;
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
+import 'package:whatsevr_app/config/enums/reaction_type.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 void showReactionsDialog({
   String? videoPostUid,

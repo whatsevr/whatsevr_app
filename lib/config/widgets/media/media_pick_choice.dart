@@ -6,7 +6,7 @@ import 'package:iconify_flutter/icons/material_symbols.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 showWhatsevrMediaPickerChoice({
   Function? onChoosingImageFromCamera,

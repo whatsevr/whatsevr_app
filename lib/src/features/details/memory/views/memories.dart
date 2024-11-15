@@ -7,12 +7,12 @@ import 'package:story_view_advance/controller/story_controller.dart';
 import 'package:story_view_advance/utils.dart';
 import 'package:story_view_advance/widgets/story_view_advance.dart';
 
-import '../../../../../../../../../config/services/launch_url.dart';
-import '../../../../../../../../../config/widgets/links_preview_list.dart';
-import '../../../../../config/mocks/mocks.dart';
-import '../../../../../config/services/file_upload.dart';
-import '../../../../../config/widgets/buttons/button.dart';
-import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/services/launch_url.dart';
+import 'package:whatsevr_app/config/widgets/links_preview_list.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
 showMemoriesPlayer(BuildContext context,
     {required List<UiMemoryGroup>? uiMemoryGroups,

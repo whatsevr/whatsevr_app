@@ -6,16 +6,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../../../../../config/api/external/models/business_validation_exception.dart';
-import '../../../../../config/api/methods/posts.dart';
-import '../../../../../config/api/requests_model/upload_pdf.dart';
-import '../../../../../config/routes/router.dart';
-import '../../../../../config/services/auth_db.dart';
-import '../../../../../config/services/file_upload.dart';
-import '../../../../../config/services/location.dart';
-import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../utils/geopoint_wkb_parser.dart';
-import '../views/page.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/posts.dart';
+import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/services/location.dart';
+import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
+import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
+import 'package:whatsevr_app/src/features/create_posts/upload_pdf/views/page.dart';
 
 part 'upload_pdf_event.dart';
 part 'upload_pdf_state.dart';

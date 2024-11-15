@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/theme_bloc.dart';
+import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
 
 enum ThemeType { light, dark }
 

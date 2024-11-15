@@ -9,7 +9,7 @@ class _AccountsView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMoreUsers());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
@@ -26,7 +26,7 @@ class _AccountsView extends StatelessWidget {
                   AppNavigationService.newRoute(
                     RoutesName.account,
                     extras: AccountPageArgument(
-                        isEditMode: false, userUid: user?.uid),
+                        isEditMode: false, userUid: user?.uid,),
                   );
                 },
                 child: Column(
@@ -108,7 +108,7 @@ class _AccountsView extends StatelessWidget {
                                         ),
                                         children: <InlineSpan>[
                                           TextSpan(
-                                            text: '${user?.address}',
+                                            text: '${user.address}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.normal,
                                               color: Colors.black,
@@ -125,7 +125,7 @@ class _AccountsView extends StatelessWidget {
                       ],
                     ),
                   ],
-                ));
+                ),);
           },
         );
       },

@@ -33,27 +33,27 @@ class CommunityProfileDataResponse {
 
   factory CommunityProfileDataResponse.fromMap(Map<String, dynamic> json) =>
       CommunityProfileDataResponse(
-        message: json["message"],
-        communityInfo: json["community_info"] == null
+        message: json['message'],
+        communityInfo: json['community_info'] == null
             ? null
-            : CommunityInfo.fromMap(json["community_info"]),
-        communityCoverMedia: json["community_cover_media"] == null
+            : CommunityInfo.fromMap(json['community_info']),
+        communityCoverMedia: json['community_cover_media'] == null
             ? []
-            : List<CommunityCoverMedia>.from(json["community_cover_media"]!
-                .map((x) => CommunityCoverMedia.fromMap(x))),
-        communityServices: json["community_services"] == null
+            : List<CommunityCoverMedia>.from(json['community_cover_media']!
+                .map((x) => CommunityCoverMedia.fromMap(x)),),
+        communityServices: json['community_services'] == null
             ? []
-            : List<CommunityService>.from(json["community_services"]!
-                .map((x) => CommunityService.fromMap(x))),
+            : List<CommunityService>.from(json['community_services']!
+                .map((x) => CommunityService.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "community_info": communityInfo?.toMap(),
-        "community_cover_media": communityCoverMedia == null
+        'message': message,
+        'community_info': communityInfo?.toMap(),
+        'community_cover_media': communityCoverMedia == null
             ? []
             : List<dynamic>.from(communityCoverMedia!.map((x) => x.toMap())),
-        "community_services": communityServices == null
+        'community_services': communityServices == null
             ? []
             : List<dynamic>.from(communityServices!.map((x) => x.toMap())),
       };
@@ -104,25 +104,25 @@ class CommunityCoverMedia {
 
   factory CommunityCoverMedia.fromMap(Map<String, dynamic> json) =>
       CommunityCoverMedia(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        imageUrl: json["image_url"],
-        isVideo: json["is_video"],
-        userUid: json["user_uid"],
-        videoUrl: json["video_url"],
-        communityUid: json["community_uid"],
+            : DateTime.parse(json['created_at']),
+        imageUrl: json['image_url'],
+        isVideo: json['is_video'],
+        userUid: json['user_uid'],
+        videoUrl: json['video_url'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "image_url": imageUrl,
-        "is_video": isVideo,
-        "user_uid": userUid,
-        "video_url": videoUrl,
-        "community_uid": communityUid,
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'image_url': imageUrl,
+        'is_video': isVideo,
+        'user_uid': userUid,
+        'video_url': videoUrl,
+        'community_uid': communityUid,
       };
 }
 
@@ -195,37 +195,37 @@ class CommunityInfo {
   String toJson() => json.encode(toMap());
 
   factory CommunityInfo.fromMap(Map<String, dynamic> json) => CommunityInfo(
-        createdAt: json["created_at"] == null
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        adminUserUid: json["admin_user_uid"],
-        status: json["status"],
-        bio: json["bio"],
-        location: json["location"],
-        description: json["description"],
-        title: json["title"],
-        profilePicture: json["profile_picture"],
-        uid: json["uid"],
-        username: json["username"],
-        totalMembers: json["total_members"],
-        requireJoiningApproval: json["require_joining_approval"],
-        seoDataWeighted: json["seo_data_weighted"],
+            : DateTime.parse(json['created_at']),
+        adminUserUid: json['admin_user_uid'],
+        status: json['status'],
+        bio: json['bio'],
+        location: json['location'],
+        description: json['description'],
+        title: json['title'],
+        profilePicture: json['profile_picture'],
+        uid: json['uid'],
+        username: json['username'],
+        totalMembers: json['total_members'],
+        requireJoiningApproval: json['require_joining_approval'],
+        seoDataWeighted: json['seo_data_weighted'],
       );
 
   Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "admin_user_uid": adminUserUid,
-        "status": status,
-        "bio": bio,
-        "location": location,
-        "description": description,
-        "title": title,
-        "profile_picture": profilePicture,
-        "uid": uid,
-        "username": username,
-        "total_members": totalMembers,
-        "require_joining_approval": requireJoiningApproval,
-        "seo_data_weighted": seoDataWeighted,
+        'created_at': createdAt?.toIso8601String(),
+        'admin_user_uid': adminUserUid,
+        'status': status,
+        'bio': bio,
+        'location': location,
+        'description': description,
+        'title': title,
+        'profile_picture': profilePicture,
+        'uid': uid,
+        'username': username,
+        'total_members': totalMembers,
+        'require_joining_approval': requireJoiningApproval,
+        'seo_data_weighted': seoDataWeighted,
       };
 }
 
@@ -270,22 +270,22 @@ class CommunityService {
 
   factory CommunityService.fromMap(Map<String, dynamic> json) =>
       CommunityService(
-        id: json["id"],
-        createdAt: json["created_at"] == null
+        id: json['id'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        title: json["title"],
-        userUid: json["user_uid"],
-        description: json["description"],
-        communityUid: json["community_uid"],
+            : DateTime.parse(json['created_at']),
+        title: json['title'],
+        userUid: json['user_uid'],
+        description: json['description'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "title": title,
-        "user_uid": userUid,
-        "description": description,
-        "community_uid": communityUid,
+        'id': id,
+        'created_at': createdAt?.toIso8601String(),
+        'title': title,
+        'user_uid': userUid,
+        'description': description,
+        'community_uid': communityUid,
       };
 }

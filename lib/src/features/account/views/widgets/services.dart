@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../../../../../config/api/response_model/profile_details.dart';
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPageServicesView extends StatelessWidget {
   const AccountPageServicesView({super.key});

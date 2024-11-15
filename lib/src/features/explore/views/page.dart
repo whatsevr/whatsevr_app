@@ -4,14 +4,14 @@ import 'package:whatsevr_app/config/routes/routes_name.dart';
 
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/tab_bar.dart';
-import '../../../../config/widgets/textfield/animated_search_field.dart';
-import 'widgets/memories/views/page.dart';
-import 'widgets/mix_posts/views/page.dart';
-import 'widgets/offers/views/page.dart';
-import 'widgets/photos/views/page.dart';
-import 'widgets/wtv/views/page.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/memories/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/mix_posts/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/offers/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/photos/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
 class ExplorePage extends StatelessWidget {
   ExplorePage({super.key});

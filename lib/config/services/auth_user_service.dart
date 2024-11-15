@@ -9,17 +9,17 @@ import 'package:otpless_flutter/otpless_flutter.dart';
 
 import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 
-import '../../dev/talker.dart';
-import '../api/external/models/business_validation_exception.dart';
-import '../api/methods/auth.dart';
-import '../api/methods/users.dart';
-import '../api/response_model/auth/login.dart';
-import '../api/response_model/auth_service_user.dart';
-import '../routes/router.dart';
-import '../routes/routes_name.dart';
-import '../widgets/dialogs/auth_dialogs.dart';
-import '../widgets/dialogs/showAppModalSheet.dart';
-import 'auth_db.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/auth.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/response_model/auth/login.dart';
+import 'package:whatsevr_app/config/api/response_model/auth_service_user.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 class AuthUserService {
   AuthUserService._privateConstructor();

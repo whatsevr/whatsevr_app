@@ -7,7 +7,7 @@ class _CommunityView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMoreCommunities());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(

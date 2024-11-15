@@ -33,7 +33,7 @@ class FollowUnfollowBloc
 
   // Fetch and cache all followed user UIDs (One-time on app launch)
   Future<void> _onFetchFollowedUsers(
-      FetchFollowedUsers event, Emitter<FollowUnfollowState> emit) async {
+      FetchFollowedUsers event, Emitter<FollowUnfollowState> emit,) async {
     emit(state.copyWith(isLoading: true, error: null, followedUserIds: {}));
 
     try {
@@ -54,32 +54,32 @@ class FollowUnfollowBloc
 
         allFollowedUids.addAll(currentPageUids);
         await box.put(
-            '$_followedUsersBox$page', currentPageUids); // Cache by page
+            '$_followedUsersBox$page', currentPageUids,); // Cache by page
         page++;
       }
 
       emit(state.copyWith(
         followedUserIds: Set.from(allFollowedUids),
         isLoading: false,
-      ));
+      ),);
 
       await box.put(_totalPagesKey, page - 1); // Store total pages count
     } catch (e) {
       emit(state.copyWith(
-          isLoading: false, error: 'Failed to fetch followed users'));
+          isLoading: false, error: 'Failed to fetch followed users',),);
     }
   }
 
   // Reload cached followed users on app restart
   Future<void> _onReloadFollowedUsers(
-      ReloadFollowedUsers event, Emitter<FollowUnfollowState> emit) async {
+      ReloadFollowedUsers event, Emitter<FollowUnfollowState> emit,) async {
     final box = await _getBox();
     if (box == null) return;
 
     try {
       await _loadCachedFollowedUsers(box);
       emit(state.copyWith(
-          followedUserIds: state.followedUserIds, isLoading: false));
+          followedUserIds: state.followedUserIds, isLoading: false,),);
     } catch (e) {
       emit(state.copyWith(error: 'Failed to reload followed users'));
     }
@@ -109,7 +109,7 @@ class FollowUnfollowBloc
         page: page,
         pageSize: _pageSize,
       );
-      List<String?> uids =
+      final List<String?> uids =
           response?.data?.map((e) => e.user?.uid).toList() ?? [];
       return uids.whereType<String>().toSet().toList();
     } catch (e) {
@@ -120,7 +120,7 @@ class FollowUnfollowBloc
 
   // Toggle follow/unfollow for a user and persist the change
   Future<void> _onToggleFollow(
-      ToggleFollow event, Emitter<FollowUnfollowState> emit) async {
+      ToggleFollow event, Emitter<FollowUnfollowState> emit,) async {
     final box = await _getBox();
     if (box == null) return;
 
@@ -168,7 +168,7 @@ class FollowUnfollowBloc
 
   // Persist the followed users list to cache
   Future<void> _persistFollowedUsers(
-      Box? box, Set<String> followedUserIds) async {
+      Box? box, Set<String> followedUserIds,) async {
     if (box == null) return;
     try {
       await box.put('followedUserIds', followedUserIds.toList());

@@ -2,23 +2,23 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../requests_model/update_user_cover_media.dart';
-import '../requests_model/update_user_profile_picture.dart';
-import '../requests_model/user/update_user_educations.dart';
-import '../requests_model/user/update_user_info.dart';
-import '../requests_model/user/update_user_portfolio_info.dart';
-import '../requests_model/user/update_user_services.dart';
-import '../requests_model/user/update_user_work_experiences.dart';
-import '../response_model/multiple_user_details.dart';
-import '../response_model/profile_details.dart';
-import '../response_model/user_details.dart';
-import '../response_model/user_flicks.dart';
-import '../response_model/user_memories.dart';
-import '../response_model/user_offers.dart';
-import '../response_model/user_photo_posts.dart';
-import '../response_model/user_video_posts.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
+import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
+import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
+import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/user_details.dart';
+import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
 
 class UsersApi {
   static Future<UserDetailsResponse?> getUserDetails({

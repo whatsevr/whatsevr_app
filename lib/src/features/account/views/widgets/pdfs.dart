@@ -6,10 +6,10 @@ import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../config/api/response_model/profile_details.dart';
-import '../../../../../config/services/file_download.dart';
-import '../../../../../config/widgets/previewers/pdf.dart';
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/services/file_download.dart';
+import 'package:whatsevr_app/config/widgets/previewers/pdf.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPagePdfsView extends StatelessWidget {
   const AccountPagePdfsView({super.key});

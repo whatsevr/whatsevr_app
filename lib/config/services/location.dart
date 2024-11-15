@@ -3,10 +3,10 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:geolocator/geolocator.dart';
 
-import '../api/client.dart';
-import '../api/external/models/business_validation_exception.dart';
-import '../api/external/models/places_nearby.dart';
-import '../api/external/models/similar_place_by_query.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
+import 'package:whatsevr_app/config/api/external/models/similar_place_by_query.dart';
 
 class LocationService {
   static const String _googlePlaceAndGeoCodingApiKey =

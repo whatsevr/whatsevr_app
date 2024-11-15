@@ -68,38 +68,38 @@ class ChatMessage {
   String toJson() => json.encode(toMap());
 
   factory ChatMessage.fromMap(Map<String, dynamic> json) => ChatMessage(
-        uid: json["uid"],
-        chatType: json["chat_type"],
-        senderUid: json["sender_uid"],
-        message: json["message"],
-        createdAt: json["created_at"] == null
+        uid: json['uid'],
+        chatType: json['chat_type'],
+        senderUid: json['sender_uid'],
+        message: json['message'],
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
+            : DateTime.parse(json['created_at']),
+        updatedAt: json['updated_at'] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
-        isDeleted: json["is_deleted"],
-        isPinned: json["is_pinned"],
-        isEdited: json["is_edited"],
-        replyToMessageUid: json["reply_to_message_uid"],
-        deletedAt: json["deleted_at"],
-        communityUid: json["community_uid"],
-        privateChatUid: json["private_chat_uid"],
+            : DateTime.parse(json['updated_at']),
+        isDeleted: json['is_deleted'],
+        isPinned: json['is_pinned'],
+        isEdited: json['is_edited'],
+        replyToMessageUid: json['reply_to_message_uid'],
+        deletedAt: json['deleted_at'],
+        communityUid: json['community_uid'],
+        privateChatUid: json['private_chat_uid'],
       );
 
   Map<String, dynamic> toMap() => {
-        "uid": uid,
-        "chat_type": chatType,
-        "sender_uid": senderUid,
-        "message": message,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "is_deleted": isDeleted,
-        "is_pinned": isPinned,
-        "is_edited": isEdited,
-        "reply_to_message_uid": replyToMessageUid,
-        "deleted_at": deletedAt,
-        "community_uid": communityUid,
-        "private_chat_uid": privateChatUid,
+        'uid': uid,
+        'chat_type': chatType,
+        'sender_uid': senderUid,
+        'message': message,
+        'created_at': createdAt?.toIso8601String(),
+        'updated_at': updatedAt?.toIso8601String(),
+        'is_deleted': isDeleted,
+        'is_pinned': isPinned,
+        'is_edited': isEdited,
+        'reply_to_message_uid': replyToMessageUid,
+        'deleted_at': deletedAt,
+        'community_uid': communityUid,
+        'private_chat_uid': privateChatUid,
       };
 }

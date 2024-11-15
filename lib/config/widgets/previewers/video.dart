@@ -3,11 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import '../../routes/router.dart';
-import '../app_bar.dart';
-import '../loading_indicator.dart';
-import '../media/aspect_ratio.dart';
-import '../slider.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/slider.dart';
 
 void showVideoPreviewDialog({BuildContext? context, String? videoUrl}) {
   if (videoUrl == null) return;

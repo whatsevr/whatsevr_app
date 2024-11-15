@@ -33,19 +33,19 @@ class UserReactedItemsResponse {
 
   factory UserReactedItemsResponse.fromMap(Map<String, dynamic> json) =>
       UserReactedItemsResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        data: json["data"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        data: json['data'] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+            : List<Datum>.from(json['data']!.map((x) => Datum.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "data":
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -105,30 +105,30 @@ class Datum {
   String toJson() => json.encode(toMap());
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-        createdAt: json["created_at"] == null
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        userUid: json["user_uid"],
-        videoPostUid: json["video_post_uid"],
-        flickPostUid: json["flick_post_uid"],
-        memoryUid: json["memory_uid"],
-        offerPostUid: json["offer_post_uid"],
-        photoPostUid: json["photo_post_uid"],
-        pdfUid: json["pdf_uid"],
-        uid: json["uid"],
-        reactionType: json["reaction_type"],
+            : DateTime.parse(json['created_at']),
+        userUid: json['user_uid'],
+        videoPostUid: json['video_post_uid'],
+        flickPostUid: json['flick_post_uid'],
+        memoryUid: json['memory_uid'],
+        offerPostUid: json['offer_post_uid'],
+        photoPostUid: json['photo_post_uid'],
+        pdfUid: json['pdf_uid'],
+        uid: json['uid'],
+        reactionType: json['reaction_type'],
       );
 
   Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "user_uid": userUid,
-        "video_post_uid": videoPostUid,
-        "flick_post_uid": flickPostUid,
-        "memory_uid": memoryUid,
-        "offer_post_uid": offerPostUid,
-        "photo_post_uid": photoPostUid,
-        "pdf_uid": pdfUid,
-        "uid": uid,
-        "reaction_type": reactionType,
+        'created_at': createdAt?.toIso8601String(),
+        'user_uid': userUid,
+        'video_post_uid': videoPostUid,
+        'flick_post_uid': flickPostUid,
+        'memory_uid': memoryUid,
+        'offer_post_uid': offerPostUid,
+        'photo_post_uid': photoPostUid,
+        'pdf_uid': pdfUid,
+        'uid': uid,
+        'reaction_type': reactionType,
       };
 }

@@ -7,7 +7,7 @@ class _PortfolioView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMorePortfolios());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
@@ -23,7 +23,7 @@ class _PortfolioView extends StatelessWidget {
                 AppNavigationService.newRoute(
                   RoutesName.account,
                   extras: AccountPageArgument(
-                      isEditMode: false, userUid: portfolio?.uid),
+                      isEditMode: false, userUid: portfolio?.uid,),
                 );
               },
               child: Column(

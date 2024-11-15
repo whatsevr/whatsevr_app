@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../../../config/api/response_model/recommendation_memories.dart';
-import '../../../../../../../config/mocks/mocks.dart';
-import '../../../../../../../config/widgets/max_scroll_listener.dart';
-import '../../../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../../../config/widgets/refresh_indicator.dart';
-import '../../../../../details/memory/views/memories.dart';
-import '../../../../bloc/explore_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_memories.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
+import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
 class ExplorePageMemoriesPage extends StatelessWidget {
   final ScrollController? scrollController;

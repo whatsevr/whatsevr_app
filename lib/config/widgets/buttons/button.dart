@@ -27,6 +27,8 @@ class WhatsevrButton extends StatelessWidget {
     VoidCallback? onPressed,
     bool miniButton = false,
     bool shrink = false,
+    bool hasIcon = false,
+    IconData? icon,
   }) {
     return WhatsevrButton._(
       label: label,
@@ -34,6 +36,8 @@ class WhatsevrButton extends StatelessWidget {
       miniButton: miniButton,
       isOutlined: false,
       shrink: shrink,
+      hasIcon: hasIcon,
+      icon: icon,
     );
   }
 
@@ -43,6 +47,8 @@ class WhatsevrButton extends StatelessWidget {
     VoidCallback? onPressed,
     bool miniButton = false,
     bool shrink = false,
+    bool hasIcon = false,
+    IconData? icon,
   }) {
     return WhatsevrButton._(
       label: label,
@@ -50,6 +56,8 @@ class WhatsevrButton extends StatelessWidget {
       miniButton: miniButton,
       isOutlined: true,
       shrink: shrink,
+      hasIcon: hasIcon,
+      icon: icon,
     );
   }
 
@@ -59,6 +67,8 @@ class WhatsevrButton extends StatelessWidget {
     VoidCallback? onPressed,
     bool miniButton = true,
     bool shrink = true,
+    bool hasIcon = false,
+    IconData? icon,
   }) {
     return WhatsevrButton._(
       label: label,
@@ -67,6 +77,8 @@ class WhatsevrButton extends StatelessWidget {
       isOutlined: false,
       shrink: shrink,
       isTextButton: true,
+      hasIcon: hasIcon,
+      icon: icon,
     );
   }
 

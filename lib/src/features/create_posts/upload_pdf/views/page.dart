@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/widgets/app_bar.dart';
-import '../../../../../config/widgets/buttons/button.dart';
-import '../../../../../config/widgets/media/aspect_ratio.dart';
-import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/product_guide/product_guides.dart';
-import '../../../../../config/widgets/textfield/super_textform_field.dart';
-import '../bloc/upload_pdf_bloc.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
+import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import 'package:whatsevr_app/src/features/create_posts/upload_pdf/bloc/upload_pdf_bloc.dart';
 
 class UploadPdfPageArgument {
   final EnumPostCreatorType postCreatorType;

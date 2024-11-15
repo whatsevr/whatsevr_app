@@ -17,7 +17,7 @@ import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart'
 class SearchAndTagUsersAndCommunityPage extends StatelessWidget {
   final bool scaffoldView;
   final Function(
-          List<String> selectedUsersUid, List<String> selectedCommunitiesUid)?
+          List<String> selectedUsersUid, List<String> selectedCommunitiesUid,)?
       onDone;
 
   const SearchAndTagUsersAndCommunityPage({
@@ -100,15 +100,15 @@ class SearchAndTagUsersAndCommunityPage extends StatelessWidget {
       create: (context) => SearchBloc(),
       child: Builder(
         builder: (context) {
-          final ScrollController _usersScrollController = ScrollController();
-          _usersScrollController.addListener(() {
-            if (_usersScrollController.position.pixels >=
-                _usersScrollController.position.maxScrollExtent) {
+          final ScrollController usersScrollController = ScrollController();
+          usersScrollController.addListener(() {
+            if (usersScrollController.position.pixels >=
+                usersScrollController.position.maxScrollExtent) {
               context.read<SearchBloc>().add(LoadMoreResults());
             }
           });
           return ListView(
-            controller: _usersScrollController,
+            controller: usersScrollController,
             children: [
               WhatsevrFormField.textFieldWithClearIcon(
                 controller: context.read<SearchBloc>().searchController,
@@ -327,7 +327,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           currentPage: 1,
           noMoreData: response?.users?.isEmpty ?? true,
         ),
-      ));
+      ),);
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -352,7 +352,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         emit(state.copyWith(
           usersAndCommunitiesPagination:
               state.usersAndCommunitiesPagination.copyWith(noMoreData: true),
-        ));
+        ),);
         return;
       }
 
@@ -360,15 +360,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           searchedUsersCommunities: state.searchedUsersCommunities?.copyWith(
             users: [
               ...(state.searchedUsersCommunities?.users ?? []),
-              ...(response.users ?? [])
+              ...(response.users ?? []),
             ],
             communities: [
               ...(state.searchedUsersCommunities?.communities ?? []),
-              ...(response.communities ?? [])
+              ...(response.communities ?? []),
             ],
           ),
           usersAndCommunitiesPagination: state.usersAndCommunitiesPagination
-              .copyWith(currentPage: nextPage)));
+              .copyWith(currentPage: nextPage),),);
     } catch (e, s) {
       highLevelCatch(e, s);
     }

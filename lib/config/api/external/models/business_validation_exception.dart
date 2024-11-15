@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import '../../../../dev/talker.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 class BusinessException implements Exception {
   final String message;

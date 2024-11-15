@@ -7,10 +7,10 @@ import 'package:pro_image_editor/models/editor_callbacks/pro_image_editor_callba
 import 'package:pro_image_editor/models/editor_configs/pro_image_editor_configs.dart';
 import 'package:pro_image_editor/modules/main_editor/main_editor.dart';
 
-import '../../../dev/talker.dart';
-import '../../../utils/file.dart';
-import '../../routes/router.dart';
-import '../app_bar.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/utils/file.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
 class ImageEditorPageArgument {
   final File imageFileToEdit;

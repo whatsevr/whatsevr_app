@@ -3,13 +3,13 @@ import 'dart:io';
 
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
-import '../../../dev/talker.dart';
-import '../../api/client.dart';
-import '../../api/external/models/business_validation_exception.dart';
-import '../../api/methods/posts.dart';
-import '../../api/requests_model/create_video_post.dart';
-import '../file_upload.dart';
-import 'task_models/posts.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/posts.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/services/long_running_task/task_models/posts.dart';
 
 @pragma('vm:entry-point')
 void startCallback() {

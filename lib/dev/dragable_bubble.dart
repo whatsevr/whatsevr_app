@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../config/routes/router.dart';
-import 'routes/routes_name.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/dev/routes/routes_name.dart';
 
 enum AnchoringPosition {
   topLeft,

@@ -6,12 +6,12 @@ import 'package:iconify_flutter/icons/la.dart';
 import 'package:iconify_flutter/icons/octicon.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 
-import '../../../utils/conversion.dart';
-import '../../api/response_model/recommendation_photo_posts.dart';
-import '../../mocks/mocks.dart';
-import '../buttons/animated_like_icon_button.dart';
-import '../dynamic_height_views.dart';
-import '../pad_horizontal.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 class PhotosPostFrame extends StatelessWidget {
   final String? photoPostUid;

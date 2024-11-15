@@ -7,7 +7,7 @@ class _PdfsView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMorePdfs());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
@@ -52,7 +52,7 @@ class _PdfsView extends StatelessWidget {
                           ),
                           const Gap(8),
                           Text(
-                            '${GetTimeAgo.parse(pdf!.createdAt!)}',
+                            GetTimeAgo.parse(pdf!.createdAt!),
                             style: const TextStyle(
                               fontSize: 12,
                             ),

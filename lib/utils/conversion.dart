@@ -1,7 +1,7 @@
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:intl/intl.dart';
 
-import '../dev/talker.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 String? calculateAgeInYearsAndMonth(DateTime birthDate) {
   try {

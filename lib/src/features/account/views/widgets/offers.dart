@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../../../../config/api/response_model/user_offers.dart';
-import '../../../../../utils/conversion.dart';
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPageOffersView extends StatelessWidget {
   const AccountPageOffersView({super.key});

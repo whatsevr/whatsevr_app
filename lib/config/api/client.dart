@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../dev/talker.dart';
-import 'interceptors/cache.dart';
-import 'interceptors/retry.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/config/api/interceptors/cache.dart';
+import 'package:whatsevr_app/config/api/interceptors/retry.dart';
 
 class ApiClient {
   /// Restricting any instantiation of this class

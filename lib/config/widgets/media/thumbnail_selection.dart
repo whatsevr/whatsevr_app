@@ -9,12 +9,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-import '../app_bar.dart';
-import '../buttons/button.dart';
-import '../loading_indicator.dart';
-import '../pad_horizontal.dart';
-import 'aspect_ratio.dart';
-import 'asset_picker.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 
 Future<File?> showWhatsevrThumbnailSelectionPage({
   required File videoFile,

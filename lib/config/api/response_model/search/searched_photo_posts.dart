@@ -33,20 +33,20 @@ class SearchedPhotoPostsResponse {
 
   factory SearchedPhotoPostsResponse.fromMap(Map<String, dynamic> json) =>
       SearchedPhotoPostsResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        photoPosts: json["photo_posts"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        photoPosts: json['photo_posts'] == null
             ? []
             : List<PhotoPost>.from(
-                json["photo_posts"]!.map((x) => PhotoPost.fromMap(x))),
+                json['photo_posts']!.map((x) => PhotoPost.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "photo_posts": photoPosts == null
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'photo_posts': photoPosts == null
             ? []
             : List<dynamic>.from(photoPosts!.map((x) => x.toMap())),
       };
@@ -168,72 +168,72 @@ class PhotoPost {
   String toJson() => json.encode(toMap());
 
   factory PhotoPost.fromMap(Map<String, dynamic> json) => PhotoPost(
-        createdAt: json["created_at"] == null
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        uid: json["uid"],
-        title: json["title"],
-        description: json["description"],
-        hashtags: json["hashtags"] == null
+            : DateTime.parse(json['created_at']),
+        uid: json['uid'],
+        title: json['title'],
+        description: json['description'],
+        hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json["hashtags"]!.map((x) => x)),
-        taggedUserUids: json["tagged_user_uids"],
-        isDeleted: json["is_deleted"],
-        isArchived: json["is_archived"],
-        isActive: json["is_active"],
-        postCreatorType: json["post_creator_type"],
-        updatedAt: json["updated_at"] == null
+            : List<String>.from(json['hashtags']!.map((x) => x)),
+        taggedUserUids: json['tagged_user_uids'],
+        isDeleted: json['is_deleted'],
+        isArchived: json['is_archived'],
+        isActive: json['is_active'],
+        postCreatorType: json['post_creator_type'],
+        updatedAt: json['updated_at'] == null
             ? null
-            : DateTime.parse(json["updated_at"]),
-        userUid: json["user_uid"],
-        location: json["location"],
-        totalImpressions: json["total_impressions"],
-        totalLikes: json["total_likes"],
-        totalComments: json["total_comments"],
-        internalAiDescription: json["internal_ai_description"],
-        addressLatLongWkb: json["address_lat_long_wkb"],
-        creatorLatLongWkb: json["creator_lat_long_wkb"],
-        taggedCommunityUids: json["tagged_community_uids"],
-        totalShares: json["total_shares"],
-        cumulativeScore: json["cumulative_score"],
-        filesData: json["files_data"] == null
+            : DateTime.parse(json['updated_at']),
+        userUid: json['user_uid'],
+        location: json['location'],
+        totalImpressions: json['total_impressions'],
+        totalLikes: json['total_likes'],
+        totalComments: json['total_comments'],
+        internalAiDescription: json['internal_ai_description'],
+        addressLatLongWkb: json['address_lat_long_wkb'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        taggedCommunityUids: json['tagged_community_uids'],
+        totalShares: json['total_shares'],
+        cumulativeScore: json['cumulative_score'],
+        filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
-        seoDataWeighted: json["seo_data_weighted"],
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+        seoDataWeighted: json['seo_data_weighted'],
         creator:
-            json["creator"] == null ? null : Creator.fromMap(json["creator"]),
+            json['creator'] == null ? null : Creator.fromMap(json['creator']),
       );
 
   Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "uid": uid,
-        "title": title,
-        "description": description,
-        "hashtags":
+        'created_at': createdAt?.toIso8601String(),
+        'uid': uid,
+        'title': title,
+        'description': description,
+        'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
-        "tagged_user_uids": taggedUserUids,
-        "is_deleted": isDeleted,
-        "is_archived": isArchived,
-        "is_active": isActive,
-        "post_creator_type": postCreatorType,
-        "updated_at": updatedAt?.toIso8601String(),
-        "user_uid": userUid,
-        "location": location,
-        "total_impressions": totalImpressions,
-        "total_likes": totalLikes,
-        "total_comments": totalComments,
-        "internal_ai_description": internalAiDescription,
-        "address_lat_long_wkb": addressLatLongWkb,
-        "creator_lat_long_wkb": creatorLatLongWkb,
-        "tagged_community_uids": taggedCommunityUids,
-        "total_shares": totalShares,
-        "cumulative_score": cumulativeScore,
-        "files_data": filesData == null
+        'tagged_user_uids': taggedUserUids,
+        'is_deleted': isDeleted,
+        'is_archived': isArchived,
+        'is_active': isActive,
+        'post_creator_type': postCreatorType,
+        'updated_at': updatedAt?.toIso8601String(),
+        'user_uid': userUid,
+        'location': location,
+        'total_impressions': totalImpressions,
+        'total_likes': totalLikes,
+        'total_comments': totalComments,
+        'internal_ai_description': internalAiDescription,
+        'address_lat_long_wkb': addressLatLongWkb,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'tagged_community_uids': taggedCommunityUids,
+        'total_shares': totalShares,
+        'cumulative_score': cumulativeScore,
+        'files_data': filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-        "seo_data_weighted": seoDataWeighted,
-        "creator": creator?.toMap(),
+        'seo_data_weighted': seoDataWeighted,
+        'creator': creator?.toMap(),
       };
 }
 
@@ -368,71 +368,71 @@ class Creator {
   String toJson() => json.encode(toMap());
 
   factory Creator.fromMap(Map<String, dynamic> json) => Creator(
-        bio: json["bio"],
-        dob: json["dob"],
-        uid: json["uid"],
-        name: json["name"],
-        gender: json["gender"],
-        address: json["address"],
-        isSpam: json["is_spam"],
-        emailId: json["email_id"],
-        username: json["username"],
-        isBanned: json["is_banned"],
-        isOnline: json["is_online"],
-        totalLikes: json["total_likes"],
-        isPortfolio: json["is_portfolio"],
-        mobileNumber: json["mobile_number"],
-        registeredOn: json["registered_on"] == null
+        bio: json['bio'],
+        dob: json['dob'],
+        uid: json['uid'],
+        name: json['name'],
+        gender: json['gender'],
+        address: json['address'],
+        isSpam: json['is_spam'],
+        emailId: json['email_id'],
+        username: json['username'],
+        isBanned: json['is_banned'],
+        isOnline: json['is_online'],
+        totalLikes: json['total_likes'],
+        isPortfolio: json['is_portfolio'],
+        mobileNumber: json['mobile_number'],
+        registeredOn: json['registered_on'] == null
             ? null
-            : DateTime.parse(json["registered_on"]),
-        isDeactivated: json["is_deactivated"],
-        lastActiveAt: json["last_active_at"] == null
+            : DateTime.parse(json['registered_on']),
+        isDeactivated: json['is_deactivated'],
+        lastActiveAt: json['last_active_at'] == null
             ? null
-            : DateTime.parse(json["last_active_at"]),
-        portfolioTitle: json["portfolio_title"],
-        profilePicture: json["profile_picture"],
-        publicEmailId: json["public_email_id"],
-        totalFollowers: json["total_followers"],
-        portfolioStatus: json["portfolio_status"],
-        totalFollowings: json["total_followings"],
-        totalPostLikes: json["total_post_likes"],
-        seoDataWeighted: json["seo_data_weighted"],
-        totalConnections: json["total_connections"],
-        portfolioCreatedAt: json["portfolio_created_at"],
-        portfolioDescription: json["portfolio_description"],
-        userLastLatLongWkb: json["user_last_lat_long_wkb"],
+            : DateTime.parse(json['last_active_at']),
+        portfolioTitle: json['portfolio_title'],
+        profilePicture: json['profile_picture'],
+        publicEmailId: json['public_email_id'],
+        totalFollowers: json['total_followers'],
+        portfolioStatus: json['portfolio_status'],
+        totalFollowings: json['total_followings'],
+        totalPostLikes: json['total_post_likes'],
+        seoDataWeighted: json['seo_data_weighted'],
+        totalConnections: json['total_connections'],
+        portfolioCreatedAt: json['portfolio_created_at'],
+        portfolioDescription: json['portfolio_description'],
+        userLastLatLongWkb: json['user_last_lat_long_wkb'],
       );
 
   Map<String, dynamic> toMap() => {
-        "bio": bio,
-        "dob": dob,
-        "uid": uid,
-        "name": name,
-        "gender": gender,
-        "address": address,
-        "is_spam": isSpam,
-        "email_id": emailId,
-        "username": username,
-        "is_banned": isBanned,
-        "is_online": isOnline,
-        "total_likes": totalLikes,
-        "is_portfolio": isPortfolio,
-        "mobile_number": mobileNumber,
-        "registered_on": registeredOn?.toIso8601String(),
-        "is_deactivated": isDeactivated,
-        "last_active_at": lastActiveAt?.toIso8601String(),
-        "portfolio_title": portfolioTitle,
-        "profile_picture": profilePicture,
-        "public_email_id": publicEmailId,
-        "total_followers": totalFollowers,
-        "portfolio_status": portfolioStatus,
-        "total_followings": totalFollowings,
-        "total_post_likes": totalPostLikes,
-        "seo_data_weighted": seoDataWeighted,
-        "total_connections": totalConnections,
-        "portfolio_created_at": portfolioCreatedAt,
-        "portfolio_description": portfolioDescription,
-        "user_last_lat_long_wkb": userLastLatLongWkb,
+        'bio': bio,
+        'dob': dob,
+        'uid': uid,
+        'name': name,
+        'gender': gender,
+        'address': address,
+        'is_spam': isSpam,
+        'email_id': emailId,
+        'username': username,
+        'is_banned': isBanned,
+        'is_online': isOnline,
+        'total_likes': totalLikes,
+        'is_portfolio': isPortfolio,
+        'mobile_number': mobileNumber,
+        'registered_on': registeredOn?.toIso8601String(),
+        'is_deactivated': isDeactivated,
+        'last_active_at': lastActiveAt?.toIso8601String(),
+        'portfolio_title': portfolioTitle,
+        'profile_picture': profilePicture,
+        'public_email_id': publicEmailId,
+        'total_followers': totalFollowers,
+        'portfolio_status': portfolioStatus,
+        'total_followings': totalFollowings,
+        'total_post_likes': totalPostLikes,
+        'seo_data_weighted': seoDataWeighted,
+        'total_connections': totalConnections,
+        'portfolio_created_at': portfolioCreatedAt,
+        'portfolio_description': portfolioDescription,
+        'user_last_lat_long_wkb': userLastLatLongWkb,
       };
 }
 
@@ -460,12 +460,12 @@ class FilesDatum {
   String toJson() => json.encode(toMap());
 
   factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: json["type"],
-        imageUrl: json["image_url"],
+        type: json['type'],
+        imageUrl: json['image_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "image_url": imageUrl,
+        'type': type,
+        'image_url': imageUrl,
       };
 }

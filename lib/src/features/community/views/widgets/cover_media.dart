@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
-import '../../../../../config/mocks/mocks.dart';
-import '../../bloc/bloc.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 
 class CommunityPageCoverVideoView extends StatelessWidget {
   CommunityPageCoverVideoView({super.key});
@@ -102,7 +102,7 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
   void initState() {
     super.initState();
     controller = CachedVideoPlayerPlusController.networkUrl(
-        Uri.parse('${widget.videoUrl}'))
+        Uri.parse('${widget.videoUrl}'),)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});

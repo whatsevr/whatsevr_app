@@ -36,28 +36,28 @@ class SearchedUsersAndCommunitiesResponse {
   String toJson() => json.encode(toMap());
 
   factory SearchedUsersAndCommunitiesResponse.fromMap(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       SearchedUsersAndCommunitiesResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        users: json["users"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        users: json['users'] == null
             ? []
-            : List<User>.from(json["users"]!.map((x) => User.fromMap(x))),
-        communities: json["communities"] == null
+            : List<User>.from(json['users']!.map((x) => User.fromMap(x))),
+        communities: json['communities'] == null
             ? []
             : List<Community>.from(
-                json["communities"]!.map((x) => Community.fromMap(x))),
+                json['communities']!.map((x) => Community.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "users": users == null
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'users': users == null
             ? []
             : List<dynamic>.from(users!.map((x) => x.toMap())),
-        "communities": communities == null
+        'communities': communities == null
             ? []
             : List<dynamic>.from(communities!.map((x) => x.toMap())),
       };
@@ -131,37 +131,37 @@ class Community {
   String toJson() => json.encode(toMap());
 
   factory Community.fromMap(Map<String, dynamic> json) => Community(
-        createdAt: json["created_at"] == null
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        adminUserUid: json["admin_user_uid"],
-        status: json["status"],
-        bio: json["bio"],
-        location: json["location"],
-        description: json["description"],
-        title: json["title"],
-        profilePicture: json["profile_picture"],
-        uid: json["uid"],
-        username: json["username"],
-        totalMembers: json["total_members"],
-        requireJoiningApproval: json["require_joining_approval"],
-        seoDataWeighted: json["seo_data_weighted"],
+            : DateTime.parse(json['created_at']),
+        adminUserUid: json['admin_user_uid'],
+        status: json['status'],
+        bio: json['bio'],
+        location: json['location'],
+        description: json['description'],
+        title: json['title'],
+        profilePicture: json['profile_picture'],
+        uid: json['uid'],
+        username: json['username'],
+        totalMembers: json['total_members'],
+        requireJoiningApproval: json['require_joining_approval'],
+        seoDataWeighted: json['seo_data_weighted'],
       );
 
   Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "admin_user_uid": adminUserUid,
-        "status": status,
-        "bio": bio,
-        "location": location,
-        "description": description,
-        "title": title,
-        "profile_picture": profilePicture,
-        "uid": uid,
-        "username": username,
-        "total_members": totalMembers,
-        "require_joining_approval": requireJoiningApproval,
-        "seo_data_weighted": seoDataWeighted,
+        'created_at': createdAt?.toIso8601String(),
+        'admin_user_uid': adminUserUid,
+        'status': status,
+        'bio': bio,
+        'location': location,
+        'description': description,
+        'title': title,
+        'profile_picture': profilePicture,
+        'uid': uid,
+        'username': username,
+        'total_members': totalMembers,
+        'require_joining_approval': requireJoiningApproval,
+        'seo_data_weighted': seoDataWeighted,
       };
 }
 
@@ -296,70 +296,70 @@ class User {
   String toJson() => json.encode(toMap());
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-        registeredOn: json["registered_on"] == null
+        registeredOn: json['registered_on'] == null
             ? null
-            : DateTime.parse(json["registered_on"]),
-        uid: json["uid"],
-        username: json["username"],
-        mobileNumber: json["mobile_number"],
-        emailId: json["email_id"],
-        name: json["name"],
-        bio: json["bio"],
-        address: json["address"],
-        dob: json["dob"],
-        profilePicture: json["profile_picture"],
-        isPortfolio: json["is_portfolio"],
-        portfolioStatus: json["portfolio_status"],
-        portfolioDescription: json["portfolio_description"],
-        isBanned: json["is_banned"],
-        isSpam: json["is_spam"],
-        isDeactivated: json["is_deactivated"],
-        portfolioCreatedAt: json["portfolio_created_at"],
-        portfolioTitle: json["portfolio_title"],
-        totalFollowers: json["total_followers"],
-        totalFollowings: json["total_followings"],
-        totalPostLikes: json["total_post_likes"],
-        gender: json["gender"],
-        isOnline: json["is_online"],
-        lastActiveAt: json["last_active_at"] == null
+            : DateTime.parse(json['registered_on']),
+        uid: json['uid'],
+        username: json['username'],
+        mobileNumber: json['mobile_number'],
+        emailId: json['email_id'],
+        name: json['name'],
+        bio: json['bio'],
+        address: json['address'],
+        dob: json['dob'],
+        profilePicture: json['profile_picture'],
+        isPortfolio: json['is_portfolio'],
+        portfolioStatus: json['portfolio_status'],
+        portfolioDescription: json['portfolio_description'],
+        isBanned: json['is_banned'],
+        isSpam: json['is_spam'],
+        isDeactivated: json['is_deactivated'],
+        portfolioCreatedAt: json['portfolio_created_at'],
+        portfolioTitle: json['portfolio_title'],
+        totalFollowers: json['total_followers'],
+        totalFollowings: json['total_followings'],
+        totalPostLikes: json['total_post_likes'],
+        gender: json['gender'],
+        isOnline: json['is_online'],
+        lastActiveAt: json['last_active_at'] == null
             ? null
-            : DateTime.parse(json["last_active_at"]),
-        userLastLatLongWkb: json["user_last_lat_long_wkb"],
-        totalConnections: json["total_connections"],
-        totalLikes: json["total_likes"],
-        publicEmailId: json["public_email_id"],
-        seoDataWeighted: json["seo_data_weighted"],
+            : DateTime.parse(json['last_active_at']),
+        userLastLatLongWkb: json['user_last_lat_long_wkb'],
+        totalConnections: json['total_connections'],
+        totalLikes: json['total_likes'],
+        publicEmailId: json['public_email_id'],
+        seoDataWeighted: json['seo_data_weighted'],
       );
 
   Map<String, dynamic> toMap() => {
-        "registered_on": registeredOn?.toIso8601String(),
-        "uid": uid,
-        "username": username,
-        "mobile_number": mobileNumber,
-        "email_id": emailId,
-        "name": name,
-        "bio": bio,
-        "address": address,
-        "dob": dob,
-        "profile_picture": profilePicture,
-        "is_portfolio": isPortfolio,
-        "portfolio_status": portfolioStatus,
-        "portfolio_description": portfolioDescription,
-        "is_banned": isBanned,
-        "is_spam": isSpam,
-        "is_deactivated": isDeactivated,
-        "portfolio_created_at": portfolioCreatedAt,
-        "portfolio_title": portfolioTitle,
-        "total_followers": totalFollowers,
-        "total_followings": totalFollowings,
-        "total_post_likes": totalPostLikes,
-        "gender": gender,
-        "is_online": isOnline,
-        "last_active_at": lastActiveAt?.toIso8601String(),
-        "user_last_lat_long_wkb": userLastLatLongWkb,
-        "total_connections": totalConnections,
-        "total_likes": totalLikes,
-        "public_email_id": publicEmailId,
-        "seo_data_weighted": seoDataWeighted,
+        'registered_on': registeredOn?.toIso8601String(),
+        'uid': uid,
+        'username': username,
+        'mobile_number': mobileNumber,
+        'email_id': emailId,
+        'name': name,
+        'bio': bio,
+        'address': address,
+        'dob': dob,
+        'profile_picture': profilePicture,
+        'is_portfolio': isPortfolio,
+        'portfolio_status': portfolioStatus,
+        'portfolio_description': portfolioDescription,
+        'is_banned': isBanned,
+        'is_spam': isSpam,
+        'is_deactivated': isDeactivated,
+        'portfolio_created_at': portfolioCreatedAt,
+        'portfolio_title': portfolioTitle,
+        'total_followers': totalFollowers,
+        'total_followings': totalFollowings,
+        'total_post_likes': totalPostLikes,
+        'gender': gender,
+        'is_online': isOnline,
+        'last_active_at': lastActiveAt?.toIso8601String(),
+        'user_last_lat_long_wkb': userLastLatLongWkb,
+        'total_connections': totalConnections,
+        'total_likes': totalLikes,
+        'public_email_id': publicEmailId,
+        'seo_data_weighted': seoDataWeighted,
       };
 }

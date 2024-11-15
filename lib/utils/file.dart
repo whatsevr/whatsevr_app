@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
-import '../config/api/external/models/business_validation_exception.dart';
-import '../dev/talker.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 Future<File?> uint8BytesToFile(Uint8List bytes) async {
   try {

@@ -24,8 +24,8 @@ import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 
-import '../../../../../config/api/response_model/search/searched_photo_posts.dart';
-import '../../../../../config/widgets/dynamic_height_views.dart';
+import 'package:whatsevr_app/config/api/response_model/search/searched_photo_posts.dart';
+import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
 part 'widgets/recents.dart';
 part 'widgets/users.dart';
 part 'widgets/portfolios.dart';

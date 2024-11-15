@@ -5,12 +5,12 @@ import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-import '../../../dev/talker.dart';
-import '../../../utils/file.dart';
-import '../../routes/router.dart';
-import '../app_bar.dart';
-import '../loading_indicator.dart';
-import 'aspect_ratio.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/utils/file.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class ImageCropperPageArgument {
   final File imageFileToCrop;

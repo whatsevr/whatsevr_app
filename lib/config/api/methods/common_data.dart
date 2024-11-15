@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../response_model/common_data.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/common_data.dart';
 
 class CommonDataApi {
   static Future<CommonDataResponse?> getAllCommonData() async {

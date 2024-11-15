@@ -7,7 +7,7 @@ class _FlicksView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMoreFlickPosts());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return GridView.builder(
@@ -129,7 +129,7 @@ class _FlicksView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${GetTimeAgo.parse(flick!.createdAt!)}',
+                        GetTimeAgo.parse(flick!.createdAt!),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

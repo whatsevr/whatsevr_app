@@ -4,9 +4,9 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../../../../config/api/response_model/profile_details.dart';
-import '../../../../../utils/conversion.dart';
-import '../../bloc/account_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 
 class AccountPageAboutView extends StatelessWidget {
   const AccountPageAboutView({

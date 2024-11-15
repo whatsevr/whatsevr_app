@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/widgets/app_bar.dart';
-import '../../../../../config/widgets/buttons/button.dart';
-import '../../../../../config/widgets/dialogs/place_search_list.dart';
-import '../../../../../config/widgets/dialogs/search_and_tag.dart';
-import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
-import '../../../../../config/widgets/media/aspect_ratio.dart';
-import '../../../../../config/widgets/media/asset_picker.dart';
-import '../../../../../config/widgets/media/meta_data.dart';
-import '../../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../../../config/widgets/pad_horizontal.dart';
-import '../../../../../config/widgets/previewers/video.dart';
-import '../../../../../config/widgets/product_guide/product_guides.dart';
-import '../../../../../config/widgets/textfield/super_textform_field.dart';
-import '../bloc/create_post_bloc.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/place_search_list.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/search_and_tag.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
+import 'package:whatsevr_app/config/widgets/media/meta_data.dart';
+import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/previewers/video.dart';
+import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
 
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;

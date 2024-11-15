@@ -11,10 +11,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fraction/fraction.dart';
 import 'package:video_editor/video_editor.dart';
 
-import '../../routes/router.dart';
-import '../app_bar.dart';
-import '../loading_indicator.dart';
-import 'aspect_ratio.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class VideoEditorPageArgument {
   final File videoFile;

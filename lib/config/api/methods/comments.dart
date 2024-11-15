@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../requests_model/comments/comment_and_reply.dart';
-import '../response_model/comments/get_comments.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
+import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart';
 
 class CommentsApi {
   static Future<GetCommentsResponse?> getComments({

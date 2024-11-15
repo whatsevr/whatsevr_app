@@ -48,7 +48,7 @@ class _YourCommunities extends StatelessWidget {
                               RoutesName.community,
                               extras: CommunityPageArgument(
                                   isEditMode: true,
-                                  communityUid: userCommunity?.uid),
+                                  communityUid: userCommunity?.uid,),
                             );
                           },
                           child: Column(
@@ -92,7 +92,7 @@ class _YourCommunities extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )),
+                          ),),
                     if (state.userCommunitiesResponse?.joinedCommunities
                             ?.isNotEmpty ??
                         false)
@@ -111,7 +111,7 @@ class _YourCommunities extends StatelessWidget {
                             AppNavigationService.newRoute(
                               RoutesName.community,
                               extras: CommunityPageArgument(
-                                  communityUid: joinedCommunity?.uid),
+                                  communityUid: joinedCommunity?.uid,),
                             );
                           },
                           child: Column(
@@ -137,7 +137,7 @@ class _YourCommunities extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )),
+                          ),),
                   ];
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,

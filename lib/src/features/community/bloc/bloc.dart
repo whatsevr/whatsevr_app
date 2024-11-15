@@ -9,13 +9,13 @@ import 'package:whatsevr_app/config/api/response_model/community/community_detai
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
-import '../../../../config/api/methods/users.dart';
-import '../../../../config/api/response_model/profile_details.dart';
-import '../../../../config/api/response_model/user_flicks.dart';
-import '../../../../config/api/response_model/user_memories.dart';
-import '../../../../config/api/response_model/user_offers.dart';
-import '../../../../config/api/response_model/user_video_posts.dart';
-import '../../../../config/services/auth_db.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -34,7 +34,7 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
       emit(state.copyWith(
         isEditMode: event.communityPageArgument?.isEditMode ?? false,
         communityUid: event.communityPageArgument?.communityUid,
-      ));
+      ),);
 
       add(LoadCommunityData());
     } catch (e) {
@@ -43,11 +43,11 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
   }
 
   FutureOr<void> _onLoadCommunityData(
-      LoadCommunityData event, Emitter<CommunityState> emit) async {
+      LoadCommunityData event, Emitter<CommunityState> emit,) async {
     try {
       final CommunityProfileDataResponse? profileDetailsResponse =
           await CommunityApi.getCommunityDetails(
-              communityUid: state.communityUid!);
+              communityUid: state.communityUid!,);
       emit(
         state.copyWith(
           communityDetailsResponse: profileDetailsResponse,

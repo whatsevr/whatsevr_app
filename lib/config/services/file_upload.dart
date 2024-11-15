@@ -4,9 +4,9 @@ import 'package:cloudinary/cloudinary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:supabase/supabase.dart';
 
-import '../../constants.dart';
-import '../../dev/talker.dart';
-import '../api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/constants.dart';
+import 'package:whatsevr_app/dev/talker.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class FileUploadService {
   static late final SupabaseStorageClient _supabaseStorageClient;

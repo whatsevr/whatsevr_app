@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../routes/router.dart';
-import '../pad_horizontal.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 Completer<void>? _currentModalCompleter;
 

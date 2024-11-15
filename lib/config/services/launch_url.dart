@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import '../../dev/talker.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 
 void launchWebURL(
   BuildContext context, {

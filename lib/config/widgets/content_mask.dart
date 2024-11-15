@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import 'loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 
 class ContentMask extends StatelessWidget {
   final Widget child;

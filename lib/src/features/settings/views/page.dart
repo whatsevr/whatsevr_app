@@ -6,14 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
-import '../../../../config/api/response_model/community/user_communities.dart';
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/routes/router.dart';
-import '../../../../config/routes/routes_name.dart';
-import '../../../../config/widgets/app_bar.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../new_community/views/page.dart';
-import 'bloc/settings_bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/src/features/new_community/views/page.dart';
+import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart';
 
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
 

@@ -9,7 +9,7 @@ class _WtvView extends StatelessWidget {
   Widget build(BuildContext context) {
     onReachingEndOfTheList(_scrollController, execute: () {
       context.read<AllSearchBloc>().add(SearchMoreVideoPosts());
-    });
+    },);
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
@@ -147,7 +147,7 @@ class _WtvView extends StatelessWidget {
                       ),
                     ),
                   ],
-                ));
+                ),);
           },
         );
       },

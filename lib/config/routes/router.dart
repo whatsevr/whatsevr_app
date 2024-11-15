@@ -28,7 +28,7 @@ import 'package:whatsevr_app/config/widgets/media/image_editor.dart';
 import 'package:whatsevr_app/config/widgets/media/video_editor.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 
-import '../../src/features/community/views/page.dart';
+import 'package:whatsevr_app/src/features/community/views/page.dart';
 
 class NavigationObserver extends NavigatorObserver {
   NavigationObserver();

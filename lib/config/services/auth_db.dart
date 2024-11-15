@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:hive_flutter/adapters.dart';
 
-import '../api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class AuthUserDb {
   AuthUserDb._();

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-import '../../../../../../../config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-import '../../../../../../../config/widgets/post_tiles/flick.dart';
-import '../../../../../../../config/widgets/post_tiles/photo.dart';
-import '../../../../../../../config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
 
 class ExploreMixPostsView extends StatelessWidget {
   final ScrollController? scrollController;

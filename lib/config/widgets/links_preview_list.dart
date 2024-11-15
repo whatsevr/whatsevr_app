@@ -4,7 +4,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' show PreviewData;
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:gap/gap.dart';
 
-import '../services/launch_url.dart';
+import 'package:whatsevr_app/config/services/launch_url.dart';
 
 class LinksPreviewListView extends StatefulWidget {
   final List<String> urls;

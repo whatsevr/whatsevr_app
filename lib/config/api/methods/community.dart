@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../requests_model/community/create_community.dart';
-import '../response_model/community/community_details.dart';
-import '../response_model/community/top_communities.dart';
-import '../response_model/community/user_communities.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
+import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
 
 class CommunityApi {
   static Future<TopCommunitiesResponse?> topCommunities({

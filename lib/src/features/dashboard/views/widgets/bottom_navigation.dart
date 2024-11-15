@@ -11,17 +11,17 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../../../../config/enums/post_creator_type.dart';
-import '../../../../../config/widgets/dialogs/auth_dialogs.dart';
-import '../../../../../config/widgets/dialogs/content_upload_button_sheet.dart';
-import '../../../../../config/widgets/dialogs/showAppModalSheet.dart';
-import '../../../account/views/page.dart';
-import '../../../chats/views/page.dart';
-import '../../../explore/views/page.dart';
-import '../../../flicks/views/page.dart';
-import '../../../home/views/page.dart';
-import '../../../notifications/views/page.dart';
-import '../../bloc/dashboard_bloc.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:whatsevr_app/src/features/chats/views/page.dart';
+import 'package:whatsevr_app/src/features/explore/views/page.dart';
+import 'package:whatsevr_app/src/features/flicks/views/page.dart';
+import 'package:whatsevr_app/src/features/home/views/page.dart';
+import 'package:whatsevr_app/src/features/notifications/views/page.dart';
+import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 
 class DashboardPageBottomNavigationBar extends StatefulWidget {
   const DashboardPageBottomNavigationBar({

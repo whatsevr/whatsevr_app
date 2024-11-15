@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/src/features/chats/bloc/chat_bloc.dart';
-import '../../../../../config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
 
 class ChatsPageChatsView extends StatelessWidget {
   const ChatsPageChatsView({
@@ -27,7 +27,7 @@ class ChatsPageChatsView extends StatelessWidget {
               return ListTile(
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      otherUser?.profilePicture ?? MockData.blankProfileAvatar),
+                      otherUser?.profilePicture ?? MockData.blankProfileAvatar,),
                 ),
                 title: Text(
                   ' ${otherUser?.name}',

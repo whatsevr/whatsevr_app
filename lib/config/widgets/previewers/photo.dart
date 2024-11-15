@@ -1,8 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import '../../routes/router.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
 
-import '../app_bar.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
 void showPhotoPreviewDialog(
     {BuildContext? context, String? photoUrl, String? appBarTitle,}) {

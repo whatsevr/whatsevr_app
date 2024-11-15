@@ -6,22 +6,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../config/api/response_model/common_data.dart';
-import '../../../../config/api/response_model/profile_details.dart';
-import '../../../../config/mocks/mocks.dart';
-import '../../../../config/widgets/app_bar.dart';
-import '../../../../config/widgets/dialogs/common_data_list.dart';
-import '../../../../config/widgets/dialogs/showAppModalSheet.dart';
-import '../../../../config/widgets/label_container.dart';
-import '../../../../config/widgets/mask_text.dart';
-import '../../../../config/widgets/media/aspect_ratio.dart';
-import '../../../../config/widgets/media/asset_picker.dart';
-import '../../../../config/widgets/media/media_pick_choice.dart';
-import '../../../../config/widgets/media/thumbnail_selection.dart';
-import '../../../../config/widgets/pad_horizontal.dart';
-import '../../../../config/widgets/previewers/video.dart';
-import '../../../../config/widgets/textfield/super_textform_field.dart';
-import '../bloc/bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/common_data.dart';
+import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/label_container.dart';
+import 'package:whatsevr_app/config/widgets/mask_text.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
+import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
+import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/previewers/video.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
+import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
 
 // Adjust the import
 class ProfileUpdatePageArgument {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
-import '../../routes/router.dart';
-import '../app_bar.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
 void showPdfPreviewDialog(
     {BuildContext? context, String? pdfUrl, String? appBarTitle,}) {

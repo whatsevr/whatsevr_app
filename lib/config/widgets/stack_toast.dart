@@ -1,7 +1,7 @@
 import 'package:animated_toast_list/animated_toast_list.dart';
 import 'package:flutter/material.dart';
-import '../routes/router.dart';
-import '../themes/theme.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 class WhatsevrStackToast extends StatelessWidget {
   final Widget child;

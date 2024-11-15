@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/response_model/user_relations/user_relations.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class UserRelationsApi {
   static Future<(int? statusCode, String? message)?> followUser({

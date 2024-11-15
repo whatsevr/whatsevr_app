@@ -55,7 +55,7 @@ class AccountPage extends StatelessWidget {
       create: (BuildContext context) => AccountBloc()
         ..add(AccountInitialEvent(
           accountPageArgument: pageArgument,
-        )),
+        ),),
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
           return Scaffold(
@@ -433,7 +433,7 @@ class AccountPage extends StatelessWidget {
                                             style: TextStyle(fontSize: 14),
                                           ),
                                         ],
-                                      )),
+                                      ),),
                                 ),
                                 Expanded(
                                   child: GestureDetector(
@@ -458,7 +458,7 @@ class AccountPage extends StatelessWidget {
                                             style: TextStyle(fontSize: 14),
                                           ),
                                         ],
-                                      )),
+                                      ),),
                                 ),
                               ],
                             ),

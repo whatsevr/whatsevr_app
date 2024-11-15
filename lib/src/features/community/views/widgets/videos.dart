@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../../config/api/response_model/user_video_posts.dart';
-import '../../../../../utils/conversion.dart';
-import '../../bloc/bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 
 class CommunityPageVideosView extends StatelessWidget {
   const CommunityPageVideosView({super.key});

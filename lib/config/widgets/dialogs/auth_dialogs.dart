@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 
-import '../../../generated/assets.dart';
-import '../../api/methods/auth.dart';
-import '../../api/methods/users.dart';
-import '../../api/requests_model/auth/register.dart';
-import '../../api/response_model/multiple_user_details.dart';
-import '../../mocks/mocks.dart';
-import '../../routes/router.dart';
-import '../../routes/routes_name.dart';
-import '../../services/auth_db.dart';
-import '../../services/auth_user_service.dart';
-import '../buttons/button.dart';
-import '../content_mask.dart';
-import '../textfield/super_textform_field.dart';
+import 'package:whatsevr_app/generated/assets.dart';
+import 'package:whatsevr_app/config/api/methods/auth.dart';
+import 'package:whatsevr_app/config/api/methods/users.dart';
+import 'package:whatsevr_app/config/api/requests_model/auth/register.dart';
+import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/content_mask.dart';
+import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 
 class SwitchUserDialogUi extends StatefulWidget {
   const SwitchUserDialogUi({super.key});

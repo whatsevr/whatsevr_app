@@ -31,7 +31,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   }
 
   Future<void> _onFetchReactions(
-      FetchReactions event, Emitter<ReactUnreactState> emit) async {
+      FetchReactions event, Emitter<ReactUnreactState> emit,) async {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
@@ -44,13 +44,13 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
         emit(state.copyWith(
           reactedItemIds: _reactedItemIds,
           isLoading: false,
-        ));
+        ),);
       } else {
         emit(state.copyWith(isLoading: false, error: 'User not logged in'));
       }
     } catch (e) {
       emit(
-          state.copyWith(isLoading: false, error: 'Failed to fetch reactions'));
+          state.copyWith(isLoading: false, error: 'Failed to fetch reactions'),);
     }
   }
 
@@ -65,7 +65,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
 
       allReactions.addAll(currentPageReactions);
       await box.put(
-          '$_reactedItemsBox$page', currentPageReactions); // Cache by page
+          '$_reactedItemsBox$page', currentPageReactions,); // Cache by page
       page++;
     }
 
@@ -102,7 +102,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
                   e.memoryUid ??
                   e.offerPostUid ??
                   e.photoPostUid ??
-                  e.pdfUid)
+                  e.pdfUid,)
               .toList() ??
           [];
       uids = uids.toSet().toList();
@@ -114,7 +114,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   }
 
   Future<void> _onToggleReaction(
-      ToggleReaction event, Emitter<ReactUnreactState> emit) async {
+      ToggleReaction event, Emitter<ReactUnreactState> emit,) async {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
@@ -155,7 +155,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       emit(state.copyWith(reactedItemIds: _reactedItemIds, isLoading: false));
     } catch (e) {
       emit(
-          state.copyWith(error: 'Failed to toggle reaction', isLoading: false));
+          state.copyWith(error: 'Failed to toggle reaction', isLoading: false),);
     }
   }
 
@@ -166,7 +166,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       String? memoryUid,
       String? offerPostUid,
       String? photoPostUid,
-      String? pdfUid) async {
+      String? pdfUid,) async {
     try {
       await ReactionsApi.recordReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
@@ -189,7 +189,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       String? memoryUid,
       String? offerPostUid,
       String? photoPostUid,
-      String? pdfUid) async {
+      String? pdfUid,) async {
     try {
       await ReactionsApi.deleteReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,

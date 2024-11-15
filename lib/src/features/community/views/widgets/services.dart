@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 
-import '../../bloc/bloc.dart';
+import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 
 class CommunityPageServicesView extends StatelessWidget {
   const CommunityPageServicesView({super.key});

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/response_model/reactions/user_reacted_items.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../response_model/reactions/get_reactions.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart';
 
 class ReactionsApi {
   static Future<GetReactionsResponse?> getContentReactions({

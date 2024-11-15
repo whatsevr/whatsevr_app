@@ -4,9 +4,9 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
-import '../../../../../config/api/response_model/community/community_details.dart';
-import '../../../../../utils/conversion.dart';
-import '../../bloc/bloc.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 
 class CommunityPageAboutView extends StatelessWidget {
   const CommunityPageAboutView({

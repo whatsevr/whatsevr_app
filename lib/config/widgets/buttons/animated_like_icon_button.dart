@@ -71,7 +71,7 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
             widget.memoryUid,
             widget.offerPostUid,
             widget.photoPostUid,
-            widget.pdfUid
+            widget.pdfUid,
           ].where((element) => element != null).length ==
           1,
       'Only one of the uid should be passed',
@@ -133,7 +133,7 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                       offerPostUid: widget.offerPostUid,
                       photoPostUid: widget.photoPostUid,
                       pdfUid: widget.pdfUid,
-                    ));
+                    ),);
 
                     setState(() {
                       _isReacted = !_isReacted;
@@ -145,7 +145,7 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                 ),
                 if (_reactionCount != 0)
                   Text(
-                    '${_reactionCount}',
+                    '$_reactionCount',
                     style: TextStyle(color: widget.firstColor ?? Colors.black),
                   ),
               ];

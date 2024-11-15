@@ -3,9 +3,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../mocks/mocks.dart';
-import '../../services/file_upload.dart';
-import '../media/aspect_ratio.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class WTVMiniPlayer extends StatefulWidget {
   final String? videoUrl;

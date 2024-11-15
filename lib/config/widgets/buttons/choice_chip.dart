@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 class WhatsevrChoiceChip extends StatelessWidget {

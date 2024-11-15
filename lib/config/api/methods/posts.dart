@@ -1,18 +1,18 @@
 import 'package:dio/dio.dart';
 
-import '../client.dart';
-import '../external/models/business_validation_exception.dart';
-import '../requests_model/create_flick_post.dart';
-import '../requests_model/create_memory.dart';
-import '../requests_model/create_offer.dart';
-import '../requests_model/create_photo_post.dart';
-import '../requests_model/create_video_post.dart';
-import '../requests_model/sanity_check_new_flick_post.dart';
-import '../requests_model/sanity_check_new_memory.dart';
-import '../requests_model/sanity_check_new_offer.dart';
-import '../requests_model/sanity_check_new_photo_posts.dart';
-import '../requests_model/sanity_check_new_video_post.dart';
-import '../requests_model/upload_pdf.dart';
+import 'package:whatsevr_app/config/api/client.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_flick_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_memory.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_offer.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_photo_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/create_video_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_flick_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_memory.dart';
+import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_offer.dart';
+import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_photo_posts.dart';
+import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_video_post.dart';
+import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
 
 class PostApi {
   static Future<(String? message, int? statusCode)?> sanityCheckNewVideoPost({

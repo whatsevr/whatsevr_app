@@ -2,13 +2,13 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../utils/conversion.dart';
-import '../../api/response_model/recommendation_offers.dart';
-import '../../mocks/mocks.dart';
-import '../buttons/animated_like_icon_button.dart';
-import '../dynamic_height_views.dart';
-import '../feed_players/wtv_mini_player.dart';
-import '../pad_horizontal.dart';
+import 'package:whatsevr_app/utils/conversion.dart';
+import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
+import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
+import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
+import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
 class OfferPostFrame extends StatelessWidget {
   final String? offerPostUid;

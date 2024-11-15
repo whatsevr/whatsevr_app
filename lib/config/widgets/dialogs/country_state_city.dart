@@ -1,7 +1,7 @@
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 
 class CountryStateCityPage extends StatefulWidget {
   final bool scaffoldView;

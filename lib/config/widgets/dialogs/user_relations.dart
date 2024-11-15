@@ -10,10 +10,10 @@ import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/api/methods/user_relations.dart';
 import 'package:whatsevr_app/config/api/response_model/user_relations/user_relations.dart';
 
-import '../buttons/follow_unfollow.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 
 void showUserRelationsDialog(
-    {required BuildContext context, required String userUid}) {
+    {required BuildContext context, required String userUid,}) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation1, animation2) {
@@ -25,7 +25,7 @@ void showUserRelationsDialog(
 class _UserRelationsPage extends StatefulWidget {
   final String userUid;
 
-  const _UserRelationsPage({Key? key, required this.userUid}) : super(key: key);
+  const _UserRelationsPage({super.key, required this.userUid});
 
   @override
   _UserRelationsPageState createState() => _UserRelationsPageState();
@@ -74,11 +74,11 @@ class _UserInfo extends StatelessWidget {
   final VoidCallback onFollow;
 
   const _UserInfo({
-    Key? key,
+    super.key,
     this.isCard = false,
     required this.user,
     required this.onFollow,
-  }) : super(key: key);
+  });
 
   Widget followButton() {
     return WhatsevrFollowButton(
@@ -129,7 +129,7 @@ class _UserInfo extends StatelessWidget {
       ),
       title: Text(user.name ?? 'Unknown'),
       subtitle: Text(user.username ?? 'Unknown',
-          style: const TextStyle(fontSize: 12)),
+          style: const TextStyle(fontSize: 12),),
       trailing: followButton(),
     );
   }
@@ -138,7 +138,7 @@ class _UserInfo extends StatelessWidget {
 class FollowersTab extends StatefulWidget {
   final String userUid;
 
-  const FollowersTab({Key? key, required this.userUid}) : super(key: key);
+  const FollowersTab({super.key, required this.userUid});
 
   @override
   _FollowersTabState createState() => _FollowersTabState();
@@ -201,14 +201,14 @@ class _FollowersTabState extends State<FollowersTab> {
                                   },
                                 ),
                               ],
-                            ));
+                            ),);
                       },
                       child: _UserInfo(
                         user: _followers[index].user!,
                         onFollow: () {
                           // Handle follow action
                         },
-                      ));
+                      ),);
                 },
               );
   }
@@ -217,7 +217,7 @@ class _FollowersTabState extends State<FollowersTab> {
 class FollowingTab extends StatefulWidget {
   final String userUid;
 
-  const FollowingTab({Key? key, required this.userUid}) : super(key: key);
+  const FollowingTab({super.key, required this.userUid});
 
   @override
   _FollowingTabState createState() => _FollowingTabState();
@@ -276,7 +276,7 @@ class _FollowingTabState extends State<FollowingTab> {
 class ConnectionsTab extends StatefulWidget {
   final String userUid;
 
-  const ConnectionsTab({Key? key, required this.userUid}) : super(key: key);
+  const ConnectionsTab({super.key, required this.userUid});
 
   @override
   _ConnectionsTabState createState() => _ConnectionsTabState();
@@ -340,7 +340,7 @@ class _ConnectionsTabState extends State<ConnectionsTab> {
 class MutualFollowings extends StatefulWidget {
   final String userUid;
 
-  const MutualFollowings({Key? key, required this.userUid}) : super(key: key);
+  const MutualFollowings({super.key, required this.userUid});
 
   @override
   _MutualFollowingsState createState() => _MutualFollowingsState();
