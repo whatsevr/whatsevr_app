@@ -61,7 +61,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .eq('user1_uid', _currentUserUid)
         .order('last_message_at', ascending: false)
         .listen(
-          (chats) => add(LoadChats()),
+          (chats) {
+            add(LoadChats());
+          },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
@@ -72,7 +74,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .eq('user2_uid', _currentUserUid)
         .order('last_message_at', ascending: false)
         .listen(
-          (chats) => add(LoadChats()),
+          (chats) {
+           add(LoadChats());
+          },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
