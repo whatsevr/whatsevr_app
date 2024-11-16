@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/src/features/chats/bloc/chat_bloc.dart';
+import 'package:whatsevr_app/src/features/chat/chats/bloc/chat_bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
-import 'package:whatsevr_app/src/features/chats/views/widgets/calls.dart';
-import 'package:whatsevr_app/src/features/chats/views/widgets/chats.dart';
-import 'package:whatsevr_app/src/features/chats/views/widgets/groups.dart';
-import 'package:whatsevr_app/src/features/chats/views/widgets/requests.dart';
+import 'package:whatsevr_app/src/features/chat/chats/views/widgets/calls.dart';
+import 'package:whatsevr_app/src/features/chat/chats/views/widgets/chats.dart';
+import 'package:whatsevr_app/src/features/chat/chats/views/widgets/groups.dart';
+import 'package:whatsevr_app/src/features/chat/chats/views/widgets/requests.dart';
 
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});

@@ -16,7 +16,7 @@ import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
-import 'package:whatsevr_app/src/features/chats/views/page.dart';
+import 'package:whatsevr_app/src/features/chat/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 import 'package:whatsevr_app/src/features/flicks/views/page.dart';
 import 'package:whatsevr_app/src/features/home/views/page.dart';

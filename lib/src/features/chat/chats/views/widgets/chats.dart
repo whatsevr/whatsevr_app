@@ -2,9 +2,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/src/features/chats/bloc/chat_bloc.dart';
+import 'package:whatsevr_app/src/features/chat/chats/bloc/chat_bloc.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/src/features/chats/views/widgets/conversations.dart';
+
 
 class ChatsPageChatsView extends StatelessWidget {
   const ChatsPageChatsView({
@@ -31,7 +32,7 @@ class ChatsPageChatsView extends StatelessWidget {
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
                       return Conversations();
-                    },
+                    }, 
                   );
                 },
                 leading: CircleAvatar(

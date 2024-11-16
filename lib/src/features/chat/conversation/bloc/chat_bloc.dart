@@ -7,18 +7,16 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/src/features/chats/models/private_chat.dart';
-import 'package:whatsevr_app/src/features/chats/models/message.dart';
-import 'package:whatsevr_app/src/features/chats/models/user.dart';
+import 'package:whatsevr_app/config/services/supabase.dart';
+import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
+import 'package:whatsevr_app/src/features/chat/models/message.dart';
+import 'package:whatsevr_app/src/features/chat/models/user.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final SupabaseClient _supabase = SupabaseClient(
-    'https://dxvbdpxfzdpgiscphujy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dmJkcHhmemRwZ2lzY3BodWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3ODQ3NzksImV4cCI6MjAyNjM2MDc3OX0.9I-obmOReMg-jCrgzpGHTNVqtHSp8VCh1mYyaTjFG-A',
-  );
+  
   final String _currentUserUid;
   StreamSubscription? _chatSubscription1;
   StreamSubscription? _chatSubscription2;
@@ -55,7 +53,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await _chatSubscription1?.cancel();
 
     await _chatSubscription2?.cancel();
-    _chatSubscription1 = _supabase
+    _chatSubscription1 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
         .eq('user1_uid', _currentUserUid)
@@ -68,7 +66,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             highLevelCatch(error, StackTrace.current);
           },
         );
-    _chatSubscription2 = _supabase
+    _chatSubscription2 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
         .eq('user2_uid', _currentUserUid)
@@ -86,7 +84,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
     try {
       //get all chats
-      final response = await _supabase
+      final response = await RemoteDb.supabaseClient1
           .from('private_chats')
           .select(
             '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',
@@ -125,7 +123,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       // Cancel existing subscription
       await _messageSubscription?.cancel();
 
-      _messageSubscription = _supabase
+      _messageSubscription = RemoteDb.supabaseClient1
           .from('chat_messages') // Ensure table name is 'chat_messages'
           .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
           .eq('chat_id', event.chatId)
@@ -174,7 +172,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       // Actually send the message with retry mechanism
       final response = await retry(
-        () => _supabase
+        () => RemoteDb.supabaseClient1
             .from('chat_messages') // Ensure table name is 'chat_messages'
             .insert({
               'chat_type': event.chatType, // Use event.chatType
@@ -197,7 +195,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       ];
 
       // Update chat's last_message
-      await _supabase
+      await RemoteDb.supabaseClient1
           .from('chats')
           .update({'last_message': response}).eq('uid', event.chatId);
 
@@ -224,7 +222,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     try {
       // Check if chat already exists
-      final existingChat = await _supabase
+      final existingChat = await RemoteDb.supabaseClient1
           .from('chats')
           .select('*, chat_participants(*)')
           .eq('is_group', false)
@@ -244,7 +242,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
 
       // Create new chat
-      final response = await _supabase
+      final response = await RemoteDb.supabaseClient1
           .from('chats')
           .insert({
             'created_by': _currentUserUid,
@@ -254,7 +252,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           .single();
 
       // Add participants
-      await _supabase.from('chat_participants').insert([
+      await RemoteDb.supabaseClient1.from('chat_participants').insert([
         {
           'chat_id': response['id'],
           'user_id': _currentUserUid,
@@ -282,7 +280,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     try {
       // Create new group chat
-      final response = await _supabase
+      final response = await RemoteDb.supabaseClient1
           .from('chats')
           .insert({
             'created_by': _currentUserUid,
@@ -303,7 +301,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           )
           .toList();
 
-      await _supabase.from('chat_participants').insert(participants);
+      await RemoteDb.supabaseClient1.from('chat_participants').insert(participants);
 
       final chat = PrivateChat.fromMap(response);
       emit(
@@ -319,7 +317,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     Emitter<ChatState> emit,
   ) async {
     try {
-      final response = await _supabase.from('users').select().neq(
+      final response = await RemoteDb.supabaseClient1.from('users').select().neq(
             'id',
             _currentUserUid,
           );
@@ -344,7 +342,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _updateTypingStatus(SetTypingStatus event) async {
     try {
-      await _supabase.from('typing_status').upsert({
+      await RemoteDb.supabaseClient1.from('typing_status').upsert({
         'chat_id': event.chatId,
         'user_id': _currentUserUid,
         'is_typing': event.isTyping,
@@ -372,7 +370,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
 
       // Actually delete the message
-      await _supabase
+      await RemoteDb.supabaseClient1
           .from('chat_messages') // Ensure table name is 'chat_messages'
           .delete()
           .eq('uid', event.messageId) // Ensure 'uid' is used
@@ -415,7 +413,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       );
 
       // Actually update the message
-      await _supabase
+      await RemoteDb.supabaseClient1
           .from('chat_messages')
           .update({
             'content': event.newContent,

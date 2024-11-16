@@ -8,7 +8,7 @@ import 'package:whatsevr_app/src/features/chat/models/user.dart';
 import 'package:flutter/services.dart';
 
 
-class Conversations extends StatefulWidget {
+class ConversationsPage extends StatefulWidget {
   final List<ChatMessage> messages = List.generate(
     20, 
     (index) => ChatMessage( 
@@ -40,13 +40,13 @@ class Conversations extends StatefulWidget {
     // Add more users as needed
   }; 
  
-  Conversations({super.key, this.isGroup = true}); // Add this parameter
+  ConversationsPage({super.key, this.isGroup = true}); // Add this parameter
  
   @override
-  _ConversationsState createState() => _ConversationsState();
+  _ConversationsPageState createState() => _ConversationsPageState();
 }
 
-class _ConversationsState extends State<Conversations> with TickerProviderStateMixin {
+class _ConversationsPageState extends State<ConversationsPage> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
   bool _showScrollToBottom = false;
