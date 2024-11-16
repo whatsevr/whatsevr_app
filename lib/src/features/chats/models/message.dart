@@ -9,11 +9,15 @@ class ChatMessage {
   final DateTime? updatedAt;
   final bool? isDeleted;
   final bool? isPinned;
-  final bool? isEdited;
+  final bool? isEdited; 
   final dynamic replyToMessageUid;
   final dynamic deletedAt;
   final String? communityUid;
   final String? privateChatUid;
+  final bool? isRead;
+  final bool? isDelivered;
+  final DateTime? readAt;
+  final DateTime? deliveredAt;
 
   ChatMessage({
     this.uid,
@@ -29,6 +33,10 @@ class ChatMessage {
     this.deletedAt,
     this.communityUid,
     this.privateChatUid,
+    this.isRead,
+    this.isDelivered,
+    this.readAt,
+    this.deliveredAt,
   });
 
   ChatMessage copyWith({
@@ -45,6 +53,10 @@ class ChatMessage {
     dynamic deletedAt,
     String? communityUid,
     String? privateChatUid,
+    bool? isRead,
+    bool? isDelivered,
+    DateTime? readAt,
+    DateTime? deliveredAt,
   }) =>
       ChatMessage(
         uid: uid ?? this.uid,
@@ -60,6 +72,10 @@ class ChatMessage {
         deletedAt: deletedAt ?? this.deletedAt,
         communityUid: communityUid ?? this.communityUid,
         privateChatUid: privateChatUid ?? this.privateChatUid,
+        isRead: isRead ?? this.isRead,
+        isDelivered: isDelivered ?? this.isDelivered,
+        readAt: readAt ?? this.readAt,
+        deliveredAt: deliveredAt ?? this.deliveredAt,
       );
 
   factory ChatMessage.fromJson(String str) =>
@@ -85,6 +101,10 @@ class ChatMessage {
         deletedAt: json['deleted_at'],
         communityUid: json['community_uid'],
         privateChatUid: json['private_chat_uid'],
+        isRead: json['is_read'],
+        isDelivered: json['is_delivered'],
+        readAt: json['read_at'] == null ? null : DateTime.parse(json['read_at']),
+        deliveredAt: json['delivered_at'] == null ? null : DateTime.parse(json['delivered_at']),
       );
 
   Map<String, dynamic> toMap() => {
@@ -101,5 +121,9 @@ class ChatMessage {
         'deleted_at': deletedAt,
         'community_uid': communityUid,
         'private_chat_uid': privateChatUid,
+        'is_read': isRead,
+        'is_delivered': isDelivered,
+        'read_at': readAt?.toIso8601String(),
+        'delivered_at': deliveredAt?.toIso8601String(),
       };
 }

@@ -187,7 +187,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 showGeneralDialog(
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      return _ColorPalettePage();
+                      return _ThemePropertiesShowcase();
                     },);
               }
             ),
@@ -217,8 +217,8 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
   }
 }
 
-class _ColorPalettePage extends StatelessWidget {
-  const _ColorPalettePage();
+class _ThemePropertiesShowcase extends StatelessWidget {
+  const _ThemePropertiesShowcase();
 
   @override
   Widget build(BuildContext context) {
@@ -232,148 +232,80 @@ class _ColorPalettePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with theme toggle
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Theme Properties',
-                    style: theme.h1,
-                  ),
-                  Switch(
+                  Text('Theme Properties', style: theme.h1),
+                  Switch( 
                     value: context.isDarkMode,
-                    onChanged: (_) {
-                      context.toggleTheme();
-                    },
+                    onChanged: (_) => context.toggleTheme(),
                   ),
                 ],
               ),
               SizedBox(height: theme.spacing3),
-
-              // Theme properties
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _ThemePropertyBox(
-                        name: 'Primary',
-                        color: theme.primary,
-                        icon: Icons.color_lens,
-                        tooltip: 'Primary color used in the app',
+                      // Colors
+                      _buildSection(
+                        'Colors',
+                        [
+                          _ThemePropertyBox(name: 'Primary', color: theme.primary, icon: Icons.color_lens, tooltip: 'Primary color'),
+                          _ThemePropertyBox(name: 'Secondary', color: theme.secondary, icon: Icons.colorize, tooltip: 'Secondary color'),
+                          _ThemePropertyBox(name: 'Background', color: theme.background, icon: Icons.format_paint, tooltip: 'Background color'),
+                          _ThemePropertyBox(name: 'Surface', color: theme.surface, icon: Icons.layers, tooltip: 'Surface color'),
+                          _ThemePropertyBox(name: 'Error', color: theme.error, icon: Icons.error, tooltip: 'Error color'),
+                          _ThemePropertyBox(name: 'Success', color: theme.success, icon: Icons.check_circle, tooltip: 'Success color'),
+                          _ThemePropertyBox(name: 'Warning', color: theme.warning, icon: Icons.warning, tooltip: 'Warning color'),
+                          _ThemePropertyBox(name: 'Info', color: theme.info, icon: Icons.info, tooltip: 'Info color'),
+                          _ThemePropertyBox(name: 'Text', color: theme.text, icon: Icons.text_fields, tooltip: 'Text color'),
+                          _ThemePropertyBox(name: 'Text Light', color: theme.textLight, icon: Icons.text_format, tooltip: 'Light text color'),
+                          _ThemePropertyBox(name: 'Divider', color: theme.divider, icon: Icons.line_weight, tooltip: 'Divider color'),
+                          _ThemePropertyBox(name: 'Disabled', color: theme.disabled, icon: Icons.block, tooltip: 'Disabled color'),
+                          _ThemePropertyBox(name: 'Accent', color: theme.accent, icon: Icons.highlight, tooltip: 'Accent color'),
+                          _ThemePropertyBox(name: 'Button', color: theme.buttonColor, icon: Icons.smart_button, tooltip: 'Button color'),
+                          _ThemePropertyBox(name: 'Card', color: theme.card, icon: Icons.credit_card, tooltip: 'Card color'),
+                          _ThemePropertyBox(name: 'Icon', color: theme.icon, icon: Icons.interests, tooltip: 'Icon color'),
+                          _ThemePropertyBox(name: 'Shadow', color: theme.shadow, icon: Icons.blur_on, tooltip: 'Shadow color'),
+                          _ThemePropertyBox(name: 'AppBar', color: theme.appBar, icon: Icons.web_asset, tooltip: 'AppBar color'),
+                          _ThemePropertyBox(name: 'Light Background', color: theme.lightBackground, icon: Icons.light_mode, tooltip: 'Light background color'),
+                          _ThemePropertyBox(name: 'Dark Background', color: theme.darkBackground, icon: Icons.dark_mode, tooltip: 'Dark background color'),
+                        ],
                       ),
-                      _ThemePropertyBox(
-                        name: 'Secondary',
-                        color: theme.secondary,
-                        icon: Icons.colorize,
-                        tooltip: 'Secondary color used in the app',
+                      // Spacing
+                      _buildSection(
+                        'Spacing',
+                        [
+                          _ThemePropertyBox(name: 'Spacing 1', value: theme.spacing1, icon: Icons.space_bar, tooltip: 'Base spacing'),
+                          _ThemePropertyBox(name: 'Spacing 2', value: theme.spacing2, icon: Icons.space_bar, tooltip: 'Double spacing'),
+                          _ThemePropertyBox(name: 'Spacing 3', value: theme.spacing3, icon: Icons.space_bar, tooltip: 'Triple spacing'),
+                          _ThemePropertyBox(name: 'Spacing 4', value: theme.spacing4, icon: Icons.space_bar, tooltip: 'Quadruple spacing'),
+                          _ThemePropertyBox(name: 'Spacing 5', value: theme.spacing5, icon: Icons.space_bar, tooltip: 'Quintuple spacing'),
+                          _ThemePropertyBox(name: 'Spacing 6', value: theme.spacing6, icon: Icons.space_bar, tooltip: 'Sextuple spacing'),
+                        ],
                       ),
-                      _ThemePropertyBox(
-                        name: 'Background',
-                        color: theme.background,
-                        icon: Icons.format_paint,
-                        tooltip: 'Background color of the app',
+                      // Other Metrics
+                      _buildSection(
+                        'Metrics',
+                        [
+                          _ThemePropertyBox(name: 'Border Radius', value: theme.borderRadius, icon: Icons.rounded_corner, tooltip: 'Default border radius'),
+                          _ThemePropertyBox(name: 'Button Height', value: theme.buttonHeight, icon: Icons.height, tooltip: 'Standard button height'),
+                          _ThemePropertyBox(name: 'Elevation Small', value: theme.elevationSmall, icon: Icons.elevator, tooltip: 'Small elevation'),
+                          _ThemePropertyBox(name: 'Elevation Medium', value: theme.elevationMedium, icon: Icons.elevator, tooltip: 'Medium elevation'),
+                          _ThemePropertyBox(name: 'Elevation Large', value: theme.elevationLarge, icon: Icons.elevator, tooltip: 'Large elevation'),
+                        ],
                       ),
-                      _ThemePropertyBox(
-                        name: 'Surface',
-                        color: theme.surface,
-                        icon: Icons.layers,
-                        tooltip: 'Surface color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Error',
-                        color: theme.error,
-                        icon: Icons.error,
-                        tooltip: 'Error color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Text',
-                        color: theme.text,
-                        icon: Icons.text_fields,
-                        tooltip: 'Primary text color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Text Light',
-                        color: theme.textLight,
-                        icon: Icons.text_format,
-                        tooltip: 'Light text color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Divider',
-                        color: theme.divider,
-                        icon: Icons.line_weight,
-                        tooltip: 'Divider color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Disabled',
-                        color: theme.disabled,
-                        icon: Icons.block,
-                        tooltip: 'Disabled color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Accent',
-                        color: theme.accent,
-                        icon: Icons.highlight,
-                        tooltip: 'Accent color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Button',
-                        color: theme.button,
-                        icon: Icons.radio_button_checked,
-                        tooltip: 'Button color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Card',
-                        color: theme.card,
-                        icon: Icons.credit_card,
-                        tooltip: 'Card color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Icon',
-                        color: theme.icon,
-                        icon: Icons.insert_emoticon,
-                        tooltip: 'Icon color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Shadow',
-                        color: theme.shadow,
-                        icon: Icons.blur_on,
-                        tooltip: 'Shadow color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'AppBar',
-                        color: theme.appBar,
-                        icon: Icons.view_headline,
-                        tooltip: 'AppBar color used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Spacing 1',
-                        value: theme.spacing1,
-                        icon: Icons.space_bar,
-                        tooltip: 'Spacing 1 value used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Spacing 2',
-                        value: theme.spacing2,
-                        icon: Icons.space_bar,
-                        tooltip: 'Spacing 2 value used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Spacing 3',
-                        value: theme.spacing3,
-                        icon: Icons.space_bar,
-                        tooltip: 'Spacing 3 value used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Border Radius',
-                        value: theme.borderRadius,
-                        icon: Icons.rounded_corner,
-                        tooltip: 'Border radius value used in the app',
-                      ),
-                      _ThemePropertyBox(
-                        name: 'Button Height',
-                        value: theme.buttonHeight,
-                        icon: Icons.height,
-                        tooltip: 'Button height value used in the app',
+                      // Opacity
+                      _buildSection(
+                        'Opacity',
+                        [
+                          _ThemePropertyBox(name: 'Dialog Barrier', value: theme.dialogBarrierOpacity, icon: Icons.opacity, tooltip: 'Dialog barrier opacity'),
+                          _ThemePropertyBox(name: 'Disabled', value: theme.disabledOpacity, icon: Icons.opacity, tooltip: 'Disabled state opacity'),
+                          _ThemePropertyBox(name: 'Hover', value: theme.hoverOpacity, icon: Icons.opacity, tooltip: 'Hover state opacity'),
+                          _ThemePropertyBox(name: 'Focus', value: theme.focusOpacity, icon: Icons.opacity, tooltip: 'Focus state opacity'),
+                          _ThemePropertyBox(name: 'Selected', value: theme.selectedOpacity, icon: Icons.opacity, tooltip: 'Selected state opacity'),
+                        ],
                       ),
                     ],
                   ),
@@ -383,6 +315,26 @@ class _ColorPalettePage extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSection(String title, List<Widget> children) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        ...children,
+        const SizedBox(height: 16),
+      ],
     );
   }
 }
