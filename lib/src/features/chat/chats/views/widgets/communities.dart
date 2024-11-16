@@ -7,8 +7,7 @@ class _CommunitiesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder < ChatBloc, ChatState >
-    (
+    return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         return Scaffold(
           body: ListView.separated(
@@ -18,13 +17,49 @@ class _CommunitiesListView extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final community = state.communities[index];
               return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage:
-                      ExtendedNetworkImageProvider(community.profilePicture??MockData.blankCommunityAvatar),
+                onTap: () {
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return ConversationsPage(
+                        isCommunity: true,
+        
+                      );
+                    },
+                  );
+                },
+                leading: AdvancedAvatar(
+                  decoration: BoxDecoration(
+                    color: context.whatsevrTheme.shadow,
+                    shape: BoxShape.circle,
+                  ),
+                  image: ExtendedNetworkImageProvider(
+                    community.profilePicture ?? MockData.blankCommunityAvatar,
+                    cache: true,
+                  ),
+                  children: [
+                    Positioned(
+                      right: 2,
+                      bottom: 2,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 title: Text('${community.title}'),
-                subtitle: Text(community.plainLastMessage??'Start Chat'),
-                trailing:  Text('${GetTimeAgo.parse(community.lastMessageAt!, pattern: 'ddMMM')}'),
+                subtitle: Text(community.plainLastMessage ?? 'Start Chat'),
+                trailing: Text(
+                    '${GetTimeAgo.parse(community.lastMessageAt!, pattern: 'ddMMM')}'),
               );
             },
           ),

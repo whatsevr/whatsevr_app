@@ -24,7 +24,9 @@ class _ChatListView extends StatelessWidget {
                   showGeneralDialog(
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      return ConversationsPage();
+                      return ConversationsPage(
+                        isCommunity: false,
+                      );
                     },
                   );
                 },

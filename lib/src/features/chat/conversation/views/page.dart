@@ -3,50 +3,57 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/chat_message.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/whatsevr_user.dart';
 import 'package:flutter/services.dart';
-
 
 class ConversationsPage extends StatefulWidget {
   final List<ChatMessage> messages = List.generate(
-    20, 
-    (index) => ChatMessage( 
+    20,
+    (index) => ChatMessage(
       uid: '$index',
       senderUid: index % 2 == 0 ? 'user1' : 'user2',
       message: 'This is message number $index',
       createdAt: DateTime.now().subtract(Duration(minutes: index * 5)),
       isRead: index < 5, // Last 5 messages are read
       isDelivered: true, // All messages are delivered
-      readAt: index < 5 ? DateTime.now().subtract(Duration(minutes: index * 2)) : null,
+      readAt: index < 5
+          ? DateTime.now().subtract(Duration(minutes: index * 2))
+          : null,
       deliveredAt: DateTime.now().subtract(Duration(minutes: index)),
-    ), 
-  ); 
+    ),
+  );
 
   final String currentUserUid = 'user1'; // Define the current user's UID
-  final bool isGroup;
+  final bool isCommunity;
+  final String? communityUid;
+  final String? privateChatUid;
 
   final Map<String, WhatsevrUser> users = {
     'user1': WhatsevrUser(
       uid: 'user1',
-      name: 'Alice', 
-     
+      name: 'Alice',
     ),
     'user2': WhatsevrUser(
       uid: 'user2',
       name: 'Bob',
-     
     ),
     // Add more users as needed
-  }; 
- 
-  ConversationsPage({super.key, this.isGroup = true}); // Add this parameter
- 
+  };
+
+  ConversationsPage({
+    super.key,
+    required this.isCommunity,
+    this.communityUid,
+    this.privateChatUid,
+  }); // Add this parameter
+
   @override
   _ConversationsPageState createState() => _ConversationsPageState();
 }
 
-class _ConversationsPageState extends State<ConversationsPage> with TickerProviderStateMixin {
+class _ConversationsPageState extends State<ConversationsPage>
+    with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _messageController = TextEditingController();
   bool _showScrollToBottom = false;
@@ -54,7 +61,7 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
   bool _isLoading = false;
   bool _hasError = false;
   late AnimationController _slideController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -92,10 +99,12 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
                     widget.messages.removeWhere((m) => m.uid == message.uid);
                   });
                 },
-                onEdit: isCurrentUser ? () {
-                  Navigator.pop(context);
-                  _showEditDialog(message);
-                } : null,
+                onEdit: isCurrentUser
+                    ? () {
+                        Navigator.pop(context);
+                        _showEditDialog(message);
+                      }
+                    : null,
               ),
             );
           },
@@ -103,28 +112,33 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
             // Handle swipe to reply
             if (details.primaryVelocity! < 0) {
               // Show reply UI
-            } 
-          }, 
+            }
+          },
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10), // Reduced padding
+            padding: EdgeInsets.symmetric(
+                vertical: 6, horizontal: 10), // Reduced padding
             decoration: BoxDecoration(
-              gradient: isCurrentUser ? LinearGradient(
-                colors: context.whatsevrTheme.darkGradient,
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ) : null,
+              gradient: isCurrentUser
+                  ? LinearGradient(
+                      colors: context.whatsevrTheme.darkGradient,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
               color: isCurrentUser ? null : context.whatsevrTheme.surface,
               borderRadius: context.whatsevrTheme.borderRadiusLarge,
-              boxShadow: [BoxShadow(
-                color: context.whatsevrTheme.shadow,
-                blurRadius: 3,
-                offset: Offset(0, 1),
-              )],
+              boxShadow: [
+                BoxShadow(
+                  color: context.whatsevrTheme.shadow,
+                  blurRadius: 3,
+                  offset: Offset(0, 1),
+                )
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.isGroup && !isCurrentUser)
+                if (widget.isCommunity && !isCurrentUser)
                   Text(
                     widget.users[message.senderUid]?.name ?? 'Unknown',
                     style: context.whatsevrTheme.bodySmall.copyWith(
@@ -136,11 +150,13 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
                 Text(
                   message.message ?? '',
                   style: context.whatsevrTheme.bodySmall.copyWith(
-                    color: isCurrentUser ? context.whatsevrTheme.surface : context.whatsevrTheme.text,
+                    color: isCurrentUser
+                        ? context.whatsevrTheme.surface
+                        : context.whatsevrTheme.text,
                   ),
                 ),
                 SizedBox(height: 3),
-                Row( 
+                Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
@@ -175,8 +191,9 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
   }
 
   void _showEditDialog(ChatMessage message) {
-    final TextEditingController editController = TextEditingController(text: message.message);
-    
+    final TextEditingController editController =
+        TextEditingController(text: message.message);
+
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -185,7 +202,7 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
       transitionDuration: Duration(milliseconds: 200),
       pageBuilder: (context, anim1, anim2) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: BackdropFilter( 
+        child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             padding: EdgeInsets.all(20),
@@ -221,7 +238,8 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   ),
                   maxLines: null,
                   autofocus: true,
@@ -242,7 +260,8 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
                       onPressed: () {
                         // TODO: Implement edit
                         setState(() {
-                          final index = widget.messages.indexWhere((m) => m.uid == message.uid);
+                          final index = widget.messages
+                              .indexWhere((m) => m.uid == message.uid);
                           if (index != -1) {
                             widget.messages[index] = message.copyWith(
                               message: editController.text,
@@ -271,7 +290,8 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
       ),
       transitionBuilder: (context, anim1, anim2, child) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, 0.2), end: Offset.zero).animate(anim1),
+          position:
+              Tween(begin: Offset(0, 0.2), end: Offset.zero).animate(anim1),
           child: FadeTransition(
             opacity: anim1,
             child: child,
@@ -284,7 +304,7 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
   @override
   Widget build(BuildContext context) {
     final theme = context.whatsevrTheme;
-    
+
     return Scaffold(
       backgroundColor: theme.background,
       appBar: AppBar(
@@ -298,11 +318,13 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage(
-                widget.isGroup
-                    ? widget.users[widget.currentUserUid]?.profilePicture ?? MockData.blankCommunityAvatar 
-                    : widget.users[widget.currentUserUid]?.profilePicture ?? MockData.blankProfileAvatar,  // Contact avatar URL
+                widget.isCommunity
+                    ? widget.users[widget.currentUserUid]?.profilePicture ??
+                        MockData.blankCommunityAvatar
+                    : widget.users[widget.currentUserUid]?.profilePicture ??
+                        MockData.blankProfileAvatar, // Contact avatar URL
               ),
-              radius: 18, 
+              radius: 18,
             ),
             SizedBox(width: 10),
             Expanded(
@@ -310,18 +332,18 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.isGroup ? 'Group Name' : 'Contact Name',
-                    style: TextStyle( 
+                    widget.isCommunity ? 'Group Name' : 'Contact Name',
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
                     ),
                   ),
                   Text(
-                    widget.isGroup ? '5 members' : 'Online',
+                    widget.isCommunity ? '5 members' : 'Online',
                     style: TextStyle(
                       fontSize: 12,
-                      color: widget.isGroup ? Colors.grey : Colors.green,
+                      color: widget.isCommunity ? Colors.grey : Colors.green,
                     ),
                   ),
                 ],
@@ -334,7 +356,7 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
             icon: Icon(Icons.video_call, color: Colors.black),
             onPressed: () {
               // Handle video call
-            }, 
+            },
           ),
           IconButton(
             icon: Icon(Icons.call, color: Colors.black),
@@ -353,113 +375,121 @@ class _ConversationsPageState extends State<ConversationsPage> with TickerProvid
         elevation: 0,
         iconTheme: IconThemeData(color: theme.icon),
       ),
-      body: _hasError 
-        ? Center(child: Text('Something went wrong', style: theme.body))
-        : Stack(
-            children: [
-              Column(
-                children: [
-                  Expanded( 
-                    child: _isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          reverse: true, // Show latest messages at bottom
-                          controller: _scrollController,
-                          itemCount: widget.messages.length,
-                          itemBuilder: (context, index) {
-                            final message = widget.messages[index];
-                            final isCurrentUser = message.senderUid == widget.currentUserUid;
-                            final sender = widget.users[message.senderUid];
+      body: _hasError
+          ? Center(child: Text('Something went wrong', style: theme.body))
+          : Stack(
+              children: [
+                Column(
+                  children: [
+                    Expanded(
+                      child: _isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                              reverse: true, // Show latest messages at bottom
+                              controller: _scrollController,
+                              itemCount: widget.messages.length,
+                              itemBuilder: (context, index) {
+                                final message = widget.messages[index];
+                                final isCurrentUser =
+                                    message.senderUid == widget.currentUserUid;
+                                final sender = widget.users[message.senderUid];
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0), // Reduced padding
-                              child: Row(
-                                mainAxisAlignment: isCurrentUser
-                                    ? MainAxisAlignment.end
-                                    : MainAxisAlignment.start,
-                                children: [
-                                  if (widget.isGroup && !isCurrentUser)
-                                    CircleAvatar(
-                                      radius: 12, // Reduced avatar size
-                                      backgroundImage: NetworkImage(
-                                        sender?.profilePicture ?? MockData.blankProfileAvatar,
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 1.0,
+                                      horizontal: 5.0), // Reduced padding
+                                  child: Row(
+                                    mainAxisAlignment: isCurrentUser
+                                        ? MainAxisAlignment.end
+                                        : MainAxisAlignment.start,
+                                    children: [
+                                      if (widget.isCommunity && !isCurrentUser)
+                                        CircleAvatar(
+                                          radius: 12, // Reduced avatar size
+                                          backgroundImage: NetworkImage(
+                                            sender?.profilePicture ??
+                                                MockData.blankProfileAvatar,
+                                          ),
+                                        ),
+                                      SizedBox(width: 4), // Reduced spacing
+                                      Flexible(
+                                        child: _buildMessageBubble(
+                                            message, isCurrentUser),
                                       ),
-                                    ),
-                                  SizedBox(width: 4), // Reduced spacing
-                                  Flexible(
-                                    child: _buildMessageBubble(message, isCurrentUser),
+                                      if (widget.isCommunity && isCurrentUser)
+                                        SizedBox(width: 4),
+                                      if (widget.isCommunity && isCurrentUser)
+                                        CircleAvatar(
+                                          radius: 12, // Reduced avatar size
+                                          backgroundImage: NetworkImage(
+                                            sender?.profilePicture ??
+                                                MockData.blankProfileAvatar,
+                                          ),
+                                        ),
+                                    ],
                                   ),
-                                  if (widget.isGroup && isCurrentUser)
-                                    SizedBox(width: 4),
-                                  if (widget.isGroup && isCurrentUser)
-                                    CircleAvatar(
-                                      radius: 12, // Reduced avatar size
-                                      backgroundImage: NetworkImage(
-                                        sender?.profilePicture ??  MockData.blankProfileAvatar,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                  ),
-                  if (_isTyping)
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Typing...',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
+                                );
+                              },
                             ),
-                          ),
-                        ],
-                      ),
                     ),
-                  Divider(height: 1),
-                  MessageComposer(
-                    controller: _messageController,
-                    onSend: _handleSendMessage,
-                    onAttachmentTap: _handleAttachment,
-                  ),
-                ],
-              ),
-              if (_showScrollToBottom)
-                Positioned(
-                  right: 16,
-                  bottom: 80,
-                  child: FloatingActionButton(
-                    mini: true,
-                    child: Icon(Icons.keyboard_arrow_down),
-                    onPressed: () {
-                      _scrollController.animateTo(
-                        0,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeOut,
-                      );
-                    },
-                  ),
+                    if (_isTyping)
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Typing...',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Divider(height: 1),
+                    MessageComposer(
+                      controller: _messageController,
+                      onSend: _handleSendMessage,
+                      onAttachmentTap: _handleAttachment,
+                    ),
+                  ],
                 ),
-            ],
-          ),
+                if (_showScrollToBottom)
+                  Positioned(
+                    right: 16,
+                    bottom: 80,
+                    child: FloatingActionButton(
+                      mini: true,
+                      child: Icon(Icons.keyboard_arrow_down),
+                      onPressed: () {
+                        _scrollController.animateTo(
+                          0,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 
   void _handleSendMessage() {
     if (_messageController.text.trim().isEmpty) return;
-    
+
     // TODO: Implement message sending
     setState(() {
-      widget.messages.insert(0, ChatMessage(
-        uid: DateTime.now().toString(),
-        senderUid: widget.currentUserUid,
-        message: _messageController.text,
-        createdAt: DateTime.now(),
-        isDelivered: true,
-      ));
+      widget.messages.insert(
+          0,
+          ChatMessage(
+            uid: DateTime.now().toString(),
+            senderUid: widget.currentUserUid,
+            message: _messageController.text,
+            createdAt: DateTime.now(),
+            isDelivered: true,
+          ));
       _messageController.clear();
     });
   }
@@ -493,7 +523,8 @@ class MessageComposer extends StatelessWidget {
   final VoidCallback onSend;
   final VoidCallback onAttachmentTap;
 
-  const MessageComposer({super.key, 
+  const MessageComposer({
+    super.key,
     required this.controller,
     required this.onSend,
     required this.onAttachmentTap,
@@ -502,7 +533,7 @@ class MessageComposer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.whatsevrTheme;
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       child: Row(
@@ -579,9 +610,12 @@ class AttachmentSheet extends StatelessWidget {
             crossAxisSpacing: 16,
             children: [
               _buildAttachmentOption(Icons.image, 'Photo', () {}, Colors.green),
-              _buildAttachmentOption(Icons.videocam, 'Video', () {}, Colors.red),
-              _buildAttachmentOption(Icons.insert_drive_file, 'Document', () {}, Colors.blue),
-              _buildAttachmentOption(Icons.location_on, 'Location', () {}, Colors.orange),
+              _buildAttachmentOption(
+                  Icons.videocam, 'Video', () {}, Colors.red),
+              _buildAttachmentOption(
+                  Icons.insert_drive_file, 'Document', () {}, Colors.blue),
+              _buildAttachmentOption(
+                  Icons.location_on, 'Location', () {}, Colors.orange),
             ],
           ),
         ],
@@ -589,7 +623,8 @@ class AttachmentSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildAttachmentOption(IconData icon, String label, VoidCallback onTap, Color color) {
+  Widget _buildAttachmentOption(
+      IconData icon, String label, VoidCallback onTap, Color color) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -625,7 +660,8 @@ class MessageActionsSheet extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback? onEdit;
 
-  const MessageActionsSheet({super.key, 
+  const MessageActionsSheet({
+    super.key,
     required this.message,
     required this.isCurrentUser,
     required this.onDelete,
@@ -755,7 +791,9 @@ class MessageActionsSheet extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: (iconColor ?? (isDestructive ? Colors.red : Colors.blue)).withOpacity(0.1),
+                  color:
+                      (iconColor ?? (isDestructive ? Colors.red : Colors.blue))
+                          .withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
@@ -785,7 +823,8 @@ class AnimatedMessageItem extends StatelessWidget {
   final Widget child;
   final VoidCallback onDismissed;
 
-  const AnimatedMessageItem({super.key, 
+  const AnimatedMessageItem({
+    super.key,
     required this.child,
     required this.onDismissed,
   });

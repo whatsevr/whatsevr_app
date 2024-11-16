@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/src/features/chat/chats/bloc/chat_bloc.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:get_time_ago/get_time_ago.dart';

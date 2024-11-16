@@ -8,10 +8,10 @@ import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
-import 'package:whatsevr_app/src/features/chat/models/communities.dart';
-import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
-import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/communities.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/private_chat.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/chat_message.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/models/whatsevr_user.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
