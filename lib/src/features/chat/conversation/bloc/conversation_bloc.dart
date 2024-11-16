@@ -9,36 +9,34 @@ import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
-import 'package:whatsevr_app/src/features/chat/models/message.dart';
-import 'package:whatsevr_app/src/features/chat/models/user.dart';
+import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
+import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 
-part 'chat_event.dart';
-part 'chat_state.dart';
+part 'conversation_event.dart';
+part 'conversation_state.dart';
 
-class ChatBloc extends Bloc<ChatEvent, ChatState> {
+class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   
   final String _currentUserUid;
   StreamSubscription? _chatSubscription1;
-  StreamSubscription? _chatSubscription2;
+
   StreamSubscription? _messageSubscription;
   StreamSubscription? _typingSubscription;
   final _typingStatusController = PublishSubject<SetTypingStatus>();
 
-  ChatBloc(this._currentUserUid) : super(const ChatState()) {
+  ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadChats>(_onLoadChats);
+  
     on<LoadMessages>(_onLoadMessages);
     on<SendMessage>(_onSendMessage);
-    on<CreateDirectChat>(_onCreateDirectChat);
-    on<CreateGroupChat>(_onCreateGroupChat);
-    on<SelectChat>(_onSelectChat);
+ 
     on<SetTypingStatus>(_onSetTypingStatus);
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
-    on<LoadAvailableUsers>(_onLoadAvailableUsers);
-    on<UpdateChats>(_onUpdateChats);
+
+ 
     on<UpdateMessages>(_onUpdateMessages);
-    on<UpdateTypingUsers>(_onUpdateTypingUsers);
+
 
     _typingStatusController
         .debounceTime(Duration(milliseconds: 500))
@@ -46,13 +44,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
   Future<void> _onInitialEvent(
     InitialEvent event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     print('Initializing ChatBloc');
 
     await _chatSubscription1?.cancel();
 
-    await _chatSubscription2?.cancel();
+  
     _chatSubscription1 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
@@ -60,55 +58,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .order('last_message_at', ascending: false)
         .listen(
           (chats) {
-            add(LoadChats());
+         
           },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
         );
-    _chatSubscription2 = RemoteDb.supabaseClient1
-        .from('private_chats')
-        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-        .eq('user2_uid', _currentUserUid)
-        .order('last_message_at', ascending: false)
-        .listen(
-          (chats) {
-           add(LoadChats());
-          },
-          onError: (error) {
-            highLevelCatch(error, StackTrace.current);
-          },
-        );
-  }
 
-  Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
-    try {
-      //get all chats
-      final response = await RemoteDb.supabaseClient1
-          .from('private_chats')
-          .select(
-            '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',
-          )
-          .or('user1_uid.eq.$_currentUserUid,user2_uid.eq.$_currentUserUid')
-          .order('last_message_at', ascending: false);
-
-      final List<PrivateChat> privateChats =
-          response.map((row) => PrivateChat.fromMap(row)).toList();
-
-      emit(
-        state.copyWith(
-          privateChats: privateChats,
-        ),
-      );
-      // Cancel any existing subscription
-    } catch (e, s) {
-      highLevelCatch(e, s);
-    }
   }
 
   Future<void> _onLoadMessages(
     LoadMessages event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     try {
       if (!event.loadMore) {
@@ -149,7 +110,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onSendMessage(
     SendMessage event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     try {
       emit(state.copyWith(messageStatus: MessageStatus.sending));
@@ -216,126 +177,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  Future<void> _onCreateDirectChat(
-    CreateDirectChat event,
-    Emitter<ChatState> emit,
-  ) async {
-    try {
-      // Check if chat already exists
-      final existingChat = await RemoteDb.supabaseClient1
-          .from('chats')
-          .select('*, chat_participants(*)')
-          .eq('is_group', false)
-          .contains(
-        'chat_participants',
-        [_currentUserUid, event.otherUserId],
-      ).maybeSingle();
-
-      if (existingChat != null) {
-        final chat = PrivateChat.fromMap(existingChat);
-        emit(
-          state.copyWith(
-            selectedChat: chat,
-          ),
-        );
-        return;
-      }
-
-      // Create new chat
-      final response = await RemoteDb.supabaseClient1
-          .from('chats')
-          .insert({
-            'created_by': _currentUserUid,
-            'is_group': false,
-          })
-          .select()
-          .single();
-
-      // Add participants
-      await RemoteDb.supabaseClient1.from('chat_participants').insert([
-        {
-          'chat_id': response['id'],
-          'user_id': _currentUserUid,
-          'is_admin': true,
-        },
-        {
-          'chat_id': response['id'],
-          'user_id': event.otherUserId,
-          'is_admin': false,
-        },
-      ]);
-
-      final chat = PrivateChat.fromMap(response);
-      emit(
-        state.copyWith(
-          selectedChat: chat,
-        ),
-      );
-    } catch (error) {}
-  }
-
-  Future<void> _onCreateGroupChat(
-    CreateGroupChat event,
-    Emitter<ChatState> emit,
-  ) async {
-    try {
-      // Create new group chat
-      final response = await RemoteDb.supabaseClient1
-          .from('chats')
-          .insert({
-            'created_by': _currentUserUid,
-            'chat_name': event.name,
-            'is_group': true,
-          })
-          .select()
-          .single();
-
-      // Add participants
-      final participants = event.participantIds
-          .map(
-            (userId) => {
-              'chat_id': response['uid'], // Ensure 'uid' is used
-              'user_id': userId,
-              'is_admin': userId == _currentUserUid, // Use  _currentUserUid,
-            },
-          )
-          .toList();
-
-      await RemoteDb.supabaseClient1.from('chat_participants').insert(participants);
-
-      final chat = PrivateChat.fromMap(response);
-      emit(
-        state.copyWith(
-          selectedChat: chat,
-        ),
-      );
-    } catch (error) {}
-  }
-
-  Future<void> _onLoadAvailableUsers(
-    LoadAvailableUsers event,
-    Emitter<ChatState> emit,
-  ) async {
-    try {
-      final response = await RemoteDb.supabaseClient1.from('users').select().neq(
-            'id',
-            _currentUserUid,
-          );
-
-      final users = response.map((row) => WhatsevrUser.fromMap(row)).toList();
-
-      emit(state.copyWith(availableUsers: users));
-    } catch (error) {}
-  }
-
-  void _onSelectChat(SelectChat event, Emitter<ChatState> emit) {
-    emit(state.copyWith(selectedChat: event.chat));
-    add(LoadMessages(event.chat.uid!));
-  }
 
   Future<void> _onSetTypingStatus(
     SetTypingStatus event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     _typingStatusController.add(event);
   }
@@ -355,7 +200,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onDeleteMessage(
     DeleteMessage event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     try {
       // Store current messages for potential rollback
@@ -385,7 +230,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future<void> _onEditMessage(
     EditMessage event,
-    Emitter<ChatState> emit,
+    Emitter<ConversationState> emit,
   ) async {
     try {
       // Store current messages for potential rollback
@@ -430,15 +275,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _onUpdateChats(UpdateChats event, Emitter<ChatState> emit) {
-    emit(
-      state.copyWith(
-        privateChats: event.chats,
-      ),
-    );
-  }
 
-  void _onUpdateMessages(UpdateMessages event, Emitter<ChatState> emit) {
+
+  void _onUpdateMessages(UpdateMessages event, Emitter<ConversationState> emit) {
     if (event.isLoadMore) {
       emit(
         state.copyWith(
@@ -457,25 +296,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void _onUpdateTypingUsers(UpdateTypingUsers event, Emitter<ChatState> emit) {
-    final updatedTypingUsers =
-        Map<String, List<WhatsevrUser>>.from(state.typingUsers);
-    updatedTypingUsers[event.chatId] = event.users;
-
-    emit(state.copyWith(typingUsers: updatedTypingUsers));
-  }
 
   @override
-  ChatState fromJson(Map<String, dynamic> json) {
+  ConversationState fromJson(Map<String, dynamic> json) {
     try {
-      return ChatState.fromJson(json);
+      return ConversationState.fromJson(json);
     } catch (_) {
-      return const ChatState();
+      return const ConversationState();
     }
   }
 
   @override
-  Map<String, dynamic> toJson(ChatState state) {
+  Map<String, dynamic> toJson(ConversationState state) {
     return state.toJson();
   }
 

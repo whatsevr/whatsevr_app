@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/src/features/chat/chats/bloc/chat_bloc.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/src/features/chats/views/widgets/conversations.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
 
 class ChatsPageChatsView extends StatelessWidget {
@@ -31,7 +31,7 @@ class ChatsPageChatsView extends StatelessWidget {
                   showGeneralDialog(
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      return Conversations();
+                      return ConversationsPage();
                     }, 
                   );
                 },

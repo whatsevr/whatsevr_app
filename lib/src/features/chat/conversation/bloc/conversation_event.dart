@@ -1,21 +1,20 @@
-part of 'chat_bloc.dart';
+part of 'conversation_bloc.dart';
 
-abstract class ChatEvent extends Equatable {
-  const ChatEvent();
+abstract class ConversationEvent extends Equatable {
+  const ConversationEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class InitialEvent extends ChatEvent {
+class InitialEvent extends ConversationEvent {
   @override
   List<Object?> get props => [];
 }
 
-// Load Events
-class LoadChats extends ChatEvent {}
 
-class LoadMessages extends ChatEvent {
+
+class LoadMessages extends ConversationEvent {
   final String chatId;
   final bool loadMore;
 
@@ -25,42 +24,9 @@ class LoadMessages extends ChatEvent {
   List<Object?> get props => [chatId, loadMore];
 }
 
-class LoadAvailableUsers extends ChatEvent {}
-
-// Chat Actions
-class CreateDirectChat extends ChatEvent {
-  final String otherUserId;
-
-  const CreateDirectChat(this.otherUserId);
-
-  @override
-  List<Object?> get props => [otherUserId];
-}
-
-class CreateGroupChat extends ChatEvent {
-  final String name;
-  final List<String> participantIds;
-
-  const CreateGroupChat({
-    required this.name,
-    required this.participantIds,
-  });
-
-  @override
-  List<Object?> get props => [name, participantIds];
-}
-
-class SelectChat extends ChatEvent {
-  final PrivateChat chat;
-
-  const SelectChat(this.chat);
-
-  @override
-  List<Object?> get props => [chat];
-}
 
 // Message Actions
-class SendMessage extends ChatEvent {
+class SendMessage extends ConversationEvent {
   final String chatId;
   final String content;
   final String chatType; // Add this line
@@ -75,7 +41,7 @@ class SendMessage extends ChatEvent {
   List<Object?> get props => [chatId, content, chatType]; // Add chatType here
 }
 
-class DeleteMessage extends ChatEvent {
+class DeleteMessage extends ConversationEvent {
   final String messageId;
 
   const DeleteMessage(this.messageId);
@@ -84,7 +50,7 @@ class DeleteMessage extends ChatEvent {
   List<Object?> get props => [messageId];
 }
 
-class EditMessage extends ChatEvent {
+class EditMessage extends ConversationEvent {
   final String messageId;
   final String newContent;
 
@@ -98,7 +64,7 @@ class EditMessage extends ChatEvent {
 }
 
 // Typing Indicator
-class SetTypingStatus extends ChatEvent {
+class SetTypingStatus extends ConversationEvent {
   final String chatId;
   final bool isTyping;
 
@@ -112,7 +78,7 @@ class SetTypingStatus extends ChatEvent {
 }
 
 // Update Events
-class UpdateChats extends ChatEvent {
+class UpdateChats extends ConversationEvent {
   final List<PrivateChat> chats;
 
   const UpdateChats(this.chats);
@@ -121,7 +87,7 @@ class UpdateChats extends ChatEvent {
   List<Object?> get props => [chats];
 }
 
-class UpdateMessages extends ChatEvent {
+class UpdateMessages extends ConversationEvent {
   final List<ChatMessage> messages;
   final bool isLoadMore;
 
@@ -131,15 +97,4 @@ class UpdateMessages extends ChatEvent {
   List<Object?> get props => [messages, isLoadMore];
 }
 
-class UpdateTypingUsers extends ChatEvent {
-  final String chatId;
-  final List<WhatsevrUser> users;
 
-  const UpdateTypingUsers({
-    required this.chatId,
-    required this.users,
-  });
-
-  @override
-  List<Object?> get props => [chatId, users];
-}
