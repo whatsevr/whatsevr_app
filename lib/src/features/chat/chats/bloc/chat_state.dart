@@ -1,44 +1,28 @@
 part of 'chat_bloc.dart';
 
-
-
 class ChatState extends Equatable {
   final List<PrivateChat> privateChats;
-
-
-
-
+  final List<Community> communities;
 
   const ChatState({
     this.privateChats = const [],
-
-
-
+    this.communities = const [],
   });
 
   ChatState copyWith({
     List<PrivateChat>? privateChats,
-    PrivateChat? selectedChat,
-    List<ChatMessage>? messages,
-    Map<String, ChatMessage>? lastMessages,
-    Map<String, int>? unreadCounts,
-    List<WhatsevrUser>? availableUsers,
- 
-    bool? isLoadingMore,
-    bool? hasReachedEnd,
-    Map<String, bool>? messagesSendingStatus,
-    Map<String, List<WhatsevrUser>>? typingUsers,
+    List<Community>? communities,
   }) {
     return ChatState(
       privateChats: privateChats ?? this.privateChats,
-    
- );
+      communities: communities ?? this.communities,
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'privateChats': privateChats.map((e) => e.toJson()).toList(),
-
+      'communities': communities.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -47,18 +31,21 @@ class ChatState extends Equatable {
       privateChats: (json['privateChats'] as List)
           .map((e) => PrivateChat.fromJson(e))
           .toList(),
-  
+      communities: (json['communities'] as List)
+          .map((e) => Community.fromMap(e))
+          .toList(),
     );
   }
 
   @override
   List<Object?> get props => [
         privateChats,
-    
+        communities,
       ];
 
   @override
   String toString() => '''ChatState {
     privateChats: ${privateChats.length} chats,
+    communities: ${communities.length} communities,
   }''';
 }

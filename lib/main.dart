@@ -64,6 +64,7 @@ void catchUnhandledExceptions(Object error, StackTrace? stack) {
   TalkerService.instance.error(error.toString(), stack);
   if (kTestingMode) {
     SmartDialog.showToast(
+      displayTime: Duration(seconds: 5),
       error.toString(),
       builder: (context) {
         return Container(

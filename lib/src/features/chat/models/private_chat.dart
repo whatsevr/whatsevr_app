@@ -12,6 +12,7 @@ class PrivateChat {
   final bool? user2IsBlocked;
   final User? user1;
   final User? user2;
+  final String? plainLastMessage;
 
   PrivateChat({
     this.uid,
@@ -25,12 +26,13 @@ class PrivateChat {
     this.user2IsBlocked,
     this.user1,
     this.user2,
+    this.plainLastMessage,
   });
 
   PrivateChat copyWith({
     String? uid,
     String? user1Uid,
-    String? user2Uid,
+    String? user2Uid, 
     DateTime? createdAt,
     DateTime? lastMessageAt,
     bool? user1IsMuted,
@@ -39,6 +41,7 @@ class PrivateChat {
     bool? user2IsBlocked,
     User? user1,
     User? user2,
+    String? plainLastMessage,
   }) =>
       PrivateChat(
         uid: uid ?? this.uid,
@@ -52,6 +55,7 @@ class PrivateChat {
         user2IsBlocked: user2IsBlocked ?? this.user2IsBlocked,
         user1: user1 ?? this.user1,
         user2: user2 ?? this.user2,
+        plainLastMessage: plainLastMessage ?? this.plainLastMessage,
       );
 
   factory PrivateChat.fromJson(String str) =>
@@ -75,6 +79,7 @@ class PrivateChat {
         user2IsBlocked: json['user2_is_blocked'],
         user1: json['user1'] == null ? null : User.fromMap(json['user1']),
         user2: json['user2'] == null ? null : User.fromMap(json['user2']),
+        plainLastMessage: json['plain_last_message'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -89,6 +94,7 @@ class PrivateChat {
         'user2_is_blocked': user2IsBlocked,
         'user1': user1?.toMap(),
         'user2': user2?.toMap(),
+        'plain_last_message': plainLastMessage,
       };
 }
 

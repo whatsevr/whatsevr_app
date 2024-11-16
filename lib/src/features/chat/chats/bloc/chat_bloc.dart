@@ -7,6 +7,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/services/supabase.dart';
+import 'package:whatsevr_app/src/features/chat/models/communities.dart';
 import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
 import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
 import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
@@ -15,22 +17,15 @@ part 'chat_event.dart';
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final SupabaseClient _supabase = SupabaseClient(
-    'https://dxvbdpxfzdpgiscphujy.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dmJkcHhmemRwZ2lzY3BodWp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA3ODQ3NzksImV4cCI6MjAyNjM2MDc3OX0.9I-obmOReMg-jCrgzpGHTNVqtHSp8VCh1mYyaTjFG-A',
-  );
   final String _currentUserUid;
   StreamSubscription? _chatSubscription1;
   StreamSubscription? _chatSubscription2;
-  StreamSubscription? _messageSubscription;
-
-
+  StreamSubscription? _communitySubscription1;
 
   ChatBloc(this._currentUserUid) : super(const ChatState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadChats>(_onLoadChats);
-
-
+    on<LoadPrivateChats>(_onLoadPrivateChats);
+    on<LoadCommunities>(_onLoadCommunities);
   }
   Future<void> _onInitialEvent(
     InitialEvent event,
@@ -41,38 +36,53 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await _chatSubscription1?.cancel();
 
     await _chatSubscription2?.cancel();
-    _chatSubscription1 = _supabase
+    await _communitySubscription1?.cancel();
+    _chatSubscription1 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
         .eq('user1_uid', _currentUserUid)
         .order('last_message_at', ascending: false)
         .listen(
           (chats) {
-            add(LoadChats());
+            add(LoadPrivateChats());
           },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
         );
-    _chatSubscription2 = _supabase
+    _chatSubscription2 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
         .eq('user2_uid', _currentUserUid)
         .order('last_message_at', ascending: false)
         .listen(
           (chats) {
-           add(LoadChats());
+            add(LoadPrivateChats());
           },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
         );
+
+    _communitySubscription1 = RemoteDb.supabaseClient1
+        .from('communities')
+        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
+
+        .listen(
+      (communities) {
+        add(LoadCommunities());
+      },
+      onError: (error) {
+        highLevelCatch(error, StackTrace.current);
+      },
+    );
   }
 
-  Future<void> _onLoadChats(LoadChats event, Emitter<ChatState> emit) async {
+  Future<void> _onLoadPrivateChats(
+      LoadPrivateChats event, Emitter<ChatState> emit) async {
     try {
       //get all chats
-      final response = await _supabase
+      final response = await RemoteDb.supabaseClient1
           .from('private_chats')
           .select(
             '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',
@@ -94,7 +104,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-
   @override
   ChatState fromJson(Map<String, dynamic> json) {
     try {
@@ -112,10 +121,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   @override
   Future<void> close() {
     _chatSubscription1?.cancel();
-    _messageSubscription?.cancel();
- 
+    _chatSubscription2?.cancel();
+    _communitySubscription1?.cancel();
 
     return super.close();
+  }
+
+  bool isOwner(String adminUserUid) {
+    return adminUserUid == _currentUserUid;
   }
 
   User? getTheOtherUser(User? user1, User? user2) {
@@ -126,6 +139,44 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       return user2;
     } else {
       return user1;
+    }
+  } 
+
+  FutureOr<void> _onLoadCommunities(
+      LoadCommunities event, Emitter<ChatState> emit) async {
+    try {
+      final List<String> userOwnedCommunities = [];
+      final List<String> userJoinedCommunities = [];
+      //get all the communities the user owns
+      final response1 = await RemoteDb.supabaseClient1
+          .from('communities')
+          .select('uid')
+          .eq('admin_user_uid', _currentUserUid);
+      userOwnedCommunities.addAll(response1.map((row) => row['uid'] as String));
+      //get all the communities the user has joined
+      final response2 = await RemoteDb.supabaseClient1
+          .from('community_members')
+          .select('community_uid')
+          .eq('user_uid', _currentUserUid);
+      userJoinedCommunities
+          .addAll(response2.map((row) => row['community_uid'] as String));
+      //above two lists will be used to query the communities
+      final response = await RemoteDb.supabaseClient1
+          .from('communities')
+          .select()
+          .inFilter('uid', [
+        ...userOwnedCommunities,
+        ...userJoinedCommunities
+      ]).order('created_at', ascending: false);
+      final List<Community> communities =
+          response.map((row) => Community.fromMap(row)).toList();
+      emit(
+        state.copyWith(
+          communities: communities,
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
 }

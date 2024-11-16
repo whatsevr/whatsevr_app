@@ -13,6 +13,7 @@ class InitialEvent extends ChatEvent {
 }
 
 // Load Events
-class LoadChats extends ChatEvent {}
+class LoadPrivateChats extends ChatEvent {}
+class LoadCommunities extends ChatEvent {}
 
 

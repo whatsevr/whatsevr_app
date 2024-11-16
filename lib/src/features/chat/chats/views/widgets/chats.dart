@@ -1,14 +1,7 @@
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/src/features/chat/chats/bloc/chat_bloc.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
+part of '../page.dart';
 
-
-class ChatsPageChatsView extends StatelessWidget {
-  const ChatsPageChatsView({
+class _ChatListView extends StatelessWidget {
+  const _ChatListView({
     super.key,
   });
 
@@ -32,7 +25,7 @@ class ChatsPageChatsView extends StatelessWidget {
                     context: context,
                     pageBuilder: (context, animation, secondaryAnimation) {
                       return ConversationsPage();
-                    }, 
+                    },
                   );
                 },
                 leading: CircleAvatar(
@@ -41,19 +34,19 @@ class ChatsPageChatsView extends StatelessWidget {
                   ),
                 ),
                 title: Text(
-                  ' ${otherUser?.name}',
+                  '${otherUser?.name}',
                   maxLines: 1,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
                 subtitle: Text(
-                  'XXXXXXXXXXXX',
+                  chat.plainLastMessage??'Start Chat', 
                   maxLines: 1,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: 14,
+                    fontSize: 12,
                   ),
                 ),
                 trailing: Text(
