@@ -11,7 +11,7 @@ class BusinessException implements Exception {
   BusinessException(this.message);
 
   @override
-  String toString() => message ?? 'BusinessException';
+  String toString() => message;
 
   @override
   bool operator ==(Object other) {

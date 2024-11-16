@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/src/features/chats/bloc/chat_bloc.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/src/features/chats/views/widgets/conversations.dart';
 
 class ChatsPageChatsView extends StatelessWidget {
   const ChatsPageChatsView({
@@ -25,9 +26,18 @@ class ChatsPageChatsView extends StatelessWidget {
                   .read<ChatBloc>()
                   .getTheOtherUser(chat.user1, chat.user2);
               return ListTile(
+                onTap: () {
+                  showGeneralDialog(
+                    context: context,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return Conversations();
+                    },
+                  );
+                },
                 leading: CircleAvatar(
                   backgroundImage: ExtendedNetworkImageProvider(
-                      otherUser?.profilePicture ?? MockData.blankProfileAvatar,),
+                    otherUser?.profilePicture ?? MockData.blankProfileAvatar,
+                  ),
                 ),
                 title: Text(
                   ' ${otherUser?.name}',
