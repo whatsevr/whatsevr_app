@@ -37,7 +37,7 @@ class ConversationsPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final theme = context.whatsevrTheme;
     final scrollController = ScrollController();
     final messageController = TextEditingController();
@@ -50,109 +50,121 @@ class ConversationsPage extends StatelessWidget {
         builder: (context, state) {
           return Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
+              color:  theme.background,
+              image: DecorationImage(
+               
+                image: ExtendedNetworkImageProvider(
+                  'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/bg-pattern1245.jpg',
+                cache: true,
+    
+                ),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
                   theme.background.withOpacity(0.95),
-                  theme.background, 
-                ],
+                  BlendMode.overlay,
+                ),
               ),
             ),
             child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: _buildAppBar(context, state),
-              body: Stack( 
-                          children: [
-                            Column(
-                              children: [ 
-                                Expanded(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12),
-                                    child: ListView.builder(
-                                      reverse: true,
-                                      controller: scrollController,
-                                      itemCount: state.messages.length,
-                                      itemBuilder: (context, index) {
-                                        final message = state.messages[index] ;
-                                        final isCurrentUser = message.senderUid == 
-                                            AuthUserDb.getLastLoggedUserUid();
-                                        
-                                        return Padding(
-                                          padding: EdgeInsets.only(bottom: 8),
-                                          child: MessageBubble(
-                                            message: message,
-                                            isCurrentUser: isCurrentUser,
-                                            isCommunity: pageArguments.isCommunity,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
+              body: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
+                          child: ListView.builder(
+                            reverse: true,
+                            controller: scrollController,
+                            itemCount: state.messages.length,
+                            itemBuilder: (context, index) {
+                              final message = state.messages[index];
+                              final isCurrentUser = message.senderUid ==
+                                  AuthUserDb.getLastLoggedUserUid();
+
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: MessageBubble(
+                                  message: message,
+                                  isCurrentUser: isCurrentUser,
+                                  isCommunity: pageArguments.isCommunity,
                                 ),
-                                if (state.typingUsers.isNotEmpty)
-                                  Container(
-                                    padding: EdgeInsets.only(left: 16, bottom: 8),
-                                    child: _buildTypingIndicator(state.typingUsers),
-                                  ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: theme.surface,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: theme.shadow.withOpacity(0.1),
-                                        blurRadius: 8,
-                                        offset: Offset(0, -2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: MessageComposer(
-                                    controller: messageController,
-                                    onSend: (content) {
-                                      context.read<ConversationBloc>().add(
-                                        SendMessage(
-                                          chatId: pageArguments.isCommunity 
-                                              ? pageArguments.communityUid!
-                                              : pageArguments.privateChatUid!,
-                                          content: content,
-                                          chatType: pageArguments.isCommunity 
-                                              ? 'community' 
-                                              : 'private',
-                                        ),
-                                      );
-                                      messageController.clear();
-                                    },
-                                    onAttachmentTap: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => const AttachmentSheet(),
-                                        backgroundColor: Colors.transparent,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      if (state.typingUsers.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.only(left: 16, bottom: 8),
+                          child: _buildTypingIndicator(state.typingUsers),
+                        ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.surface,
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.shadow.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: Offset(0, -2),
                             ),
-                            if (scrollController.hasClients && 
-                                scrollController.offset > 1000)
-                              Positioned(
-                                right: 16,
-                                bottom: 80,
-                                child: FloatingActionButton(
-                                  mini: true,
-                                  backgroundColor: theme.accent,
-                                  child: Icon(Icons.keyboard_arrow_down, color: theme.surface),
-                                  onPressed: () {
-                                    scrollController.animateTo( // Changed from controller to scrollController
-                                      0,
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeOut,
-                                    ); 
-                                  },
-                                ),
-                              ),
                           ],
                         ),
+                        child: MessageComposer(
+                          controller: messageController,
+                          onSend: (content) {
+                            context.read<ConversationBloc>().add(
+                                  SendMessage(
+                                    chatId: pageArguments.isCommunity
+                                        ? pageArguments.communityUid!
+                                        : pageArguments.privateChatUid!,
+                                    content: content,
+                                    chatType: pageArguments.isCommunity
+                                        ? 'community'
+                                        : 'private',
+                                  ),
+                                );
+                            messageController.clear();
+                          },
+                          onAttachmentTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (_) => BlocProvider.value(
+                                value:
+                                    BlocProvider.of<ConversationBloc>(context),
+                                child: const AttachmentSheet(),
+                              ),
+                              backgroundColor: Colors.transparent,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (scrollController.hasClients &&
+                      scrollController.offset > 1000)
+                    Positioned(
+                      right: 16,
+                      bottom: 80,
+                      child: FloatingActionButton(
+                        mini: true,
+                        backgroundColor: theme.accent,
+                        child: Icon(Icons.keyboard_arrow_down,
+                            color: theme.surface),
+                        onPressed: () {
+                          scrollController.animateTo(
+                            // Changed from controller to scrollController
+                            0,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
+                        },
+                      ),
+                    ),
+                ],
+              ),
             ),
           );
         },
@@ -160,20 +172,22 @@ class ConversationsPage extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context, ConversationState state) {
+  PreferredSizeWidget _buildAppBar(
+      BuildContext context, ConversationState state) {
     return AppBar(
-      leading: IconButton(
+      leading: IconButton( 
         icon: Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),
       ),
+      surfaceTintColor:  Colors.transparent,
       title: Row(
         children: [
           CircleAvatar(
             backgroundImage: ExtendedNetworkImageProvider(
               state.profilePicture ?? 
-                (state.isCommunity 
-                  ? MockData.blankCommunityAvatar 
-                  : MockData.blankProfileAvatar),
+                  (state.isCommunity
+                      ? MockData.blankCommunityAvatar
+                      : MockData.blankProfileAvatar),
             ),
             radius: 18,
           ),
@@ -191,9 +205,11 @@ class ConversationsPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  state.isCommunity 
-                      ? '${state.chatMembers.length} members' 
-                      : state.typingUsers.isNotEmpty ? 'Typing...' : 'Online',
+                  state.isCommunity
+                      ? '${state.chatMembers.length} members'
+                      : state.typingUsers.isNotEmpty
+                          ? 'Typing...'
+                          : 'Online',
                   style: TextStyle(
                     fontSize: 12,
                     color: state.isCommunity ? Colors.grey : Colors.green,
@@ -281,111 +297,111 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 'message-${message.uid}',
-      child: Material(
-        color: Colors.transparent,
-        child: GestureDetector(
-          onLongPress: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) => MessageActionsSheet(
-                message: message,
-                isCurrentUser: isCurrentUser,
-                onDelete: () {
-                  // Dispatch DeleteMessage event
-                  context.read<ConversationBloc>().add(DeleteMessage(message.uid!));
-                  Navigator.pop(context);
-                },
-                onEdit: isCurrentUser
-                    ? () {
-                        Navigator.pop(context);
-                        _showEditDialog(context, message);
-                      }
-                    : null,
+    final theme = context.whatsevrTheme;
+    final state = context.read<ConversationBloc>().state;
+    final sender = isCommunity 
+      ? state.chatMembers.firstWhereOrNull((user) => user.uid == message.senderUid)
+      : !isCurrentUser
+        ? state.chatMembers.firstWhereOrNull((user) => user.uid == message.senderUid)
+        : null;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: isCurrentUser ? 50 : 0,
+        right: isCurrentUser ? 0 : 50,
+        bottom: 4,
+      ),
+      child: Row(
+        mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (!isCurrentUser) ...[
+            CircleAvatar(
+              radius: 12,
+              backgroundImage: ExtendedNetworkImageProvider(
+                sender?.profilePicture ?? MockData.blankProfileAvatar,
               ),
-            );
-          },
-          onHorizontalDragEnd: (details) {
-            // Handle swipe to reply
-            if (details.primaryVelocity! < 0) {
-              // Show reply UI
-            }
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(
-                vertical: 6, horizontal: 10), // Reduced padding
-            decoration: BoxDecoration(
-              gradient: isCurrentUser
-                  ? LinearGradient(
-                      colors: context.whatsevrTheme.darkGradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                  : null,
-              color: isCurrentUser ? null : context.whatsevrTheme.surface,
-              borderRadius: context.whatsevrTheme.borderRadiusLarge,
-              boxShadow: [
-                BoxShadow(
-                  color: context.whatsevrTheme.shadow,
-                  blurRadius: 3,
-                  offset: Offset(0, 1),
-                )
-              ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (isCommunity && !isCurrentUser)
-                  Text(
-                    context.read<ConversationBloc>().state.chatMembers
-                        .firstWhereOrNull((user) => user.uid == message.senderUid)
-                        ?.name ?? '', 
-                    style: context.whatsevrTheme.bodySmall.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: context.whatsevrTheme.textLight,
-                    ),
-                  ),
-                SizedBox(height: 1),
-                Text(
-                  message.message ?? '',
-                  style: context.whatsevrTheme.bodySmall.copyWith(
-                    color: isCurrentUser
-                        ? context.whatsevrTheme.surface
-                        : context.whatsevrTheme.text,
-                  ),
+            SizedBox(width: 8),
+          ],
+          Flexible(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                gradient: isCurrentUser
+                    ? LinearGradient(
+                        colors: theme.darkGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isCurrentUser ? null : theme.surface.withOpacity(0.9),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                  bottomLeft: Radius.circular(isCurrentUser ? 16 : 4),
+                  bottomRight: Radius.circular(isCurrentUser ? 4 : 16),
                 ),
-                SizedBox(height: 3),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.shadow.withOpacity(0.1),
+                    blurRadius: 3,
+                    offset: Offset(0, 1),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isCommunity && !isCurrentUser && sender != null)
                     Text(
-                      '${message.createdAt?.hour.toString().padLeft(2, '0')}:${message.createdAt?.minute.toString().padLeft(2, '0')}',
+                      sender.name ?? 'Unknown',
                       style: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 9, // Decreased font size
+                        color: theme.accent,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
                       ),
                     ),
-                    if (isCurrentUser) ...[
-                      SizedBox(width: 3),
-                      Icon(
-                        message.isRead ?? false
-                            ? Icons.done_all
-                            : message.isDelivered ?? false
-                                ? Icons.done_all
-                                : Icons.check,
-                        size: 12,
-                        color: message.isRead ?? false
-                            ? Colors.blue
-                            : Colors.grey[500],
+                  Text(
+                    message.message ?? '',
+                    style: TextStyle(
+                      color: isCurrentUser ? theme.surface : theme.text,
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${message.createdAt?.hour.toString().padLeft(2, '0')}:${message.createdAt?.minute.toString().padLeft(2, '0')}',
+                        style: TextStyle(
+                          color: isCurrentUser 
+                            ? theme.surface.withOpacity(0.7)
+                            : theme.textLight,
+                          fontSize: 10,
+                        ),
                       ),
+                      if (isCurrentUser) ...[
+                        SizedBox(width: 3),
+                        Icon(
+                          message.isRead ?? false ? Icons.done_all 
+                          : message.isDelivered ?? false ? Icons.done_all 
+                          : Icons.check,
+                          size: 12,
+                          color: message.isRead ?? false 
+                            ? Colors.blue[300]
+                            : theme.surface.withOpacity(0.7),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-              ],
+                  ),
+                ],
             ),
-          ),
-        ),
+            ),
+            
+      )],
       ),
     );
   }
@@ -460,11 +476,11 @@ class MessageBubble extends StatelessWidget {
                       onPressed: () {
                         // Dispatch EditMessage event
                         context.read<ConversationBloc>().add(
-                          EditMessage(
-                            messageId: message.uid!,
-                            newContent: editController.text,
-                          ),
-                        );
+                              EditMessage(
+                                messageId: message.uid!,
+                                newContent: editController.text,
+                              ),
+                            );
                         Navigator.pop(context);
                       },
                       child: Text('Save'),
@@ -509,7 +525,7 @@ class MessageComposer extends StatelessWidget {
     required this.controller,
     required this.onSend,
     required this.onAttachmentTap,
- // Added this parameter
+    // Added this parameter
   });
 
   @override

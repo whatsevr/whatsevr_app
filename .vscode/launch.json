@@ -8,8 +8,7 @@
             "name": "whatsevr_app (dev mode)",
             "request": "launch",
             "type": "dart",
-            "noDebug": true,
-            "deviceId": "RZCWC0M3XXJ"
+            "noDebug": true
         },
         {
             "name": "whatsevr_app (debug)",
@@ -21,13 +20,15 @@
             "name": "whatsevr_app (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+             "deviceId": "RZCWC0M3XXJ"
         },
         {
             "name": "whatsevr_app (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            "flutterMode": "release",
+             "deviceId": "RZCWC0M3XXJ"
         }
     ]
 }
