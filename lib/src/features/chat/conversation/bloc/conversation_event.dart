@@ -8,22 +8,21 @@ abstract class ConversationEvent extends Equatable {
 }
 
 class InitialEvent extends ConversationEvent {
+  final ConversationPageArguments? pageArguments;
+
+  const InitialEvent({required this.pageArguments});
   @override
   List<Object?> get props => [];
 }
 
-
-
 class LoadMessages extends ConversationEvent {
-  final String chatId;
-  final bool loadMore;
 
-  const LoadMessages(this.chatId, {this.loadMore = false});
+
+  
 
   @override
-  List<Object?> get props => [chatId, loadMore];
+  List<Object?> get props => [];
 }
-
 
 // Message Actions
 class SendMessage extends ConversationEvent {
@@ -63,19 +62,7 @@ class EditMessage extends ConversationEvent {
   List<Object?> get props => [messageId, newContent];
 }
 
-// Typing Indicator
-class SetTypingStatus extends ConversationEvent {
-  final String chatId;
-  final bool isTyping;
 
-  const SetTypingStatus({
-    required this.chatId,
-    required this.isTyping,
-  });
-
-  @override
-  List<Object?> get props => [chatId, isTyping];
-}
 
 // Update Events
 class UpdateChats extends ConversationEvent {
@@ -96,5 +83,7 @@ class UpdateMessages extends ConversationEvent {
   @override
   List<Object?> get props => [messages, isLoadMore];
 }
+
+
 
 

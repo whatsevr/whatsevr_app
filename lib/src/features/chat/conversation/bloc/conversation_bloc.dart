@@ -8,6 +8,7 @@ import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
 import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
 import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
@@ -16,41 +17,41 @@ part 'conversation_event.dart';
 part 'conversation_state.dart';
 
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
-  
   final String _currentUserUid;
   StreamSubscription? _chatSubscription1;
 
   StreamSubscription? _messageSubscription;
   StreamSubscription? _typingSubscription;
-  final _typingStatusController = PublishSubject<SetTypingStatus>();
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-  
+
     on<LoadMessages>(_onLoadMessages);
     on<SendMessage>(_onSendMessage);
- 
-    on<SetTypingStatus>(_onSetTypingStatus);
+
+  
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
 
- 
     on<UpdateMessages>(_onUpdateMessages);
 
-
-    _typingStatusController
-        .debounceTime(Duration(milliseconds: 500))
-        .listen((event) => _updateTypingStatus(event));
+  
   }
+
   Future<void> _onInitialEvent(
     InitialEvent event,
     Emitter<ConversationState> emit,
   ) async {
     print('Initializing ChatBloc');
-
+    emit(state.copyWith(
+      isCommunity: event.pageArguments?.isCommunity,
+      communityUid: event.pageArguments?.communityUid,
+      privateChatUid: event.pageArguments?.privateChatUid,
+      title: event.pageArguments?.title,
+      profilePicture: event.pageArguments?.profilePicture,
+    ));
     await _chatSubscription1?.cancel();
 
-  
     _chatSubscription1 = RemoteDb.supabaseClient1
         .from('private_chats')
         .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
@@ -58,13 +59,12 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         .order('last_message_at', ascending: false)
         .listen(
           (chats) {
-         
+            add(LoadMessages());
           },
           onError: (error) {
             highLevelCatch(error, StackTrace.current);
           },
         );
-
   }
 
   Future<void> _onLoadMessages(
@@ -72,33 +72,32 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     Emitter<ConversationState> emit,
   ) async {
     try {
-      if (!event.loadMore) {
-        emit(
-          state.copyWith(
-            messageStatus: MessageStatus.loading,
-            messages: [],
-          ),
-        );
+      PostgrestTransformBuilder<PostgrestList> query;
+      if (state.isCommunity) {
+        query = RemoteDb.supabaseClient1
+            .from('chat_messages')
+            .select()
+            .eq('community_uid', state.communityUid!)
+            .order('created_at', ascending: false)
+            .limit(50);
+      } else {
+        query = RemoteDb.supabaseClient1
+            .from('chat_messages')
+            .select()
+            .eq('chat_uid', state.privateChatUid!)
+            .order('created_at', ascending: false)
+            .limit(50);
       }
+      final response = await query;
 
-      // Cancel existing subscription
-      await _messageSubscription?.cancel();
+      final chatMessages = response.map((m) => ChatMessage.fromMap(m)).toList();
 
-      _messageSubscription = RemoteDb.supabaseClient1
-          .from('chat_messages') // Ensure table name is 'chat_messages'
-          .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-          .eq('chat_id', event.chatId)
-          .order('created_at', ascending: false)
-          .limit(50)
-          .map((rows) {
-            return rows.map((row) => ChatMessage.fromMap(row)).toList();
-          })
-          .listen(
-            (messages) => add(UpdateMessages(messages, event.loadMore)),
-            onError: (error) {
-              highLevelCatch(error, StackTrace.current);
-            },
-          );
+      emit(
+        state.copyWith(
+          messages: chatMessages,
+          messageStatus: MessageStatus.sent,
+        ),
+      );
     } catch (error) {
       emit(
         state.copyWith(
@@ -134,14 +133,8 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       // Actually send the message with retry mechanism
       final response = await retry(
         () => RemoteDb.supabaseClient1
-            .from('chat_messages') // Ensure table name is 'chat_messages'
-            .insert({
-              'chat_type': event.chatType, // Use event.chatType
-              'sender_uid': _currentUserUid,
-              'message': event.content,
-              'created_at': DateTime.now().toIso8601String(),
-              'updated_at': DateTime.now().toIso8601String(),
-            })
+            .from('') // Ensure table name is 'chat_messages'
+            .insert({})
             .select()
             .single()
             .timeout(Duration(seconds: 5)),
@@ -157,8 +150,8 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       // Update chat's last_message
       await RemoteDb.supabaseClient1
-          .from('chats')
-          .update({'last_message': response}).eq('uid', event.chatId);
+          .from('')
+          .update({'': response}).eq('', event.chatId);
 
       emit(
         state.copyWith(
@@ -178,25 +171,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }
 
 
-  Future<void> _onSetTypingStatus(
-    SetTypingStatus event,
-    Emitter<ConversationState> emit,
-  ) async {
-    _typingStatusController.add(event);
-  }
 
-  Future<void> _updateTypingStatus(SetTypingStatus event) async {
-    try {
-      await RemoteDb.supabaseClient1.from('typing_status').upsert({
-        'chat_id': event.chatId,
-        'user_id': _currentUserUid,
-        'is_typing': event.isTyping,
-      });
-    } catch (error) {
-      // Silently fail typing status updates
-      print('Error updating typing status: $error');
-    }
-  }
 
   Future<void> _onDeleteMessage(
     DeleteMessage event,
@@ -275,9 +250,8 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 
-
-
-  void _onUpdateMessages(UpdateMessages event, Emitter<ConversationState> emit) {
+  void _onUpdateMessages(
+      UpdateMessages event, Emitter<ConversationState> emit) {
     if (event.isLoadMore) {
       emit(
         state.copyWith(
@@ -295,7 +269,6 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       );
     }
   }
-
 
   @override
   ConversationState fromJson(Map<String, dynamic> json) {
@@ -316,7 +289,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     _chatSubscription1?.cancel();
     _messageSubscription?.cancel();
     _typingSubscription?.cancel();
-    _typingStatusController.close();
+   
     return super.close();
   }
 

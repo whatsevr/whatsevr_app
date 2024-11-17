@@ -9,7 +9,11 @@ enum MessageStatus {
 }
 
 class ConversationState extends Equatable {
-
+  final bool isCommunity;
+  final String? communityUid;
+  final String? privateChatUid;
+  final String? title;
+  final String? profilePicture;
   final List<ChatMessage> messages;
   final Map<String, ChatMessage> lastMessages;
   final Map<String, int> unreadCounts;
@@ -22,7 +26,12 @@ class ConversationState extends Equatable {
   final Map<String, List<WhatsevrUser>> typingUsers;
 
   const ConversationState({
-   this.messages = const [],
+    this.isCommunity = false,
+    this.communityUid,
+    this.privateChatUid,
+    this.title,
+    this.profilePicture,
+    this.messages = const [],
     this.lastMessages = const {},
     this.unreadCounts = const {},
     this.availableUsers = const [],
@@ -34,7 +43,11 @@ class ConversationState extends Equatable {
   });
 
   ConversationState copyWith({
-
+    bool? isCommunity,
+    String? communityUid,
+    String? privateChatUid,
+    String? title,
+    String? profilePicture,
     List<ChatMessage>? messages,
     Map<String, ChatMessage>? lastMessages,
     Map<String, int>? unreadCounts,
@@ -46,7 +59,12 @@ class ConversationState extends Equatable {
     Map<String, List<WhatsevrUser>>? typingUsers,
   }) {
     return ConversationState(
-     messages: messages ?? this.messages,
+      isCommunity: isCommunity ?? this.isCommunity,
+      communityUid: communityUid ?? this.communityUid,
+      privateChatUid: privateChatUid ?? this.privateChatUid,
+      title: title ?? this.title,
+      profilePicture: profilePicture ?? this.profilePicture,
+      messages: messages ?? this.messages,
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
       availableUsers: availableUsers ?? this.availableUsers,
@@ -61,6 +79,11 @@ class ConversationState extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
+      'isCommunity': isCommunity,
+      'communityUid': communityUid,
+      'privateChatUid': privateChatUid,
+      'title': title,
+      'profilePicture': profilePicture,
       'messages': messages.map((e) => e.toJson()).toList(),
       'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
       'unreadCounts': unreadCounts,
@@ -76,7 +99,12 @@ class ConversationState extends Equatable {
 
   static ConversationState fromJson(Map<String, dynamic> json) {
     return ConversationState(
-     messages: (json['messages'] as List)
+      isCommunity: json['isCommunity'] ?? false,
+      communityUid: json['communityUid'],
+      privateChatUid: json['privateChatUid'],
+      title: json['title'],
+      profilePicture: json['profilePicture'],
+      messages: (json['messages'] as List)
           .map((e) => ChatMessage.fromJson(e))
           .toList(),
       lastMessages: (json['lastMessages'] as Map)
@@ -91,13 +119,18 @@ class ConversationState extends Equatable {
       messagesSendingStatus:
           Map<String, bool>.from(json['messagesSendingStatus']),
       typingUsers: (json['typingUsers'] as Map).map((k, v) => MapEntry(
-          k, (v as List).map((e) => WhatsevrUser.fromJson(e)).toList(),),),
+          k, (v as List).map((e) => WhatsevrUser.fromJson(e)).toList())),
     );
   }
 
   @override
   List<Object?> get props => [
-       messages,
+        isCommunity,
+        communityUid,
+        privateChatUid,
+        title,
+        profilePicture,
+        messages,
         lastMessages,
         unreadCounts,
         availableUsers,
