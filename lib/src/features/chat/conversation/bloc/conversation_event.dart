@@ -17,9 +17,6 @@ class InitialEvent extends ConversationEvent {
 
 class LoadMessages extends ConversationEvent {
 
-
-  
-
   @override
   List<Object?> get props => [];
 }
@@ -62,27 +59,7 @@ class EditMessage extends ConversationEvent {
   List<Object?> get props => [messageId, newContent];
 }
 
-
-
-// Update Events
-class UpdateChats extends ConversationEvent {
-  final List<PrivateChat> chats;
-
-  const UpdateChats(this.chats);
-
-  @override
-  List<Object?> get props => [chats];
-}
-
-class UpdateMessages extends ConversationEvent {
-  final List<ChatMessage> messages;
-  final bool isLoadMore;
-
-  const UpdateMessages(this.messages, [this.isLoadMore = false]);
-
-  @override
-  List<Object?> get props => [messages, isLoadMore];
-}
+// Remove UpdateChats and UpdateMessages events
 
 
 

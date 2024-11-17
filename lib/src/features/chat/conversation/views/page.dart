@@ -191,7 +191,7 @@ class ConversationsPage extends StatelessWidget {
                 ),
                 Text(
                   state.isCommunity 
-                      ? '${state.availableUsers.length} members' 
+                      ? '${state.chatMembers.length} members' 
                       : state.typingUsers.isNotEmpty ? 'Typing...' : 'Online',
                   style: TextStyle(
                     fontSize: 12,
@@ -337,7 +337,7 @@ class MessageBubble extends StatelessWidget {
               children: [
                 if (isCommunity && !isCurrentUser)
                   Text(
-                    context.read<ConversationBloc>().state.availableUsers
+                    context.read<ConversationBloc>().state.chatMembers
                         .firstWhere((user) => user.uid == message.senderUid)
                         .name ?? 'Unknown',
                     style: context.whatsevrTheme.bodySmall.copyWith(

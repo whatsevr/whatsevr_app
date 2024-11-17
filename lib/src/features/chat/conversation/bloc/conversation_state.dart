@@ -11,7 +11,7 @@ class ConversationState extends Equatable {
   final List<ChatMessage> messages;
   final Map<String, ChatMessage> lastMessages;
   final Map<String, int> unreadCounts;
-  final List<WhatsevrUser> availableUsers;
+  final List<WhatsevrUser> chatMembers;
 
 
   final bool isLoadingMore;
@@ -28,7 +28,7 @@ class ConversationState extends Equatable {
     this.messages = const [],
     this.lastMessages = const {},
     this.unreadCounts = const {},
-    this.availableUsers = const [],
+    this.chatMembers = const [],
  
     this.isLoadingMore = false,
     this.hasReachedEnd = false,
@@ -45,7 +45,7 @@ class ConversationState extends Equatable {
     List<ChatMessage>? messages,
     Map<String, ChatMessage>? lastMessages,
     Map<String, int>? unreadCounts,
-    List<WhatsevrUser>? availableUsers,
+    List<WhatsevrUser>? chatMembers,
 
     bool? isLoadingMore,
     bool? hasReachedEnd,
@@ -53,7 +53,7 @@ class ConversationState extends Equatable {
     Map<String, List<WhatsevrUser>>? typingUsers,
   }) {
     return ConversationState(
-      isCommunity: isCommunity ?? this.isCommunity,
+      isCommunity: isCommunity ?? this.isCommunity, 
       communityUid: communityUid ?? this.communityUid,
       privateChatUid: privateChatUid ?? this.privateChatUid,
       title: title ?? this.title,
@@ -61,9 +61,9 @@ class ConversationState extends Equatable {
       messages: messages ?? this.messages,
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
-      availableUsers: availableUsers ?? this.availableUsers,
+      chatMembers: chatMembers ?? this.chatMembers,
      
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore, 
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       messagesSendingStatus:
           messagesSendingStatus ?? this.messagesSendingStatus,
@@ -81,7 +81,7 @@ class ConversationState extends Equatable {
       'messages': messages.map((e) => e.toJson()).toList(),
       'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
       'unreadCounts': unreadCounts,
-      'availableUsers': availableUsers.map((e) => e.toJson()).toList(),
+      'availableUsers': chatMembers.map((e) => e.toJson()).toList(),
    
       'isLoadingMore': isLoadingMore,
       'hasReachedEnd': hasReachedEnd,
@@ -104,7 +104,7 @@ class ConversationState extends Equatable {
       lastMessages: (json['lastMessages'] as Map)
           .map((k, v) => MapEntry(k, ChatMessage.fromJson(v))),
       unreadCounts: Map<String, int>.from(json['unreadCounts']),
-      availableUsers: (json['availableUsers'] as List)
+      chatMembers: (json['availableUsers'] as List)
           .map((e) => WhatsevrUser.fromJson(e))
           .toList(),
     
@@ -127,7 +127,7 @@ class ConversationState extends Equatable {
         messages,
         lastMessages,
         unreadCounts,
-        availableUsers,
+        chatMembers,
       
         isLoadingMore,
         hasReachedEnd,

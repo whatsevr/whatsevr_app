@@ -18,31 +18,53 @@ part 'conversation_state.dart';
 
 class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
-  StreamSubscription? _chatSubscription1;
-
+  StreamSubscription? _chatSubscription;
   StreamSubscription? _messageSubscription;
   StreamSubscription? _typingSubscription;
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-
     on<LoadMessages>(_onLoadMessages);
     on<SendMessage>(_onSendMessage);
-
-  
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
+  }
 
-    on<UpdateMessages>(_onUpdateMessages);
-
-  
+  void _setupMessageSubscription() {
+    _messageSubscription?.cancel();
+    if (state.isCommunity) {
+      _messageSubscription = RemoteDb.supabaseClient1
+          .from('chat_messages')
+          .stream(primaryKey: ['uid'])
+          .eq('community_uid', state.communityUid!)
+          .order('created_at', ascending: false) // Changed to false for reverse chronological
+          .listen(
+            (data) {
+              final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
+              emit(state.copyWith(messages: messages));
+            },
+            onError: (error) => print('Error in message stream: $error'),
+          );
+    } else {
+      _messageSubscription = RemoteDb.supabaseClient1
+          .from('chat_messages')
+          .stream(primaryKey: ['uid'])
+          .eq('private_chat_uid', state.privateChatUid!)
+          .order('created_at', ascending: false) // Changed to false for reverse chronological
+          .listen(
+            (data) {
+              final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
+              emit(state.copyWith(messages: messages));
+            },
+            onError: (error) => print('Error in message stream: $error'),
+          );
+    }
   }
 
   Future<void> _onInitialEvent(
     InitialEvent event,
     Emitter<ConversationState> emit,
   ) async {
-    print('Initializing ChatBloc');
     emit(state.copyWith(
       isCommunity: event.pageArguments?.isCommunity,
       communityUid: event.pageArguments?.communityUid,
@@ -50,52 +72,56 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       title: event.pageArguments?.title,
       profilePicture: event.pageArguments?.profilePicture,
     ));
-    await _chatSubscription1?.cancel();
 
-    _chatSubscription1 = RemoteDb.supabaseClient1
-        .from('private_chats')
-        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-        .eq('user1_uid', _currentUserUid)
-        .order('last_message_at', ascending: false)
-        .listen(
-          (chats) {
-            add(LoadMessages());
-          },
-          onError: (error) {
-            highLevelCatch(error, StackTrace.current);
-          },
-        );
+    // Setup initial subscriptions
+    _setupMessageSubscription();
+
+    // Load available users if community
+    if (event.pageArguments?.isCommunity == true) {
+      final membersResponse = await RemoteDb.supabaseClient1
+          .from('community_members')
+          .select('user:user_uid(*)')
+          .eq('community_uid', event.pageArguments!.communityUid!);
+
+      final List<WhatsevrUser> members =
+          membersResponse.map((m) => WhatsevrUser.fromMap(m['user'])).toList();
+
+      emit(state.copyWith(chatMembers: members));
+    }
   }
 
-  Future<void> _onLoadMessages(
+  Future<void> _onLoadMessages( 
     LoadMessages event,
-    Emitter<ConversationState> emit,
+    Emitter<ConversationState> emit, 
   ) async {
     try {
-      PostgrestTransformBuilder<PostgrestList> query;
+      // Mark loading
+      emit(state.copyWith(isLoadingMore: true));
+
+      final query = RemoteDb.supabaseClient1.from('chat_messages').select();
+
       if (state.isCommunity) {
-        query = RemoteDb.supabaseClient1
-            .from('chat_messages')
-            .select()
-            .eq('community_uid', state.communityUid!)
-            .order('created_at', ascending: false)
-            .limit(50);
+        query.eq('community_uid', state.communityUid!);
       } else {
-        query = RemoteDb.supabaseClient1
-            .from('chat_messages')
-            .select()
-            .eq('private_chat_uid', state.privateChatUid!)
-            .order('created_at', ascending: false)
-            .limit(50);
+        query.eq('private_chat_uid', state.privateChatUid!);
       }
-      final response = await query; 
 
-      final chatMessages = response.map((m) => ChatMessage.fromMap(m)).toList();
+      if (state.messages.isNotEmpty) {
+        query.lt(
+            'created_at', state.messages.last.createdAt!.toIso8601String());
+      }
 
-      
-    } catch (error,s) {
-    
-      highLevelCatch (error, s);
+      final response = await query;
+      final messages = response.map((m) => ChatMessage.fromMap(m)).toList();
+
+      emit(state.copyWith(
+        messages: [...state.messages, ...messages],
+        isLoadingMore: false,
+        hasReachedEnd: messages.length < 50,
+      ));
+    } catch (error) {
+      emit(state.copyWith(isLoadingMore: false));
+      print('Error loading messages: $error');
     }
   }
 
@@ -104,93 +130,83 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     Emitter<ConversationState> emit,
   ) async {
     try {
-     
-      // Create optimistic message
       final optimisticMessage = ChatMessage(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
-        chatType: event.chatType, // Use event.chatType
+        chatType: event.chatType,
         senderUid: _currentUserUid,
         message: event.content,
         createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-
-        // Add this line
+        isDelivered: false,
+        isRead: false,
       );
 
-      // Add optimistic message to state
-      final updatedMessages = [optimisticMessage, ...state.messages];
-      emit(state.copyWith(messages: updatedMessages));
+      // Insert at the beginning of the list since newest messages should be first
+      emit(state.copyWith(
+        messages: [optimisticMessage, ...state.messages],
+        messagesSendingStatus: {
+          ...state.messagesSendingStatus,
+          optimisticMessage.uid!: true
+        },
+      ));
 
-      // Actually send the message with retry mechanism
-      final response = await retry(
-        () => RemoteDb.supabaseClient1
-            .from('') // Ensure table name is 'chat_messages'
-            .insert({})
-            .select()
-            .single()
-            .timeout(Duration(seconds: 5)),
-        retryIf: (e) => e is TimeoutException || e is SocketException,
-      );
+      final messageData = {
+        'chat_type': event.chatType,
+        'sender_uid': _currentUserUid,
+        'message': event.content,
+        if (event.chatType == 'community') 'community_uid': event.chatId,
+        if (event.chatType == 'private') 'private_chat_uid': event.chatId,
+      };
 
-      // Remove optimistic message and add real message
+      final response = await RemoteDb.supabaseClient1
+          .from('chat_messages')
+          .insert(messageData)
+          .select()
+          .single();
+
       final realMessage = ChatMessage.fromMap(response);
-      final newMessages = [
-        ...state.messages.where((m) => m.uid != optimisticMessage.uid),
-        realMessage,
-      ];
 
-      // Update chat's last_message
-      await RemoteDb.supabaseClient1
-          .from('')
-          .update({'': response}).eq('', event.chatId);
-
-      emit(
-        state.copyWith(
-          
-          messages: newMessages,
-        ),
-      );
+      // When adding real message, maintain reverse chronological order
+      final messages = [...state.messages.where((m) => m.uid != optimisticMessage.uid)];
+      messages.insert(0, realMessage); // Insert at beginning
+      
+      emit(state.copyWith(
+        messages: messages,
+        messagesSendingStatus: {
+          ...state.messagesSendingStatus,
+          realMessage.uid!: false
+        },
+      ));
     } catch (error) {
+      print('Error sending message: $error');
       // Remove optimistic message on error
-
-      emit(
-        state.copyWith(
-        
-        ),
-      );
+      emit(state.copyWith(
+        messages: [
+          ...state.messages.where((m) => !m.uid!.startsWith('temp_')),
+        ],
+      ));
     }
   }
-
-
-
 
   Future<void> _onDeleteMessage(
     DeleteMessage event,
     Emitter<ConversationState> emit,
   ) async {
     try {
-      // Store current messages for potential rollback
-      final currentMessages = state.messages;
+      final currentMessages = [...state.messages];
+      emit(state.copyWith(
+        messages:
+            state.messages.where((m) => m.uid != event.messageId).toList(),
+      ));
 
-      // Update state with message removed
-      emit(
-        state.copyWith(
-          messages:
-              state.messages.where((m) => m.uid != event.messageId).toList(),
-        ),
-      );
-
-      // Actually delete the message
       await RemoteDb.supabaseClient1
-          .from('') // Ensure table name is 'chat_messages'
+          .from('chat_messages')
           .delete()
-          .eq('uid', event.messageId) // Ensure 'uid' is used
-          .eq(
-            '',
-            _currentUserUid,
-          ); // Ensure user owns message
+          .eq('uid', event.messageId)
+          .eq('sender_uid', _currentUserUid);
     } catch (error) {
+      print('Error deleting message: $error');
       // Restore messages on error
+      emit(state.copyWith(messages: state.messages));
     }
   }
 
@@ -199,65 +215,30 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     Emitter<ConversationState> emit,
   ) async {
     try {
-      // Store current messages for potential rollback
-      final currentMessages = [...state.messages];
       final messageIndex =
-          currentMessages.indexWhere((m) => m.uid == event.messageId);
+          state.messages.indexWhere((m) => m.uid == event.messageId);
+      if (messageIndex == -1) return;
 
-      if (messageIndex == -1) {
-        throw Exception('Message not found');
-      }
-
-      // Create updated message list
-      final updatedMessages = [...currentMessages];
+      final updatedMessages = [...state.messages];
       updatedMessages[messageIndex] = updatedMessages[messageIndex].copyWith(
         message: event.newContent,
         isEdited: true,
         updatedAt: DateTime.now(),
       );
 
-      // Update state
-      emit(
-        state.copyWith(
-          messages: updatedMessages,
-        ),
-      );
+      emit(state.copyWith(messages: updatedMessages));
 
-      // Actually update the message
       await RemoteDb.supabaseClient1
-          .from('')
+          .from('chat_messages')
           .update({
-            '': event.newContent,
-            '': true,
-            '': DateTime.now().toIso8601String(),
+            'message': event.newContent,
+            'is_edited': true,
+            'updated_at': DateTime.now().toIso8601String(),
           })
-          .eq('', event.messageId)
-          .eq(
-            '',
-            _currentUserUid,
-          ); // Ensure user owns message
+          .eq('uid', event.messageId)
+          .eq('sender_uid', _currentUserUid);
     } catch (error) {
-      // Restore messages on error
-    }
-  }
-
-  void _onUpdateMessages(
-      UpdateMessages event, Emitter<ConversationState> emit) {
-    if (event.isLoadMore) {
-      emit(
-        state.copyWith(
-          messages: [...state.messages, ...event.messages],
-        
-          isLoadingMore: false,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          messages: event.messages,
-          
-        ),
-      );
+      print('Error editing message: $error');
     }
   }
 
@@ -277,10 +258,9 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   @override
   Future<void> close() {
-    _chatSubscription1?.cancel();
+    _chatSubscription?.cancel();
     _messageSubscription?.cancel();
     _typingSubscription?.cancel();
-   
     return super.close();
   }
 
@@ -295,7 +275,4 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 }
-
-
-
-
+ 
