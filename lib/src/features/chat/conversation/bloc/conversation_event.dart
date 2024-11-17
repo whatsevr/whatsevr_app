@@ -27,7 +27,7 @@ class SendMessage extends ConversationEvent {
   final String content;
   final String chatType; // Add this line
 
-  const SendMessage({
+  const SendMessage({ 
     required this.chatId,
     required this.content,
     required this.chatType, // Add this line

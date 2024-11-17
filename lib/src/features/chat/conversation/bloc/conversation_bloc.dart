@@ -7,6 +7,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
@@ -24,7 +25,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadMessages>(_onLoadMessages);
+    on<LoadMessages>(_onLoadMessages,transformer: blocEventDebounce());
     on<SendMessage>(_onSendMessage);
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
@@ -55,7 +56,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
             (data) {
               final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
               emit(state.copyWith(messages: messages));
-            },
+            }, 
             onError: (error) => print('Error in message stream: $error'),
           );
     }
@@ -97,7 +98,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     try {
       // Mark loading
       emit(state.copyWith(isLoadingMore: true));
-
+ 
       final query = RemoteDb.supabaseClient1.from('chat_messages').select();
 
       if (state.isCommunity) {
@@ -258,7 +259,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   @override
   Future<void> close() {
-    _chatSubscription?.cancel();
+    _chatSubscription?.cancel(); 
     _messageSubscription?.cancel();
     _typingSubscription?.cancel();
     return super.close();
@@ -275,4 +276,3 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 }
- 

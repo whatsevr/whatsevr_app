@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -338,8 +339,8 @@ class MessageBubble extends StatelessWidget {
                 if (isCommunity && !isCurrentUser)
                   Text(
                     context.read<ConversationBloc>().state.chatMembers
-                        .firstWhere((user) => user.uid == message.senderUid)
-                        .name ?? 'Unknown',
+                        .firstWhereOrNull((user) => user.uid == message.senderUid)
+                        ?.name ?? '', 
                     style: context.whatsevrTheme.bodySmall.copyWith(
                       fontWeight: FontWeight.bold,
                       color: context.whatsevrTheme.textLight,
