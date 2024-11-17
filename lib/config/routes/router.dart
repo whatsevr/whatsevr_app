@@ -40,6 +40,17 @@ class NavigationObserver extends NavigatorObserver {
 }
 
 class AppNavigationService {
+  static Future<dynamic> pushPage({
+     BuildContext? context,
+    required Widget screen,
+  }) async{
+   return await Navigator.of(context?? _navigatorKey.currentContext!
+    ).push(
+      CupertinoPageRoute(
+        builder: (context) => screen,
+      ),
+    );
+  }
   static Future<dynamic> newRoute(
     String routeName, {
     Object? extras,

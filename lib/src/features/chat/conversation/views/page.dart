@@ -7,6 +7,22 @@ import 'package:whatsevr_app/src/features/chat/conversation/models/chat_message.
 import 'package:whatsevr_app/src/features/chat/conversation/models/whatsevr_user.dart';
 import 'package:flutter/services.dart';
 
+class ConversationPageArguments {
+  final bool isCommunity;
+  final String? communityUid;
+  final String? privateChatUid;
+  final String? title;
+  final String? profilePicture;
+
+  ConversationPageArguments({
+    required this.isCommunity,
+    this.communityUid,
+    this.privateChatUid,
+    this.title,
+    this.profilePicture,
+  });
+}
+
 class ConversationsPage extends StatefulWidget {
   final List<ChatMessage> messages = List.generate(
     20,
@@ -25,9 +41,7 @@ class ConversationsPage extends StatefulWidget {
   );
 
   final String currentUserUid = 'user1'; // Define the current user's UID
-  final bool isCommunity;
-  final String? communityUid;
-  final String? privateChatUid;
+  final ConversationPageArguments pageArguments;
 
   final Map<String, WhatsevrUser> users = {
     'user1': WhatsevrUser(
@@ -43,9 +57,7 @@ class ConversationsPage extends StatefulWidget {
 
   ConversationsPage({
     super.key,
-    required this.isCommunity,
-    this.communityUid,
-    this.privateChatUid,
+    required this.pageArguments,
   }); // Add this parameter
 
   @override

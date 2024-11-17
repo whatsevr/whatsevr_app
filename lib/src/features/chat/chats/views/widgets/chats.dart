@@ -21,13 +21,15 @@ class _ChatListView extends StatelessWidget {
                   .getTheOtherUser(chat.user1, chat.user2);
               return ListTile(
                 onTap: () {
-                  showGeneralDialog(
-                    context: context,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return ConversationsPage(
+                  AppNavigationService.pushPage(
+                    screen: ConversationsPage(
+                      pageArguments: ConversationPageArguments(
                         isCommunity: false,
-                      );
-                    },
+                        privateChatUid: chat.uid,
+                        title: otherUser?.name ?? 'Chat',
+                        profilePicture: otherUser?.profilePicture ?? '',
+                      ),
+                    ),
                   );
                 },
                 leading: CircleAvatar(
@@ -44,7 +46,7 @@ class _ChatListView extends StatelessWidget {
                   ),
                 ),
                 subtitle: Text(
-                  chat.plainLastMessage??'Start Chat', 
+                  chat.plainLastMessage ?? 'Start Chat',
                   maxLines: 1,
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,

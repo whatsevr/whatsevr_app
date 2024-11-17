@@ -9,7 +9,7 @@
             "request": "launch",
             "type": "dart",
             "noDebug": true,
-            "deviceId": "emulator-5554"
+            "deviceId": "RZCWC0M3XXJ"
         },
         {
             "name": "whatsevr_app (debug)",

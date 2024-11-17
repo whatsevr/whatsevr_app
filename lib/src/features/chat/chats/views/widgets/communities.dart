@@ -18,15 +18,15 @@ class _CommunitiesListView extends StatelessWidget {
               final community = state.communities[index];
               return ListTile(
                 onTap: () {
-                  showGeneralDialog(
-                    context: context,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return ConversationsPage(
-                        isCommunity: true,
-        
-                      );
-                    },
-                  );
+                  AppNavigationService.pushPage(
+                      screen: ConversationsPage(
+                    pageArguments: ConversationPageArguments(
+                      isCommunity: true,
+                      communityUid: community.uid,
+                      title: community.title,
+                      profilePicture: community.profilePicture ?? '',
+                    ),
+                  ));
                 },
                 leading: AdvancedAvatar(
                   decoration: BoxDecoration(
