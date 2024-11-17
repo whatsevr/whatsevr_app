@@ -84,26 +84,18 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         query = RemoteDb.supabaseClient1
             .from('chat_messages')
             .select()
-            .eq('chat_uid', state.privateChatUid!)
+            .eq('private_chat_uid', state.privateChatUid!)
             .order('created_at', ascending: false)
             .limit(50);
       }
-      final response = await query;
+      final response = await query; 
 
       final chatMessages = response.map((m) => ChatMessage.fromMap(m)).toList();
 
-      emit(
-        state.copyWith(
-          messages: chatMessages,
-          messageStatus: MessageStatus.sent,
-        ),
-      );
-    } catch (error) {
-      emit(
-        state.copyWith(
-          messageStatus: MessageStatus.error,
-        ),
-      );
+      
+    } catch (error,s) {
+    
+      highLevelCatch (error, s);
     }
   }
 
@@ -112,8 +104,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     Emitter<ConversationState> emit,
   ) async {
     try {
-      emit(state.copyWith(messageStatus: MessageStatus.sending));
-
+     
       // Create optimistic message
       final optimisticMessage = ChatMessage(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
@@ -155,7 +146,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       emit(
         state.copyWith(
-          messageStatus: MessageStatus.sent,
+          
           messages: newMessages,
         ),
       );
@@ -164,7 +155,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       emit(
         state.copyWith(
-          messageStatus: MessageStatus.error,
+        
         ),
       );
     }
@@ -191,11 +182,11 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       // Actually delete the message
       await RemoteDb.supabaseClient1
-          .from('chat_messages') // Ensure table name is 'chat_messages'
+          .from('') // Ensure table name is 'chat_messages'
           .delete()
           .eq('uid', event.messageId) // Ensure 'uid' is used
           .eq(
-            'sender_uid',
+            '',
             _currentUserUid,
           ); // Ensure user owns message
     } catch (error) {
@@ -234,15 +225,15 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       // Actually update the message
       await RemoteDb.supabaseClient1
-          .from('chat_messages')
+          .from('')
           .update({
-            'content': event.newContent,
-            'is_edited': true,
-            'updated_at': DateTime.now().toIso8601String(),
+            '': event.newContent,
+            '': true,
+            '': DateTime.now().toIso8601String(),
           })
-          .eq('id', event.messageId)
+          .eq('', event.messageId)
           .eq(
-            'sender_uid',
+            '',
             _currentUserUid,
           ); // Ensure user owns message
     } catch (error) {
@@ -256,7 +247,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       emit(
         state.copyWith(
           messages: [...state.messages, ...event.messages],
-          messageStatus: MessageStatus.sent,
+        
           isLoadingMore: false,
         ),
       );
@@ -264,7 +255,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       emit(
         state.copyWith(
           messages: event.messages,
-          messageStatus: MessageStatus.sent,
+          
         ),
       );
     }
@@ -304,3 +295,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     }
   }
 }
+
+
+
+

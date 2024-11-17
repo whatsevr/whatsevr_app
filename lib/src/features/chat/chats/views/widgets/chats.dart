@@ -26,8 +26,8 @@ class _ChatListView extends StatelessWidget {
                       pageArguments: ConversationPageArguments(
                         isCommunity: false,
                         privateChatUid: chat.uid,
-                        title: otherUser?.name ?? 'Chat',
-                        profilePicture: otherUser?.profilePicture ?? '',
+                        title: otherUser?.name,
+                        profilePicture: otherUser?.profilePicture, 
                       ),
                     ),
                   );

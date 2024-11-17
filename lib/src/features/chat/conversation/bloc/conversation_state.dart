@@ -1,12 +1,6 @@
 part of 'conversation_bloc.dart';
 
-enum MessageStatus {
-  initial,
-  loading,
-  sending,
-  sent,
-  error,
-}
+
 
 class ConversationState extends Equatable {
   final bool isCommunity;
@@ -18,7 +12,7 @@ class ConversationState extends Equatable {
   final Map<String, ChatMessage> lastMessages;
   final Map<String, int> unreadCounts;
   final List<WhatsevrUser> availableUsers;
-  final MessageStatus messageStatus;
+
 
   final bool isLoadingMore;
   final bool hasReachedEnd;
@@ -35,7 +29,7 @@ class ConversationState extends Equatable {
     this.lastMessages = const {},
     this.unreadCounts = const {},
     this.availableUsers = const [],
-    this.messageStatus = MessageStatus.initial,
+ 
     this.isLoadingMore = false,
     this.hasReachedEnd = false,
     this.messagesSendingStatus = const {},
@@ -52,7 +46,7 @@ class ConversationState extends Equatable {
     Map<String, ChatMessage>? lastMessages,
     Map<String, int>? unreadCounts,
     List<WhatsevrUser>? availableUsers,
-    MessageStatus? messageStatus,
+
     bool? isLoadingMore,
     bool? hasReachedEnd,
     Map<String, bool>? messagesSendingStatus,
@@ -68,7 +62,7 @@ class ConversationState extends Equatable {
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
       availableUsers: availableUsers ?? this.availableUsers,
-      messageStatus: messageStatus ?? this.messageStatus,
+     
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
       messagesSendingStatus:
@@ -88,7 +82,7 @@ class ConversationState extends Equatable {
       'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
       'unreadCounts': unreadCounts,
       'availableUsers': availableUsers.map((e) => e.toJson()).toList(),
-      'messageStatus': messageStatus.index,
+   
       'isLoadingMore': isLoadingMore,
       'hasReachedEnd': hasReachedEnd,
       'messagesSendingStatus': messagesSendingStatus,
@@ -113,7 +107,7 @@ class ConversationState extends Equatable {
       availableUsers: (json['availableUsers'] as List)
           .map((e) => WhatsevrUser.fromJson(e))
           .toList(),
-      messageStatus: MessageStatus.values[json['messageStatus']],
+    
       isLoadingMore: json['isLoadingMore'],
       hasReachedEnd: json['hasReachedEnd'],
       messagesSendingStatus:
@@ -134,7 +128,7 @@ class ConversationState extends Equatable {
         lastMessages,
         unreadCounts,
         availableUsers,
-        messageStatus,
+      
         isLoadingMore,
         hasReachedEnd,
         messagesSendingStatus,
@@ -144,7 +138,7 @@ class ConversationState extends Equatable {
   @override
   String toString() => '''ChatState {
   messages: ${messages.length} messages,
-    messageStatus: $messageStatus,
+ 
  
     isLoadingMore: $isLoadingMore,
     hasReachedEnd: $hasReachedEnd

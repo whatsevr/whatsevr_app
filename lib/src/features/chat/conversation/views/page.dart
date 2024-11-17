@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -35,81 +36,123 @@ class ConversationsPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     final theme = context.whatsevrTheme;
     final scrollController = ScrollController();
-    final messageController = TextEditingController(); // Added this line
+    final messageController = TextEditingController();
 
     return BlocProvider(
       create: (context) => ConversationBloc(
-        AuthUserDb.getLastLoggedUserUid()!, // Changed this line to use AuthUserDb directly
-      )..add(InitialEvent(
-        pageArguments: pageArguments,
-      )),
+        AuthUserDb.getLastLoggedUserUid()!,
+      )..add(InitialEvent(pageArguments: pageArguments)),
       child: BlocBuilder<ConversationBloc, ConversationState>(
         builder: (context, state) {
-          return Scaffold(
-            backgroundColor: theme.background,
-            appBar: _buildAppBar(context, state),
-            body: state.messageStatus == MessageStatus.loading
-                ? Center(child: CircularProgressIndicator())
-                : state.messageStatus == MessageStatus.error
-                    ? Center(child: Text('Something went wrong', style: theme.body))
-                    : Stack(
-                        children: [
-                          Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  reverse: true,
-                                  controller: scrollController,
-                                  itemCount: state.messages.length,
-                                  itemBuilder: (context, index) {
-                                    final message = state.messages[index];
-                                    final isCurrentUser = message.senderUid == 
-                                        AuthUserDb.getLastLoggedUserUid(); // Changed this line
-                                    
-                                    return MessageBubble(
-                                      message: message,
-                                      isCurrentUser: isCurrentUser,
-                                      isCommunity: pageArguments.isCommunity,
-                                    );
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  theme.background.withOpacity(0.95),
+                  theme.background, 
+                ],
+              ),
+            ),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: _buildAppBar(context, state),
+              body: Stack( 
+                          children: [
+                            Column(
+                              children: [ 
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 12),
+                                    child: ListView.builder(
+                                      reverse: true,
+                                      controller: scrollController,
+                                      itemCount: state.messages.length,
+                                      itemBuilder: (context, index) {
+                                        final message = state.messages[index] ;
+                                        final isCurrentUser = message.senderUid == 
+                                            AuthUserDb.getLastLoggedUserUid();
+                                        
+                                        return Padding(
+                                          padding: EdgeInsets.only(bottom: 8),
+                                          child: MessageBubble(
+                                            message: message,
+                                            isCurrentUser: isCurrentUser,
+                                            isCommunity: pageArguments.isCommunity,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                if (state.typingUsers.isNotEmpty)
+                                  Container(
+                                    padding: EdgeInsets.only(left: 16, bottom: 8),
+                                    child: _buildTypingIndicator(state.typingUsers),
+                                  ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: theme.surface,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: theme.shadow.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        offset: Offset(0, -2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: MessageComposer(
+                                    controller: messageController,
+                                    onSend: (content) {
+                                      context.read<ConversationBloc>().add(
+                                        SendMessage(
+                                          chatId: pageArguments.isCommunity 
+                                              ? pageArguments.communityUid!
+                                              : pageArguments.privateChatUid!,
+                                          content: content,
+                                          chatType: pageArguments.isCommunity 
+                                              ? 'community' 
+                                              : 'private',
+                                        ),
+                                      );
+                                      messageController.clear();
+                                    },
+                                    onAttachmentTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => const AttachmentSheet(),
+                                        backgroundColor: Colors.transparent,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (scrollController.hasClients && 
+                                scrollController.offset > 1000)
+                              Positioned(
+                                right: 16,
+                                bottom: 80,
+                                child: FloatingActionButton(
+                                  mini: true,
+                                  backgroundColor: theme.accent,
+                                  child: Icon(Icons.keyboard_arrow_down, color: theme.surface),
+                                  onPressed: () {
+                                    scrollController.animateTo( // Changed from controller to scrollController
+                                      0,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeOut,
+                                    ); 
                                   },
                                 ),
                               ),
-                              if (state.typingUsers.isNotEmpty)
-                                _buildTypingIndicator(state.typingUsers),
-                              MessageComposer(
-                                controller: messageController, // Use the controller
-                                onSend: (content) { // Changed to accept String parameter
-                                  context.read<ConversationBloc>().add(
-                                    SendMessage(
-                                      chatId: pageArguments.isCommunity 
-                                          ? pageArguments.communityUid!
-                                          : pageArguments.privateChatUid!,
-                                      content: content, // Use the content parameter
-                                      chatType: pageArguments.isCommunity 
-                                          ? 'community' 
-                                          : 'private',
-                                    ),
-                                  );
-                                  messageController.clear(); // Clear after sending
-                                },
-                                onAttachmentTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => const AttachmentSheet(),
-                                  );
-                                }, 
-                                
-                              ),
-                            ],
-                          ),
-                          if (scrollController.hasClients && 
-                              scrollController.offset > 1000)
-                            _buildScrollToBottomButton(scrollController),
-                        ],
-                      ),
+                          ],
+                        ),
+            ),
           );
         },
       ),
@@ -125,7 +168,7 @@ class ConversationsPage extends StatelessWidget {
       title: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(
+            backgroundImage: ExtendedNetworkImageProvider(
               state.profilePicture ?? 
                 (state.isCommunity 
                   ? MockData.blankCommunityAvatar 
