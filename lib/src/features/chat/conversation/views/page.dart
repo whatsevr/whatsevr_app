@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
-import 'package:whatsevr_app/src/features/chat/conversation/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/conversation/models/whatsevr_user.dart';
+import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
+import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 import 'package:flutter/services.dart';
 
 class ConversationPageArguments {
