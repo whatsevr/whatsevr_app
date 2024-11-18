@@ -14,10 +14,7 @@ class ConversationState extends Equatable {
   final List<WhatsevrUser> chatMembers;
 
 
-  final bool isLoadingMore;
-  final bool hasReachedEnd;
-  final Map<String, bool> messagesSendingStatus;
-  final Map<String, List<WhatsevrUser>> typingUsers;
+final PaginationData messagesPaginationData;
 
   const ConversationState({
     this.isCommunity = false,
@@ -29,11 +26,7 @@ class ConversationState extends Equatable {
     this.lastMessages = const {},
     this.unreadCounts = const {},
     this.chatMembers = const [],
- 
-    this.isLoadingMore = false,
-    this.hasReachedEnd = false,
-    this.messagesSendingStatus = const {},
-    this.typingUsers = const {},
+    this.messagesPaginationData = const PaginationData(),
   });
 
   ConversationState copyWith({
@@ -46,11 +39,8 @@ class ConversationState extends Equatable {
     Map<String, ChatMessage>? lastMessages,
     Map<String, int>? unreadCounts,
     List<WhatsevrUser>? chatMembers,
-
-    bool? isLoadingMore,
-    bool? hasReachedEnd,
-    Map<String, bool>? messagesSendingStatus,
-    Map<String, List<WhatsevrUser>>? typingUsers,
+    PaginationData? messagesPaginationData,
+    
   }) {
     return ConversationState(
       isCommunity: isCommunity ?? this.isCommunity, 
@@ -62,12 +52,7 @@ class ConversationState extends Equatable {
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
       chatMembers: chatMembers ?? this.chatMembers,
-     
-      isLoadingMore: isLoadingMore ?? this.isLoadingMore, 
-      hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
-      messagesSendingStatus:
-          messagesSendingStatus ?? this.messagesSendingStatus,
-      typingUsers: typingUsers ?? this.typingUsers,
+      messagesPaginationData: messagesPaginationData ?? this.messagesPaginationData,
     );
   }
 
@@ -83,11 +68,7 @@ class ConversationState extends Equatable {
       'unreadCounts': unreadCounts,
       'availableUsers': chatMembers.map((e) => e.toJson()).toList(),
    
-      'isLoadingMore': isLoadingMore,
-      'hasReachedEnd': hasReachedEnd,
-      'messagesSendingStatus': messagesSendingStatus,
-      'typingUsers': typingUsers
-          .map((k, v) => MapEntry(k, v.map((e) => e.toJson()).toList())),
+
     };
   }
 
@@ -108,12 +89,6 @@ class ConversationState extends Equatable {
           .map((e) => WhatsevrUser.fromJson(e))
           .toList(),
     
-      isLoadingMore: json['isLoadingMore'],
-      hasReachedEnd: json['hasReachedEnd'],
-      messagesSendingStatus:
-          Map<String, bool>.from(json['messagesSendingStatus']),
-      typingUsers: (json['typingUsers'] as Map).map((k, v) => MapEntry(
-          k, (v as List).map((e) => WhatsevrUser.fromJson(e)).toList())),
     );
   }
 
@@ -129,10 +104,6 @@ class ConversationState extends Equatable {
         unreadCounts,
         chatMembers,
       
-        isLoadingMore,
-        hasReachedEnd,
-        messagesSendingStatus,
-        typingUsers,
       ];
 
   @override
@@ -140,7 +111,6 @@ class ConversationState extends Equatable {
   messages: ${messages.length} messages,
  
  
-    isLoadingMore: $isLoadingMore,
-    hasReachedEnd: $hasReachedEnd
+ 
   }''';
 }

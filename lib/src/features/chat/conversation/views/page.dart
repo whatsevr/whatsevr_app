@@ -4,6 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
@@ -96,11 +98,7 @@ class ConversationsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (state.typingUsers.isNotEmpty)
-                        Container(
-                          padding: EdgeInsets.only(left: 16, bottom: 8),
-                          child: _buildTypingIndicator(state.typingUsers),
-                        ),
+                    
                       Container(
                         decoration: BoxDecoration(
                           color: theme.surface,
@@ -117,9 +115,7 @@ class ConversationsPage extends StatelessWidget {
                           onSend: (content) {
                             context.read<ConversationBloc>().add(
                                   SendMessage(
-                                    chatId: pageArguments.isCommunity
-                                        ? pageArguments.communityUid!
-                                        : pageArguments.privateChatUid!,
+                                
                                     content: content,
                                    
                                   ),
@@ -202,17 +198,7 @@ class ConversationsPage extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                Text(
-                  state.isCommunity
-                      ? '${state.chatMembers.length} members'
-                      : state.typingUsers.isNotEmpty
-                          ? 'Typing...'
-                          : 'Online',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: state.isCommunity ? Colors.grey : Colors.green,
-                  ),
-                ),
+                
               ],
             ),
           ),
@@ -245,40 +231,8 @@ class ConversationsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTypingIndicator(Map<String, List<WhatsevrUser>> typingUsers) {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Text(
-            'Typing...',
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildScrollToBottomButton(ScrollController controller) {
-    return Positioned(
-      right: 16,
-      bottom: 80,
-      child: FloatingActionButton(
-        mini: true,
-        child: Icon(Icons.keyboard_arrow_down),
-        onPressed: () {
-          controller.animateTo(
-            0,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        },
-      ),
-    );
-  }
+
 }
 
 class MessageBubble extends StatelessWidget {
@@ -340,7 +294,7 @@ class MessageBubble extends StatelessWidget {
                   bottomLeft: Radius.circular(isCurrentUser ? 16 : 4),
                   bottomRight: Radius.circular(isCurrentUser ? 4 : 16),
                 ),
-                boxShadow: [
+                boxShadow: [ 
                   BoxShadow(
                     color: theme.shadow.withOpacity(0.1),
                     blurRadius: 3,
@@ -349,12 +303,12 @@ class MessageBubble extends StatelessWidget {
                 ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (isCommunity && !isCurrentUser && sender != null)
                     Text(
-                      sender.name ?? 'Unknown',
+                      sender.name ?? sender.username ?? '',
                       style: TextStyle(
                         color: theme.accent,
                         fontWeight: FontWeight.w600,
@@ -372,8 +326,8 @@ class MessageBubble extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        '${message.createdAt?.hour.toString().padLeft(2, '0')}:${message.createdAt?.minute.toString().padLeft(2, '0')}',
+                      Text( 
+                        DateFormat('h:mm a').format(message.createdAt!),
                         style: TextStyle(
                           color: isCurrentUser 
                             ? theme.surface.withOpacity(0.7)
@@ -381,7 +335,11 @@ class MessageBubble extends StatelessWidget {
                           fontSize: 10,
                         ),
                       ),
-                     
+                      Gap(8),
+                       if (isCurrentUser) ...[
+                        if(message.uid?.startsWith('temp_')==true) Icon(Icons.access_time, size: 12, color: theme.surface),
+                        if(message.uid?.startsWith('temp_')==false) Icon(Icons.done_all, size: 12, color: theme.text), 
+                       ],
                     ],
                   ),
                 ],

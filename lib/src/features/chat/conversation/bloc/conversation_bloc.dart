@@ -7,6 +7,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
@@ -17,15 +18,15 @@ import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 part 'conversation_event.dart';
 part 'conversation_state.dart';
 
-class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState> {
+class ConversationBloc
+    extends HydratedBloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
-  StreamSubscription? _chatSubscription;
+
   StreamSubscription? _messageSubscription;
-  StreamSubscription? _typingSubscription;
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadMessages>(_onLoadMessages,transformer: blocEventDebounce());
+    on<LoadMoreMessages>(_onLoadMoreMessages, transformer: blocEventDebounce());
     on<SendMessage>(_onSendMessage);
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
@@ -38,7 +39,8 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
           .from('chat_messages')
           .stream(primaryKey: ['uid'])
           .eq('community_uid', state.communityUid!)
-          .order('created_at', ascending: false) // Changed to false for reverse chronological
+          .order('created_at',
+              ascending: false) // Changed to false for reverse chronological
           .listen(
             (data) {
               final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
@@ -51,12 +53,13 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
           .from('chat_messages')
           .stream(primaryKey: ['uid'])
           .eq('private_chat_uid', state.privateChatUid!)
-          .order('created_at', ascending: false) // Changed to false for reverse chronological
+          .order('created_at',
+              ascending: false) // Changed to false for reverse chronological
           .listen(
             (data) {
               final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
               emit(state.copyWith(messages: messages));
-            }, 
+            },
             onError: (error) => print('Error in message stream: $error'),
           );
     }
@@ -91,14 +94,13 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
     }
   }
 
-  Future<void> _onLoadMessages( 
-    LoadMessages event,
-    Emitter<ConversationState> emit, 
+  Future<void> _onLoadMoreMessages(
+    LoadMoreMessages event,
+    Emitter<ConversationState> emit,
   ) async {
     try {
       // Mark loading
-      emit(state.copyWith(isLoadingMore: true));
- 
+
       final query = RemoteDb.supabaseClient1.from('chat_messages').select();
 
       if (state.isCommunity) {
@@ -117,12 +119,9 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
 
       emit(state.copyWith(
         messages: [...state.messages, ...messages],
-        isLoadingMore: false,
-        hasReachedEnd: messages.length < 50,
       ));
-    } catch (error) {
-      emit(state.copyWith(isLoadingMore: false));
-      print('Error loading messages: $error');
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
 
@@ -131,59 +130,41 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
     Emitter<ConversationState> emit,
   ) async {
     try {
+      if( event.content.isEmpty) return;
       final optimisticMessage = ChatMessage(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
-     
         senderUid: _currentUserUid,
         message: event.content,
         createdAt: DateTime.now(),
-    
+        communityUid: state.isCommunity ? state.communityUid : null,
+        privateChatUid: state.isCommunity ? null : state.privateChatUid,
+        replyToMessageUid:  event.replyToMessageUid,
       );
 
       // Insert at the beginning of the list since newest messages should be first
       emit(state.copyWith(
-        messages: [optimisticMessage, ...state.messages],
-        messagesSendingStatus: {
-          ...state.messagesSendingStatus,
-          optimisticMessage.uid!: true
-        },
+        messages: [...state.messages, optimisticMessage],
       ));
-
+      return;
       final messageData = {
-      
         'sender_uid': _currentUserUid,
         'message': event.content,
-       state.isCommunity?'community_uid': 'private_chat_uid': event.chatId,
-       
+        state.isCommunity ? 'community_uid' : 'private_chat_uid': event.chatId,
       };
 
-      final response = await RemoteDb.supabaseClient1
+      await RemoteDb.supabaseClient1
           .from('chat_messages')
           .insert(messageData)
           .select()
           .single();
-
-      final realMessage = ChatMessage.fromMap(response);
-
-      // When adding real message, maintain reverse chronological order
-      final messages = [...state.messages.where((m) => m.uid != optimisticMessage.uid)];
-      messages.insert(0, realMessage); // Insert at beginning
-      
-      emit(state.copyWith(
-        messages: messages,
-        messagesSendingStatus: {
-          ...state.messagesSendingStatus,
-          realMessage.uid!: false
-        },
-      ));
-    } catch (error) {
-      print('Error sending message: $error');
+    } catch (e, s) {
       // Remove optimistic message on error
       emit(state.copyWith(
         messages: [
           ...state.messages.where((m) => !m.uid!.startsWith('temp_')),
         ],
       ));
+      highLevelCatch(e, s);
     }
   }
 
@@ -191,22 +172,21 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
     DeleteMessage event,
     Emitter<ConversationState> emit,
   ) async {
+    final List<ChatMessage> currentMessages = state.messages;
     try {
-      final currentMessages = [...state.messages];
       emit(state.copyWith(
         messages:
-            state.messages.where((m) => m.uid != event.messageId).toList(),
+            currentMessages.where((m) => m.uid != event.messageUid).toList(),
       ));
 
       await RemoteDb.supabaseClient1
           .from('chat_messages')
           .delete()
-          .eq('uid', event.messageId)
+          .eq('uid', event.messageUid)
           .eq('sender_uid', _currentUserUid);
-    } catch (error) {
-      print('Error deleting message: $error');
-      // Restore messages on error
-      emit(state.copyWith(messages: state.messages));
+    } catch (e, s) {
+      emit(state.copyWith(messages: currentMessages));
+      highLevelCatch(e, s);
     }
   }
 
@@ -222,7 +202,6 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
       final updatedMessages = [...state.messages];
       updatedMessages[messageIndex] = updatedMessages[messageIndex].copyWith(
         message: event.newContent,
-     
       );
 
       emit(state.copyWith(messages: updatedMessages));
@@ -257,9 +236,8 @@ class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState
 
   @override
   Future<void> close() {
-    _chatSubscription?.cancel(); 
     _messageSubscription?.cancel();
-    _typingSubscription?.cancel();
+
     return super.close();
   }
 
