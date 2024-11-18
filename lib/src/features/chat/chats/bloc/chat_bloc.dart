@@ -16,7 +16,7 @@ import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 part 'chat_event.dart';
 part 'chat_state.dart';
 
-class ChatBloc extends Bloc<ChatEvent, ChatState> {
+class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
   final String _currentUserUid;
   StreamSubscription? _chatSubscription1;
   StreamSubscription? _chatSubscription2;

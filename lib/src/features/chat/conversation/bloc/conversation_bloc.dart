@@ -17,7 +17,7 @@ import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 part 'conversation_event.dart';
 part 'conversation_state.dart';
 
-class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
+class ConversationBloc extends HydratedBloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
   StreamSubscription? _chatSubscription;
   StreamSubscription? _messageSubscription;
@@ -133,12 +133,11 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     try {
       final optimisticMessage = ChatMessage(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
-        chatType: event.chatType,
+     
         senderUid: _currentUserUid,
         message: event.content,
         createdAt: DateTime.now(),
-        isDelivered: false,
-        isRead: false,
+    
       );
 
       // Insert at the beginning of the list since newest messages should be first
@@ -151,11 +150,11 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       ));
 
       final messageData = {
-        'chat_type': event.chatType,
+      
         'sender_uid': _currentUserUid,
         'message': event.content,
-        if (event.chatType == 'community') 'community_uid': event.chatId,
-        if (event.chatType == 'private') 'private_chat_uid': event.chatId,
+       state.isCommunity?'community_uid': 'private_chat_uid': event.chatId,
+       
       };
 
       final response = await RemoteDb.supabaseClient1
@@ -223,8 +222,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       final updatedMessages = [...state.messages];
       updatedMessages[messageIndex] = updatedMessages[messageIndex].copyWith(
         message: event.newContent,
-        isEdited: true,
-        updatedAt: DateTime.now(),
+     
       );
 
       emit(state.copyWith(messages: updatedMessages));

@@ -121,9 +121,7 @@ class ConversationsPage extends StatelessWidget {
                                         ? pageArguments.communityUid!
                                         : pageArguments.privateChatUid!,
                                     content: content,
-                                    chatType: pageArguments.isCommunity
-                                        ? 'community'
-                                        : 'private',
+                                   
                                   ),
                                 );
                             messageController.clear();
@@ -383,18 +381,7 @@ class MessageBubble extends StatelessWidget {
                           fontSize: 10,
                         ),
                       ),
-                      if (isCurrentUser) ...[
-                        SizedBox(width: 3),
-                        Icon(
-                          message.isRead ?? false ? Icons.done_all 
-                          : message.isDelivered ?? false ? Icons.done_all 
-                          : Icons.check,
-                          size: 12,
-                          color: message.isRead ?? false 
-                            ? Colors.blue[300]
-                            : theme.surface.withOpacity(0.7),
-                        ),
-                      ],
+                     
                     ],
                   ),
                 ],

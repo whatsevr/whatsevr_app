@@ -25,16 +25,16 @@ class LoadMessages extends ConversationEvent {
 class SendMessage extends ConversationEvent {
   final String chatId;
   final String content;
-  final String chatType; // Add this line
+ // Add this line
 
   const SendMessage({ 
     required this.chatId,
     required this.content,
-    required this.chatType, // Add this line
+    // Add this line
   });
 
   @override
-  List<Object?> get props => [chatId, content, chatType]; // Add chatType here
+  List<Object?> get props => [chatId, content, ]; // Add chatType here
 }
 
 class DeleteMessage extends ConversationEvent {
