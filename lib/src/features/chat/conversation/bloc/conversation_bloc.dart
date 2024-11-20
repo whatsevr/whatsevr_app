@@ -149,7 +149,10 @@ class ConversationBloc
       final messageData = {
         'sender_uid': _currentUserUid,
         'message': event.content,
-        state.isCommunity ? 'community_uid' : 'private_chat_uid': event.chatId,
+        if(event.replyToMessageUid != null) 'reply_to_message_uid': event.replyToMessageUid,
+        if(state.isCommunity) 'community_uid': state.communityUid,
+        if( !state.isCommunity) 'private_chat_uid': state.privateChatUid,
+        
       };
 
       await RemoteDb.supabaseClient1
