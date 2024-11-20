@@ -7,7 +7,7 @@ class ChatMessage {
   final String? message;
   final DateTime? createdAt;
 
-  final bool? isDeleted;
+
   final bool? isPinned;
 
   final dynamic replyToMessageUid;
@@ -25,7 +25,7 @@ class ChatMessage {
     this.message,
     this.createdAt,
  
-    this.isDeleted,
+   
     this.isPinned,
   
     this.replyToMessageUid,
@@ -42,7 +42,7 @@ class ChatMessage {
     String? message,
     DateTime? createdAt,
   
-    bool? isDeleted,
+  
     bool? isPinned,
    
     dynamic replyToMessageUid,
@@ -58,7 +58,7 @@ class ChatMessage {
         message: message ?? this.message,
         createdAt: createdAt ?? this.createdAt,
       
-        isDeleted: isDeleted ?? this.isDeleted,
+      
         isPinned: isPinned ?? this.isPinned,
  
         replyToMessageUid: replyToMessageUid ?? this.replyToMessageUid,
@@ -84,7 +84,7 @@ class ChatMessage {
             ? null
             : DateTime.parse(json['created_at']),
       
-        isDeleted: json['is_deleted'],
+     
         isPinned: json['is_pinned'],
       
         replyToMessageUid: json['reply_to_message_uid'],
@@ -101,7 +101,6 @@ class ChatMessage {
         'message': message,
         'created_at': createdAt?.toIso8601String(),
        
-        'is_deleted': isDeleted,
         'is_pinned': isPinned,
    
         'reply_to_message_uid': replyToMessageUid,

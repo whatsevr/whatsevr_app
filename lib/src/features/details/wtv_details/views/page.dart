@@ -134,7 +134,7 @@ class WtvDetailsPage extends StatelessWidget {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: WhatsevrDetectableText(
+                            child: WhatsevrPostDetectableText(
                               text:
                                   '${state.videoPostDetailsResponse?.videoPostDetails?.description}',
                             ),

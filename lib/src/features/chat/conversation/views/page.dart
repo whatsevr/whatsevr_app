@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/bloc/conversation_bloc.dart';
 import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
 import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
@@ -169,11 +170,13 @@ class ConversationsPage extends StatelessWidget {
   PreferredSizeWidget _buildAppBar(
       BuildContext context, ConversationState state) {
     return AppBar(
+      
       leading: IconButton( 
         icon: Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),
       ),
-      surfaceTintColor:  Colors.transparent,
+     
+
       title: Row(
         children: [
           CircleAvatar(
@@ -205,20 +208,7 @@ class ConversationsPage extends StatelessWidget {
         ],
       ),
       actions: [
-        if (!state.isCommunity) ...[
-          IconButton(
-            icon: Icon(Icons.video_call, color: Colors.black),
-            onPressed: () {
-              // Handle video call
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.call, color: Colors.black),
-            onPressed: () {
-              // Handle voice call
-            },
-          ),
-        ],
+         
         IconButton(
           icon: Icon(Icons.more_vert, color: Colors.black),
           onPressed: () {
@@ -245,7 +235,7 @@ class MessageBubble extends StatelessWidget {
     required this.message,
     required this.isCurrentUser,
     required this.isCommunity,
-  });
+  }); 
 
   @override
   Widget build(BuildContext context) {
@@ -286,7 +276,11 @@ class MessageBubble extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
-                    : null,
+                    :  LinearGradient(
+                        colors: theme.accentGradient,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                 color: isCurrentUser ? null : theme.surface.withOpacity(0.9),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
@@ -315,23 +309,21 @@ class MessageBubble extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                  Text(
+                  WhatsevrMessageDetectableText(
+                    text: 
                     message.message ?? '',
-                    style: TextStyle(
-                      color: isCurrentUser ? theme.surface : theme.text,
-                      fontSize: 14,
-                    ),
+                    trimLines: 8,
+                    basicStyleColor:  theme.surface ,
+                    detectedStyleColor:  theme.surface,
                   ),
-                  SizedBox(height: 2),
+                  
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text( 
                         DateFormat('h:mm a').format(message.createdAt!),
                         style: TextStyle(
-                          color: isCurrentUser 
-                            ? theme.surface.withOpacity(0.7)
-                            : theme.textLight,
+                            color:  theme.surface,
                           fontSize: 10,
                         ),
                       ),
