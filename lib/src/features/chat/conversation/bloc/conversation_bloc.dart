@@ -149,9 +149,9 @@ class ConversationBloc
 
       // Insert at the beginning of the list since newest messages should be first
       emit(state.copyWith(
-        messages: [...state.messages, optimisticMessage],
+        messages: [optimisticMessage,...state.messages, ],
       ));
-      return;
+     
       final messageData = {
         'sender_uid': _currentUserUid,
         'message': event.content,
