@@ -1,7 +1,5 @@
 part of 'conversation_bloc.dart';
 
-
-
 class ConversationState extends Equatable {
   final bool isCommunity;
   final String? communityUid;
@@ -13,8 +11,7 @@ class ConversationState extends Equatable {
   final Map<String, int> unreadCounts;
   final List<WhatsevrUser> chatMembers;
 
-
-final PaginationData messagesPaginationData;
+  final PaginationData messagesPaginationData;
 
   const ConversationState({
     this.isCommunity = false,
@@ -29,6 +26,8 @@ final PaginationData messagesPaginationData;
     this.messagesPaginationData = const PaginationData(),
   });
 
+  String get chatId => isCommunity ? communityUid! : privateChatUid!;
+
   ConversationState copyWith({
     bool? isCommunity,
     String? communityUid,
@@ -40,10 +39,9 @@ final PaginationData messagesPaginationData;
     Map<String, int>? unreadCounts,
     List<WhatsevrUser>? chatMembers,
     PaginationData? messagesPaginationData,
-    
   }) {
     return ConversationState(
-      isCommunity: isCommunity ?? this.isCommunity, 
+      isCommunity: isCommunity ?? this.isCommunity,
       communityUid: communityUid ?? this.communityUid,
       privateChatUid: privateChatUid ?? this.privateChatUid,
       title: title ?? this.title,
@@ -58,37 +56,45 @@ final PaginationData messagesPaginationData;
 
   Map<String, dynamic> toJson() {
     return {
-      'isCommunity': isCommunity,
-      'communityUid': communityUid,
-      'privateChatUid': privateChatUid,
-      'title': title,
-      'profilePicture': profilePicture,
-      'messages': messages.map((e) => e.toJson()).toList(),
-      'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
-      'unreadCounts': unreadCounts,
-      'availableUsers': chatMembers.map((e) => e.toJson()).toList(),
-   
-
+      chatId: {
+        'isCommunity': isCommunity,
+        'communityUid': communityUid,
+        'privateChatUid': privateChatUid,
+        'title': title,
+        'profilePicture': profilePicture,
+        'messages': messages.map((e) => e.toJson()).toList(),
+        'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
+        'unreadCounts': unreadCounts,
+        'availableUsers': chatMembers.map((e) => e.toJson()).toList(),
+        'messagesPaginationData': messagesPaginationData,
+      }
     };
   }
 
-  static ConversationState fromJson(Map<String, dynamic> json) {
+  static ConversationState fromJson(Map<String, dynamic> json, String chatId) {
+    final chatData = json[chatId] as Map<String, dynamic>?;
+    if (chatData == null) return ConversationState();
+
     return ConversationState(
-      isCommunity: json['isCommunity'] ?? false,
-      communityUid: json['communityUid'],
-      privateChatUid: json['privateChatUid'],
-      title: json['title'],
-      profilePicture: json['profilePicture'],
-      messages: (json['messages'] as List)
-          .map((e) => ChatMessage.fromJson(e))
-          .toList(),
-      lastMessages: (json['lastMessages'] as Map)
-          .map((k, v) => MapEntry(k, ChatMessage.fromJson(v))),
-      unreadCounts: Map<String, int>.from(json['unreadCounts']),
-      chatMembers: (json['availableUsers'] as List)
-          .map((e) => WhatsevrUser.fromJson(e))
-          .toList(),
-    
+      isCommunity: chatData['isCommunity'] ?? false,
+      communityUid: chatData['communityUid'],
+      privateChatUid: chatData['privateChatUid'],
+      title: chatData['title'],
+      profilePicture: chatData['profilePicture'],
+      messages: (chatData['messages'] as List?)
+              ?.map((e) => ChatMessage.fromJson(e))
+              .toList() ??
+          [],
+      lastMessages: (chatData['lastMessages'] as Map?)
+              ?.map((k, v) => MapEntry(k, ChatMessage.fromJson(v))) ??
+          {},
+      unreadCounts: Map<String, int>.from(chatData['unreadCounts'] ?? {}),
+      chatMembers: (chatData['availableUsers'] as List?)
+              ?.map((e) => WhatsevrUser.fromJson(e))
+              .toList() ??
+          [],
+      messagesPaginationData:
+          chatData['messagesPaginationData'] ?? const PaginationData(),
     );
   }
 
@@ -103,14 +109,10 @@ final PaginationData messagesPaginationData;
         lastMessages,
         unreadCounts,
         chatMembers,
-      
       ];
 
   @override
   String toString() => '''ChatState {
   messages: ${messages.length} messages,
- 
- 
- 
   }''';
 }

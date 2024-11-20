@@ -25,4 +25,12 @@ class PaginationData extends Equatable {
       noMoreData: noMoreData ?? this.noMoreData,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'currentPage': currentPage,
+      'isLoading': isLoading,
+      'noMoreData': noMoreData,
+    };
+  }
 }

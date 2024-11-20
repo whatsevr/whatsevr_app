@@ -24,6 +24,8 @@ class ConversationBloc
 
   StreamSubscription? _messageSubscription;
 
+  String? _currentChatId;
+
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
     on<LoadMoreMessages>(_onLoadMoreMessages, transformer: blocEventDebounce());
@@ -69,6 +71,10 @@ class ConversationBloc
     InitialEvent event,
     Emitter<ConversationState> emit,
   ) async {
+    _currentChatId = event.pageArguments?.isCommunity == true 
+        ? event.pageArguments?.communityUid
+        : event.pageArguments?.privateChatUid;
+
     emit(state.copyWith(
       isCommunity: event.pageArguments?.isCommunity,
       communityUid: event.pageArguments?.communityUid,
@@ -226,14 +232,16 @@ class ConversationBloc
   @override
   ConversationState fromJson(Map<String, dynamic> json) {
     try {
-      return ConversationState.fromJson(json);
+      if (_currentChatId == null) return const ConversationState();
+      return ConversationState.fromJson(json, _currentChatId!);
     } catch (_) {
       return const ConversationState();
     }
   }
 
   @override
-  Map<String, dynamic> toJson(ConversationState state) {
+  Map<String, dynamic>? toJson(ConversationState state) {
+    if (state.communityUid == null && state.privateChatUid == null) return null;
     return state.toJson();
   }
 
