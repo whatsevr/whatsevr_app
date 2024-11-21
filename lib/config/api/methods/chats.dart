@@ -51,20 +51,20 @@ class ChatsApi {
 
   static Future<(int? statusCode, String? message)?> sendChatMessage({
     required String senderUid,
-    String? receiverUid,
+    String? privateChatUid,
     String? communityUid,
     required String message,
-    required String chatType,
+
   }) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/send-chat-message',
         data: {
           'sender_uid': senderUid,
-          'receiver_uid': receiverUid,
+          'private_chat_uid': privateChatUid,
           'community_uid': communityUid,
           'message': message,
-          'chat_type': chatType,
+         
         },
       );
       return (response.statusCode, response.data['message'] as String?);
@@ -75,16 +75,16 @@ class ChatsApi {
   }
 
   static Future<(int? statusCode, String? message)?> editChatMessage({
-    required String messageId,
-    required String userUid,
+    required String messageUid,
+    required String senderUid,
     required String newMessage,
   }) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/edit-chat-message',
         data: {
-          'message_id': messageId,
-          'user_uid': userUid,
+          'message_uid': messageUid,
+          'sender_uid': senderUid,
           'new_message': newMessage,
         },
       );
@@ -96,15 +96,15 @@ class ChatsApi {
   }
 
   static Future<(int? statusCode, String? message)?> deleteChatMessage({
-    required String messageId,
-    required String userUid,
+    required String messageUid,
+    required String senderUid,
   }) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/delete-chat-message',
         data: {
-          'message_id': messageId,
-          'user_uid': userUid,
+          'message_uid': messageUid,
+          'sender_uid': senderUid,
         },
       );
       return (response.statusCode, response.data['message'] as String?);
@@ -115,15 +115,15 @@ class ChatsApi {
   }
 
   static Future<(int? statusCode, String? message)?> pinChatMessage({
-    required String messageId,
-    required String userUid,
+    required String messageUid,
+    required String senderUid,
   }) async {
     try {
       final Response response = await ApiClient.client.post(
-        '/v1/pin-chat-message',
+        '/v1/pin-unpin-chat-message',
         data: {
-          'message_id': messageId,
-          'user_uid': userUid,
+          'message_uid': messageUid,
+          'sender_uid': senderUid,
         },
       );
       return (response.statusCode, response.data['message'] as String?);

@@ -58,7 +58,10 @@ class _CommunitiesListView extends StatelessWidget {
                 ),
                 title: Text('${community.title}'),
                 subtitle: Text(community.plainLastMessage ?? 'Start Chat'),
-                trailing: Text(
+                trailing: community.lastMessageAt == null
+                    ? null
+                    :
+                Text(
                     '${GetTimeAgo.parse(community.lastMessageAt!, pattern: 'ddMMM')}'),
               );
             },
