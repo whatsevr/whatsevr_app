@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/user_private_chats.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/user_community_chats.dart';
 
@@ -49,6 +50,26 @@ class ChatsApi {
     return null;
   }
 
+  static Future<ChatMessagesResponse?> getChatMessages({
+    required String communityUid,
+    required String privateChatUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-chat-messages',
+        queryParameters: {
+          'community_uid': communityUid,
+          'private_chat_uid': privateChatUid,
+        },
+      );
+      if (response.data != null) {
+        return ChatMessagesResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
   static Future<(int? statusCode, String? message)?> sendChatMessage({
     required String senderUid,
     String? privateChatUid,
