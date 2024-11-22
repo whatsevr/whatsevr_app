@@ -6,10 +6,10 @@ class ConversationState extends Equatable {
   final String? privateChatUid;
   final String? title;
   final String? profilePicture;
-  final List<ChatMessage> messages;
-  final Map<String, ChatMessage> lastMessages;
+  final List<Message> messages;
+  final Map<String, Message> lastMessages;
   final Map<String, int> unreadCounts;
-  final List<WhatsevrUser> chatMembers;
+ 
 
   final PaginationData messagesPaginationData;
 
@@ -22,7 +22,7 @@ class ConversationState extends Equatable {
     this.messages = const [],
     this.lastMessages = const {},
     this.unreadCounts = const {},
-    this.chatMembers = const [],
+
     this.messagesPaginationData = const PaginationData(),
   });
 
@@ -34,10 +34,10 @@ class ConversationState extends Equatable {
     String? privateChatUid,
     String? title,
     String? profilePicture,
-    List<ChatMessage>? messages,
-    Map<String, ChatMessage>? lastMessages,
+    List<Message>? messages,
+    Map<String, Message>? lastMessages,
     Map<String, int>? unreadCounts,
-    List<WhatsevrUser>? chatMembers,
+    
     PaginationData? messagesPaginationData,
   }) {
     return ConversationState(
@@ -49,7 +49,7 @@ class ConversationState extends Equatable {
       messages: messages ?? this.messages,
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
-      chatMembers: chatMembers ?? this.chatMembers,
+     
       messagesPaginationData: messagesPaginationData ?? this.messagesPaginationData,
     );
   }
@@ -65,7 +65,7 @@ class ConversationState extends Equatable {
         'messages': messages.map((e) => e.toJson()).toList(),
         'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
         'unreadCounts': unreadCounts,
-        'availableUsers': chatMembers.map((e) => e.toJson()).toList(),
+     
         'messagesPaginationData': messagesPaginationData,
       }
     };
@@ -82,17 +82,14 @@ class ConversationState extends Equatable {
       title: chatData['title'],
       profilePicture: chatData['profilePicture'],
       messages: (chatData['messages'] as List?)
-              ?.map((e) => ChatMessage.fromJson(e))
+              ?.map((e) => Message.fromJson(e))
               .toList() ??
           [],
       lastMessages: (chatData['lastMessages'] as Map?)
-              ?.map((k, v) => MapEntry(k, ChatMessage.fromJson(v))) ??
+              ?.map((k, v) => MapEntry(k, Message.fromJson(v))) ??
           {},
       unreadCounts: Map<String, int>.from(chatData['unreadCounts'] ?? {}),
-      chatMembers: (chatData['availableUsers'] as List?)
-              ?.map((e) => WhatsevrUser.fromJson(e))
-              .toList() ??
-          [],
+   
       messagesPaginationData:
           chatData['messagesPaginationData'] ?? const PaginationData(),
     );
@@ -108,7 +105,7 @@ class ConversationState extends Equatable {
         messages,
         lastMessages,
         unreadCounts,
-        chatMembers,
+       
       ];
 
   @override

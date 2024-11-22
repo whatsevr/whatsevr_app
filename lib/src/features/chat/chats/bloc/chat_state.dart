@@ -1,7 +1,7 @@
 part of 'chat_bloc.dart';
 
 class ChatState extends Equatable {
-  final List<PrivateChat> privateChats;
+  final List<Chat> privateChats;
   final List<Community> communities;
 
   const ChatState({
@@ -10,7 +10,7 @@ class ChatState extends Equatable {
   });
 
   ChatState copyWith({
-    List<PrivateChat>? privateChats,
+    List<Chat>? privateChats,
     List<Community>? communities,
   }) {
     return ChatState(
@@ -29,7 +29,7 @@ class ChatState extends Equatable {
   static ChatState fromJson(Map<String, dynamic> json) {
     return ChatState(
       privateChats: (json['privateChats'] as List)
-          .map((e) => PrivateChat.fromJson(e))
+          .map((e) => Chat.fromJson(e))
           .toList(),
       communities: (json['communities'] as List)
           .map((e) => Community.fromMap(e))

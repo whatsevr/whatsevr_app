@@ -7,11 +7,11 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/user_community_chats.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/user_private_chats.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
-import 'package:whatsevr_app/src/features/chat/models/communities.dart';
-import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
-import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
+
+import 'package:whatsevr_app/config/api/methods/chats.dart';
 
 part 'chat_event.dart';
 part 'chat_state.dart';
@@ -81,24 +81,19 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
   Future<void> _onLoadPrivateChats(
       LoadPrivateChats event, Emitter<ChatState> emit) async {
     try {
-      //get all chats
-      final response = await RemoteDb.supabaseClient1
-          .from('private_chats')
-          .select(
-            '*, user1:users!private_chats_user1_uid_fkey(*), user2:users!private_chats_user2_uid_fkey(*)',
-          )
-          .or('user1_uid.eq.$_currentUserUid,user2_uid.eq.$_currentUserUid')
-          .order('last_message_at', ascending: false);
-
-      final List<PrivateChat> privateChats =
-          response.map((row) => PrivateChat.fromMap(row)).toList();
-
-      emit(
-        state.copyWith(
-          privateChats: privateChats,
-        ),
+      final UserPrivateChatsResponse? response =
+          await ChatsApi.getUserPrivateChats(
+        userUid: _currentUserUid,
       );
-      // Cancel any existing subscription
+
+      if (response?.chats != null) {
+        final List<Chat> updatedPrivateChats = [
+          ...state.privateChats,
+          ...response!.chats!,
+        ];
+
+        emit(state.copyWith(privateChats: updatedPrivateChats));
+      }
     } catch (e, s) {
       highLevelCatch(e, s);
     }
@@ -140,41 +135,23 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     } else {
       return user1;
     }
-  } 
+  }
 
   FutureOr<void> _onLoadCommunities(
       LoadCommunities event, Emitter<ChatState> emit) async {
     try {
-      final List<String> userOwnedCommunities = [];
-      final List<String> userJoinedCommunities = [];
-      //get all the communities the user owns
-      final response1 = await RemoteDb.supabaseClient1
-          .from('communities')
-          .select('uid')
-          .eq('admin_user_uid', _currentUserUid);
-      userOwnedCommunities.addAll(response1.map((row) => row['uid'] as String));
-      //get all the communities the user has joined
-      final response2 = await RemoteDb.supabaseClient1
-          .from('community_members')
-          .select('community_uid')
-          .eq('user_uid', _currentUserUid);
-      userJoinedCommunities
-          .addAll(response2.map((row) => row['community_uid'] as String));
-      //above two lists will be used to query the communities
-      final response = await RemoteDb.supabaseClient1
-          .from('communities')
-          .select()
-          .inFilter('uid', [
-        ...userOwnedCommunities,
-        ...userJoinedCommunities
-      ]).order('created_at', ascending: false);
-      final List<Community> communities =
-          response.map((row) => Community.fromMap(row)).toList();
-      emit(
-        state.copyWith(
-          communities: communities,
-        ),
+      final response = await ChatsApi.getUserCommunityChats(
+        userUid: _currentUserUid,
+        communityUid: '', // Empty string to get all communities
       );
+
+      if (response?.communities != null) {
+        final List<Community> communities = response!.communities!
+            .map((community) => Community.fromMap(community.toMap()))
+            .toList();
+
+        emit(state.copyWith(communities: communities));
+      }
     } catch (e, s) {
       highLevelCatch(e, s);
     }

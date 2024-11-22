@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
@@ -53,13 +54,11 @@ class ConversationsPage extends StatelessWidget {
         builder: (context, state) {
           return Container(
             decoration: BoxDecoration(
-              color:  theme.background,
+              color: theme.background,
               image: DecorationImage(
-               
                 image: ExtendedNetworkImageProvider(
                   'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/bg-pattern1245.jpg',
-                cache: true,
-    
+                  cache: true,
                 ),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
@@ -99,7 +98,6 @@ class ConversationsPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    
                       Container(
                         decoration: BoxDecoration(
                           color: theme.surface,
@@ -116,9 +114,7 @@ class ConversationsPage extends StatelessWidget {
                           onSend: (content) {
                             context.read<ConversationBloc>().add(
                                   SendMessage(
-                                
                                     content: content,
-                                   
                                   ),
                                 );
                             messageController.clear();
@@ -170,18 +166,15 @@ class ConversationsPage extends StatelessWidget {
   PreferredSizeWidget _buildAppBar(
       BuildContext context, ConversationState state) {
     return AppBar(
-      
-      leading: IconButton( 
+      leading: IconButton(
         icon: Icon(Icons.arrow_back),
         onPressed: () => Navigator.of(context).pop(),
       ),
-     
-
       title: Row(
         children: [
           CircleAvatar(
             backgroundImage: ExtendedNetworkImageProvider(
-              state.profilePicture ?? 
+              state.profilePicture ??
                   (state.isCommunity
                       ? MockData.blankCommunityAvatar
                       : MockData.blankProfileAvatar),
@@ -201,14 +194,12 @@ class ConversationsPage extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                
               ],
             ),
           ),
         ],
       ),
       actions: [
-         
         IconButton(
           icon: Icon(Icons.more_vert, color: Colors.black),
           onPressed: () {
@@ -220,13 +211,10 @@ class ConversationsPage extends StatelessWidget {
       elevation: 0,
     );
   }
-
-
-
 }
 
 class MessageBubble extends StatelessWidget {
-  final ChatMessage message;
+  final Message message;
   final bool isCurrentUser;
   final bool isCommunity;
 
@@ -235,17 +223,13 @@ class MessageBubble extends StatelessWidget {
     required this.message,
     required this.isCurrentUser,
     required this.isCommunity,
-  }); 
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = context.whatsevrTheme;
     final state = context.read<ConversationBloc>().state;
-    final sender = isCommunity 
-      ? state.chatMembers.firstWhereOrNull((user) => user.uid == message.senderUid)
-      : !isCurrentUser
-        ? state.chatMembers.firstWhereOrNull((user) => user.uid == message.senderUid)
-        : null;
+    final sender = message.sender;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -254,7 +238,8 @@ class MessageBubble extends StatelessWidget {
         bottom: 4,
       ),
       child: Row(
-        mainAxisAlignment: isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isCurrentUser) ...[
@@ -276,7 +261,7 @@ class MessageBubble extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       )
-                    :  LinearGradient(
+                    : LinearGradient(
                         colors: theme.accentGradient,
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -288,7 +273,7 @@ class MessageBubble extends StatelessWidget {
                   bottomLeft: Radius.circular(isCurrentUser ? 16 : 4),
                   bottomRight: Radius.circular(isCurrentUser ? 4 : 16),
                 ),
-                boxShadow: [ 
+                boxShadow: [
                   BoxShadow(
                     color: theme.shadow.withOpacity(0.1),
                     blurRadius: 3,
@@ -310,40 +295,41 @@ class MessageBubble extends StatelessWidget {
                       ),
                     ),
                   WhatsevrMessageDetectableText(
-                    text: 
-                    message.message ?? '',
+                    text: message.message ?? '',
                     trimLines: 8,
-                    basicStyleColor:  theme.surface ,
-                    detectedStyleColor:  theme.surface,
+                    basicStyleColor: theme.surface,
+                    detectedStyleColor: theme.surface,
                   ),
-                  
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text( 
+                      Text(
                         DateFormat('h:mm a').format(message.createdAt!),
                         style: TextStyle(
-                            color:  theme.surface,
+                          color: theme.surface,
                           fontSize: 10,
                         ),
                       ),
                       Gap(8),
-                       if (isCurrentUser) ...[
-                        if(message.uid?.startsWith('temp_')==true) Icon(Icons.access_time, size: 12, color: theme.surface),
-                        if(message.uid?.startsWith('temp_')==false) Icon(Icons.done_all, size: 12, color: theme.text), 
-                       ],
+                      if (isCurrentUser) ...[
+                        if (message.uid?.startsWith('temp_') == true)
+                          Icon(Icons.access_time,
+                              size: 12, color: theme.surface),
+                        if (message.uid?.startsWith('temp_') == false)
+                          Icon(Icons.done_all, size: 12, color: theme.text),
+                      ],
                     ],
                   ),
                 ],
+              ),
             ),
-            ),
-            
-      )],
+          )
+        ],
       ),
     );
   }
 
-  void _showEditDialog(BuildContext context, ChatMessage message) {
+  void _showEditDialog(BuildContext context, Message message) {
     final TextEditingController editController =
         TextEditingController(text: message.message);
 
@@ -590,7 +576,7 @@ class AttachmentSheet extends StatelessWidget {
 
 // Update MessageActionsSheet
 class MessageActionsSheet extends StatelessWidget {
-  final ChatMessage message;
+  final Message message;
   final bool isCurrentUser;
   final VoidCallback onDelete;
   final VoidCallback? onEdit;

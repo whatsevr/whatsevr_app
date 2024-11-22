@@ -8,6 +8,7 @@ import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
 import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
@@ -45,7 +46,7 @@ class ConversationBloc
               ascending: false) // Changed to false for reverse chronological
           .listen(
             (data) {
-              final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
+              final messages = data.map((m) => Message.fromMap(m)).toList();
               emit(state.copyWith(messages: messages));
             },
             onError: (error) => print('Error in message stream: $error'),
@@ -59,7 +60,7 @@ class ConversationBloc
               ascending: false) // Changed to false for reverse chronological
           .listen(
             (data) {
-              final messages = data.map((m) => ChatMessage.fromMap(m)).toList();
+              final messages = data.map((m) => Message.fromMap(m)).toList();
               emit(state.copyWith(messages: messages));
             },
             onError: (error) => print('Error in message stream: $error'),
@@ -86,18 +87,7 @@ class ConversationBloc
     // Setup initial subscriptions
     _setupMessageSubscription();
 
-    // Load available users if community
-    if (event.pageArguments?.isCommunity == true) {
-      final membersResponse = await RemoteDb.supabaseClient1
-          .from('community_members')
-          .select('user:user_uid(*)')
-          .eq('community_uid', event.pageArguments!.communityUid!);
 
-      final List<WhatsevrUser> members =
-          membersResponse.map((m) => WhatsevrUser.fromMap(m['user'])).toList();
-
-      emit(state.copyWith(chatMembers: members));
-    }
   }
 
   Future<void> _onLoadMoreMessages(
@@ -121,7 +111,7 @@ class ConversationBloc
       }
 
       final response = await query;
-      final messages = response.map((m) => ChatMessage.fromMap(m)).toList();
+      final messages = response.map((m) => Message.fromMap(m)).toList();
 
       emit(state.copyWith(
         messages: [...state.messages, ...messages],
@@ -137,7 +127,7 @@ class ConversationBloc
   ) async {
     try {
       if( event.content.isEmpty) return;
-      final optimisticMessage = ChatMessage(
+      final optimisticMessage = Message(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
         senderUid: _currentUserUid,
         message: event.content,
@@ -181,7 +171,7 @@ class ConversationBloc
     DeleteMessage event,
     Emitter<ConversationState> emit,
   ) async {
-    final List<ChatMessage> currentMessages = state.messages;
+    final List<Message> currentMessages = state.messages;
     try {
       emit(state.copyWith(
         messages:
@@ -252,7 +242,7 @@ class ConversationBloc
     return super.close();
   }
 
-  User? getTheOtherUser(User? user1, User? user2) {
+  Sender? getTheOtherUser(Sender? user1, Sender? user2) {
     if (user1 == null || user2 == null) {
       return null;
     }
