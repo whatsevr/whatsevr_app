@@ -15,27 +15,38 @@ class InitialEvent extends ConversationEvent {
   List<Object?> get props => [];
 }
 
-class LoadMoreMessages extends ConversationEvent {
+class LoadMessages extends ConversationEvent {
+  const LoadMessages();
 
   @override
   List<Object?> get props => [];
 }
 
-// Message Actions
+class MessageChangesEvent extends ConversationEvent {
+  @override
+  List<Object?> get props => [];
+}
+class LoadLatestMessages extends ConversationEvent {
+  
+  const LoadLatestMessages();
+
+  @override
+  List<Object?> get props => [];
+}
 class SendMessage extends ConversationEvent {
- 
   final String content;
   final String? replyToMessageUid;
- // Add this line
 
-  const SendMessage({ 
-     this.replyToMessageUid,
+  const SendMessage({
+    this.replyToMessageUid,
     required this.content,
-    // Add this line
   });
 
   @override
-  List<Object?> get props => [replyToMessageUid, content, ]; // Add chatType here
+  List<Object?> get props => [
+        replyToMessageUid,
+        content,
+      ]; // Add chatType here
 }
 
 class DeleteMessage extends ConversationEvent {
@@ -59,9 +70,3 @@ class EditMessage extends ConversationEvent {
   @override
   List<Object?> get props => [messageId, newContent];
 }
-
-// Remove UpdateChats and UpdateMessages events
-
-
-
-

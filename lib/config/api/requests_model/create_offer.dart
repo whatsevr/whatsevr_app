@@ -96,7 +96,8 @@ class CreateOfferRequest {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
         ctaAction: json['cta_action'],
         ctaActionUrl: json['cta_action_url'],
       );

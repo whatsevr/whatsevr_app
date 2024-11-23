@@ -102,8 +102,8 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
   void initState() {
     super.initState();
     controller = CachedVideoPlayerPlusController.networkUrl(
-        Uri.parse('${widget.videoUrl}'),)
-      ..initialize().then((_) {
+      Uri.parse('${widget.videoUrl}'),
+    )..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
         controller.addListener(() {

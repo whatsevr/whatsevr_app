@@ -27,73 +27,76 @@ class WtvVideoDetailsRelatedVideosView extends StatelessWidget {
             final RelatedVideoPost? relatedVideoPost =
                 state.videoPostDetailsResponse?.relatedVideoPosts?[index];
             return GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  context.read<WtvDetailsBloc>().add(
-                        FetchVideoPostDetails(
-                          videoPostUid: relatedVideoPost.uid,
-                          thumbnail: relatedVideoPost.thumbnail,
-                          videoUrl: relatedVideoPost.videoUrl,
-                        ),
-                      );
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        ExtendedImage.network(
-                          relatedVideoPost?.thumbnail ??
-                              MockData.imagePlaceholder(),
-                          borderRadius: BorderRadius.circular(8),
-                          shape: BoxShape.rectangle,
-                          fit: BoxFit.cover,
-                          height: 120,
-                          width: 180,
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(4),
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                context.read<WtvDetailsBloc>().add(
+                      FetchVideoPostDetails(
+                        videoPostUid: relatedVideoPost.uid,
+                        thumbnail: relatedVideoPost.thumbnail,
+                        videoUrl: relatedVideoPost.videoUrl,
+                      ),
+                    );
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      ExtendedImage.network(
+                        relatedVideoPost?.thumbnail ??
+                            MockData.imagePlaceholder(),
+                        borderRadius: BorderRadius.circular(8),
+                        shape: BoxShape.rectangle,
+                        fit: BoxFit.cover,
+                        height: 120,
+                        width: 180,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            '${getDurationInText(relatedVideoPost?.videoDurationInSec)}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
                             ),
-                            child: Text(
-                              '${getDurationInText(relatedVideoPost?.videoDurationInSec)}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <StatelessWidget>[
+                        Text(
+                          '${relatedVideoPost?.title}',
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Gap(8),
+                        Text(
+                          '${formatCountToKMBTQ(relatedVideoPost?.totalViews)} views · ${GetTimeAgo.parse(relatedVideoPost!.createdAt!)}',
+                          style: TextStyle(
+                            fontSize: 12,
                           ),
                         ),
                       ],
                     ),
-                    const Gap(8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <StatelessWidget>[
-                          Text(
-                            '${relatedVideoPost?.title}',
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold,),
-                          ),
-                          Gap(8),
-                          Text(
-                            '${formatCountToKMBTQ(relatedVideoPost?.totalViews)} views · ${GetTimeAgo.parse(relatedVideoPost!.createdAt!)}',
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),);
+                  ),
+                ],
+              ),
+            );
           },
           separatorBuilder: (BuildContext context, int index) {
             return const Gap(8);

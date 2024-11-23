@@ -39,12 +39,16 @@ class CommunityProfileDataResponse {
             : CommunityInfo.fromMap(json['community_info']),
         communityCoverMedia: json['community_cover_media'] == null
             ? []
-            : List<CommunityCoverMedia>.from(json['community_cover_media']!
-                .map((x) => CommunityCoverMedia.fromMap(x)),),
+            : List<CommunityCoverMedia>.from(
+                json['community_cover_media']!
+                    .map((x) => CommunityCoverMedia.fromMap(x)),
+              ),
         communityServices: json['community_services'] == null
             ? []
-            : List<CommunityService>.from(json['community_services']!
-                .map((x) => CommunityService.fromMap(x)),),
+            : List<CommunityService>.from(
+                json['community_services']!
+                    .map((x) => CommunityService.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

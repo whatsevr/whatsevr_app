@@ -28,8 +28,7 @@ class WKBUtil {
       return null;
     }
     try {
-      final wkbBytes =
-          Uint8List.fromList(_hexStringToBytes(wkbString));
+      final wkbBytes = Uint8List.fromList(_hexStringToBytes(wkbString));
 
       final point = Point.decode(wkbBytes, format: WKB.geometry);
 

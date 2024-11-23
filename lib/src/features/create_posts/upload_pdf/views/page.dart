@@ -93,9 +93,12 @@ class UploadPdfPage extends StatelessWidget {
                                             color: Colors.white,
                                           ),
                                           Gap(6),
-                                          Text('View Pdf',
-                                              style: TextStyle(
-                                                  color: Colors.white,),),
+                                          Text(
+                                            'View Pdf',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                           Gap(6),
                                           Text(
                                             '(${FileMetaData.getFileSize(state.pdfFile?.lengthSync())})',
@@ -140,8 +143,10 @@ class UploadPdfPage extends StatelessWidget {
                                   size: 50,
                                 ),
                                 Gap(6),
-                                Text('Add',
-                                    style: TextStyle(color: Colors.white),),
+                                Text(
+                                  'Add',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ],
                             ),
                           ),
@@ -158,12 +163,15 @@ class UploadPdfPage extends StatelessWidget {
                           miniButton: true,
                           onPressed: () {
                             CustomAssetPicker.pickImageFromGallery(
-                                aspectRatios: videoPostAspectRatio,
-                                onCompleted: (file) {
-                                  context.read<UploadPdfBloc>().add(
+                              aspectRatios: videoPostAspectRatio,
+                              onCompleted: (file) {
+                                context.read<UploadPdfBloc>().add(
                                       PickThumbnailEvent(
-                                          pickedThumbnailFile: file,),);
-                                },);
+                                        pickedThumbnailFile: file,
+                                      ),
+                                    );
+                              },
+                            );
                           },
                           label: 'Add Thumbnail',
                         ),

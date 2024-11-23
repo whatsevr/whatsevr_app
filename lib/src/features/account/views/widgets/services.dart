@@ -27,7 +27,9 @@ class AccountPageServicesView extends StatelessWidget {
                         '${userService?.title}',
                         maxLines: 2,
                         style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold,),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const Gap(8),
                       Text(

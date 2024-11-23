@@ -42,7 +42,8 @@ class CreateVideoPostBloc
     on<PickThumbnailEvent>(_onPickThumbnail);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities,);
+      _onUpdateTaggedUsersAndCommunities,
+    );
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
@@ -53,14 +54,21 @@ class CreateVideoPostBloc
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
-        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed,) {
+        onCompleted: (
+          nearbyPlacesResponse,
+          lat,
+          long,
+          isDeviceGpsEnabled,
+          isPermissionAllowed,
+        ) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
-            emit(state.copyWith(
-              userCurrentLocationLatLongWkb:
-                  WKBUtil.getWkbString(lat: lat, long: long),
-            ),);
+            emit(
+              state.copyWith(
+                userCurrentLocationLatLongWkb:
+                    WKBUtil.getWkbString(lat: lat, long: long),
+              ),
+            );
           }
         },
       );
@@ -96,83 +104,86 @@ class CreateVideoPostBloc
       SmartDialog.showLoading();
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewVideoPost(
-          request: SanityCheckNewVideoPostRequest(
-              mediaMetaData: MediaMetaData(
-                aspectRatio: state.videoMetaData?.aspectRatio,
-                durationSec: state.videoMetaData?.durationInSec,
-                sizeBytes: state.videoMetaData?.sizeInBytes,
-              ),
-              postData: PostData(
-                userUid: AuthUserDb.getLastLoggedUserUid(),
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-              ),),);
+        request: SanityCheckNewVideoPostRequest(
+          mediaMetaData: MediaMetaData(
+            aspectRatio: state.videoMetaData?.aspectRatio,
+            durationSec: state.videoMetaData?.durationInSec,
+            sizeBytes: state.videoMetaData?.sizeInBytes,
+          ),
+          postData: PostData(
+            userUid: AuthUserDb.getLastLoggedUserUid(),
+            postCreatorType: state.pageArgument?.postCreatorType.value,
+          ),
+        ),
+      );
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
 
       WhatsevrLongTaskController.startServiceWithTaskData(
-          taskData: VideoPostTaskDataForLRT(
-            videoFilePath: state.videoFile!.path,
-            thumbnailFilePath: state.thumbnailFile!.path,
-            title: titleController.text,
-            description: descriptionController.text,
+        taskData: VideoPostTaskDataForLRT(
+          videoFilePath: state.videoFile!.path,
+          thumbnailFilePath: state.thumbnailFile!.path,
+          title: titleController.text,
+          description: descriptionController.text,
+          userUid: (AuthUserDb.getLastLoggedUserUid())!,
+          hashtags: hashtags.isEmpty
+              ? null
+              : hashtags.map((e) => e.replaceAll('#', '')).toList(),
+          location: state.selectedPostLocation,
+          postCreatorType: state.pageArgument?.postCreatorType.value,
+          addressLatLongWkb: state.selectedPostLocationLatLongWkb,
+          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+          taggedUserUids: state.taggedUsersUid,
+          taggedCommunityUids: state.taggedCommunitiesUid,
+          videoDurationInSec: state.videoMetaData?.durationInSec,
+        ),
+        onTaskAssignFail: () async {
+          SmartDialog.showLoading();
+          final String? videoUrl =
+              await FileUploadService.uploadFilesToSupabase(
+            state.videoFile!,
             userUid: (AuthUserDb.getLastLoggedUserUid())!,
-            hashtags: hashtags.isEmpty
-                ? null
-                : hashtags.map((e) => e.replaceAll('#', '')).toList(),
-            location: state.selectedPostLocation,
-            postCreatorType: state.pageArgument?.postCreatorType.value,
-            addressLatLongWkb: state.selectedPostLocationLatLongWkb,
-            creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-            taggedUserUids: state.taggedUsersUid,
-            taggedCommunityUids: state.taggedCommunitiesUid,
-            videoDurationInSec: state.videoMetaData?.durationInSec,
-          ),
-          onTaskAssignFail: () async {
-            SmartDialog.showLoading();
-            final String? videoUrl =
-                await FileUploadService.uploadFilesToSupabase(
-              state.videoFile!,
-              userUid: (AuthUserDb.getLastLoggedUserUid())!,
-              fileRelatedTo: 'video-post',
-            );
-            final String? thumbnailUrl =
-                await FileUploadService.uploadFilesToSupabase(
-              state.thumbnailFile!,
-              userUid: (AuthUserDb.getLastLoggedUserUid())!,
-              fileRelatedTo: 'video-post-thumbnail',
-            );
-            (String? message, int? statusCode)? response =
-                await PostApi.createVideoPost(
-              post: CreateVideoPostRequest(
-                title: titleController.text,
-                description: descriptionController.text,
-                userUid: AuthUserDb.getLastLoggedUserUid(),
-                hashtags: hashtags.isEmpty
-                    ? null
-                    : hashtags.map((e) => e.replaceAll('#', '')).toList(),
-                location: state.selectedPostLocation,
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-                thumbnail: thumbnailUrl,
-                videoUrl: videoUrl,
-                addressLatLongWkb: state.selectedPostLocationLatLongWkb,
-                creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-                taggedUserUids: state.taggedUsersUid,
-                taggedCommunityUids: state.taggedCommunitiesUid,
-                videoDurationInSec: state.videoMetaData?.durationInSec,
-              ),
-            );
-            if (response?.$2 == 200) {
-              SmartDialog.dismiss();
-              SmartDialog.showToast('${response?.$1}');
-              AppNavigationService.goBack();
-            }
-          },
-          onTaskAssigned: () {
+            fileRelatedTo: 'video-post',
+          );
+          final String? thumbnailUrl =
+              await FileUploadService.uploadFilesToSupabase(
+            state.thumbnailFile!,
+            userUid: (AuthUserDb.getLastLoggedUserUid())!,
+            fileRelatedTo: 'video-post-thumbnail',
+          );
+          (String? message, int? statusCode)? response =
+              await PostApi.createVideoPost(
+            post: CreateVideoPostRequest(
+              title: titleController.text,
+              description: descriptionController.text,
+              userUid: AuthUserDb.getLastLoggedUserUid(),
+              hashtags: hashtags.isEmpty
+                  ? null
+                  : hashtags.map((e) => e.replaceAll('#', '')).toList(),
+              location: state.selectedPostLocation,
+              postCreatorType: state.pageArgument?.postCreatorType.value,
+              thumbnail: thumbnailUrl,
+              videoUrl: videoUrl,
+              addressLatLongWkb: state.selectedPostLocationLatLongWkb,
+              creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+              taggedUserUids: state.taggedUsersUid,
+              taggedCommunityUids: state.taggedCommunitiesUid,
+              videoDurationInSec: state.videoMetaData?.durationInSec,
+            ),
+          );
+          if (response?.$2 == 200) {
             SmartDialog.dismiss();
-            SmartDialog.showToast('Creating post, do not close the app');
+            SmartDialog.showToast('${response?.$1}');
             AppNavigationService.goBack();
-          },);
+          }
+        },
+        onTaskAssigned: () {
+          SmartDialog.dismiss();
+          SmartDialog.showToast('Creating post, do not close the app');
+          AppNavigationService.goBack();
+        },
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -192,7 +203,8 @@ class CreateVideoPostBloc
           videoMetaData.isVideo != true ||
           videoMetaData.aspectRatio?.isAspectRatioLandscapeOrSquare != true) {
         throw BusinessException(
-            'Video is not valid, it must be landscape or square',);
+          'Video is not valid, it must be landscape or square',
+        );
       }
 
       emit(state.copyWith(videoFile: event.pickVideoFile));
@@ -246,13 +258,17 @@ class CreateVideoPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateVideoPostState> emit,) async {
+    UpdatePostAddressEvent event,
+    Emitter<CreateVideoPostState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           selectedPostLocation: event.address,
           selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude,),
+            lat: event.addressLatitude,
+            long: event.addressLongitude,
+          ),
         ),
       );
     } catch (e, stackTrace) {
@@ -261,14 +277,17 @@ class CreateVideoPostBloc
   }
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
-      UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateVideoPostState> emit,) {
+    UpdateTaggedUsersAndCommunitiesEvent event,
+    Emitter<CreateVideoPostState> emit,
+  ) {
     try {
       if (event.clearAll == true) {
-        emit(state.copyWith(
-          taggedUsersUid: [],
-          taggedCommunitiesUid: [],
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: [],
+            taggedCommunitiesUid: [],
+          ),
+        );
       } else {
         List<String> taggedUsersUid = [
           ...state.taggedUsersUid,
@@ -280,10 +299,12 @@ class CreateVideoPostBloc
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
-        emit(state.copyWith(
-          taggedUsersUid: taggedUsersUid,
-          taggedCommunitiesUid: taggedCommunitiesUid,
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: taggedUsersUid,
+            taggedCommunitiesUid: taggedCommunitiesUid,
+          ),
+        );
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

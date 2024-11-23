@@ -17,7 +17,8 @@ class ChatsPageRequestsView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
+              backgroundImage:
+                  ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
             ),
             title: Text('User $index'),
             subtitle: Text('Request $index'),
@@ -35,7 +36,8 @@ class ChatsPageRequestsView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: WidgetStateProperty.all(Colors.green.withOpacity(0.2)),
+                    backgroundColor:
+                        WidgetStateProperty.all(Colors.green.withOpacity(0.2)),
                     foregroundColor: WidgetStateProperty.all(Colors.green),
                   ),
                   icon: const Icon(Icons.check),
@@ -52,7 +54,8 @@ class ChatsPageRequestsView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                     ),
-                    backgroundColor: WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
+                    backgroundColor:
+                        WidgetStateProperty.all(Colors.red.withOpacity(0.2)),
                     foregroundColor: WidgetStateProperty.all(Colors.red),
                   ),
                   icon: const Icon(Icons.close),

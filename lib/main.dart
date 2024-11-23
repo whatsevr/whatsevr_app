@@ -93,7 +93,6 @@ void afterLoginServices() async {
 }
 
 void afterRunAppServices() {
-
   GetTimeAgo.setDefaultLocale('en');
   GetTimeAgo.setCustomLocaleMessages('en', GetTimeAgoMessages());
 }

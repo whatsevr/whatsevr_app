@@ -39,7 +39,8 @@ class SearchedVideoPostsResponse {
         videoPosts: json['video_posts'] == null
             ? []
             : List<VideoPost>.from(
-                json['video_posts']!.map((x) => VideoPost.fromMap(x)),),
+                json['video_posts']!.map((x) => VideoPost.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

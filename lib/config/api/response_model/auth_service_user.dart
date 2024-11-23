@@ -69,7 +69,8 @@ class OtpLessSuccessResponse {
         identities: json['identities'] == null
             ? []
             : List<Identity>.from(
-                json['identities']!.map((x) => Identity.fromMap(x)),),
+                json['identities']!.map((x) => Identity.fromMap(x)),
+              ),
         idToken: json['idToken'],
         network:
             json['network'] == null ? null : Network.fromMap(json['network']),
@@ -133,7 +134,6 @@ class DeviceInfo {
   DeviceInfo copyWith({
     String? userAgent,
     String? platform,
-    
     String? vendor,
     String? browser,
     String? connection,

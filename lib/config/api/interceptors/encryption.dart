@@ -50,7 +50,8 @@ class ApiEncryptionInterceptor extends Interceptor {
     final cipherKey = Key.fromUtf8(encryptionKey);
     final encryptService = Encrypter(AES(cipherKey, mode: AESMode.cbc));
     final initVector = IV.fromUtf8(encryptionKey.substring(0, 16));
-    final Encrypted encryptedText = encryptService.encrypt(plainText, iv: initVector);
+    final Encrypted encryptedText =
+        encryptService.encrypt(plainText, iv: initVector);
     final String encryptedBase64String = encryptedText.base64;
     return encryptedBase64String;
   }

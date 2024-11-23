@@ -58,13 +58,19 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(FontAwesomeIcons.mobileAlt,
-                color: Colors.redAccent, size: 24,),
-            title: Text('Device Information',
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,),),
+            leading: Icon(
+              FontAwesomeIcons.mobileAlt,
+              color: Colors.redAccent,
+              size: 24,
+            ),
+            title: Text(
+              'Device Information',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
           for ((String, String) itm in <(String, String)>[
             (
@@ -85,10 +91,14 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             ),
           ])
             ListTile(
-              title: Text(itm.$1,
-                  style: TextStyle(color: Colors.black, fontSize: 14),),
-              subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 12),),
+              title: Text(
+                itm.$1,
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              subtitle: Text(
+                itm.$2,
+                style: TextStyle(color: Colors.grey[700], fontSize: 12),
+              ),
             ),
         ],
       ),
@@ -106,20 +116,27 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ListTile(
             leading:
                 Icon(FontAwesomeIcons.user, color: Colors.redAccent, size: 24),
-            title: Text('Logged User Information',
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,),),
+            title: Text(
+              'Logged User Information',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
           for ((String, String) itm in <(String, String)>[
             ('User UID', AuthUserDb.getLastLoggedUserUid() ?? 'Unknown'),
           ])
             ListTile(
-              title: Text(itm.$1,
-                  style: TextStyle(color: Colors.black, fontSize: 14),),
-              subtitle: Text(itm.$2,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 12),),
+              title: Text(
+                itm.$1,
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              subtitle: Text(
+                itm.$2,
+                style: TextStyle(color: Colors.grey[700], fontSize: 12),
+              ),
             ),
         ],
       ),
@@ -137,17 +154,22 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ListTile(
             leading:
                 Icon(FontAwesomeIcons.users, color: Colors.redAccent, size: 24),
-            title: Text('All Authorized Users',
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,),),
+            title: Text(
+              'All Authorized Users',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
           for (String? userUid
               in AuthUserDb.getAllAuthorisedUserUid() ?? <String?>[])
             ListTile(
-              title: Text(userUid ?? 'Unknown',
-                  style: TextStyle(color: Colors.black, fontSize: 14),),
+              title: Text(
+                userUid ?? 'Unknown',
+                style: TextStyle(color: Colors.black, fontSize: 14),
+              ),
             ),
         ],
       ),
@@ -165,11 +187,14 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           ListTile(
             leading:
                 Icon(FontAwesomeIcons.cogs, color: Colors.redAccent, size: 24),
-            title: const Text('Actions',
-                style: TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,),),
+            title: const Text(
+              'Actions',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
           for ((String, Future<void>? Function()) itm
               in <(String, Future<void>? Function())>[
@@ -185,10 +210,11 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               'Check Theme Colors',
               () async {
                 showGeneralDialog(
-                    context: context,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return _ThemePropertiesShowcase();
-                    },);
+                  context: context,
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return _ThemePropertiesShowcase();
+                  },
+                );
               }
             ),
             (
@@ -207,8 +233,10 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             ListTile(
               title: TextButton(
                 onPressed: itm.$2,
-                child: Text(itm.$1,
-                    style: TextStyle(color: Colors.redAccent, fontSize: 14),),
+                child: Text(
+                  itm.$1,
+                  style: TextStyle(color: Colors.redAccent, fontSize: 14),
+                ),
               ),
             ),
         ],
@@ -236,7 +264,7 @@ class _ThemePropertiesShowcase extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Theme Properties', style: theme.h1),
-                  Switch( 
+                  Switch(
                     value: context.isDarkMode,
                     onChanged: (_) => context.toggleTheme(),
                   ),
@@ -251,60 +279,204 @@ class _ThemePropertiesShowcase extends StatelessWidget {
                       _buildSection(
                         'Colors',
                         [
-                          _ThemePropertyBox(name: 'Primary', color: theme.primary, icon: Icons.color_lens, tooltip: 'Primary color'),
-                          _ThemePropertyBox(name: 'Secondary', color: theme.secondary, icon: Icons.colorize, tooltip: 'Secondary color'),
-                          _ThemePropertyBox(name: 'Background', color: theme.background, icon: Icons.format_paint, tooltip: 'Background color'),
-                          _ThemePropertyBox(name: 'Surface', color: theme.surface, icon: Icons.layers, tooltip: 'Surface color'),
-                          _ThemePropertyBox(name: 'Error', color: theme.error, icon: Icons.error, tooltip: 'Error color'),
-                          _ThemePropertyBox(name: 'Success', color: theme.success, icon: Icons.check_circle, tooltip: 'Success color'),
-                          _ThemePropertyBox(name: 'Warning', color: theme.warning, icon: Icons.warning, tooltip: 'Warning color'),
-                          _ThemePropertyBox(name: 'Info', color: theme.info, icon: Icons.info, tooltip: 'Info color'),
-                          _ThemePropertyBox(name: 'Text', color: theme.text, icon: Icons.text_fields, tooltip: 'Text color'),
-                          _ThemePropertyBox(name: 'Text Light', color: theme.textLight, icon: Icons.text_format, tooltip: 'Light text color'),
-                          _ThemePropertyBox(name: 'Divider', color: theme.divider, icon: Icons.line_weight, tooltip: 'Divider color'),
-                          _ThemePropertyBox(name: 'Disabled', color: theme.disabled, icon: Icons.block, tooltip: 'Disabled color'),
-                          _ThemePropertyBox(name: 'Accent', color: theme.accent, icon: Icons.highlight, tooltip: 'Accent color'),
-                          _ThemePropertyBox(name: 'Button', color: theme.buttonColor, icon: Icons.smart_button, tooltip: 'Button color'),
-                          _ThemePropertyBox(name: 'Card', color: theme.card, icon: Icons.credit_card, tooltip: 'Card color'),
-                          _ThemePropertyBox(name: 'Icon', color: theme.icon, icon: Icons.interests, tooltip: 'Icon color'),
-                          _ThemePropertyBox(name: 'Shadow', color: theme.shadow, icon: Icons.blur_on, tooltip: 'Shadow color'),
-                          _ThemePropertyBox(name: 'AppBar', color: theme.appBar, icon: Icons.web_asset, tooltip: 'AppBar color'),
-                          _ThemePropertyBox(name: 'Light Background', color: theme.lightBackground, icon: Icons.light_mode, tooltip: 'Light background color'),
-                          _ThemePropertyBox(name: 'Dark Background', color: theme.darkBackground, icon: Icons.dark_mode, tooltip: 'Dark background color'),
+                          _ThemePropertyBox(
+                              name: 'Primary',
+                              color: theme.primary,
+                              icon: Icons.color_lens,
+                              tooltip: 'Primary color'),
+                          _ThemePropertyBox(
+                              name: 'Secondary',
+                              color: theme.secondary,
+                              icon: Icons.colorize,
+                              tooltip: 'Secondary color'),
+                          _ThemePropertyBox(
+                              name: 'Background',
+                              color: theme.background,
+                              icon: Icons.format_paint,
+                              tooltip: 'Background color'),
+                          _ThemePropertyBox(
+                              name: 'Surface',
+                              color: theme.surface,
+                              icon: Icons.layers,
+                              tooltip: 'Surface color'),
+                          _ThemePropertyBox(
+                              name: 'Error',
+                              color: theme.error,
+                              icon: Icons.error,
+                              tooltip: 'Error color'),
+                          _ThemePropertyBox(
+                              name: 'Success',
+                              color: theme.success,
+                              icon: Icons.check_circle,
+                              tooltip: 'Success color'),
+                          _ThemePropertyBox(
+                              name: 'Warning',
+                              color: theme.warning,
+                              icon: Icons.warning,
+                              tooltip: 'Warning color'),
+                          _ThemePropertyBox(
+                              name: 'Info',
+                              color: theme.info,
+                              icon: Icons.info,
+                              tooltip: 'Info color'),
+                          _ThemePropertyBox(
+                              name: 'Text',
+                              color: theme.text,
+                              icon: Icons.text_fields,
+                              tooltip: 'Text color'),
+                          _ThemePropertyBox(
+                              name: 'Text Light',
+                              color: theme.textLight,
+                              icon: Icons.text_format,
+                              tooltip: 'Light text color'),
+                          _ThemePropertyBox(
+                              name: 'Divider',
+                              color: theme.divider,
+                              icon: Icons.line_weight,
+                              tooltip: 'Divider color'),
+                          _ThemePropertyBox(
+                              name: 'Disabled',
+                              color: theme.disabled,
+                              icon: Icons.block,
+                              tooltip: 'Disabled color'),
+                          _ThemePropertyBox(
+                              name: 'Accent',
+                              color: theme.accent,
+                              icon: Icons.highlight,
+                              tooltip: 'Accent color'),
+                          _ThemePropertyBox(
+                              name: 'Button',
+                              color: theme.buttonColor,
+                              icon: Icons.smart_button,
+                              tooltip: 'Button color'),
+                          _ThemePropertyBox(
+                              name: 'Card',
+                              color: theme.card,
+                              icon: Icons.credit_card,
+                              tooltip: 'Card color'),
+                          _ThemePropertyBox(
+                              name: 'Icon',
+                              color: theme.icon,
+                              icon: Icons.interests,
+                              tooltip: 'Icon color'),
+                          _ThemePropertyBox(
+                              name: 'Shadow',
+                              color: theme.shadow,
+                              icon: Icons.blur_on,
+                              tooltip: 'Shadow color'),
+                          _ThemePropertyBox(
+                              name: 'AppBar',
+                              color: theme.appBar,
+                              icon: Icons.web_asset,
+                              tooltip: 'AppBar color'),
+                          _ThemePropertyBox(
+                              name: 'Light Background',
+                              color: theme.lightBackground,
+                              icon: Icons.light_mode,
+                              tooltip: 'Light background color'),
+                          _ThemePropertyBox(
+                              name: 'Dark Background',
+                              color: theme.darkBackground,
+                              icon: Icons.dark_mode,
+                              tooltip: 'Dark background color'),
                         ],
                       ),
                       // Spacing
                       _buildSection(
                         'Spacing',
                         [
-                          _ThemePropertyBox(name: 'Spacing 1', value: theme.spacing1, icon: Icons.space_bar, tooltip: 'Base spacing'),
-                          _ThemePropertyBox(name: 'Spacing 2', value: theme.spacing2, icon: Icons.space_bar, tooltip: 'Double spacing'),
-                          _ThemePropertyBox(name: 'Spacing 3', value: theme.spacing3, icon: Icons.space_bar, tooltip: 'Triple spacing'),
-                          _ThemePropertyBox(name: 'Spacing 4', value: theme.spacing4, icon: Icons.space_bar, tooltip: 'Quadruple spacing'),
-                          _ThemePropertyBox(name: 'Spacing 5', value: theme.spacing5, icon: Icons.space_bar, tooltip: 'Quintuple spacing'),
-                          _ThemePropertyBox(name: 'Spacing 6', value: theme.spacing6, icon: Icons.space_bar, tooltip: 'Sextuple spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 1',
+                              value: theme.spacing1,
+                              icon: Icons.space_bar,
+                              tooltip: 'Base spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 2',
+                              value: theme.spacing2,
+                              icon: Icons.space_bar,
+                              tooltip: 'Double spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 3',
+                              value: theme.spacing3,
+                              icon: Icons.space_bar,
+                              tooltip: 'Triple spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 4',
+                              value: theme.spacing4,
+                              icon: Icons.space_bar,
+                              tooltip: 'Quadruple spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 5',
+                              value: theme.spacing5,
+                              icon: Icons.space_bar,
+                              tooltip: 'Quintuple spacing'),
+                          _ThemePropertyBox(
+                              name: 'Spacing 6',
+                              value: theme.spacing6,
+                              icon: Icons.space_bar,
+                              tooltip: 'Sextuple spacing'),
                         ],
                       ),
                       // Other Metrics
                       _buildSection(
                         'Metrics',
                         [
-                          _ThemePropertyBox(name: 'Border Radius', value: theme.borderRadius, icon: Icons.rounded_corner, tooltip: 'Default border radius'),
-                          _ThemePropertyBox(name: 'Button Height', value: theme.buttonHeight, icon: Icons.height, tooltip: 'Standard button height'),
-                          _ThemePropertyBox(name: 'Elevation Small', value: theme.elevationSmall, icon: Icons.elevator, tooltip: 'Small elevation'),
-                          _ThemePropertyBox(name: 'Elevation Medium', value: theme.elevationMedium, icon: Icons.elevator, tooltip: 'Medium elevation'),
-                          _ThemePropertyBox(name: 'Elevation Large', value: theme.elevationLarge, icon: Icons.elevator, tooltip: 'Large elevation'),
+                          _ThemePropertyBox(
+                              name: 'Border Radius',
+                              value: theme.borderRadius,
+                              icon: Icons.rounded_corner,
+                              tooltip: 'Default border radius'),
+                          _ThemePropertyBox(
+                              name: 'Button Height',
+                              value: theme.buttonHeight,
+                              icon: Icons.height,
+                              tooltip: 'Standard button height'),
+                          _ThemePropertyBox(
+                              name: 'Elevation Small',
+                              value: theme.elevationSmall,
+                              icon: Icons.elevator,
+                              tooltip: 'Small elevation'),
+                          _ThemePropertyBox(
+                              name: 'Elevation Medium',
+                              value: theme.elevationMedium,
+                              icon: Icons.elevator,
+                              tooltip: 'Medium elevation'),
+                          _ThemePropertyBox(
+                              name: 'Elevation Large',
+                              value: theme.elevationLarge,
+                              icon: Icons.elevator,
+                              tooltip: 'Large elevation'),
                         ],
                       ),
                       // Opacity
                       _buildSection(
                         'Opacity',
                         [
-                          _ThemePropertyBox(name: 'Dialog Barrier', value: theme.dialogBarrierOpacity, icon: Icons.opacity, tooltip: 'Dialog barrier opacity'),
-                          _ThemePropertyBox(name: 'Disabled', value: theme.disabledOpacity, icon: Icons.opacity, tooltip: 'Disabled state opacity'),
-                          _ThemePropertyBox(name: 'Hover', value: theme.hoverOpacity, icon: Icons.opacity, tooltip: 'Hover state opacity'),
-                          _ThemePropertyBox(name: 'Focus', value: theme.focusOpacity, icon: Icons.opacity, tooltip: 'Focus state opacity'),
-                          _ThemePropertyBox(name: 'Selected', value: theme.selectedOpacity, icon: Icons.opacity, tooltip: 'Selected state opacity'),
+                          _ThemePropertyBox(
+                              name: 'Dialog Barrier',
+                              value: theme.dialogBarrierOpacity,
+                              icon: Icons.opacity,
+                              tooltip: 'Dialog barrier opacity'),
+                          _ThemePropertyBox(
+                              name: 'Disabled',
+                              value: theme.disabledOpacity,
+                              icon: Icons.opacity,
+                              tooltip: 'Disabled state opacity'),
+                          _ThemePropertyBox(
+                              name: 'Hover',
+                              value: theme.hoverOpacity,
+                              icon: Icons.opacity,
+                              tooltip: 'Hover state opacity'),
+                          _ThemePropertyBox(
+                              name: 'Focus',
+                              value: theme.focusOpacity,
+                              icon: Icons.opacity,
+                              tooltip: 'Focus state opacity'),
+                          _ThemePropertyBox(
+                              name: 'Selected',
+                              value: theme.selectedOpacity,
+                              icon: Icons.opacity,
+                              tooltip: 'Selected state opacity'),
                         ],
                       ),
                     ],

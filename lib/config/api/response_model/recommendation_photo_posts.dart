@@ -39,8 +39,10 @@ class RecommendationPhotoPostsResponse {
         lastPage: json['last_page'],
         recommendedPhotoPosts: json['recommended_photo_posts'] == null
             ? []
-            : List<RecommendedPhotoPost>.from(json['recommended_photo_posts']!
-                .map((x) => RecommendedPhotoPost.fromMap(x)),),
+            : List<RecommendedPhotoPost>.from(
+                json['recommended_photo_posts']!
+                    .map((x) => RecommendedPhotoPost.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -207,7 +209,8 @@ class RecommendedPhotoPost {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
         user: json['user'] == null ? null : User.fromMap(json['user']),
       );
 

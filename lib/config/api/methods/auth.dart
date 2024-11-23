@@ -43,7 +43,8 @@ class AuthApi {
 
   //register
   static Future<(String? message, int? statusCode)?> register(
-      UserRegistrationRequest registrationRequest,) async {
+    UserRegistrationRequest registrationRequest,
+  ) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/auth/register',

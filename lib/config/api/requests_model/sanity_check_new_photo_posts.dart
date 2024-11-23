@@ -28,7 +28,8 @@ class SanityCheckNewPhotoPostRequest {
         mediaMetaData: json['media_meta_data'] == null
             ? []
             : List<MediaMetaDatum>.from(
-                json['media_meta_data']!.map((x) => MediaMetaDatum.fromMap(x)),),
+                json['media_meta_data']!.map((x) => MediaMetaDatum.fromMap(x)),
+              ),
         postData: json['post_data'] == null
             ? null
             : PostData.fromMap(json['post_data']),

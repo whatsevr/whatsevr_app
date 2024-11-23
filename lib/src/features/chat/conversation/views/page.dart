@@ -12,8 +12,6 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/bloc/conversation_bloc.dart';
-import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 import 'package:flutter/services.dart';
 
 class ConversationPageArguments {

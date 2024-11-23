@@ -33,11 +33,13 @@ class UserCommunitiesResponse {
         userCommunities: json['user_communities'] == null
             ? []
             : List<Community>.from(
-                json['user_communities']!.map((x) => Community.fromMap(x)),),
+                json['user_communities']!.map((x) => Community.fromMap(x)),
+              ),
         joinedCommunities: json['joined_communities'] == null
             ? []
             : List<Community>.from(
-                json['joined_communities']!.map((x) => Community.fromMap(x)),),
+                json['joined_communities']!.map((x) => Community.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

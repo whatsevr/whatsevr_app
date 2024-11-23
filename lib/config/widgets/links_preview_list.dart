@@ -9,8 +9,11 @@ import 'package:whatsevr_app/config/services/launch_url.dart';
 class LinksPreviewListView extends StatefulWidget {
   final List<String> urls;
   final bool largePreview;
-  const LinksPreviewListView(
-      {super.key, required this.urls, this.largePreview = true,});
+  const LinksPreviewListView({
+    super.key,
+    required this.urls,
+    this.largePreview = true,
+  });
 
   @override
   State<LinksPreviewListView> createState() => _LinksPreviewListViewState();
@@ -63,16 +66,17 @@ class _LinksPreviewListViewState extends State<LinksPreviewListView> {
           },
           previewBuilder: (ctx, previewData) {
             return GestureDetector(
-                onTap: () {
-                  launchWebURL(context, url: urlWithHttps[index]);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Builder(builder: (context) {
+              onTap: () {
+                launchWebURL(context, url: urlWithHttps[index]);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Builder(
+                  builder: (context) {
                     if (widget.largePreview) {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
@@ -127,8 +131,10 @@ class _LinksPreviewListViewState extends State<LinksPreviewListView> {
                             )
                           : null,
                     );
-                  },),
-                ),);
+                  },
+                ),
+              ),
+            );
           },
         ),
       ),

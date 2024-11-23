@@ -124,16 +124,18 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                   onTap: (isReacted) async {
                     final bloc = BlocProvider.of<ReactUnreactBloc>(context);
 
-                    bloc.add(ToggleReaction(
-                      reactionType:
-                          'like', // or other reaction type if available
-                      videoPostUid: widget.videoPostUid,
-                      flickPostUid: widget.flickPostUid,
-                      memoryUid: widget.memoryUid,
-                      offerPostUid: widget.offerPostUid,
-                      photoPostUid: widget.photoPostUid,
-                      pdfUid: widget.pdfUid,
-                    ),);
+                    bloc.add(
+                      ToggleReaction(
+                        reactionType:
+                            'like', // or other reaction type if available
+                        videoPostUid: widget.videoPostUid,
+                        flickPostUid: widget.flickPostUid,
+                        memoryUid: widget.memoryUid,
+                        offerPostUid: widget.offerPostUid,
+                        photoPostUid: widget.photoPostUid,
+                        pdfUid: widget.pdfUid,
+                      ),
+                    );
 
                     setState(() {
                       _isReacted = !_isReacted;

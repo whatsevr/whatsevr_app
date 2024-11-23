@@ -26,23 +26,28 @@ class SearchedPdfsResponse {
         pdfs: pdfs ?? this.pdfs,
       );
 
-  factory SearchedPdfsResponse.fromJson(String str) => SearchedPdfsResponse.fromMap(json.decode(str));
+  factory SearchedPdfsResponse.fromJson(String str) =>
+      SearchedPdfsResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory SearchedPdfsResponse.fromMap(Map<String, dynamic> json) => SearchedPdfsResponse(
-    message: json['message'],
-    page: json['page'],
-    lastPage: json['last_page'],
-    pdfs: json['pdfs'] == null ? [] : List<Pdf>.from(json['pdfs']!.map((x) => Pdf.fromMap(x))),
-  );
+  factory SearchedPdfsResponse.fromMap(Map<String, dynamic> json) =>
+      SearchedPdfsResponse(
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        pdfs: json['pdfs'] == null
+            ? []
+            : List<Pdf>.from(json['pdfs']!.map((x) => Pdf.fromMap(x))),
+      );
 
   Map<String, dynamic> toMap() => {
-    'message': message,
-    'page': page,
-    'last_page': lastPage,
-    'pdfs': pdfs == null ? [] : List<dynamic>.from(pdfs!.map((x) => x.toMap())),
-  };
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'pdfs':
+            pdfs == null ? [] : List<dynamic>.from(pdfs!.map((x) => x.toMap())),
+      };
 }
 
 class Pdf {
@@ -108,34 +113,36 @@ class Pdf {
   String toJson() => json.encode(toMap());
 
   factory Pdf.fromMap(Map<String, dynamic> json) => Pdf(
-    createdAt: json['created_at'] == null ? null : DateTime.parse(json['created_at']),
-    fileUrl: json['file_url'],
-    userUid: json['user_uid'],
-    title: json['title'],
-    thumbnailUrl: json['thumbnail_url'],
-    description: json['description'],
-    postCreatorType: json['post_creator_type'],
-    communityUid: json['community_uid'],
-    creatorLatLongWkb: json['creator_lat_long_wkb'],
-    uid: json['uid'],
-    seoDataWeighted: json['seo_data_weighted'],
-    owner: json['owner'] == null ? null : Owner.fromMap(json['owner']),
-  );
+        createdAt: json['created_at'] == null
+            ? null
+            : DateTime.parse(json['created_at']),
+        fileUrl: json['file_url'],
+        userUid: json['user_uid'],
+        title: json['title'],
+        thumbnailUrl: json['thumbnail_url'],
+        description: json['description'],
+        postCreatorType: json['post_creator_type'],
+        communityUid: json['community_uid'],
+        creatorLatLongWkb: json['creator_lat_long_wkb'],
+        uid: json['uid'],
+        seoDataWeighted: json['seo_data_weighted'],
+        owner: json['owner'] == null ? null : Owner.fromMap(json['owner']),
+      );
 
   Map<String, dynamic> toMap() => {
-    'created_at': createdAt?.toIso8601String(),
-    'file_url': fileUrl,
-    'user_uid': userUid,
-    'title': title,
-    'thumbnail_url': thumbnailUrl,
-    'description': description,
-    'post_creator_type': postCreatorType,
-    'community_uid': communityUid,
-    'creator_lat_long_wkb': creatorLatLongWkb,
-    'uid': uid,
-    'seo_data_weighted': seoDataWeighted,
-    'owner': owner?.toMap(),
-  };
+        'created_at': createdAt?.toIso8601String(),
+        'file_url': fileUrl,
+        'user_uid': userUid,
+        'title': title,
+        'thumbnail_url': thumbnailUrl,
+        'description': description,
+        'post_creator_type': postCreatorType,
+        'community_uid': communityUid,
+        'creator_lat_long_wkb': creatorLatLongWkb,
+        'uid': uid,
+        'seo_data_weighted': seoDataWeighted,
+        'owner': owner?.toMap(),
+      };
 }
 
 class Owner {
@@ -269,66 +276,70 @@ class Owner {
   String toJson() => json.encode(toMap());
 
   factory Owner.fromMap(Map<String, dynamic> json) => Owner(
-    bio: json['bio'],
-    dob: json['dob'],
-    uid: json['uid'],
-    name: json['name'],
-    gender: json['gender'],
-    address: json['address'],
-    isSpam: json['is_spam'],
-    emailId: json['email_id'],
-    username: json['username'],
-    isBanned: json['is_banned'],
-    isOnline: json['is_online'],
-    totalLikes: json['total_likes'],
-    isPortfolio: json['is_portfolio'],
-    mobileNumber: json['mobile_number'],
-    registeredOn: json['registered_on'] == null ? null : DateTime.parse(json['registered_on']),
-    isDeactivated: json['is_deactivated'],
-    lastActiveAt: json['last_active_at'] == null ? null : DateTime.parse(json['last_active_at']),
-    portfolioTitle: json['portfolio_title'],
-    profilePicture: json['profile_picture'],
-    publicEmailId: json['public_email_id'],
-    totalFollowers: json['total_followers'],
-    portfolioStatus: json['portfolio_status'],
-    totalFollowings: json['total_followings'],
-    totalPostLikes: json['total_post_likes'],
-    seoDataWeighted: json['seo_data_weighted'],
-    totalConnections: json['total_connections'],
-    portfolioCreatedAt: json['portfolio_created_at'],
-    portfolioDescription: json['portfolio_description'],
-    userLastLatLongWkb: json['user_last_lat_long_wkb'],
-  );
+        bio: json['bio'],
+        dob: json['dob'],
+        uid: json['uid'],
+        name: json['name'],
+        gender: json['gender'],
+        address: json['address'],
+        isSpam: json['is_spam'],
+        emailId: json['email_id'],
+        username: json['username'],
+        isBanned: json['is_banned'],
+        isOnline: json['is_online'],
+        totalLikes: json['total_likes'],
+        isPortfolio: json['is_portfolio'],
+        mobileNumber: json['mobile_number'],
+        registeredOn: json['registered_on'] == null
+            ? null
+            : DateTime.parse(json['registered_on']),
+        isDeactivated: json['is_deactivated'],
+        lastActiveAt: json['last_active_at'] == null
+            ? null
+            : DateTime.parse(json['last_active_at']),
+        portfolioTitle: json['portfolio_title'],
+        profilePicture: json['profile_picture'],
+        publicEmailId: json['public_email_id'],
+        totalFollowers: json['total_followers'],
+        portfolioStatus: json['portfolio_status'],
+        totalFollowings: json['total_followings'],
+        totalPostLikes: json['total_post_likes'],
+        seoDataWeighted: json['seo_data_weighted'],
+        totalConnections: json['total_connections'],
+        portfolioCreatedAt: json['portfolio_created_at'],
+        portfolioDescription: json['portfolio_description'],
+        userLastLatLongWkb: json['user_last_lat_long_wkb'],
+      );
 
   Map<String, dynamic> toMap() => {
-    'bio': bio,
-    'dob': dob,
-    'uid': uid,
-    'name': name,
-    'gender': gender,
-    'address': address,
-    'is_spam': isSpam,
-    'email_id': emailId,
-    'username': username,
-    'is_banned': isBanned,
-    'is_online': isOnline,
-    'total_likes': totalLikes,
-    'is_portfolio': isPortfolio,
-    'mobile_number': mobileNumber,
-    'registered_on': registeredOn?.toIso8601String(),
-    'is_deactivated': isDeactivated,
-    'last_active_at': lastActiveAt?.toIso8601String(),
-    'portfolio_title': portfolioTitle,
-    'profile_picture': profilePicture,
-    'public_email_id': publicEmailId,
-    'total_followers': totalFollowers,
-    'portfolio_status': portfolioStatus,
-    'total_followings': totalFollowings,
-    'total_post_likes': totalPostLikes,
-    'seo_data_weighted': seoDataWeighted,
-    'total_connections': totalConnections,
-    'portfolio_created_at': portfolioCreatedAt,
-    'portfolio_description': portfolioDescription,
-    'user_last_lat_long_wkb': userLastLatLongWkb,
-  };
+        'bio': bio,
+        'dob': dob,
+        'uid': uid,
+        'name': name,
+        'gender': gender,
+        'address': address,
+        'is_spam': isSpam,
+        'email_id': emailId,
+        'username': username,
+        'is_banned': isBanned,
+        'is_online': isOnline,
+        'total_likes': totalLikes,
+        'is_portfolio': isPortfolio,
+        'mobile_number': mobileNumber,
+        'registered_on': registeredOn?.toIso8601String(),
+        'is_deactivated': isDeactivated,
+        'last_active_at': lastActiveAt?.toIso8601String(),
+        'portfolio_title': portfolioTitle,
+        'profile_picture': profilePicture,
+        'public_email_id': publicEmailId,
+        'total_followers': totalFollowers,
+        'portfolio_status': portfolioStatus,
+        'total_followings': totalFollowings,
+        'total_post_likes': totalPostLikes,
+        'seo_data_weighted': seoDataWeighted,
+        'total_connections': totalConnections,
+        'portfolio_created_at': portfolioCreatedAt,
+        'portfolio_description': portfolioDescription,
+        'user_last_lat_long_wkb': userLastLatLongWkb,
+      };
 }

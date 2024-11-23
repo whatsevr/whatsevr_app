@@ -80,7 +80,8 @@ class CreatePhotoPostRequest {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

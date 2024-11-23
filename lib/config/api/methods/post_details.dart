@@ -8,10 +8,12 @@ class PostDetailsApi {
     required String videoPostUid,
   }) async {
     try {
-      final Response response = await ApiClient.client
-          .get('/v1/video-post-details', queryParameters: {
-        'video_post_uid': videoPostUid,
-      },);
+      final Response response = await ApiClient.client.get(
+        '/v1/video-post-details',
+        queryParameters: {
+          'video_post_uid': videoPostUid,
+        },
+      );
       if (response.data != null) {
         return VideoPostDetailsResponse.fromMap(response.data);
       }

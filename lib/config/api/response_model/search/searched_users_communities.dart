@@ -36,7 +36,8 @@ class SearchedUsersAndCommunitiesResponse {
   String toJson() => json.encode(toMap());
 
   factory SearchedUsersAndCommunitiesResponse.fromMap(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       SearchedUsersAndCommunitiesResponse(
         message: json['message'],
         page: json['page'],
@@ -47,7 +48,8 @@ class SearchedUsersAndCommunitiesResponse {
         communities: json['communities'] == null
             ? []
             : List<Community>.from(
-                json['communities']!.map((x) => Community.fromMap(x)),),
+                json['communities']!.map((x) => Community.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

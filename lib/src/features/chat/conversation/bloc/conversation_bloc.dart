@@ -8,71 +8,38 @@ import 'package:retry/retry.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
+import 'package:whatsevr_app/config/api/methods/chats.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
 import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
-import 'package:whatsevr_app/src/features/chat/models/private_chat.dart';
-import 'package:whatsevr_app/src/features/chat/models/chat_message.dart';
-import 'package:whatsevr_app/src/features/chat/models/whatsevr_user.dart';
 
 part 'conversation_event.dart';
 part 'conversation_state.dart';
 
 class ConversationBloc
-    extends HydratedBloc<ConversationEvent, ConversationState> {
+    extends Bloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
 
-  StreamSubscription? _messageSubscription;
+  RealtimeChannel? _chatMessageChannel;
 
   String? _currentChatId;
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadMoreMessages>(_onLoadMoreMessages, transformer: blocEventDebounce());
+    on<LoadMessages>(_onLoadMessages, transformer: blocEventDebounce());
+    on<MessageChangesEvent>(_onMessageChanges);
+    on<LoadLatestMessages>(_onLoadLatestMessages);
     on<SendMessage>(_onSendMessage);
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
-  }
-
-  void _setupMessageSubscription() {
-    _messageSubscription?.cancel();
-    if (state.isCommunity) {
-      _messageSubscription = RemoteDb.supabaseClient1
-          .from('chat_messages')
-          .stream(primaryKey: ['uid'])
-          .eq('community_uid', state.communityUid!)
-          .order('created_at',
-              ascending: false) // Changed to false for reverse chronological
-          .listen(
-            (data) {
-              final messages = data.map((m) => Message.fromMap(m)).toList();
-              emit(state.copyWith(messages: messages));
-            },
-            onError: (error) => print('Error in message stream: $error'),
-          );
-    } else {
-      _messageSubscription = RemoteDb.supabaseClient1
-          .from('chat_messages')
-          .stream(primaryKey: ['uid'])
-          .eq('private_chat_uid', state.privateChatUid!)
-          .order('created_at',
-              ascending: false) // Changed to false for reverse chronological
-          .listen(
-            (data) {
-              final messages = data.map((m) => Message.fromMap(m)).toList();
-              emit(state.copyWith(messages: messages));
-            },
-            onError: (error) => print('Error in message stream: $error'),
-          );
-    }
   }
 
   Future<void> _onInitialEvent(
     InitialEvent event,
     Emitter<ConversationState> emit,
   ) async {
-    _currentChatId = event.pageArguments?.isCommunity == true 
+    _currentChatId = event.pageArguments?.isCommunity == true
         ? event.pageArguments?.communityUid
         : event.pageArguments?.privateChatUid;
 
@@ -84,37 +51,21 @@ class ConversationBloc
       profilePicture: event.pageArguments?.profilePicture,
     ));
 
-    // Setup initial subscriptions
-    _setupMessageSubscription();
-
-
+    add(LoadMessages());
+    add(MessageChangesEvent());
   }
 
-  Future<void> _onLoadMoreMessages(
-    LoadMoreMessages event,
+  Future<void> _onLoadMessages(
+    LoadMessages event,
     Emitter<ConversationState> emit,
   ) async {
     try {
-      // Mark loading
-
-      final query = RemoteDb.supabaseClient1.from('chat_messages').select();
-
-      if (state.isCommunity) {
-        query.eq('community_uid', state.communityUid!);
-      } else {
-        query.eq('private_chat_uid', state.privateChatUid!);
-      }
-
-      if (state.messages.isNotEmpty) {
-        query.lt(
-            'created_at', state.messages.last.createdAt!.toIso8601String());
-      }
-
-      final response = await query;
-      final messages = response.map((m) => Message.fromMap(m)).toList();
-
+      final ChatMessagesResponse? response = await ChatsApi.getChatMessages(
+        communityUid: state.isCommunity ? state.communityUid : null,
+        privateChatUid: state.isCommunity ? null : state.privateChatUid,
+      );
       emit(state.copyWith(
-        messages: [...state.messages, ...messages],
+        messages: response?.messages,
       ));
     } catch (e, s) {
       highLevelCatch(e, s);
@@ -126,7 +77,7 @@ class ConversationBloc
     Emitter<ConversationState> emit,
   ) async {
     try {
-      if( event.content.isEmpty) return;
+      if (event.content.isEmpty) return;
       final optimisticMessage = Message(
         uid: 'temp_${DateTime.now().millisecondsSinceEpoch}',
         senderUid: _currentUserUid,
@@ -134,28 +85,32 @@ class ConversationBloc
         createdAt: DateTime.now(),
         communityUid: state.isCommunity ? state.communityUid : null,
         privateChatUid: state.isCommunity ? null : state.privateChatUid,
-        replyToMessageUid:  event.replyToMessageUid,
+        replyToMessageUid: event.replyToMessageUid,
       );
 
       // Insert at the beginning of the list since newest messages should be first
       emit(state.copyWith(
-        messages: [optimisticMessage,...state.messages, ],
+        messages: [
+          optimisticMessage,
+          ...state.messages,
+        ],
       ));
-     
+
       final messageData = {
         'sender_uid': _currentUserUid,
         'message': event.content,
-        if(event.replyToMessageUid != null) 'reply_to_message_uid': event.replyToMessageUid,
-        if(state.isCommunity) 'community_uid': state.communityUid,
-        if( !state.isCommunity) 'private_chat_uid': state.privateChatUid,
-        
+        if (event.replyToMessageUid != null)
+          'reply_to_message_uid': event.replyToMessageUid,
+        if (state.isCommunity) 'community_uid': state.communityUid,
+        if (!state.isCommunity) 'private_chat_uid': state.privateChatUid,
       };
 
-      await RemoteDb.supabaseClient1
-          .from('chat_messages')
-          .insert(messageData)
-          .select()
-          .single();
+      await ChatsApi.sendChatMessage(
+        senderUid: _currentUserUid,
+        message:  event.content,
+        privateChatUid: state.isCommunity ? null : state.privateChatUid,
+        communityUid: state.isCommunity ? state.communityUid : null,
+      );
     } catch (e, s) {
       // Remove optimistic message on error
       emit(state.copyWith(
@@ -178,11 +133,10 @@ class ConversationBloc
             currentMessages.where((m) => m.uid != event.messageUid).toList(),
       ));
 
-      await RemoteDb.supabaseClient1
-          .from('chat_messages')
-          .delete()
-          .eq('uid', event.messageUid)
-          .eq('sender_uid', _currentUserUid);
+      await ChatsApi.deleteChatMessage(
+        messageUid: event.messageUid,
+        senderUid: _currentUserUid,
+      );
     } catch (e, s) {
       emit(state.copyWith(messages: currentMessages));
       highLevelCatch(e, s);
@@ -205,17 +159,13 @@ class ConversationBloc
 
       emit(state.copyWith(messages: updatedMessages));
 
-      await RemoteDb.supabaseClient1
-          .from('chat_messages')
-          .update({
-            'message': event.newContent,
-            'is_edited': true,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('uid', event.messageId)
-          .eq('sender_uid', _currentUserUid);
-    } catch (error) {
-      print('Error editing message: $error');
+      await ChatsApi.editChatMessage(
+        messageUid: event.messageId,
+        senderUid: _currentUserUid,
+        newMessage: event.newContent,
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
 
@@ -237,7 +187,7 @@ class ConversationBloc
 
   @override
   Future<void> close() {
-    _messageSubscription?.cancel();
+    _chatMessageChannel?.unsubscribe();
 
     return super.close();
   }
@@ -250,6 +200,74 @@ class ConversationBloc
       return user2;
     } else {
       return user1;
+    }
+  }
+
+  FutureOr<void> _onMessageChanges(
+      MessageChangesEvent event, Emitter<ConversationState> emit) async {
+    try {
+      _chatMessageChannel?.unsubscribe();
+      if (state.isCommunity) {
+        _chatMessageChannel = RemoteDb.supabaseClient1
+            .channel('chat_messages:community_uid=${state.communityUid}')
+            .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              filter: PostgresChangeFilter(
+                type: PostgresChangeFilterType.eq,
+                column: 'community_uid',
+                value: state.communityUid,
+              ),
+              schema: 'public',
+              table: 'chat_messages',
+              callback: (payload) {
+                print('Chat message change detected');
+                add(LoadLatestMessages());
+              },
+            )
+            .subscribe();
+      } else {
+        _chatMessageChannel = RemoteDb.supabaseClient1
+            .channel('chat_messages:private_chat_uid=${state.privateChatUid}')
+            .onPostgresChanges(
+              event: PostgresChangeEvent.all,
+              filter: PostgresChangeFilter(
+                type: PostgresChangeFilterType.eq,
+                column: 'private_chat_uid',
+                value: state.privateChatUid,
+              ),
+              schema: 'public',
+              table: 'chat_messages',
+              callback: (payload) {
+                add(LoadLatestMessages());
+              },
+            )
+            .subscribe();
+      }
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadLatestMessages(
+      LoadLatestMessages event, Emitter<ConversationState> emit) async {
+    try {
+      final Message? lastMessage =
+          state.messages.isNotEmpty ? state.messages.first : null;
+
+      final ChatMessagesResponse? response = await ChatsApi.getChatMessages(
+        communityUid: state.isCommunity ? state.communityUid : null,
+        privateChatUid: state.isCommunity ? null : state.privateChatUid,
+        createdAfter: lastMessage?.createdAt,
+      );
+      final List<Message> newMessages = response?.messages ?? [];
+      emit(state.copyWith(
+        messages: [
+          ...newMessages,
+          ...state.messages,
+        ],
+      ));
+    } catch (e, s) {
+      highLevelCatch(e, s);
     }
   }
 }

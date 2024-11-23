@@ -31,10 +31,12 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
     Emitter<CommunityState> emit,
   ) async {
     try {
-      emit(state.copyWith(
-        isEditMode: event.communityPageArgument?.isEditMode ?? false,
-        communityUid: event.communityPageArgument?.communityUid,
-      ),);
+      emit(
+        state.copyWith(
+          isEditMode: event.communityPageArgument?.isEditMode ?? false,
+          communityUid: event.communityPageArgument?.communityUid,
+        ),
+      );
 
       add(LoadCommunityData());
     } catch (e) {
@@ -43,11 +45,14 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
   }
 
   FutureOr<void> _onLoadCommunityData(
-      LoadCommunityData event, Emitter<CommunityState> emit,) async {
+    LoadCommunityData event,
+    Emitter<CommunityState> emit,
+  ) async {
     try {
       final CommunityProfileDataResponse? profileDetailsResponse =
           await CommunityApi.getCommunityDetails(
-              communityUid: state.communityUid!,);
+        communityUid: state.communityUid!,
+      );
       emit(
         state.copyWith(
           communityDetailsResponse: profileDetailsResponse,

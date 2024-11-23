@@ -30,8 +30,8 @@ class ChatsApi {
   }
 
   static Future<UserCommunityChatsResponse?> getUserCommunityChats({
-    required String communityUid,
-    required String userUid,
+    String? communityUid,
+    String? userUid,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
@@ -51,15 +51,21 @@ class ChatsApi {
   }
 
   static Future<ChatMessagesResponse?> getChatMessages({
-    required String communityUid,
-    required String privateChatUid,
+    String? communityUid,
+    String? privateChatUid,
+    DateTime? createdAfter,
+    DateTime? createdBefore,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
         '/v1/get-chat-messages',
         queryParameters: {
-          'community_uid': communityUid,
-          'private_chat_uid': privateChatUid,
+          if (communityUid != null) 'community_uid': communityUid,
+          if (privateChatUid != null) 'private_chat_uid': privateChatUid,
+          if (createdAfter != null)
+            'created_after': createdAfter.toIso8601String(),
+          if (createdBefore != null)
+            'created_before': createdBefore.toIso8601String(),
         },
       );
       if (response.data != null) {
@@ -70,12 +76,12 @@ class ChatsApi {
     }
     return null;
   }
+
   static Future<(int? statusCode, String? message)?> sendChatMessage({
     required String senderUid,
     String? privateChatUid,
     String? communityUid,
     required String message,
-
   }) async {
     try {
       final Response response = await ApiClient.client.post(
@@ -85,7 +91,6 @@ class ChatsApi {
           'private_chat_uid': privateChatUid,
           'community_uid': communityUid,
           'message': message,
-         
         },
       );
       return (response.statusCode, response.data['message'] as String?);
@@ -154,4 +159,3 @@ class ChatsApi {
     return null;
   }
 }
-

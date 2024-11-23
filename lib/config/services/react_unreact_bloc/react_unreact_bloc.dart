@@ -31,7 +31,9 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   }
 
   Future<void> _onFetchReactions(
-      FetchReactions event, Emitter<ReactUnreactState> emit,) async {
+    FetchReactions event,
+    Emitter<ReactUnreactState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
@@ -41,16 +43,19 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       if (box != null) {
         await _loadCachedReactions(box);
         await _fetchAndCacheReactions(box);
-        emit(state.copyWith(
-          reactedItemIds: _reactedItemIds,
-          isLoading: false,
-        ),);
+        emit(
+          state.copyWith(
+            reactedItemIds: _reactedItemIds,
+            isLoading: false,
+          ),
+        );
       } else {
         emit(state.copyWith(isLoading: false, error: 'User not logged in'));
       }
     } catch (e) {
       emit(
-          state.copyWith(isLoading: false, error: 'Failed to fetch reactions'),);
+        state.copyWith(isLoading: false, error: 'Failed to fetch reactions'),
+      );
     }
   }
 
@@ -65,7 +70,9 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
 
       allReactions.addAll(currentPageReactions);
       await box.put(
-          '$_reactedItemsBox$page', currentPageReactions,); // Cache by page
+        '$_reactedItemsBox$page',
+        currentPageReactions,
+      ); // Cache by page
       page++;
     }
 
@@ -96,13 +103,15 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
         pageSize: _pageSize,
       );
       List<String?> uids = response?.data
-              ?.map((e) =>
-                  e.videoPostUid ??
-                  e.flickPostUid ??
-                  e.memoryUid ??
-                  e.offerPostUid ??
-                  e.photoPostUid ??
-                  e.pdfUid,)
+              ?.map(
+                (e) =>
+                    e.videoPostUid ??
+                    e.flickPostUid ??
+                    e.memoryUid ??
+                    e.offerPostUid ??
+                    e.photoPostUid ??
+                    e.pdfUid,
+              )
               .toList() ??
           [];
       uids = uids.toSet().toList();
@@ -114,7 +123,9 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   }
 
   Future<void> _onToggleReaction(
-      ToggleReaction event, Emitter<ReactUnreactState> emit,) async {
+    ToggleReaction event,
+    Emitter<ReactUnreactState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true, error: null));
 
     try {
@@ -155,18 +166,20 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       emit(state.copyWith(reactedItemIds: _reactedItemIds, isLoading: false));
     } catch (e) {
       emit(
-          state.copyWith(error: 'Failed to toggle reaction', isLoading: false),);
+        state.copyWith(error: 'Failed to toggle reaction', isLoading: false),
+      );
     }
   }
 
   Future<void> _handleReact(
-      String reactionType,
-      String? videoPostUid,
-      String? flickPostUid,
-      String? memoryUid,
-      String? offerPostUid,
-      String? photoPostUid,
-      String? pdfUid,) async {
+    String reactionType,
+    String? videoPostUid,
+    String? flickPostUid,
+    String? memoryUid,
+    String? offerPostUid,
+    String? photoPostUid,
+    String? pdfUid,
+  ) async {
     try {
       await ReactionsApi.recordReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
@@ -184,12 +197,13 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
   }
 
   Future<void> _handleUnreact(
-      String? videoPostUid,
-      String? flickPostUid,
-      String? memoryUid,
-      String? offerPostUid,
-      String? photoPostUid,
-      String? pdfUid,) async {
+    String? videoPostUid,
+    String? flickPostUid,
+    String? memoryUid,
+    String? offerPostUid,
+    String? photoPostUid,
+    String? pdfUid,
+  ) async {
     try {
       await ReactionsApi.deleteReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,

@@ -43,56 +43,58 @@ class _YourCommunities extends StatelessWidget {
                     for (Community? userCommunity
                         in state.userCommunitiesResponse?.userCommunities ?? [])
                       GestureDetector(
-                          onTap: () {
-                            AppNavigationService.newRoute(
-                              RoutesName.community,
-                              extras: CommunityPageArgument(
-                                  isEditMode: true,
-                                  communityUid: userCommunity?.uid,),
-                            );
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              AdvancedAvatar(
-                                size: 62,
-                                image: ExtendedNetworkImageProvider(
-                                  userCommunity?.profilePicture ??
-                                      MockData.blankProfileAvatar,
-                                ),
-                                children: [
-                                  Positioned(
-                                    right: 2,
-                                    bottom: 2,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 14,
-                                      ),
+                        onTap: () {
+                          AppNavigationService.newRoute(
+                            RoutesName.community,
+                            extras: CommunityPageArgument(
+                              isEditMode: true,
+                              communityUid: userCommunity?.uid,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            AdvancedAvatar(
+                              size: 62,
+                              image: ExtendedNetworkImageProvider(
+                                userCommunity?.profilePicture ??
+                                    MockData.blankProfileAvatar,
+                              ),
+                              children: [
+                                Positioned(
+                                  right: 2,
+                                  bottom: 2,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 14,
                                     ),
                                   ),
-                                ],
-                              ),
-                              const Gap(8),
-                              SizedBox(
-                                width: 60,
-                                child: Text(
-                                  '${userCommunity?.title}',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(8),
+                            SizedBox(
+                              width: 60,
+                              child: Text(
+                                '${userCommunity?.title}',
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),),
+                            ),
+                          ],
+                        ),
+                      ),
                     if (state.userCommunitiesResponse?.joinedCommunities
                             ?.isNotEmpty ??
                         false)
@@ -107,37 +109,39 @@ class _YourCommunities extends StatelessWidget {
                         in state.userCommunitiesResponse?.joinedCommunities ??
                             [])
                       GestureDetector(
-                          onTap: () {
-                            AppNavigationService.newRoute(
-                              RoutesName.community,
-                              extras: CommunityPageArgument(
-                                  communityUid: joinedCommunity?.uid,),
-                            );
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundImage: ExtendedNetworkImageProvider(
-                                  joinedCommunity?.profilePicture ??
-                                      MockData.blankProfileAvatar,
-                                ),
-                                radius: 30,
+                        onTap: () {
+                          AppNavigationService.newRoute(
+                            RoutesName.community,
+                            extras: CommunityPageArgument(
+                              communityUid: joinedCommunity?.uid,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundImage: ExtendedNetworkImageProvider(
+                                joinedCommunity?.profilePicture ??
+                                    MockData.blankProfileAvatar,
                               ),
-                              const Gap(8),
-                              SizedBox(
-                                width: 60,
-                                child: Text(
-                                  '${joinedCommunity?.title}',
-                                  maxLines: 1,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              radius: 30,
+                            ),
+                            const Gap(8),
+                            SizedBox(
+                              width: 60,
+                              child: Text(
+                                '${joinedCommunity?.title}',
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),),
+                            ),
+                          ],
+                        ),
+                      ),
                   ];
                   return ListView.separated(
                     scrollDirection: Axis.horizontal,

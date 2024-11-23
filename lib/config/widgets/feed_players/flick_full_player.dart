@@ -12,11 +12,12 @@ class FlicksFullPlayer extends StatefulWidget {
   final String? thumbnail;
 
   final Function(CachedVideoPlayerPlusController?)? onPlayerInitialized;
-  const FlicksFullPlayer(
-      {super.key,
-      required this.videoUrl,
-      this.thumbnail,
-      this.onPlayerInitialized,});
+  const FlicksFullPlayer({
+    super.key,
+    required this.videoUrl,
+    this.thumbnail,
+    this.onPlayerInitialized,
+  });
 
   @override
   State<FlicksFullPlayer> createState() => _FlicksFullPlayerState();
@@ -39,8 +40,10 @@ class _FlicksFullPlayerState extends State<FlicksFullPlayer> {
     final String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
       originalUrl: widget.videoUrl!,
     );
-    controller =
-        CachedVideoPlayerPlusController.networkUrl(Uri.parse(adaptiveVideoUrl),invalidateCacheIfOlderThan: const Duration(days: 90),);
+    controller = CachedVideoPlayerPlusController.networkUrl(
+      Uri.parse(adaptiveVideoUrl),
+      invalidateCacheIfOlderThan: const Duration(days: 90),
+    );
     await controller?.initialize();
     setState(() {});
     controller?.setLooping(true);

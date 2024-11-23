@@ -100,7 +100,8 @@ class FileMetaData {
         mediaInfo = await MediaInfo().getMediaInfo(file.path);
       } catch (e) {
         TalkerService.instance.error(
-            'Error getting media info so trying to get media info for renamed file',);
+          'Error getting media info so trying to get media info for renamed file',
+        );
 
         ///in case package:media_info was unable to get media info for the file for complex file name
         final File? renamedFile = await _simplifyFileNameAndPutToTempDir(
@@ -161,7 +162,8 @@ class FileMetaData {
   }
 
   static (int? sec, int? min, int? hour) getDurationInSecMinHour(
-      int? duration,) {
+    int? duration,
+  ) {
     if (duration == null) return (null, null, null);
     final int sec = duration ~/ 1000;
     final int min = sec ~/ 60;

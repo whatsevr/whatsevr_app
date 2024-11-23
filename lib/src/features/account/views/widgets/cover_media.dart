@@ -98,18 +98,18 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
   @override
   void initState() {
     super.initState();
-    controller =
-    CachedVideoPlayerPlusController.networkUrl(Uri.parse('${widget.videoUrl}'))
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-            controller.addListener(() {
-              if (controller.value.position == controller.value.duration) {
-                controller.seekTo(Duration.zero);
-                controller.play();
-              }
-            });
-          });
+    controller = CachedVideoPlayerPlusController.networkUrl(
+        Uri.parse('${widget.videoUrl}'))
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+        controller.addListener(() {
+          if (controller.value.position == controller.value.duration) {
+            controller.seekTo(Duration.zero);
+            controller.play();
+          }
+        });
+      });
   }
 
   @override

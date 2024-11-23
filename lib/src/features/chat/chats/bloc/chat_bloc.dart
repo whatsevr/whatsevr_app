@@ -18,64 +18,24 @@ part 'chat_state.dart';
 
 class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
   final String _currentUserUid;
-  StreamSubscription? _chatSubscription1;
-  StreamSubscription? _chatSubscription2;
-  StreamSubscription? _communitySubscription1;
+  RealtimeChannel? _chatSubscription1;
+  RealtimeChannel? _chatSubscription2;
+  RealtimeChannel? _communitySubscription1;
 
   ChatBloc(this._currentUserUid) : super(const ChatState()) {
     on<InitialEvent>(_onInitialEvent);
     on<LoadPrivateChats>(_onLoadPrivateChats);
     on<LoadCommunities>(_onLoadCommunities);
+    on<SubscribeToChatChanges>(_onSubscribeToChatChanges);
   }
   Future<void> _onInitialEvent(
     InitialEvent event,
     Emitter<ChatState> emit,
   ) async {
     print('Initializing ChatBloc');
-
-    await _chatSubscription1?.cancel();
-
-    await _chatSubscription2?.cancel();
-    await _communitySubscription1?.cancel();
-    _chatSubscription1 = RemoteDb.supabaseClient1
-        .from('private_chats')
-        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-        .eq('user1_uid', _currentUserUid)
-        .order('last_message_at', ascending: false)
-        .listen(
-          (chats) {
-            add(LoadPrivateChats());
-          },
-          onError: (error) {
-            highLevelCatch(error, StackTrace.current);
-          },
-        );
-    _chatSubscription2 = RemoteDb.supabaseClient1
-        .from('private_chats')
-        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-        .eq('user2_uid', _currentUserUid)
-        .order('last_message_at', ascending: false)
-        .listen(
-          (chats) {
-            add(LoadPrivateChats());
-          },
-          onError: (error) {
-            highLevelCatch(error, StackTrace.current);
-          },
-        );
-
-    _communitySubscription1 = RemoteDb.supabaseClient1
-        .from('communities')
-        .stream(primaryKey: ['uid']) // Ensure primary key is 'uid'
-
-        .listen(
-      (communities) {
-        add(LoadCommunities());
-      },
-      onError: (error) {
-        highLevelCatch(error, StackTrace.current);
-      },
-    );
+    add(LoadPrivateChats());
+    add(LoadCommunities());
+    add(SubscribeToChatChanges());
   }
 
   Future<void> _onLoadPrivateChats(
@@ -86,14 +46,7 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
         userUid: _currentUserUid,
       );
 
-      if (response?.chats != null) {
-        final List<Chat> updatedPrivateChats = [
-          ...state.privateChats,
-          ...response!.chats!,
-        ];
-
-        emit(state.copyWith(privateChats: updatedPrivateChats));
-      }
+      emit(state.copyWith(privateChats: response?.chats));
     } catch (e, s) {
       highLevelCatch(e, s);
     }
@@ -115,9 +68,9 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
 
   @override
   Future<void> close() {
-    _chatSubscription1?.cancel();
-    _chatSubscription2?.cancel();
-    _communitySubscription1?.cancel();
+    _chatSubscription1?.unsubscribe();
+    _chatSubscription2?.unsubscribe();
+    _communitySubscription1?.unsubscribe();
 
     return super.close();
   }
@@ -142,18 +95,62 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     try {
       final response = await ChatsApi.getUserCommunityChats(
         userUid: _currentUserUid,
-        communityUid: '', // Empty string to get all communities
       );
 
-      if (response?.communities != null) {
-        final List<Community> communities = response!.communities!
-            .map((community) => Community.fromMap(community.toMap()))
-            .toList();
-
-        emit(state.copyWith(communities: communities));
-      }
+      emit(state.copyWith(communities: response?.communities));
     } catch (e, s) {
       highLevelCatch(e, s);
     }
+  }
+
+  FutureOr<void> _onSubscribeToChatChanges(
+      SubscribeToChatChanges event, Emitter<ChatState> emit) async {
+    await _chatSubscription1?.unsubscribe();
+    await _chatSubscription2?.unsubscribe();
+    await _communitySubscription1?.unsubscribe();
+    _chatSubscription1 = RemoteDb.supabaseClient1
+        .channel('public:private_chats:user1_uid=$_currentUserUid')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          filter: PostgresChangeFilter(
+              type: PostgresChangeFilterType.eq,
+              column: 'user1_uid',
+              value: _currentUserUid),
+          schema: 'public',
+          table: 'private_chats',
+          callback: (PostgresChangePayload payload) {
+            print('ChatBloc: Received private chat change');
+            add(LoadPrivateChats());
+          },
+        )
+        .subscribe();
+    _chatSubscription2 = RemoteDb.supabaseClient1
+        .channel('public:private_chats:user2_uid=$_currentUserUid')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          filter: PostgresChangeFilter(
+              type: PostgresChangeFilterType.eq,
+              column: 'user2_uid',
+              value: _currentUserUid),
+          schema: 'public',
+          table: 'private_chats',
+          callback: (PostgresChangePayload payload) {
+            print('ChatBloc: Received private chat change');
+            add(LoadPrivateChats());
+          },
+        )
+        .subscribe();
+    _communitySubscription1 = RemoteDb.supabaseClient1
+        .channel('public:communities:user_uid=$_currentUserUid')
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'communities',
+          callback: (PostgresChangePayload payload) {
+            print('ChatBloc: Received community change');
+            add(LoadCommunities());
+          },
+        )
+        .subscribe();
   }
 }

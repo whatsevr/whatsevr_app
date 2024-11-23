@@ -9,7 +9,6 @@ class ConversationState extends Equatable {
   final List<Message> messages;
   final Map<String, Message> lastMessages;
   final Map<String, int> unreadCounts;
- 
 
   final PaginationData messagesPaginationData;
 
@@ -22,7 +21,6 @@ class ConversationState extends Equatable {
     this.messages = const [],
     this.lastMessages = const {},
     this.unreadCounts = const {},
-
     this.messagesPaginationData = const PaginationData(),
   });
 
@@ -37,7 +35,6 @@ class ConversationState extends Equatable {
     List<Message>? messages,
     Map<String, Message>? lastMessages,
     Map<String, int>? unreadCounts,
-    
     PaginationData? messagesPaginationData,
   }) {
     return ConversationState(
@@ -49,8 +46,8 @@ class ConversationState extends Equatable {
       messages: messages ?? this.messages,
       lastMessages: lastMessages ?? this.lastMessages,
       unreadCounts: unreadCounts ?? this.unreadCounts,
-     
-      messagesPaginationData: messagesPaginationData ?? this.messagesPaginationData,
+      messagesPaginationData:
+          messagesPaginationData ?? this.messagesPaginationData,
     );
   }
 
@@ -65,7 +62,6 @@ class ConversationState extends Equatable {
         'messages': messages.map((e) => e.toJson()).toList(),
         'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
         'unreadCounts': unreadCounts,
-     
         'messagesPaginationData': messagesPaginationData,
       }
     };
@@ -89,7 +85,6 @@ class ConversationState extends Equatable {
               ?.map((k, v) => MapEntry(k, Message.fromJson(v))) ??
           {},
       unreadCounts: Map<String, int>.from(chatData['unreadCounts'] ?? {}),
-   
       messagesPaginationData:
           chatData['messagesPaginationData'] ?? const PaginationData(),
     );
@@ -105,7 +100,6 @@ class ConversationState extends Equatable {
         messages,
         lastMessages,
         unreadCounts,
-       
       ];
 
   @override

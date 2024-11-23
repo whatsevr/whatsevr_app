@@ -30,8 +30,10 @@ class PickVideoEvent extends CreateOfferEvent {
 class ChangeVideoThumbnail extends CreateOfferEvent {
   final UiFileData uiFileData;
   final File? pickedThumbnailFile;
-  const ChangeVideoThumbnail(
-      {required this.pickedThumbnailFile, required this.uiFileData,});
+  const ChangeVideoThumbnail({
+    required this.pickedThumbnailFile,
+    required this.uiFileData,
+  });
 
   @override
   List<Object?> get props => <Object?>[pickedThumbnailFile, uiFileData];
@@ -49,8 +51,11 @@ class UpdateTaggedUsersAndCommunitiesEvent extends CreateOfferEvent {
   final bool? clearAll;
   final List<String>? taggedUsersUid;
   final List<String>? taggedCommunitiesUid;
-  const UpdateTaggedUsersAndCommunitiesEvent(
-      {this.taggedUsersUid, this.taggedCommunitiesUid, this.clearAll,});
+  const UpdateTaggedUsersAndCommunitiesEvent({
+    this.taggedUsersUid,
+    this.taggedCommunitiesUid,
+    this.clearAll,
+  });
 
   @override
   List<Object?> get props =>

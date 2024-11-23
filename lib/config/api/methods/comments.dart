@@ -17,17 +17,19 @@ class CommentsApi {
     String? pdfUid,
   }) async {
     try {
-      final Response response =
-          await ApiClient.client.get('/v1/get-comments', queryParameters: {
-        'page': page,
-        'page_size': pageSize,
-        'video_post_uid': videoPostUid,
-        'flick_post_uid': flickPostUid,
-        'memory_uid': memoryUid,
-        'offer_post_uid': offerPostUid,
-        'photo_post_uid': photoPostUid,
-        'pdf_uid': pdfUid,
-      },);
+      final Response response = await ApiClient.client.get(
+        '/v1/get-comments',
+        queryParameters: {
+          'page': page,
+          'page_size': pageSize,
+          'video_post_uid': videoPostUid,
+          'flick_post_uid': flickPostUid,
+          'memory_uid': memoryUid,
+          'offer_post_uid': offerPostUid,
+          'photo_post_uid': photoPostUid,
+          'pdf_uid': pdfUid,
+        },
+      );
       if (response.data != null) {
         return GetCommentsResponse.fromMap(response.data);
       }

@@ -103,10 +103,12 @@ abstract class AppTheme {
         height: 1.4,
       );
 
-  TextStyle get buttonText => TextStyle( // rename from 'buttonStyle' to 'buttonText'
+  TextStyle get buttonText => TextStyle(
+        // rename from 'buttonStyle' to 'buttonText'
         fontSize: 16,
         fontWeight: FontWeight.w600, // make slightly bolder
-        color: surface, // should use surface color since buttons usually have primary background
+        color:
+            surface, // should use surface color since buttons usually have primary background
         letterSpacing: 0.5,
         height: 1.0, // add height for better vertical alignment
       );
@@ -154,19 +156,20 @@ abstract class AppTheme {
 
 class LightTheme extends AppTheme {
   @override
-  Color get primary => const Color(0xFF2D3436);  // Dark gray with slight blue tint
+  Color get primary =>
+      const Color(0xFF2D3436); // Dark gray with slight blue tint
 
   @override
-  Color get secondary => const Color(0xFF636E72);  // Medium gray
+  Color get secondary => const Color(0xFF636E72); // Medium gray
 
   @override
   Color get background => Colors.white;
 
   @override
-  Color get surface => const Color(0xFFFAFAFA);  // Very light gray
+  Color get surface => const Color(0xFFFAFAFA); // Very light gray
 
   @override
-  Color get error => const Color(0xFFE53935);  // Vibrant red
+  Color get error => const Color(0xFFE53935); // Vibrant red
 
   @override
   Color get text => const Color(0xFF2D3436);
@@ -175,13 +178,13 @@ class LightTheme extends AppTheme {
   Color get textLight => const Color(0xFF636E72);
 
   @override
-  Color get divider => const Color(0xFFDFE6E9);  // Light blue-gray
+  Color get divider => const Color(0xFFDFE6E9); // Light blue-gray
 
   @override
-  Color get disabled => const Color(0xFFB2BEC3);  // Muted blue-gray
+  Color get disabled => const Color(0xFFB2BEC3); // Muted blue-gray
 
   @override
-  Color get accent => const Color(0xFF0984E3);  // Bright blue
+  Color get accent => const Color(0xFF0984E3); // Bright blue
 
   @override
   Color get buttonColor => const Color(0xFF2D3436);
@@ -191,7 +194,7 @@ class LightTheme extends AppTheme {
 
   @override
   Color get icon => const Color(0xFF2D3436);
- 
+
   @override
   Color get shadow => const Color(0xFF2D3436).withOpacity(0.1);
 
@@ -199,36 +202,36 @@ class LightTheme extends AppTheme {
   Color get appBar => Colors.white;
 
   @override
-  Color get success => const Color(0xFF00B894);  // Mint green
+  Color get success => const Color(0xFF00B894); // Mint green
 
   @override
-  Color get warning => const Color(0xFFFAB1A0);  // Soft coral
+  Color get warning => const Color(0xFFFAB1A0); // Soft coral
 
   @override
-  Color get info => const Color(0xFF0984E3);  // Bright blue
+  Color get info => const Color(0xFF0984E3); // Bright blue
 
   @override
   Color get lightBackground => Colors.white;
 
   @override
-  Color get darkBackground => const Color(0xFFF5F6FA);  // Light grayish
+  Color get darkBackground => const Color(0xFFF5F6FA); // Light grayish
 }
 
 class DarkTheme extends AppTheme {
   @override
-  Color get primary => const Color(0xFFFDFDFD);  // Almost white
+  Color get primary => const Color(0xFFFDFDFD); // Almost white
 
   @override
-  Color get secondary => const Color(0xFFDFE6E9);  // Light gray
+  Color get secondary => const Color(0xFFDFE6E9); // Light gray
 
   @override
-  Color get background => const Color(0xFF17181A);  // Very dark gray
+  Color get background => const Color(0xFF17181A); // Very dark gray
 
   @override
-  Color get surface => const Color(0xFF222427);  // Dark gray with slight warmth
+  Color get surface => const Color(0xFF222427); // Dark gray with slight warmth
 
   @override
-  Color get error => const Color(0xFFFF7675);  // Soft red
+  Color get error => const Color(0xFFFF7675); // Soft red
 
   @override
   Color get text => const Color(0xFFFDFDFD);
@@ -243,7 +246,7 @@ class DarkTheme extends AppTheme {
   Color get disabled => const Color(0xFF636E72);
 
   @override
-  Color get accent => const Color(0xFF74B9FF);  // Light blue
+  Color get accent => const Color(0xFF74B9FF); // Light blue
 
   @override
   Color get buttonColor => const Color(0xFFFDFDFD);
@@ -261,13 +264,13 @@ class DarkTheme extends AppTheme {
   Color get appBar => const Color(0xFF222427);
 
   @override
-  Color get success => const Color(0xFF55EFC4);  // Bright mint
+  Color get success => const Color(0xFF55EFC4); // Bright mint
 
   @override
-  Color get warning => const Color(0xFFFFB8B8);  // Light coral
+  Color get warning => const Color(0xFFFFB8B8); // Light coral
 
   @override
-  Color get info => const Color(0xFF74B9FF);  // Light blue
+  Color get info => const Color(0xFF74B9FF); // Light blue
 
   @override
   Color get lightBackground => const Color(0xFF222427);

@@ -92,7 +92,8 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                     },
                     leading: CircleAvatar(
                       backgroundImage: ExtendedNetworkImageProvider(
-                          user.profilePicture ?? MockData.blankProfileAvatar,),
+                        user.profilePicture ?? MockData.blankProfileAvatar,
+                      ),
                     ),
                     title: Text(user.username ?? 'Unknown User'),
                     subtitle: Text('${user.totalFollowers} Followers'),
@@ -109,12 +110,15 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                               Navigator.pop(context);
                               AuthUserDb.clearLastLoggedUserUid();
                               AppNavigationService.clearAllAndNewRoute(
-                                  RoutesName.auth,);
+                                RoutesName.auth,
+                              );
                             } else {
                               setState(() {
-                                final int index = multipleUserDetailsResponse!.users!
+                                final int index = multipleUserDetailsResponse!
+                                    .users!
                                     .indexWhere(
-                                        (element) => element.uid == user.uid,);
+                                  (element) => element.uid == user.uid,
+                                );
                                 multipleUserDetailsResponse!.users!
                                     .removeAt(index);
                               });
@@ -236,7 +240,8 @@ class CreateAccountUi extends StatelessWidget {
             );
             if (registerInfo?.$2 != HttpStatus.ok) {
               SmartDialog.showToast(
-                  registerInfo?.$1 ?? 'Failed to create account',);
+                registerInfo?.$1 ?? 'Failed to create account',
+              );
               return;
             }
             AuthUserService.loginToApp(

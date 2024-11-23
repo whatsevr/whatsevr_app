@@ -38,8 +38,10 @@ class RecommendationOffersResponse {
         lastPage: json['last_page'],
         recommendedOffers: json['recommended_offers'] == null
             ? []
-            : List<RecommendedOffer>.from(json['recommended_offers']!
-                .map((x) => RecommendedOffer.fromMap(x)),),
+            : List<RecommendedOffer>.from(
+                json['recommended_offers']!
+                    .map((x) => RecommendedOffer.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -211,7 +213,8 @@ class RecommendedOffer {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
         status: json['status'],
         targetGender: json['target_gender'],
         targetAreas: json['target_areas'] == null

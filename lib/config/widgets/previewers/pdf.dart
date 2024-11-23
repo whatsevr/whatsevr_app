@@ -4,8 +4,11 @@ import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
-void showPdfPreviewDialog(
-    {BuildContext? context, String? pdfUrl, String? appBarTitle,}) {
+void showPdfPreviewDialog({
+  BuildContext? context,
+  String? pdfUrl,
+  String? appBarTitle,
+}) {
   if (pdfUrl == null) return;
   context ??= AppNavigationService.currentContext!;
   showGeneralDialog(

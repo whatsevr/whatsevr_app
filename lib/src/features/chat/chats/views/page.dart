@@ -14,10 +14,10 @@ import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
 import 'package:whatsevr_app/src/features/chat/chats/views/widgets/calls.dart';
 
-
 import 'package:whatsevr_app/src/features/chat/chats/views/widgets/requests.dart';
 part 'widgets/chats.dart';
 part 'widgets/communities.dart';
+
 class ChatsPage extends StatelessWidget {
   const ChatsPage({super.key});
 

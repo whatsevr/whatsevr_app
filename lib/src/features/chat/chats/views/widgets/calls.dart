@@ -18,7 +18,8 @@ class ChatsPageCallsView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
+              backgroundImage:
+                  ExtendedNetworkImageProvider(MockData.randomImageAvatar()),
             ),
             title: Text('User $index'),
             subtitle: Row(

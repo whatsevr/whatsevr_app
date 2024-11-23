@@ -12,8 +12,10 @@ import 'package:whatsevr_app/config/api/response_model/user_relations/user_relat
 
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 
-void showUserRelationsDialog(
-    {required BuildContext context, required String userUid,}) {
+void showUserRelationsDialog({
+  required BuildContext context,
+  required String userUid,
+}) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation1, animation2) {
@@ -128,8 +130,10 @@ class _UserInfo extends StatelessWidget {
         ),
       ),
       title: Text(user.name ?? 'Unknown'),
-      subtitle: Text(user.username ?? 'Unknown',
-          style: const TextStyle(fontSize: 12),),
+      subtitle: Text(
+        user.username ?? 'Unknown',
+        style: const TextStyle(fontSize: 12),
+      ),
       trailing: followButton(),
     );
   }
@@ -183,32 +187,33 @@ class _FollowersTabState extends State<FollowersTab> {
                 itemCount: _followers.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                      onTap: () {
-                        showAppModalSheet(
-                            flexibleSheet: false,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                WhatsevrButton.text(
-                                  label: 'Remove Follower',
-                                  onPressed: () {
-                                    UserRelationsApi.removeFollower(
-                                      followeeUserUid:
-                                          AuthUserDb.getLastLoggedUserUid()!,
-                                      followerUserUid:
-                                          _followers[index].user!.uid!,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),);
+                    onTap: () {
+                      showAppModalSheet(
+                        flexibleSheet: false,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            WhatsevrButton.text(
+                              label: 'Remove Follower',
+                              onPressed: () {
+                                UserRelationsApi.removeFollower(
+                                  followeeUserUid:
+                                      AuthUserDb.getLastLoggedUserUid()!,
+                                  followerUserUid: _followers[index].user!.uid!,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: _UserInfo(
+                      user: _followers[index].user!,
+                      onFollow: () {
+                        // Handle follow action
                       },
-                      child: _UserInfo(
-                        user: _followers[index].user!,
-                        onFollow: () {
-                          // Handle follow action
-                        },
-                      ),);
+                    ),
+                  );
                 },
               );
   }

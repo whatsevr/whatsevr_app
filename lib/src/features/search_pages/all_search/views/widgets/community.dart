@@ -5,9 +5,12 @@ class _CommunityView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    onReachingEndOfTheList(_scrollController, execute: () {
-      context.read<AllSearchBloc>().add(SearchMoreCommunities());
-    },);
+    onReachingEndOfTheList(
+      _scrollController,
+      execute: () {
+        context.read<AllSearchBloc>().add(SearchMoreCommunities());
+      },
+    );
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(

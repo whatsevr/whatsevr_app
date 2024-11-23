@@ -27,7 +27,7 @@ class _ChatListView extends StatelessWidget {
                         isCommunity: false,
                         privateChatUid: chat.uid,
                         title: otherUser?.name,
-                        profilePicture: otherUser?.profilePicture, 
+                        profilePicture: otherUser?.profilePicture,
                       ),
                     ),
                   );

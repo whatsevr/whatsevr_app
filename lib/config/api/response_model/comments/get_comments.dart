@@ -39,7 +39,8 @@ class GetCommentsResponse {
         comments: json['comments'] == null
             ? []
             : List<Comment>.from(
-                json['comments']!.map((x) => Comment.fromMap(x)),),
+                json['comments']!.map((x) => Comment.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -134,8 +135,10 @@ class Comment {
         imageUrl: json['image_url'],
         userCommentReplies: json['user_comment_replies'] == null
             ? []
-            : List<UserCommentReply>.from(json['user_comment_replies']!
-                .map((x) => UserCommentReply.fromMap(x)),),
+            : List<UserCommentReply>.from(
+                json['user_comment_replies']!
+                    .map((x) => UserCommentReply.fromMap(x)),
+              ),
         author: json['author'] == null
             ? null
             : CommentAuthor.fromMap(json['author']),

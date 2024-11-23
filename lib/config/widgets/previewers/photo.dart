@@ -4,8 +4,11 @@ import 'package:whatsevr_app/config/routes/router.dart';
 
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 
-void showPhotoPreviewDialog(
-    {BuildContext? context, String? photoUrl, String? appBarTitle,}) {
+void showPhotoPreviewDialog({
+  BuildContext? context,
+  String? photoUrl,
+  String? appBarTitle,
+}) {
   if (photoUrl == null) return;
   context ??= AppNavigationService.currentContext!;
   showGeneralDialog(

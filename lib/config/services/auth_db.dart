@@ -45,7 +45,8 @@ class AuthUserDb {
 
   static Future<void> removeAuthorisedUserUid(String userId) async {
     try {
-      final List<dynamic>? users = _authorisedCustomersBox.get(_allLoggedUserUids);
+      final List<dynamic>? users =
+          _authorisedCustomersBox.get(_allLoggedUserUids);
       if (users == null) throw BusinessException('No user found');
       users.remove(userId);
       await _authorisedCustomersBox.put(_allLoggedUserUids, users);

@@ -67,7 +67,8 @@ class NotificationsPage extends StatelessWidget {
                         ),
                       ),
                       title: const Text(
-                          'Mr John Doe, liked your post XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',),
+                        'Mr John Doe, liked your post XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                      ),
                       trailing: const Icon(Icons.more_vert),
                     ),
                   ],

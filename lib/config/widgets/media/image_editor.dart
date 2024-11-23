@@ -15,8 +15,10 @@ import 'package:whatsevr_app/config/widgets/app_bar.dart';
 class ImageEditorPageArgument {
   final File imageFileToEdit;
   final Function(File file) onCompleted;
-  ImageEditorPageArgument(
-      {required this.imageFileToEdit, required this.onCompleted,});
+  ImageEditorPageArgument({
+    required this.imageFileToEdit,
+    required this.onCompleted,
+  });
 }
 
 class ImageEditorPage extends StatelessWidget {

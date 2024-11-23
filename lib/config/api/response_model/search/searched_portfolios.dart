@@ -39,7 +39,8 @@ class SearchedPortfoliosResponse {
         portfolios: json['users'] == null
             ? []
             : List<Portfolio>.from(
-                json['users']!.map((x) => Portfolio.fromMap(x)),),
+                json['users']!.map((x) => Portfolio.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

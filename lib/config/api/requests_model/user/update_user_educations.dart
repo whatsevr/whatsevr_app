@@ -29,7 +29,8 @@ class UpdateUserEducationsRequest {
         'user_educations': userEducations == null
             ? <dynamic>[]
             : List<dynamic>.from(
-                userEducations!.map((UserEducation x) => x.toMap()),),
+                userEducations!.map((UserEducation x) => x.toMap()),
+              ),
       };
 }
 

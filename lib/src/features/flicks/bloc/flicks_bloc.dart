@@ -13,14 +13,16 @@ part 'flicks_state.dart';
 
 class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   FlicksBloc()
-      : super(const FlicksState(
-          flicksPaginationData: PaginationData(
-            currentPage: 1,
-            isLoading: false,
-            noMoreData: false,
+      : super(
+          const FlicksState(
+            flicksPaginationData: PaginationData(
+              currentPage: 1,
+              isLoading: false,
+              noMoreData: false,
+            ),
+            recommendationFlicks: [],
           ),
-          recommendationFlicks: [],
-        ),) {
+        ) {
     on<FlicksInitialEvent>(_onInitial);
     on<LoadFlicksEvent>(_loadFlicks);
     on<LoadMoreFlicksEvent>(_onLoadMoreFlicks);
@@ -34,7 +36,9 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   }
 
   FutureOr<void> _loadFlicks(
-      LoadFlicksEvent event, Emitter<FlicksState> emit,) async {
+    LoadFlicksEvent event,
+    Emitter<FlicksState> emit,
+  ) async {
     try {
       final RecommendationFlicksResponse? recommendationVideos =
           await RecommendationApi.publicFlickPosts(
@@ -55,7 +59,9 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   }
 
   FutureOr<void> _onLoadMoreFlicks(
-      LoadMoreFlicksEvent event, Emitter<FlicksState> emit,) async {
+    LoadMoreFlicksEvent event,
+    Emitter<FlicksState> emit,
+  ) async {
     if (state.flicksPaginationData?.isLoading == true ||
         state.flicksPaginationData?.noMoreData == true) return;
     try {

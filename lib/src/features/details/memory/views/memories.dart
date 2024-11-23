@@ -14,10 +14,12 @@ import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 
-showMemoriesPlayer(BuildContext context,
-    {required List<UiMemoryGroup>? uiMemoryGroups,
-    required int startGroupIndex,
-    required int startMemoryIndex,}) {
+showMemoriesPlayer(
+  BuildContext context, {
+  required List<UiMemoryGroup>? uiMemoryGroups,
+  required int startGroupIndex,
+  required int startMemoryIndex,
+}) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation, secondaryAnimation) {
@@ -177,15 +179,15 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                     : uiMemoryData[i]?.isVideo == true
                         ? StoryItem.pageVideo(
                             generateOptimizedCloudinaryVideoUrl(
-                                originalUrl:
-                                    '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.videoUrl}',),
+                              originalUrl:
+                                  '${widget.uiMemoryGroups?[index].uiMemoryGroupItems[i]?.videoUrl}',
+                            ),
                             controller: flutterStoryController,
                             duration: Duration(
-                                milliseconds: widget
-                                        .uiMemoryGroups?[index]
-                                        .uiMemoryGroupItems[i]
-                                        ?.videoDurationMs ??
-                                    0,),
+                              milliseconds: widget.uiMemoryGroups?[index]
+                                      .uiMemoryGroupItems[i]?.videoDurationMs ??
+                                  0,
+                            ),
                             caption: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -235,9 +237,10 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                               label:
                                   uiMemoryData[index]?.ctaAction ?? 'Open Link',
                               onPressed: () {
-                                launchWebURL(context,
-                                    url: uiMemoryData[index]?.ctaActionUrl ??
-                                        '',);
+                                launchWebURL(
+                                  context,
+                                  url: uiMemoryData[index]?.ctaActionUrl ?? '',
+                                );
                               },
                             ),
                           ),
@@ -245,9 +248,12 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                             onPressed: () {
                               flutterStoryController.pause();
                               showAppModalSheet(
-                                  child: LinksPreviewListView(
-                                urls: [uiMemoryData[index]?.ctaActionUrl ?? ''],
-                              ),);
+                                child: LinksPreviewListView(
+                                  urls: [
+                                    uiMemoryData[index]?.ctaActionUrl ?? ''
+                                  ],
+                                ),
+                              );
                             },
                             icon: const Icon(Icons.info_outline),
                           ),

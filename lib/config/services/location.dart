@@ -12,8 +12,9 @@ class LocationService {
   static const String _googlePlaceAndGeoCodingApiKey =
       'AIzaSyBO4o78fH_94mh2JHYjiq3WAa9Sue6G5EE';
   LocationService._();
-  static Future<(double lat, double long)?> getCurrentGpsLatLong(
-      {bool isRequired = false,}) async {
+  static Future<(double lat, double long)?> getCurrentGpsLatLong({
+    bool isRequired = false,
+  }) async {
     try {
       final bool deviceGpsEnabled = await Geolocator.isLocationServiceEnabled();
       if (!deviceGpsEnabled) {
@@ -33,8 +34,9 @@ class LocationService {
         return null;
       }
       final Position position = await Geolocator.getCurrentPosition(
-          locationSettings:
-              const LocationSettings(accuracy: LocationAccuracy.high),);
+        locationSettings:
+            const LocationSettings(accuracy: LocationAccuracy.high),
+      );
       return (position.latitude, position.longitude);
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -45,13 +47,18 @@ class LocationService {
   static Future<void> getNearByPlacesFromLatLong({
     double? lat,
     double? long,
-    required Function(PlacesNearbyResponse? nearbyPlacesResponse, double? lat,
-            double? long, bool isDeviceGpsEnabled, bool isPermissionAllowed,)
-        onCompleted,
+    required Function(
+      PlacesNearbyResponse? nearbyPlacesResponse,
+      double? lat,
+      double? long,
+      bool isDeviceGpsEnabled,
+      bool isPermissionAllowed,
+    ) onCompleted,
   }) async {
     try {
       if (lat == null || long == null) {
-        final bool deviceGpsEnabled = await Geolocator.isLocationServiceEnabled();
+        final bool deviceGpsEnabled =
+            await Geolocator.isLocationServiceEnabled();
         if (!deviceGpsEnabled) {
           onCompleted(null, null, null, false, false);
           return;
@@ -65,8 +72,9 @@ class LocationService {
           return;
         }
         final Position position = await Geolocator.getCurrentPosition(
-            locationSettings:
-                const LocationSettings(accuracy: LocationAccuracy.high),);
+          locationSettings:
+              const LocationSettings(accuracy: LocationAccuracy.high),
+        );
         lat = position.latitude;
         long = position.longitude;
       }
@@ -104,9 +112,10 @@ class LocationService {
     }
   }
 
-  static void getSearchPredictedPlacesNames(
-      {required String searchQuery,
-      required Function(SimilarPlacesByQueryResponse?) onCompleted,}) async {
+  static void getSearchPredictedPlacesNames({
+    required String searchQuery,
+    required Function(SimilarPlacesByQueryResponse?) onCompleted,
+  }) async {
     if (searchQuery.length < 4) {
       return;
     }
@@ -120,14 +129,17 @@ class LocationService {
             'input': searchQuery,
             'languageCode': 'en',
           },
-          options: Options(headers: {
-            'Content-Type': 'application/json',
-            'X-Goog-Api-Key': _googlePlaceAndGeoCodingApiKey,
-          },),
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Goog-Api-Key': _googlePlaceAndGeoCodingApiKey,
+            },
+          ),
         );
         if (response.data == null) {
           throw BusinessException(
-              'Failed to get search predicted places names',);
+            'Failed to get search predicted places names',
+          );
         }
         final SimilarPlacesByQueryResponse placesByQueryResponse =
             SimilarPlacesByQueryResponse.fromMap(response.data);
@@ -138,9 +150,10 @@ class LocationService {
     });
   }
 
-  static Future<void> getLatLongFromGooglePlaceName(
-      {required String? placeName,
-      Function(double lat, double long)? onCompleted,}) async {
+  static Future<void> getLatLongFromGooglePlaceName({
+    required String? placeName,
+    Function(double lat, double long)? onCompleted,
+  }) async {
     if (placeName == null) return;
     try {
       final List<geocoding.Location> locations =

@@ -35,8 +35,10 @@ class VideoPostDetailsResponse {
             : VideoPostDetails.fromMap(json['video_post_details']),
         relatedVideoPosts: json['related_video_posts'] == null
             ? []
-            : List<RelatedVideoPost>.from(json['related_video_posts']!
-                .map((x) => RelatedVideoPost.fromMap(x)),),
+            : List<RelatedVideoPost>.from(
+                json['related_video_posts']!
+                    .map((x) => RelatedVideoPost.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -622,7 +624,8 @@ class VideoPostDetails {
         userComments: json['user_comments'] == null
             ? []
             : List<UserComment>.from(
-                json['user_comments']!.map((x) => UserComment.fromMap(x)),),
+                json['user_comments']!.map((x) => UserComment.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

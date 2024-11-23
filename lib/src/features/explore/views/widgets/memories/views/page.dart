@@ -21,14 +21,16 @@ class ExplorePageMemoriesPage extends StatelessWidget {
     onReachingEndOfTheList(
       scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(LoadMoreMemoriesEvent(
-              page: context
-                      .read<ExploreBloc>()
-                      .state
-                      .memoryPaginationData!
-                      .currentPage +
-                  1,
-            ),);
+        context.read<ExploreBloc>().add(
+              LoadMoreMemoriesEvent(
+                page: context
+                        .read<ExploreBloc>()
+                        .state
+                        .memoryPaginationData!
+                        .currentPage +
+                    1,
+              ),
+            );
       },
     );
 
@@ -52,141 +54,139 @@ class ExplorePageMemoriesPage extends StatelessWidget {
               itemCount: data?.length ?? 0,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                    onTap: () {
-                      showMemoriesPlayer(
-                        context,
-                        uiMemoryGroups: [
-                          for (RecommendedMemory memoryGroup in data ?? [])
-                            UiMemoryGroup(
-                              userUid: memoryGroup.userUid,
-                              profilePicture: memoryGroup.user?.profilePicture,
-                              username: memoryGroup.user?.username,
-                              uiMemoryGroupItems: [
-                                for (UserMemory? memory
-                                    in memoryGroup.userMemories ?? [])
-                                  UiMemoryGroupItems(
-                                    isImage: memory?.isImage,
-                                    imageUrl: memory?.imageUrl,
-                                    isVideo: memory?.isVideo,
-                                    videoUrl: memory?.videoUrl,
-                                    videoDurationMs: memory?.videoDurationMs,
-                                    caption: memory?.caption,
-                                    ctaAction: memory?.ctaAction,
-                                    ctaActionUrl: memory?.ctaActionUrl,
-                                    createdAt: memory?.createdAt,
-                                  ),
-                              ],
-                            ),
-                        ],
-                        startGroupIndex: index,
-                        startMemoryIndex: 0,
-                      );
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .primaries[index % Colors.primaries.length],
-                            borderRadius: BorderRadius.circular(18.0),
-                            image: DecorationImage(
-                              image: ExtendedNetworkImageProvider(
-                                '${data?[index].userMemories?.first.imageUrl}',
-                                cache: true,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                        ),
-
-                        /// profile avatar
-                        Positioned(
-                          top: 8,
-                          left: 8,
-                          child: Container(
-                            padding: const EdgeInsets.all(3.0),
-                            decoration: const BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                            ),
-                            child: CircleAvatar(
-                              radius: 24.0,
-                              backgroundImage: ExtendedNetworkImageProvider(
-                                data?[index].user?.profilePicture ??
-                                    MockData.blankProfileAvatar,
-                                cache: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0.0,
-                          left: 0.0,
-                          right: 0.0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: <Color>[
-                                      Colors.black.withOpacity(0.0),
-                                      Colors.black,
-                                    ],
-                                  ),
+                  onTap: () {
+                    showMemoriesPlayer(
+                      context,
+                      uiMemoryGroups: [
+                        for (RecommendedMemory memoryGroup in data ?? [])
+                          UiMemoryGroup(
+                            userUid: memoryGroup.userUid,
+                            profilePicture: memoryGroup.user?.profilePicture,
+                            username: memoryGroup.user?.username,
+                            uiMemoryGroupItems: [
+                              for (UserMemory? memory
+                                  in memoryGroup.userMemories ?? [])
+                                UiMemoryGroupItems(
+                                  isImage: memory?.isImage,
+                                  imageUrl: memory?.imageUrl,
+                                  isVideo: memory?.isVideo,
+                                  videoUrl: memory?.videoUrl,
+                                  videoDurationMs: memory?.videoDurationMs,
+                                  caption: memory?.caption,
+                                  ctaAction: memory?.ctaAction,
+                                  ctaActionUrl: memory?.ctaActionUrl,
+                                  createdAt: memory?.createdAt,
                                 ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Gap(22),
-                                    Text(
-                                      data?[index]
-                                              .userMemories
-                                              ?.first
-                                              .caption ??
-                                          '',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.fade,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                            ],
+                          ),
+                      ],
+                      startGroupIndex: index,
+                      startMemoryIndex: 0,
+                    );
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          color:
+                              Colors.primaries[index % Colors.primaries.length],
+                          borderRadius: BorderRadius.circular(18.0),
+                          image: DecorationImage(
+                            image: ExtendedNetworkImageProvider(
+                              '${data?[index].userMemories?.first.imageUrl}',
+                              cache: true,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                      ),
+
+                      /// profile avatar
+                      Positioned(
+                        top: 8,
+                        left: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(3.0),
+                          decoration: const BoxDecoration(
+                            color: Colors.blue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            radius: 24.0,
+                            backgroundImage: ExtendedNetworkImageProvider(
+                              data?[index].user?.profilePicture ??
+                                  MockData.blankProfileAvatar,
+                              cache: true,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0.0,
+                        left: 0.0,
+                        right: 0.0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: <Color>[
+                                    Colors.black.withOpacity(0.0),
+                                    Colors.black,
                                   ],
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 4.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(18.0),
-                                    bottomRight: Radius.circular(18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Gap(22),
+                                  Text(
+                                    data?[index].userMemories?.first.caption ??
+                                        '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                child: Text(
-                                  data?[index].user?.username ?? '',
-                                  maxLines: 1,
-                                  overflow: TextOverflow.fade,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.0,
-                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(18.0),
+                                  bottomRight: Radius.circular(18.0),
                                 ),
                               ),
-                            ],
-                          ),
+                              child: Text(
+                                data?[index].user?.username ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.0,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),);
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           );

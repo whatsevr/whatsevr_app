@@ -40,7 +40,8 @@ class CreateFlickPostBloc
     on<PickThumbnailEvent>(_onPickThumbnail);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities,);
+      _onUpdateTaggedUsersAndCommunities,
+    );
   }
   FutureOr<void> _onInitial(
     CreatePostInitialEvent event,
@@ -51,14 +52,21 @@ class CreateFlickPostBloc
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
-        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed,) {
+        onCompleted: (
+          nearbyPlacesResponse,
+          lat,
+          long,
+          isDeviceGpsEnabled,
+          isPermissionAllowed,
+        ) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
-            emit(state.copyWith(
-              userCurrentLocationLatLongWkb:
-                  WKBUtil.getWkbString(lat: lat, long: long),
-            ),);
+            emit(
+              state.copyWith(
+                userCurrentLocationLatLongWkb:
+                    WKBUtil.getWkbString(lat: lat, long: long),
+              ),
+            );
           }
         },
       );
@@ -94,16 +102,18 @@ class CreateFlickPostBloc
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewFlickPost(
-          request: SanityCheckNewFlickPostRequest(
-              mediaMetaData: MediaMetaData(
-                aspectRatio: state.videoMetaData?.aspectRatio,
-                durationSec: state.videoMetaData?.durationInSec,
-                sizeBytes: state.videoMetaData?.sizeInBytes,
-              ),
-              postData: PostData(
-                userUid: AuthUserDb.getLastLoggedUserUid(),
-                postCreatorType: state.pageArgument?.postCreatorType.value,
-              ),),);
+        request: SanityCheckNewFlickPostRequest(
+          mediaMetaData: MediaMetaData(
+            aspectRatio: state.videoMetaData?.aspectRatio,
+            durationSec: state.videoMetaData?.durationInSec,
+            sizeBytes: state.videoMetaData?.sizeInBytes,
+          ),
+          postData: PostData(
+            userUid: AuthUserDb.getLastLoggedUserUid(),
+            postCreatorType: state.pageArgument?.postCreatorType.value,
+          ),
+        ),
+      );
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -218,13 +228,17 @@ class CreateFlickPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateFlickPostState> emit,) async {
+    UpdatePostAddressEvent event,
+    Emitter<CreateFlickPostState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           selectedPostLocation: event.address,
           selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude,),
+            lat: event.addressLatitude,
+            long: event.addressLongitude,
+          ),
         ),
       );
     } catch (e, stackTrace) {
@@ -233,14 +247,17 @@ class CreateFlickPostBloc
   }
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
-      UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateFlickPostState> emit,) {
+    UpdateTaggedUsersAndCommunitiesEvent event,
+    Emitter<CreateFlickPostState> emit,
+  ) {
     try {
       if (event.clearAll == true) {
-        emit(state.copyWith(
-          taggedUsersUid: [],
-          taggedCommunitiesUid: [],
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: [],
+            taggedCommunitiesUid: [],
+          ),
+        );
       } else {
         List<String> taggedUsersUid = [
           ...state.taggedUsersUid,
@@ -252,10 +269,12 @@ class CreateFlickPostBloc
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
-        emit(state.copyWith(
-          taggedUsersUid: taggedUsersUid,
-          taggedCommunitiesUid: taggedCommunitiesUid,
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: taggedUsersUid,
+            taggedCommunitiesUid: taggedCommunitiesUid,
+          ),
+        );
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);

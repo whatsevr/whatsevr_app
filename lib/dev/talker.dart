@@ -16,10 +16,11 @@ class TalkerService {
   static TalkerBlocObserver blocObserver = TalkerBlocObserver(talker: instance);
 
   static TalkerDioLogger dioLogger = TalkerDioLogger(
-      talker: instance,
-      settings: TalkerDioLoggerSettings(
-        printRequestHeaders: true,
-      ),);
+    talker: instance,
+    settings: TalkerDioLoggerSettings(
+      printRequestHeaders: true,
+    ),
+  );
 
   static TalkerRouteObserver takerRouteObserver() {
     return TalkerRouteObserver(instance);

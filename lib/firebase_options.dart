@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'whatsevr-live.appspot.com',
     iosBundleId: 'com.example.whatsevrApp',
   );
-
 }

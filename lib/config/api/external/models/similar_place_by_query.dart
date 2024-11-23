@@ -17,7 +17,8 @@ class SimilarPlacesByQueryResponse {
         suggestions: json['suggestions'] == null
             ? []
             : List<Suggestion>.from(
-                json['suggestions']!.map((x) => Suggestion.fromMap(x)),),
+                json['suggestions']!.map((x) => Suggestion.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

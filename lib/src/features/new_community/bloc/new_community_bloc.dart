@@ -21,10 +21,12 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
   final TextEditingController communityStatusController =
       TextEditingController();
   NewCommunityBloc()
-      : super(NewCommunityState(
-          topCommunities: const [],
-          topCommunitiesPaginationData: PaginationData(),
-        ),) {
+      : super(
+          NewCommunityState(
+            topCommunities: const [],
+            topCommunitiesPaginationData: PaginationData(),
+          ),
+        ) {
     on<NewCommunityInitialEvent>(_onInitialEvent);
     on<LoadTopCommunitiesEvent>(_loadTopCommunities);
     on<LoadMoreTopCommunitiesEvent>(_loadMoreTopCommunities);
@@ -33,68 +35,91 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
   }
 
   FutureOr<void> _onInitialEvent(
-      NewCommunityInitialEvent event, Emitter<NewCommunityState> emit,) {
+    NewCommunityInitialEvent event,
+    Emitter<NewCommunityState> emit,
+  ) {
     add(const LoadTopCommunitiesEvent());
   }
 
   FutureOr<void> _loadTopCommunities(
-      LoadTopCommunitiesEvent event, Emitter<NewCommunityState> emit,) async {
+    LoadTopCommunitiesEvent event,
+    Emitter<NewCommunityState> emit,
+  ) async {
     try {
       // Fetch the top communities from the API
       final TopCommunitiesResponse? topCommunities =
           await CommunityApi.topCommunities(page: 1);
-      emit(state.copyWith(
-        topCommunities: topCommunities?.topCommunities,
-        topCommunitiesPaginationData:
-            state.topCommunitiesPaginationData?.copyWith(
-          currentPage: 1,
-          isLoading: false,
-          noMoreData: topCommunities?.lastPage,
+      emit(
+        state.copyWith(
+          topCommunities: topCommunities?.topCommunities,
+          topCommunitiesPaginationData:
+              state.topCommunitiesPaginationData?.copyWith(
+            currentPage: 1,
+            isLoading: false,
+            noMoreData: topCommunities?.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
 
-  FutureOr<void> _loadMoreTopCommunities(LoadMoreTopCommunitiesEvent event,
-      Emitter<NewCommunityState> emit,) async {
+  FutureOr<void> _loadMoreTopCommunities(
+    LoadMoreTopCommunitiesEvent event,
+    Emitter<NewCommunityState> emit,
+  ) async {
     if (state.topCommunitiesPaginationData?.isLoading == true ||
         state.topCommunitiesPaginationData?.noMoreData == true) return;
     try {
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           topCommunitiesPaginationData:
-              state.topCommunitiesPaginationData?.copyWith(isLoading: true),),);
+              state.topCommunitiesPaginationData?.copyWith(isLoading: true),
+        ),
+      );
       final TopCommunitiesResponse? topCommunities =
           await CommunityApi.topCommunities(page: event.page!);
-      emit(state.copyWith(
-        topCommunities: state.topCommunities! + topCommunities!.topCommunities!,
-        topCommunitiesPaginationData:
-            state.topCommunitiesPaginationData?.copyWith(
-          currentPage: event.page,
-          isLoading: false,
-          noMoreData: topCommunities.lastPage,
+      emit(
+        state.copyWith(
+          topCommunities:
+              state.topCommunities! + topCommunities!.topCommunities!,
+          topCommunitiesPaginationData:
+              state.topCommunitiesPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            noMoreData: topCommunities.lastPage,
+          ),
         ),
-      ),);
+      );
     } catch (e, s) {
-      emit(state.copyWith(
-        topCommunitiesPaginationData:
-            state.topCommunitiesPaginationData?.copyWith(
-          isLoading: false,
+      emit(
+        state.copyWith(
+          topCommunitiesPaginationData:
+              state.topCommunitiesPaginationData?.copyWith(
+            isLoading: false,
+          ),
         ),
-      ),);
+      );
       highLevelCatch(e, s);
     }
   }
 
   FutureOr<void> _changeApproveJoiningRequest(
-      ChangeApproveJoiningRequestEvent event, Emitter<NewCommunityState> emit,) {
-    emit(state.copyWith(
-        approveJoiningRequest: !(state.approveJoiningRequest ?? false),),);
+    ChangeApproveJoiningRequestEvent event,
+    Emitter<NewCommunityState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        approveJoiningRequest: !(state.approveJoiningRequest ?? false),
+      ),
+    );
   }
 
   FutureOr<void> _createCommunity(
-      CreateCommunityEvent event, Emitter<NewCommunityState> emit,) async {
+    CreateCommunityEvent event,
+    Emitter<NewCommunityState> emit,
+  ) async {
     try {
       if (communityNameController.text.isEmpty) {
         throw BusinessException('Community name is required');

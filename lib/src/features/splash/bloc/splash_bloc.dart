@@ -49,7 +49,10 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
     await AuthUserService.loginWithOtpLessService(
       onLoginSuccess: (userUid, mobileNumber, emailId) {
         AuthUserService.loginToApp(
-            userUid: userUid, mobileNumber: mobileNumber, emailId: emailId,);
+          userUid: userUid,
+          mobileNumber: mobileNumber,
+          emailId: emailId,
+        );
       },
       onLoginFailed: (errorMessage) {
         SmartDialog.showToast(errorMessage);

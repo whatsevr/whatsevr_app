@@ -38,10 +38,12 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
       emit(state.copyWith(pageArgument: event.pageArgument));
 
       (double, double)? latLong = await LocationService.getCurrentGpsLatLong();
-      emit(state.copyWith(
-        userCurrentLocationLatLongWkb:
-            WKBUtil.getWkbString(lat: latLong?.$1, long: latLong?.$2),
-      ),);
+      emit(
+        state.copyWith(
+          userCurrentLocationLatLongWkb:
+              WKBUtil.getWkbString(lat: latLong?.$1, long: latLong?.$2),
+        ),
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -113,11 +115,13 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
         throw BusinessException('Please select a pdf file less than 25 MB');
       }
 
-      emit(UploadPdfState(
-        pdfFile: event.pickPdfFile,
-        pageArgument: state.pageArgument,
-        userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
-      ),);
+      emit(
+        UploadPdfState(
+          pdfFile: event.pickPdfFile,
+          pageArgument: state.pageArgument,
+          userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
+        ),
+      );
 
       SmartDialog.dismiss();
     } catch (e, stackTrace) {

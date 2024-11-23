@@ -48,27 +48,34 @@ class CommonDataResponse {
         message: json['message'],
         educationDegrees: json['education_degrees'] == null
             ? []
-            : List<EducationDegree>.from(json['education_degrees']!
-                .map((x) => EducationDegree.fromMap(x)),),
+            : List<EducationDegree>.from(
+                json['education_degrees']!
+                    .map((x) => EducationDegree.fromMap(x)),
+              ),
         genders: json['genders'] == null
             ? []
             : List<Gender>.from(json['genders']!.map((x) => Gender.fromMap(x))),
         workingModes: json['working_modes'] == null
             ? []
             : List<WorkingMode>.from(
-                json['working_modes']!.map((x) => WorkingMode.fromMap(x)),),
+                json['working_modes']!.map((x) => WorkingMode.fromMap(x)),
+              ),
         interests: json['interests'] == null
             ? []
             : List<Interest>.from(
-                json['interests']!.map((x) => Interest.fromMap(x)),),
+                json['interests']!.map((x) => Interest.fromMap(x)),
+              ),
         ctaActions: json['cta_actions'] == null
             ? []
             : List<CtaAction>.from(
-                json['cta_actions']!.map((x) => CtaAction.fromMap(x)),),
+                json['cta_actions']!.map((x) => CtaAction.fromMap(x)),
+              ),
         professionalStatus: json['professional_status'] == null
             ? []
-            : List<ProfessionalStatus>.from(json['professional_status']!
-                .map((x) => ProfessionalStatus.fromMap(x)),),
+            : List<ProfessionalStatus>.from(
+                json['professional_status']!
+                    .map((x) => ProfessionalStatus.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

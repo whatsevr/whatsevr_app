@@ -17,7 +17,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onInitialEvent(
-      InitialEvent event, Emitter<SettingsState> emit,) async {
+    InitialEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       add(LoadUserCommunitiesEvent());
     } catch (e, s) {
@@ -26,11 +28,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   FutureOr<void> _onLoadUserCommunitiesEvent(
-      LoadUserCommunitiesEvent event, Emitter<SettingsState> emit,) async {
+    LoadUserCommunitiesEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
     try {
       final UserCommunitiesResponse? userCommunitiesResponse =
           await CommunityApi.getUserCommunities(
-              userUid: (AuthUserDb.getLastLoggedUserUid())!,);
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
+      );
 
       emit(state.copyWith(userCommunitiesResponse: userCommunitiesResponse));
     } catch (e, s) {

@@ -262,18 +262,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedUsers: state.searchedUsers?.copyWith(
-          users: [
-            ...state.searchedUsers?.users ?? [],
-            ...response?.users ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedUsers: state.searchedUsers?.copyWith(
+            users: [
+              ...state.searchedUsers?.users ?? [],
+              ...response?.users ?? [],
+            ],
+          ),
+          usersPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        usersPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -290,18 +292,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedPortfolios: state.searchedPortfolios?.copyWith(
-          portfolios: [
-            ...state.searchedPortfolios?.portfolios ?? [],
-            ...response?.portfolios ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedPortfolios: state.searchedPortfolios?.copyWith(
+            portfolios: [
+              ...state.searchedPortfolios?.portfolios ?? [],
+              ...response?.portfolios ?? [],
+            ],
+          ),
+          portfoliosPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        portfoliosPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -318,18 +322,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedCommunities: state.searchedCommunities?.copyWith(
-          communities: [
-            ...state.searchedCommunities?.communities ?? [],
-            ...response?.communities ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedCommunities: state.searchedCommunities?.copyWith(
+            communities: [
+              ...state.searchedCommunities?.communities ?? [],
+              ...response?.communities ?? [],
+            ],
+          ),
+          communitiesPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        communitiesPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -346,18 +352,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedFlickPosts: state.searchedFlickPosts?.copyWith(
-          flicks: [
-            ...state.searchedFlickPosts?.flicks ?? [],
-            ...response?.flicks ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedFlickPosts: state.searchedFlickPosts?.copyWith(
+            flicks: [
+              ...state.searchedFlickPosts?.flicks ?? [],
+              ...response?.flicks ?? [],
+            ],
+          ),
+          flickPostsPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        flickPostsPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -374,18 +382,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedMemories: state.searchedMemories?.copyWith(
-          memories: [
-            ...state.searchedMemories?.memories ?? [],
-            ...response?.memories ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedMemories: state.searchedMemories?.copyWith(
+            memories: [
+              ...state.searchedMemories?.memories ?? [],
+              ...response?.memories ?? [],
+            ],
+          ),
+          memoriesPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        memoriesPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -402,18 +412,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedOffers: state.searchedOffers?.copyWith(
-          offers: [
-            ...state.searchedOffers?.offers ?? [],
-            ...response?.offers ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedOffers: state.searchedOffers?.copyWith(
+            offers: [
+              ...state.searchedOffers?.offers ?? [],
+              ...response?.offers ?? [],
+            ],
+          ),
+          offersPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        offersPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -430,18 +442,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedPdfs: state.searchedPdfs?.copyWith(
-          pdfs: [
-            ...state.searchedPdfs?.pdfs ?? [],
-            ...response?.pdfs ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedPdfs: state.searchedPdfs?.copyWith(
+            pdfs: [
+              ...state.searchedPdfs?.pdfs ?? [],
+              ...response?.pdfs ?? [],
+            ],
+          ),
+          pdfsPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        pdfsPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -458,18 +472,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedPhotoPosts: state.searchedPhotoPosts?.copyWith(
-          photoPosts: [
-            ...state.searchedPhotoPosts?.photoPosts ?? [],
-            ...response?.photoPosts ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedPhotoPosts: state.searchedPhotoPosts?.copyWith(
+            photoPosts: [
+              ...state.searchedPhotoPosts?.photoPosts ?? [],
+              ...response?.photoPosts ?? [],
+            ],
+          ),
+          photoPostsPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        photoPostsPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -486,18 +502,20 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
         page: currentPage + 1,
       );
 
-      emit(state.copyWith(
-        searchedVideoPosts: state.searchedVideoPosts?.copyWith(
-          videoPosts: [
-            ...state.searchedVideoPosts?.videoPosts ?? [],
-            ...response?.videoPosts ?? [],
-          ],
+      emit(
+        state.copyWith(
+          searchedVideoPosts: state.searchedVideoPosts?.copyWith(
+            videoPosts: [
+              ...state.searchedVideoPosts?.videoPosts ?? [],
+              ...response?.videoPosts ?? [],
+            ],
+          ),
+          videoPostsPagination: PaginationData(
+            currentPage: currentPage + 1,
+            noMoreData: response?.lastPage ?? false,
+          ),
         ),
-        videoPostsPagination: PaginationData(
-          currentPage: currentPage + 1,
-          noMoreData: response?.lastPage ?? false,
-        ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -511,7 +529,9 @@ class AllSearchBloc extends Bloc<AllSearchEvent, AllSearchState> {
   }
 
   FutureOr<void> _onSearchTextChanged(
-      SearchTextChangedEvent event, Emitter<AllSearchState> emit,) async {
+    SearchTextChangedEvent event,
+    Emitter<AllSearchState> emit,
+  ) async {
     if (event.query.trim().isEmpty || event.query.length < 4) {
       return;
     }

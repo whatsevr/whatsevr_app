@@ -40,7 +40,8 @@ class CreatePhotoPostBloc
     on<PickImageEvent>(_onPickImage);
 
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities,);
+      _onUpdateTaggedUsersAndCommunities,
+    );
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
   }
   FutureOr<void> _onInitial(
@@ -52,14 +53,21 @@ class CreatePhotoPostBloc
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
-        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed,) {
+        onCompleted: (
+          nearbyPlacesResponse,
+          lat,
+          long,
+          isDeviceGpsEnabled,
+          isPermissionAllowed,
+        ) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
-            emit(state.copyWith(
-              userCurrentLocationLatLongWkb:
-                  WKBUtil.getWkbString(lat: lat, long: long),
-            ),);
+            emit(
+              state.copyWith(
+                userCurrentLocationLatLongWkb:
+                    WKBUtil.getWkbString(lat: lat, long: long),
+              ),
+            );
           }
         },
       );
@@ -70,13 +78,17 @@ class CreatePhotoPostBloc
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreatePhotoPostState> emit,) async {
+    UpdatePostAddressEvent event,
+    Emitter<CreatePhotoPostState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           selectedPostLocation: event.address,
           selectedPostLocationLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude,),
+            lat: event.addressLatitude,
+            long: event.addressLongitude,
+          ),
         ),
       );
     } catch (e, stackTrace) {
@@ -97,7 +109,8 @@ class CreatePhotoPostBloc
         throw BusinessException('Description is required');
       }
 
-      final String hashtagsArea = titleController.text + descriptionController.text;
+      final String hashtagsArea =
+          titleController.text + descriptionController.text;
       List<String> hashtags = [];
       if (TextPatternDetector.isDetected(hashtagsArea, hashTagRegExp)) {
         hashtags = TextPatternDetector.extractDetections(
@@ -112,18 +125,19 @@ class CreatePhotoPostBloc
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewPhotoPost(
-          request: SanityCheckNewPhotoPostRequest(
-        mediaMetaData: [
-          for (var e in state.uiImageData)
-            MediaMetaDatum(
-              imageSizeBytes: e.fileMetaData?.sizeInBytes,
-            ),
-        ],
-        postData: PostData(
-          userUid: AuthUserDb.getLastLoggedUserUid(),
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+        request: SanityCheckNewPhotoPostRequest(
+          mediaMetaData: [
+            for (var e in state.uiImageData)
+              MediaMetaDatum(
+                imageSizeBytes: e.fileMetaData?.sizeInBytes,
+              ),
+          ],
+          postData: PostData(
+            userUid: AuthUserDb.getLastLoggedUserUid(),
+            postCreatorType: state.pageArgument?.postCreatorType.value,
+          ),
         ),
-      ),);
+      );
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
@@ -164,14 +178,17 @@ class CreatePhotoPostBloc
   }
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
-      UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreatePhotoPostState> emit,) {
+    UpdateTaggedUsersAndCommunitiesEvent event,
+    Emitter<CreatePhotoPostState> emit,
+  ) {
     try {
       if (event.clearAll == true) {
-        emit(state.copyWith(
-          taggedUsersUid: [],
-          taggedCommunitiesUid: [],
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: [],
+            taggedCommunitiesUid: [],
+          ),
+        );
       } else {
         List<String> taggedUsersUid = [
           ...state.taggedUsersUid,
@@ -196,35 +213,43 @@ class CreatePhotoPostBloc
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreatePhotoPostState> emit,) async {
+    PickImageEvent event,
+    Emitter<CreatePhotoPostState> emit,
+  ) async {
     try {
       final FileMetaData? imageMetaData =
           await FileMetaData.fromFile(event.pickedImageFile);
       if (imageMetaData == null || imageMetaData.isImage != true) {
         throw BusinessException('Image is not valid');
       }
-      emit(state.copyWith(
-        uiFilesData: [
-          ...state.uiImageData,
-          UiImageData(
-            file: event.pickedImageFile,
-            fileMetaData: imageMetaData,
-          ),
-        ],
-      ),);
+      emit(
+        state.copyWith(
+          uiFilesData: [
+            ...state.uiImageData,
+            UiImageData(
+              file: event.pickedImageFile,
+              fileMetaData: imageMetaData,
+            ),
+          ],
+        ),
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreatePhotoPostState> emit,) {
+    RemoveVideoOrImageEvent event,
+    Emitter<CreatePhotoPostState> emit,
+  ) {
     try {
-      emit(state.copyWith(
-        uiFilesData: state.uiImageData
-            .where((element) => element != event.uiFileData)
-            .toList(),
-      ),);
+      emit(
+        state.copyWith(
+          uiFilesData: state.uiImageData
+              .where((element) => element != event.uiFileData)
+              .toList(),
+        ),
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

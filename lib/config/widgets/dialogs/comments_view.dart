@@ -13,7 +13,8 @@ import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/comments.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/requests_model/comments/comment_and_reply.dart';
-import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart' as m1;
+import 'package:whatsevr_app/config/api/response_model/comments/get_comments.dart'
+    as m1;
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
@@ -618,7 +619,8 @@ class _UiState extends State<_Ui> {
                                                           ],
                                                         ),
                                                         const SizedBox(
-                                                            height: 4,),
+                                                          height: 4,
+                                                        ),
                                                         Text(
                                                           reply.replyText ?? '',
                                                         ),

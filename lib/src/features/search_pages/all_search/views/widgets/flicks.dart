@@ -5,9 +5,12 @@ class _FlicksView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    onReachingEndOfTheList(_scrollController, execute: () {
-      context.read<AllSearchBloc>().add(SearchMoreFlickPosts());
-    },);
+    onReachingEndOfTheList(
+      _scrollController,
+      execute: () {
+        context.read<AllSearchBloc>().add(SearchMoreFlickPosts());
+      },
+    );
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return GridView.builder(

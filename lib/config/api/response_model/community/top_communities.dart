@@ -39,7 +39,8 @@ class TopCommunitiesResponse {
         topCommunities: json['top_communities'] == null
             ? []
             : List<TopCommunity>.from(
-                json['top_communities']!.map((x) => TopCommunity.fromMap(x)),),
+                json['top_communities']!.map((x) => TopCommunity.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

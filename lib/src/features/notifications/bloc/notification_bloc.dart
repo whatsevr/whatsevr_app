@@ -6,7 +6,8 @@ part 'notification_state.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc() : super(NotificationInitial()) {
-    on<NotificationEvent>((NotificationEvent event, Emitter<NotificationState> emit) {
+    on<NotificationEvent>(
+        (NotificationEvent event, Emitter<NotificationState> emit) {
       // TODO: implement event handler
     });
   }

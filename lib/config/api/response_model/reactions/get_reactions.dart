@@ -39,7 +39,8 @@ class GetReactionsResponse {
         reactions: json['reactions'] == null
             ? []
             : List<Reaction>.from(
-                json['reactions']!.map((x) => Reaction.fromMap(x)),),
+                json['reactions']!.map((x) => Reaction.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

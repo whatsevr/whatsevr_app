@@ -208,7 +208,8 @@ class _UiState extends State<_Ui> {
                   SmartDialog.showToast('Please select a thumbnail');
                   return;
                 }
-                final File? file = await saveImageAsFile(selectedThumbnail!.bytes);
+                final File? file =
+                    await saveImageAsFile(selectedThumbnail!.bytes);
                 if (file != null) {
                   widget.onThumbnailSelected(file);
                 }

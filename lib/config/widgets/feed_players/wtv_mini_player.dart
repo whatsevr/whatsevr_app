@@ -40,7 +40,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
       quality: 30,
     );
     videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
-      Uri.parse(adaptiveVideoUrl),invalidateCacheIfOlderThan: const Duration(days: 90),
+      Uri.parse(adaptiveVideoUrl),
+      invalidateCacheIfOlderThan: const Duration(days: 90),
       videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
     );
     await videoPlayerController!.initialize();
@@ -99,9 +100,10 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                       );
                     }
                     return AspectRatio(
-                        aspectRatio: videoPlayerController?.value.aspectRatio ??
-                            WhatsevrAspectRatio.landscape.ratio,
-                        child: CachedVideoPlayerPlus(videoPlayerController!),);
+                      aspectRatio: videoPlayerController?.value.aspectRatio ??
+                          WhatsevrAspectRatio.landscape.ratio,
+                      child: CachedVideoPlayerPlus(videoPlayerController!),
+                    );
                   },
                 ),
               ),

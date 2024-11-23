@@ -32,7 +32,8 @@ class FileUploadService {
     try {
       if (file.lengthSync() > kMaxMediaFileUploadSizeInGB * 1024 * 1000000) {
         throw BusinessException(
-            'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)',);
+          'File size too large (Max $kMaxMediaFileUploadSizeInGB GB)',
+        );
       }
       final String fileName =
           '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
@@ -65,15 +66,16 @@ class FileUploadService {
           '${userUid}_${fileRelatedTo}_${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
 
       final CloudinaryResponse response = await cloudinary.upload(
-          file: file.path,
-          fileBytes: file.readAsBytesSync(),
-          resourceType: CloudinaryResourceType.auto,
-          folder: 'public',
-          optParams: {},
-          fileName: fileName,
-          progressCallback: (count, total) {
-            debugPrint('Cloudinary.upload progress: $count/$total');
-          },);
+        file: file.path,
+        fileBytes: file.readAsBytesSync(),
+        resourceType: CloudinaryResourceType.auto,
+        folder: 'public',
+        optParams: {},
+        fileName: fileName,
+        progressCallback: (count, total) {
+          debugPrint('Cloudinary.upload progress: $count/$total');
+        },
+      );
 
       if (!response.isSuccessful || response.secureUrl == null) {
         throw BusinessException('Failed to upload file to Cloudinary');

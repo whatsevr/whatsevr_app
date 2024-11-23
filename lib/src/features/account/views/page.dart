@@ -53,9 +53,11 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => AccountBloc()
-        ..add(AccountInitialEvent(
-          accountPageArgument: pageArgument,
-        ),),
+        ..add(
+          AccountInitialEvent(
+            accountPageArgument: pageArgument,
+          ),
+        ),
       child: BlocBuilder<AccountBloc, AccountState>(
         builder: (BuildContext context, AccountState state) {
           return Scaffold(
@@ -412,53 +414,55 @@ class AccountPage extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        showUserRelationsDialog(
-                                          context: context,
-                                          userUid: (state.profileDetailsResponse
-                                              ?.userInfo?.uid)!,
-                                        );
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)}',
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                          Text(
-                                            'Networks',
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        ],
-                                      ),),
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      showUserRelationsDialog(
+                                        context: context,
+                                        userUid: (state.profileDetailsResponse
+                                            ?.userInfo?.uid)!,
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalFollowers)}',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        Text(
+                                          'Networks',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                                 Expanded(
                                   child: GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: () {
-                                        showUserRelationsDialog(
-                                          context: context,
-                                          userUid: (state.profileDetailsResponse
-                                              ?.userInfo?.uid)!,
-                                        );
-                                      },
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}',
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                          Text(
-                                            'Connections',
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        ],
-                                      ),),
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      showUserRelationsDialog(
+                                        context: context,
+                                        userUid: (state.profileDetailsResponse
+                                            ?.userInfo?.uid)!,
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          '${formatCountToKMBTQ(state.profileDetailsResponse?.userInfo?.totalConnections)}',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        Text(
+                                          'Connections',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

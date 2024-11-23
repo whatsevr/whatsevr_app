@@ -40,24 +40,25 @@ class WhatsevrPostDetectableText extends StatelessWidget {
     );
   }
 }
+
 class WhatsevrMessageDetectableText extends StatelessWidget {
   final String? text;
   // More style properties
   final Color? moreStyleColor;
   final double? moreStyleFontSize;
-  
+
   // Less style properties
   final Color? lessStyleColor;
   final double? lessStyleFontSize;
-  
+
   // Detected style properties
   final Color? detectedStyleColor;
   final double? detectedStyleFontSize;
-  
+
   // Basic style properties
   final double? basicStyleFontSize;
   final Color? basicStyleColor;
-  
+
   // Other properties
   final Color? colorClickableText;
   final int? trimLines;
@@ -85,7 +86,6 @@ class WhatsevrMessageDetectableText extends StatelessWidget {
       text: text ?? '',
       trimLines: trimLines ?? 3,
       trimMode: trimMode ?? TrimMode.Line,
-    
       moreStyle: TextStyle(
         color: moreStyleColor ?? Colors.grey,
         fontSize: moreStyleFontSize ?? 14,

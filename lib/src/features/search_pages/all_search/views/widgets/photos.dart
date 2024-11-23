@@ -5,9 +5,12 @@ class _PhotosView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    onReachingEndOfTheList(_scrollController, execute: () {
-      context.read<AllSearchBloc>().add(SearchMorePhotoPosts());
-    },);
+    onReachingEndOfTheList(
+      _scrollController,
+      execute: () {
+        context.read<AllSearchBloc>().add(SearchMorePhotoPosts());
+      },
+    );
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
@@ -37,7 +40,8 @@ class _PhotosView extends StatelessWidget {
                   children: <Widget>[
                     CircleAvatar(
                       backgroundImage: ExtendedNetworkImageProvider(
-                          MockData.blankProfileAvatar,),
+                        MockData.blankProfileAvatar,
+                      ),
                     ),
                     const Gap(8),
                     Expanded(

@@ -27,9 +27,11 @@ class CustomAssetPicker {
     File? capturedFile;
     await AppNavigationService.newRoute(
       RoutesName.cameraView,
-      extras: CameraViewPageArgument(onCapture: (File file) {
-        capturedFile = file;
-      },),
+      extras: CameraViewPageArgument(
+        onCapture: (File file) {
+          capturedFile = file;
+        },
+      ),
     );
     if (capturedFile == null) return;
     File? compressedFile;
@@ -63,10 +65,11 @@ class CustomAssetPicker {
     await AppNavigationService.newRoute(
       RoutesName.imageEditor,
       extras: ImageEditorPageArgument(
-          imageFileToEdit: croppedImage!,
-          onCompleted: (File file) {
-            editedImage = file;
-          },),
+        imageFileToEdit: croppedImage!,
+        onCompleted: (File file) {
+          editedImage = file;
+        },
+      ),
     );
     onCompleted?.call(editedImage ?? croppedImage!);
   }
@@ -127,10 +130,11 @@ class CustomAssetPicker {
     await AppNavigationService.newRoute(
       RoutesName.imageEditor,
       extras: ImageEditorPageArgument(
-          imageFileToEdit: croppedImage!,
-          onCompleted: (File file) {
-            editedImage = file;
-          },),
+        imageFileToEdit: croppedImage!,
+        onCompleted: (File file) {
+          editedImage = file;
+        },
+      ),
     );
     onCompleted.call(editedImage ?? croppedImage!);
   }
@@ -169,10 +173,11 @@ class CustomAssetPicker {
     await AppNavigationService.newRoute(
       RoutesName.videoEditor,
       extras: VideoEditorPageArgument(
-          videoFile: pickedVideo,
-          onCompleted: (File? file) {
-            editedVideo = file;
-          },),
+        videoFile: pickedVideo,
+        onCompleted: (File? file) {
+          editedVideo = file;
+        },
+      ),
     );
     if (editedVideo == null) {
       if (!(await pickedVideo.exists())) {
@@ -184,9 +189,10 @@ class CustomAssetPicker {
     onCompleted?.call(editedVideo!);
   }
 
-  static void pickDocuments(
-      {bool singleFile = true,
-      required Function(List<File>) onCompleted,}) async {
+  static void pickDocuments({
+    bool singleFile = true,
+    required Function(List<File>) onCompleted,
+  }) async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: !singleFile,
       type: FileType.custom,

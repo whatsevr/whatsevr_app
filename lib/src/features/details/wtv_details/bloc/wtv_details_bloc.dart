@@ -16,28 +16,39 @@ class WtvDetailsBloc extends Bloc<WtvDetailsEvent, WtvDetailsState> {
   }
 
   FutureOr<void> _onInitialEvent(
-      InitialEvent event, Emitter<WtvDetailsState> emit,) {
-    add(FetchVideoPostDetails(
-      videoPostUid: event.pageArgument.videoPostUid,
-      thumbnail: event.pageArgument.thumbnail,
-      videoUrl: event.pageArgument.videoUrl,
-    ),);
+    InitialEvent event,
+    Emitter<WtvDetailsState> emit,
+  ) {
+    add(
+      FetchVideoPostDetails(
+        videoPostUid: event.pageArgument.videoPostUid,
+        thumbnail: event.pageArgument.thumbnail,
+        videoUrl: event.pageArgument.videoUrl,
+      ),
+    );
   }
 
   FutureOr<void> _onFetchVideoPostDetails(
-      FetchVideoPostDetails event, Emitter<WtvDetailsState> emit,) async {
-    emit(WtvDetailsState(
-      thumbnail: event.thumbnail,
-      videoUrl: event.videoUrl,
-      videoPostUid: event.videoPostUid,
-    ),);
+    FetchVideoPostDetails event,
+    Emitter<WtvDetailsState> emit,
+  ) async {
+    emit(
+      WtvDetailsState(
+        thumbnail: event.thumbnail,
+        videoUrl: event.videoUrl,
+        videoPostUid: event.videoPostUid,
+      ),
+    );
     final videoPostDetailsResponse = await PostDetailsApi.video(
       videoPostUid: event.videoPostUid!,
     );
-    emit(state.copyWith(
+    emit(
+      state.copyWith(
         thumbnail: videoPostDetailsResponse?.videoPostDetails?.thumbnail,
         videoUrl: videoPostDetailsResponse?.videoPostDetails?.videoUrl,
         videoPostUid: videoPostDetailsResponse?.videoPostDetails?.uid,
-        videoPostDetailsResponse: videoPostDetailsResponse,),);
+        videoPostDetailsResponse: videoPostDetailsResponse,
+      ),
+    );
   }
 }

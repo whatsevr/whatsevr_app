@@ -191,7 +191,8 @@ class UsersApi {
   }
 
   static Future<(int? statusCode, String? message)?> updateUserInfo(
-      UpdateUserInfoRequest request,) async {
+    UpdateUserInfoRequest request,
+  ) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/user-info',
@@ -205,7 +206,8 @@ class UsersApi {
   }
 
   static Future<(int? statusCode, String? message)?> updateUserPortfolioInfo(
-      UpdateUserPortfolioInfoRequest request,) async {
+    UpdateUserPortfolioInfoRequest request,
+  ) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/update-user-portfolio-info',

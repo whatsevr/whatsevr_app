@@ -52,9 +52,11 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => CommunityBloc()
-        ..add(InitialEvent(
-          communityPageArgument: pageArgument,
-        ),),
+        ..add(
+          InitialEvent(
+            communityPageArgument: pageArgument,
+          ),
+        ),
       child: BlocBuilder<CommunityBloc, CommunityState>(
         builder: (BuildContext context, CommunityState state) {
           return Scaffold(
@@ -331,31 +333,32 @@ class CommunityPage extends StatelessWidget {
                     ),
                     const Gap(28),
                     GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onTap: () {
-                          showUserRelationsDialog(
-                            context: context,
-                            userUid: (state
-                                .communityDetailsResponse?.communityInfo?.uid)!,
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: PadHorizontal.paddingValue,
-                            vertical: 8,
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        showUserRelationsDialog(
+                          context: context,
+                          userUid: (state
+                              .communityDetailsResponse?.communityInfo?.uid)!,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: PadHorizontal.paddingValue,
+                          vertical: 8,
+                        ),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: context.whatsevrTheme.shadow,
+                        ),
+                        child: Text(
+                          '${formatCountToKMBTQ(state.communityDetailsResponse?.communityInfo?.totalMembers)} Members',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: context.whatsevrTheme.shadow,
-                          ),
-                          child: Text(
-                            '${formatCountToKMBTQ(state.communityDetailsResponse?.communityInfo?.totalMembers)} Members',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),),
+                        ),
+                      ),
+                    ),
                     const Gap(8),
                     if (pageArgument?.isEditMode != true) ...<Widget>[
                       PadHorizontal(
@@ -368,8 +371,10 @@ class CommunityPage extends StatelessWidget {
                                 ),
                                 color: Colors.black,
                                 onPressed: () {},
-                                child: const Text('Join',
-                                    style: TextStyle(color: Colors.white),),
+                                child: const Text(
+                                  'Join',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
                             const Gap(8),

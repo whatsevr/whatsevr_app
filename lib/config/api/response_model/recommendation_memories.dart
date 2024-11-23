@@ -38,8 +38,10 @@ class RecommendationMemoriesResponse {
         lastPage: json['last_page'],
         recommendedMemories: json['recommended_memories'] == null
             ? []
-            : List<RecommendedMemory>.from(json['recommended_memories']!
-                .map((x) => RecommendedMemory.fromMap(x)),),
+            : List<RecommendedMemory>.from(
+                json['recommended_memories']!
+                    .map((x) => RecommendedMemory.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -86,7 +88,8 @@ class RecommendedMemory {
         userMemories: json['user_memories'] == null
             ? []
             : List<UserMemory>.from(
-                json['user_memories']!.map((x) => UserMemory.fromMap(x)),),
+                json['user_memories']!.map((x) => UserMemory.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

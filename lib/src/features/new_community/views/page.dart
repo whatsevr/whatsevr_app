@@ -234,7 +234,8 @@ class NewCommunityPage extends StatelessWidget {
                                   choiced: state.approveJoiningRequest ?? false,
                                   switchChoice: (value) {
                                     context.read<NewCommunityBloc>().add(
-                                        ChangeApproveJoiningRequestEvent(),);
+                                          ChangeApproveJoiningRequestEvent(),
+                                        );
                                   },
                                 ),
                                 Gap(4),
@@ -244,7 +245,8 @@ class NewCommunityPage extends StatelessWidget {
                                       !(state.approveJoiningRequest ?? false),
                                   switchChoice: (value) {
                                     context.read<NewCommunityBloc>().add(
-                                        ChangeApproveJoiningRequestEvent(),);
+                                          ChangeApproveJoiningRequestEvent(),
+                                        );
                                   },
                                 ),
                               ],

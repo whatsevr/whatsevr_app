@@ -28,9 +28,8 @@ class ChatState extends Equatable {
 
   static ChatState fromJson(Map<String, dynamic> json) {
     return ChatState(
-      privateChats: (json['privateChats'] as List)
-          .map((e) => Chat.fromJson(e))
-          .toList(),
+      privateChats:
+          (json['privateChats'] as List).map((e) => Chat.fromJson(e)).toList(),
       communities: (json['communities'] as List)
           .map((e) => Community.fromMap(e))
           .toList(),

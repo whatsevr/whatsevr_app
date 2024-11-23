@@ -38,8 +38,10 @@ class RecommendationVideosResponse {
         lastPage: json['last_page'],
         recommendedVideos: json['recommended_videos'] == null
             ? []
-            : List<RecommendedVideo>.from(json['recommended_videos']!
-                .map((x) => RecommendedVideo.fromMap(x)),),
+            : List<RecommendedVideo>.from(
+                json['recommended_videos']!
+                    .map((x) => RecommendedVideo.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

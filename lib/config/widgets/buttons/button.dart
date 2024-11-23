@@ -92,7 +92,7 @@ class WhatsevrButton extends StatelessWidget {
       elevation: 0,
       minWidth: shrink ? null : double.infinity,
       visualDensity: miniButton ? VisualDensity.compact : null,
-      onPressed: (){
+      onPressed: () {
         onPressed?.call();
       },
       color: isTextButton ? Colors.transparent : buttonColor,

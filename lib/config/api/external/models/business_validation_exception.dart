@@ -59,7 +59,8 @@ void lowLevelCatch(dynamic e, StackTrace stackTrace) {
       throw BusinessException('Internal server error: $errorMessage');
     } else {
       throw BusinessException(
-          'HTTP error: $errorMessage (Status code: $statusCode)',);
+        'HTTP error: $errorMessage (Status code: $statusCode)',
+      );
     }
   }
 

@@ -22,12 +22,15 @@ class _FlickMiniPlayerState extends State<FlickMiniPlayer> {
   @override
   void initState() {
     super.initState();
-    controller =
-    CachedVideoPlayerPlusController.networkUrl(Uri.parse('${widget.videoUrl}',),invalidateCacheIfOlderThan: const Duration(days: 90),)
-          ..initialize().then((_) {
-            // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-            setState(() {});
-          });
+    controller = CachedVideoPlayerPlusController.networkUrl(
+      Uri.parse(
+        '${widget.videoUrl}',
+      ),
+      invalidateCacheIfOlderThan: const Duration(days: 90),
+    )..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
 
     controller.addListener(() {
       if (controller.value.position == controller.value.duration) {

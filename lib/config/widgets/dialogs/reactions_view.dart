@@ -6,7 +6,8 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/reactions.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart' as m1;
+import 'package:whatsevr_app/config/api/response_model/reactions/get_reactions.dart'
+    as m1;
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';

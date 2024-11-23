@@ -22,25 +22,27 @@ class AccountPagePdfsView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final UserPdf? userPdf = state.profileDetailsResponse?.userPdfs?[index];
+            final UserPdf? userPdf =
+                state.profileDetailsResponse?.userPdfs?[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 GestureDetector(
-                    onTap: () {
-                      showPdfPreviewDialog(
-                        context: context,
-                        pdfUrl: userPdf?.fileUrl,
-                        appBarTitle: userPdf?.title,
-                      );
-                    },
-                    child: ExtendedImage.network(
-                      '${userPdf?.thumbnailUrl}',
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(8),
-                    ),),
+                  onTap: () {
+                    showPdfPreviewDialog(
+                      context: context,
+                      pdfUrl: userPdf?.fileUrl,
+                      appBarTitle: userPdf?.title,
+                    );
+                  },
+                  child: ExtendedImage.network(
+                    '${userPdf?.thumbnailUrl}',
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
                 const Gap(8),
                 Row(
                   children: <Widget>[

@@ -61,8 +61,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         TalkerService.instance.error('Failed to upload video file.');
         return;
       }
-      final thumbnailUrl =
-          await FileUploadService.uploadFilesToSupabase(
+      final thumbnailUrl = await FileUploadService.uploadFilesToSupabase(
         File(taskData.thumbnailFilePath!),
         userUid: taskData.userUid!,
         fileRelatedTo: 'video-post-thumbnail',
@@ -72,8 +71,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         return;
       }
 
-      final response =
-          await PostApi.createVideoPost(
+      final response = await PostApi.createVideoPost(
         post: CreateVideoPostRequest(
           title: taskData.title,
           description: taskData.description,
@@ -153,10 +151,11 @@ class WhatsevrLongTaskController extends TaskHandler {
         .info('Foreground Service Notification channel registered.');
   }
 
-  static Future<void> startServiceWithTaskData(
-      {required LongRunningTask taskData,
-      required Function onTaskAssignFail,
-      required Function onTaskAssigned,}) async {
+  static Future<void> startServiceWithTaskData({
+    required LongRunningTask taskData,
+    required Function onTaskAssignFail,
+    required Function onTaskAssigned,
+  }) async {
     try {
       if (await FlutterForegroundTask.isRunningService) {
         await FlutterForegroundTask.restartService();

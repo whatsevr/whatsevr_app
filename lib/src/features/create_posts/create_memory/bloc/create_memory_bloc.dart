@@ -37,7 +37,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     on<PickImageEvent>(_onPickImage);
     on<UpdatePostAddressEvent>(_onUpdatePostAddress);
     on<UpdateTaggedUsersAndCommunitiesEvent>(
-        _onUpdateTaggedUsersAndCommunities,);
+      _onUpdateTaggedUsersAndCommunities,
+    );
     on<RemoveVideoOrImageEvent>(_onRemoveVideoOrImage);
     on<CreateVideoMemoryEvent>(_onCreateVideoMemory);
     on<CreateImageMemoryEvent>(_onCreateImageMemory);
@@ -53,14 +54,21 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
-        onCompleted: (nearbyPlacesResponse, lat, long, isDeviceGpsEnabled,
-            isPermissionAllowed,) {
+        onCompleted: (
+          nearbyPlacesResponse,
+          lat,
+          long,
+          isDeviceGpsEnabled,
+          isPermissionAllowed,
+        ) {
           placesNearbyResponse = nearbyPlacesResponse;
           if (lat != null && long != null) {
-            emit(state.copyWith(
-              userCurrentLocationLatLongWkb:
-                  WKBUtil.getWkbString(lat: lat, long: long),
-            ),);
+            emit(
+              state.copyWith(
+                userCurrentLocationLatLongWkb:
+                    WKBUtil.getWkbString(lat: lat, long: long),
+              ),
+            );
           }
         },
       );
@@ -96,31 +104,36 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       SmartDialog.showLoading(msg: 'Validating post...');
       //Sanity check
       (String?, int?)? itm = await PostApi.sanityCheckNewMemory(
-          request: SanityCheckNewMemoryRequest(
-        mediaMetaData: MediaMetaData(
-          videoDurationSec: state.videoMetaData?.durationInSec,
-          sizeBytes: state.videoMetaData?.sizeInBytes,
+        request: SanityCheckNewMemoryRequest(
+          mediaMetaData: MediaMetaData(
+            videoDurationSec: state.videoMetaData?.durationInSec,
+            sizeBytes: state.videoMetaData?.sizeInBytes,
+          ),
+          postData: PostData(
+            isVideo: state.isVideoMemory,
+            isImage: state.isImageMemory,
+            userUid: AuthUserDb.getLastLoggedUserUid(),
+            postCreatorType: state.pageArgument?.postCreatorType.value,
+          ),
         ),
-        postData: PostData(
-          isVideo: state.isVideoMemory,
-          isImage: state.isImageMemory,
-          userUid: AuthUserDb.getLastLoggedUserUid(),
-          postCreatorType: state.pageArgument?.postCreatorType.value,
-        ),
-      ),);
+      );
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
 
       //create video memory
       if (state.isVideoMemory == true) {
-        add(CreateVideoMemoryEvent(
-          hashtags: hashtags,
-        ),);
+        add(
+          CreateVideoMemoryEvent(
+            hashtags: hashtags,
+          ),
+        );
       } else if (state.isImageMemory == true) {
-        add(CreateImageMemoryEvent(
-          hashtags: hashtags,
-        ),);
+        add(
+          CreateImageMemoryEvent(
+            hashtags: hashtags,
+          ),
+        );
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -141,11 +154,13 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         throw BusinessException('Invalid video file');
       }
 
-      emit(state.copyWith(
-        videoFile: event.pickVideoFile,
-        isVideoMemory: true,
-        isImageMemory: false,
-      ),);
+      emit(
+        state.copyWith(
+          videoFile: event.pickVideoFile,
+          isVideoMemory: true,
+          isImageMemory: false,
+        ),
+      );
 
       final File? thumbnailFile =
           await getThumbnailFile(videoFile: event.pickVideoFile!);
@@ -196,13 +211,17 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   Future<void> _onUpdatePostAddress(
-      UpdatePostAddressEvent event, Emitter<CreateMemoryState> emit,) async {
+    UpdatePostAddressEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) async {
     try {
       emit(
         state.copyWith(
           selectedAddress: event.address,
           selectedAddressLatLongWkb: WKBUtil.getWkbString(
-              lat: event.addressLatitude, long: event.addressLongitude,),
+            lat: event.addressLatitude,
+            long: event.addressLongitude,
+          ),
         ),
       );
     } catch (e, stackTrace) {
@@ -211,14 +230,17 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onUpdateTaggedUsersAndCommunities(
-      UpdateTaggedUsersAndCommunitiesEvent event,
-      Emitter<CreateMemoryState> emit,) {
+    UpdateTaggedUsersAndCommunitiesEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) {
     try {
       if (event.clearAll == true) {
-        emit(state.copyWith(
-          taggedUsersUid: [],
-          taggedCommunitiesUid: [],
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: [],
+            taggedCommunitiesUid: [],
+          ),
+        );
       } else {
         List<String> taggedUsersUid = [
           ...state.taggedUsersUid,
@@ -230,10 +252,12 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         ];
         taggedUsersUid = taggedUsersUid.toSet().toList();
         taggedCommunitiesUid = taggedCommunitiesUid.toSet().toList();
-        emit(state.copyWith(
-          taggedUsersUid: taggedUsersUid,
-          taggedCommunitiesUid: taggedCommunitiesUid,
-        ),);
+        emit(
+          state.copyWith(
+            taggedUsersUid: taggedUsersUid,
+            taggedCommunitiesUid: taggedCommunitiesUid,
+          ),
+        );
       }
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
@@ -241,35 +265,45 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onPickImage(
-      PickImageEvent event, Emitter<CreateMemoryState> emit,) async {
+    PickImageEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) async {
     try {
       if (event.pickedImageFile == null) return;
-      emit(state.copyWith(
-        imageFile: event.pickedImageFile,
-        isImageMemory: true,
-        isVideoMemory: false,
-      ),);
+      emit(
+        state.copyWith(
+          imageFile: event.pickedImageFile,
+          isImageMemory: true,
+          isVideoMemory: false,
+        ),
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
   }
 
   FutureOr<void> _onRemoveVideoOrImage(
-      RemoveVideoOrImageEvent event, Emitter<CreateMemoryState> emit,) {
-    emit(CreateMemoryState(
-      pageArgument: state.pageArgument,
-      userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
-      selectedAddress: state.selectedAddress,
-      selectedAddressLatLongWkb: state.selectedAddressLatLongWkb,
-      taggedUsersUid: state.taggedUsersUid,
-      taggedCommunitiesUid: state.taggedCommunitiesUid,
-      ctaAction: state.ctaAction,
-      placesNearbyResponse: state.placesNearbyResponse,
-    ),);
+    RemoveVideoOrImageEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) {
+    emit(
+      CreateMemoryState(
+        pageArgument: state.pageArgument,
+        userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
+        selectedAddress: state.selectedAddress,
+        selectedAddressLatLongWkb: state.selectedAddressLatLongWkb,
+        taggedUsersUid: state.taggedUsersUid,
+        taggedCommunitiesUid: state.taggedCommunitiesUid,
+        ctaAction: state.ctaAction,
+        placesNearbyResponse: state.placesNearbyResponse,
+      ),
+    );
   }
 
   FutureOr<void> _onCreateVideoMemory(
-      CreateVideoMemoryEvent event, Emitter<CreateMemoryState> emit,) async {
+    CreateVideoMemoryEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) async {
     try {
       if (state.videoFile == null) {
         throw BusinessException('Please select a video first');
@@ -326,7 +360,9 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onCreateImageMemory(
-      CreateImageMemoryEvent event, Emitter<CreateMemoryState> emit,) async {
+    CreateImageMemoryEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) async {
     try {
       if (state.imageFile == null) {
         throw BusinessException('Please select an image first');
@@ -372,12 +408,16 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   }
 
   FutureOr<void> _onUpdateCtaAction(
-      UpdateCtaActionEvent event, Emitter<CreateMemoryState> emit,) {
+    UpdateCtaActionEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) {
     emit(state.copyWith(ctaAction: event.ctaAction));
   }
 
   FutureOr<void> _onUpdateNoOfDays(
-      UpdateNoOfDaysEvent event, Emitter<CreateMemoryState> emit,) {
+    UpdateNoOfDaysEvent event,
+    Emitter<CreateMemoryState> emit,
+  ) {
     emit(state.copyWith(noOfDays: event.noOfDays));
   }
 }

@@ -17,8 +17,9 @@ import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart'
 class SearchAndTagUsersAndCommunityPage extends StatelessWidget {
   final bool scaffoldView;
   final Function(
-          List<String> selectedUsersUid, List<String> selectedCommunitiesUid,)?
-      onDone;
+    List<String> selectedUsersUid,
+    List<String> selectedCommunitiesUid,
+  )? onDone;
 
   const SearchAndTagUsersAndCommunityPage({
     super.key,
@@ -321,13 +322,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         page: 1,
       );
 
-      emit(state.copyWith(
-        searchedUsersCommunities: response,
-        usersAndCommunitiesPagination: PaginationData(
-          currentPage: 1,
-          noMoreData: response?.users?.isEmpty ?? true,
+      emit(
+        state.copyWith(
+          searchedUsersCommunities: response,
+          usersAndCommunitiesPagination: PaginationData(
+            currentPage: 1,
+            noMoreData: response?.users?.isEmpty ?? true,
+          ),
         ),
-      ),);
+      );
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }
@@ -349,14 +352,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
 
       if (response == null) {
-        emit(state.copyWith(
-          usersAndCommunitiesPagination:
-              state.usersAndCommunitiesPagination.copyWith(noMoreData: true),
-        ),);
+        emit(
+          state.copyWith(
+            usersAndCommunitiesPagination:
+                state.usersAndCommunitiesPagination.copyWith(noMoreData: true),
+          ),
+        );
         return;
       }
 
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           searchedUsersCommunities: state.searchedUsersCommunities?.copyWith(
             users: [
               ...(state.searchedUsersCommunities?.users ?? []),
@@ -368,7 +374,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             ],
           ),
           usersAndCommunitiesPagination: state.usersAndCommunitiesPagination
-              .copyWith(currentPage: nextPage),),);
+              .copyWith(currentPage: nextPage),
+        ),
+      );
     } catch (e, s) {
       highLevelCatch(e, s);
     }

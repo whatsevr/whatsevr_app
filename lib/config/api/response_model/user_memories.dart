@@ -39,7 +39,8 @@ class UserMemoriesResponse {
         memories: json['memories'] == null
             ? []
             : List<Memory>.from(
-                json['memories']!.map((x) => Memory.fromMap(x)),),
+                json['memories']!.map((x) => Memory.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

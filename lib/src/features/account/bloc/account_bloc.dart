@@ -28,11 +28,13 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     Emitter<AccountState> emit,
   ) async {
     try {
-      emit(state.copyWith(
-        isEditMode: event.accountPageArgument?.isEditMode ?? false,
-        userUid: event.accountPageArgument?.userUid ??
-            AuthUserDb.getLastLoggedUserUid(),
-      ),);
+      emit(
+        state.copyWith(
+          isEditMode: event.accountPageArgument?.isEditMode ?? false,
+          userUid: event.accountPageArgument?.userUid ??
+              AuthUserDb.getLastLoggedUserUid(),
+        ),
+      );
 
       add(LoadAccountData());
     } catch (e) {
@@ -41,7 +43,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   }
 
   FutureOr<void> _onLoadAccountData(
-      LoadAccountData event, Emitter<AccountState> emit,) async {
+    LoadAccountData event,
+    Emitter<AccountState> emit,
+  ) async {
     try {
       final ProfileDetailsResponse? profileDetailsResponse =
           await UsersApi.getProfileDetails(userUid: state.userUid!);

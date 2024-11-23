@@ -118,8 +118,7 @@ class _ImageCropperPageState extends State<ImageCropperPage> {
                   separatorBuilder: (BuildContext context, int index) =>
                       const VerticalDivider(),
                   itemBuilder: (BuildContext context, int index) {
-                    final aspectRatio =
-                        widget.pageArgument.aspectRatios[index];
+                    final aspectRatio = widget.pageArgument.aspectRatios[index];
                     return IconButton(
                       icon: Text(
                         '${aspectRatio.label}(${aspectRatio.valueLabel})',

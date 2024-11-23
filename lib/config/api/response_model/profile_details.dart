@@ -52,23 +52,29 @@ class ProfileDetailsResponse {
         userEducations: json['user_educations'] == null
             ? []
             : List<UserEducation>.from(
-                json['user_educations']!.map((x) => UserEducation.fromMap(x)),),
+                json['user_educations']!.map((x) => UserEducation.fromMap(x)),
+              ),
         userCoverMedia: json['user_cover_media'] == null
             ? []
-            : List<UserCoverMedia>.from(json['user_cover_media']!
-                .map((x) => UserCoverMedia.fromMap(x)),),
+            : List<UserCoverMedia>.from(
+                json['user_cover_media']!.map((x) => UserCoverMedia.fromMap(x)),
+              ),
         userPdfs: json['user_pdfs'] == null
             ? []
             : List<UserPdf>.from(
-                json['user_pdfs']!.map((x) => UserPdf.fromMap(x)),),
+                json['user_pdfs']!.map((x) => UserPdf.fromMap(x)),
+              ),
         userServices: json['user_services'] == null
             ? []
             : List<UserService>.from(
-                json['user_services']!.map((x) => UserService.fromMap(x)),),
+                json['user_services']!.map((x) => UserService.fromMap(x)),
+              ),
         userWorkExperiences: json['user_work_experiences'] == null
             ? []
-            : List<UserWorkExperience>.from(json['user_work_experiences']!
-                .map((x) => UserWorkExperience.fromMap(x)),),
+            : List<UserWorkExperience>.from(
+                json['user_work_experiences']!
+                    .map((x) => UserWorkExperience.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

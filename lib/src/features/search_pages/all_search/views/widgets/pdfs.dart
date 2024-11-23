@@ -5,9 +5,12 @@ class _PdfsView extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    onReachingEndOfTheList(_scrollController, execute: () {
-      context.read<AllSearchBloc>().add(SearchMorePdfs());
-    },);
+    onReachingEndOfTheList(
+      _scrollController,
+      execute: () {
+        context.read<AllSearchBloc>().add(SearchMorePdfs());
+      },
+    );
     return BlocBuilder<AllSearchBloc, AllSearchState>(
       builder: (context, state) {
         return ListView.separated(
