@@ -53,7 +53,7 @@ class ConversationState extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      chatId: {
+     
         'isCommunity': isCommunity,
         'communityUid': communityUid,
         'privateChatUid': privateChatUid,
@@ -63,32 +63,10 @@ class ConversationState extends Equatable {
         'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
         'unreadCounts': unreadCounts,
         'messagesPaginationData': messagesPaginationData,
-      }
+    
     };
   }
 
-  static ConversationState fromJson(Map<String, dynamic> json, String chatId) {
-    final chatData = json[chatId] as Map<String, dynamic>?;
-    if (chatData == null) return ConversationState();
-
-    return ConversationState(
-      isCommunity: chatData['isCommunity'] ?? false,
-      communityUid: chatData['communityUid'],
-      privateChatUid: chatData['privateChatUid'],
-      title: chatData['title'],
-      profilePicture: chatData['profilePicture'],
-      messages: (chatData['messages'] as List?)
-              ?.map((e) => Message.fromJson(e))
-              .toList() ??
-          [],
-      lastMessages: (chatData['lastMessages'] as Map?)
-              ?.map((k, v) => MapEntry(k, Message.fromJson(v))) ??
-          {},
-      unreadCounts: Map<String, int>.from(chatData['unreadCounts'] ?? {}),
-      messagesPaginationData:
-          chatData['messagesPaginationData'] ?? const PaginationData(),
-    );
-  }
 
   @override
   List<Object?> get props => [

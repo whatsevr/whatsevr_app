@@ -22,16 +22,27 @@ class LoadMessages extends ConversationEvent {
   List<Object?> get props => [];
 }
 
-class MessageChangesEvent extends ConversationEvent {
+class SubscribeToMessageInserAndUpdateEvent extends ConversationEvent {
   @override
   List<Object?> get props => [];
 }
-class LoadLatestMessages extends ConversationEvent {
-  
-  const LoadLatestMessages();
+class RemoteMessagesInsertOrUpdateEvent extends ConversationEvent {
+  final Message? newMessage;
+  const RemoteMessagesInsertOrUpdateEvent({
+    required this.newMessage,
+  });
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [ newMessage];
+}
+class RemoteMessageDeletedEvent extends ConversationEvent {
+  final String? deletedMessageUid;
+  const RemoteMessageDeletedEvent({
+    required this.deletedMessageUid,
+  });
+
+  @override
+  List<Object?> get props => [ deletedMessageUid];
 }
 class SendMessage extends ConversationEvent {
   final String content;

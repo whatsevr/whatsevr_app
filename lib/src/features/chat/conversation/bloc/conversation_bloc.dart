@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase/supabase.dart' hide User;
@@ -11,7 +12,9 @@ import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/chats.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
 import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
+import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
+import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
 part 'conversation_event.dart';
@@ -21,15 +24,18 @@ class ConversationBloc
     extends Bloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
 
-  RealtimeChannel? _chatMessageChannel;
+  RealtimeChannel? _chatMessageInsertAndUpdateChannel;
+  RealtimeChannel? _chatMessageDeleteChannel;
 
   String? _currentChatId;
 
   ConversationBloc(this._currentUserUid) : super(const ConversationState()) {
     on<InitialEvent>(_onInitialEvent);
-    on<LoadMessages>(_onLoadMessages, transformer: blocEventDebounce());
-    on<MessageChangesEvent>(_onMessageChanges);
-    on<LoadLatestMessages>(_onLoadLatestMessages);
+    on<LoadMessages>(_onLoadMessages);
+    on<SubscribeToMessageInserAndUpdateEvent>(
+        _onSubscribeToMessageInserAndUpdate);
+    on<RemoteMessagesInsertOrUpdateEvent>(_onRemoteMessageChanges);
+    on<RemoteMessageDeletedEvent>(_onRemoteMessageDeleted);
     on<SendMessage>(_onSendMessage);
     on<DeleteMessage>(_onDeleteMessage);
     on<EditMessage>(_onEditMessage);
@@ -52,7 +58,7 @@ class ConversationBloc
     ));
 
     add(LoadMessages());
-    add(MessageChangesEvent());
+    add(SubscribeToMessageInserAndUpdateEvent());
   }
 
   Future<void> _onLoadMessages(
@@ -107,7 +113,7 @@ class ConversationBloc
 
       await ChatsApi.sendChatMessage(
         senderUid: _currentUserUid,
-        message:  event.content,
+        message: event.content,
         privateChatUid: state.isCommunity ? null : state.privateChatUid,
         communityUid: state.isCommunity ? state.communityUid : null,
       );
@@ -169,25 +175,11 @@ class ConversationBloc
     }
   }
 
-  @override
-  ConversationState fromJson(Map<String, dynamic> json) {
-    try {
-      if (_currentChatId == null) return const ConversationState();
-      return ConversationState.fromJson(json, _currentChatId!);
-    } catch (_) {
-      return const ConversationState();
-    }
-  }
 
-  @override
-  Map<String, dynamic>? toJson(ConversationState state) {
-    if (state.communityUid == null && state.privateChatUid == null) return null;
-    return state.toJson();
-  }
 
   @override
   Future<void> close() {
-    _chatMessageChannel?.unsubscribe();
+    _chatMessageInsertAndUpdateChannel?.unsubscribe();
 
     return super.close();
   }
@@ -203,12 +195,13 @@ class ConversationBloc
     }
   }
 
-  FutureOr<void> _onMessageChanges(
-      MessageChangesEvent event, Emitter<ConversationState> emit) async {
+  FutureOr<void> _onSubscribeToMessageInserAndUpdate(
+      SubscribeToMessageInserAndUpdateEvent event,
+      Emitter<ConversationState> emit) async {
     try {
-      _chatMessageChannel?.unsubscribe();
+      _chatMessageInsertAndUpdateChannel?.unsubscribe();
       if (state.isCommunity) {
-        _chatMessageChannel = RemoteDb.supabaseClient1
+        _chatMessageInsertAndUpdateChannel = RemoteDb.supabaseClient1
             .channel('chat_messages:community_uid=${state.communityUid}')
             .onPostgresChanges(
               event: PostgresChangeEvent.all,
@@ -221,12 +214,15 @@ class ConversationBloc
               table: 'chat_messages',
               callback: (payload) {
                 print('Chat message change detected');
-                add(LoadLatestMessages());
+                final Message? newMessage = Message.fromMap(payload.newRecord);
+                add(RemoteMessagesInsertOrUpdateEvent(
+                  newMessage: newMessage,
+                ));
               },
             )
             .subscribe();
       } else {
-        _chatMessageChannel = RemoteDb.supabaseClient1
+        _chatMessageInsertAndUpdateChannel = RemoteDb.supabaseClient1
             .channel('chat_messages:private_chat_uid=${state.privateChatUid}')
             .onPostgresChanges(
               event: PostgresChangeEvent.all,
@@ -237,35 +233,86 @@ class ConversationBloc
               ),
               schema: 'public',
               table: 'chat_messages',
-              callback: (payload) {
-                add(LoadLatestMessages());
+              callback: (PostgresChangePayload payload) {
+               
+                
+                final Message? newMessage = Message.fromMap(payload.newRecord);
+
+                add(RemoteMessagesInsertOrUpdateEvent(
+                  newMessage: newMessage,
+                ));
               },
             )
             .subscribe();
       }
+      _chatMessageDeleteChannel?.unsubscribe();
+      _chatMessageDeleteChannel = RemoteDb.supabaseClient1
+          .channel('chat_messages_delete:private_chat_uid=${state.privateChatUid}')
+          .onPostgresChanges(
+            event: PostgresChangeEvent.delete,
+            
+            schema: 'public',
+            table: 'chat_messages',
+            callback: (PostgresChangePayload payload) {
+              print('Chat message delete detected');
+              final String? deletedMessageUid =
+                  payload.oldRecord['uid'] as String?;
+              if (deletedMessageUid != null) {
+                add(RemoteMessageDeletedEvent(
+                  deletedMessageUid: deletedMessageUid,
+                ));
+              }
+            },
+          )
+          .subscribe();
     } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
 
-  FutureOr<void> _onLoadLatestMessages(
-      LoadLatestMessages event, Emitter<ConversationState> emit) async {
+  FutureOr<void> _onRemoteMessageChanges(
+      RemoteMessagesInsertOrUpdateEvent event,
+      Emitter<ConversationState> emit) async {
     try {
-      final Message? lastMessage =
-          state.messages.isNotEmpty ? state.messages.first : null;
+      final newOrUpdatedMessage = event.newMessage;
+      if (newOrUpdatedMessage == null) return;
 
-      final ChatMessagesResponse? response = await ChatsApi.getChatMessages(
-        communityUid: state.isCommunity ? state.communityUid : null,
-        privateChatUid: state.isCommunity ? null : state.privateChatUid,
-        createdAfter: lastMessage?.createdAt,
-      );
-      final List<Message> newMessages = response?.messages ?? [];
-      emit(state.copyWith(
-        messages: [
-          ...newMessages,
-          ...state.messages,
-        ],
-      ));
+      // Remove any temporary messages
+      final filteredMessages =
+          state.messages.where((m) => !m.uid!.startsWith('temp_')).toList();
+
+      // Check if message exists to determine if it's an update
+      final existingIndex =
+          filteredMessages.indexWhere((m) => m.uid == newOrUpdatedMessage.uid);
+
+      if (existingIndex != -1) {
+        // Update scenario
+        filteredMessages[existingIndex] = newOrUpdatedMessage;
+      } else {
+        // New message scenario - add to beginning since newest first
+        filteredMessages.insert(0, newOrUpdatedMessage);
+      }
+
+      // Sort messages by creation date (newest first)
+      filteredMessages.sort((a, b) => (b.createdAt ?? DateTime.now())
+          .compareTo(a.createdAt ?? DateTime.now()));
+
+      emit(state.copyWith(messages: filteredMessages));
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onRemoteMessageDeleted(
+      RemoteMessageDeletedEvent event, Emitter<ConversationState> emit) async {
+    try {
+      final deletedMessageUid = event.deletedMessageUid;
+      if (deletedMessageUid == null) return;
+
+      final filteredMessages =
+          state.messages.where((m) => m.uid != deletedMessageUid).toList();
+
+      emit(state.copyWith(messages: filteredMessages));
     } catch (e, s) {
       highLevelCatch(e, s);
     }
