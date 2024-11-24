@@ -79,9 +79,4 @@ class ConversationState extends Equatable {
         lastMessages,
         unreadCounts,
       ];
-
-  @override
-  String toString() => '''ChatState {
-  messages: ${messages.length} messages,
-  }''';
 }
