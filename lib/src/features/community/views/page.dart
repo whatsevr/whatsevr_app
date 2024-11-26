@@ -8,6 +8,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
@@ -365,16 +366,10 @@ class CommunityPage extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                color: Colors.black,
-                                onPressed: () {},
-                                child: const Text(
-                                  'Join',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                              child: WhatsevrCommunityJoinLeaveButton( 
+                                
+                                communityUid: state
+                                    .communityDetailsResponse?.communityInfo?.uid,
                               ),
                             ),
                             const Gap(8),

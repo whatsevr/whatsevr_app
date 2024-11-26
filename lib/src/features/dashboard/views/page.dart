@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:nested/nested.dart';
 import 'package:whatsevr_app/config/services/follow_unfollow_bloc/follow_unfollow_bloc.dart';
+import 'package:whatsevr_app/config/services/join_leave_community/join_leave_community_bloc.dart';
 import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/widgets/bottom_navigation.dart';
@@ -16,6 +17,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ReactUnreactBloc>().add(FetchReactions());
     context.read<FollowUnfollowBloc>().add(FetchFollowedUsers());
+    context.read<JoinLeaveCommunityBloc>().add( FetchUserCommunities());
     return DoubleBackToExit(
       snackBarMessage: 'Press back again to exit',
       snackbarBackgroundColor: Colors.white,

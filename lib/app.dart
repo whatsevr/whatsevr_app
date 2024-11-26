@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:whatsevr_app/config/services/follow_unfollow_bloc/follow_unfollow_bloc.dart';
+import 'package:whatsevr_app/config/services/join_leave_community/join_leave_community_bloc.dart';
 import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
@@ -57,6 +58,9 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
         ),
         BlocProvider<FollowUnfollowBloc>(
           create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
+        ),
+         BlocProvider<JoinLeaveCommunityBloc>(
+          create: (context) => JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(

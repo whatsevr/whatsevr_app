@@ -2,18 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:whatsevr_app/config/api/methods/community.dart';
-import 'package:whatsevr_app/config/api/methods/user_relations.dart';
 import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
-import 'package:whatsevr_app/config/api/response_model/user_relations/user_relations.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'join_leave_community_event.dart';
 part 'join_leave_community_state.dart';
 
-class JoinLeaveCommunityBloc
+class JoinLeaveCommunityBloc 
     extends Bloc<JoinLeaveCommunityEvent, JoinLeaveCommunityState> {
-  static const String _totalPagesKey = 'totalPages';
-  static const int _pageSize = 500;
   static String? _userCommunitiesBox;
 
   JoinLeaveCommunityBloc() 
@@ -46,38 +42,30 @@ class JoinLeaveCommunityBloc
         return;
       }
 
-      await _loadCachedUserCommunities(box); // Load from cache first
-      int page = 1;
-      final List<String> allUserCommunities = [];
-
-      while (true) {
-        final List<String> currentPageUids =
-            await _fetchUserCommunitiesFromApi(page);
-        if (currentPageUids.isEmpty) break;
-
-        allUserCommunities.addAll(currentPageUids);
-        await box.put(
-          '$_userCommunitiesBox$page',
-          currentPageUids,
-        ); // Cache by page
-        page++;
+      // Load from cache first
+      final List<dynamic>? cachedCommunities = box.get('userCommunities');
+      if (cachedCommunities != null) {
+        emit(state.copyWith(
+          userCommunities: Set.from(cachedCommunities.cast<String>()),
+        ));
       }
 
-      emit(
-        state.copyWith(
-          userCommunities: Set.from(allUserCommunities),
+      // Fetch from API
+      final List<String> communities = await _fetchUserCommunitiesFromApi();
+      
+      if (communities.isNotEmpty) {
+        emit(state.copyWith(
+          userCommunities: Set.from(communities),
           isLoading: false,
-        ),
-      );
-
-      await box.put(_totalPagesKey, page - 1); // Store total pages count
+        ));
+        
+        await box.put('userCommunities', communities);
+      }
     } catch (e) {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          error: 'Failed to fetch joined communities',
-        ),
-      );
+      emit(state.copyWith(
+        isLoading: false,
+        error: 'Failed to fetch joined communities',
+      ));
     }
   }
 
@@ -89,55 +77,45 @@ class JoinLeaveCommunityBloc
     if (box == null) return;
 
     try {
-      await _loadCachedUserCommunities(box);
-      emit(
-        state.copyWith(
-          userCommunities: state.userCommunities,
+      final List<dynamic>? cachedCommunities = box.get('userCommunities');
+      if (cachedCommunities != null) {
+        emit(state.copyWith(
+          userCommunities: Set.from(cachedCommunities.cast<String>()),
           isLoading: false,
-        ),
-      );
+        ));
+      }
     } catch (e) {
       emit(state.copyWith(error: 'Failed to reload followed users'));
     }
   }
 
-  Future<void> _loadCachedUserCommunities(Box box) async {
-    final int totalPages = box.get(_totalPagesKey, defaultValue: 0);
-    final List<String> allFollowedUids = [];
-
-    for (int page = 1; page <= totalPages; page++) {
-      final List<dynamic>? pageData = box.get('$_userCommunitiesBox$page');
-      if (pageData != null) {
-        allFollowedUids.addAll(pageData.cast<String>());
-      }
-    }
-
-    emit(state.copyWith(userCommunities: Set.from(allFollowedUids)));
-  }
-
-  Future<List<String>> _fetchUserCommunitiesFromApi(int page) async {
+  Future<List<String>> _fetchUserCommunitiesFromApi() async {
     try {
       final UserCommunitiesResponse? response =
           await CommunityApi.getUserCommunities(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
-        page: page,
-        pageSize: _pageSize,
       );
+
+      if (response == null || 
+          ((response.userCommunities == null || response.userCommunities!.isEmpty) && 
+           (response.joinedCommunities == null || response.joinedCommunities!.isEmpty))) {
+        return [];
+      }
 
       final List<String> communityUids = [];
       
-      if (response?.userCommunities != null) {
+      if (response.userCommunities != null) {
         communityUids.addAll(
-          response!.userCommunities!
+          response.userCommunities!
               .map((e) => e.uid)
               .whereType<String>()
               .toList(),
         );
       }
       
-      if (response?.joinedCommunities != null) {
+      if (response.joinedCommunities != null) {
         communityUids.addAll(
-          response!.joinedCommunities!
+          response.joinedCommunities!
               .map((e) => e.uid)
               .whereType<String>()
               .toList(),
@@ -200,12 +178,12 @@ class JoinLeaveCommunityBloc
   }
 
   Future<void> _persistUserCommunities(
-    Box? box,    // Change parameter to be nullable
+    Box? box,
     Set<String> communityIds,
   ) async {
-    if (box == null) return;    // Add null check
+    if (box == null) return;
     try {
-      await box.put('userCommunities', communityIds.toList());    // Use simple key name
+      await box.put('userCommunities', communityIds.toList());
     } catch (e) {
       print('Error persisting user communities to cache: $e');
     }
