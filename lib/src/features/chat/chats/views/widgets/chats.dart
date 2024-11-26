@@ -19,7 +19,8 @@ class _ChatListView extends StatelessWidget {
               final otherUser = context
                   .read<ChatBloc>()
                   .getTheOtherUser(chat.user1, chat.user2);
-              return ListTile(
+              return ListTile(  dense: true,
+            visualDensity: VisualDensity.compact,
                 onTap: () {
                   AppNavigationService.pushPage(
                     screen: ConversationsPage(

@@ -61,9 +61,9 @@ class SendMessage extends ConversationEvent {
 }
 
 class DeleteMessage extends ConversationEvent {
-  final String messageUid;
+  final String? messageUid;
 
-  const DeleteMessage(this.messageUid);
+  const DeleteMessage({this.messageUid});
 
   @override
   List<Object?> get props => [messageUid];

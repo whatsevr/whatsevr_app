@@ -250,75 +250,102 @@ class MessageBubble extends StatelessWidget {
             SizedBox(width: 8),
           ],
           Flexible(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: isCurrentUser
-                    ? LinearGradient(
-                        colors: theme.darkGradient,
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : LinearGradient(
-                        colors: theme.accentGradient,
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                color: isCurrentUser ? null : theme.surface.withOpacity(0.9),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                  bottomLeft: Radius.circular(isCurrentUser ? 16 : 4),
-                  bottomRight: Radius.circular(isCurrentUser ? 4 : 16),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.shadow.withOpacity(0.1),
-                    blurRadius: 3,
-                    offset: Offset(0, 1),
-                  )
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isCommunity && !isCurrentUser && sender != null)
-                    Text(
-                      sender.name ?? sender.username ?? '',
-                      style: TextStyle(
-                        color: theme.accent,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
-                    ),
-                  WhatsevrMessageDetectableText(
-                    text: message.message ?? '',
-                    trimLines: 8,
-                    basicStyleColor: theme.surface,
-                    detectedStyleColor: theme.surface,
+            child: GestureDetector(
+              onLongPress: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => MessageActionsSheet(
+                    message: message,
+                    isCurrentUser: isCurrentUser,
+                    onDelete: () {
+                      context.read<ConversationBloc>().add(
+                            DeleteMessage(messageUid: message.uid!),
+                          );
+                      Navigator.pop(context);
+                    },
+                    onEdit: isCurrentUser
+                        ? () {
+                            Navigator.pop(context);
+                            _showEditDialog(context, message);
+                          }
+                        : null,
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  gradient: isCurrentUser
+                      ? LinearGradient(
+                          colors: theme.darkGradient,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : LinearGradient(
+                          colors: theme.accentGradient,
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                  color: isCurrentUser ? null : theme.surface.withOpacity(0.9),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(isCurrentUser ? 16 : 4),
+                    bottomRight: Radius.circular(isCurrentUser ? 4 : 16),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.shadow.withOpacity(0.1),
+                      blurRadius: 3,
+                      offset: Offset(0, 1),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: isCurrentUser
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (isCommunity && !isCurrentUser && sender != null)
                       Text(
-                        DateFormat('h:mm a').format(message.createdAt!),
+                        sender.name ?? sender.username ?? '',
                         style: TextStyle(
                           color: theme.surface,
-                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
                         ),
                       ),
-                      Gap(8),
-                      if (isCurrentUser) ...[
-                        if (message.uid?.startsWith('temp_') == true)
-                          Icon(Icons.access_time,
-                              size: 12, color: theme.surface),
-                        if (message.uid?.startsWith('temp_') == false)
-                          Icon(Icons.done_all, size: 12, color: theme.text),
+                    WhatsevrMessageDetectableText(
+                      text: message.message ?? '',
+                      trimLines: 8,
+                      basicStyleColor: theme.surface,
+                      detectedStyleColor: theme.surface,
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          DateFormat('h:mm a').format(message.createdAt!),
+                          style: TextStyle(
+                            color: theme.surface,
+                            fontSize: 10,
+                          ),
+                        ),
+                        Gap(8),
+                        if (isCurrentUser) ...[
+                          if (message.uid?.startsWith('temp_') == true)
+                            Icon(Icons.access_time,
+                                size: 12, color: theme.surface),
+                          if (message.uid?.startsWith('temp_') == false)
+                            Icon(Icons.done_all, size: 12, color: theme.text),
+                        ],
                       ],
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           )
@@ -330,35 +357,38 @@ class MessageBubble extends StatelessWidget {
   void _showEditDialog(BuildContext context, Message message) {
     final TextEditingController editController =
         TextEditingController(text: message.message);
+    final theme = context.whatsevrTheme;
 
-    showGeneralDialog(
+    showDialog(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: '',
-      barrierColor: Colors.black54,
-      transitionDuration: Duration(milliseconds: 200),
-      pageBuilder: (context, anim1, anim2) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<ConversationBloc>(context),
+        child: Center(
           child: Container(
+            margin: EdgeInsets.all(32),
             padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: theme.surface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.shadow.withOpacity(0.2),
+                  blurRadius: 10,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Edit Message',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close),
+                      icon: Icon(Icons.close, color: theme.icon),
                       onPressed: () => Navigator.pop(context),
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(),
@@ -370,13 +400,12 @@ class MessageBubble extends StatelessWidget {
                   controller: editController,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: theme.background,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: EdgeInsets.all(12),
                   ),
                   maxLines: null,
                   autofocus: true,
@@ -389,13 +418,12 @@ class MessageBubble extends StatelessWidget {
                       onPressed: () => Navigator.pop(context),
                       child: Text('Cancel'),
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey[600],
+                        foregroundColor: theme.textLight,
                       ),
                     ),
                     SizedBox(width: 12),
                     ElevatedButton(
                       onPressed: () {
-                        // Dispatch EditMessage event
                         context.read<ConversationBloc>().add(
                               EditMessage(
                                 messageId: message.uid!,
@@ -406,8 +434,8 @@ class MessageBubble extends StatelessWidget {
                       },
                       child: Text('Save'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        foregroundColor: Colors.white,
+                        backgroundColor: theme.accent,
+                        foregroundColor: theme.surface,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -420,16 +448,6 @@ class MessageBubble extends StatelessWidget {
           ),
         ),
       ),
-      transitionBuilder: (context, anim1, anim2, child) {
-        return SlideTransition(
-          position:
-              Tween(begin: Offset(0, 0.2), end: Offset.zero).animate(anim1),
-          child: FadeTransition(
-            opacity: anim1,
-            child: child,
-          ),
-        );
-      },
     );
   }
 }

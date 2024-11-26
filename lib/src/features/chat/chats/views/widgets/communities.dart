@@ -16,7 +16,8 @@ class _CommunitiesListView extends StatelessWidget {
                 const Divider(),
             itemBuilder: (BuildContext context, int index) {
               final community = state.communities[index];
-              return ListTile(
+              return ListTile(  dense: true,
+            visualDensity: VisualDensity.compact,
                 onTap: () {
                   AppNavigationService.pushPage(
                       screen: ConversationsPage(

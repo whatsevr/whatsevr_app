@@ -140,7 +140,7 @@ class ConversationBloc
       ));
 
       await ChatsApi.deleteChatMessage(
-        messageUid: event.messageUid,
+        messageUid: event.messageUid!,
         senderUid: _currentUserUid,
       );
     } catch (e, s) {
