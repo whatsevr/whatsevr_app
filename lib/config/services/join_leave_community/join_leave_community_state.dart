@@ -1,28 +1,28 @@
 part of 'join_leave_community_bloc.dart';
 
-class FollowUnfollowState extends Equatable {
-  final Set<String> followedUserIds;
+class JoinLeaveCommunityState extends Equatable {
+  final Set<String> userCommunities;
   final bool isLoading;
   final String? error;
 
-  const FollowUnfollowState({
-    required this.followedUserIds,
+  const JoinLeaveCommunityState({
+    required this.userCommunities,
     this.isLoading = false,
     this.error,
   });
 
-  FollowUnfollowState copyWith({
-    Set<String>? followedUserIds,
+  JoinLeaveCommunityState copyWith({
+    Set<String>? userCommunities,
     bool? isLoading,
     String? error,
   }) {
-    return FollowUnfollowState(
-      followedUserIds: followedUserIds ?? this.followedUserIds,
+    return JoinLeaveCommunityState(
+      userCommunities: userCommunities ?? this.userCommunities,
       isLoading: isLoading ?? this.isLoading,
       error: error,
     );
   }
 
   @override
-  List<Object?> get props => [followedUserIds, isLoading, error];
+  List<Object?> get props => [userCommunities, isLoading, error];
 }

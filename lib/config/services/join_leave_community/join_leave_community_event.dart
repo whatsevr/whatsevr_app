@@ -1,20 +1,20 @@
 part of 'join_leave_community_bloc.dart';
 
-abstract class FollowUnfollowEvent extends Equatable {
-  const FollowUnfollowEvent();
+abstract class JoinLeaveCommunityEvent extends Equatable {
+  const JoinLeaveCommunityEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class FetchFollowedUsers extends FollowUnfollowEvent {}
+class FetchUserCommunities extends JoinLeaveCommunityEvent {}
 
-class ReloadFollowedUsers extends FollowUnfollowEvent {}
+class ReloadUserCommunities extends JoinLeaveCommunityEvent {}
 
-class ToggleFollow extends FollowUnfollowEvent {
+class JoinOrLeave extends JoinLeaveCommunityEvent {
   final String userUid;
 
-  const ToggleFollow({required this.userUid});
+  const JoinOrLeave({required this.userUid});
 
   @override
   List<Object?> get props => [userUid];

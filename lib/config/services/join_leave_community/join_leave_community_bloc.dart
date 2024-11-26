@@ -1,42 +1,43 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:whatsevr_app/config/api/methods/community.dart';
 import 'package:whatsevr_app/config/api/methods/user_relations.dart';
+import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
 import 'package:whatsevr_app/config/api/response_model/user_relations/user_relations.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'join_leave_community_event.dart';
 part 'join_leave_community_state.dart';
 
-class FollowUnfollowBloc
-    extends Bloc<FollowUnfollowEvent, FollowUnfollowState> {
+class JoinLeaveCommunityBloc
+    extends Bloc<JoinLeaveCommunityEvent, JoinLeaveCommunityState> {
   static const String _totalPagesKey = 'totalPages';
   static const int _pageSize = 500;
-  static String? _followedUsersBox;
+  static String? _userCommunitiesBox;
 
-  FollowUnfollowBloc() : super(const FollowUnfollowState(followedUserIds: {})) {
-    on<FetchFollowedUsers>(_onFetchFollowedUsers);
-    on<ToggleFollow>(_onToggleFollow);
-    on<ReloadFollowedUsers>(_onReloadFollowedUsers);
+  JoinLeaveCommunityBloc() 
+      : super(const JoinLeaveCommunityState(userCommunities: {})) {
+    on<FetchUserCommunities>(_onFetchUserCommunities);
+    on<JoinOrLeave>(_onJoinOrLeave);
+    on<ReloadUserCommunities>(_onReloadUserCommunities);
   }
 
-  // Lazy initialization for Hive Box
   Future<Box?> _getBox() async {
     final String? userUid = AuthUserDb.getLastLoggedUserUid();
     if (userUid == null) return null;
-    _followedUsersBox = 'followedUsersBox_$userUid';
-    if (!Hive.isBoxOpen(_followedUsersBox!)) {
-      await Hive.openBox(_followedUsersBox!);
+    _userCommunitiesBox = 'joinedCommunitiesBox_$userUid';
+    if (!Hive.isBoxOpen(_userCommunitiesBox!)) {
+      await Hive.openBox(_userCommunitiesBox!);
     }
-    return Hive.box(_followedUsersBox!);
+    return Hive.box(_userCommunitiesBox!);
   }
 
-  // Fetch and cache all followed user UIDs (One-time on app launch)
-  Future<void> _onFetchFollowedUsers(
-    FetchFollowedUsers event,
-    Emitter<FollowUnfollowState> emit,
+  Future<void> _onFetchUserCommunities(
+    FetchUserCommunities event,
+    Emitter<JoinLeaveCommunityState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null, followedUserIds: {}));
+    emit(state.copyWith(isLoading: true, error: null, userCommunities: {}));
 
     try {
       final box = await _getBox();
@@ -45,18 +46,18 @@ class FollowUnfollowBloc
         return;
       }
 
-      await _loadCachedFollowedUsers(box); // Load from cache first
+      await _loadCachedUserCommunities(box); // Load from cache first
       int page = 1;
-      final List<String> allFollowedUids = [];
+      final List<String> allUserCommunities = [];
 
       while (true) {
         final List<String> currentPageUids =
-            await _fetchFollowedUsersFromApi(page);
+            await _fetchUserCommunitiesFromApi(page);
         if (currentPageUids.isEmpty) break;
 
-        allFollowedUids.addAll(currentPageUids);
+        allUserCommunities.addAll(currentPageUids);
         await box.put(
-          '$_followedUsersBox$page',
+          '$_userCommunitiesBox$page',
           currentPageUids,
         ); // Cache by page
         page++;
@@ -64,7 +65,7 @@ class FollowUnfollowBloc
 
       emit(
         state.copyWith(
-          followedUserIds: Set.from(allFollowedUids),
+          userCommunities: Set.from(allUserCommunities),
           isLoading: false,
         ),
       );
@@ -74,25 +75,24 @@ class FollowUnfollowBloc
       emit(
         state.copyWith(
           isLoading: false,
-          error: 'Failed to fetch followed users',
+          error: 'Failed to fetch joined communities',
         ),
       );
     }
   }
 
-  // Reload cached followed users on app restart
-  Future<void> _onReloadFollowedUsers(
-    ReloadFollowedUsers event,
-    Emitter<FollowUnfollowState> emit,
+  Future<void> _onReloadUserCommunities(
+    ReloadUserCommunities event,
+    Emitter<JoinLeaveCommunityState> emit,
   ) async {
     final box = await _getBox();
     if (box == null) return;
 
     try {
-      await _loadCachedFollowedUsers(box);
+      await _loadCachedUserCommunities(box);
       emit(
         state.copyWith(
-          followedUserIds: state.followedUserIds,
+          userCommunities: state.userCommunities,
           isLoading: false,
         ),
       );
@@ -101,99 +101,113 @@ class FollowUnfollowBloc
     }
   }
 
-  // Load cached followed users from Hive
-  Future<void> _loadCachedFollowedUsers(Box box) async {
+  Future<void> _loadCachedUserCommunities(Box box) async {
     final int totalPages = box.get(_totalPagesKey, defaultValue: 0);
     final List<String> allFollowedUids = [];
 
     for (int page = 1; page <= totalPages; page++) {
-      final List<dynamic>? pageData = box.get('$_followedUsersBox$page');
+      final List<dynamic>? pageData = box.get('$_userCommunitiesBox$page');
       if (pageData != null) {
         allFollowedUids.addAll(pageData.cast<String>());
       }
     }
 
-    emit(state.copyWith(followedUserIds: Set.from(allFollowedUids)));
+    emit(state.copyWith(userCommunities: Set.from(allFollowedUids)));
   }
 
-  // Fetch followed users from API (with error handling)
-  Future<List<String>> _fetchFollowedUsersFromApi(int page) async {
+  Future<List<String>> _fetchUserCommunitiesFromApi(int page) async {
     try {
-      final UsersRelationResponse? response =
-          await UserRelationsApi.getAllFollowing(
+      final UserCommunitiesResponse? response =
+          await CommunityApi.getUserCommunities(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
         page: page,
         pageSize: _pageSize,
       );
-      final List<String?> uids =
-          response?.data?.map((e) => e.user?.uid).toList() ?? [];
-      return uids.whereType<String>().toSet().toList();
+
+      final List<String> communityUids = [];
+      
+      if (response?.userCommunities != null) {
+        communityUids.addAll(
+          response!.userCommunities!
+              .map((e) => e.uid)
+              .whereType<String>()
+              .toList(),
+        );
+      }
+      
+      if (response?.joinedCommunities != null) {
+        communityUids.addAll(
+          response!.joinedCommunities!
+              .map((e) => e.uid)
+              .whereType<String>()
+              .toList(),
+        );
+      }
+
+      return communityUids.toSet().toList();
     } catch (e) {
-      print('Error fetching followed users from API: $e');
+      print('Error fetching communities from API: $e');
       return [];
     }
   }
 
-  // Toggle follow/unfollow for a user and persist the change
-  Future<void> _onToggleFollow(
-    ToggleFollow event,
-    Emitter<FollowUnfollowState> emit,
+  Future<void> _onJoinOrLeave(
+    JoinOrLeave event,
+    Emitter<JoinLeaveCommunityState> emit,
   ) async {
     final box = await _getBox();
     if (box == null) return;
 
     try {
-      final isCurrentlyFollowed = state.followedUserIds.contains(event.userUid);
-      final updatedFollowedUserIds = Set<String>.from(state.followedUserIds);
+      final isCurrentlyJoined = state.userCommunities.contains(event.userUid);
+      final updatedCommunities = Set<String>.from(state.userCommunities);
 
-      if (isCurrentlyFollowed) {
-        updatedFollowedUserIds.remove(event.userUid);
-        await _handleUnfollow(event.userUid);
+      if (isCurrentlyJoined) {
+        updatedCommunities.remove(event.userUid);
+        await _handleLeave(event.userUid);
       } else {
-        updatedFollowedUserIds.add(event.userUid);
-        await _handleFollow(event.userUid);
+        updatedCommunities.add(event.userUid);
+        await _handleJoin(event.userUid);
       }
 
-      emit(state.copyWith(followedUserIds: updatedFollowedUserIds));
-      await _persistFollowedUsers(box, updatedFollowedUserIds);
+      emit(state.copyWith(userCommunities: updatedCommunities));
+      await _persistUserCommunities(box, updatedCommunities);
     } catch (e) {
-      emit(state.copyWith(error: 'Failed to toggle follow'));
+      emit(state.copyWith(error: 'Failed to toggle community membership'));
     }
   }
 
-  // Helper methods to handle follow/unfollow API calls
-  Future<void> _handleFollow(String userUid) async {
+  Future<void> _handleJoin(String userUid) async {
     try {
-      await UserRelationsApi.followUser(
-        followerUserUid: AuthUserDb.getLastLoggedUserUid()!,
-        followeeUserUid: userUid,
+      await CommunityApi.joinCommunity(
+        joineeUserUid: AuthUserDb.getLastLoggedUserUid()!,
+        communityUid: userUid,
       );
     } catch (e) {
       print('Error following user: $e');
     }
   }
 
-  Future<void> _handleUnfollow(String userUid) async {
+  Future<void> _handleLeave(String userUid) async {
     try {
-      await UserRelationsApi.unfollowUser(
-        followerUserUid: AuthUserDb.getLastLoggedUserUid()!,
-        followeeUserUid: userUid,
+      await CommunityApi.leaveCommunity(
+        memberUserUid: AuthUserDb.getLastLoggedUserUid()!,
+        communityUid: userUid,
       );
     } catch (e) {
       print('Error unfollowing user: $e');
     }
   }
 
-  // Persist the followed users list to cache
-  Future<void> _persistFollowedUsers(
-    Box? box,
-    Set<String> followedUserIds,
+  Future<void> _persistUserCommunities(
+    Box? box,    // Change parameter to be nullable
+    Set<String> communityIds,
   ) async {
-    if (box == null) return;
+    if (box == null) return;    // Add null check
     try {
-      await box.put('followedUserIds', followedUserIds.toList());
+      await box.put('userCommunities', communityIds.toList());    // Use simple key name
     } catch (e) {
-      print('Error persisting followed users to cache: $e');
+      print('Error persisting user communities to cache: $e');
     }
   }
 }

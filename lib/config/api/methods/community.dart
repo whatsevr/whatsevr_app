@@ -44,11 +44,17 @@ class CommunityApi {
 
   static Future<UserCommunitiesResponse?> getUserCommunities({
     required String userUid,
+     int? page=1,
+    int? pageSize = 30,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
         '/v1/user-communities',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
+        queryParameters: <String, dynamic>{
+          'user_uid': userUid,
+          'page': page,
+          'page_size': pageSize,
+        },
       );
       if (response.data != null) {
         return UserCommunitiesResponse.fromMap(response.data);
@@ -70,6 +76,46 @@ class CommunityApi {
       if (response.data != null) {
         return CommunityProfileDataResponse.fromMap(response.data);
       }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> joinCommunity({
+    required String joineeUserUid,
+    required String communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/join-community',
+        data: {
+          'joinee_user_uid': joineeUserUid,
+          'community_uid': communityUid,
+        },
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> leaveCommunity({
+    required String memberUserUid,
+    required String communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/leave-community',
+        data: {
+          'member_user_uid': memberUserUid,
+          'community_uid': communityUid,
+        },
+      );
+
+      return (response.data['message'] as String?, response.statusCode);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
