@@ -4,6 +4,7 @@ import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_members.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
 import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
 
@@ -116,6 +117,30 @@ class CommunityApi {
       );
 
       return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  //get members
+  static Future<CommunityMembersResponse?> getCommunityMembers({
+    required String communityUid,
+    int? page = 1,
+    int? pageSize = 30,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-community-members',
+        queryParameters: <String, dynamic>{
+          'community_uid': communityUid,
+          'page': page,
+          'page_size': pageSize,
+        },
+      );
+      if (response.data != null) {
+        return CommunityMembersResponse.fromMap(response.data);
+      }
     } catch (e, s) {
       lowLevelCatch(e, s);
     }

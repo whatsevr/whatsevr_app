@@ -96,17 +96,7 @@ class _CommunityView extends StatelessWidget {
                         ),
                       ),
                       const Gap(8),
-                      MaterialButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () {},
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        color: Colors.blue,
-                        textColor: Colors.white,
-                        child: const Text('Join'),
-                      ),
-                      const Gap(8),
+                
                     ],
                   ),
                 ],

@@ -35,7 +35,7 @@ class WhatsevrCommunityJoinLeaveButton extends StatelessWidget {
           return MaterialButton(
               onPressed:null,
               
-              child :Text('Owned'),
+              child :Text('Owner'),
             );
         }
         final bool isJoined =

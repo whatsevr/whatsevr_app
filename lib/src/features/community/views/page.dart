@@ -9,6 +9,7 @@ import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
@@ -336,9 +337,9 @@ class CommunityPage extends StatelessWidget {
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
-                        showUserRelationsDialog(
+                        showCommunityMembersDialog(
                           context: context,
-                          userUid: (state
+                          communityUid: (state
                               .communityDetailsResponse?.communityInfo?.uid)!,
                         );
                       },
