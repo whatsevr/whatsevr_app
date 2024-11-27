@@ -23,15 +23,23 @@ class WhatsevrCommunityJoinLeaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (AuthUserDb.getLastLoggedUserUid() == communityUid) {
-      return const SizedBox();
-    }
+  
 
     final AppTheme theme = context.whatsevrTheme;
 
     return BlocBuilder<JoinLeaveCommunityBloc, JoinLeaveCommunityState>(
       builder: (context, state) {
-        final bool isJoined = state.userCommunities.contains(communityUid);
+        final bool isOwner =
+            state.userOwnedCommunityUids.contains(communityUid);
+        if (isOwner) {
+          return MaterialButton(
+              onPressed:null,
+              
+              child :Text('Owned'),
+            );
+        }
+        final bool isJoined =
+            state.userJoinedCommunityUids.contains(communityUid);
 
         return WhatsevrTwoStateUi(
           isSecondState: isJoined,

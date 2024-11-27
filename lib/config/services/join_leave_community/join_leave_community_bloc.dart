@@ -10,61 +10,78 @@ part 'join_leave_community_state.dart';
 
 class JoinLeaveCommunityBloc 
     extends Bloc<JoinLeaveCommunityEvent, JoinLeaveCommunityState> {
-  static String? _userCommunitiesBox;
-
+  static String? _userOwnedCommunitiesBox;
+  static String? _userJoinedCommunitiesBox;
   JoinLeaveCommunityBloc() 
-      : super(const JoinLeaveCommunityState(userCommunities: {})) {
+      : super(const JoinLeaveCommunityState(userJoinedCommunityUids: {})) {
     on<FetchUserCommunities>(_onFetchUserCommunities);
     on<JoinOrLeave>(_onJoinOrLeave);
     on<ReloadUserCommunities>(_onReloadUserCommunities);
   }
 
-  Future<Box?> _getBox() async {
+  Future<(Box?, Box?)> _getBoxes() async {
     final String? userUid = AuthUserDb.getLastLoggedUserUid();
-    if (userUid == null) return null;
-    _userCommunitiesBox = 'joinedCommunitiesBox_$userUid';
-    if (!Hive.isBoxOpen(_userCommunitiesBox!)) {
-      await Hive.openBox(_userCommunitiesBox!);
+    if (userUid == null) return (null, null);
+
+    _userOwnedCommunitiesBox = 'ownedCommunitiesBox_$userUid';
+    _userJoinedCommunitiesBox = 'joinedCommunitiesBox_$userUid';
+
+    if (!Hive.isBoxOpen(_userOwnedCommunitiesBox!)) {
+      await Hive.openBox(_userOwnedCommunitiesBox!);
     }
-    return Hive.box(_userCommunitiesBox!);
+    if (!Hive.isBoxOpen(_userJoinedCommunitiesBox!)) {
+      await Hive.openBox(_userJoinedCommunitiesBox!);
+    }
+
+    return (
+      Hive.box(_userOwnedCommunitiesBox!),
+      Hive.box(_userJoinedCommunitiesBox!)
+    );
   }
 
   Future<void> _onFetchUserCommunities(
     FetchUserCommunities event,
     Emitter<JoinLeaveCommunityState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true, error: null, userCommunities: {}));
+    emit(state.copyWith(isLoading: true, error: null));
 
     try {
-      final box = await _getBox();
-      if (box == null) {
+      final (Box? ownedBox, Box? joinedBox) = await _getBoxes();
+      if (ownedBox == null || joinedBox == null) {
         emit(state.copyWith(isLoading: false, error: 'User not logged in'));
         return;
       }
 
       // Load from cache first
-      final List<dynamic>? cachedCommunities = box.get('userCommunities');
-      if (cachedCommunities != null) {
+      final List<dynamic>? cachedOwnedCommunities = ownedBox.get('ownedCommunities');
+      final List<dynamic>? cachedJoinedCommunities = joinedBox.get('joinedCommunities');
+      
+      if (cachedOwnedCommunities != null || cachedJoinedCommunities != null) {
         emit(state.copyWith(
-          userCommunities: Set.from(cachedCommunities.cast<String>()),
+          userOwnedCommunityUids: cachedOwnedCommunities != null ? Set.from(cachedOwnedCommunities.cast<String>()) : {},
+          userJoinedCommunityUids: cachedJoinedCommunities != null ? Set.from(cachedJoinedCommunities.cast<String>()) : {},
         ));
       }
 
       // Fetch from API
-      final List<String> communities = await _fetchUserCommunitiesFromApi();
-      
-      if (communities.isNotEmpty) {
-        emit(state.copyWith(
-          userCommunities: Set.from(communities),
+      final  (List<String>, List<String>)? communitiesUids = await _fetchUserCommunitiesFromApi();
+     if( communitiesUids == null) return;
+      final List<String> ownedCommunities = communitiesUids.$1;
+      final List<String> joinedCommunities = communitiesUids.$2;
+
+      emit(state.copyWith(
+          userJoinedCommunityUids: Set.from(joinedCommunities),
+          userOwnedCommunityUids:  Set.from(ownedCommunities),
           isLoading: false,
         ));
         
-        await box.put('userCommunities', communities);
-      }
+      // Persist to separate boxes
+      await ownedBox.put('ownedCommunities', ownedCommunities);
+      await joinedBox.put('joinedCommunities', joinedCommunities);
     } catch (e) {
       emit(state.copyWith(
         isLoading: false,
-        error: 'Failed to fetch joined communities',
+        error: 'Failed to fetch user communities',
       ));
     }
   }
@@ -73,23 +90,24 @@ class JoinLeaveCommunityBloc
     ReloadUserCommunities event,
     Emitter<JoinLeaveCommunityState> emit,
   ) async {
-    final box = await _getBox();
-    if (box == null) return;
+    final (Box? ownedBox, Box? joinedBox) = await _getBoxes();
+    if (ownedBox == null || joinedBox == null) return;
 
     try {
-      final List<dynamic>? cachedCommunities = box.get('userCommunities');
-      if (cachedCommunities != null) {
-        emit(state.copyWith(
-          userCommunities: Set.from(cachedCommunities.cast<String>()),
-          isLoading: false,
-        ));
-      }
+      final List<dynamic>? cachedOwnedCommunities = ownedBox.get('ownedCommunities');
+      final List<dynamic>? cachedJoinedCommunities = joinedBox.get('joinedCommunities');
+      
+      emit(state.copyWith(
+        userOwnedCommunityUids: cachedOwnedCommunities != null ? Set.from(cachedOwnedCommunities.cast<String>()) : {},
+        userJoinedCommunityUids: cachedJoinedCommunities != null ? Set.from(cachedJoinedCommunities.cast<String>()) : {},
+        isLoading: false,
+      ));
     } catch (e) {
-      emit(state.copyWith(error: 'Failed to reload followed users'));
+      emit(state.copyWith(error: 'Failed to reload communities'));
     }
   }
 
-  Future<List<String>> _fetchUserCommunitiesFromApi() async {
+  Future<(List<String> ownedCommunityUids,List<String> joinedCommunityUids,)?> _fetchUserCommunitiesFromApi() async {
     try {
       final UserCommunitiesResponse? response =
           await CommunityApi.getUserCommunities(
@@ -99,13 +117,14 @@ class JoinLeaveCommunityBloc
       if (response == null || 
           ((response.userCommunities == null || response.userCommunities!.isEmpty) && 
            (response.joinedCommunities == null || response.joinedCommunities!.isEmpty))) {
-        return [];
+        return null;
       }
 
-      final List<String> communityUids = [];
-      
+      final List<String> userCommunitiesUids = [];
+      final List<String> joinedCommunitiesUids = [];
       if (response.userCommunities != null) {
-        communityUids.addAll(
+        
+        userCommunitiesUids.addAll(
           response.userCommunities!
               .map((e) => e.uid)
               .whereType<String>()
@@ -114,7 +133,7 @@ class JoinLeaveCommunityBloc
       }
       
       if (response.joinedCommunities != null) {
-        communityUids.addAll(
+        joinedCommunitiesUids.addAll(
           response.joinedCommunities!
               .map((e) => e.uid)
               .whereType<String>()
@@ -122,10 +141,10 @@ class JoinLeaveCommunityBloc
         );
       }
 
-      return communityUids.toSet().toList();
+      return (userCommunitiesUids,joinedCommunitiesUids);
     } catch (e) {
       print('Error fetching communities from API: $e');
-      return [];
+       return null;
     }
   }
 
@@ -133,23 +152,28 @@ class JoinLeaveCommunityBloc
     JoinOrLeave event,
     Emitter<JoinLeaveCommunityState> emit,
   ) async {
-    final box = await _getBox();
-    if (box == null) return;
+    final (Box? ownedBox, Box? joinedBox) = await _getBoxes();
+    if (ownedBox == null || joinedBox == null) return;
 
     try {
-      final isCurrentlyJoined = state.userCommunities.contains(event.userUid);
-      final updatedCommunities = Set<String>.from(state.userCommunities);
+      final isCurrentlyJoined = state.userJoinedCommunityUids.contains(event.userUid);
+      final updatedJoinedCommunities = Set<String>.from(state.userJoinedCommunityUids);
 
       if (isCurrentlyJoined) {
-        updatedCommunities.remove(event.userUid);
+        updatedJoinedCommunities.remove(event.userUid);
         await _handleLeave(event.userUid);
       } else {
-        updatedCommunities.add(event.userUid);
+        updatedJoinedCommunities.add(event.userUid);
         await _handleJoin(event.userUid);
       }
 
-      emit(state.copyWith(userCommunities: updatedCommunities));
-      await _persistUserCommunities(box, updatedCommunities);
+      emit(state.copyWith(userJoinedCommunityUids: updatedJoinedCommunities));
+      await _persistUserCommunities(
+        ownedBox,
+        joinedBox,
+        state.userOwnedCommunityUids,
+        updatedJoinedCommunities,
+      );
     } catch (e) {
       emit(state.copyWith(error: 'Failed to toggle community membership'));
     }
@@ -178,12 +202,15 @@ class JoinLeaveCommunityBloc
   }
 
   Future<void> _persistUserCommunities(
-    Box? box,
-    Set<String> communityIds,
+    Box? ownedBox,
+    Box? joinedBox,
+    Set<String> ownedCommunityIds,
+    Set<String> joinedCommunityIds,
   ) async {
-    if (box == null) return;
+    if (ownedBox == null || joinedBox == null) return;
     try {
-      await box.put('userCommunities', communityIds.toList());
+      await ownedBox.put('ownedCommunities', ownedCommunityIds.toList());
+      await joinedBox.put('joinedCommunities', joinedCommunityIds.toList());
     } catch (e) {
       print('Error persisting user communities to cache: $e');
     }

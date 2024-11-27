@@ -366,14 +366,6 @@ class CommunityPage extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: WhatsevrCommunityJoinLeaveButton( 
-                                
-                                communityUid: state
-                                    .communityDetailsResponse?.communityInfo?.uid,
-                              ),
-                            ),
-                            const Gap(8),
-                            Expanded(
                               child: MaterialButton(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -384,6 +376,13 @@ class CommunityPage extends StatelessWidget {
                                   'Chat',
                                   style: TextStyle(color: Colors.white),
                                 ),
+                              ),
+                            ),
+                            const Gap(8),
+                            Expanded(
+                              child: WhatsevrCommunityJoinLeaveButton(
+                                communityUid: state.communityDetailsResponse
+                                    ?.communityInfo?.uid,
                               ),
                             ),
                           ],
