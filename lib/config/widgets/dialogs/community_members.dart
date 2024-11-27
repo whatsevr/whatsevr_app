@@ -70,58 +70,26 @@ class _UiState extends State<_Ui>
 }
 
 class _MemberInfo extends StatelessWidget {
-  final bool isCard;
-  final Member user;
+ 
+  final Datum data;
   final VoidCallback onTap;
 
   const _MemberInfo({
     super.key,
-    this.isCard = false,
-    required this.user,
+  
+    required this.data,
     required this.onTap,
   });
 
   Widget followButton() {
     return WhatsevrFollowButton(
-      followeeUserUid: user.uid!,
+      followeeUserUid: data.user!.uid!,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isCard) {
-      return Card(
-        margin: const EdgeInsets.all(8.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 4.0,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                backgroundImage: ExtendedNetworkImageProvider(
-                  user.profilePicture ?? MockData.blankProfileAvatar,
-                ),
-                radius: 30,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                user.name ?? 'Unknown',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              followButton(),
-            ],
-          ),
-        ),
-      );
-    }
+    final Member user = data.user!;
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: ExtendedNetworkImageProvider(
@@ -231,7 +199,7 @@ class _MembersViewState extends State<_MembersView> {
                     );
                   }
                   return _MemberInfo(
-                    user: _followers[index].user!,
+                    data: _followers[index],
                     onTap: () {
                       // Handle follow action
                     },
