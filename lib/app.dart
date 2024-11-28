@@ -8,9 +8,9 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:whatsevr_app/config/services/follow_unfollow_bloc/follow_unfollow_bloc.dart';
-import 'package:whatsevr_app/config/services/join_leave_community/join_leave_community_bloc.dart';
-import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
+import 'package:whatsevr_app/config/global_bloc/follow_unfollow_bloc/follow_unfollow_bloc.dart';
+import 'package:whatsevr_app/config/global_bloc/join_leave_community/join_leave_community_bloc.dart';
+import 'package:whatsevr_app/config/global_bloc/react_unreact_bloc/react_unreact_bloc.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';

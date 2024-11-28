@@ -7,7 +7,7 @@ import 'package:iconify_flutter/icons/octicon.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:like_button/like_button.dart';
-import 'package:whatsevr_app/config/services/react_unreact_bloc/react_unreact_bloc.dart';
+import 'package:whatsevr_app/config/global_bloc/react_unreact_bloc/react_unreact_bloc.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/reactions_view.dart';
