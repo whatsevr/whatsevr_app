@@ -86,7 +86,7 @@ void catchUnhandledExceptions(Object error, StackTrace? stack) {
 
 void afterLoginServices() async {
   TalkerService.instance.info('Executing after login services.');
-  AuthUserService.getSupportiveDataForLoggedUser();
+  AuthUserService.getUserSuppotiveData();
   await PermissionService.requestAllPermissions();
   WhatsevrLongTaskController.registerNotificationChannel();
   NotificationService().init();

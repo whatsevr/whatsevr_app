@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "whatsevr_app (dev mode)",
+            "name": "Dev whatsevr_app",
             "request": "launch",
             "type": "dart",
             "noDebug": true
         },
         {
-            "name": "whatsevr_app (debug)",
+            "name": "Debug whatsevr_app",
             "request": "launch",
             "type": "dart"
         },
    
         {
-            "name": "whatsevr_app (profile mode)",
+            "name": "whatse vr_app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",

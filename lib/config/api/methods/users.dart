@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/api/requests_model/user/update_user_services
 import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
 import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/user/user_supportive_data.dart';
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
 import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
@@ -38,7 +39,9 @@ class UsersApi {
     return null;
   }
 
-  static Future<(int? statusCode, dynamic data)?> getSupportiveUserData({
+
+  static Future<(int? statusCode, UserSupportiveDataResponse data)?>
+      getSupportiveUserData({
     required String userUid,
   }) async {
     try {
@@ -47,7 +50,10 @@ class UsersApi {
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {
-        return (response.statusCode, response.data);
+        return (
+          response.statusCode,
+          UserSupportiveDataResponse.fromMap(response.data)
+        );
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

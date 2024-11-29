@@ -6,7 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
-
+import 'package:whatsevr_app/config/api/response_model/user/user_supportive_data.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
@@ -164,17 +164,20 @@ class AuthUserService {
     }
   }
 
-  static Future<void> getSupportiveDataForLoggedUser() async {
+  static UserSupportiveDataResponse? supportiveData;
+  static Future<void> getUserSuppotiveData() async {
     final String? currentlyLoggedUserUid = AuthUserDb.getLastLoggedUserUid();
     try {
+      supportiveData = null;
       if (currentlyLoggedUserUid != null) {
-        (int?, dynamic)? supportiveDataResponse =
+        (int?, UserSupportiveDataResponse)? supportiveDataResponse =
             await UsersApi.getSupportiveUserData(
           userUid: currentlyLoggedUserUid,
         );
-        if (supportiveDataResponse?.$1 != HttpStatus.ok) {
-          throw BusinessException('Failed to fetch logged user data');
+        if (supportiveDataResponse?.$1 == HttpStatus.unauthorized) {
+          throw BusinessException('Authenticity check failed');
         }
+        supportiveData = supportiveDataResponse?.$2;
       }
     } catch (e, stackTrace) {
       AuthUserDb.clearLastLoggedUserUid();

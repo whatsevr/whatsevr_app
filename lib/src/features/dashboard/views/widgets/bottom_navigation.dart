@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
@@ -9,6 +10,7 @@ import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
@@ -66,9 +68,17 @@ class _DashboardPageBottomNavigationBarState
       (
         const Iconify(Ri.heart_add_fill, size: 30),
         () {
+          bool? isPortfolio =
+              AuthUserService.supportiveData?.userInfo?.isPortfolio;
+          if (isPortfolio == null) {
+            SmartDialog.showToast('Please wait...');
+            return;
+          }
           showContentUploadBottomSheet(
             context,
-            postCreatorType: EnumPostCreatorType.ACCOUNT,
+            postCreatorType: isPortfolio
+                ? EnumPostCreatorType.PORTFOLIO
+                : EnumPostCreatorType.ACCOUNT,
           );
         },
         null

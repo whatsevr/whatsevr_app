@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
@@ -42,6 +44,8 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             const SizedBox(height: 8),
             _buildLoggedUserInfoCard(),
             const SizedBox(height: 8),
+            _buildSupportiveDataCard(),
+            Gap(8),
             _buildAllAuthorizedUsersCard(),
           ],
         ),
@@ -171,6 +175,85 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                 style: TextStyle(color: Colors.black, fontSize: 14),
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSupportiveDataCard() {
+    return Card(
+      color: Colors.white,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shadowColor: Colors.black.withOpacity(0.2),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.database,
+                color: Colors.redAccent, size: 24),
+            title: Text(
+              'Supportive Data of current user',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Table( 
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(2),
+            },
+            children: [
+              TableRow(
+                children: [
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Key',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  TableCell(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Value',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              for ((String?, String?) itm in [
+                ('Name', AuthUserService.supportiveData?.userInfo?.name),
+                (
+                  'Is Portfolio',
+                  AuthUserService.supportiveData?.userInfo?.isPortfolio
+                      .toString()
+                ),
+              ])
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('${itm.$1}'),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('${itm.$2}'),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ],
       ),
     );
