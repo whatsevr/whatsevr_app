@@ -38,172 +38,159 @@ class _Ui extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const Gap(20),
-        Text(
-          'Upload Content for ${postCreatorType.value}',
-        ),
-        const Gap(20),
-        MaterialButton(
-          elevation: 0,
-          color: Colors.blueGrey.withOpacity(0.2),
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+    return Container( 
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+     
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+       
+          Text(
+            'Upload Content for ${postCreatorType.value}',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
           ),
-          onPressed: () async {
-            Navigator.pop(context);
-            AppNavigationService.newRoute(
-              RoutesName.createMemory,
-              extras: CreateMemoryPageArgument(
-                postCreatorType: postCreatorType,
-              ),
-            );
-          },
-          child: const Row(
-            children: <Widget>[
-              Iconify(Ic.round_history_toggle_off),
-              Gap(8),
-              Text('Create Memory'),
-            ],
-          ),
-        ),
-        const Gap(8),
-        MaterialButton(
-          elevation: 0,
-          color: Colors.blueGrey.withOpacity(0.2),
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-            AppNavigationService.newRoute(
-              RoutesName.createPhotoPost,
-              extras: CreatePhotoPostPageArgument(
-                postCreatorType: postCreatorType,
-              ),
-            );
-          },
-          child: const Row(
-            children: <Widget>[
-              Iconify(Mdi.camera_image),
-              Gap(8),
-              Text('Upload Photos'),
-            ],
-          ),
-        ),
-        const Gap(8),
-        MaterialButton(
-          elevation: 0,
-          color: Colors.blueGrey.withOpacity(0.2),
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          onPressed: () async {
-            Navigator.pop(context);
-            AppNavigationService.newRoute(
-              RoutesName.createVideoPost,
-              extras: CreateVideoPostPageArgument(
-                postCreatorType: postCreatorType,
-              ),
-            );
-          },
-          child: const Row(
-            children: <Widget>[
-              Iconify(Ic.sharp_slow_motion_video),
-              Gap(8),
-              Text('Create Video Post'),
-            ],
-          ),
-        ),
-        if (postCreatorType == EnumPostCreatorType.ACCOUNT ||
-            postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
-          const Gap(8),
-          MaterialButton(
-            elevation: 0,
-            color: Colors.blueGrey.withOpacity(0.2),
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            onPressed: () async {
+          const Gap(16),
+          _buildButton(
+            icon: const Iconify(Ic.round_history_toggle_off),
+            label: 'Create Memory',
+            onPressed: () {
               Navigator.pop(context);
               AppNavigationService.newRoute(
-                RoutesName.createFlick,
-                extras: CreateFlickPostPageArgument(
-                  postCreatorType: postCreatorType,
-                ),
+                RoutesName.createMemory,
+                extras: CreateMemoryPageArgument(postCreatorType: postCreatorType),
               );
             },
-            child: const Row(
-              children: <Widget>[
-                Iconify(Pepicons.play_print),
-                Gap(8),
-                Text('Create Flick'),
-              ],
-            ),
           ),
-        ],
-        if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...<Widget>[
           const Gap(8),
-          MaterialButton(
-            elevation: 0,
-            color: Colors.blueGrey.withOpacity(0.2),
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            onPressed: () async {
+          _buildButton(
+            icon: const Iconify(Mdi.camera_image),
+            label: 'Upload Photos',
+            onPressed: () {
               Navigator.pop(context);
               AppNavigationService.newRoute(
-                RoutesName.createOffer,
-                extras: CreateOfferPageArgument(
-                  postCreatorType: postCreatorType,
-                ),
+                RoutesName.createPhotoPost,
+                extras: CreatePhotoPostPageArgument(postCreatorType: postCreatorType),
               );
             },
-            child: const Row(
-              children: <Widget>[
-                Iconify(Fa6Solid.signs_post),
-                Gap(8),
-                Text('Create Offer'),
-              ],
-            ),
           ),
-        ],
-        if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...<Widget>[
           const Gap(8),
-          MaterialButton(
-            elevation: 0,
-            color: Colors.blueGrey.withOpacity(0.2),
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            onPressed: () async {
+          _buildButton(
+            icon: const Iconify(Ic.sharp_slow_motion_video),
+            label: 'Create Video Post',
+            onPressed: () {
               Navigator.pop(context);
               AppNavigationService.newRoute(
-                RoutesName.uploadPdf,
-                extras: UploadPdfPageArgument(
-                  postCreatorType: postCreatorType,
-                ),
+                RoutesName.createVideoPost,
+                extras: CreateVideoPostPageArgument(postCreatorType: postCreatorType),
               );
             },
-            child: const Row(
-              children: <Widget>[
-                Iconify(Fa6Solid.file_pdf),
-                Gap(8),
-                Text('Upload Pdf'),
-              ],
-            ),
           ),
+          if (postCreatorType == EnumPostCreatorType.ACCOUNT || postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
+            const Gap(8),
+            _buildButton(
+              icon: const Iconify(Pepicons.play_print),
+              label: 'Create Flick',
+              onPressed: () {
+                Navigator.pop(context);
+                AppNavigationService.newRoute(
+                  RoutesName.createFlick,
+                  extras: CreateFlickPostPageArgument(postCreatorType: postCreatorType),
+                );
+              },
+            ),
+          ],
+          if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
+            const Gap(8),
+            _buildButton( 
+              icon: const Iconify(Fa6Solid.signs_post),
+              label: 'Create Offer',
+              onPressed: () {
+                Navigator.pop(context);
+                AppNavigationService.newRoute(
+                  RoutesName.createOffer,
+                  extras: CreateOfferPageArgument(postCreatorType: postCreatorType),
+                );
+              },
+            ),
+            const Gap(8),
+            _buildButton(
+              icon: const Iconify(Fa6Solid.file_pdf),
+              label: 'Upload PDF',
+              onPressed: () {
+                Navigator.pop(context);
+                AppNavigationService.newRoute(
+                  RoutesName.uploadPdf,
+                  extras: UploadPdfPageArgument(postCreatorType: postCreatorType),
+                );
+              },
+            ),
+          ],
+          const Gap(16),
         ],
-        const Gap(8),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildButton({
+    required Widget icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) { 
+    return SizedBox(
+      width: double.infinity,
+      child: MaterialButton(
+        elevation: 0,
+        color: Colors.grey[100],
+        hoverColor: Colors.grey[200],
+        highlightColor: Colors.grey[300],
+        splashColor: Colors.grey[200],
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(color: Colors.grey[300]!),
+        ),
+        onPressed: onPressed,
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: IconTheme(
+                data: const IconThemeData(
+                  size: 18,
+                  color: Colors.black87,
+                ),
+                child: icon,
+              ),
+            ),
+            const Gap(12),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
