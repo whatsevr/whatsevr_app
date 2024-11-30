@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_flick_post.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_flick_post.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -48,7 +49,10 @@ class CreateFlickPostBloc
     Emitter<CreateFlickPostState> emit,
   ) async {
     try {
-      emit(state.copyWith(pageArgument: event.pageArgument));
+      emit(state.copyWith(
+        postCreatorType: event.pageArgument.postCreatorType,
+        communityUid: event.pageArgument.communityUid,
+      ));
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
@@ -110,7 +114,8 @@ class CreateFlickPostBloc
           ),
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
-            postCreatorType: state.pageArgument?.postCreatorType.value,
+            postCreatorType: state.postCreatorType?.value,
+            communityUid:  state.communityUid,
           ),
         ),
       );
@@ -141,7 +146,7 @@ class CreateFlickPostBloc
               ? null
               : hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedPostLocation,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+          postCreatorType: state.postCreatorType?.value,
           thumbnail: thumbnailUrl,
           videoUrl: videoUrl,
           addressLatLongWkb: state.selectedPostLocationLatLongWkb,
@@ -149,6 +154,7 @@ class CreateFlickPostBloc
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
           videoDurationInSec: state.videoMetaData?.durationInSec,
+          communityUid: state.communityUid,
         ),
       );
       if (response != null) {

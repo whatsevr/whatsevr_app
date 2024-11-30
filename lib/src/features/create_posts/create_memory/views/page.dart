@@ -27,8 +27,9 @@ import 'package:whatsevr_app/src/features/create_posts/create_memory/bloc/create
 
 class CreateMemoryPageArgument {
   final EnumPostCreatorType postCreatorType;
+  final String? communityUid;
 
-  CreateMemoryPageArgument({required this.postCreatorType});
+  CreateMemoryPageArgument({required this.postCreatorType, this.communityUid});
 }
 
 class CreateMemoryPage extends StatelessWidget {

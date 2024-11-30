@@ -1,7 +1,8 @@
 part of 'create_photo_post_bloc.dart';
 
 class CreatePhotoPostState extends Equatable {
-  final CreatePhotoPostPageArgument? pageArgument;
+  final EnumPostCreatorType? postCreatorType;
+  final String? communityUid;
   final List<UiImageData> uiImageData;
   final UiImageData? selectedUiFileData;
   final PlacesNearbyResponse? placesNearbyResponse;
@@ -13,7 +14,8 @@ class CreatePhotoPostState extends Equatable {
   final List<String> taggedCommunitiesUid;
 
   const CreatePhotoPostState({
-    this.pageArgument,
+    this.postCreatorType,
+    this.communityUid,
     this.uiImageData = const [],
     this.selectedUiFileData,
     this.placesNearbyResponse,
@@ -26,7 +28,8 @@ class CreatePhotoPostState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        pageArgument,
+        postCreatorType,
+        communityUid,
         uiImageData,
         selectedUiFileData,
         placesNearbyResponse,
@@ -38,7 +41,8 @@ class CreatePhotoPostState extends Equatable {
       ];
 
   CreatePhotoPostState copyWith({
-    CreatePhotoPostPageArgument? pageArgument,
+    EnumPostCreatorType? postCreatorType,
+    String? communityUid,
     List<UiImageData>? uiFilesData,
     UiImageData? selectedUiFileData,
     PlacesNearbyResponse? placesNearbyResponse,
@@ -49,7 +53,8 @@ class CreatePhotoPostState extends Equatable {
     List<String>? taggedCommunitiesUid,
   }) {
     return CreatePhotoPostState(
-      pageArgument: pageArgument ?? this.pageArgument,
+      postCreatorType: postCreatorType ?? this.postCreatorType,
+      communityUid: communityUid ?? this.communityUid,
       uiImageData: uiFilesData ?? uiImageData,
       selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
       placesNearbyResponse: placesNearbyResponse ?? this.placesNearbyResponse,

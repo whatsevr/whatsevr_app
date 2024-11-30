@@ -1,7 +1,8 @@
 part of 'create_flick_bloc.dart';
 
 class CreateFlickPostState extends Equatable {
-  final CreateFlickPostPageArgument? pageArgument;
+  final EnumPostCreatorType? postCreatorType;
+  final String? communityUid;
   final File? videoFile;
   final FileMetaData? videoMetaData;
   final File? thumbnailFile;
@@ -15,7 +16,8 @@ class CreateFlickPostState extends Equatable {
   final List<String> taggedCommunitiesUid;
 
   const CreateFlickPostState({
-    this.pageArgument,
+     this.postCreatorType,
+      this.communityUid,
     this.videoFile,
     this.videoMetaData,
     this.thumbnailFile,
@@ -30,11 +32,13 @@ class CreateFlickPostState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
+        postCreatorType,
+        communityUid,
         videoFile,
         videoMetaData,
         thumbnailFile,
         thumbnailMetaData,
-        pageArgument,
+        
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedPostLocation,
@@ -44,7 +48,8 @@ class CreateFlickPostState extends Equatable {
       ];
 
   CreateFlickPostState copyWith({
-    CreateFlickPostPageArgument? pageArgument,
+    EnumPostCreatorType? postCreatorType,
+    String? communityUid,
     File? videoFile,
     FileMetaData? videoMetaData,
     File? thumbnailFile,
@@ -57,7 +62,8 @@ class CreateFlickPostState extends Equatable {
     List<String>? taggedCommunitiesUid,
   }) {
     return CreateFlickPostState(
-      pageArgument: pageArgument ?? this.pageArgument,
+      postCreatorType: postCreatorType ?? this.postCreatorType,
+      communityUid: communityUid ?? this.communityUid,
       videoFile: videoFile ?? this.videoFile,
       videoMetaData: videoMetaData ?? this.videoMetaData,
       thumbnailFile: thumbnailFile ?? this.thumbnailFile,

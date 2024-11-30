@@ -77,6 +77,7 @@ class PostData {
   final dynamic isVideo;
   final bool? isImage;
   final String? userUid;
+  final String? communityUid;
 
   final String? postCreatorType;
 
@@ -85,6 +86,7 @@ class PostData {
     this.isImage,
     this.userUid,
     this.postCreatorType,
+    this.communityUid,
   });
 
   PostData copyWith({
@@ -92,12 +94,14 @@ class PostData {
     bool? isImage,
     String? userUid,
     String? postCreatorType,
+    String? communityUid,
   }) =>
       PostData(
         isVideo: isVideo ?? this.isVideo,
         isImage: isImage ?? this.isImage,
         userUid: userUid ?? this.userUid,
         postCreatorType: postCreatorType ?? this.postCreatorType,
+        communityUid: communityUid ?? this.communityUid,
       );
 
   factory PostData.fromJson(String str) => PostData.fromMap(json.decode(str));
@@ -109,6 +113,7 @@ class PostData {
         isImage: json['is_image'],
         userUid: json['user_uid'],
         postCreatorType: json['post_creator_type'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -116,5 +121,6 @@ class PostData {
         'is_image': isImage,
         'user_uid': userUid,
         'post_creator_type': postCreatorType,
+        'community_uid': communityUid,
       };
 }

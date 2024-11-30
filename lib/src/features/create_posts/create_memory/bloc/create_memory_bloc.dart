@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_memory.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_memory.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -50,7 +51,10 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
     Emitter<CreateMemoryState> emit,
   ) async {
     try {
-      emit(state.copyWith(pageArgument: event.pageArgument));
+      emit(state.copyWith(
+        postCreatorType: event.pageArgument.postCreatorType,
+        communityUid: event.pageArgument.communityUid,
+      ));
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
@@ -113,7 +117,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
             isVideo: state.isVideoMemory,
             isImage: state.isImageMemory,
             userUid: AuthUserDb.getLastLoggedUserUid(),
-            postCreatorType: state.pageArgument?.postCreatorType.value,
+            postCreatorType: state.postCreatorType?.value,
+              communityUid:  state.communityUid,
           ),
         ),
       );
@@ -288,7 +293,8 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   ) {
     emit(
       CreateMemoryState(
-        pageArgument: state.pageArgument,
+        communityUid:  state.communityUid,
+        postCreatorType: state.postCreatorType,
         userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
         selectedAddress: state.selectedAddress,
         selectedAddressLatLongWkb: state.selectedAddressLatLongWkb,
@@ -333,7 +339,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
               ? null
               : event.hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+          postCreatorType: state.postCreatorType?.value,
           imageUrl: thumbnailUrl,
           videoUrl: videoUrl,
           videoDurationMs: state.videoMetaData?.durationInMs,
@@ -347,6 +353,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
+          communityUid: state.communityUid,
         ),
       );
       if (response != null) {
@@ -383,7 +390,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
               ? null
               : event.hashtags.map((e) => e.replaceAll('#', '')).toList(),
           location: state.selectedAddress,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+          postCreatorType: state.postCreatorType?.value,
           imageUrl: imageUrl,
           ctaAction:
               ctaActionUrlController.text.isEmpty ? null : state.ctaAction,

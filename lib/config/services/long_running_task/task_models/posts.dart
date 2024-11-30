@@ -38,6 +38,7 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
   final int? videoDurationInSec;
+  final String? communityUid;
 
   VideoPostTaskDataForLRT({
     this.title,
@@ -53,6 +54,7 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
     this.taggedUserUids,
     this.taggedCommunityUids,
     this.videoDurationInSec,
+    this.communityUid,
   }) : super(
           taskTitle: 'New Video Post: $title',
           taskDescription: 'Creating post please wait...',
@@ -76,6 +78,7 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
       'taggedUserUids': taggedUserUids,
       'taggedCommunityUids': taggedCommunityUids,
       'videoDurationInSec': videoDurationInSec,
+      'communityUid': communityUid,
     };
   }
 
@@ -94,6 +97,7 @@ class VideoPostTaskDataForLRT extends LongRunningTask {
       postCreatorType: map['postCreatorType'],
       taggedUserUids: map['taggedUserUids']?.cast<String>(),
       videoDurationInSec: map['videoDurationInSec'],
+      communityUid: map['communityUid'],
     );
   }
 }

@@ -20,8 +20,8 @@ import 'package:whatsevr_app/src/features/create_posts/create_photo_post/bloc/cr
 
 class CreatePhotoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
-
-  CreatePhotoPostPageArgument({required this.postCreatorType});
+final String? communityUid;
+  CreatePhotoPostPageArgument({required this.postCreatorType, this.communityUid});
 }
 
 class CreatePhotoPostPage extends StatelessWidget {

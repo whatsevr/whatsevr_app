@@ -20,34 +20,36 @@ import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 void showContentUploadBottomSheet(
   BuildContext context, {
   required EnumPostCreatorType postCreatorType,
+  String? communityUid,
 }) {
   showAppModalSheet(
     context: context,
     flexibleSheet: false,
     child: _Ui(
       postCreatorType: postCreatorType,
+      communityUid: communityUid,
     ),
   );
 }
 
 class _Ui extends StatelessWidget {
   final EnumPostCreatorType postCreatorType;
+  final String? communityUid;
   const _Ui({
     required this.postCreatorType,
+    this.communityUid,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container( 
+    return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-     
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-       
           Text(
             'Upload Content for ${postCreatorType.value}',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -63,7 +65,10 @@ class _Ui extends StatelessWidget {
               Navigator.pop(context);
               AppNavigationService.newRoute(
                 RoutesName.createMemory,
-                extras: CreateMemoryPageArgument(postCreatorType: postCreatorType),
+                extras: CreateMemoryPageArgument(
+                  postCreatorType: postCreatorType,
+                  communityUid: communityUid,
+                ),
               );
             },
           ),
@@ -75,7 +80,10 @@ class _Ui extends StatelessWidget {
               Navigator.pop(context);
               AppNavigationService.newRoute(
                 RoutesName.createPhotoPost,
-                extras: CreatePhotoPostPageArgument(postCreatorType: postCreatorType),
+                extras: CreatePhotoPostPageArgument(
+                  postCreatorType: postCreatorType,
+                  communityUid: communityUid,
+                ),
               );
             },
           ),
@@ -87,11 +95,14 @@ class _Ui extends StatelessWidget {
               Navigator.pop(context);
               AppNavigationService.newRoute(
                 RoutesName.createVideoPost,
-                extras: CreateVideoPostPageArgument(postCreatorType: postCreatorType),
+                extras: CreateVideoPostPageArgument(
+                  postCreatorType: postCreatorType,
+                  communityUid: communityUid,
+                ),
               );
             },
           ),
-          if (postCreatorType == EnumPostCreatorType.ACCOUNT || postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
+          ...[
             const Gap(8),
             _buildButton(
               icon: const Iconify(Pepicons.play_print),
@@ -100,21 +111,23 @@ class _Ui extends StatelessWidget {
                 Navigator.pop(context);
                 AppNavigationService.newRoute(
                   RoutesName.createFlick,
-                  extras: CreateFlickPostPageArgument(postCreatorType: postCreatorType),
+                  extras: CreateFlickPostPageArgument(
+                      postCreatorType: postCreatorType),
                 );
               },
             ),
           ],
           if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
             const Gap(8),
-            _buildButton( 
+            _buildButton(
               icon: const Iconify(Fa6Solid.signs_post),
               label: 'Create Offer',
               onPressed: () {
                 Navigator.pop(context);
                 AppNavigationService.newRoute(
                   RoutesName.createOffer,
-                  extras: CreateOfferPageArgument(postCreatorType: postCreatorType),
+                  extras:
+                      CreateOfferPageArgument(postCreatorType: postCreatorType),
                 );
               },
             ),
@@ -123,10 +136,11 @@ class _Ui extends StatelessWidget {
               icon: const Iconify(Fa6Solid.file_pdf),
               label: 'Upload PDF',
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context); 
                 AppNavigationService.newRoute(
                   RoutesName.uploadPdf,
-                  extras: UploadPdfPageArgument(postCreatorType: postCreatorType),
+                  extras:
+                      UploadPdfPageArgument(postCreatorType: postCreatorType),
                 );
               },
             ),
@@ -141,7 +155,7 @@ class _Ui extends StatelessWidget {
     required Widget icon,
     required String label,
     required VoidCallback onPressed,
-  }) { 
+  }) {
     return SizedBox(
       width: double.infinity,
       child: MaterialButton(

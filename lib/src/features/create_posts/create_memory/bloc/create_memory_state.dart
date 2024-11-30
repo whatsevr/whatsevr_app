@@ -1,7 +1,8 @@
 part of 'create_memory_bloc.dart';
 
 class CreateMemoryState extends Equatable {
-  final CreateMemoryPageArgument? pageArgument;
+  final EnumPostCreatorType? postCreatorType;
+  final String? communityUid;
   final bool? isVideoMemory;
   final bool? isImageMemory;
   final File? videoFile;
@@ -20,7 +21,8 @@ class CreateMemoryState extends Equatable {
   final String? ctaAction;
   final int? noOfDays;
   const CreateMemoryState({
-    this.pageArgument,
+    this.postCreatorType,
+    this.communityUid,
     this.isVideoMemory,
     this.isImageMemory,
     this.videoFile,
@@ -41,13 +43,15 @@ class CreateMemoryState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
+        postCreatorType,
+        communityUid,
         videoFile,
         videoMetaData,
         thumbnailFile,
         thumbnailMetaData,
         imageFile,
         imageMetaData,
-        pageArgument,
+        
         isVideoMemory,
         isImageMemory,
         placesNearbyResponse,
@@ -61,7 +65,8 @@ class CreateMemoryState extends Equatable {
       ];
 
   CreateMemoryState copyWith({
-    CreateMemoryPageArgument? pageArgument,
+    EnumPostCreatorType? postCreatorType,
+    String? communityUid,
     bool? isVideoMemory,
     bool? isImageMemory,
     File? videoFile,
@@ -80,7 +85,8 @@ class CreateMemoryState extends Equatable {
     int? noOfDays,
   }) {
     return CreateMemoryState(
-      pageArgument: pageArgument ?? this.pageArgument,
+      postCreatorType: postCreatorType ?? this.postCreatorType,
+      communityUid: communityUid ?? this.communityUid,
       isVideoMemory: isVideoMemory ?? this.isVideoMemory,
       isImageMemory: isImageMemory ?? this.isImageMemory,
       videoFile: videoFile ?? this.videoFile,

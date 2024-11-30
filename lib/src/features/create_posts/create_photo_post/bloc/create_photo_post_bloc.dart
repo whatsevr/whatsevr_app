@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/api/external/models/places_nearby.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_photo_post.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_photo_posts.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -49,7 +50,10 @@ class CreatePhotoPostBloc
     Emitter<CreatePhotoPostState> emit,
   ) async {
     try {
-      emit(state.copyWith(pageArgument: event.pageArgument));
+      emit(state.copyWith(
+        postCreatorType: event.pageArgument.postCreatorType,
+        communityUid: event.pageArgument.communityUid,
+      ));
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(
@@ -134,7 +138,8 @@ class CreatePhotoPostBloc
           ],
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
-            postCreatorType: state.pageArgument?.postCreatorType.value,
+            postCreatorType: state.postCreatorType?.value,
+              communityUid:  state.communityUid,
           ),
         ),
       );
@@ -150,7 +155,7 @@ class CreatePhotoPostBloc
           location: state.selectedPostLocation,
           addressLatLongWkb: state.selectedPostLocationLatLongWkb,
           hashtags: hashtags,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+          postCreatorType: state.postCreatorType?.value,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
@@ -165,6 +170,7 @@ class CreatePhotoPostBloc
                 ),
               ),
           ],
+          communityUid: state.communityUid,
         ),
       );
       if (response != null) {

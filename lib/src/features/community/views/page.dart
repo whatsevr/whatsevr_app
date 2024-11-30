@@ -290,6 +290,8 @@ class CommunityPage extends StatelessWidget {
                                       context,
                                       postCreatorType:
                                           EnumPostCreatorType.COMMUNITY,
+                                      communityUid: state.communityDetailsResponse
+                                          ?.communityInfo?.uid,
                                     );
                                   },
                                 ),

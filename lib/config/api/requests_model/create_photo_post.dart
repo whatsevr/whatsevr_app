@@ -12,7 +12,7 @@ class CreatePhotoPostRequest {
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
   final List<FilesDatum>? filesData;
-
+  final String? communityUid;
   CreatePhotoPostRequest({
     this.title,
     this.description,
@@ -25,6 +25,7 @@ class CreatePhotoPostRequest {
     this.taggedUserUids,
     this.taggedCommunityUids,
     this.filesData,
+    this.communityUid,
   });
 
   CreatePhotoPostRequest copyWith({
@@ -39,6 +40,7 @@ class CreatePhotoPostRequest {
     List<String>? taggedUserUids,
     List<String>? taggedCommunityUids,
     List<FilesDatum>? filesData,
+    String? communityUid,
   }) =>
       CreatePhotoPostRequest(
         title: title ?? this.title,
@@ -52,6 +54,7 @@ class CreatePhotoPostRequest {
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         filesData: filesData ?? this.filesData,
+        communityUid: communityUid ?? this.communityUid,
       );
 
   factory CreatePhotoPostRequest.fromJson(String str) =>
@@ -82,6 +85,7 @@ class CreatePhotoPostRequest {
             : List<FilesDatum>.from(
                 json['files_data']!.map((x) => FilesDatum.fromMap(x)),
               ),
+              communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -103,6 +107,7 @@ class CreatePhotoPostRequest {
         'files_data': filesData == null
             ? []
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        'community_uid': communityUid,
       };
 }
 
