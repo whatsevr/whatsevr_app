@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
@@ -15,11 +13,6 @@ import 'package:whatsevr_app/config/api/response_model/multiple_user_details.dar
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
 import 'package:whatsevr_app/config/api/response_model/user/user_supportive_data.dart';
 import 'package:whatsevr_app/config/api/response_model/user_details.dart';
-import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
-import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
 
 class UsersApi {
   static Future<UserDetailsResponse?> getUserDetails({
@@ -39,9 +32,7 @@ class UsersApi {
     return null;
   }
 
-
-  static Future<(int? statusCode, UserSupportiveDataResponse data)?>
-      getSupportiveUserData({
+  static Future<(int? statusCode, UserSupportiveDataResponse data)?> getSupportiveUserData({
     required String userUid,
   }) async {
     try {
@@ -71,91 +62,6 @@ class UsersApi {
       );
       if (response.data != null) {
         return ProfileDetailsResponse.fromMap(response.data);
-      }
-    } catch (e, s) {
-      lowLevelCatch(e, s);
-    }
-    return null;
-  }
-
-  static Future<UserVideoPostsResponse?> getVideoPosts({
-    required String userUid,
-  }) async {
-    try {
-      final Response response = await ApiClient.client.get(
-        '/v1/user-video-posts',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
-      );
-      if (response.data != null) {
-        return UserVideoPostsResponse.fromMap(response.data);
-      }
-    } catch (e, s) {
-      lowLevelCatch(e, s);
-    }
-    return null;
-  }
-
-  static Future<UserFlicksResponse?> getFLicks({
-    required String userUid,
-  }) async {
-    try {
-      final Response response = await ApiClient.client.get(
-        '/v1/user-flicks',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
-      );
-      if (response.data != null) {
-        return UserFlicksResponse.fromMap(response.data);
-      }
-    } catch (e, s) {
-      lowLevelCatch(e, s);
-    }
-    return null;
-  }
-
-  static Future<UserMemoriesResponse?> getMemories({
-    required String userUid,
-  }) async {
-    try {
-      final Response response = await ApiClient.client.get(
-        '/v1/user-memories',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
-      );
-      if (response.data != null) {
-        return UserMemoriesResponse.fromMap(response.data);
-      }
-    } catch (e, s) {
-      lowLevelCatch(e, s);
-    }
-    return null;
-  }
-
-  static Future<UserPhotoPostsResponse?> getPhotoPosts({
-    required String userUid,
-  }) async {
-    try {
-      final Response response = await ApiClient.client.get(
-        '/v1/user-photo-posts',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
-      );
-      if (response.data != null) {
-        return UserPhotoPostsResponse.fromMap(response.data);
-      }
-    } catch (e, s) {
-      lowLevelCatch(e, s);
-    }
-    return null;
-  }
-
-  static Future<UserOffersResponse?> getOfferPosts({
-    required String userUid,
-  }) async {
-    try {
-      final Response response = await ApiClient.client.get(
-        '/v1/user-offer-posts',
-        queryParameters: <String, dynamic>{'user_uid': userUid},
-      );
-      if (response.data != null) {
-        return UserOffersResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

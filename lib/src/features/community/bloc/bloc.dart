@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
@@ -59,10 +60,10 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
         ),
       );
       final UserVideoPostsResponse? userVideoPostsResponse =
-          await UsersApi.getVideoPosts(userUid: state.communityUid!);
+          await PostApi.getVideoPosts(communityUid: state.communityUid!);
 
       final UserMemoriesResponse? userMemoriesResponse =
-          await UsersApi.getMemories(userUid: state.communityUid!);
+          await PostApi.getMemories(communityUid: state.communityUid!);
 
       emit(
         state.copyWith(

@@ -13,6 +13,11 @@ import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_offer.da
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_photo_posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_video_post.dart';
 import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
+import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
 
 class PostApi {
   static Future<(String? message, int? statusCode)?> sanityCheckNewVideoPost({
@@ -185,6 +190,111 @@ class PostApi {
       );
 
       return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserVideoPostsResponse?> getVideoPosts({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-video-posts',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserVideoPostsResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserFlicksResponse?> getFlicks({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-flicks',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserFlicksResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserMemoriesResponse?> getMemories({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-memories',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserMemoriesResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserPhotoPostsResponse?> getPhotoPosts({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-photo-posts',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserPhotoPostsResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<UserOffersResponse?> getOfferPosts({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-offer-posts',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserOffersResponse.fromMap(response.data);
+      }
     } catch (e, s) {
       lowLevelCatch(e, s);
     }

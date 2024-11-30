@@ -324,6 +324,28 @@ class MessageBubble extends StatelessWidget {
                       basicStyleColor: theme.surface,
                       detectedStyleColor: theme.surface,
                     ),
+                    // Add media content previews
+                    if (message.flick != null) ...[
+                      Gap(8),
+                      _buildMediaPreview( context,
+                        message.flick!.thumbnail!,
+                      
+                      ),
+                    ],
+                    if (message.videoPost != null) ...[
+                      Gap(8),
+                      _buildMediaPreview(context,
+                        message.videoPost!.thumbnail!,
+                      
+                      ),
+                    ],
+                    if (message.memory != null && message.memory!.imageUrl != null) ...[
+                      Gap(8),
+                      _buildMediaPreview(context,
+                        message.memory!.imageUrl!,
+                       
+                      ),
+                    ],
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -350,6 +372,45 @@ class MessageBubble extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildMediaPreview(BuildContext context,String url) {
+    final theme = context.whatsevrTheme;
+    return GestureDetector(
+      onTap: () {
+        // TODO: Implement media preview/playback
+      },
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: 200,
+          maxHeight: 200,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: ExtendedImage.network(
+            url,
+            fit: BoxFit.cover,
+            loadStateChanged: (state) {
+              if (state.extendedImageLoadState == LoadState.loading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(theme.accent),
+                  ),
+                );
+              } else if (state.extendedImageLoadState == LoadState.failed) {
+                return Container(
+                  color: theme.background,
+                  child: Center(
+                    child: Icon(Icons.error, color: theme.accent),
+                  ),
+                );
+              }
+              return null;
+            },
+          ),
+        ),
       ),
     );
   }

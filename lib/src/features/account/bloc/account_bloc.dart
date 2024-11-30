@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 
 import 'package:whatsevr_app/config/api/methods/users.dart';
@@ -55,13 +56,13 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         ),
       );
       final UserVideoPostsResponse? userVideoPostsResponse =
-          await UsersApi.getVideoPosts(userUid: state.userUid!);
+          await PostApi.getVideoPosts(userUid: state.userUid!);
       final UserFlicksResponse? userFlicksResponse =
-          await UsersApi.getFLicks(userUid: state.userUid!);
+          await PostApi.getFlicks(userUid: state.userUid!);
       final UserMemoriesResponse? userMemoriesResponse =
-          await UsersApi.getMemories(userUid: state.userUid!);
+          await PostApi.getMemories(userUid: state.userUid!);
       final UserOffersResponse? userOffersResponse =
-          await UsersApi.getOfferPosts(userUid: state.userUid!);
+          await PostApi.getOfferPosts(userUid: state.userUid!);
 
       emit(
         state.copyWith(
