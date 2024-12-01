@@ -21,7 +21,9 @@ class AccountPageAboutView extends StatelessWidget {
           children: <Widget>[
             const Gap(12),
             if (state.profileDetailsResponse?.userInfo?.isPortfolio ==
-                true) ...<Widget>[
+                true  
+                ) ...<Widget>[
+                  if(state.profileDetailsResponse?.userInfo?.portfolioStatus?.isNotEmpty??false)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -57,6 +59,7 @@ class AccountPageAboutView extends StatelessWidget {
                   ),
                 ),
               ),
+              if( state.profileDetailsResponse?.userServices?.isNotEmpty??false)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

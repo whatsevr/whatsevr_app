@@ -457,7 +457,11 @@ class AccountPage extends StatelessWidget {
                                           style: TextStyle(fontSize: 20),
                                         ),
                                         Text(
-                                          'Connections',
+                                          state.profileDetailsResponse?.userInfo
+                                                      ?.isPortfolio ==
+                                                  true
+                                              ? 'Connections'
+                                              : 'Friends',
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ],
@@ -558,25 +562,34 @@ class AccountPage extends StatelessWidget {
                                 top: Radius.circular(12),
                               ),
                             ),
-                            child: const Column(
+                            child: Column(
                               children: <Widget>[
-                                Gap(12),
+                                const Gap(12),
                                 WhatsevrTabBarWithViews(
                                   shrinkViews: true,
                                   tabAlignment: TabAlignment.start,
                                   isTabsScrollable: true,
                                   tabViews: [
                                     ('About', AccountPageAboutView()),
-                                    ('Services', AccountPageServicesView()),
+                                    if (state.profileDetailsResponse?.userInfo
+                                            ?.isPortfolio ==
+                                        true)
+                                      ('Services', AccountPageServicesView()),
                                     ('Media', Text('Media')),
                                     ('Videos', AccountPageVideosView()),
                                     ('Flicks', AccountPageFlicksView()),
-                                    ('Offerings', AccountPageOffersView()),
-                                    ('Pdf', AccountPagePdfsView()),
+                                    if (state.profileDetailsResponse?.userInfo
+                                            ?.isPortfolio ==
+                                        true)
+                                      ('Offerings', AccountPageOffersView()),
+                                    if (state.profileDetailsResponse?.userInfo
+                                            ?.isPortfolio ==
+                                        true)
+                                      ('Pdf', AccountPagePdfsView()),
                                     ('Tags', Text('Tags')),
                                   ],
                                 ),
-                                Gap(50),
+                                const Gap(50),
                               ],
                             ),
                           ),

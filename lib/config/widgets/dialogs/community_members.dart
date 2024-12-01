@@ -4,6 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/methods/community.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_members.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
@@ -12,6 +14,7 @@ import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/api/methods/user_relations.dart';
 
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
+import 'package:whatsevr_app/src/features/account/views/page.dart';
 
 void showCommunityMembersDialog({
   required BuildContext context,
@@ -34,8 +37,7 @@ class _Ui extends StatefulWidget {
   _UiState createState() => _UiState();
 }
 
-class _UiState extends State<_Ui>
-    with SingleTickerProviderStateMixin {
+class _UiState extends State<_Ui> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -61,8 +63,6 @@ class _UiState extends State<_Ui>
         tabAlignment: TabAlignment.start,
         tabViews: [
           ('Members', _MembersView(userUid: widget.userUid)),
-        
-          
         ],
       ),
     );
@@ -70,15 +70,13 @@ class _UiState extends State<_Ui>
 }
 
 class _MemberInfo extends StatelessWidget {
- 
   final Datum data;
-  final VoidCallback onTap;
+  final VoidCallback onTapMenu;
 
   const _MemberInfo({
     super.key,
-  
     required this.data,
-    required this.onTap,
+    required this.onTapMenu,
   });
 
   Widget followButton() {
@@ -91,6 +89,10 @@ class _MemberInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final Member user = data.user!;
     return ListTile(
+      onTap: () {
+        AppNavigationService.newRoute(RoutesName.account,
+            extras: AccountPageArgument(userUid: user.uid!));
+      },
       leading: CircleAvatar(
         backgroundImage: ExtendedNetworkImageProvider(
           user.profilePicture ?? MockData.blankProfileAvatar,
@@ -138,7 +140,8 @@ class _MembersViewState extends State<_MembersView> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       _loadMore();
     }
   }
@@ -149,7 +152,8 @@ class _MembersViewState extends State<_MembersView> {
         _isFetchingMore = true;
       });
 
-      final CommunityMembersResponse? response = await CommunityApi.getCommunityMembers(
+      final CommunityMembersResponse? response =
+          await CommunityApi.getCommunityMembers(
         communityUid: widget.userUid,
         page: _currentPage + 1,
       );
@@ -166,7 +170,8 @@ class _MembersViewState extends State<_MembersView> {
   }
 
   Future<void> _fetchMembers() async {
-    final CommunityMembersResponse? response = await CommunityApi.getCommunityMembers(
+    final CommunityMembersResponse? response =
+        await CommunityApi.getCommunityMembers(
       communityUid: widget.userUid,
       page: _currentPage,
     );
@@ -200,7 +205,7 @@ class _MembersViewState extends State<_MembersView> {
                   }
                   return _MemberInfo(
                     data: _followers[index],
-                    onTap: () {
+                    onTapMenu: () {
                       // Handle follow action
                     },
                   );
