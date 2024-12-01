@@ -420,6 +420,7 @@ class AccountPage extends StatelessWidget {
                                         context: context,
                                         userUid: (state.profileDetailsResponse
                                             ?.userInfo?.uid)!,
+                                            isPortfolio: state.profileDetailsResponse?.userInfo?.isPortfolio,
                                       );
                                     },
                                     child: Column(
@@ -446,6 +447,7 @@ class AccountPage extends StatelessWidget {
                                         context: context,
                                         userUid: (state.profileDetailsResponse
                                             ?.userInfo?.uid)!,
+                                            isPortfolio:  state.profileDetailsResponse?.userInfo?.isPortfolio,
                                       );
                                     },
                                     child: Column(

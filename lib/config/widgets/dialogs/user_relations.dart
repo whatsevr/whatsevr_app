@@ -18,19 +18,24 @@ import 'package:whatsevr_app/src/features/account/views/page.dart';
 void showUserRelationsDialog({
   required BuildContext context,
   required String userUid,
+  required bool? isPortfolio,
 }) {
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation1, animation2) {
-      return _UserRelationsPage(userUid: userUid);
+      return _UserRelationsPage(
+        userUid: userUid,
+        isPortfolio: isPortfolio??false,
+      );
     },
   );
 }
 
 class _UserRelationsPage extends StatefulWidget {
   final String userUid;
-
-  const _UserRelationsPage({super.key, required this.userUid});
+  final bool isPortfolio;
+  const _UserRelationsPage(
+      {super.key, required this.userUid, this.isPortfolio = false});
 
   @override
   _UserRelationsPageState createState() => _UserRelationsPageState();
@@ -66,7 +71,10 @@ class _UserRelationsPageState extends State<_UserRelationsPage>
           ('Following', FollowingTab(userUid: widget.userUid)),
           if (AuthUserDb.getLastLoggedUserUid() != widget.userUid)
             ('Mutual Followings', MutualFollowings(userUid: widget.userUid)),
-          ('Connections', ConnectionsTab(userUid: widget.userUid)),
+          (
+            widget.isPortfolio ? 'Connections' : 'Friends',
+            ConnectionsTab(userUid: widget.userUid)
+          ),
         ],
       ),
     );
