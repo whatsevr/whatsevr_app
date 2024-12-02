@@ -1,7 +1,8 @@
 part of 'create_offer_bloc.dart';
 
 class CreateOfferState extends Equatable {
-  final CreateOfferPageArgument? pageArgument;
+  final EnumPostCreatorType? postCreatorType;
+  final String? communityUid;
   final List<UiFileData> uiFilesData;
   final UiFileData? selectedUiFileData;
 
@@ -15,7 +16,8 @@ class CreateOfferState extends Equatable {
   final int? noOfDays;
   final String? selectedTargetGender;
   const CreateOfferState({
-    this.pageArgument,
+    this.postCreatorType,
+    this.communityUid,
     this.uiFilesData = const [],
     this.selectedUiFileData,
     this.userCurrentLocationLatLongWkb,
@@ -29,7 +31,8 @@ class CreateOfferState extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        pageArgument,
+        postCreatorType,
+        communityUid,
         uiFilesData,
         selectedUiFileData,
         userCurrentLocationLatLongWkb,
@@ -43,7 +46,8 @@ class CreateOfferState extends Equatable {
       ];
 
   CreateOfferState copyWith({
-    CreateOfferPageArgument? pageArgument,
+    EnumPostCreatorType? postCreatorType,
+    String? communityUid,
     List<UiFileData>? uiFilesData,
     UiFileData? selectedUiFileData,
     String? userCurrentLocationLatLongWkb,
@@ -55,7 +59,8 @@ class CreateOfferState extends Equatable {
     String? selectedTargetGender,
   }) {
     return CreateOfferState(
-      pageArgument: pageArgument ?? this.pageArgument,
+      postCreatorType: postCreatorType ?? this.postCreatorType,
+      communityUid: communityUid ?? this.communityUid,
       uiFilesData: uiFilesData ?? this.uiFilesData,
       selectedUiFileData: selectedUiFileData ?? this.selectedUiFileData,
       userCurrentLocationLatLongWkb:

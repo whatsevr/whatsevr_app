@@ -16,7 +16,7 @@ class CreateOfferRequest {
   final List<FilesDatum>? filesData;
   final String? ctaAction;
   final String? ctaActionUrl;
-
+ final String? communityUid;
   CreateOfferRequest({
     this.title,
     this.description,
@@ -32,6 +32,7 @@ class CreateOfferRequest {
     this.filesData,
     this.ctaAction,
     this.ctaActionUrl,
+    this.communityUid,
   });
 
   CreateOfferRequest copyWith({
@@ -49,6 +50,7 @@ class CreateOfferRequest {
     List<FilesDatum>? filesData,
     String? ctaAction,
     String? ctaActionUrl,
+    String? communityUid,
   }) =>
       CreateOfferRequest(
         title: title ?? this.title,
@@ -65,6 +67,7 @@ class CreateOfferRequest {
         filesData: filesData ?? this.filesData,
         ctaAction: ctaAction ?? this.ctaAction,
         ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+        communityUid: communityUid ?? this.communityUid,
       );
 
   factory CreateOfferRequest.fromJson(String str) =>
@@ -100,6 +103,7 @@ class CreateOfferRequest {
               ),
         ctaAction: json['cta_action'],
         ctaActionUrl: json['cta_action_url'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -126,6 +130,7 @@ class CreateOfferRequest {
             : List<dynamic>.from(filesData!.map((x) => x.toMap())),
         'cta_action': ctaAction,
         'cta_action_url': ctaActionUrl,
+        'community_uid': communityUid,
       };
 }
 

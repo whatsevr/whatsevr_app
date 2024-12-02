@@ -12,6 +12,7 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/create_offer.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_offer.dart';
+import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -54,7 +55,11 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      emit(state.copyWith(pageArgument: event.pageArgument));
+      emit(state.copyWith(
+        communityUid: event.pageArgument.communityUid,
+        postCreatorType: event.pageArgument.postCreatorType,
+      ));
+
       (double, double)? currentGpsLatLong =
           await LocationService.getCurrentGpsLatLong();
       if (currentGpsLatLong != null) {
@@ -114,7 +119,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           ],
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
-            postCreatorType: state.pageArgument?.postCreatorType.value,
+            postCreatorType: state.postCreatorType?.value,
           ),
         ),
       );
@@ -131,7 +136,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           targetAreas: state.selectedTargetAddresses,
           targetGender: state.selectedTargetGender?.toLowerCase(),
           hashtags: hashtags,
-          postCreatorType: state.pageArgument?.postCreatorType.value,
+          postCreatorType: state.postCreatorType?.value,
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
@@ -167,6 +172,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           ctaActionUrl: state.ctaAction?.isNotEmpty ?? false
               ? ctaActionUrlController.text
               : null,
+          communityUid: state.communityUid,
         ),
       );
 

@@ -488,6 +488,7 @@ class CommunityPage extends StatelessWidget {
                               ('Services', CommunityPageServicesView()),
                               ('Media', Text('Media')),
                               ('Videos', CommunityPageVideosView()),
+                              ('Offers', CommunityPageVideosView()),
                             ],
                           ),
                           Gap(50),

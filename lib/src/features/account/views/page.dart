@@ -580,9 +580,7 @@ class AccountPage extends StatelessWidget {
                                     ('Media', Text('Media')),
                                     ('Videos', AccountPageVideosView()),
                                     ('Flicks', AccountPageFlicksView()),
-                                    if (state.profileDetailsResponse?.userInfo
-                                            ?.isPortfolio ==
-                                        true)
+                                   
                                       ('Offerings', AccountPageOffersView()),
                                     if (state.profileDetailsResponse?.userInfo
                                             ?.isPortfolio ==

@@ -117,7 +117,7 @@ class _Ui extends StatelessWidget {
               },
             ),
           ],
-          if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
+          ...[
             const Gap(8),
             _buildButton(
               icon: const Iconify(Fa6Solid.signs_post),
@@ -126,17 +126,21 @@ class _Ui extends StatelessWidget {
                 Navigator.pop(context);
                 AppNavigationService.newRoute(
                   RoutesName.createOffer,
-                  extras:
-                      CreateOfferPageArgument(postCreatorType: postCreatorType),
+                  extras: CreateOfferPageArgument(
+                    postCreatorType: postCreatorType,
+                    communityUid: communityUid,
+                  ),
                 );
-              },
+              }, 
             ),
             const Gap(8),
+          ],
+          if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
             _buildButton(
               icon: const Iconify(Fa6Solid.file_pdf),
               label: 'Upload PDF',
               onPressed: () {
-                Navigator.pop(context); 
+                Navigator.pop(context);
                 AppNavigationService.newRoute(
                   RoutesName.uploadPdf,
                   extras:
