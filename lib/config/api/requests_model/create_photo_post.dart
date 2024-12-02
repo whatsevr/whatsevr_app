@@ -85,7 +85,7 @@ class CreatePhotoPostRequest {
             : List<FilesDatum>.from(
                 json['files_data']!.map((x) => FilesDatum.fromMap(x)),
               ),
-              communityUid: json['community_uid'],
+        communityUid: json['community_uid'],
       );
 
   Map<String, dynamic> toMap() => {

@@ -51,7 +51,6 @@ class CreateMemoryState extends Equatable {
         thumbnailMetaData,
         imageFile,
         imageMetaData,
-        
         isVideoMemory,
         isImageMemory,
         placesNearbyResponse,

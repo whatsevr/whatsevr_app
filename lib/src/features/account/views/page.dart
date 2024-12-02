@@ -27,7 +27,7 @@ import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
-import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';
@@ -350,7 +350,7 @@ class AccountPage extends StatelessWidget {
                                                         .newRoute(
                                                       RoutesName.updateProfile,
                                                       extras:
-                                                          ProfileUpdatePageArgument(
+                                                          UserProfileUpdatePageArgument(
                                                         profileDetailsResponse:
                                                             state
                                                                 .profileDetailsResponse,
@@ -420,7 +420,10 @@ class AccountPage extends StatelessWidget {
                                         context: context,
                                         userUid: (state.profileDetailsResponse
                                             ?.userInfo?.uid)!,
-                                            isPortfolio: state.profileDetailsResponse?.userInfo?.isPortfolio,
+                                        isPortfolio: state
+                                            .profileDetailsResponse
+                                            ?.userInfo
+                                            ?.isPortfolio,
                                       );
                                     },
                                     child: Column(
@@ -447,7 +450,10 @@ class AccountPage extends StatelessWidget {
                                         context: context,
                                         userUid: (state.profileDetailsResponse
                                             ?.userInfo?.uid)!,
-                                            isPortfolio:  state.profileDetailsResponse?.userInfo?.isPortfolio,
+                                        isPortfolio: state
+                                            .profileDetailsResponse
+                                            ?.userInfo
+                                            ?.isPortfolio,
                                       );
                                     },
                                     child: Column(
@@ -580,8 +586,7 @@ class AccountPage extends StatelessWidget {
                                     ('Media', Text('Media')),
                                     ('Videos', AccountPageVideosView()),
                                     ('Flicks', AccountPageFlicksView()),
-                                   
-                                      ('Offerings', AccountPageOffersView()),
+                                    ('Offerings', AccountPageOffersView()),
                                     if (state.profileDetailsResponse?.userInfo
                                             ?.isPortfolio ==
                                         true)

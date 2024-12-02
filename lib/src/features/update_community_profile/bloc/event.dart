@@ -1,14 +1,14 @@
 part of 'bloc.dart';
 
-abstract class ProfileEvent extends Equatable {
-  const ProfileEvent();
+abstract class CommunityProfileUpdateEvent extends Equatable {
+  const CommunityProfileUpdateEvent();
 
   @override
   List<Object?> get props => <Object?>[];
 }
 
-class InitialEvent extends ProfileEvent {
-  final ProfileUpdatePageArgument pageArgument;
+class InitialEvent extends CommunityProfileUpdateEvent {
+  final CommunityProfileUpdatePageArgument pageArgument;
 
   const InitialEvent({required this.pageArgument});
 
@@ -16,7 +16,7 @@ class InitialEvent extends ProfileEvent {
   List<Object?> get props => <Object?>[pageArgument];
 }
 
-class ChangeProfilePictureEvent extends ProfileEvent {
+class ChangeProfilePictureEvent extends CommunityProfileUpdateEvent {
   final File? profileImage;
   const ChangeProfilePictureEvent({this.profileImage});
 
@@ -24,7 +24,7 @@ class ChangeProfilePictureEvent extends ProfileEvent {
   List<Object?> get props => <Object?>[profileImage];
 }
 
-class AddOrRemoveCoverMedia extends ProfileEvent {
+class AddOrRemoveCoverMedia extends CommunityProfileUpdateEvent {
   final File? coverImage;
   final File? coverVideo;
   final UiCoverMedia? removableCoverMedia;
@@ -40,7 +40,7 @@ class AddOrRemoveCoverMedia extends ProfileEvent {
       <Object?>[coverImage, coverVideo, removableCoverMedia];
 }
 
-class UpdateGender extends ProfileEvent {
+class UpdateGender extends CommunityProfileUpdateEvent {
   final String? gender;
 
   const UpdateGender(this.gender);
@@ -49,7 +49,7 @@ class UpdateGender extends ProfileEvent {
   List<Object?> get props => <Object?>[gender];
 }
 
-class AddOrRemoveEducation extends ProfileEvent {
+class AddOrRemoveEducation extends CommunityProfileUpdateEvent {
   final UiEducation? education;
   final bool? isRemove;
 
@@ -59,7 +59,7 @@ class AddOrRemoveEducation extends ProfileEvent {
   List<Object?> get props => <Object?>[education, isRemove];
 }
 
-class AddOrRemoveWorkExperience extends ProfileEvent {
+class AddOrRemoveWorkExperience extends CommunityProfileUpdateEvent {
   final UiWorkExperience? workExperience;
   final bool? isRemove;
 
@@ -69,7 +69,7 @@ class AddOrRemoveWorkExperience extends ProfileEvent {
   List<Object?> get props => <Object?>[workExperience, isRemove];
 }
 
-class AddOrRemoveService extends ProfileEvent {
+class AddOrRemoveService extends CommunityProfileUpdateEvent {
   final UiService? service;
   final bool? isRemove;
 
@@ -79,7 +79,7 @@ class AddOrRemoveService extends ProfileEvent {
   List<Object?> get props => <Object?>[service, isRemove];
 }
 
-class SubmitProfile extends ProfileEvent {
+class SubmitProfile extends CommunityProfileUpdateEvent {
   const SubmitProfile();
 
   @override

@@ -16,8 +16,8 @@ class CreateFlickPostState extends Equatable {
   final List<String> taggedCommunitiesUid;
 
   const CreateFlickPostState({
-     this.postCreatorType,
-      this.communityUid,
+    this.postCreatorType,
+    this.communityUid,
     this.videoFile,
     this.videoMetaData,
     this.thumbnailFile,
@@ -38,7 +38,6 @@ class CreateFlickPostState extends Equatable {
         videoMetaData,
         thumbnailFile,
         thumbnailMetaData,
-        
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedPostLocation,

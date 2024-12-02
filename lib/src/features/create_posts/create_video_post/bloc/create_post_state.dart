@@ -1,7 +1,6 @@
 part of 'create_post_bloc.dart';
 
 class CreateVideoPostState extends Equatable {
-  
   final EnumPostCreatorType? postCreatorType;
   final String? communityUid;
   final File? videoFile;
@@ -38,7 +37,6 @@ class CreateVideoPostState extends Equatable {
         videoMetaData,
         thumbnailFile,
         thumbnailMetaData,
-        
         placesNearbyResponse,
         userCurrentLocationLatLongWkb,
         selectedPostLocation,

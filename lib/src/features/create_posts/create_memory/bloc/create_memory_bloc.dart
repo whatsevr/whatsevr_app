@@ -118,7 +118,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
             isImage: state.isImageMemory,
             userUid: AuthUserDb.getLastLoggedUserUid(),
             postCreatorType: state.postCreatorType?.value,
-              communityUid:  state.communityUid,
+            communityUid: state.communityUid,
           ),
         ),
       );
@@ -293,7 +293,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
   ) {
     emit(
       CreateMemoryState(
-        communityUid:  state.communityUid,
+        communityUid: state.communityUid,
         postCreatorType: state.postCreatorType,
         userCurrentLocationLatLongWkb: state.userCurrentLocationLatLongWkb,
         selectedAddress: state.selectedAddress,
@@ -402,7 +402,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
           taggedUserUids: state.taggedUsersUid,
           taggedCommunityUids: state.taggedCommunitiesUid,
-          communityUid: state.communityUid, 
+          communityUid: state.communityUid,
         ),
       );
       if (response != null) {

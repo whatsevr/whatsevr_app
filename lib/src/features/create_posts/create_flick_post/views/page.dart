@@ -21,8 +21,9 @@ import 'package:whatsevr_app/src/features/create_posts/create_flick_post/bloc/cr
 
 class CreateFlickPostPageArgument {
   final EnumPostCreatorType postCreatorType;
-   final String? communityUid;
-  CreateFlickPostPageArgument({required this.postCreatorType, this.communityUid});
+  final String? communityUid;
+  CreateFlickPostPageArgument(
+      {required this.postCreatorType, this.communityUid});
 }
 
 class CreateFlickPostPage extends StatelessWidget {

@@ -61,7 +61,6 @@ class CreateVideoPostRequest {
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         videoDurationInSec: json['video_duration_in_sec'],
         communityUid: json['community_uid'],
-
       );
 
   Map<String, dynamic> toMap() => <String, dynamic>{

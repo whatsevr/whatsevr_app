@@ -74,7 +74,7 @@ void lowLevelCatch(dynamic e, StackTrace stackTrace) {
 }
 
 // High level function to handle and show error messages
-void highLevelCatch(dynamic e,StackTrace stackTrace) {
+void highLevelCatch(dynamic e, StackTrace stackTrace) {
   SmartDialog.dismiss();
   if (e is BusinessException) {
     SmartDialog.showToast(e.message);

@@ -120,6 +120,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
             postCreatorType: state.postCreatorType?.value,
+            communityUid:  state.communityUid,
           ),
         ),
       );

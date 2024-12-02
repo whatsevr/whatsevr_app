@@ -26,6 +26,7 @@ class SubscribeToMessageInserAndUpdateEvent extends ConversationEvent {
   @override
   List<Object?> get props => [];
 }
+
 class RemoteMessagesInsertOrUpdateEvent extends ConversationEvent {
   final Message? newMessage;
   const RemoteMessagesInsertOrUpdateEvent({
@@ -33,8 +34,9 @@ class RemoteMessagesInsertOrUpdateEvent extends ConversationEvent {
   });
 
   @override
-  List<Object?> get props => [ newMessage];
+  List<Object?> get props => [newMessage];
 }
+
 class RemoteMessageDeletedEvent extends ConversationEvent {
   final String? deletedMessageUid;
   const RemoteMessageDeletedEvent({
@@ -42,8 +44,9 @@ class RemoteMessageDeletedEvent extends ConversationEvent {
   });
 
   @override
-  List<Object?> get props => [ deletedMessageUid];
+  List<Object?> get props => [deletedMessageUid];
 }
+
 class SendMessage extends ConversationEvent {
   final String content;
   final String? replyToMessageUid;

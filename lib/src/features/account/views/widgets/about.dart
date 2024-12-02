@@ -21,106 +21,108 @@ class AccountPageAboutView extends StatelessWidget {
           children: <Widget>[
             const Gap(12),
             if (state.profileDetailsResponse?.userInfo?.isPortfolio ==
-                true  
-                ) ...<Widget>[
-                  if(state.profileDetailsResponse?.userInfo?.portfolioStatus?.isNotEmpty??false)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: context.whatsevrTheme.surface,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Gap(8),
-                        const Text(
-                          'Status',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
+                true) ...<Widget>[
+              if (state.profileDetailsResponse?.userInfo?.portfolioStatus
+                      ?.isNotEmpty ??
+                  false)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: context.whatsevrTheme.surface,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Gap(8),
+                          const Text(
+                            'Status',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
                           ),
-                        ),
-                        Text(
-                          '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            '${state.profileDetailsResponse?.userInfo?.portfolioStatus}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const Gap(8),
-                      ],
+                          const Gap(8),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              if( state.profileDetailsResponse?.userServices?.isNotEmpty??false)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: context.whatsevrTheme.surface,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Gap(8),
-                        const Row(
-                          children: <StatelessWidget>[
-                            Text(
-                              'Serve',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              'All Services>>',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                        Gap(8),
-                        Wrap(
-                          spacing: 8,
-                          children: <Widget>[
-                            for (UserService? service
-                                in state.profileDetailsResponse?.userServices ??
-                                    <UserService?>[])
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.blueGrey,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  '${service?.title}',
-                                  style: const TextStyle(color: Colors.white),
+              if (state.profileDetailsResponse?.userServices?.isNotEmpty ??
+                  false)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: context.whatsevrTheme.surface,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          const Gap(8),
+                          const Row(
+                            children: <StatelessWidget>[
+                              Text(
+                                'Serve',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
                                 ),
                               ),
-                          ],
-                        ),
-                        const Gap(8),
-                      ],
+                              Spacer(),
+                              Text(
+                                'All Services>>',
+                                style:
+                                    TextStyle(fontSize: 14, color: Colors.blue),
+                              ),
+                            ],
+                          ),
+                          Gap(8),
+                          Wrap(
+                            spacing: 8,
+                            children: <Widget>[
+                              for (UserService? service in state
+                                      .profileDetailsResponse?.userServices ??
+                                  <UserService?>[])
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blueGrey,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    '${service?.title}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const Gap(8),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
             for ((String label, String info) itm in <(String, String)>[
               if (state.profileDetailsResponse?.userInfo?.bio?.isNotEmpty ??

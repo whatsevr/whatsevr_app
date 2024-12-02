@@ -22,7 +22,8 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/cr
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
-  const CreateVideoPostPageArgument({required this.postCreatorType, this.communityUid});
+  const CreateVideoPostPageArgument(
+      {required this.postCreatorType, this.communityUid});
 }
 
 class CreateVideoPostPage extends StatelessWidget {

@@ -7,8 +7,8 @@ class JoinLeaveCommunityState extends Equatable {
   final String? error;
 
   const JoinLeaveCommunityState({
-     this.userJoinedCommunityUids  = const {},
-     this.userOwnedCommunityUids = const {},
+    this.userJoinedCommunityUids = const {},
+    this.userOwnedCommunityUids = const {},
     this.isLoading = false,
     this.error,
   });
@@ -20,13 +20,16 @@ class JoinLeaveCommunityState extends Equatable {
     String? error,
   }) {
     return JoinLeaveCommunityState(
-      userJoinedCommunityUids: userJoinedCommunityUids ?? this.userJoinedCommunityUids,
-      userOwnedCommunityUids: userOwnedCommunityUids ?? this.userOwnedCommunityUids,
+      userJoinedCommunityUids:
+          userJoinedCommunityUids ?? this.userJoinedCommunityUids,
+      userOwnedCommunityUids:
+          userOwnedCommunityUids ?? this.userOwnedCommunityUids,
       isLoading: isLoading ?? this.isLoading,
       error: error,
     );
   }
 
   @override
-  List<Object?> get props => [userJoinedCommunityUids,userOwnedCommunityUids, isLoading, error];
+  List<Object?> get props =>
+      [userJoinedCommunityUids, userOwnedCommunityUids, isLoading, error];
 }

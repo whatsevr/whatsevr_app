@@ -139,7 +139,7 @@ class CreatePhotoPostBloc
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
             postCreatorType: state.postCreatorType?.value,
-              communityUid:  state.communityUid,
+            communityUid: state.communityUid,
           ),
         ),
       );

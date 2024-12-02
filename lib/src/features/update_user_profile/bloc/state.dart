@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-class ProfileState extends Equatable {
+class UserProfileUpdateState extends Equatable {
   final ProfileDetailsResponse? currentProfileDetailsResponse;
 
   final DateTime? dob;
@@ -14,7 +14,7 @@ class ProfileState extends Equatable {
   final List<UiEducation>? educations;
   final List<UiWorkExperience>? workExperiences;
 
-  const ProfileState({
+  const UserProfileUpdateState({
     this.currentProfileDetailsResponse,
     this.dob,
     this.profileImage,
@@ -25,7 +25,7 @@ class ProfileState extends Equatable {
     this.gender,
   });
 
-  ProfileState copyWith({
+  UserProfileUpdateState copyWith({
     ProfileDetailsResponse? currentProfileDetailsResponse,
     DateTime? dob,
     File? profileImage,
@@ -35,7 +35,7 @@ class ProfileState extends Equatable {
     List<UiWorkExperience>? workExperiences,
     String? gender,
   }) {
-    return ProfileState(
+    return UserProfileUpdateState(
       currentProfileDetailsResponse:
           currentProfileDetailsResponse ?? this.currentProfileDetailsResponse,
       dob: dob ?? this.dob,

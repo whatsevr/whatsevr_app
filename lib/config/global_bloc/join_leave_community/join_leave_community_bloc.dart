@@ -8,11 +8,11 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 part 'join_leave_community_event.dart';
 part 'join_leave_community_state.dart';
 
-class JoinLeaveCommunityBloc 
+class JoinLeaveCommunityBloc
     extends Bloc<JoinLeaveCommunityEvent, JoinLeaveCommunityState> {
   static String? _userOwnedCommunitiesBox;
   static String? _userJoinedCommunitiesBox;
-  JoinLeaveCommunityBloc() 
+  JoinLeaveCommunityBloc()
       : super(const JoinLeaveCommunityState(userJoinedCommunityUids: {})) {
     on<FetchUserCommunities>(_onFetchUserCommunities);
     on<JoinOrLeave>(_onJoinOrLeave);
@@ -53,28 +53,35 @@ class JoinLeaveCommunityBloc
       }
 
       // Load from cache first
-      final List<dynamic>? cachedOwnedCommunities = ownedBox.get('ownedCommunities');
-      final List<dynamic>? cachedJoinedCommunities = joinedBox.get('joinedCommunities');
-      
+      final List<dynamic>? cachedOwnedCommunities =
+          ownedBox.get('ownedCommunities');
+      final List<dynamic>? cachedJoinedCommunities =
+          joinedBox.get('joinedCommunities');
+
       if (cachedOwnedCommunities != null || cachedJoinedCommunities != null) {
         emit(state.copyWith(
-          userOwnedCommunityUids: cachedOwnedCommunities != null ? Set.from(cachedOwnedCommunities.cast<String>()) : {},
-          userJoinedCommunityUids: cachedJoinedCommunities != null ? Set.from(cachedJoinedCommunities.cast<String>()) : {},
+          userOwnedCommunityUids: cachedOwnedCommunities != null
+              ? Set.from(cachedOwnedCommunities.cast<String>())
+              : {},
+          userJoinedCommunityUids: cachedJoinedCommunities != null
+              ? Set.from(cachedJoinedCommunities.cast<String>())
+              : {},
         ));
       }
 
       // Fetch from API
-      final  (List<String>, List<String>)? communitiesUids = await _fetchUserCommunitiesFromApi();
-     if( communitiesUids == null) return;
+      final (List<String>, List<String>)? communitiesUids =
+          await _fetchUserCommunitiesFromApi();
+      if (communitiesUids == null) return;
       final List<String> ownedCommunities = communitiesUids.$1;
       final List<String> joinedCommunities = communitiesUids.$2;
 
       emit(state.copyWith(
-          userJoinedCommunityUids: Set.from(joinedCommunities),
-          userOwnedCommunityUids:  Set.from(ownedCommunities),
-          isLoading: false,
-        ));
-        
+        userJoinedCommunityUids: Set.from(joinedCommunities),
+        userOwnedCommunityUids: Set.from(ownedCommunities),
+        isLoading: false,
+      ));
+
       // Persist to separate boxes
       await ownedBox.put('ownedCommunities', ownedCommunities);
       await joinedBox.put('joinedCommunities', joinedCommunities);
@@ -94,12 +101,18 @@ class JoinLeaveCommunityBloc
     if (ownedBox == null || joinedBox == null) return;
 
     try {
-      final List<dynamic>? cachedOwnedCommunities = ownedBox.get('ownedCommunities');
-      final List<dynamic>? cachedJoinedCommunities = joinedBox.get('joinedCommunities');
-      
+      final List<dynamic>? cachedOwnedCommunities =
+          ownedBox.get('ownedCommunities');
+      final List<dynamic>? cachedJoinedCommunities =
+          joinedBox.get('joinedCommunities');
+
       emit(state.copyWith(
-        userOwnedCommunityUids: cachedOwnedCommunities != null ? Set.from(cachedOwnedCommunities.cast<String>()) : {},
-        userJoinedCommunityUids: cachedJoinedCommunities != null ? Set.from(cachedJoinedCommunities.cast<String>()) : {},
+        userOwnedCommunityUids: cachedOwnedCommunities != null
+            ? Set.from(cachedOwnedCommunities.cast<String>())
+            : {},
+        userJoinedCommunityUids: cachedJoinedCommunities != null
+            ? Set.from(cachedJoinedCommunities.cast<String>())
+            : {},
         isLoading: false,
       ));
     } catch (e) {
@@ -107,23 +120,28 @@ class JoinLeaveCommunityBloc
     }
   }
 
-  Future<(List<String> ownedCommunityUids,List<String> joinedCommunityUids,)?> _fetchUserCommunitiesFromApi() async {
+  Future<
+      (
+        List<String> ownedCommunityUids,
+        List<String> joinedCommunityUids,
+      )?> _fetchUserCommunitiesFromApi() async {
     try {
       final UserCommunitiesResponse? response =
           await CommunityApi.getUserCommunities(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
-      if (response == null || 
-          ((response.userCommunities == null || response.userCommunities!.isEmpty) && 
-           (response.joinedCommunities == null || response.joinedCommunities!.isEmpty))) {
+      if (response == null ||
+          ((response.userCommunities == null ||
+                  response.userCommunities!.isEmpty) &&
+              (response.joinedCommunities == null ||
+                  response.joinedCommunities!.isEmpty))) {
         return null;
       }
 
       final List<String> userCommunitiesUids = [];
       final List<String> joinedCommunitiesUids = [];
       if (response.userCommunities != null) {
-        
         userCommunitiesUids.addAll(
           response.userCommunities!
               .map((e) => e.uid)
@@ -131,7 +149,7 @@ class JoinLeaveCommunityBloc
               .toList(),
         );
       }
-      
+
       if (response.joinedCommunities != null) {
         joinedCommunitiesUids.addAll(
           response.joinedCommunities!
@@ -141,10 +159,10 @@ class JoinLeaveCommunityBloc
         );
       }
 
-      return (userCommunitiesUids,joinedCommunitiesUids);
+      return (userCommunitiesUids, joinedCommunitiesUids);
     } catch (e) {
       print('Error fetching communities from API: $e');
-       return null;
+      return null;
     }
   }
 
@@ -156,8 +174,10 @@ class JoinLeaveCommunityBloc
     if (ownedBox == null || joinedBox == null) return;
 
     try {
-      final isCurrentlyJoined = state.userJoinedCommunityUids.contains(event.userUid);
-      final updatedJoinedCommunities = Set<String>.from(state.userJoinedCommunityUids);
+      final isCurrentlyJoined =
+          state.userJoinedCommunityUids.contains(event.userUid);
+      final updatedJoinedCommunities =
+          Set<String>.from(state.userJoinedCommunityUids);
 
       if (isCurrentlyJoined) {
         updatedJoinedCommunities.remove(event.userUid);

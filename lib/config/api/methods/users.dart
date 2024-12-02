@@ -32,7 +32,8 @@ class UsersApi {
     return null;
   }
 
-  static Future<(int? statusCode, UserSupportiveDataResponse data)?> getSupportiveUserData({
+  static Future<(int? statusCode, UserSupportiveDataResponse data)?>
+      getSupportiveUserData({
     required String userUid,
   }) async {
     try {

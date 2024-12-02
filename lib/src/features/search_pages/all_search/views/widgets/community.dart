@@ -96,7 +96,6 @@ class _CommunityView extends StatelessWidget {
                         ),
                       ),
                       const Gap(8),
-                
                     ],
                   ),
                 ],

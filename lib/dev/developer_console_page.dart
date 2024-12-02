@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
@@ -200,7 +201,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               ),
             ),
           ),
-          Table( 
+          Table(
             columnWidths: const {
               0: FlexColumnWidth(1),
               1: FlexColumnWidth(2),
@@ -303,7 +304,8 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             (
               'Test Function 1',
               () async {
-                WhatsevrStackToast.showSuccess('Success Test Function');
+                SmartDialog.showToast( 'Success Test Function');
+                
               }
             ),
             (

@@ -131,7 +131,7 @@ class _Ui extends StatelessWidget {
                     communityUid: communityUid,
                   ),
                 );
-              }, 
+              },
             ),
             const Gap(8),
           ],

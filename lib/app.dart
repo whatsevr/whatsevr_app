@@ -59,8 +59,9 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
         BlocProvider<FollowUnfollowBloc>(
           create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
         ),
-         BlocProvider<JoinLeaveCommunityBloc>(
-          create: (context) => JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
+        BlocProvider<JoinLeaveCommunityBloc>(
+          create: (context) =>
+              JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
         ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
@@ -79,7 +80,6 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
                   selectionHandleColor: Colors.grey,
                 ),
                 useMaterial3: true,
-                //flipkart
                 textTheme: GoogleFonts.poppinsTextTheme(),
               ),
               routerConfig: routeConfig,
@@ -88,7 +88,7 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
                 dragDevices: PointerDeviceKind.values.toSet(),
               ),
               builder: FlutterSmartDialog.init(
-                toastBuilder: (msg) => _toastUi(msg),
+              toastBuilder: (msg) => _toastUi(msg),
                 loadingBuilder: (String msg) => _loaderUi(msg),
                 builder: (BuildContext context, Widget? child) {
                   return GestureDetector(
@@ -140,7 +140,7 @@ Container _toastUi(String msg) {
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
-      color: AppNavigationService.currentContext?.whatsevrTheme.surface,
+     /// color: AppNavigationService.currentContext?.whatsevrTheme.surface,
       borderRadius: BorderRadius.circular(8),
       boxShadow: const <BoxShadow>[
         BoxShadow(

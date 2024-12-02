@@ -327,23 +327,24 @@ class MessageBubble extends StatelessWidget {
                     // Add media content previews
                     if (message.flick != null) ...[
                       Gap(8),
-                      _buildMediaPreview( context,
+                      _buildMediaPreview(
+                        context,
                         message.flick!.thumbnail!,
-                      
                       ),
                     ],
                     if (message.videoPost != null) ...[
                       Gap(8),
-                      _buildMediaPreview(context,
+                      _buildMediaPreview(
+                        context,
                         message.videoPost!.thumbnail!,
-                      
                       ),
                     ],
-                    if (message.memory != null && message.memory!.imageUrl != null) ...[
+                    if (message.memory != null &&
+                        message.memory!.imageUrl != null) ...[
                       Gap(8),
-                      _buildMediaPreview(context,
+                      _buildMediaPreview(
+                        context,
                         message.memory!.imageUrl!,
-                       
                       ),
                     ],
                     Row(
@@ -376,7 +377,7 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildMediaPreview(BuildContext context,String url) {
+  Widget _buildMediaPreview(BuildContext context, String url) {
     final theme = context.whatsevrTheme;
     return GestureDetector(
       onTap: () {

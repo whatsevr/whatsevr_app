@@ -11,6 +11,7 @@ import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
+import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
@@ -30,7 +31,7 @@ import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
-import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/community/bloc/bloc.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/cover_media.dart';
@@ -290,8 +291,10 @@ class CommunityPage extends StatelessWidget {
                                       context,
                                       postCreatorType:
                                           EnumPostCreatorType.COMMUNITY,
-                                      communityUid: state.communityDetailsResponse
-                                          ?.communityInfo?.uid,
+                                      communityUid: state
+                                          .communityDetailsResponse
+                                          ?.communityInfo
+                                          ?.uid,
                                     );
                                   },
                                 ),
@@ -488,8 +491,8 @@ class CommunityPage extends StatelessWidget {
                               ('Services', CommunityPageServicesView()),
                               ('Media', Text('Media')),
                               ('Videos', CommunityPageVideosView()),
-                              ('Offers', CommunityPageVideosView()),
-                            ],
+                              ('Offers', CommunityPageOffersView()),
+                            ],  
                           ),
                           Gap(50),
                         ],

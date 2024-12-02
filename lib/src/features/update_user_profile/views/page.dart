@@ -21,18 +21,18 @@ import 'package:whatsevr_app/config/widgets/media/thumbnail_selection.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/update_profile/bloc/bloc.dart';
+import 'package:whatsevr_app/src/features/update_user_profile/bloc/bloc.dart';
 
 // Adjust the import
-class ProfileUpdatePageArgument {
+class UserProfileUpdatePageArgument {
   final ProfileDetailsResponse? profileDetailsResponse;
 
-  ProfileUpdatePageArgument({required this.profileDetailsResponse});
+  UserProfileUpdatePageArgument({required this.profileDetailsResponse});
 }
 
-class ProfileUpdatePage extends StatelessWidget {
-  final ProfileUpdatePageArgument pageArgument;
-  const ProfileUpdatePage({
+class UserProfileUpdatePage extends StatelessWidget {
+  final UserProfileUpdatePageArgument pageArgument;
+  const UserProfileUpdatePage({
     super.key,
     required this.pageArgument,
   });
@@ -42,7 +42,7 @@ class ProfileUpdatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-          ProfileBloc()..add(InitialEvent(pageArgument: pageArgument)),
+          UserProfileUpdateBloc()..add(InitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
@@ -51,8 +51,8 @@ class ProfileUpdatePage extends StatelessWidget {
               title: 'Update Profile',
               showAiAction: true,
             ),
-            body: BlocBuilder<ProfileBloc, ProfileState>(
-              builder: (BuildContext context, ProfileState state) {
+            body: BlocBuilder<UserProfileUpdateBloc, UserProfileUpdateState>(
+              builder: (BuildContext context, UserProfileUpdateState state) {
                 return ListView(
                   padding: PadHorizontal.padding,
                   children: <Widget>[
@@ -77,7 +77,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       WhatsevrAspectRatio.square,
                                     ],
                                     onCompleted: (file) {
-                                      context.read<ProfileBloc>().add(
+                                      context.read<UserProfileUpdateBloc>().add(
                                             ChangeProfilePictureEvent(
                                               profileImage: file,
                                             ),
@@ -93,7 +93,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       WhatsevrAspectRatio.square,
                                     ],
                                     onCompleted: (file) {
-                                      context.read<ProfileBloc>().add(
+                                      context.read<UserProfileUpdateBloc>().add(
                                             ChangeProfilePictureEvent(
                                               profileImage: file,
                                             ),
@@ -258,7 +258,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       left: 0,
                                       child: IconButton(
                                         onPressed: () {
-                                          context.read<ProfileBloc>().add(
+                                          context.read<UserProfileUpdateBloc>().add(
                                                 AddOrRemoveCoverMedia(
                                                   removableCoverMedia:
                                                       coverMedia,
@@ -295,7 +295,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<ProfileBloc>().add(
+                                        context.read<UserProfileUpdateBloc>().add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -310,7 +310,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<ProfileBloc>().add(
+                                        context.read<UserProfileUpdateBloc>().add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -348,7 +348,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                             await showWhatsevrThumbnailSelectionPage(
                                           videoFile: file,
                                         );
-                                        context.read<ProfileBloc>().add(
+                                        context.read<UserProfileUpdateBloc>().add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: thumbnail,
                                                 coverVideo: file,
@@ -380,14 +380,14 @@ class ProfileUpdatePage extends StatelessWidget {
                           children: <Widget>[
                             WhatsevrFormField.generalTextField(
                               controller:
-                                  context.read<ProfileBloc>().nameController,
+                                  context.read<UserProfileUpdateBloc>().nameController,
                               headingTitle: 'Name',
                               maxLength: 40,
                             ),
                             const Gap(8),
                             WhatsevrFormField.email(
                               controller: context
-                                  .read<ProfileBloc>()
+                                  .read<UserProfileUpdateBloc>()
                                   .publicEmailController,
                               headingTitle: 'Email',
                               maxLength: 60,
@@ -395,7 +395,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             const Gap(8),
                             WhatsevrFormField.multilineTextField(
                               controller:
-                                  context.read<ProfileBloc>().bioController,
+                                  context.read<UserProfileUpdateBloc>().bioController,
                               headingTitle: 'Bio',
                               minLines: 3,
                               maxLength: 300,
@@ -403,7 +403,7 @@ class ProfileUpdatePage extends StatelessWidget {
                             const Gap(8),
                             WhatsevrFormField.multilineTextField(
                               controller:
-                                  context.read<ProfileBloc>().addressController,
+                                  context.read<UserProfileUpdateBloc>().addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
                             ),
@@ -419,7 +419,7 @@ class ProfileUpdatePage extends StatelessWidget {
                               headingTitle: 'Date of Birth',
                               onDateSelected: (DateTime date) {
                                 context
-                                    .read<ProfileBloc>()
+                                    .read<UserProfileUpdateBloc>()
                                     .emit(state.copyWith(dob: date));
                               },
                             ),
@@ -518,7 +518,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   endDateController
                                                       .text.isNotEmpty) {
-                                                context.read<ProfileBloc>().add(
+                                                context.read<UserProfileUpdateBloc>().add(
                                                       AddOrRemoveEducation(
                                                         education: UiEducation(
                                                           degreeName:
@@ -581,7 +581,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<ProfileBloc>().add(
+                                          context.read<UserProfileUpdateBloc>().add(
                                                 AddOrRemoveEducation(
                                                   education:
                                                       state.educations?[index],
@@ -701,7 +701,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   designationController
                                                       .text.isNotEmpty) {
-                                                context.read<ProfileBloc>().add(
+                                                context.read<UserProfileUpdateBloc>().add(
                                                       AddOrRemoveWorkExperience(
                                                         workExperience:
                                                             UiWorkExperience(
@@ -764,7 +764,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<ProfileBloc>().add(
+                                          context.read<UserProfileUpdateBloc>().add(
                                                 AddOrRemoveWorkExperience(
                                                   workExperience: state
                                                       .workExperiences?[index],
@@ -800,7 +800,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                     showGenders: true,
                                     onGenderSelected: (Gender p0) {
                                       context
-                                          .read<ProfileBloc>()
+                                          .read<UserProfileUpdateBloc>()
                                           .add(UpdateGender(p0.gender));
                                     },
                                   ),
@@ -825,14 +825,14 @@ class ProfileUpdatePage extends StatelessWidget {
                               headingTitle: 'Title',
                               hintText: 'Enter Portfolio Title',
                               controller:
-                                  context.read<ProfileBloc>().portfolioTitle,
+                                  context.read<UserProfileUpdateBloc>().portfolioTitle,
                             ),
                             const Gap(12),
                             WhatsevrFormField.generalTextField(
                               headingTitle: 'Status',
                               hintText: 'Add Status on Portfolio',
                               controller:
-                                  context.read<ProfileBloc>().portfolioStatus,
+                                  context.read<UserProfileUpdateBloc>().portfolioStatus,
                             ),
 
                             const Gap(12),
@@ -877,7 +877,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   descriptionController
                                                       .text.isNotEmpty) {
-                                                context.read<ProfileBloc>().add(
+                                                context.read<UserProfileUpdateBloc>().add(
                                                       AddOrRemoveService(
                                                         service: UiService(
                                                           serviceName:
@@ -922,7 +922,7 @@ class ProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<ProfileBloc>().add(
+                                          context.read<UserProfileUpdateBloc>().add(
                                                 AddOrRemoveService(
                                                   service:
                                                       state.services?[index],
@@ -950,7 +950,7 @@ class ProfileUpdatePage extends StatelessWidget {
 
                             WhatsevrFormField.multilineTextField(
                               controller: context
-                                  .read<ProfileBloc>()
+                                  .read<UserProfileUpdateBloc>()
                                   .portfolioDescriptionController,
                               headingTitle: 'Portfolio Description',
                               minLines: 5,
@@ -966,7 +966,7 @@ class ProfileUpdatePage extends StatelessWidget {
                       ),
                       color: Colors.blueAccent,
                       onPressed: () {
-                        context.read<ProfileBloc>().add(const SubmitProfile());
+                        context.read<UserProfileUpdateBloc>().add(const SubmitProfile());
                       },
                       child: const Text(
                         'SAVE',

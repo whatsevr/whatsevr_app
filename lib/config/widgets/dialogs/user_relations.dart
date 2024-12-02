@@ -25,7 +25,7 @@ void showUserRelationsDialog({
     pageBuilder: (context, animation1, animation2) {
       return _UserRelationsPage(
         userUid: userUid,
-        isPortfolio: isPortfolio??false,
+        isPortfolio: isPortfolio ?? false,
       );
     },
   );

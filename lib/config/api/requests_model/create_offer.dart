@@ -16,7 +16,7 @@ class CreateOfferRequest {
   final List<FilesDatum>? filesData;
   final String? ctaAction;
   final String? ctaActionUrl;
- final String? communityUid;
+  final String? communityUid;
   CreateOfferRequest({
     this.title,
     this.description,

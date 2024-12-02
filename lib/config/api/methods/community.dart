@@ -45,7 +45,7 @@ class CommunityApi {
 
   static Future<UserCommunitiesResponse?> getUserCommunities({
     required String userUid,
-     int? page=1,
+    int? page = 1,
     int? pageSize = 30,
   }) async {
     try {

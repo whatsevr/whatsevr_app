@@ -24,7 +24,7 @@ import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
 import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_offer/bloc/create_offer_bloc.dart';
 
-class CreateOfferPageArgument { 
+class CreateOfferPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
 

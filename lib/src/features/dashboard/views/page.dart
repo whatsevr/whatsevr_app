@@ -16,7 +16,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<ReactUnreactBloc>().add(FetchReactions());
     context.read<FollowUnfollowBloc>().add(FetchFollowedUsers());
-    context.read<JoinLeaveCommunityBloc>().add( FetchUserCommunities());
+    context.read<JoinLeaveCommunityBloc>().add(FetchUserCommunities());
     return DoubleBackToExit(
       snackBarMessage: 'Press back again to exit',
       snackbarBackgroundColor: Colors.white,

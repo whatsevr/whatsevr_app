@@ -20,8 +20,7 @@ import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 part 'conversation_event.dart';
 part 'conversation_state.dart';
 
-class ConversationBloc
-    extends Bloc<ConversationEvent, ConversationState> {
+class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   final String _currentUserUid;
 
   RealtimeChannel? _chatMessageInsertAndUpdateChannel;
@@ -175,8 +174,6 @@ class ConversationBloc
     }
   }
 
-
-
   @override
   Future<void> close() {
     _chatMessageInsertAndUpdateChannel?.unsubscribe();
@@ -234,8 +231,6 @@ class ConversationBloc
               schema: 'public',
               table: 'chat_messages',
               callback: (PostgresChangePayload payload) {
-               
-                
                 final Message? newMessage = Message.fromMap(payload.newRecord);
 
                 add(RemoteMessagesInsertOrUpdateEvent(
@@ -247,10 +242,10 @@ class ConversationBloc
       }
       _chatMessageDeleteChannel?.unsubscribe();
       _chatMessageDeleteChannel = RemoteDb.supabaseClient1
-          .channel('chat_messages_delete:private_chat_uid=${state.privateChatUid}')
+          .channel(
+              'chat_messages_delete:private_chat_uid=${state.privateChatUid}')
           .onPostgresChanges(
             event: PostgresChangeEvent.delete,
-            
             schema: 'public',
             table: 'chat_messages',
             callback: (PostgresChangePayload payload) {

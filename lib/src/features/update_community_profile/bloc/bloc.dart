@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
@@ -27,12 +26,12 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/src/features/update_profile/views/page.dart';
+import 'package:whatsevr_app/src/features/update_community_profile/views/page.dart';
 
 part 'event.dart';
 part 'state.dart';
 
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, CommunityProfileUpdateState> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController publicEmailController = TextEditingController();
@@ -44,7 +43,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       TextEditingController();
   TextEditingController portfolioStatus = TextEditingController();
 
-  ProfileBloc() : super(const ProfileState()) {
+  CommunityProfileUpdateBloc() : super(const CommunityProfileUpdateState()) {
     on<InitialEvent>(_onInitialEvent);
     on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
     on<AddOrRemoveCoverMedia>(_onAddOrRemoveCoverMedia);
@@ -57,7 +56,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
   FutureOr<void> _onInitialEvent(
     InitialEvent event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) {
     emit(
       state.copyWith(
@@ -152,7 +151,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onChangeProfilePicture(
     ChangeProfilePictureEvent event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) async {
     try {
       if (event.profileImage == null) throw Exception('No image picked');
@@ -178,7 +177,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onAddOrRemoveCoverMedia(
     AddOrRemoveCoverMedia event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) async {
     try {
       if (event.removableCoverMedia != null) {
@@ -253,14 +252,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _onUpdateGender(
     UpdateGender event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) {
     emit(state.copyWith(gender: event.gender));
   }
 
   FutureOr<void> _onAddOrRemoveEducation(
     AddOrRemoveEducation event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) {
     if (event.isRemove == true) {
       emit(
@@ -284,7 +283,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _onAddOrRemoveWorkExperience(
     AddOrRemoveWorkExperience event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) {
     if (event.isRemove == true) {
       emit(
@@ -309,7 +308,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> _onAddOrRemoveService(
     AddOrRemoveService event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) {
     if (event.isRemove == true) {
       emit(
@@ -333,7 +332,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   Future<void> _onSubmitProfile(
     SubmitProfile event,
-    Emitter<ProfileState> emit,
+    Emitter<CommunityProfileUpdateState> emit,
   ) async {
     try {
       if (nameController.text.isEmpty) {

@@ -20,7 +20,7 @@ class CreateMemoryRequest {
   final List<String>? taggedUserUids;
   final List<String>? taggedCommunityUids;
   final int? videoDurationMs;
-    final String? communityUid;
+  final String? communityUid;
 
   CreateMemoryRequest({
     this.caption,

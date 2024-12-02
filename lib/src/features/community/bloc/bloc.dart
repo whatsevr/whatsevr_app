@@ -59,16 +59,18 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
           communityDetailsResponse: profileDetailsResponse,
         ),
       );
-      final UserVideoPostsResponse? userVideoPostsResponse =
+      final UserVideoPostsResponse? videoPosts =
           await PostApi.getVideoPosts(communityUid: state.communityUid!);
 
-      final UserMemoriesResponse? userMemoriesResponse =
+      final UserMemoriesResponse? memories =
           await PostApi.getMemories(communityUid: state.communityUid!);
-
+  final UserOffersResponse? offers =
+          await PostApi.getOfferPosts( communityUid: state.communityUid!);
       emit(
         state.copyWith(
-          communityVideoPosts: userVideoPostsResponse?.videoPosts ?? [],
-          communityMemories: userMemoriesResponse?.memories ?? [],
+          communityVideoPosts: videoPosts?.videoPosts ?? [],
+          communityMemories: memories?.memories ?? [],
+          communityOffers: offers?.offerPosts ?? [],
         ),
       );
     } catch (e, s) {

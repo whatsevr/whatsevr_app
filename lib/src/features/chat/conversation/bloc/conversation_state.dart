@@ -53,20 +53,17 @@ class ConversationState extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-     
-        'isCommunity': isCommunity,
-        'communityUid': communityUid,
-        'privateChatUid': privateChatUid,
-        'title': title,
-        'profilePicture': profilePicture,
-        'messages': messages.map((e) => e.toJson()).toList(),
-        'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
-        'unreadCounts': unreadCounts,
-        'messagesPaginationData': messagesPaginationData,
-    
+      'isCommunity': isCommunity,
+      'communityUid': communityUid,
+      'privateChatUid': privateChatUid,
+      'title': title,
+      'profilePicture': profilePicture,
+      'messages': messages.map((e) => e.toJson()).toList(),
+      'lastMessages': lastMessages.map((k, v) => MapEntry(k, v.toJson())),
+      'unreadCounts': unreadCounts,
+      'messagesPaginationData': messagesPaginationData,
     };
   }
-
 
   @override
   List<Object?> get props => [
