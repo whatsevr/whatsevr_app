@@ -6,12 +6,8 @@ import 'package:whatsevr_app/config/api/response_model/community/community_membe
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
-import 'package:whatsevr_app/config/api/methods/user_relations.dart';
 
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
@@ -31,7 +27,7 @@ void showCommunityMembersDialog({
 class _Ui extends StatefulWidget {
   final String userUid;
 
-  const _Ui({super.key, required this.userUid});
+  const _Ui({required this.userUid});
 
   @override
   _UiState createState() => _UiState();
@@ -74,7 +70,6 @@ class _MemberInfo extends StatelessWidget {
   final VoidCallback onTapMenu;
 
   const _MemberInfo({
-    super.key,
     required this.data,
     required this.onTapMenu,
   });
@@ -91,7 +86,7 @@ class _MemberInfo extends StatelessWidget {
     return ListTile(
       onTap: () {
         AppNavigationService.newRoute(RoutesName.account,
-            extras: AccountPageArgument(userUid: user.uid!));
+            extras: AccountPageArgument(userUid: user.uid!),);
       },
       leading: CircleAvatar(
         backgroundImage: ExtendedNetworkImageProvider(
@@ -111,7 +106,7 @@ class _MemberInfo extends StatelessWidget {
 class _MembersView extends StatefulWidget {
   final String userUid;
 
-  const _MembersView({super.key, required this.userUid});
+  const _MembersView({required this.userUid});
 
   @override
   _MembersViewState createState() => _MembersViewState();

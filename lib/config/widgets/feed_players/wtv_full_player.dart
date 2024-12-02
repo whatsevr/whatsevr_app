@@ -324,7 +324,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                         showControls = !showControls;
                       });
                       SystemChrome.setEnabledSystemUIMode(
-                          SystemUiMode.immersive);
+                          SystemUiMode.immersive,);
                     },
                     child: Stack(
                       alignment: Alignment.center,
@@ -474,7 +474,7 @@ class _WtvFullPlayerState extends State<WtvFullPlayer> {
                                   brightness = newBrightness;
                                   ScreenBrightness()
                                       .setApplicationScreenBrightness(
-                                          brightness);
+                                          brightness,);
                                 });
                               },
                             ),

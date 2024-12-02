@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/bloc/conversation_bloc.dart';
-import 'package:flutter/services.dart';
 
 class ConversationPageArguments {
   final bool isCommunity;
@@ -141,7 +139,7 @@ class ConversationsPage extends StatelessWidget {
                         mini: true,
                         backgroundColor: theme.accent,
                         child: Icon(Icons.keyboard_arrow_down,
-                            color: theme.surface),
+                            color: theme.surface,),
                         onPressed: () {
                           scrollController.animateTo(
                             // Changed from controller to scrollController
@@ -162,7 +160,7 @@ class ConversationsPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(
-      BuildContext context, ConversationState state) {
+      BuildContext context, ConversationState state,) {
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back),
@@ -300,7 +298,7 @@ class MessageBubble extends StatelessWidget {
                       color: theme.shadow.withOpacity(0.1),
                       blurRadius: 3,
                       offset: Offset(0, 1),
-                    )
+                    ),
                   ],
                 ),
                 child: Column(
@@ -361,7 +359,7 @@ class MessageBubble extends StatelessWidget {
                         if (isCurrentUser) ...[
                           if (message.uid?.startsWith('temp_') == true)
                             Icon(Icons.access_time,
-                                size: 12, color: theme.surface),
+                                size: 12, color: theme.surface,),
                           if (message.uid?.startsWith('temp_') == false)
                             Icon(Icons.done_all, size: 12, color: theme.text),
                         ],
@@ -371,7 +369,7 @@ class MessageBubble extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -478,10 +476,10 @@ class MessageBubble extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
                       style: TextButton.styleFrom(
                         foregroundColor: theme.textLight,
                       ),
+                      child: Text('Cancel'),
                     ),
                     SizedBox(width: 12),
                     ElevatedButton(
@@ -494,7 +492,6 @@ class MessageBubble extends StatelessWidget {
                             );
                         Navigator.pop(context);
                       },
-                      child: Text('Save'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.accent,
                         foregroundColor: theme.surface,
@@ -502,6 +499,7 @@ class MessageBubble extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
+                      child: Text('Save'),
                     ),
                   ],
                 ),
@@ -610,11 +608,11 @@ class AttachmentSheet extends StatelessWidget {
             children: [
               _buildAttachmentOption(Icons.image, 'Photo', () {}, Colors.green),
               _buildAttachmentOption(
-                  Icons.videocam, 'Video', () {}, Colors.red),
+                  Icons.videocam, 'Video', () {}, Colors.red,),
               _buildAttachmentOption(
-                  Icons.insert_drive_file, 'Document', () {}, Colors.blue),
+                  Icons.insert_drive_file, 'Document', () {}, Colors.blue,),
               _buildAttachmentOption(
-                  Icons.location_on, 'Location', () {}, Colors.orange),
+                  Icons.location_on, 'Location', () {}, Colors.orange,),
             ],
           ),
         ],
@@ -623,7 +621,7 @@ class AttachmentSheet extends StatelessWidget {
   }
 
   Widget _buildAttachmentOption(
-      IconData icon, String label, VoidCallback onTap, Color color) {
+      IconData icon, String label, VoidCallback onTap, Color color,) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),

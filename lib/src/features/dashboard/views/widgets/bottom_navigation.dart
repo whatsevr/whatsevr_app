@@ -68,7 +68,7 @@ class _DashboardPageBottomNavigationBarState
       (
         const Iconify(Ri.heart_add_fill, size: 30),
         () {
-          bool? isPortfolio =
+          final bool? isPortfolio =
               AuthUserService.supportiveData?.userInfo?.isPortfolio;
           if (isPortfolio == null) {
             SmartDialog.showToast('Please wait...');

@@ -250,7 +250,7 @@ class _MemoriesPlayerState extends State<_MemoriesPlayer> {
                               showAppModalSheet(
                                 child: LinksPreviewListView(
                                   urls: [
-                                    uiMemoryData[index]?.ctaActionUrl ?? ''
+                                    uiMemoryData[index]?.ctaActionUrl ?? '',
                                   ],
                                 ),
                               );

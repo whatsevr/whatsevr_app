@@ -112,7 +112,7 @@ class _Ui extends StatelessWidget {
                 AppNavigationService.newRoute(
                   RoutesName.createFlick,
                   extras: CreateFlickPostPageArgument(
-                      postCreatorType: postCreatorType),
+                      postCreatorType: postCreatorType,),
                 );
               },
             ),

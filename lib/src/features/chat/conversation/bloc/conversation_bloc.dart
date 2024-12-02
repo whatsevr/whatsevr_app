@@ -1,20 +1,13 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase/supabase.dart' hide User;
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:retry/retry.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/chats.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
-import 'package:whatsevr_app/config/bloc_helpers/bloc_event_debounce.dart';
-import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
-import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
 part 'conversation_event.dart';
@@ -32,7 +25,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     on<InitialEvent>(_onInitialEvent);
     on<LoadMessages>(_onLoadMessages);
     on<SubscribeToMessageInserAndUpdateEvent>(
-        _onSubscribeToMessageInserAndUpdate);
+        _onSubscribeToMessageInserAndUpdate,);
     on<RemoteMessagesInsertOrUpdateEvent>(_onRemoteMessageChanges);
     on<RemoteMessageDeletedEvent>(_onRemoteMessageDeleted);
     on<SendMessage>(_onSendMessage);
@@ -54,7 +47,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       privateChatUid: event.pageArguments?.privateChatUid,
       title: event.pageArguments?.title,
       profilePicture: event.pageArguments?.profilePicture,
-    ));
+    ),);
 
     add(LoadMessages());
     add(SubscribeToMessageInserAndUpdateEvent());
@@ -71,7 +64,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       );
       emit(state.copyWith(
         messages: response?.messages,
-      ));
+      ),);
     } catch (e, s) {
       highLevelCatch(e, s);
     }
@@ -99,7 +92,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
           optimisticMessage,
           ...state.messages,
         ],
-      ));
+      ),);
 
       final messageData = {
         'sender_uid': _currentUserUid,
@@ -122,7 +115,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
         messages: [
           ...state.messages.where((m) => !m.uid!.startsWith('temp_')),
         ],
-      ));
+      ),);
       highLevelCatch(e, s);
     }
   }
@@ -136,7 +129,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       emit(state.copyWith(
         messages:
             currentMessages.where((m) => m.uid != event.messageUid).toList(),
-      ));
+      ),);
 
       await ChatsApi.deleteChatMessage(
         messageUid: event.messageUid!,
@@ -194,7 +187,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   FutureOr<void> _onSubscribeToMessageInserAndUpdate(
       SubscribeToMessageInserAndUpdateEvent event,
-      Emitter<ConversationState> emit) async {
+      Emitter<ConversationState> emit,) async {
     try {
       _chatMessageInsertAndUpdateChannel?.unsubscribe();
       if (state.isCommunity) {
@@ -211,10 +204,10 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
               table: 'chat_messages',
               callback: (payload) {
                 print('Chat message change detected');
-                final Message? newMessage = Message.fromMap(payload.newRecord);
+                final Message newMessage = Message.fromMap(payload.newRecord);
                 add(RemoteMessagesInsertOrUpdateEvent(
                   newMessage: newMessage,
-                ));
+                ),);
               },
             )
             .subscribe();
@@ -231,11 +224,11 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
               schema: 'public',
               table: 'chat_messages',
               callback: (PostgresChangePayload payload) {
-                final Message? newMessage = Message.fromMap(payload.newRecord);
+                final Message newMessage = Message.fromMap(payload.newRecord);
 
                 add(RemoteMessagesInsertOrUpdateEvent(
                   newMessage: newMessage,
-                ));
+                ),);
               },
             )
             .subscribe();
@@ -243,7 +236,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       _chatMessageDeleteChannel?.unsubscribe();
       _chatMessageDeleteChannel = RemoteDb.supabaseClient1
           .channel(
-              'chat_messages_delete:private_chat_uid=${state.privateChatUid}')
+              'chat_messages_delete:private_chat_uid=${state.privateChatUid}',)
           .onPostgresChanges(
             event: PostgresChangeEvent.delete,
             schema: 'public',
@@ -255,7 +248,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
               if (deletedMessageUid != null) {
                 add(RemoteMessageDeletedEvent(
                   deletedMessageUid: deletedMessageUid,
-                ));
+                ),);
               }
             },
           )
@@ -267,7 +260,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
   FutureOr<void> _onRemoteMessageChanges(
       RemoteMessagesInsertOrUpdateEvent event,
-      Emitter<ConversationState> emit) async {
+      Emitter<ConversationState> emit,) async {
     try {
       final newOrUpdatedMessage = event.newMessage;
       if (newOrUpdatedMessage == null) return;
@@ -290,7 +283,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
 
       // Sort messages by creation date (newest first)
       filteredMessages.sort((a, b) => (b.createdAt ?? DateTime.now())
-          .compareTo(a.createdAt ?? DateTime.now()));
+          .compareTo(a.createdAt ?? DateTime.now()),);
 
       emit(state.copyWith(messages: filteredMessages));
     } catch (e, s) {
@@ -299,7 +292,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }
 
   FutureOr<void> _onRemoteMessageDeleted(
-      RemoteMessageDeletedEvent event, Emitter<ConversationState> emit) async {
+      RemoteMessageDeletedEvent event, Emitter<ConversationState> emit,) async {
     try {
       final deletedMessageUid = event.deletedMessageUid;
       if (deletedMessageUid == null) return;

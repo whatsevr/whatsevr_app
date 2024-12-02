@@ -54,7 +54,7 @@ class CreateVideoPostBloc
       emit(state.copyWith(
         postCreatorType: event.pageArgument.postCreatorType,
         communityUid: event.pageArgument.communityUid,
-      ));
+      ),);
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(

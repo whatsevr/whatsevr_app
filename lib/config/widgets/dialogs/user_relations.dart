@@ -35,7 +35,7 @@ class _UserRelationsPage extends StatefulWidget {
   final String userUid;
   final bool isPortfolio;
   const _UserRelationsPage(
-      {super.key, required this.userUid, this.isPortfolio = false});
+      {required this.userUid, this.isPortfolio = false,});
 
   @override
   _UserRelationsPageState createState() => _UserRelationsPageState();
@@ -86,7 +86,6 @@ class _UserInfo extends StatelessWidget {
   final User user;
 
   const _UserInfo({
-    super.key,
     this.isCard = false,
     required this.user,
   });
@@ -127,7 +126,7 @@ class _UserInfo extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         AppNavigationService.newRoute(RoutesName.account,
-            extras: AccountPageArgument(userUid: user.uid!));
+            extras: AccountPageArgument(userUid: user.uid!),);
       },
       child: Builder(builder: (context) {
         if (isCard) {
@@ -193,7 +192,7 @@ class _UserInfo extends StatelessWidget {
             ],
           ),
         );
-      }),
+      },),
     );
   }
 }

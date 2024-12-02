@@ -66,7 +66,7 @@ class JoinLeaveCommunityBloc
           userJoinedCommunityUids: cachedJoinedCommunities != null
               ? Set.from(cachedJoinedCommunities.cast<String>())
               : {},
-        ));
+        ),);
       }
 
       // Fetch from API
@@ -80,7 +80,7 @@ class JoinLeaveCommunityBloc
         userJoinedCommunityUids: Set.from(joinedCommunities),
         userOwnedCommunityUids: Set.from(ownedCommunities),
         isLoading: false,
-      ));
+      ),);
 
       // Persist to separate boxes
       await ownedBox.put('ownedCommunities', ownedCommunities);
@@ -89,7 +89,7 @@ class JoinLeaveCommunityBloc
       emit(state.copyWith(
         isLoading: false,
         error: 'Failed to fetch user communities',
-      ));
+      ),);
     }
   }
 
@@ -114,7 +114,7 @@ class JoinLeaveCommunityBloc
             ? Set.from(cachedJoinedCommunities.cast<String>())
             : {},
         isLoading: false,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(error: 'Failed to reload communities'));
     }

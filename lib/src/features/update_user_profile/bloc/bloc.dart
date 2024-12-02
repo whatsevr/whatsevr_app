@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
@@ -27,7 +26,6 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
-import 'package:whatsevr_app/src/features/update_community_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 
 part 'event.dart';

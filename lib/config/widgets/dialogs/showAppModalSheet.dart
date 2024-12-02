@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';

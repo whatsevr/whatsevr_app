@@ -22,7 +22,7 @@ class CreatePhotoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
   CreatePhotoPostPageArgument(
-      {required this.postCreatorType, this.communityUid});
+      {required this.postCreatorType, this.communityUid,});
 }
 
 class CreatePhotoPostPage extends StatelessWidget {

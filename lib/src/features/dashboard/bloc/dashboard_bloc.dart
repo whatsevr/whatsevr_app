@@ -9,7 +9,6 @@ import 'package:whatsevr_app/config/api/methods/common_data.dart';
 import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/services/permission.dart';
 import 'package:whatsevr_app/main.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
 

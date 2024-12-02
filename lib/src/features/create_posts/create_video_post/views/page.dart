@@ -23,7 +23,7 @@ class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
   const CreateVideoPostPageArgument(
-      {required this.postCreatorType, this.communityUid});
+      {required this.postCreatorType, this.communityUid,});
 }
 
 class CreateVideoPostPage extends StatelessWidget {

@@ -33,20 +33,20 @@ class UserCommunityChatsResponse {
 
   factory UserCommunityChatsResponse.fromMap(Map<String, dynamic> json) =>
       UserCommunityChatsResponse(
-        message: json["message"],
-        page: json["page"],
-        lastPage: json["last_page"],
-        communities: json["communities"] == null
+        message: json['message'],
+        page: json['page'],
+        lastPage: json['last_page'],
+        communities: json['communities'] == null
             ? []
             : List<Community>.from(
-                json["communities"]!.map((x) => Community.fromMap(x))),
+                json['communities']!.map((x) => Community.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "page": page,
-        "last_page": lastPage,
-        "communities": communities == null
+        'message': message,
+        'page': page,
+        'last_page': lastPage,
+        'communities': communities == null
             ? []
             : List<dynamic>.from(communities!.map((x) => x.toMap())),
       };
@@ -128,40 +128,40 @@ class Community {
   String toJson() => json.encode(toMap());
 
   factory Community.fromMap(Map<String, dynamic> json) => Community(
-        createdAt: json["created_at"] == null
+        createdAt: json['created_at'] == null
             ? null
-            : DateTime.parse(json["created_at"]),
-        adminUserUid: json["admin_user_uid"],
-        status: json["status"],
-        bio: json["bio"],
-        location: json["location"],
-        description: json["description"],
-        title: json["title"],
-        profilePicture: json["profile_picture"],
-        uid: json["uid"],
-        username: json["username"],
-        totalMembers: json["total_members"],
-        requireJoiningApproval: json["require_joining_approval"],
-        seoDataWeighted: json["seo_data_weighted"],
-        plainLastMessage: json["plain_last_message"],
-        lastMessageAt: json["last_message_at"],
+            : DateTime.parse(json['created_at']),
+        adminUserUid: json['admin_user_uid'],
+        status: json['status'],
+        bio: json['bio'],
+        location: json['location'],
+        description: json['description'],
+        title: json['title'],
+        profilePicture: json['profile_picture'],
+        uid: json['uid'],
+        username: json['username'],
+        totalMembers: json['total_members'],
+        requireJoiningApproval: json['require_joining_approval'],
+        seoDataWeighted: json['seo_data_weighted'],
+        plainLastMessage: json['plain_last_message'],
+        lastMessageAt: json['last_message_at'],
       );
 
   Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "admin_user_uid": adminUserUid,
-        "status": status,
-        "bio": bio,
-        "location": location,
-        "description": description,
-        "title": title,
-        "profile_picture": profilePicture,
-        "uid": uid,
-        "username": username,
-        "total_members": totalMembers,
-        "require_joining_approval": requireJoiningApproval,
-        "seo_data_weighted": seoDataWeighted,
-        "plain_last_message": plainLastMessage,
-        "last_message_at": lastMessageAt,
+        'created_at': createdAt?.toIso8601String(),
+        'admin_user_uid': adminUserUid,
+        'status': status,
+        'bio': bio,
+        'location': location,
+        'description': description,
+        'title': title,
+        'profile_picture': profilePicture,
+        'uid': uid,
+        'username': username,
+        'total_members': totalMembers,
+        'require_joining_approval': requireJoiningApproval,
+        'seo_data_weighted': seoDataWeighted,
+        'plain_last_message': plainLastMessage,
+        'last_message_at': lastMessageAt,
       };
 }

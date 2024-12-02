@@ -7,16 +7,11 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 import 'package:whatsevr_app/config/api/methods/community.dart';
 import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
-import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
 import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
 import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'event.dart';
 part 'state.dart';

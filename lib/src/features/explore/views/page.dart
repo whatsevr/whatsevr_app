@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 
-import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';

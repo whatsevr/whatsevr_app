@@ -54,7 +54,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       emit(state.copyWith(
         postCreatorType: event.pageArgument.postCreatorType,
         communityUid: event.pageArgument.communityUid,
-      ));
+      ),);
 
       PlacesNearbyResponse? placesNearbyResponse;
       await LocationService.getNearByPlacesFromLatLong(

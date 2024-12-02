@@ -23,7 +23,7 @@ class CreateFlickPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
   CreateFlickPostPageArgument(
-      {required this.postCreatorType, this.communityUid});
+      {required this.postCreatorType, this.communityUid,});
 }
 
 class CreateFlickPostPage extends StatelessWidget {

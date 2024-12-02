@@ -58,7 +58,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       emit(state.copyWith(
         communityUid: event.pageArgument.communityUid,
         postCreatorType: event.pageArgument.postCreatorType,
-      ));
+      ),);
 
       (double, double)? currentGpsLatLong =
           await LocationService.getCurrentGpsLatLong();

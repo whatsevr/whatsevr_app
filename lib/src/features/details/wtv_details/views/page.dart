@@ -6,16 +6,13 @@ import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 
 import 'package:whatsevr_app/config/api/methods/reactions.dart';
-import 'package:whatsevr_app/config/api/methods/user_relations.dart';
 import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
-import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
-import 'package:whatsevr_app/config/widgets/dialogs/reactions_view.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_full_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/utils/conversion.dart';

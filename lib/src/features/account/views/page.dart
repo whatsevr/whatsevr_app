@@ -6,9 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
-import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
