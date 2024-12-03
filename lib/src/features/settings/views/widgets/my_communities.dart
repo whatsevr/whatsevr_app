@@ -58,7 +58,7 @@ class _YourCommunities extends StatelessWidget {
                               size: 62,
                               image: ExtendedNetworkImageProvider(
                                 userCommunity?.profilePicture ??
-                                    MockData.blankProfileAvatar,
+                                    MockData.blankCommunityAvatar,
                               ),
                               children: [
                                 Positioned(

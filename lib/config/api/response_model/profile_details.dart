@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ProfileDetailsResponse {
+class UserProfileDetailsResponse {
   final String? message;
   final UserInfo? userInfo;
   final List<UserEducation>? userEducations;
@@ -9,7 +9,7 @@ class ProfileDetailsResponse {
   final List<UserService>? userServices;
   final List<UserWorkExperience>? userWorkExperiences;
 
-  ProfileDetailsResponse({
+  UserProfileDetailsResponse({
     this.message,
     this.userInfo,
     this.userEducations,
@@ -19,7 +19,7 @@ class ProfileDetailsResponse {
     this.userWorkExperiences,
   });
 
-  ProfileDetailsResponse copyWith({
+  UserProfileDetailsResponse copyWith({
     String? message,
     UserInfo? userInfo,
     List<UserEducation>? userEducations,
@@ -28,7 +28,7 @@ class ProfileDetailsResponse {
     List<UserService>? userServices,
     List<UserWorkExperience>? userWorkExperiences,
   }) =>
-      ProfileDetailsResponse(
+      UserProfileDetailsResponse(
         message: message ?? this.message,
         userInfo: userInfo ?? this.userInfo,
         userEducations: userEducations ?? this.userEducations,
@@ -38,13 +38,13 @@ class ProfileDetailsResponse {
         userWorkExperiences: userWorkExperiences ?? this.userWorkExperiences,
       );
 
-  factory ProfileDetailsResponse.fromJson(String str) =>
-      ProfileDetailsResponse.fromMap(json.decode(str));
+  factory UserProfileDetailsResponse.fromJson(String str) =>
+      UserProfileDetailsResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory ProfileDetailsResponse.fromMap(Map<String, dynamic> json) =>
-      ProfileDetailsResponse(
+  factory UserProfileDetailsResponse.fromMap(Map<String, dynamic> json) =>
+      UserProfileDetailsResponse(
         message: json['message'],
         userInfo: json['user_info'] == null
             ? null

@@ -346,7 +346,7 @@ class AccountPage extends StatelessWidget {
                                                     Navigator.pop(context);
                                                     await AppNavigationService
                                                         .newRoute(
-                                                      RoutesName.updateProfile,
+                                                      RoutesName.updateUserProfile,
                                                       extras:
                                                           UserProfileUpdatePageArgument(
                                                         profileDetailsResponse:

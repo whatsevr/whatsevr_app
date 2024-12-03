@@ -53,7 +53,7 @@ class UsersApi {
     return null;
   }
 
-  static Future<ProfileDetailsResponse?> getProfileDetails({
+  static Future<UserProfileDetailsResponse?> getProfileDetails({
     required String userUid,
   }) async {
     try {
@@ -62,7 +62,7 @@ class UsersApi {
         queryParameters: <String, dynamic>{'user_uid': userUid},
       );
       if (response.data != null) {
-        return ProfileDetailsResponse.fromMap(response.data);
+        return UserProfileDetailsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

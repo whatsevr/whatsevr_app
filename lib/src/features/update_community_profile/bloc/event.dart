@@ -40,34 +40,10 @@ class AddOrRemoveCoverMedia extends CommunityProfileUpdateEvent {
       <Object?>[coverImage, coverVideo, removableCoverMedia];
 }
 
-class UpdateGender extends CommunityProfileUpdateEvent {
-  final String? gender;
 
-  const UpdateGender(this.gender);
 
-  @override
-  List<Object?> get props => <Object?>[gender];
-}
 
-class AddOrRemoveEducation extends CommunityProfileUpdateEvent {
-  final UiEducation? education;
-  final bool? isRemove;
 
-  const AddOrRemoveEducation({this.education, this.isRemove});
-
-  @override
-  List<Object?> get props => <Object?>[education, isRemove];
-}
-
-class AddOrRemoveWorkExperience extends CommunityProfileUpdateEvent {
-  final UiWorkExperience? workExperience;
-  final bool? isRemove;
-
-  const AddOrRemoveWorkExperience({this.workExperience, this.isRemove});
-
-  @override
-  List<Object?> get props => <Object?>[workExperience, isRemove];
-}
 
 class AddOrRemoveService extends CommunityProfileUpdateEvent {
   final UiService? service;

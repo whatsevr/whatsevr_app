@@ -48,7 +48,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     Emitter<AccountState> emit,
   ) async {
     try {
-      final ProfileDetailsResponse? profileDetailsResponse =
+      final UserProfileDetailsResponse? profileDetailsResponse =
           await UsersApi.getProfileDetails(userUid: state.userUid!);
       emit(
         state.copyWith(

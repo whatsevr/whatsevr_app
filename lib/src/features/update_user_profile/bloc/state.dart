@@ -1,7 +1,7 @@
 part of 'bloc.dart';
 
 class UserProfileUpdateState extends Equatable {
-  final ProfileDetailsResponse? currentProfileDetailsResponse;
+  final UserProfileDetailsResponse? currentProfileDetailsResponse;
 
   final DateTime? dob;
 
@@ -26,7 +26,7 @@ class UserProfileUpdateState extends Equatable {
   });
 
   UserProfileUpdateState copyWith({
-    ProfileDetailsResponse? currentProfileDetailsResponse,
+    UserProfileDetailsResponse? currentProfileDetailsResponse,
     DateTime? dob,
     File? profileImage,
     List<UiCoverMedia>? coverMedia,

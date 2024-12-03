@@ -25,7 +25,7 @@ import 'package:whatsevr_app/src/features/update_user_profile/bloc/bloc.dart';
 
 // Adjust the import
 class UserProfileUpdatePageArgument {
-  final ProfileDetailsResponse? profileDetailsResponse;
+  final UserProfileDetailsResponse? profileDetailsResponse;
 
   UserProfileUpdatePageArgument({required this.profileDetailsResponse});
 }

@@ -11,18 +11,9 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
 import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_educations.dart';
 import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_portfolio_info.dart';
 import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_work_experiences.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
-    hide
-        UserInfo,
-        UserEducation,
-        UserWorkExperience,
-        UserService,
-        UserCoverMedia;
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -31,25 +22,21 @@ import 'package:whatsevr_app/src/features/update_community_profile/views/page.da
 part 'event.dart';
 part 'state.dart';
 
-class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, CommunityProfileUpdateState> {
+class CommunityProfileUpdateBloc
+    extends Bloc<CommunityProfileUpdateEvent, CommunityProfileUpdateState> {
   TextEditingController nameController = TextEditingController();
 
-  TextEditingController publicEmailController = TextEditingController();
+ 
 
   TextEditingController bioController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController portfolioTitle = TextEditingController();
-  TextEditingController portfolioDescriptionController =
-      TextEditingController();
+
   TextEditingController portfolioStatus = TextEditingController();
 
   CommunityProfileUpdateBloc() : super(const CommunityProfileUpdateState()) {
     on<InitialEvent>(_onInitialEvent);
     on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
     on<AddOrRemoveCoverMedia>(_onAddOrRemoveCoverMedia);
-    on<UpdateGender>(_onUpdateGender);
-    on<AddOrRemoveEducation>(_onAddOrRemoveEducation);
-    on<AddOrRemoveWorkExperience>(_onAddOrRemoveWorkExperience);
     on<AddOrRemoveService>(_onAddOrRemoveService);
 
     on<SubmitProfile>(_onSubmitProfile);
@@ -62,64 +49,28 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
       state.copyWith(
         currentProfileDetailsResponse:
             event.pageArgument.profileDetailsResponse,
-        dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
-        gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
-        educations: List.generate(
-          event.pageArgument.profileDetailsResponse?.userEducations?.length ??
-              0,
-          (int index) => UiEducation(
-            degreeName: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].title,
-            degreeType: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].type,
-            startDate: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].startDate,
-            endDate: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].endDate,
-            isOngoingEducation: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].isOngoingEducation,
-            institute: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].institute,
-          ),
-        ),
-        workExperiences: List.generate(
-          event.pageArgument.profileDetailsResponse?.userWorkExperiences
+        services: List.generate(
+          event.pageArgument.profileDetailsResponse?.communityServices
                   ?.length ??
               0,
-          (int index) => UiWorkExperience(
-            designation: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].designation,
-            startDate: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].startDate,
-            endDate: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].endDate,
-            isCurrentlyWorking: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].isCurrentlyWorking,
-            workingMode: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].workingMode,
-            companyName: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].companyName,
-          ),
-        ),
-        services: List.generate(
-          event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
           (int index) => UiService(
             serviceName: event.pageArgument.profileDetailsResponse
-                ?.userServices?[index].title,
+                ?.communityServices?[index].title,
             serviceDescription: event.pageArgument.profileDetailsResponse
-                ?.userServices?[index].description,
+                ?.communityServices?[index].description,
           ),
         ),
         coverMedia: List.generate(
-          event.pageArgument.profileDetailsResponse?.userCoverMedia?.length ??
+          event.pageArgument.profileDetailsResponse?.communityCoverMedia
+                  ?.length ??
               0,
           (int index) => UiCoverMedia(
             imageUrl: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].imageUrl,
+                ?.communityCoverMedia?[index].imageUrl,
             videoUrl: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].videoUrl,
+                ?.communityCoverMedia?[index].videoUrl,
             isVideo: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].isVideo,
+                ?.communityCoverMedia?[index].isVideo,
           ),
         ),
       ),
@@ -127,26 +78,16 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
 
     // Set the initial values of the text controllers
     nameController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.name ?? '';
-
-    publicEmailController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.publicEmailId ??
-            '';
+        event.pageArgument.profileDetailsResponse?.communityInfo?.title ?? '';
 
     bioController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.bio ?? '';
+        event.pageArgument.profileDetailsResponse?.communityInfo?.bio ?? '';
     addressController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.address ?? '';
+        event.pageArgument.profileDetailsResponse?.communityInfo?.location ??
+            '';
 
-    portfolioDescriptionController.text = event.pageArgument
-            .profileDetailsResponse?.userInfo?.portfolioDescription ??
-        '';
     portfolioStatus.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.portfolioStatus ??
-            '';
-    portfolioTitle.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.portfolioTitle ??
-            '';
+        event.pageArgument.profileDetailsResponse?.communityInfo?.status ?? '';
   }
 
   void _onChangeProfilePicture(
@@ -165,7 +106,7 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
       );
       await UsersApi.updateProfilePicture(
         ProfilePictureUpdateRequest(
-          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
           profilePictureUrl: profilePictureUrl,
         ),
       );
@@ -229,14 +170,15 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
 
       await UsersApi.updateCoverMedia(
         UpdateUserCoverMediaRequest(
-          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+          userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
           userCoverMedia: state.coverMedia
               ?.map(
                 (UiCoverMedia e) => UserCoverMedia(
                   imageUrl: e.imageUrl,
                   videoUrl: e.videoUrl,
                   isVideo: e.videoUrl?.isNotEmpty ?? false,
-                  userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+                  userUid:
+                      state.currentProfileDetailsResponse?.communityInfo?.uid,
                 ),
               )
               .toList(),
@@ -247,62 +189,6 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
       SmartDialog.dismiss();
       SmartDialog.showToast(e.toString());
       if (kDebugMode) rethrow;
-    }
-  }
-
-  FutureOr<void> _onUpdateGender(
-    UpdateGender event,
-    Emitter<CommunityProfileUpdateState> emit,
-  ) {
-    emit(state.copyWith(gender: event.gender));
-  }
-
-  FutureOr<void> _onAddOrRemoveEducation(
-    AddOrRemoveEducation event,
-    Emitter<CommunityProfileUpdateState> emit,
-  ) {
-    if (event.isRemove == true) {
-      emit(
-        state.copyWith(
-          educations: state.educations?.where((UiEducation element) {
-            return element != event.education;
-          }).toList(),
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          educations: <UiEducation>[
-            ...state.educations ?? <UiEducation>[],
-            event.education!,
-          ],
-        ),
-      );
-    }
-  }
-
-  FutureOr<void> _onAddOrRemoveWorkExperience(
-    AddOrRemoveWorkExperience event,
-    Emitter<CommunityProfileUpdateState> emit,
-  ) {
-    if (event.isRemove == true) {
-      emit(
-        state.copyWith(
-          workExperiences:
-              state.workExperiences?.where((UiWorkExperience element) {
-            return element != event.workExperience;
-          }).toList(),
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          workExperiences: <UiWorkExperience>[
-            ...state.workExperiences ?? <UiWorkExperience>[],
-            event.workExperience!,
-          ],
-        ),
-      );
     }
   }
 
@@ -338,22 +224,16 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
       if (nameController.text.isEmpty) {
         throw BusinessException('Name cannot be empty');
       }
-      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
-        if (portfolioTitle.text.isEmpty) {
-          throw BusinessException('Portfolio title cannot be empty');
-        }
-      }
+
       SmartDialog.showLoading();
       final UpdateUserInfoRequest newUpdateUserInfoRequest =
           UpdateUserInfoRequest(
-        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
+        userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
         userInfo: UserInfo(
           name: nameController.text,
           bio: bioController.text,
           address: addressController.text,
-          publicEmailId: publicEmailController.text,
-          dob: state.dob,
-          gender: state.gender,
+        
         ),
       );
       (int?, String?)? userInfoUpdateResponse =
@@ -364,80 +244,24 @@ class CommunityProfileUpdateBloc extends Bloc<CommunityProfileUpdateEvent, Commu
         );
       }
       SmartDialog.showLoading(msg: '${userInfoUpdateResponse?.$2}');
-      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
-        final UpdateUserPortfolioInfoRequest newUserPortfolioInfoRequest =
-            UpdateUserPortfolioInfoRequest(
-          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-          portfolioInfo: PortfolioInfo(
-            portfolioStatus: portfolioStatus.text,
-            portfolioDescription: portfolioDescriptionController.text,
-            portfolioTitle: portfolioTitle.text,
-          ),
-        );
-        (int?, String?)? portfolioUpdateResponse =
-            await UsersApi.updateUserPortfolioInfo(newUserPortfolioInfoRequest);
-        SmartDialog.showLoading(msg: '${portfolioUpdateResponse?.$2}');
-      }
-      final UpdateUserEducationsRequest newUserEducationsRequest =
-          UpdateUserEducationsRequest(
-        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-        userEducations: state.educations
+
+      final UpdateUserServicesRequest newUserServicesRequest =
+          UpdateUserServicesRequest(
+        userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+        userServices: state.services
             ?.map(
-              (UiEducation e) => UserEducation(
-                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-                title: e.degreeName,
-                type: e.degreeType,
-                startDate: e.startDate,
-                endDate: e.endDate,
-                isOngoingEducation: e.isOngoingEducation,
-                institute: e.institute,
+              (UiService e) => UserService(
+                userUid:
+                    state.currentProfileDetailsResponse?.communityInfo?.uid,
+                title: e.serviceName,
+                description: e.serviceDescription,
               ),
             )
             .toList(),
       );
-      (int?, String?)? m2 =
-          await UsersApi.updateEducations(newUserEducationsRequest);
-
-      SmartDialog.showLoading(msg: '${m2?.$2}');
-      final UpdateUserWorkExperiencesRequest newUserWorkExperiencesRequest =
-          UpdateUserWorkExperiencesRequest(
-        userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-        userWorkExperiences: state.workExperiences
-            ?.map(
-              (UiWorkExperience e) => UserWorkExperience(
-                userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-                designation: e.designation,
-                startDate: e.startDate,
-                endDate: e.endDate,
-                isCurrentlyWorking: e.isCurrentlyWorking,
-                workingMode: e.workingMode,
-                companyName: e.companyName,
-              ),
-            )
-            .toList(),
-      );
-
-      (int?, String?)? m3 =
-          await UsersApi.updateWorkExperiences(newUserWorkExperiencesRequest);
-      SmartDialog.showLoading(msg: '${m3?.$2}');
-      if (state.currentProfileDetailsResponse?.userInfo?.isPortfolio ?? false) {
-        final UpdateUserServicesRequest newUserServicesRequest =
-            UpdateUserServicesRequest(
-          userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-          userServices: state.services
-              ?.map(
-                (UiService e) => UserService(
-                  userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
-                  title: e.serviceName,
-                  description: e.serviceDescription,
-                ),
-              )
-              .toList(),
-        );
-        (int?, String?)? m4 =
-            await UsersApi.updateServices(newUserServicesRequest);
-        SmartDialog.showLoading(msg: '${m4?.$2}');
-      }
+      (int?, String?)? m4 =
+          await UsersApi.updateServices(newUserServicesRequest);
+      SmartDialog.showLoading(msg: '${m4?.$2}');
       SmartDialog.dismiss();
       AppNavigationService.goBack();
     } catch (e, stackTrace) {

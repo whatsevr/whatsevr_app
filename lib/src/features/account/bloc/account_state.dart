@@ -3,7 +3,7 @@ part of 'account_bloc.dart';
 class AccountState extends Equatable {
   final String? userUid;
   final bool isEditMode;
-  final ProfileDetailsResponse? profileDetailsResponse;
+  final UserProfileDetailsResponse? profileDetailsResponse;
   final List<VideoPost?> userVideoPosts;
   final List<Flick?> userFlicks;
   final List<Memory?> userMemories;
@@ -31,7 +31,7 @@ class AccountState extends Equatable {
   AccountState copyWith({
     String? userUid,
     bool? isEditMode,
-    ProfileDetailsResponse? profileDetailsResponse,
+    UserProfileDetailsResponse? profileDetailsResponse,
     List<VideoPost>? userVideoPosts,
     List<Flick>? userFlicks,
     List<Memory>? userMemories,

@@ -12,7 +12,7 @@ import 'package:whatsevr_app/config/api/methods/chats.dart';
 part 'chat_event.dart';
 part 'chat_state.dart';
 
-class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
+class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final String _currentUserUid;
   RealtimeChannel? _chatSubscription1;
   RealtimeChannel? _chatSubscription2;
@@ -48,19 +48,9 @@ class ChatBloc extends HydratedBloc<ChatEvent, ChatState> {
     }
   }
 
-  @override
-  ChatState fromJson(Map<String, dynamic> json) {
-    try {
-      return ChatState.fromJson(json);
-    } catch (_) {
-      return const ChatState();
-    }
-  }
 
-  @override
-  Map<String, dynamic> toJson(ChatState state) {
-    return state.toJson();
-  }
+
+
 
   @override
   Future<void> close() {

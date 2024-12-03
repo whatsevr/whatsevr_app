@@ -16,8 +16,8 @@ class RoutesName {
   static const String createOffer = '/create-offer';
   static const String createPhotoPost = '/create-photo-post';
   static const String uploadPdf = '/upload-pdf';
-  static const String updateProfile = '/update-profile';
-
+  static const String updateUserProfile = '/update-user-profile';
+  static const String updateCommunityProfile = '/update-community-profile';
   static const String videoEditor = '/video-editor';
   static const String cameraView = '/camera-view';
   static const String imageEditor = '/image-editor';

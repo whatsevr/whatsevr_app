@@ -6,6 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
@@ -21,6 +23,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
+import 'package:whatsevr_app/src/features/update_community_profile/views/page.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
@@ -305,18 +308,18 @@ class CommunityPage extends StatelessWidget {
                                             ),
                                             onTap: () async {
                                               Navigator.pop(context);
-                                              // await AppNavigationService
-                                              //     .newRoute(
-                                              //   RoutesName.updateProfile,
-                                              //   extras:
-                                              //       ProfileUpdatePageArgument(
-                                              //     profileDetailsResponse: state
-                                              //         .communityDetailsResponse,
-                                              //   ),
-                                              // );
-                                              // context.read<CommunityBloc>().add(
-                                              //       LoadCommunityData(),
-                                              //     );
+                                              await AppNavigationService
+                                                  .newRoute(
+                                                RoutesName.updateCommunityProfile,
+                                                extras:
+                                                    CommunityProfileUpdatePageArgument(
+                                                  profileDetailsResponse: state
+                                                      .communityDetailsResponse,
+                                                ),
+                                              );
+                                              context.read<CommunityBloc>().add(
+                                                    LoadCommunityData(),
+                                                  );
                                             },
                                           ),
                                         ],

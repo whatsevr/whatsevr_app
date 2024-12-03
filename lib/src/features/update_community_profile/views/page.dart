@@ -7,13 +7,12 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 import 'package:whatsevr_app/config/api/response_model/common_data.dart';
-import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/label_container.dart';
-import 'package:whatsevr_app/config/widgets/mask_text.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/media/asset_picker.dart';
 import 'package:whatsevr_app/config/widgets/media/media_pick_choice.dart';
@@ -25,7 +24,7 @@ import 'package:whatsevr_app/src/features/update_community_profile/bloc/bloc.dar
 
 // Adjust the import
 class CommunityProfileUpdatePageArgument {
-  final ProfileDetailsResponse? profileDetailsResponse;
+  final CommunityProfileDataResponse? profileDetailsResponse;
 
   CommunityProfileUpdatePageArgument({required this.profileDetailsResponse});
 }
@@ -41,18 +40,20 @@ class CommunityProfileUpdatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          CommunityProfileUpdateBloc()..add(InitialEvent(pageArgument: pageArgument)),
+      create: (BuildContext context) => CommunityProfileUpdateBloc()
+        ..add(InitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
             backgroundColor: Colors.blueGrey[50],
             appBar: const WhatsevrAppBar(
-              title: 'Update Profile',
+              title: 'Edit Community',
               showAiAction: true,
             ),
-            body: BlocBuilder<CommunityProfileUpdateBloc, CommunityProfileUpdateState>(
-              builder: (BuildContext context, CommunityProfileUpdateState state) {
+            body: BlocBuilder<CommunityProfileUpdateBloc,
+                CommunityProfileUpdateState>(
+              builder:
+                  (BuildContext context, CommunityProfileUpdateState state) {
                 return ListView(
                   padding: PadHorizontal.padding,
                   children: <Widget>[
@@ -77,7 +78,9 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                       WhatsevrAspectRatio.square,
                                     ],
                                     onCompleted: (file) {
-                                      context.read<CommunityProfileUpdateBloc>().add(
+                                      context
+                                          .read<CommunityProfileUpdateBloc>()
+                                          .add(
                                             ChangeProfilePictureEvent(
                                               profileImage: file,
                                             ),
@@ -93,7 +96,9 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                       WhatsevrAspectRatio.square,
                                     ],
                                     onCompleted: (file) {
-                                      context.read<CommunityProfileUpdateBloc>().add(
+                                      context
+                                          .read<CommunityProfileUpdateBloc>()
+                                          .add(
                                             ChangeProfilePictureEvent(
                                               profileImage: file,
                                             ),
@@ -124,20 +129,22 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                           ? ExtendedFileImageProvider(
                                               state.profileImage!,
                                             )
-                                          : state.currentProfileDetailsResponse
-                                                      ?.userInfo?.profilePicture !=
+                                          : state
+                                                      .currentProfileDetailsResponse
+                                                      ?.communityInfo
+                                                      ?.profilePicture !=
                                                   null
                                               ? ExtendedNetworkImageProvider(
                                                   state
                                                           .currentProfileDetailsResponse
-                                                          ?.userInfo
+                                                          ?.communityInfo
                                                           ?.profilePicture ??
                                                       MockData
-                                                          .blankProfileAvatar,
+                                                          .blankCommunityAvatar,
                                                   cache: true,
                                                 )
                                               : ExtendedNetworkImageProvider(
-                                                  MockData.blankProfileAvatar,
+                                                  MockData.blankCommunityAvatar,
                                                   cache: true,
                                                 ),
                                       fit: BoxFit.cover,
@@ -163,24 +170,6 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                          const Gap(22),
-                          MaskText(
-                            key: ValueKey(
-                              state.currentProfileDetailsResponse?.userInfo
-                                      ?.mobileNumber ??
-                                  '',
-                            ), // Add a key to the widget to force rebuild
-                            text: state.currentProfileDetailsResponse?.userInfo
-                                    ?.mobileNumber ??
-                                '',
-                            maskLength: 5,
-                            maskFirstDigits: false,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
                             ),
                           ),
                           const Gap(25),
@@ -258,7 +247,10 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                       left: 0,
                                       child: IconButton(
                                         onPressed: () {
-                                          context.read<CommunityProfileUpdateBloc>().add(
+                                          context
+                                              .read<
+                                                  CommunityProfileUpdateBloc>()
+                                              .add(
                                                 AddOrRemoveCoverMedia(
                                                   removableCoverMedia:
                                                       coverMedia,
@@ -295,7 +287,9 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<CommunityProfileUpdateBloc>().add(
+                                        context
+                                            .read<CommunityProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -310,7 +304,9 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<CommunityProfileUpdateBloc>().add(
+                                        context
+                                            .read<CommunityProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -348,7 +344,9 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                                             await showWhatsevrThumbnailSelectionPage(
                                           videoFile: file,
                                         );
-                                        context.read<CommunityProfileUpdateBloc>().add(
+                                        context
+                                            .read<CommunityProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: thumbnail,
                                                 coverVideo: file,
@@ -374,468 +372,45 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                     const Gap(12),
                     ...<Widget>[
                       LabelContainer(
-                        labelText: 'Personal Info',
+                        labelText: 'Basic Info',
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             WhatsevrFormField.generalTextField(
-                              controller:
-                                  context.read<CommunityProfileUpdateBloc>().nameController,
-                              headingTitle: 'Name',
-                              maxLength: 40,
-                            ),
-                            const Gap(8),
-                            WhatsevrFormField.email(
                               controller: context
                                   .read<CommunityProfileUpdateBloc>()
-                                  .publicEmailController,
-                              headingTitle: 'Email',
-                              maxLength: 60,
+                                  .nameController,
+                              headingTitle: 'Title',
+                              maxLength: 40,
                             ),
-                            const Gap(8),
+                          const Gap(8),
                             WhatsevrFormField.multilineTextField(
-                              controller:
-                                  context.read<CommunityProfileUpdateBloc>().bioController,
+                              controller: context
+                                  .read<CommunityProfileUpdateBloc>()
+                                  .bioController,
                               headingTitle: 'Bio',
                               minLines: 3,
                               maxLength: 300,
                             ),
                             const Gap(8),
                             WhatsevrFormField.multilineTextField(
-                              controller:
-                                  context.read<CommunityProfileUpdateBloc>().addressController,
+                              controller: context
+                                  .read<CommunityProfileUpdateBloc>()
+                                  .addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
                             ),
                             const Gap(8),
-                            WhatsevrFormField.datePicker(
-                              context: context,
-                              controller: TextEditingController(
-                                text: state.dob == null
-                                    ? ''
-                                    : DateFormat('dd-MM-yyyy')
-                                        .format(state.dob!),
-                              ),
-                              headingTitle: 'Date of Birth',
-                              onDateSelected: (DateTime date) {
-                                context
-                                    .read<CommunityProfileUpdateBloc>()
-                                    .emit(state.copyWith(dob: date));
-                              },
-                            ),
-                            const Gap(8),
-                            Builder(
-                              builder: (BuildContext context) {
-                                final TextEditingController schoolController =
-                                    TextEditingController();
-                                final TextEditingController degreeController =
-                                    TextEditingController();
-                                final TextEditingController
-                                    degreeTypeController =
-                                    TextEditingController();
-                                final TextEditingController
-                                    startDateController =
-                                    TextEditingController();
-                                final TextEditingController endDateController =
-                                    TextEditingController();
-
-                                return WhatsevrFormField.invokeCustomFunction(
-                                  headingTitle: 'Educations',
-                                  hintText: 'Add Education',
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          WhatsevrFormField.generalTextField(
-                                            headingTitle: 'Enter School',
-                                            controller: schoolController,
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField
-                                              .invokeCustomFunction(
-                                            headingTitle: 'Select Degree',
-                                            controller: degreeController,
-                                            readOnly: false,
-                                            customFunction: () {
-                                              showAppModalSheet(
-                                                context: context,
-                                                child:
-                                                    CommonDataSearchSelectPage(
-                                                  showEducationDegrees: true,
-                                                  onEducationDegreeSelected:
-                                                      (EducationDegree p0) {
-                                                    degreeController.text =
-                                                        p0.title ?? '';
-                                                    degreeTypeController.text =
-                                                        p0.type ?? '';
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.generalTextField(
-                                            readOnly: true,
-                                            controller: degreeTypeController,
-                                            headingTitle: 'Degree Type',
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.datePicker(
-                                            context: context,
-                                            controller: startDateController,
-                                            headingTitle: 'Select Start Date',
-                                            onDateSelected: (DateTime date) {
-                                              startDateController.text =
-                                                  DateFormat('dd-MM-yyyy')
-                                                      .format(date);
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.datePicker(
-                                            context: context,
-                                            controller: endDateController,
-                                            headingTitle: 'Select End Date',
-                                            onDateSelected: (DateTime date) {
-                                              endDateController.text =
-                                                  DateFormat('dd-MM-yyyy')
-                                                      .format(date);
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          MaterialButton(
-                                            minWidth: double.infinity,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            color: Colors.blueAccent,
-                                            onPressed: () {
-                                              if (degreeController.text.isNotEmpty &&
-                                                  schoolController
-                                                      .text.isNotEmpty &&
-                                                  startDateController
-                                                      .text.isNotEmpty &&
-                                                  endDateController
-                                                      .text.isNotEmpty) {
-                                                context.read<CommunityProfileUpdateBloc>().add(
-                                                      AddOrRemoveEducation(
-                                                        education: UiEducation(
-                                                          degreeName:
-                                                              degreeController
-                                                                  .text,
-                                                          degreeType:
-                                                              degreeTypeController
-                                                                  .text,
-                                                          startDate: DateFormat(
-                                                            'dd-MM-yyyy',
-                                                          ).parse(
-                                                            startDateController
-                                                                .text,
-                                                          ),
-                                                          endDate: DateFormat(
-                                                            'dd-MM-yyyy',
-                                                          ).parse(
-                                                            endDateController
-                                                                .text,
-                                                          ),
-                                                          institute:
-                                                              schoolController
-                                                                  .text,
-                                                          isOngoingEducation:
-                                                              false,
-                                                        ),
-                                                      ),
-                                                    );
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: const Text(
-                                              'Add',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            const Gap(8),
-                            //show eduction as list
-                            if (state.educations != null) ...<Widget>[
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: state.educations?.length ?? 0,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Text(
-                                          '${state.educations?[index].degreeType} - ${state.educations?[index].degreeName}',
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context.read<CommunityProfileUpdateBloc>().add(
-                                                AddOrRemoveEducation(
-                                                  education:
-                                                      state.educations?[index],
-                                                  isRemove: true,
-                                                ),
-                                              );
-                                        },
-                                        child: const Icon(
-                                          Icons.close_rounded,
-                                          color: Colors.red,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
-                                  return const Gap(2);
-                                },
-                              ),
-                              const Gap(8),
-                            ],
-
-                            Builder(
-                              builder: (BuildContext context) {
-                                final TextEditingController
-                                    companyNameController =
-                                    TextEditingController();
-                                final TextEditingController
-                                    designationController =
-                                    TextEditingController();
-                                final TextEditingController
-                                    workingModeController =
-                                    TextEditingController();
-                                final TextEditingController
-                                    startDateController =
-                                    TextEditingController();
-                                final TextEditingController endDateController =
-                                    TextEditingController();
-
-                                return WhatsevrFormField.invokeCustomFunction(
-                                  headingTitle: 'Work Experience',
-                                  hintText: 'Add Work Experience',
-                                  customFunction: () {
-                                    showAppModalSheet(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          WhatsevrFormField.generalTextField(
-                                            headingTitle: 'Enter Company Name',
-                                            controller: companyNameController,
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.generalTextField(
-                                            headingTitle: 'Enter Designation',
-                                            controller: designationController,
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField
-                                              .invokeCustomFunction(
-                                            headingTitle: 'Select Mode of Work',
-                                            controller: workingModeController,
-                                            customFunction: () {
-                                              showAppModalSheet(
-                                                flexibleSheet: true,
-                                                context: context,
-                                                child:
-                                                    CommonDataSearchSelectPage(
-                                                  showWorkingModes: true,
-                                                  onWorkingModeSelected:
-                                                      (WorkingMode p0) {
-                                                    workingModeController.text =
-                                                        p0.mode ?? '';
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.datePicker(
-                                            context: context,
-                                            controller: startDateController,
-                                            headingTitle: 'Start Start Date',
-                                            onDateSelected: (DateTime date) {
-                                              startDateController.text =
-                                                  DateFormat('dd-MM-yyyy')
-                                                      .format(date);
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          WhatsevrFormField.datePicker(
-                                            context: context,
-                                            headingTitle: 'End Date',
-                                            controller: endDateController,
-                                            onDateSelected: (DateTime date) {
-                                              endDateController.text =
-                                                  DateFormat('dd-MM-yyyy')
-                                                      .format(date);
-                                            },
-                                          ),
-                                          const Gap(12),
-                                          MaterialButton(
-                                            minWidth: double.infinity,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            color: Colors.blueAccent,
-                                            onPressed: () {
-                                              if (companyNameController.text.isNotEmpty &&
-                                                  workingModeController
-                                                      .text.isNotEmpty &&
-                                                  startDateController
-                                                      .text.isNotEmpty &&
-                                                  endDateController
-                                                      .text.isNotEmpty &&
-                                                  designationController
-                                                      .text.isNotEmpty) {
-                                                context.read<CommunityProfileUpdateBloc>().add(
-                                                      AddOrRemoveWorkExperience(
-                                                        workExperience:
-                                                            UiWorkExperience(
-                                                          companyName:
-                                                              companyNameController
-                                                                  .text,
-                                                          isCurrentlyWorking:
-                                                              false,
-                                                          designation:
-                                                              designationController
-                                                                  .text,
-                                                          workingMode:
-                                                              workingModeController
-                                                                  .text,
-                                                          startDate: DateFormat(
-                                                            'dd-MM-yyyy',
-                                                          ).parse(
-                                                            startDateController
-                                                                .text,
-                                                          ),
-                                                          endDate: DateFormat(
-                                                            'dd-MM-yyyy',
-                                                          ).parse(
-                                                            endDateController
-                                                                .text,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                            child: const Text(
-                                              'Add',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            const Gap(8),
-                            if (state.workExperiences != null) ...<Widget>[
-                              ListView.separated(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: state.workExperiences?.length ?? 0,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: Text(
-                                          '${state.workExperiences?[index].companyName} - ${state.workExperiences?[index].workingMode} - ${state.workExperiences?[index].designation}',
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context.read<CommunityProfileUpdateBloc>().add(
-                                                AddOrRemoveWorkExperience(
-                                                  workExperience: state
-                                                      .workExperiences?[index],
-                                                  isRemove: true,
-                                                ),
-                                              );
-                                        },
-                                        child: const Icon(
-                                          Icons.close_rounded,
-                                          color: Colors.red,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
-                                  return const Gap(2);
-                                },
-                              ),
-                              const Gap(8),
-                            ],
-                            WhatsevrFormField.invokeCustomFunction(
-                              controller:
-                                  TextEditingController(text: state.gender),
-                              headingTitle: 'Gender',
-                              hintText: 'Select Gender',
-                              customFunction: () {
-                                showAppModalSheet(
-                                  flexibleSheet: true,
-                                  child: CommonDataSearchSelectPage(
-                                    showGenders: true,
-                                    onGenderSelected: (Gender p0) {
-                                      context
-                                          .read<CommunityProfileUpdateBloc>()
-                                          .add(UpdateGender(p0.gender));
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Gap(12),
-                    ],
-
-                    // Service Info Section
-                    if (state.currentProfileDetailsResponse?.userInfo
-                            ?.isPortfolio ==
-                        true) ...<Widget>[
-                      LabelContainer(
-                        labelText: 'Portfolio Info',
-                        child: Column(
-                          children: <Widget>[
-                            WhatsevrFormField.generalTextField(
-                              headingTitle: 'Title',
-                              hintText: 'Enter Portfolio Title',
-                              controller:
-                                  context.read<CommunityProfileUpdateBloc>().portfolioTitle,
-                            ),
-                            const Gap(12),
+                            // Service Info Section
                             WhatsevrFormField.generalTextField(
                               headingTitle: 'Status',
                               hintText: 'Add Status on Portfolio',
-                              controller:
-                                  context.read<CommunityProfileUpdateBloc>().portfolioStatus,
+                              controller: context
+                                  .read<CommunityProfileUpdateBloc>()
+                                  .portfolioStatus,
                             ),
-
-                            const Gap(12),
+                            const Gap(8),
+                                 const Gap(12),
                             Builder(
                               builder: (BuildContext context) {
                                 final TextEditingController titleController =
@@ -948,25 +523,21 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                             ],
                             // Portfolio Info Section
 
-                            WhatsevrFormField.multilineTextField(
-                              controller: context
-                                  .read<CommunityProfileUpdateBloc>()
-                                  .portfolioDescriptionController,
-                              headingTitle: 'Portfolio Description',
-                              minLines: 5,
-                            ),
                           ],
                         ),
                       ),
                       const Gap(12),
                     ],
+                    const Gap(12), 
                     MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       color: Colors.blueAccent,
                       onPressed: () {
-                        context.read<CommunityProfileUpdateBloc>().add(const SubmitProfile());
+                        context
+                            .read<CommunityProfileUpdateBloc>()
+                            .add(const SubmitProfile());
                       },
                       child: const Text(
                         'SAVE',

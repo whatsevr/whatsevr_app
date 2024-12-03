@@ -20,6 +20,7 @@ import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 import 'package:whatsevr_app/src/features/search_pages/all_search/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
 import 'package:whatsevr_app/src/features/splash/views/page.dart';
+import 'package:whatsevr_app/src/features/update_community_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 import 'package:whatsevr_app/config/widgets/media/camera_surface.dart';
 import 'package:whatsevr_app/config/widgets/media/image_cropper.dart';
@@ -222,11 +223,21 @@ class AppNavigationService {
         },
       ),
       GoRoute(
-        path: RoutesName.updateProfile,
+        path: RoutesName.updateUserProfile,
         builder: (BuildContext context, GoRouterState state) {
           final UserProfileUpdatePageArgument pageArgument =
               state.extra as UserProfileUpdatePageArgument;
           return UserProfileUpdatePage(
+            pageArgument: pageArgument,
+          );
+        },
+      ),
+           GoRoute(
+        path: RoutesName.updateCommunityProfile,
+        builder: (BuildContext context, GoRouterState state) {
+          final CommunityProfileUpdatePageArgument pageArgument =
+              state.extra as CommunityProfileUpdatePageArgument;
+          return CommunityProfileUpdatePage(
             pageArgument: pageArgument,
           );
         },

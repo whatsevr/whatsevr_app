@@ -131,10 +131,14 @@ class WtvVideoPostFrame extends StatelessWidget {
                           const Gap(4),
                           Row(
                             children: [
-                              Text(
-                                '$username',
-                                style: const TextStyle(
-                                  fontSize: 12,
+                              Expanded(
+                                child: Text(
+                                  '$username',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                               Text(
