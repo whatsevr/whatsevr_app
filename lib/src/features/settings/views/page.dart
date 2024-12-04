@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
 import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
@@ -14,6 +15,7 @@ import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
 
@@ -34,285 +36,463 @@ class SettingsPage extends StatelessWidget {
   }
 
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: const WhatsevrAppBar(
-        title: 'Settings',
-      ),
-      body: PadHorizontal(
-        child: ListView(
-          children: <Widget>[
-            const Gap(8),
-            _YourCommunities(),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, state) {
+        final theme = context.whatsevrTheme;
+        return Scaffold(
+          appBar: WhatsevrAppBar(
+            title: 'Settings',
+            backgroundColor: theme.appBar,
+          ),
+          body: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            children: [
+              const Gap(4),
+              _buildProfileCard(context),
+              _YourCommunities(),
+              SettingsSection(
+                title: 'Account & Privacy',
+                children: [
+                  SettingsTile(
+                    icon: Icons.lock_outline,
+                    title: 'Privacy Settings',
+                    subtitle: 'Control your profile visibility and data',
+                    trailing: Switch(
+                      value: state.isProfileVisible,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdatePrivacySettings(
+                                isProfileVisible: value,
+                                isActivityStatusVisible:
+                                    state.isActivityStatusVisible,
+                                messageRequests:
+                                    state.messageRequestsPreference,
+                              ),
+                            );
+                      },
+                    ),
+                  ),
+                  // ...other privacy tiles...
+                ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const Expanded(
-                        child: Text(
-                          'Show rating when someone views your profile',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+              SettingsSection(
+                title: 'Notifications',
+                children: [
+                  SettingsTile(
+                    icon: Icons.notifications_outlined,
+                    title: 'Push Notifications',
+                    trailing: Switch(
+                      value: state.isPushNotificationsEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateNotificationPreferences(
+                                isPushEnabled: value,
+                                isEmailEnabled:
+                                    state.isEmailNotificationsEnabled,
+                                isPostEnabled: state.isPostNotificationsEnabled,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.mail_outline,
+                    title: 'Email Notifications',
+                    trailing: Switch(
+                      value: state.isEmailNotificationsEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateNotificationPreferences(
+                                isPushEnabled: state.isPushNotificationsEnabled,
+                                isEmailEnabled: value,
+                                isPostEnabled: state.isPostNotificationsEnabled,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Data & Storage',
+                children: [
+                  SettingsTile(
+                    icon: Icons.data_usage,
+                    title: 'Data Saver',
+                    subtitle: 'Reduce data usage',
+                    trailing: Switch(
+                      value: state.isDataSaverEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateDataSettings(
+                                isDataSaverEnabled: value,
+                                isAutoPlayEnabled: state.isAutoPlayEnabled,
+                                mediaQuality: state.mediaQuality,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                  SettingsTile(
+                    icon: Icons.wifi_outlined,
+                    title: 'Auto-play Videos',
+                    subtitle: 'Play videos automatically',
+                    trailing: Switch(
+                      value: state.isAutoPlayEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateDataSettings(
+                                isDataSaverEnabled: state.isDataSaverEnabled,
+                                isAutoPlayEnabled: value,
+                                mediaQuality: state.mediaQuality,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Security',
+                children: [
+                  SettingsTile(
+                    icon: Icons.fingerprint,
+                    title: 'Biometric Lock',
+                    subtitle: 'Secure app access with biometrics',
+                    trailing: Switch(
+                      value: state.isBiometricEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateSecuritySettings(
+                                isBiometricEnabled: value,
+                                isTwoFactorEnabled: state.isTwoFactorEnabled,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Device Permissions',
+                children: [
+                  for (final permission in state.permissions.entries)
+                    SettingsTile(
+                      icon: _getPermissionIcon(permission.key),
+                      title: _getPermissionTitle(permission.key),
+                      subtitle: 'Allow access to ${permission.key}',
+                      trailing: Switch(
+                        value: permission.value,
+                        onChanged: (value) {
+                          context.read<SettingsBloc>().add(
+                                UpdatePermission(
+                                  permission: permission.key,
+                                  isEnabled: value,
+                                ),
+                              );
+                        },
+                        activeColor: theme.primary,
+                      ),
+                    ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Notification Preferences',
+                children: [
+                  for (final type in state.notificationTypes.entries)
+                    SettingsTile(
+                      icon: _getNotificationIcon(type.key),
+                      title: '${type.key} notifications',
+                      trailing: Switch(
+                        value: type.value,
+                        onChanged: (value) {
+                          context.read<SettingsBloc>().add(
+                                UpdateNotificationType(
+                                  type: type.key,
+                                  enabled: value,
+                                ),
+                              );
+                        },
+                        activeColor: theme.primary,
+                      ),
+                    ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Display',
+                children: [
+                  SettingsTile(
+                    icon: Icons.text_fields,
+                    title: 'Text Size',
+                    subtitle: state.textSize,
+                    onTap: () => _showTextSizeDialog(context, state),
+                  ),
+                ],
+              ),
+              SettingsSection(
+                title: 'Developer',
+                children: [
+                  SettingsTile(
+                    icon: Icons.code,
+                    title: 'Developer Mode',
+                    subtitle: 'Enable advanced debugging features',
+                    trailing: Switch(
+                      value: state.isDeveloperMode,
+                      onChanged: (value) {
+                        context
+                            .read<SettingsBloc>()
+                            .add(ToggleDeveloperMode(value));
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+              
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  IconData _getPermissionIcon(String permission) {
+    switch (permission) {
+      case 'camera':
+        return Icons.camera_alt_outlined;
+      case 'storage':
+        return Icons.folder_outlined;
+      case 'location':
+        return Icons.location_on_outlined;
+      case 'microphone':
+        return Icons.mic_outlined;
+      default:
+        return Icons.settings;
+    }
+  }
+
+  String _getPermissionTitle(String permission) {
+    return permission.substring(0, 1).toUpperCase() + permission.substring(1);
+  }
+
+  IconData _getNotificationIcon(String type) {
+    switch (type) {
+      case 'likes':
+        return Icons.favorite_outline;
+      case 'comments':
+        return Icons.comment_outlined;
+      case 'mentions':
+        return Icons.alternate_email;
+      case 'follows':
+        return Icons.person_add_outlined;
+      case 'messages':
+        return Icons.message_outlined;
+      default:
+        return Icons.notifications_outlined;
+    }
+  }
+
+  void _showTextSizeDialog(BuildContext context, SettingsState state) {
+    final theme = context.whatsevrTheme;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Choose Text Size'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final size in ['Small', 'Medium', 'Large', 'Extra Large'])
+              ListTile(
+                title: Text(size),
+                trailing: state.textSize == size
+                    ? Icon(Icons.check, color: theme.primary)
+                    : null,
+                onTap: () {
+                  context.read<SettingsBloc>().add(UpdateTextSize(size));
+                  Navigator.pop(context);
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileCard(BuildContext context) {
+    final theme = context.whatsevrTheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12), // Reduced margin
+      padding: const EdgeInsets.all(12), // Reduced padding
+      decoration: BoxDecoration(
+        color: theme.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadow.withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          AdvancedAvatar(
+            size: 50, // Slightly smaller avatar
+            image: ExtendedImage.network(
+              'https://i.pravatar.cc/150',
+              cache: true,
+            ).image,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: theme.primary,
+            ),
+          ),
+          const Gap(12), // Reduced gap
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'John Doe',
+                  style: theme.subtitle,
+                ),
+                const Gap(4),
+                Text(
+                  '@johndoe',
+                  style: theme.bodySmall.copyWith(color: theme.textLight),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.edit_outlined, color: theme.primary),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsSection extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+  const SettingsSection({
+    required this.title,
+    required this.children,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.whatsevrTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: 12, horizontal: 4), // Reduced padding
+          child: Text(
+            title,
+            style: theme.subtitle.copyWith(
+              fontSize: 16, // Smaller font size
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        ...children,
+        const Gap(4), // Reduced gap
+      ],
+    );
+  }
+}
+
+class SettingsTile extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+  final IconData? icon;
+
+  const SettingsTile({
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    this.icon,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.whatsevrTheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 6), // Reduced margin
+      decoration: BoxDecoration(
+        color: theme.surface,
+        borderRadius: BorderRadius.circular(10), // Slightly reduced radius
+        boxShadow: [
+          BoxShadow(
+            color: theme.shadow.withOpacity(0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ), // Adjusted padding
+            child: Row(
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, color: theme.primary, size: 20), // Smaller icon
+                  const Gap(12), // Reduced gap
+                ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.body.copyWith(
+                          fontWeight:
+                              FontWeight.w500, // Slightly reduced weight
+                          fontSize: 15, // Smaller font size
                         ),
                       ),
-                      Switch(
-                        value: true,
-                        onChanged: (bool value) {},
-                      ),
+                      if (subtitle != null) ...[
+                        const Gap(2), // Reduced gap
+                        Text(
+                          subtitle!,
+                          style: theme.bodySmall.copyWith(
+                            color: theme.textLight,
+                            fontSize: 13, // Smaller font size
+                          ),
+                        ),
+                      ],
                     ],
                   ),
-                  const Gap(8),
-                  const Text(
-                    'This will show a rating when someone views your profile.',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
+                ),
+                if (trailing != null)
+                  Transform.scale(
+                    scale: 0.8, // Make switches smaller
+                    child: trailing!,
                   ),
-                ],
-              ),
+              ],
             ),
-            const Gap(8),
-            const Text(
-              'Device Permissions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(8),
-            Builder(
-              builder: (BuildContext context) {
-                final List<Widget> children = <Widget>[
-                  for (int i = 0; i < 5; i++)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              const Text(
-                                'Camera',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Spacer(),
-                              Switch(
-                                value: true,
-                                onChanged: (bool value) {},
-                              ),
-                            ],
-                          ),
-                          const Gap(8),
-                          const Text(
-                            'Allow Whatsevr to access your camera to take photos and record videos.',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ];
-                return ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: children.length,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Gap(8),
-                  itemBuilder: (BuildContext context, int index) =>
-                      children[index],
-                );
-              },
-            ),
-            const Gap(16),
-            const Text(
-              'For Professionals',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Professional Mode',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap(8),
-                  Text(
-                    'Enable professional mode to access advanced features.',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(16),
-            const Text(
-              'Support',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Contact Us',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap(8),
-                  Text(
-                    'If you have any questions or need help, please contact us',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'About Us',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap(8),
-                  Text(
-                    'If you have any questions or need help, please contact us',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(16),
-            const Text(
-              'Accounts in this Device',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Add Account',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gap(8),
-                  Text(
-                    'Add another account to this device',
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Log Out',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Gap(8),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Log Out of All Accounts',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
