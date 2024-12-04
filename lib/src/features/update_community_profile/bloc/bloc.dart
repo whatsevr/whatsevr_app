@@ -8,12 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_cover_media.dart';
-import 'package:whatsevr_app/config/api/requests_model/update_user_profile_picture.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_info.dart';
-import 'package:whatsevr_app/config/api/requests_model/user/update_user_services.dart';
-import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
+import 'package:whatsevr_app/config/api/methods/community.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_cover_media.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_services.dart';
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart' hide CommunityInfo, CommunityService, CommunityCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -104,8 +104,9 @@ class CommunityProfileUpdateBloc
         fileRelatedTo: 'profile-picture',
         fileExtension: 'jpg',
       );
-      await UsersApi.updateProfilePicture(
-        ProfilePictureUpdateRequest(
+      await CommunityApi.updateCommunityProfilePicture(
+        request: 
+        CommunityProfilePictureUpdateRequest (
           userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
           profilePictureUrl: profilePictureUrl,
         ),
@@ -168,16 +169,17 @@ class CommunityProfileUpdateBloc
         );
       }
 
-      await UsersApi.updateCoverMedia(
-        UpdateUserCoverMediaRequest(
+      await CommunityApi.updateCommunityCoverMedia(
+        request: 
+        UpdateCommunityCoverMediaRequest (
           userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
-          userCoverMedia: state.coverMedia
+          communityCoverMedia: state.coverMedia
               ?.map(
-                (UiCoverMedia e) => UserCoverMedia(
+                (UiCoverMedia e) => CommunityCoverMedia(
                   imageUrl: e.imageUrl,
                   videoUrl: e.videoUrl,
                   isVideo: e.videoUrl?.isNotEmpty ?? false,
-                  userUid:
+                  communityUid:
                       state.currentProfileDetailsResponse?.communityInfo?.uid,
                 ),
               )
@@ -226,18 +228,20 @@ class CommunityProfileUpdateBloc
       }
 
       SmartDialog.showLoading();
-      final UpdateUserInfoRequest newUpdateUserInfoRequest =
-          UpdateUserInfoRequest(
+      final UpdateCommunityInfoRequest  newUpdateUserInfoRequest =
+          UpdateCommunityInfoRequest (
         userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
-        userInfo: UserInfo(
-          name: nameController.text,
+        communityInfo: CommunityInfo(
+          title: nameController.text,
           bio: bioController.text,
-          address: addressController.text,
+          location: addressController.text,
         
         ),
       );
       (int?, String?)? userInfoUpdateResponse =
-          await UsersApi.updateUserInfo(newUpdateUserInfoRequest);
+          await CommunityApi.updateCommunityInfo(
+            request: 
+            newUpdateUserInfoRequest);
       if (userInfoUpdateResponse?.$1 != HttpStatus.ok) {
         throw BusinessException(
           userInfoUpdateResponse?.$2 ?? 'Failed to update profile info',
@@ -245,13 +249,13 @@ class CommunityProfileUpdateBloc
       }
       SmartDialog.showLoading(msg: '${userInfoUpdateResponse?.$2}');
 
-      final UpdateUserServicesRequest newUserServicesRequest =
-          UpdateUserServicesRequest(
+      final UpdateCommunityServicesRequest  newUserServicesRequest =
+          UpdateCommunityServicesRequest (
         userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
-        userServices: state.services
+        communityServices: state.services
             ?.map(
-              (UiService e) => UserService(
-                userUid:
+              (UiService e) => CommunityService(
+                communityUid:
                     state.currentProfileDetailsResponse?.communityInfo?.uid,
                 title: e.serviceName,
                 description: e.serviceDescription,
@@ -260,7 +264,9 @@ class CommunityProfileUpdateBloc
             .toList(),
       );
       (int?, String?)? m4 =
-          await UsersApi.updateServices(newUserServicesRequest);
+          await CommunityApi.updateCommunityServices(
+            request: 
+            newUserServicesRequest);
       SmartDialog.showLoading(msg: '${m4?.$2}');
       SmartDialog.dismiss();
       AppNavigationService.goBack();

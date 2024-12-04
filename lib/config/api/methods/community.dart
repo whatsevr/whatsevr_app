@@ -3,6 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/requests_model/community/create_community.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_cover_media.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_profile_picture.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_info.dart';
+import 'package:whatsevr_app/config/api/requests_model/community/update_community_services.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_members.dart';
 import 'package:whatsevr_app/config/api/response_model/community/top_communities.dart';
@@ -141,6 +145,66 @@ class CommunityApi {
       if (response.data != null) {
         return CommunityMembersResponse.fromMap(response.data);
       }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(int? statusCode,String? message, )?> updateCommunityInfo({
+    required UpdateCommunityInfoRequest request,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/update-community-info',
+        data: request.toMap(),
+      );
+      return ( response.statusCode,response.data['message'] as String?);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(int? statusCode,String? message, )?> updateCommunityServices({
+    required UpdateCommunityServicesRequest request,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/update-community-services',
+        data: request.toMap(),
+      );
+      return ( response.statusCode,response.data['message'] as String?,);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> updateCommunityProfilePicture({
+    required CommunityProfilePictureUpdateRequest request,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/update-community-profile-picture',
+        data: request.toMap(),
+      );
+      return (response.data['message'] as String?, response.statusCode);
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+  static Future<(String? message, int? statusCode)?> updateCommunityCoverMedia({
+    required UpdateCommunityCoverMediaRequest request,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/update-community-cover-media',
+        data: request.toMap(),
+      );
+      return (response.data['message'] as String?, response.statusCode);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
