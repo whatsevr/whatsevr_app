@@ -27,6 +27,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ToggleBackup>(_onToggleBackup);
     on<ToggleDeveloperMode>(_onToggleDeveloperMode);
     on<UpdateNotificationType>(_onUpdateNotificationType);
+    on<UpdateAvailabilityStatus>(_onUpdateAvailabilityStatus);
     _initHive();
   }
 
@@ -238,6 +239,19 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       // Update notification settings on the server
       await _updateNotificationSettings(event.type, event.enabled);
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onUpdateAvailabilityStatus(
+    UpdateAvailabilityStatus event,
+    Emitter<SettingsState> emit,
+  ) async {
+    try {
+      final newState = state.copyWith(availabilityStatus: event.status);
+      emit(newState);
+      await _saveSettings(newState);
     } catch (e, s) {
       highLevelCatch(e, s);
     }

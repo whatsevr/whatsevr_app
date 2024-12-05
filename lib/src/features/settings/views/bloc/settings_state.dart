@@ -44,6 +44,8 @@ class SettingsState extends Equatable {
   final Map<String, bool> notificationTypes;
   @HiveField(20)
   final bool isDeveloperMode;
+  @HiveField(21)
+  final String availabilityStatus;
 
   const SettingsState({
     this.userCommunitiesResponse,
@@ -66,11 +68,9 @@ class SettingsState extends Equatable {
     this.textSize = 'Medium',
     this.isDeveloperMode = false,
     this.notificationTypes = const {
-      'likes': true,
-      'comments': true,
-      'mentions': true,
-      'follows': true,
-      'messages': true,
+      'global': true,
+      'account': true,
+      'promotional': true,
     },
     this.permissions = const {
       'camera': true,
@@ -78,6 +78,7 @@ class SettingsState extends Equatable {
       'location': true,
       'microphone': true,
     },
+    this.availabilityStatus = 'Available',
   });
 
   @override
@@ -103,6 +104,7 @@ class SettingsState extends Equatable {
         textSize,
         notificationTypes,
         isDeveloperMode,
+        availabilityStatus,
       ];
 
   SettingsState copyWith({
@@ -127,6 +129,7 @@ class SettingsState extends Equatable {
     bool? isDeveloperMode,
     Map<String, bool>? notificationTypes,
     Map<String, bool>? permissions,
+    String? availabilityStatus,
   }) {
     return SettingsState(
       userCommunitiesResponse: userCommunitiesResponse ?? this.userCommunitiesResponse,
@@ -150,6 +153,7 @@ class SettingsState extends Equatable {
       isDeveloperMode: isDeveloperMode ?? this.isDeveloperMode,
       notificationTypes: notificationTypes ?? this.notificationTypes,
       permissions: permissions ?? this.permissions,
+      availabilityStatus: availabilityStatus ?? this.availabilityStatus,
     );
   }
 }

@@ -114,3 +114,10 @@ class UpdateNotificationType extends SettingsEvent {
   @override
   List<Object> get props => [type, enabled];
 }
+
+class UpdateAvailabilityStatus extends SettingsEvent {
+  final String status;
+  const UpdateAvailabilityStatus(this.status);
+  @override
+  List<Object> get props => [status];
+}

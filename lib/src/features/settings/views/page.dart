@@ -72,7 +72,77 @@ class SettingsPage extends StatelessWidget {
                       },
                     ),
                   ),
-                  // ...other privacy tiles...
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    decoration: BoxDecoration(
+                      color: theme.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.shadow.withOpacity(0.02),
+                          blurRadius: 6,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        dividerColor: Colors.transparent,
+                      ),
+                      child: ExpansionTile(
+                        leading: Icon(
+                          _getAvailabilityIcon(state.availabilityStatus),
+                          color: _getAvailabilityColor(state.availabilityStatus, theme),
+                          size: 20,
+                        ), 
+                        title: Text( 
+                          'Availability Status',
+                          style: theme.body.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                        ),
+                        subtitle: Text(
+                          state.availabilityStatus,
+                          style: theme.bodySmall.copyWith(
+                            color: theme.textLight,
+                            fontSize: 13,
+                          ),
+                        ),
+                        children: [
+                          _buildAvailabilityOption(
+                            context,
+                            'Available',
+                            Icons.check_circle_outline,
+                            theme.success,
+                            state,
+                          ),
+                          _buildAvailabilityOption(
+                            context,
+                            'Limited Availability',
+                            Icons.access_time,
+                            theme.warning,
+                            state,
+                          ),
+                          _buildAvailabilityOption(
+                            context,
+                            'Away',
+                            Icons.not_interested,
+                            theme.error,
+                            state,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SettingsTile( 
+                    icon: Icons.block_outlined,
+                    title: 'Blocked Users',
+                    subtitle: 'Manage blocked users',
+                    onTap: () {
+                      // Navigate to blocked users page
+                    },
+                  ),
                 ],
               ),
               SettingsSection(
@@ -207,7 +277,8 @@ class SettingsPage extends StatelessWidget {
                   for (final type in state.notificationTypes.entries)
                     SettingsTile(
                       icon: _getNotificationIcon(type.key),
-                      title: '${type.key} notifications',
+                      title: _getNotificationTitle(type.key),
+                      subtitle: _getNotificationSubtitle(type.key),
                       trailing: Switch(
                         value: type.value,
                         onChanged: (value) {
@@ -282,18 +353,40 @@ class SettingsPage extends StatelessWidget {
 
   IconData _getNotificationIcon(String type) {
     switch (type) {
-      case 'likes':
-        return Icons.favorite_outline;
-      case 'comments':
-        return Icons.comment_outlined;
-      case 'mentions':
-        return Icons.alternate_email;
-      case 'follows':
-        return Icons.person_add_outlined;
-      case 'messages':
-        return Icons.message_outlined;
+      case 'global':
+        return Icons.notifications_outlined;
+      case 'account':
+        return Icons.person_outline;
+      case 'promotional':
+        return Icons.campaign_outlined;
       default:
         return Icons.notifications_outlined;
+    }
+  }
+
+  String _getNotificationTitle(String type) {
+    switch (type) {
+      case 'global':
+        return 'Global Notifications';
+      case 'account':
+        return 'Account Notifications';
+      case 'promotional':
+        return 'Promotional Notifications';
+      default:
+        return type;
+    }
+  }
+
+  String _getNotificationSubtitle(String type) {
+    switch (type) {
+      case 'global':
+        return 'Updates, alerts and important messages';
+      case 'account':
+        return 'Security and account-related notifications';
+      case 'promotional':
+        return 'Offers, news and promotional content';
+      default:
+        return '';
     }
   }
 
@@ -368,7 +461,7 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+           ),
           IconButton(
             icon: Icon(Icons.edit_outlined, color: theme.primary),
             onPressed: () {},
@@ -376,6 +469,49 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _buildAvailabilityOption(
+    BuildContext context,
+    String status,
+    IconData icon,
+    Color color,
+    SettingsState state,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: color, size: 20),
+      title: Text(status),
+      selected: state.availabilityStatus == status,
+      onTap: () {
+        context.read<SettingsBloc>().add(UpdateAvailabilityStatus(status));
+      },
+    );
+  }
+
+  IconData _getAvailabilityIcon(String status) {
+    switch (status) {
+      case 'Available':
+        return Icons.check_circle_outline;
+      case 'Limited Availability':
+        return Icons.access_time;
+      case 'Away':
+        return Icons.not_interested;
+      default:
+        return Icons.circle_outlined;
+    }
+  }
+
+  Color _getAvailabilityColor(String status, AppTheme theme) {
+    switch (status) {
+      case 'Available':
+        return Colors.green;
+      case 'Limited Availability':
+        return Colors.orange;
+      case 'Away':
+        return Colors.red;
+      default:
+        return theme.primary;
+    }
   }
 }
 
