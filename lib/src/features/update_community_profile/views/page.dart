@@ -379,7 +379,7 @@ class CommunityProfileUpdatePage extends StatelessWidget {
                             WhatsevrFormField.generalTextField(
                               controller: context
                                   .read<CommunityProfileUpdateBloc>()
-                                  .nameController,
+                                  .titleController,
                               headingTitle: 'Title',
                               maxLength: 40,
                             ),

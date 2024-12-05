@@ -140,7 +140,7 @@ Container _toastUi(String msg) {
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
-     /// color: AppNavigationService.currentContext?.whatsevrTheme.surface,
+     color: AppNavigationService.currentContext?.whatsevrTheme.surface,
       borderRadius: BorderRadius.circular(8),
       boxShadow: const <BoxShadow>[
         BoxShadow(

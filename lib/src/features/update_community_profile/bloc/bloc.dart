@@ -13,7 +13,8 @@ import 'package:whatsevr_app/config/api/requests_model/community/update_communit
 import 'package:whatsevr_app/config/api/requests_model/community/update_community_info.dart';
 import 'package:whatsevr_app/config/api/requests_model/community/update_community_profile_picture.dart';
 import 'package:whatsevr_app/config/api/requests_model/community/update_community_services.dart';
-import 'package:whatsevr_app/config/api/response_model/community/community_details.dart' hide CommunityInfo, CommunityService, CommunityCoverMedia;
+import 'package:whatsevr_app/config/api/response_model/community/community_details.dart'
+    hide CommunityInfo, CommunityService, CommunityCoverMedia;
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
@@ -24,9 +25,7 @@ part 'state.dart';
 
 class CommunityProfileUpdateBloc
     extends Bloc<CommunityProfileUpdateEvent, CommunityProfileUpdateState> {
-  TextEditingController nameController = TextEditingController();
-
- 
+  TextEditingController titleController = TextEditingController();
 
   TextEditingController bioController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -77,7 +76,7 @@ class CommunityProfileUpdateBloc
     );
 
     // Set the initial values of the text controllers
-    nameController.text =
+    titleController.text =
         event.pageArgument.profileDetailsResponse?.communityInfo?.title ?? '';
 
     bioController.text =
@@ -105,8 +104,7 @@ class CommunityProfileUpdateBloc
         fileExtension: 'jpg',
       );
       await CommunityApi.updateCommunityProfilePicture(
-        request: 
-        CommunityProfilePictureUpdateRequest (
+        request: CommunityProfilePictureUpdateRequest(
           userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
           profilePictureUrl: profilePictureUrl,
         ),
@@ -170,9 +168,9 @@ class CommunityProfileUpdateBloc
       }
 
       await CommunityApi.updateCommunityCoverMedia(
-        request: 
-        UpdateCommunityCoverMediaRequest (
-          userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+        request: UpdateCommunityCoverMediaRequest(
+          communityUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+          userUid: AuthUserDb.getLastLoggedUserUid(),
           communityCoverMedia: state.coverMedia
               ?.map(
                 (UiCoverMedia e) => CommunityCoverMedia(
@@ -223,25 +221,24 @@ class CommunityProfileUpdateBloc
     Emitter<CommunityProfileUpdateState> emit,
   ) async {
     try {
-      if (nameController.text.isEmpty) {
-        throw BusinessException('Name cannot be empty');
+      if (titleController.text.isEmpty) {
+        throw BusinessException('Title cannot be empty');
       }
 
       SmartDialog.showLoading();
-      final UpdateCommunityInfoRequest  newUpdateUserInfoRequest =
-          UpdateCommunityInfoRequest (
-        userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+      final UpdateCommunityInfoRequest newUpdateUserInfoRequest =
+          UpdateCommunityInfoRequest(
+        communityUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+        userUid: AuthUserDb.getLastLoggedUserUid(),
         communityInfo: CommunityInfo(
-          title: nameController.text,
+          title: titleController.text,
           bio: bioController.text,
           location: addressController.text,
-        
         ),
       );
       (int?, String?)? userInfoUpdateResponse =
           await CommunityApi.updateCommunityInfo(
-            request: 
-            newUpdateUserInfoRequest);
+              request: newUpdateUserInfoRequest);
       if (userInfoUpdateResponse?.$1 != HttpStatus.ok) {
         throw BusinessException(
           userInfoUpdateResponse?.$2 ?? 'Failed to update profile info',
@@ -249,9 +246,10 @@ class CommunityProfileUpdateBloc
       }
       SmartDialog.showLoading(msg: '${userInfoUpdateResponse?.$2}');
 
-      final UpdateCommunityServicesRequest  newUserServicesRequest =
-          UpdateCommunityServicesRequest (
-        userUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+      final UpdateCommunityServicesRequest newUserServicesRequest =
+          UpdateCommunityServicesRequest(
+        communityUid: state.currentProfileDetailsResponse?.communityInfo?.uid,
+        userUid: AuthUserDb.getLastLoggedUserUid(),
         communityServices: state.services
             ?.map(
               (UiService e) => CommunityService(
@@ -263,10 +261,8 @@ class CommunityProfileUpdateBloc
             )
             .toList(),
       );
-      (int?, String?)? m4 =
-          await CommunityApi.updateCommunityServices(
-            request: 
-            newUserServicesRequest);
+      (int?, String?)? m4 = await CommunityApi.updateCommunityServices(
+          request: newUserServicesRequest);
       SmartDialog.showLoading(msg: '${m4?.$2}');
       SmartDialog.dismiss();
       AppNavigationService.goBack();

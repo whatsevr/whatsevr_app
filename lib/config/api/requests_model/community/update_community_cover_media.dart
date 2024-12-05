@@ -40,14 +40,14 @@ class UpdateCommunityCoverMediaRequest {
 }
 
 class CommunityCoverMedia {
-    final DateTime? createdAt;
+
     final String? imageUrl;
     final bool? isVideo;
     final String? communityUid;
     final String? videoUrl;
 
     CommunityCoverMedia({
-        this.createdAt,
+     
         this.imageUrl,
         this.isVideo,
         this.communityUid,
@@ -55,14 +55,14 @@ class CommunityCoverMedia {
     });
 
     CommunityCoverMedia copyWith({
-        DateTime? createdAt,
+     
         String? imageUrl,
         bool? isVideo,
         String? communityUid,
         String? videoUrl,
     }) => 
         CommunityCoverMedia(
-            createdAt: createdAt ?? this.createdAt,
+        
             imageUrl: imageUrl ?? this.imageUrl,
             isVideo: isVideo ?? this.isVideo,
             communityUid: communityUid ?? this.communityUid,
@@ -74,18 +74,16 @@ class CommunityCoverMedia {
     String toJson() => json.encode(toMap());
 
     factory CommunityCoverMedia.fromMap(Map<String, dynamic> json) => CommunityCoverMedia(
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        imageUrl: json["image_url"],
+       imageUrl: json["image_url"],
         isVideo: json["is_video"],
         communityUid: json["community_uid"],
         videoUrl: json["video_url"],
     );
 
     Map<String, dynamic> toMap() => {
-        "created_at": createdAt?.toIso8601String(),
-        "image_url": imageUrl,
+       "image_url": imageUrl,
         "is_video": isVideo,
         "community_uid": communityUid,
         "video_url": videoUrl,
-    };
+    }; 
 }
