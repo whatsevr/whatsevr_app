@@ -467,16 +467,32 @@ Call to Action: End with a simple invite to participate.
                                   .addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
-                              hintText: 'Eg; Home, Office, Landmark, City',
+                              hintText: 'Eg; Home, Office, Landmark, City, Country',
                             ),
                             const Gap(8),
                             // Service Info Section
-                            WhatsevrFormField.generalTextField(
+                            WhatsevrFormField.invokeCustomFunction(
                               headingTitle: 'Status',
                               hintText: 'Hint; Short innovative or volatile keyword',
                               controller: context
                                   .read<CommunityProfileUpdateBloc>()
                                   .statusController,
+                                  readOnly: false,
+                                  customFunction: (){
+                                    showAppModalSheet(
+                                  child: CommonDataSearchSelectPage(
+                                    showProfessionalStatus: true,
+                                    onProfessionalStatusSelected:
+                                        (professionalStatus) {
+                                      context
+                                              .read<CommunityProfileUpdateBloc>()
+                                              .statusController
+                                              .text =
+                                          professionalStatus.title ?? '';
+                                    },
+                                  ),
+                                );
+                                  },
                             ),
                             const Gap(8),
                             const Gap(12),
@@ -598,7 +614,7 @@ Call to Action: End with a simple invite to participate.
                               ),
                               const Gap(8),
                             ],
-                            // Portfolio Info Section
+                           
                           ],
                         ),
                       ),

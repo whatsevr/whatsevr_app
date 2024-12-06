@@ -193,11 +193,16 @@ class NewCommunityPage extends StatelessWidget {
                       builder: (context, state) {
                         return Column(
                           children: [
-                            WhatsevrFormField.generalTextField(
+                            WhatsevrFormField.multilineTextField(
                               controller: context
                                   .read<NewCommunityBloc>()
                                   .communityNameController,
                               headingTitle: 'Community Name',
+                              minLines: 4,
+                              maxLines: 4,
+                              maxLength: 40,
+                              hintText:
+                                  'Hint; In crafting titles, balance clarity, engagement, and focus to attract users and build vibrant, purpose-driven communities.',
                             ),
                             Gap(12),
                             WhatsevrFormField.invokeCustomFunction(
@@ -206,6 +211,7 @@ class NewCommunityPage extends StatelessWidget {
                                   .communityStatusController,
                               readOnly: false,
                               headingTitle: 'Status',
+                               hintText: 'Hint; Short innovative or volatile keyword',
                               customFunction: () {
                                 showAppModalSheet(
                                   child: CommonDataSearchSelectPage(

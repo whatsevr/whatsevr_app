@@ -27,7 +27,7 @@ import 'package:whatsevr_app/src/features/update_user_profile/bloc/bloc.dart';
 class UserProfileUpdatePageArgument {
   final UserProfileDetailsResponse? profileDetailsResponse;
 
-  UserProfileUpdatePageArgument({ this.profileDetailsResponse});
+  UserProfileUpdatePageArgument({this.profileDetailsResponse});
 }
 
 class UserProfileUpdatePage extends StatelessWidget {
@@ -41,8 +41,8 @@ class UserProfileUpdatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) =>
-          UserProfileUpdateBloc()..add(InitialEvent(pageArgument: pageArgument)),
+      create: (BuildContext context) => UserProfileUpdateBloc()
+        ..add(InitialEvent(pageArgument: pageArgument)),
       child: Builder(
         builder: (BuildContext context) {
           return Scaffold(
@@ -258,7 +258,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                       left: 0,
                                       child: IconButton(
                                         onPressed: () {
-                                          context.read<UserProfileUpdateBloc>().add(
+                                          context
+                                              .read<UserProfileUpdateBloc>()
+                                              .add(
                                                 AddOrRemoveCoverMedia(
                                                   removableCoverMedia:
                                                       coverMedia,
@@ -295,7 +297,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<UserProfileUpdateBloc>().add(
+                                        context
+                                            .read<UserProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -310,7 +314,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                         WhatsevrAspectRatio.widescreen16by9,
                                       ],
                                       onCompleted: (file) {
-                                        context.read<UserProfileUpdateBloc>().add(
+                                        context
+                                            .read<UserProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: file,
                                               ),
@@ -348,7 +354,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                             await showWhatsevrThumbnailSelectionPage(
                                           videoFile: file,
                                         );
-                                        context.read<UserProfileUpdateBloc>().add(
+                                        context
+                                            .read<UserProfileUpdateBloc>()
+                                            .add(
                                               AddOrRemoveCoverMedia(
                                                 coverImage: thumbnail,
                                                 coverVideo: file,
@@ -379,10 +387,12 @@ class UserProfileUpdatePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             WhatsevrFormField.generalTextField(
-                              controller:
-                                  context.read<UserProfileUpdateBloc>().nameController,
+                              controller: context
+                                  .read<UserProfileUpdateBloc>()
+                                  .nameController,
                               headingTitle: 'Name',
                               maxLength: 40,
+                              hintText: 'Eg; Erik Smith',
                             ),
                             const Gap(8),
                             WhatsevrFormField.email(
@@ -391,21 +401,28 @@ class UserProfileUpdatePage extends StatelessWidget {
                                   .publicEmailController,
                               headingTitle: 'Email',
                               maxLength: 60,
+                              hintText: 'Eg; erik.smith@gmail.com',
                             ),
                             const Gap(8),
                             WhatsevrFormField.multilineTextField(
-                              controller:
-                                  context.read<UserProfileUpdateBloc>().bioController,
+                              controller: context
+                                  .read<UserProfileUpdateBloc>()
+                                  .bioController,
                               headingTitle: 'Bio',
                               minLines: 3,
                               maxLength: 300,
+                              hintText:
+                                  'Eg; hobbies, special interests, goals, urls, emojis etc',
                             ),
                             const Gap(8),
                             WhatsevrFormField.multilineTextField(
-                              controller:
-                                  context.read<UserProfileUpdateBloc>().addressController,
+                              controller: context
+                                  .read<UserProfileUpdateBloc>()
+                                  .addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
+                              hintText:
+                                  'Eg; Home, Office, Landmark, City, Country',
                             ),
                             const Gap(8),
                             WhatsevrFormField.datePicker(
@@ -416,7 +433,8 @@ class UserProfileUpdatePage extends StatelessWidget {
                                     : DateFormat('dd-MM-yyyy')
                                         .format(state.dob!),
                               ),
-                              headingTitle: 'Date of Birth',
+                              headingTitle: 'Birthday',
+                              hintText: 'Select Date of Birth',
                               onDateSelected: (DateTime date) {
                                 context
                                     .read<UserProfileUpdateBloc>()
@@ -450,11 +468,15 @@ class UserProfileUpdatePage extends StatelessWidget {
                                           WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter School',
                                             controller: schoolController,
+                                            hintText:
+                                                'Eg; Cambridge University',
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField
                                               .invokeCustomFunction(
-                                            headingTitle: 'Select Degree',
+                                            headingTitle: 'Field of Study',
+                                            hintText:
+                                                'Eg; Masters in Business Administration',
                                             controller: degreeController,
                                             readOnly: false,
                                             customFunction: () {
@@ -475,16 +497,21 @@ class UserProfileUpdatePage extends StatelessWidget {
                                             },
                                           ),
                                           const Gap(12),
-                                          WhatsevrFormField.generalTextField(
-                                            readOnly: true,
+                                          WhatsevrFormField
+                                              .invokeCustomFunction(
+                                            readOnly: false,
                                             controller: degreeTypeController,
-                                            headingTitle: 'Degree Type',
+                                            headingTitle: 'Academic Degree',
+                                            hintText:
+                                                'Eg; Bachelors, Masters, or Dr.PhD',
+                                            customFunction: () {},
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField.datePicker(
                                             context: context,
                                             controller: startDateController,
                                             headingTitle: 'Select Start Date',
+                                            hintText: 'First day',
                                             onDateSelected: (DateTime date) {
                                               startDateController.text =
                                                   DateFormat('dd-MM-yyyy')
@@ -496,6 +523,7 @@ class UserProfileUpdatePage extends StatelessWidget {
                                             context: context,
                                             controller: endDateController,
                                             headingTitle: 'Select End Date',
+                                            hintText: 'Last day',
                                             onDateSelected: (DateTime date) {
                                               endDateController.text =
                                                   DateFormat('dd-MM-yyyy')
@@ -518,7 +546,10 @@ class UserProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   endDateController
                                                       .text.isNotEmpty) {
-                                                context.read<UserProfileUpdateBloc>().add(
+                                                context
+                                                    .read<
+                                                        UserProfileUpdateBloc>()
+                                                    .add(
                                                       AddOrRemoveEducation(
                                                         education: UiEducation(
                                                           degreeName:
@@ -581,7 +612,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<UserProfileUpdateBloc>().add(
+                                          context
+                                              .read<UserProfileUpdateBloc>()
+                                              .add(
                                                 AddOrRemoveEducation(
                                                   education:
                                                       state.educations?[index],
@@ -634,17 +667,21 @@ class UserProfileUpdatePage extends StatelessWidget {
                                           WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter Company Name',
                                             controller: companyNameController,
+                                            hintText: 'Eg; Whatsevr, Google',
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter Designation',
                                             controller: designationController,
+                                            hintText:
+                                                'Eg; HR Manager, Software Engineer',
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField
                                               .invokeCustomFunction(
                                             headingTitle: 'Select Mode of Work',
                                             controller: workingModeController,
+                                            hintText: 'Please select',
                                             customFunction: () {
                                               showAppModalSheet(
                                                 flexibleSheet: true,
@@ -666,6 +703,7 @@ class UserProfileUpdatePage extends StatelessWidget {
                                             context: context,
                                             controller: startDateController,
                                             headingTitle: 'Start Start Date',
+                                            hintText: 'First working day',
                                             onDateSelected: (DateTime date) {
                                               startDateController.text =
                                                   DateFormat('dd-MM-yyyy')
@@ -676,6 +714,7 @@ class UserProfileUpdatePage extends StatelessWidget {
                                           WhatsevrFormField.datePicker(
                                             context: context,
                                             headingTitle: 'End Date',
+                                            hintText: 'Last working day',
                                             controller: endDateController,
                                             onDateSelected: (DateTime date) {
                                               endDateController.text =
@@ -701,7 +740,10 @@ class UserProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   designationController
                                                       .text.isNotEmpty) {
-                                                context.read<UserProfileUpdateBloc>().add(
+                                                context
+                                                    .read<
+                                                        UserProfileUpdateBloc>()
+                                                    .add(
                                                       AddOrRemoveWorkExperience(
                                                         workExperience:
                                                             UiWorkExperience(
@@ -764,7 +806,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<UserProfileUpdateBloc>().add(
+                                          context
+                                              .read<UserProfileUpdateBloc>()
+                                              .add(
                                                 AddOrRemoveWorkExperience(
                                                   workExperience: state
                                                       .workExperiences?[index],
@@ -792,7 +836,7 @@ class UserProfileUpdatePage extends StatelessWidget {
                               controller:
                                   TextEditingController(text: state.gender),
                               headingTitle: 'Gender',
-                              hintText: 'Select Gender',
+                              hintText: 'Please select',
                               customFunction: () {
                                 showAppModalSheet(
                                   flexibleSheet: true,
@@ -812,8 +856,6 @@ class UserProfileUpdatePage extends StatelessWidget {
                       ),
                       const Gap(12),
                     ],
-
-                    // Service Info Section
                     if (state.currentProfileDetailsResponse?.userInfo
                             ?.isPortfolio ==
                         true) ...<Widget>[
@@ -821,18 +863,40 @@ class UserProfileUpdatePage extends StatelessWidget {
                         labelText: 'Portfolio Info',
                         child: Column(
                           children: <Widget>[
-                            WhatsevrFormField.generalTextField(
-                              headingTitle: 'Title',
-                              hintText: 'Enter Portfolio Title',
-                              controller:
-                                  context.read<UserProfileUpdateBloc>().portfolioTitle,
+                            WhatsevrFormField.multilineTextField(
+                              headingTitle: 'Portfolio Title',
+                              hintText:
+                                  'List your major expertise, guidance and proficiency',
+                              minLines: 2,
+                              maxLines: 3,
+                              controller: context
+                                  .read<UserProfileUpdateBloc>()
+                                  .portfolioTitle,
                             ),
                             const Gap(12),
-                            WhatsevrFormField.generalTextField(
-                              headingTitle: 'Status',
-                              hintText: 'Add Status on Portfolio',
-                              controller:
-                                  context.read<UserProfileUpdateBloc>().portfolioStatus,
+                            WhatsevrFormField.invokeCustomFunction(
+                              headingTitle: 'Portfolio Status',
+                              hintText:
+                                  'Hint; One work only, like Hiring, Searching, Collaborating, Closed',
+                              controller: context
+                                  .read<UserProfileUpdateBloc>()
+                                  .portfolioStatus,
+                              readOnly: false,
+                              customFunction: () {
+                                showAppModalSheet(
+                                  child: CommonDataSearchSelectPage(
+                                    showProfessionalStatus: true,
+                                    onProfessionalStatusSelected:
+                                        (professionalStatus) {
+                                      context
+                                              .read<UserProfileUpdateBloc>()
+                                              .portfolioStatus
+                                              .text =
+                                          professionalStatus.title ?? '';
+                                    },
+                                  ),
+                                );
+                              },
                             ),
 
                             const Gap(12),
@@ -846,7 +910,7 @@ class UserProfileUpdatePage extends StatelessWidget {
 
                                 return WhatsevrFormField.invokeCustomFunction(
                                   headingTitle: 'Services',
-                                  hintText: 'Add Service you provide',
+                                  hintText: 'Fill service details',
                                   suffixWidget:
                                       const Icon(Icons.add_circle_rounded),
                                   customFunction: () {
@@ -857,11 +921,18 @@ class UserProfileUpdatePage extends StatelessWidget {
                                         children: <Widget>[
                                           WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter Title',
+                                            hintText:
+                                                'Eg; It Support, Consulting Services, Real Estate, or Educational and training',
                                             controller: titleController,
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField.multilineTextField(
                                             headingTitle: 'Enter Description',
+                                            hintText:
+                                                '''A service description is a clear and simple explanation of what a service provides, how it works, and what value it brings to you. It highlights the main features, benefits, and outcomes of the service, helping you understand what to expect and how it meets your needs. You can also use URL links and emojis.
+''',
+                                            minLines: 6,
+                                            maxLines: 10,
                                             controller: descriptionController,
                                           ),
                                           const Gap(12),
@@ -877,7 +948,10 @@ class UserProfileUpdatePage extends StatelessWidget {
                                                       .text.isNotEmpty &&
                                                   descriptionController
                                                       .text.isNotEmpty) {
-                                                context.read<UserProfileUpdateBloc>().add(
+                                                context
+                                                    .read<
+                                                        UserProfileUpdateBloc>()
+                                                    .add(
                                                       AddOrRemoveService(
                                                         service: UiService(
                                                           serviceName:
@@ -922,7 +996,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          context.read<UserProfileUpdateBloc>().add(
+                                          context
+                                              .read<UserProfileUpdateBloc>()
+                                              .add(
                                                 AddOrRemoveService(
                                                   service:
                                                       state.services?[index],
@@ -952,8 +1028,11 @@ class UserProfileUpdatePage extends StatelessWidget {
                               controller: context
                                   .read<UserProfileUpdateBloc>()
                                   .portfolioDescriptionController,
+                                  hintText: '''My portfolio highlights a range of projects, showcasing my skills in [insert specific field, e.g., graphic design, content writing, web development]. Each piece reflects my dedication to quality and creativity, as well as my ability to deliver tailored solutions that meet client needs. Explore my work to see how I can bring your ideas to life. For any inquiries or to get started on your project, visit my website [Insert Website Link] or contact me at [Insert Contact Number]. I’m here to help and collaborate! 
+''',
                               headingTitle: 'Portfolio Description',
-                              minLines: 5,
+                              minLines: 8,
+                              maxLines: 12,
                             ),
                           ],
                         ),
@@ -966,7 +1045,9 @@ class UserProfileUpdatePage extends StatelessWidget {
                       ),
                       color: Colors.blueAccent,
                       onPressed: () {
-                        context.read<UserProfileUpdateBloc>().add(const SubmitProfile());
+                        context
+                            .read<UserProfileUpdateBloc>()
+                            .add(const SubmitProfile());
                       },
                       child: const Text(
                         'SAVE',
