@@ -41,24 +41,37 @@ class UpdateCommunityInfoRequest {
 
 class CommunityInfo {
     final String? title;
+    final String? status;
     final String? bio;
+    final String? description;
     final String? location;
-
+    final bool? requireJoiningApproval;
+    
     CommunityInfo({
         this.title,
+        this.status,
+
         this.bio,
+        this.description,
         this.location,
+        this.requireJoiningApproval,
     });
 
     CommunityInfo copyWith({
         String? title,
+        String? status,
         String? bio,
+        String? description,
         String? location,
+        bool? requireJoiningApproval,
     }) => 
         CommunityInfo(
             title: title ?? this.title,
+            status: status ?? this.status,
             bio: bio ?? this.bio,
+            description:  description ?? this.description,
             location: location ?? this.location,
+            requireJoiningApproval: requireJoiningApproval ?? this.requireJoiningApproval,
         );
 
     factory CommunityInfo.fromJson(String str) => CommunityInfo.fromMap(json.decode(str));
@@ -67,13 +80,19 @@ class CommunityInfo {
 
     factory CommunityInfo.fromMap(Map<String, dynamic> json) => CommunityInfo(
         title: json["title"],
+        status: json["status"],
         bio: json["bio"],
+        description:  json["description"],
         location: json["location"],
+        requireJoiningApproval: json["require_joining_approval"],
     );
 
     Map<String, dynamic> toMap() => {
         "title": title,
+        "status": status,
         "bio": bio,
+        "description": description,
         "location": location,
+        "require_joining_approval": requireJoiningApproval,
     };
 }

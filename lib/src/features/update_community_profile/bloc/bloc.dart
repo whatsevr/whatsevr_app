@@ -28,16 +28,17 @@ class CommunityProfileUpdateBloc
   TextEditingController titleController = TextEditingController();
 
   TextEditingController bioController = TextEditingController();
+  TextEditingController descriptionConroller = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  TextEditingController portfolioStatus = TextEditingController();
+  TextEditingController statusController = TextEditingController();
 
   CommunityProfileUpdateBloc() : super(const CommunityProfileUpdateState()) {
     on<InitialEvent>(_onInitialEvent);
     on<ChangeProfilePictureEvent>(_onChangeProfilePicture);
     on<AddOrRemoveCoverMedia>(_onAddOrRemoveCoverMedia);
     on<AddOrRemoveService>(_onAddOrRemoveService);
-
+    on<ChangeApproveJoiningRequestEvent>(_changeApproveJoiningRequest);
     on<SubmitProfile>(_onSubmitProfile);
   }
   FutureOr<void> _onInitialEvent(
@@ -48,6 +49,8 @@ class CommunityProfileUpdateBloc
       state.copyWith(
         currentProfileDetailsResponse:
             event.pageArgument.profileDetailsResponse,
+        requireJoiningApproval: event.pageArgument.profileDetailsResponse
+            ?.communityInfo?.requireJoiningApproval,
         services: List.generate(
           event.pageArgument.profileDetailsResponse?.communityServices
                   ?.length ??
@@ -81,11 +84,15 @@ class CommunityProfileUpdateBloc
 
     bioController.text =
         event.pageArgument.profileDetailsResponse?.communityInfo?.bio ?? '';
+
+    descriptionConroller.text =
+        event.pageArgument.profileDetailsResponse?.communityInfo?.description ??
+            '';
     addressController.text =
         event.pageArgument.profileDetailsResponse?.communityInfo?.location ??
             '';
 
-    portfolioStatus.text =
+    statusController.text =
         event.pageArgument.profileDetailsResponse?.communityInfo?.status ?? '';
   }
 
@@ -216,6 +223,17 @@ class CommunityProfileUpdateBloc
     }
   }
 
+  FutureOr<void> _changeApproveJoiningRequest(
+    ChangeApproveJoiningRequestEvent event,
+    Emitter<CommunityProfileUpdateState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        requireJoiningApproval: !(state.requireJoiningApproval ?? false),
+      ),
+    );
+  }
+
   Future<void> _onSubmitProfile(
     SubmitProfile event,
     Emitter<CommunityProfileUpdateState> emit,
@@ -232,8 +250,11 @@ class CommunityProfileUpdateBloc
         userUid: AuthUserDb.getLastLoggedUserUid(),
         communityInfo: CommunityInfo(
           title: titleController.text,
+          status: statusController.text,
           bio: bioController.text,
+          description: descriptionConroller.text,
           location: addressController.text,
+          requireJoiningApproval: state.requireJoiningApproval,
         ),
       );
       (int?, String?)? userInfoUpdateResponse =

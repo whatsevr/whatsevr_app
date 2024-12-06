@@ -320,7 +320,7 @@ class WhatsevrFormField extends StatefulWidget {
     String? hintText,
     Function(String)? onChanged,
     int minLines = 3,
-    int? maxLines,
+    int maxLines=5,
     int? maxLength,
     Widget? prefixWidget,
     Widget? suffixWidget,
@@ -398,16 +398,20 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
               minLines: widget.minLines,
               maxLines: widget.maxLines ?? 1,
               focusNode: widget.focusNode,
+              
               decoration: InputDecoration(
                 isDense: true,
+              
                 contentPadding: defaultContextPadding,
                 hintText: widget.hintText,
                 alignLabelWithHint: true,
                 hintStyle: TextStyle(
                   color: baseColor,
-                  fontSize: 14.0,
+                  fontSize: 12.0,
                   fontStyle: FontStyle.italic,
                 ),
+                hintMaxLines: widget.minLines, 
+                
                 suffixIconColor: baseColor,
                 prefixIconColor: baseColor,
                 suffixIcon: widget.obscureText

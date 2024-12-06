@@ -294,37 +294,20 @@ class CommunityPage extends StatelessWidget {
                                   },
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.menu),
-                                  onPressed: () {
-                                    showAppModalSheet(
-                                      flexibleSheet: false,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ListTile(
-                                            leading: const Icon(Icons.edit),
-                                            title: const Text(
-                                              'Manage Community',
-                                            ),
-                                            onTap: () async {
-                                              Navigator.pop(context);
-                                              await AppNavigationService
-                                                  .newRoute(
-                                                RoutesName.updateCommunityProfile,
-                                                extras:
-                                                    CommunityProfileUpdatePageArgument(
-                                                  profileDetailsResponse: state
-                                                      .communityDetailsResponse,
-                                                ),
-                                              );
-                                              context.read<CommunityBloc>().add(
-                                                    LoadCommunityData(),
-                                                  );
-                                            },
-                                          ),
-                                        ],
+                                  icon: const Icon(Icons.edit),
+                                  onPressed: () async {
+                                   
+                                    await AppNavigationService.newRoute(
+                                      RoutesName.updateCommunityProfile,
+                                      extras:
+                                          CommunityProfileUpdatePageArgument(
+                                        profileDetailsResponse:
+                                            state.communityDetailsResponse,
                                       ),
                                     );
+                                    context.read<CommunityBloc>().add(
+                                          LoadCommunityData(),
+                                        );
                                   },
                                 ),
                               ],
@@ -487,7 +470,7 @@ class CommunityPage extends StatelessWidget {
                               ('Media', Text('Media')),
                               ('Videos', CommunityPageVideosView()),
                               ('Offers', CommunityPageOffersView()),
-                            ],  
+                            ],
                           ),
                           Gap(50),
                         ],

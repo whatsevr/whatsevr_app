@@ -39,7 +39,12 @@ class AddOrRemoveCoverMedia extends CommunityProfileUpdateEvent {
   List<Object?> get props =>
       <Object?>[coverImage, coverVideo, removableCoverMedia];
 }
+class ChangeApproveJoiningRequestEvent extends CommunityProfileUpdateEvent {
+  const ChangeApproveJoiningRequestEvent();
 
+  @override
+  List<Object?> get props => [];
+}
 
 
 
