@@ -31,7 +31,8 @@ import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 part 'event.dart';
 part 'state.dart';
 
-class UserProfileUpdateBloc extends Bloc<UserProfileUpdateEvent, UserProfileUpdateState> {
+class UserProfileUpdateBloc
+    extends Bloc<UserProfileUpdateEvent, UserProfileUpdateState> {
   TextEditingController nameController = TextEditingController();
 
   TextEditingController publicEmailController = TextEditingController();
@@ -57,96 +58,84 @@ class UserProfileUpdateBloc extends Bloc<UserProfileUpdateEvent, UserProfileUpda
   FutureOr<void> _onInitialEvent(
     InitialEvent event,
     Emitter<UserProfileUpdateState> emit,
-  ) {
+  ) async {
+    UserProfileDetailsResponse? profileDetailsResponse =
+        event.pageArgument.profileDetailsResponse;
+    if (profileDetailsResponse == null) {
+      SmartDialog.showLoading();
+      profileDetailsResponse = await UsersApi.getProfileDetails(
+          userUid: (AuthUserDb.getLastLoggedUserUid())!);
+      SmartDialog.dismiss();
+    }
     emit(
       state.copyWith(
-        currentProfileDetailsResponse:
-            event.pageArgument.profileDetailsResponse,
-        dob: event.pageArgument.profileDetailsResponse?.userInfo?.dob,
-        gender: event.pageArgument.profileDetailsResponse?.userInfo?.gender,
+        currentProfileDetailsResponse: profileDetailsResponse,
+        dob: profileDetailsResponse?.userInfo?.dob,
+        gender: profileDetailsResponse?.userInfo?.gender,
         educations: List.generate(
-          event.pageArgument.profileDetailsResponse?.userEducations?.length ??
-              0,
+          profileDetailsResponse?.userEducations?.length ?? 0,
           (int index) => UiEducation(
-            degreeName: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].title,
-            degreeType: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].type,
-            startDate: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].startDate,
-            endDate: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].endDate,
-            isOngoingEducation: event.pageArgument.profileDetailsResponse
+            degreeName: profileDetailsResponse?.userEducations?[index].title,
+            degreeType: profileDetailsResponse?.userEducations?[index].type,
+            startDate: profileDetailsResponse?.userEducations?[index].startDate,
+            endDate: profileDetailsResponse?.userEducations?[index].endDate,
+            isOngoingEducation: profileDetailsResponse
                 ?.userEducations?[index].isOngoingEducation,
-            institute: event.pageArgument.profileDetailsResponse
-                ?.userEducations?[index].institute,
+            institute: profileDetailsResponse?.userEducations?[index].institute,
           ),
         ),
         workExperiences: List.generate(
-          event.pageArgument.profileDetailsResponse?.userWorkExperiences
-                  ?.length ??
-              0,
+          profileDetailsResponse?.userWorkExperiences?.length ?? 0,
           (int index) => UiWorkExperience(
-            designation: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].designation,
-            startDate: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].startDate,
-            endDate: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].endDate,
-            isCurrentlyWorking: event.pageArgument.profileDetailsResponse
+            designation:
+                profileDetailsResponse?.userWorkExperiences?[index].designation,
+            startDate:
+                profileDetailsResponse?.userWorkExperiences?[index].startDate,
+            endDate:
+                profileDetailsResponse?.userWorkExperiences?[index].endDate,
+            isCurrentlyWorking: profileDetailsResponse
                 ?.userWorkExperiences?[index].isCurrentlyWorking,
-            workingMode: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].workingMode,
-            companyName: event.pageArgument.profileDetailsResponse
-                ?.userWorkExperiences?[index].companyName,
+            workingMode:
+                profileDetailsResponse?.userWorkExperiences?[index].workingMode,
+            companyName:
+                profileDetailsResponse?.userWorkExperiences?[index].companyName,
           ),
         ),
         services: List.generate(
-          event.pageArgument.profileDetailsResponse?.userServices?.length ?? 0,
+          profileDetailsResponse?.userServices?.length ?? 0,
           (int index) => UiService(
-            serviceName: event.pageArgument.profileDetailsResponse
-                ?.userServices?[index].title,
-            serviceDescription: event.pageArgument.profileDetailsResponse
-                ?.userServices?[index].description,
+            serviceName: profileDetailsResponse?.userServices?[index].title,
+            serviceDescription:
+                profileDetailsResponse?.userServices?[index].description,
           ),
         ),
         coverMedia: List.generate(
-          event.pageArgument.profileDetailsResponse?.userCoverMedia?.length ??
-              0,
+          profileDetailsResponse?.userCoverMedia?.length ?? 0,
           (int index) => UiCoverMedia(
-            imageUrl: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].imageUrl,
-            videoUrl: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].videoUrl,
-            isVideo: event.pageArgument.profileDetailsResponse
-                ?.userCoverMedia?[index].isVideo,
+            imageUrl: profileDetailsResponse?.userCoverMedia?[index].imageUrl,
+            videoUrl: profileDetailsResponse?.userCoverMedia?[index].videoUrl,
+            isVideo: profileDetailsResponse?.userCoverMedia?[index].isVideo,
           ),
         ),
       ),
     );
 
     // Set the initial values of the text controllers
-    nameController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.name ?? '';
+    nameController.text = profileDetailsResponse?.userInfo?.name ?? '';
 
     publicEmailController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.publicEmailId ??
-            '';
+        profileDetailsResponse?.userInfo?.publicEmailId ?? '';
 
-    bioController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.bio ?? '';
-    addressController.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.address ?? '';
+    bioController.text = profileDetailsResponse?.userInfo?.bio ?? '';
+    addressController.text = profileDetailsResponse?.userInfo?.address ?? '';
 
     portfolioDescriptionController.text = event.pageArgument
             .profileDetailsResponse?.userInfo?.portfolioDescription ??
         '';
     portfolioStatus.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.portfolioStatus ??
-            '';
+        profileDetailsResponse?.userInfo?.portfolioStatus ?? '';
     portfolioTitle.text =
-        event.pageArgument.profileDetailsResponse?.userInfo?.portfolioTitle ??
-            '';
+        profileDetailsResponse?.userInfo?.portfolioTitle ?? '';
   }
 
   void _onChangeProfilePicture(

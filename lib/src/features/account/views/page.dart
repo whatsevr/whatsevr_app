@@ -331,57 +331,11 @@ class AccountPage extends StatelessWidget {
                                       IconButton(
                                         icon: const Icon(Icons.menu),
                                         onPressed: () {
-                                          showAppModalSheet(
-                                            flexibleSheet: false,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ListTile(
-                                                  leading:
-                                                      const Icon(Icons.edit),
-                                                  title: const Text(
-                                                    'Edit Profile',
-                                                  ),
-                                                  onTap: () async {
-                                                    Navigator.pop(context);
-                                                    await AppNavigationService
-                                                        .newRoute(
-                                                      RoutesName.updateUserProfile,
-                                                      extras:
-                                                          UserProfileUpdatePageArgument(
-                                                        profileDetailsResponse:
-                                                            state
-                                                                .profileDetailsResponse,
-                                                      ),
-                                                    );
-                                                    context
-                                                        .read<AccountBloc>()
-                                                        .add(
-                                                          LoadAccountData(),
-                                                        );
-                                                  },
-                                                ),
-                                                ListTile(
-                                                  leading: const Icon(
-                                                    Icons.settings,
-                                                  ),
-                                                  title: const Text(
-                                                    'Manage Account',
-                                                  ),
-                                                  onTap: () {
-                                                    Navigator.pop(context);
-                                                    AppNavigationService
-                                                        .newRoute(
-                                                      RoutesName.settings,
-                                                      extras:
-                                                          SettingsPageArgument(),
-                                                    );
-                                                  },
-                                                ),
-                                              ],
-                                            ),
+                                          AppNavigationService.newRoute(
+                                            RoutesName.settings,
+                                            extras: SettingsPageArgument(),
                                           );
-                                        },
+                                      },
                                       ),
                                     ],
                                   ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
@@ -16,6 +17,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
 
@@ -92,10 +94,11 @@ class SettingsPage extends StatelessWidget {
                       child: ExpansionTile(
                         leading: Icon(
                           _getAvailabilityIcon(state.availabilityStatus),
-                          color: _getAvailabilityColor(state.availabilityStatus, theme),
+                          color: _getAvailabilityColor(
+                              state.availabilityStatus, theme),
                           size: 20,
-                        ), 
-                        title: Text( 
+                        ),
+                        title: Text(
                           'Availability Status',
                           style: theme.body.copyWith(
                             fontWeight: FontWeight.w500,
@@ -135,7 +138,7 @@ class SettingsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SettingsTile( 
+                  SettingsTile(
                     icon: Icons.block_outlined,
                     title: 'Blocked Users',
                     subtitle: 'Manage blocked users',
@@ -322,7 +325,6 @@ class SettingsPage extends StatelessWidget {
                       activeColor: theme.primary,
                     ),
                   ),
-              
                 ],
               ),
             ],
@@ -418,6 +420,7 @@ class SettingsPage extends StatelessWidget {
 
   Widget _buildProfileCard(BuildContext context) {
     final theme = context.whatsevrTheme;
+    final user = AuthUserService.supportiveData?.userInfo;
     return Container(
       margin: const EdgeInsets.only(bottom: 12), // Reduced margin
       padding: const EdgeInsets.all(12), // Reduced padding
@@ -437,7 +440,7 @@ class SettingsPage extends StatelessWidget {
           AdvancedAvatar(
             size: 50, // Slightly smaller avatar
             image: ExtendedImage.network(
-              'https://i.pravatar.cc/150',
+              user?.profilePicture ?? MockData.blankProfileAvatar,
               cache: true,
             ).image,
             decoration: BoxDecoration(
@@ -451,20 +454,30 @@ class SettingsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'John Doe',
+                  '${user?.name}',
                   style: theme.subtitle,
                 ),
                 const Gap(4),
                 Text(
-                  '@johndoe',
+                  '@${user?.username}',
                   style: theme.bodySmall.copyWith(color: theme.textLight),
                 ),
               ],
             ),
-           ),
+          ),
           IconButton(
             icon: Icon(Icons.edit_outlined, color: theme.primary),
-            onPressed: () {},
+            onPressed: () {
+                   AppNavigationService
+                                                        .newRoute(
+                                                      RoutesName
+                                                          .updateUserProfile,
+                                                      extras:
+                                                          UserProfileUpdatePageArgument(
+                                                        
+                                                      ),
+                                                    );
+            },
           ),
         ],
       ),

@@ -27,7 +27,7 @@ import 'package:whatsevr_app/src/features/update_user_profile/bloc/bloc.dart';
 class UserProfileUpdatePageArgument {
   final UserProfileDetailsResponse? profileDetailsResponse;
 
-  UserProfileUpdatePageArgument({required this.profileDetailsResponse});
+  UserProfileUpdatePageArgument({ this.profileDetailsResponse});
 }
 
 class UserProfileUpdatePage extends StatelessWidget {
