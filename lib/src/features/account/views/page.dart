@@ -6,6 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
@@ -335,7 +338,7 @@ class AccountPage extends StatelessWidget {
                                             RoutesName.settings,
                                             extras: SettingsPageArgument(),
                                           );
-                                      },
+                                        },
                                       ),
                                     ],
                                   ],
@@ -426,6 +429,29 @@ class AccountPage extends StatelessWidget {
                                         ),
                                       ],
                                     ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Gap(8),
+                            if (pageArgument?.isEditMode != true
+                     && pageArgument?.userUid != AuthUserDb.getLastLoggedUserUid()
+                    )
+                          PadHorizontal(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: WhatsevrButton.filled(
+                                    miniButton: true,
+                                    label: 'Message',
+                                  ),
+                                ),
+                                const Gap(8),
+                                Expanded(
+                                  child: WhatsevrFollowButton( 
+                                    followeeUserUid: state
+                                        .profileDetailsResponse?.userInfo?.uid,
                                   ),
                                 ),
                               ],

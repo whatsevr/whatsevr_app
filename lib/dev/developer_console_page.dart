@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +11,7 @@ import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 class DeveloperConsolePage extends StatefulWidget {
   const DeveloperConsolePage({super.key});
@@ -297,6 +299,17 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                   context: context,
                   pageBuilder: (context, animation, secondaryAnimation) {
                     return _ThemePropertiesShowcase();
+                  },
+                );
+              }
+            ),
+             (
+              'Whatsevr Icons',
+              () async {
+                showGeneralDialog(
+                  context: context,
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return _WhatsevrIconsShowcase();
                   },
                 );
               }
@@ -651,4 +664,93 @@ class _ThemePropertyBox extends StatelessWidget {
       ),
     );
   }
+}
+
+class _WhatsevrIconsShowcase extends StatelessWidget {
+  const _WhatsevrIconsShowcase();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.whatsevrTheme;
+
+    return Scaffold(
+      backgroundColor: theme.background,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(theme.spacing2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Whatsevr Icons', style: theme.h1),
+              SizedBox(height: theme.spacing3),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                  ),
+                  itemCount: _iconData.length,
+                  itemBuilder: (context, index) {
+                    final icon = _iconData[index];
+                    return GestureDetector(
+                      onTap: (){
+                        Clipboard.setData(ClipboardData(text: 'Icon(WhatsevrIcons.${icon.$1})'));
+                        WhatsevrStackToast.showSuccess('Copied ${icon.$1} to clipboard');
+                      },
+                      child: Card(
+                        color: theme.card,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(icon.$2, size: 32),
+                            SizedBox(height: 8),
+                            Text(
+                              icon.$1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  } 
+
+  List<(String, IconData)> get _iconData => [
+        ('Play_Button', WhatsevrIcons.Play_Button),
+        ('Post_Memories', WhatsevrIcons.Post_Memories),
+        ('Post_Upload_Icon_002', WhatsevrIcons.Post_Upload_Icon_002),
+        ('Search_Icon', WhatsevrIcons.Search_Icon),
+        ('Share', WhatsevrIcons.Share),
+        ('Upload_photo', WhatsevrIcons.Upload_photo),
+        ('WTV_Icon', WhatsevrIcons.WTV_Icon),
+        ('Book_Mark_Icon_Line', WhatsevrIcons.Book_Mark_Icon_Line),
+        ('Book_Mark_Icon', WhatsevrIcons.Book_Mark_Icon),
+        ('Comment_icon', WhatsevrIcons.Comment_icon),
+        ('EditPencile_02', WhatsevrIcons.EditPencile_02),
+        ('Flicks_Icon_001', WhatsevrIcons.Flicks_Icon_001),
+        ('Hamburger_Icon', WhatsevrIcons.Hamburger_Icon),
+        ('I_Button_Icon', WhatsevrIcons.I_Button_Icon),
+        ('Icon_Explore_002_SVG', WhatsevrIcons.Icon_Explore_002_SVG),
+        ('Icon_WhatServ_001_SVG', WhatsevrIcons.Icon_WhatServ_001_SVG),
+        ('Like_Outline', WhatsevrIcons.Like_Outline),
+        ('Like_Solid', WhatsevrIcons.Like_Solid),
+        ('Message', WhatsevrIcons.Message),
+        ('Notification_Icon_001', WhatsevrIcons.Notification_Icon_001),
+        ('Offer_Icon', WhatsevrIcons.Offer_Icon),
+        ('PDF_Icon', WhatsevrIcons.PDF_Icon),
+        ('Docts_icon', WhatsevrIcons.Docts_icon),
+        ('Account', WhatsevrIcons.Account),
+      ];
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/game_icons.dart';
@@ -150,6 +151,15 @@ class _DashboardPageBottomNavigationBarState
       child: Builder(
         builder: (BuildContext context) {
           final List<Widget> children = <Widget>[
+            // Gap(8),
+            // SvgPicture.network(
+            //   'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/Icon_Explore_002_SVG%20(1).svg',
+            //   height: 30,
+            //   colorFilter: ColorFilter.mode(
+            //     Colors.purple,
+            //     BlendMode.srcIn, 
+            //   ),
+            // ),
             for ((Widget, VoidCallback?, VoidCallback?) itm in items)
               Stack(
                 alignment: Alignment.center,

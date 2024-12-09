@@ -364,7 +364,8 @@ class CreateMemoryPage extends StatelessWidget {
                 maxLength: 100,
                 minLines: 3,
                 controller: context.read<CreateMemoryBloc>().captionController,
-                hintText: 'Caption',
+                headingTitle: 'Caption',
+                hintText: 'Hint; Write about your personal update',
               ),
               const Gap(12),
               Theme(
@@ -560,7 +561,8 @@ class CreateMemoryPage extends StatelessWidget {
                       controller: TextEditingController(
                         text: state.ctaAction ?? '',
                       ),
-                      hintText: 'User Action',
+                      headingTitle: 'User Action',
+                      hintText: 'Select user action',
                       customFunction: () {
                         showAppModalSheet(
                           flexibleSheet: true,
@@ -582,7 +584,8 @@ class CreateMemoryPage extends StatelessWidget {
                       controller: context
                           .read<CreateMemoryBloc>()
                           .ctaActionUrlController,
-                      hintText: 'Action URL',
+                      headingTitle: 'Action URL',
+                      hintText: 'Enter action URL',
                       onChanged: (value) {
                         if (state.ctaAction == null) {
                           SmartDialog.showToast(

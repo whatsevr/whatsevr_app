@@ -237,32 +237,36 @@ class CreateFlickPostPage extends StatelessWidget {
               WhatsevrFormField.generalTextField(
                 maxLength: 100,
                 controller: context.read<CreateFlickPostBloc>().titleController,
-                hintText: 'Title',
+                headingTitle: 'Title',
+                hintText: 'Hint; Be clear and concise while describing content',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
+                headingTitle: 'Description',
                 controller:
                     context.read<CreateFlickPostBloc>().descriptionController,
                 maxLength: 5000,
-                minLines: 5,
+                minLines: 5,  
                 maxLines: 10,
-                hintText: 'Description',
+                hintText: 'Enter here...(max 5000 characters)',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
+                headingTitle: 'Hashtags',
                 controller:
                     context.read<CreateFlickPostBloc>().hashtagsController,
-                hintText: 'Hashtags (start with #, max 30)',
+                hintText: 'Start with #, max 30 hashtags',
               ),
               const Gap(12),
               Column(
                 children: [
                   WhatsevrFormField.invokeCustomFunction(
+                    headingTitle: 'Location',
                     controller: TextEditingController(
                       text: state.selectedPostLocation ?? '',
                     ),
                     suffixWidget: const Icon(Icons.location_on),
-                    hintText: 'Location',
+                    hintText: 'Select location',
                     customFunction: () {
                       showAppModalSheet(
                         child: PlaceSearchByNamePage(

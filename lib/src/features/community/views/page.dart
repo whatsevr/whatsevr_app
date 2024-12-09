@@ -6,9 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ri.dart';
+import 'package:whatsevr_app/config/global_bloc/join_leave_community/join_leave_community_bloc.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
@@ -296,7 +299,6 @@ class CommunityPage extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   onPressed: () async {
-                                   
                                     await AppNavigationService.newRoute(
                                       RoutesName.updateCommunityProfile,
                                       extras:
@@ -345,30 +347,32 @@ class CommunityPage extends StatelessWidget {
                       ),
                     ),
                     const Gap(8),
-                    if (pageArgument?.isEditMode != true) ...<Widget>[
+                    ...<Widget>[
                       PadHorizontal(
                         child: Row(
                           children: <Widget>[
                             Expanded(
-                              child: MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                color: Colors.blue,
+                              child: WhatsevrButton.outlined(
+                                label: 'Chat',
+                                miniButton: true,
                                 onPressed: () {},
-                                child: const Text(
-                                  'Chat',
-                                  style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            if (context
+                                    .read<JoinLeaveCommunityBloc>()
+                                    .state
+                                    .userOwnedCommunityUids
+                                    .contains(state.communityDetailsResponse
+                                        ?.communityInfo?.uid) !=
+                                true) ...[
+                              const Gap(8),
+                              Expanded(
+                                child: WhatsevrCommunityJoinLeaveButton(
+                                  communityUid: state.communityDetailsResponse
+                                      ?.communityInfo?.uid,
                                 ),
-                              ),
-                            ),
-                            const Gap(8),
-                            Expanded(
-                              child: WhatsevrCommunityJoinLeaveButton(
-                                communityUid: state.communityDetailsResponse
-                                    ?.communityInfo?.uid,
-                              ),
-                            ),
+                              )
+                            ],
                           ],
                         ),
                       ),

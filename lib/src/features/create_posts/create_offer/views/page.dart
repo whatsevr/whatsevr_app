@@ -70,7 +70,8 @@ class CreateOfferPage extends StatelessWidget {
                 minLines: 1,
                 maxLines: 5,
                 controller: context.read<CreateOfferBloc>().titleController,
-                hintText: 'Title',
+                headingTitle: 'Title',
+                hintText: 'Hint; Be clear describe your objective',
               ),
               const Gap(12),
               Builder(
@@ -271,14 +272,16 @@ class CreateOfferPage extends StatelessWidget {
                 maxLines: 20,
                 controller:
                     context.read<CreateOfferBloc>().descriptionController,
-                hintText: 'Description',
+                headingTitle: 'Description',
+                hintText: 'Hint; Describe your offer in detail',
               ),
               const Gap(12),
               WhatsevrFormField.invokeCustomFunction(
                 maxLength: 35,
                 readOnly: false,
                 controller: context.read<CreateOfferBloc>().statusController,
-                hintText: 'Status',
+                headingTitle: 'Status',
+                hintText: 'Hint; One work only, like Hiring, Searching, Collaborating, Closed',
                 customFunction: () {
                   showAppModalSheet(
                     flexibleSheet: true,
@@ -297,7 +300,8 @@ class CreateOfferPage extends StatelessWidget {
                 children: [
                   WhatsevrFormField.invokeCustomFunction(
                     suffixWidget: const Icon(Icons.location_on),
-                    hintText: 'Target Area',
+                    headingTitle: 'Target Area',
+                    hintText: 'Hint; Select target area',
                     customFunction: () {
                       showAppModalSheet(
                         child: CountryStateCityPage(
@@ -374,7 +378,8 @@ class CreateOfferPage extends StatelessWidget {
                         controller: TextEditingController(
                           text: state.ctaAction ?? '',
                         ),
-                        hintText: 'User Action',
+                        headingTitle: 'User Action',
+                        hintText: 'Hint; Select user action',
                         customFunction: () {
                           showAppModalSheet(
                             child: CommonDataSearchSelectPage(
@@ -395,7 +400,8 @@ class CreateOfferPage extends StatelessWidget {
                         controller: context
                             .read<CreateOfferBloc>()
                             .ctaActionUrlController,
-                        hintText: 'Action URL',
+                        headingTitle: 'Action URL',
+                        hintText: 'Hint; Add action URL',
                         onChanged: (value) {
                           if (state.ctaAction == null) {
                             SmartDialog.showToast(

@@ -24,7 +24,7 @@ class WhatsevrFollowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (AuthUserDb.getLastLoggedUserUid() == followeeUserUid) {
-      return const SizedBox();
+      return WhatsevrButton.text(label: 'Owner');
     }
 
     final AppTheme theme = context.whatsevrTheme;

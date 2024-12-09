@@ -161,7 +161,8 @@ class CreatePhotoPostPage extends StatelessWidget {
                 minLines: 1,
                 maxLines: 5,
                 controller: context.read<CreatePhotoPostBloc>().titleController,
-                hintText: 'Title',
+                headingTitle: 'Title',
+                hintText: 'Hint; Be clear describe content simply',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
@@ -170,7 +171,8 @@ class CreatePhotoPostPage extends StatelessWidget {
                 maxLines: 20,
                 controller:
                     context.read<CreatePhotoPostBloc>().descriptionController,
-                hintText: 'Description',
+                headingTitle: 'Description',
+                hintText: 'Hint; Write a detailed description',
               ),
               const Gap(12),
               Column(
@@ -180,8 +182,9 @@ class CreatePhotoPostPage extends StatelessWidget {
                       text: state.selectedPostLocation ?? '',
                     ),
                     suffixWidget: const Icon(Icons.location_on),
-                    hintText: 'Location',
-                    customFunction: () {
+                    headingTitle: 'Location',
+                    hintText: 'Hint; Add location',
+                    customFunction: () { 
                       showAppModalSheet(
                         child: PlaceSearchByNamePage(
                           onPlaceSelected: (placeName, lat, long) {

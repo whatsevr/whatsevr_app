@@ -22,8 +22,10 @@ import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/cr
 class CreateVideoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
-  const CreateVideoPostPageArgument(
-      {required this.postCreatorType, this.communityUid,});
+  const CreateVideoPostPageArgument({
+    required this.postCreatorType,
+    this.communityUid,
+  });
 }
 
 class CreateVideoPostPage extends StatelessWidget {
@@ -49,7 +51,7 @@ class CreateVideoPostPage extends StatelessWidget {
       builder: (BuildContext context, CreateVideoPostState state) {
         return Scaffold(
           appBar: WhatsevrAppBar(
-            title: 'Create Video Post',
+            title: 'Create Wtv Post',
             showAiAction: true,
             showInfo: () {
               ProductGuides.showWtvPostCreationGuide();
@@ -236,7 +238,8 @@ class CreateVideoPostPage extends StatelessWidget {
               WhatsevrFormField.generalTextField(
                 maxLength: 100,
                 controller: context.read<CreateVideoPostBloc>().titleController,
-                hintText: 'Title',
+                headingTitle: 'Title',
+                hintText: 'Hint; Be clear while describing your content',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
@@ -245,13 +248,16 @@ class CreateVideoPostPage extends StatelessWidget {
                 maxLength: 5000,
                 minLines: 5,
                 maxLines: 10,
-                hintText: 'Description',
+                headingTitle: 'Description',
+                hintText:
+                    'Enter description about your video (max 5000 characters)',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
                 controller:
                     context.read<CreateVideoPostBloc>().hashtagsController,
-                hintText: 'Hashtags (start with #, max 30)',
+                headingTitle: 'Hashtags',
+                hintText: 'Start with #, max 30 hashtags',
               ),
               const Gap(12),
               WhatsevrFormField.invokeCustomFunction(
@@ -259,7 +265,8 @@ class CreateVideoPostPage extends StatelessWidget {
                   text: state.selectedPostLocation ?? '',
                 ),
                 suffixWidget: const Icon(Icons.location_on),
-                hintText: 'Location',
+                headingTitle: 'Location',
+                hintText: 'Select location',
                 customFunction: () {
                   showAppModalSheet(
                     child: PlaceSearchByNamePage(

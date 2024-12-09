@@ -155,36 +155,26 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
           ),
         ),
         if (!controller.value.isPlaying)
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: IconButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.black38),
-                shape: WidgetStateProperty.all(
-                  const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              icon: const Icon(
-                Icons.play_arrow,
-                size: 40,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                setState(() {
-                  if (controller.value.isPlaying) {
-                    controller.pause();
-                  } else {
-                    controller.play();
-                    controller.setVolume(1);
-                  }
-                });
-              },
+          IconButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(Colors.black38),
+             
             ),
+            icon: const Icon(
+              Icons.play_arrow,
+              size: 40,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                if (controller.value.isPlaying) {
+                  controller.pause();
+                } else {
+                  controller.play();
+                  controller.setVolume(1);
+                }
+              });
+            },
           ),
       ],
     );

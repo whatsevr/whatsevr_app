@@ -131,3 +131,7 @@ flutter:
     - assets/
     - assets/images/
     - shorebird.yaml
+  fonts:
+    - family:  whatsevr-icon
+      fonts:
+       - asset: assets/icons/whatsevr-icon.ttf

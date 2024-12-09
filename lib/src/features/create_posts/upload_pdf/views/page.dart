@@ -198,7 +198,8 @@ class UploadPdfPage extends StatelessWidget {
               WhatsevrFormField.generalTextField(
                 maxLength: 100,
                 controller: context.read<UploadPdfBloc>().titleController,
-                hintText: 'Title',
+                headingTitle: 'Title',
+                hintText: 'Enter title for your PDF document',
               ),
               const Gap(12),
               WhatsevrFormField.multilineTextField(
@@ -206,7 +207,8 @@ class UploadPdfPage extends StatelessWidget {
                 maxLength: 5000,
                 minLines: 5,
                 maxLines: 10,
-                hintText: 'Description',
+                headingTitle: 'Description',
+                hintText: 'Enter description about your PDF document (max 5000 characters)',
               ),
               const Gap(50),
             ],
