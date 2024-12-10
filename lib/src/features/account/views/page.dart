@@ -24,6 +24,7 @@ import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
@@ -314,8 +315,8 @@ class AccountPage extends StatelessWidget {
                                     if (pageArgument?.isEditMode ==
                                         true) ...<Widget>[
                                       IconButton(
-                                        icon: const Iconify(
-                                          Ri.heart_add_fill,
+                                        icon: const Icon(
+                                          WhatsevrIcons.postUploadIcon002,
                                           size: 30,
                                         ),
                                         onPressed: () {
@@ -332,7 +333,7 @@ class AccountPage extends StatelessWidget {
                                         },
                                       ),
                                       IconButton(
-                                        icon: const Icon(Icons.menu),
+                                        icon: Icon(WhatsevrIcons.hamburgerIcon),
                                         onPressed: () {
                                           AppNavigationService.newRoute(
                                             RoutesName.settings,

@@ -14,6 +14,7 @@ import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
@@ -280,8 +281,8 @@ class CommunityPage extends StatelessWidget {
                               Gap(12),
                               if (pageArgument?.isEditMode == true) ...<Widget>[
                                 IconButton(
-                                  icon: const Iconify(
-                                    Ri.heart_add_fill,
+                                  icon: const Icon(
+                                    WhatsevrIcons.postUploadIcon002,
                                     size: 30,
                                   ),
                                   onPressed: () {
@@ -297,7 +298,7 @@ class CommunityPage extends StatelessWidget {
                                   },
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.edit),
+                                  icon: Icon(WhatsevrIcons.editPencil02),
                                   onPressed: () async {
                                     await AppNavigationService.newRoute(
                                       RoutesName.updateCommunityProfile,

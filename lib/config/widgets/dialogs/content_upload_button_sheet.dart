@@ -5,6 +5,7 @@ import 'package:iconify_flutter/icons/fa6_solid.dart';
 import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/pepicons.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
@@ -59,7 +60,7 @@ class _Ui extends StatelessWidget {
           ),
           const Gap(16),
           _buildButton(
-            icon: const Iconify(Ic.round_history_toggle_off),
+            icon: const Icon(WhatsevrIcons.postMemories),
             label: 'Create Memory',
             onPressed: () {
               Navigator.pop(context);
@@ -74,7 +75,7 @@ class _Ui extends StatelessWidget {
           ),
           const Gap(8),
           _buildButton(
-            icon: const Iconify(Mdi.camera_image),
+            icon: Icon(WhatsevrIcons.uploadPhoto),
             label: 'Upload Photos',
             onPressed: () {
               Navigator.pop(context);
@@ -89,8 +90,8 @@ class _Ui extends StatelessWidget {
           ),
           const Gap(8),
           _buildButton(
-            icon: const Iconify(Ic.sharp_slow_motion_video),
-            label: 'Create Video Post',
+            icon: Icon(WhatsevrIcons.wtvIcon),
+            label: 'Create Wtv Post',
             onPressed: () {
               Navigator.pop(context);
               AppNavigationService.newRoute(
@@ -105,7 +106,7 @@ class _Ui extends StatelessWidget {
           ...[
             const Gap(8),
             _buildButton(
-              icon: const Iconify(Pepicons.play_print),
+              icon: Icon(WhatsevrIcons.flicksIcon001),
               label: 'Create Flick',
               onPressed: () {
                 Navigator.pop(context);
@@ -120,7 +121,7 @@ class _Ui extends StatelessWidget {
           ...[
             const Gap(8),
             _buildButton(
-              icon: const Iconify(Fa6Solid.signs_post),
+              icon: Icon(WhatsevrIcons.offerIcon),
               label: 'Create Offer',
               onPressed: () {
                 Navigator.pop(context);
@@ -137,7 +138,7 @@ class _Ui extends StatelessWidget {
           ],
           if (postCreatorType == EnumPostCreatorType.PORTFOLIO) ...[
             _buildButton(
-              icon: const Iconify(Fa6Solid.file_pdf),
+              icon: Icon(WhatsevrIcons.pdfIcon),
               label: 'Upload PDF',
               onPressed: () {
                 Navigator.pop(context);

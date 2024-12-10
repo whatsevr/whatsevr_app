@@ -153,42 +153,28 @@ class _DashboardPageBottomNavigationBarState
         builder: (BuildContext context) {
           final List<Widget> children = <Widget>[
             for ((Widget, VoidCallback?, VoidCallback?) itm in items)
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      itm.$2?.call();
-                      setState(() {
-                        selectedIndex = items.indexOf(itm);
-                      });
-                    },
-                    onLongPress: itm.$3,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Theme(
-                        data: ThemeData(
-                          iconTheme: IconThemeData(
-                            
-                            color: selectedIndex == items.indexOf(itm)
-                                ? context.whatsevrTheme.primary
-                                : context.whatsevrTheme.disabled,
-                          ),
-                        ),
-                        child: itm.$1,
+              GestureDetector(
+                onTap: () {
+                  itm.$2?.call();
+                  setState(() {
+                    selectedIndex = items.indexOf(itm);
+                  });
+                },
+                onLongPress: itm.$3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Theme(
+                    data: ThemeData(
+                      iconTheme: IconThemeData(
+                        
+                        color: selectedIndex == items.indexOf(itm)
+                            ? context.whatsevrTheme.primary
+                            : context.whatsevrTheme.disabled,
                       ),
                     ),
+                    child: itm.$1,
                   ),
-                  if (selectedIndex == items.indexOf(itm))
-                    const Positioned(
-                      bottom: 0,
-                      child: Icon(
-                        Icons.circle,
-                        color: Colors.black,
-                        size: 8,
-                      ),
-                    ),
-                ],
+                ),
               ),
           ];
           return SizedBox(

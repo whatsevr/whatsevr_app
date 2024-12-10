@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
 import 'package:whatsevr_app/config/api/response_model/community/user_communities.dart';
@@ -465,8 +466,9 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.edit_outlined, color: theme.primary),
+          IconButton( 
+            icon: Icon(WhatsevrIcons.editPencil02, 
+            color: theme.primary),
             onPressed: () {
                    AppNavigationService
                                                         .newRoute(
