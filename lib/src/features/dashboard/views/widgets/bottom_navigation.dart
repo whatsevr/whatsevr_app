@@ -18,6 +18,7 @@ import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/auth_dialogs.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
 import 'package:whatsevr_app/src/features/chat/chats/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/page.dart';
@@ -45,7 +46,7 @@ class _DashboardPageBottomNavigationBarState
     final List<(Widget icon, VoidCallback? onTap, VoidCallback? onLongTap)>
         items = [
       (
-        const Iconify(MaterialSymbols.explore, size: 30),
+        const Icon(WhatsevrIcons.iconExplore002Svg, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -56,7 +57,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(GameIcons.nest_eggs, size: 30),
+        const Icon(WhatsevrIcons.iconWhatServ001Svg, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -67,7 +68,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(Ri.heart_add_fill, size: 30),
+        const Icon(WhatsevrIcons.postUploadIcon002, size: 28),
         () {
           final bool? isPortfolio =
               AuthUserService.supportiveData?.userInfo?.isPortfolio;
@@ -85,7 +86,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(Pepicons.play_print, size: 30),
+        const Icon(WhatsevrIcons.flicksIcon001, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -96,7 +97,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(Ph.chat_circle_text_fill, size: 30),
+        const Icon(WhatsevrIcons.message, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -107,7 +108,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(Ic.twotone_notifications_none, size: 30),
+        const Icon(WhatsevrIcons.notificationIcon001, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -118,7 +119,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Iconify(Ic.sharp_account_circle, size: 30),
+        const Icon(WhatsevrIcons.account, size: 28),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -151,15 +152,6 @@ class _DashboardPageBottomNavigationBarState
       child: Builder(
         builder: (BuildContext context) {
           final List<Widget> children = <Widget>[
-            // Gap(8),
-            // SvgPicture.network(
-            //   'https://dxvbdpxfzdpgiscphujy.supabase.co/storage/v1/object/public/assets/Icon_Explore_002_SVG%20(1).svg',
-            //   height: 30,
-            //   colorFilter: ColorFilter.mode(
-            //     Colors.purple,
-            //     BlendMode.srcIn, 
-            //   ),
-            // ),
             for ((Widget, VoidCallback?, VoidCallback?) itm in items)
               Stack(
                 alignment: Alignment.center,
@@ -174,7 +166,17 @@ class _DashboardPageBottomNavigationBarState
                     onLongPress: itm.$3,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: itm.$1,
+                      child: Theme(
+                        data: ThemeData(
+                          iconTheme: IconThemeData(
+                            
+                            color: selectedIndex == items.indexOf(itm)
+                                ? context.whatsevrTheme.primary
+                                : context.whatsevrTheme.disabled,
+                          ),
+                        ),
+                        child: itm.$1,
+                      ),
                     ),
                   ),
                   if (selectedIndex == items.indexOf(itm))
