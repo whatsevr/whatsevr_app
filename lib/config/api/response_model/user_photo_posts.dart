@@ -39,7 +39,8 @@ class UserPhotoPostsResponse {
         photoPosts: json['photo_posts'] == null
             ? []
             : List<PhotoPost>.from(
-                json['photo_posts']!.map((x) => PhotoPost.fromMap(x)),),
+                json['photo_posts']!.map((x) => PhotoPost.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -200,7 +201,8 @@ class PhotoPost {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

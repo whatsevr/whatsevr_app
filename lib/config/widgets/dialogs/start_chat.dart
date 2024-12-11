@@ -11,13 +11,9 @@ void startChat({
       (currentUserUid != null && otherUserUid != null) || communityUid != null,
       'Either provide both currentUserUid and otherUserUid or provide communityUid',
     );
-     SmartDialog.showLoading(msg: 'Starting chat...');
-    if (currentUserUid != null && otherUserUid != null) {
-     
-    }
-    if (communityUid != null) {
-      
-    }
+    SmartDialog.showLoading(msg: 'Starting chat...');
+    if (currentUserUid != null && otherUserUid != null) {}
+    if (communityUid != null) {}
   } catch (e, s) {
     highLevelCatch(e, s);
   }

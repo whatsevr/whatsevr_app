@@ -20,7 +20,7 @@ class AccountPageServicesView extends StatelessWidget {
             height: 150,
             child: Center(
               child: WhatsevrButton.text(
-                shrink: true, 
+                shrink: true,
                 label: '+ Add Services',
                 onPressed: () {
                   AppNavigationService.newRoute(

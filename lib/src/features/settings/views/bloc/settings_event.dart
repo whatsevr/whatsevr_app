@@ -37,7 +37,8 @@ class UpdatePrivacySettings extends SettingsEvent {
     required this.messageRequests,
   });
   @override
-  List<Object> get props => [isProfileVisible, isActivityStatusVisible, messageRequests];
+  List<Object> get props =>
+      [isProfileVisible, isActivityStatusVisible, messageRequests];
 }
 
 class UpdateDataSettings extends SettingsEvent {
@@ -50,7 +51,8 @@ class UpdateDataSettings extends SettingsEvent {
     required this.mediaQuality,
   });
   @override
-  List<Object> get props => [isDataSaverEnabled, isAutoPlayEnabled, mediaQuality];
+  List<Object> get props =>
+      [isDataSaverEnabled, isAutoPlayEnabled, mediaQuality];
 }
 
 class UpdateSecuritySettings extends SettingsEvent {

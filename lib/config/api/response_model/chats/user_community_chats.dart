@@ -39,7 +39,8 @@ class UserCommunityChatsResponse {
         communities: json['communities'] == null
             ? []
             : List<Community>.from(
-                json['communities']!.map((x) => Community.fromMap(x)),),
+                json['communities']!.map((x) => Community.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

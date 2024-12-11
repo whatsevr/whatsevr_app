@@ -35,7 +35,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Future<void> _onLoadPrivateChats(
-      LoadPrivateChats event, Emitter<ChatState> emit,) async {
+    LoadPrivateChats event,
+    Emitter<ChatState> emit,
+  ) async {
     try {
       final UserPrivateChatsResponse? response =
           await ChatsApi.getUserPrivateChats(
@@ -47,10 +49,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       highLevelCatch(e, s);
     }
   }
-
-
-
-
 
   @override
   Future<void> close() {
@@ -77,7 +75,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   FutureOr<void> _onLoadCommunities(
-      LoadCommunities event, Emitter<ChatState> emit,) async {
+    LoadCommunities event,
+    Emitter<ChatState> emit,
+  ) async {
     try {
       final response = await ChatsApi.getUserCommunityChats(
         userUid: _currentUserUid,
@@ -90,7 +90,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   FutureOr<void> _onSubscribeToChatChanges(
-      SubscribeToChatChanges event, Emitter<ChatState> emit,) async {
+    SubscribeToChatChanges event,
+    Emitter<ChatState> emit,
+  ) async {
     await _chatSubscription1?.unsubscribe();
     await _chatSubscription2?.unsubscribe();
     await _communitySubscription1?.unsubscribe();
@@ -99,9 +101,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .onPostgresChanges(
           event: PostgresChangeEvent.all,
           filter: PostgresChangeFilter(
-              type: PostgresChangeFilterType.eq,
-              column: 'user1_uid',
-              value: _currentUserUid,),
+            type: PostgresChangeFilterType.eq,
+            column: 'user1_uid',
+            value: _currentUserUid,
+          ),
           schema: 'public',
           table: 'private_chats',
           callback: (PostgresChangePayload payload) {
@@ -115,9 +118,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         .onPostgresChanges(
           event: PostgresChangeEvent.all,
           filter: PostgresChangeFilter(
-              type: PostgresChangeFilterType.eq,
-              column: 'user2_uid',
-              value: _currentUserUid,),
+            type: PostgresChangeFilterType.eq,
+            column: 'user2_uid',
+            value: _currentUserUid,
+          ),
           schema: 'public',
           table: 'private_chats',
           callback: (PostgresChangePayload payload) {

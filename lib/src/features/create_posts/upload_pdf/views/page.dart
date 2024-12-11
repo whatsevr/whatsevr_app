@@ -208,7 +208,8 @@ class UploadPdfPage extends StatelessWidget {
                 minLines: 5,
                 maxLines: 10,
                 headingTitle: 'Description',
-                hintText: 'Enter description about your PDF document (max 5000 characters)',
+                hintText:
+                    'Enter description about your PDF document (max 5000 characters)',
               ),
               const Gap(50),
             ],

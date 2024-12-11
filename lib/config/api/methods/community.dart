@@ -151,7 +151,11 @@ class CommunityApi {
     return null;
   }
 
-  static Future<(int? statusCode,String? message, )?> updateCommunityInfo({
+  static Future<
+      (
+        int? statusCode,
+        String? message,
+      )?> updateCommunityInfo({
     required UpdateCommunityInfoRequest request,
   }) async {
     try {
@@ -159,14 +163,18 @@ class CommunityApi {
         '/v1/update-community-info',
         data: request.toMap(),
       );
-      return ( response.statusCode,response.data['message'] as String?);
+      return (response.statusCode, response.data['message'] as String?);
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<(int? statusCode,String? message, )?> updateCommunityServices({
+  static Future<
+      (
+        int? statusCode,
+        String? message,
+      )?> updateCommunityServices({
     required UpdateCommunityServicesRequest request,
   }) async {
     try {
@@ -174,14 +182,18 @@ class CommunityApi {
         '/v1/update-community-services',
         data: request.toMap(),
       );
-      return ( response.statusCode,response.data['message'] as String?,);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> updateCommunityProfilePicture({
+  static Future<(String? message, int? statusCode)?>
+      updateCommunityProfilePicture({
     required CommunityProfilePictureUpdateRequest request,
   }) async {
     try {

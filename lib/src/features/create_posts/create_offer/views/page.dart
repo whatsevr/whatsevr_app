@@ -281,7 +281,8 @@ class CreateOfferPage extends StatelessWidget {
                 readOnly: false,
                 controller: context.read<CreateOfferBloc>().statusController,
                 headingTitle: 'Status',
-                hintText: 'Hint; One work only, like Hiring, Searching, Collaborating, Closed',
+                hintText:
+                    'Hint; One work only, like Hiring, Searching, Collaborating, Closed',
                 customFunction: () {
                   showAppModalSheet(
                     flexibleSheet: true,

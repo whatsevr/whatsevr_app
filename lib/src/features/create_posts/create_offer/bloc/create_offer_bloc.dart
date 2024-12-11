@@ -55,10 +55,12 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
     Emitter<CreateOfferState> emit,
   ) async {
     try {
-      emit(state.copyWith(
-        communityUid: event.pageArgument.communityUid,
-        postCreatorType: event.pageArgument.postCreatorType,
-      ),);
+      emit(
+        state.copyWith(
+          communityUid: event.pageArgument.communityUid,
+          postCreatorType: event.pageArgument.postCreatorType,
+        ),
+      );
 
       (double, double)? currentGpsLatLong =
           await LocationService.getCurrentGpsLatLong();
@@ -120,7 +122,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
           postData: PostData(
             userUid: AuthUserDb.getLastLoggedUserUid(),
             postCreatorType: state.postCreatorType?.value,
-            communityUid:  state.communityUid,
+            communityUid: state.communityUid,
           ),
         ),
       );

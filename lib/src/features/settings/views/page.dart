@@ -466,19 +466,13 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
-          IconButton( 
-            icon: Icon(WhatsevrIcons.editPencil02, 
-            color: theme.primary),
+          IconButton(
+            icon: Icon(WhatsevrIcons.editPencil02, color: theme.primary),
             onPressed: () {
-                   AppNavigationService
-                                                        .newRoute(
-                                                      RoutesName
-                                                          .updateUserProfile,
-                                                      extras:
-                                                          UserProfileUpdatePageArgument(
-                                                        
-                                                      ),
-                                                    );
+              AppNavigationService.newRoute(
+                RoutesName.updateUserProfile,
+                extras: UserProfileUpdatePageArgument(),
+              );
             },
           ),
         ],

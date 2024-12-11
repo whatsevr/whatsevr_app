@@ -22,8 +22,10 @@ import 'package:whatsevr_app/src/features/create_posts/create_flick_post/bloc/cr
 class CreateFlickPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
-  CreateFlickPostPageArgument(
-      {required this.postCreatorType, this.communityUid,});
+  CreateFlickPostPageArgument({
+    required this.postCreatorType,
+    this.communityUid,
+  });
 }
 
 class CreateFlickPostPage extends StatelessWidget {
@@ -246,7 +248,7 @@ class CreateFlickPostPage extends StatelessWidget {
                 controller:
                     context.read<CreateFlickPostBloc>().descriptionController,
                 maxLength: 5000,
-                minLines: 5,  
+                minLines: 5,
                 maxLines: 10,
                 hintText: 'Enter here...(max 5000 characters)',
               ),

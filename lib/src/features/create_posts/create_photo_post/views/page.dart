@@ -21,8 +21,10 @@ import 'package:whatsevr_app/src/features/create_posts/create_photo_post/bloc/cr
 class CreatePhotoPostPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
-  CreatePhotoPostPageArgument(
-      {required this.postCreatorType, this.communityUid,});
+  CreatePhotoPostPageArgument({
+    required this.postCreatorType,
+    this.communityUid,
+  });
 }
 
 class CreatePhotoPostPage extends StatelessWidget {
@@ -184,7 +186,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                     suffixWidget: const Icon(Icons.location_on),
                     headingTitle: 'Location',
                     hintText: 'Hint; Add location',
-                    customFunction: () { 
+                    customFunction: () {
                       showAppModalSheet(
                         child: PlaceSearchByNamePage(
                           onPlaceSelected: (placeName, lat, long) {

@@ -211,7 +211,8 @@ class NewCommunityPage extends StatelessWidget {
                                   .communityStatusController,
                               readOnly: false,
                               headingTitle: 'Status',
-                               hintText: 'Hint; Short innovative or volatile keyword',
+                              hintText:
+                                  'Hint; Short innovative or volatile keyword',
                               customFunction: () {
                                 showAppModalSheet(
                                   child: CommonDataSearchSelectPage(

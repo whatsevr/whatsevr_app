@@ -59,14 +59,16 @@ class JoinLeaveCommunityBloc
           joinedBox.get('joinedCommunities');
 
       if (cachedOwnedCommunities != null || cachedJoinedCommunities != null) {
-        emit(state.copyWith(
-          userOwnedCommunityUids: cachedOwnedCommunities != null
-              ? Set.from(cachedOwnedCommunities.cast<String>())
-              : {},
-          userJoinedCommunityUids: cachedJoinedCommunities != null
-              ? Set.from(cachedJoinedCommunities.cast<String>())
-              : {},
-        ),);
+        emit(
+          state.copyWith(
+            userOwnedCommunityUids: cachedOwnedCommunities != null
+                ? Set.from(cachedOwnedCommunities.cast<String>())
+                : {},
+            userJoinedCommunityUids: cachedJoinedCommunities != null
+                ? Set.from(cachedJoinedCommunities.cast<String>())
+                : {},
+          ),
+        );
       }
 
       // Fetch from API
@@ -76,20 +78,24 @@ class JoinLeaveCommunityBloc
       final List<String> ownedCommunities = communitiesUids.$1;
       final List<String> joinedCommunities = communitiesUids.$2;
 
-      emit(state.copyWith(
-        userJoinedCommunityUids: Set.from(joinedCommunities),
-        userOwnedCommunityUids: Set.from(ownedCommunities),
-        isLoading: false,
-      ),);
+      emit(
+        state.copyWith(
+          userJoinedCommunityUids: Set.from(joinedCommunities),
+          userOwnedCommunityUids: Set.from(ownedCommunities),
+          isLoading: false,
+        ),
+      );
 
       // Persist to separate boxes
       await ownedBox.put('ownedCommunities', ownedCommunities);
       await joinedBox.put('joinedCommunities', joinedCommunities);
     } catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        error: 'Failed to fetch user communities',
-      ),);
+      emit(
+        state.copyWith(
+          isLoading: false,
+          error: 'Failed to fetch user communities',
+        ),
+      );
     }
   }
 
@@ -106,15 +112,17 @@ class JoinLeaveCommunityBloc
       final List<dynamic>? cachedJoinedCommunities =
           joinedBox.get('joinedCommunities');
 
-      emit(state.copyWith(
-        userOwnedCommunityUids: cachedOwnedCommunities != null
-            ? Set.from(cachedOwnedCommunities.cast<String>())
-            : {},
-        userJoinedCommunityUids: cachedJoinedCommunities != null
-            ? Set.from(cachedJoinedCommunities.cast<String>())
-            : {},
-        isLoading: false,
-      ),);
+      emit(
+        state.copyWith(
+          userOwnedCommunityUids: cachedOwnedCommunities != null
+              ? Set.from(cachedOwnedCommunities.cast<String>())
+              : {},
+          userJoinedCommunityUids: cachedJoinedCommunities != null
+              ? Set.from(cachedJoinedCommunities.cast<String>())
+              : {},
+          isLoading: false,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(error: 'Failed to reload communities'));
     }

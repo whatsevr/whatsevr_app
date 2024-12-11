@@ -161,7 +161,6 @@ class _CoverVideoUiState extends State<_CoverVideoUi> {
           IconButton(
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(Colors.black38),
-            
             ),
             icon: const Icon(
               Icons.play_arrow,

@@ -85,8 +85,10 @@ class _MemberInfo extends StatelessWidget {
     final Member user = data.user!;
     return ListTile(
       onTap: () {
-        AppNavigationService.newRoute(RoutesName.account,
-            extras: AccountPageArgument(userUid: user.uid!),);
+        AppNavigationService.newRoute(
+          RoutesName.account,
+          extras: AccountPageArgument(userUid: user.uid!),
+        );
       },
       leading: CircleAvatar(
         backgroundImage: ExtendedNetworkImageProvider(

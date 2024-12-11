@@ -22,7 +22,7 @@ class CommunityProfileUpdateState extends Equatable {
     File? profileImage,
     List<UiCoverMedia>? coverMedia,
     List<UiService>? services,
-     bool? requireJoiningApproval,
+    bool? requireJoiningApproval,
   }) {
     return CommunityProfileUpdateState(
       currentProfileDetailsResponse:
@@ -30,7 +30,8 @@ class CommunityProfileUpdateState extends Equatable {
       profileImage: profileImage ?? this.profileImage,
       coverMedia: coverMedia ?? this.coverMedia,
       services: services ?? this.services,
-      requireJoiningApproval:  requireJoiningApproval ?? this.requireJoiningApproval,
+      requireJoiningApproval:
+          requireJoiningApproval ?? this.requireJoiningApproval,
     );
   }
 

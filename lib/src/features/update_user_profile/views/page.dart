@@ -1028,7 +1028,8 @@ class UserProfileUpdatePage extends StatelessWidget {
                               controller: context
                                   .read<UserProfileUpdateBloc>()
                                   .portfolioDescriptionController,
-                                  hintText: '''My portfolio highlights a range of projects, showcasing my skills in [insert specific field, e.g., graphic design, content writing, web development]. Each piece reflects my dedication to quality and creativity, as well as my ability to deliver tailored solutions that meet client needs. Explore my work to see how I can bring your ideas to life. For any inquiries or to get started on your project, visit my website [Insert Website Link] or contact me at [Insert Contact Number]. I’m here to help and collaborate! 
+                              hintText:
+                                  '''My portfolio highlights a range of projects, showcasing my skills in [insert specific field, e.g., graphic design, content writing, web development]. Each piece reflects my dedication to quality and creativity, as well as my ability to deliver tailored solutions that meet client needs. Explore my work to see how I can bring your ideas to life. For any inquiries or to get started on your project, visit my website [Insert Website Link] or contact me at [Insert Contact Number]. I’m here to help and collaborate! 
 ''',
                               headingTitle: 'Portfolio Description',
                               minLines: 8,

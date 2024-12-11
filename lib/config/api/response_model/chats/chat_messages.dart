@@ -39,7 +39,8 @@ class ChatMessagesResponse {
         messages: json['messages'] == null
             ? []
             : List<Message>.from(
-                json['messages']!.map((x) => Message.fromMap(x)),),
+                json['messages']!.map((x) => Message.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

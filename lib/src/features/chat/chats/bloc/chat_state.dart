@@ -19,10 +19,6 @@ class ChatState extends Equatable {
     );
   }
 
-
-
-
-
   @override
   List<Object?> get props => [
         privateChats,

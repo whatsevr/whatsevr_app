@@ -34,8 +34,10 @@ void showUserRelationsDialog({
 class _UserRelationsPage extends StatefulWidget {
   final String userUid;
   final bool isPortfolio;
-  const _UserRelationsPage(
-      {required this.userUid, this.isPortfolio = false,});
+  const _UserRelationsPage({
+    required this.userUid,
+    this.isPortfolio = false,
+  });
 
   @override
   _UserRelationsPageState createState() => _UserRelationsPageState();
@@ -125,74 +127,78 @@ class _UserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppNavigationService.newRoute(RoutesName.account,
-            extras: AccountPageArgument(userUid: user.uid!),);
+        AppNavigationService.newRoute(
+          RoutesName.account,
+          extras: AccountPageArgument(userUid: user.uid!),
+        );
       },
-      child: Builder(builder: (context) {
-        if (isCard) {
-          return Stack(
-            fit: StackFit.passthrough,
-            children: [
-              Card(
-                margin: const EdgeInsets.all(8.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                elevation: 4.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: ExtendedNetworkImageProvider(
-                          user.profilePicture ?? MockData.blankProfileAvatar,
+      child: Builder(
+        builder: (context) {
+          if (isCard) {
+            return Stack(
+              fit: StackFit.passthrough,
+              children: [
+                Card(
+                  margin: const EdgeInsets.all(8.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  elevation: 4.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage: ExtendedNetworkImageProvider(
+                            user.profilePicture ?? MockData.blankProfileAvatar,
+                          ),
+                          radius: 30,
                         ),
-                        radius: 30,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        user.name ?? 'Unknown',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 8),
+                        Text(
+                          user.name ?? 'Unknown',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      followAction(),
-                    ],
+                        const SizedBox(height: 8),
+                        followAction(),
+                      ],
+                    ),
                   ),
                 ),
+                Positioned(
+                  top: 8,
+                  right: 0,
+                  child: menuAction(),
+                ),
+              ],
+            );
+          }
+          return ListTile(
+            contentPadding: const EdgeInsets.only(left: 8),
+            leading: CircleAvatar(
+              backgroundImage: ExtendedNetworkImageProvider(
+                user.profilePicture ?? MockData.blankProfileAvatar,
               ),
-              Positioned(
-                top: 8,
-                right: 0,
-                child: menuAction(),
-              ),
-            ],
-          );
-        }
-        return ListTile(
-          contentPadding: const EdgeInsets.only(left: 8),
-          leading: CircleAvatar(
-            backgroundImage: ExtendedNetworkImageProvider(
-              user.profilePicture ?? MockData.blankProfileAvatar,
             ),
-          ),
-          title: Text(user.name ?? 'Unknown'),
-          subtitle: Text(
-            user.username ?? 'Unknown',
-            style: const TextStyle(fontSize: 12),
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              followAction(),
-              menuAction(),
-            ],
-          ),
-        );
-      },),
+            title: Text(user.name ?? 'Unknown'),
+            subtitle: Text(
+              user.username ?? 'Unknown',
+              style: const TextStyle(fontSize: 12),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                followAction(),
+                menuAction(),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

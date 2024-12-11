@@ -59,8 +59,8 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
 
       final UserMemoriesResponse? memories =
           await PostApi.getMemories(communityUid: state.communityUid!);
-  final UserOffersResponse? offers =
-          await PostApi.getOfferPosts( communityUid: state.communityUid!);
+      final UserOffersResponse? offers =
+          await PostApi.getOfferPosts(communityUid: state.communityUid!);
       emit(
         state.copyWith(
           communityVideoPosts: videoPosts?.videoPosts ?? [],

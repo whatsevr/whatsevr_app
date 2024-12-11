@@ -32,7 +32,7 @@ class CommunityState extends Equatable {
     CommunityProfileDataResponse? communityDetailsResponse,
     List<VideoPost>? communityVideoPosts,
     List<Memory>? communityMemories,
-     List<OfferPost>? communityOffers,
+    List<OfferPost>? communityOffers,
   }) {
     return CommunityState(
       communityUid: communityUid ?? this.communityUid,

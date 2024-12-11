@@ -166,7 +166,6 @@ class _DashboardPageBottomNavigationBarState
                   child: Theme(
                     data: ThemeData(
                       iconTheme: IconThemeData(
-                        
                         color: selectedIndex == items.indexOf(itm)
                             ? context.whatsevrTheme.primary
                             : context.whatsevrTheme.disabled,

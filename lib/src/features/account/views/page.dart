@@ -436,28 +436,30 @@ class AccountPage extends StatelessWidget {
                             ),
                           ),
                           const Gap(8),
-                            if (pageArgument?.isEditMode != true
-                     && pageArgument?.userUid != AuthUserDb.getLastLoggedUserUid()
-                    )
-                          PadHorizontal(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: WhatsevrButton.filled(
-                                    miniButton: true,
-                                    label: 'Message',
+                          if (pageArgument?.isEditMode != true &&
+                              pageArgument?.userUid !=
+                                  AuthUserDb.getLastLoggedUserUid())
+                            PadHorizontal(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: WhatsevrButton.filled(
+                                      miniButton: true,
+                                      label: 'Message',
+                                    ),
                                   ),
-                                ),
-                                const Gap(8),
-                                Expanded(
-                                  child: WhatsevrFollowButton( 
-                                    followeeUserUid: state
-                                        .profileDetailsResponse?.userInfo?.uid,
+                                  const Gap(8),
+                                  Expanded(
+                                    child: WhatsevrFollowButton(
+                                      followeeUserUid: state
+                                          .profileDetailsResponse
+                                          ?.userInfo
+                                          ?.uid,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
                           const Gap(8),
                           if (pageArgument?.isEditMode != true) ...<Widget>[
                             const PadHorizontal(

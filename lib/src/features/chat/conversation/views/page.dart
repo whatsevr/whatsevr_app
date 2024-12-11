@@ -138,8 +138,10 @@ class ConversationsPage extends StatelessWidget {
                       child: FloatingActionButton(
                         mini: true,
                         backgroundColor: theme.accent,
-                        child: Icon(Icons.keyboard_arrow_down,
-                            color: theme.surface,),
+                        child: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: theme.surface,
+                        ),
                         onPressed: () {
                           scrollController.animateTo(
                             // Changed from controller to scrollController
@@ -160,7 +162,9 @@ class ConversationsPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppBar(
-      BuildContext context, ConversationState state,) {
+    BuildContext context,
+    ConversationState state,
+  ) {
     return AppBar(
       leading: IconButton(
         icon: Icon(Icons.arrow_back),
@@ -358,8 +362,11 @@ class MessageBubble extends StatelessWidget {
                         Gap(8),
                         if (isCurrentUser) ...[
                           if (message.uid?.startsWith('temp_') == true)
-                            Icon(Icons.access_time,
-                                size: 12, color: theme.surface,),
+                            Icon(
+                              Icons.access_time,
+                              size: 12,
+                              color: theme.surface,
+                            ),
                           if (message.uid?.startsWith('temp_') == false)
                             Icon(Icons.done_all, size: 12, color: theme.text),
                         ],
@@ -608,11 +615,23 @@ class AttachmentSheet extends StatelessWidget {
             children: [
               _buildAttachmentOption(Icons.image, 'Photo', () {}, Colors.green),
               _buildAttachmentOption(
-                  Icons.videocam, 'Video', () {}, Colors.red,),
+                Icons.videocam,
+                'Video',
+                () {},
+                Colors.red,
+              ),
               _buildAttachmentOption(
-                  Icons.insert_drive_file, 'Document', () {}, Colors.blue,),
+                Icons.insert_drive_file,
+                'Document',
+                () {},
+                Colors.blue,
+              ),
               _buildAttachmentOption(
-                  Icons.location_on, 'Location', () {}, Colors.orange,),
+                Icons.location_on,
+                'Location',
+                () {},
+                Colors.orange,
+              ),
             ],
           ),
         ],
@@ -621,7 +640,11 @@ class AttachmentSheet extends StatelessWidget {
   }
 
   Widget _buildAttachmentOption(
-      IconData icon, String label, VoidCallback onTap, Color color,) {
+    IconData icon,
+    String label,
+    VoidCallback onTap,
+    Color color,
+  ) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),

@@ -467,32 +467,35 @@ Call to Action: End with a simple invite to participate.
                                   .addressController,
                               headingTitle: 'Address',
                               maxLength: 100,
-                              hintText: 'Eg; Home, Office, Landmark, City, Country',
+                              hintText:
+                                  'Eg; Home, Office, Landmark, City, Country',
                             ),
                             const Gap(8),
                             // Service Info Section
                             WhatsevrFormField.invokeCustomFunction(
                               headingTitle: 'Status',
-                              hintText: 'Hint; Short innovative or volatile keyword',
+                              hintText:
+                                  'Hint; Short innovative or volatile keyword',
                               controller: context
                                   .read<CommunityProfileUpdateBloc>()
                                   .statusController,
-                                  readOnly: false,
-                                  customFunction: (){
-                                    showAppModalSheet(
+                              readOnly: false,
+                              customFunction: () {
+                                showAppModalSheet(
                                   child: CommonDataSearchSelectPage(
                                     showProfessionalStatus: true,
                                     onProfessionalStatusSelected:
                                         (professionalStatus) {
                                       context
-                                              .read<CommunityProfileUpdateBloc>()
-                                              .statusController
-                                              .text =
-                                          professionalStatus.title ?? '';
+                                          .read<CommunityProfileUpdateBloc>()
+                                          .statusController
+                                          .text = professionalStatus
+                                              .title ??
+                                          '';
                                     },
                                   ),
                                 );
-                                  },
+                              },
                             ),
                             const Gap(8),
                             const Gap(12),
@@ -506,7 +509,8 @@ Call to Action: End with a simple invite to participate.
 
                                 return WhatsevrFormField.invokeCustomFunction(
                                   headingTitle: 'Services',
-                                  hintText: 'Click on the + icon to add services',
+                                  hintText:
+                                      'Click on the + icon to add services',
                                   suffixWidget:
                                       const Icon(Icons.add_circle_rounded),
                                   customFunction: () {
@@ -518,13 +522,15 @@ Call to Action: End with a simple invite to participate.
                                           WhatsevrFormField.generalTextField(
                                             headingTitle: 'Enter Title',
                                             controller: titleController,
-                                            hintText: 'Eg; Education, Health, Gadgets',
+                                            hintText:
+                                                'Eg; Education, Health, Gadgets',
                                           ),
                                           const Gap(12),
                                           WhatsevrFormField.multilineTextField(
                                             headingTitle: 'Enter Description',
                                             controller: descriptionController,
-                                            hintText: 'Eg; We provide the best education services in the city',
+                                            hintText:
+                                                'Eg; We provide the best education services in the city',
                                           ),
                                           const Gap(12),
                                           MaterialButton(
@@ -614,7 +620,6 @@ Call to Action: End with a simple invite to participate.
                               ),
                               const Gap(8),
                             ],
-                           
                           ],
                         ),
                       ),

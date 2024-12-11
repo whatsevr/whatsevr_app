@@ -232,7 +232,7 @@ class AppNavigationService {
           );
         },
       ),
-           GoRoute(
+      GoRoute(
         path: RoutesName.updateCommunityProfile,
         builder: (BuildContext context, GoRouterState state) {
           final CommunityProfileUpdatePageArgument pageArgument =

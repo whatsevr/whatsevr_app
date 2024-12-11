@@ -132,20 +132,26 @@ class SettingsState extends Equatable {
     String? availabilityStatus,
   }) {
     return SettingsState(
-      userCommunitiesResponse: userCommunitiesResponse ?? this.userCommunitiesResponse,
-      isPushNotificationsEnabled: isPushNotificationsEnabled ?? this.isPushNotificationsEnabled,
-      isEmailNotificationsEnabled: isEmailNotificationsEnabled ?? this.isEmailNotificationsEnabled,
+      userCommunitiesResponse:
+          userCommunitiesResponse ?? this.userCommunitiesResponse,
+      isPushNotificationsEnabled:
+          isPushNotificationsEnabled ?? this.isPushNotificationsEnabled,
+      isEmailNotificationsEnabled:
+          isEmailNotificationsEnabled ?? this.isEmailNotificationsEnabled,
       isProfileVisible: isProfileVisible ?? this.isProfileVisible,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      isActivityStatusVisible: isActivityStatusVisible ?? this.isActivityStatusVisible,
+      isActivityStatusVisible:
+          isActivityStatusVisible ?? this.isActivityStatusVisible,
       isDataSaverEnabled: isDataSaverEnabled ?? this.isDataSaverEnabled,
       isAutoPlayEnabled: isAutoPlayEnabled ?? this.isAutoPlayEnabled,
       selectedLanguage: selectedLanguage ?? this.selectedLanguage,
       contentFilterLevel: contentFilterLevel ?? this.contentFilterLevel,
       mediaQuality: mediaQuality ?? this.mediaQuality,
       isTwoFactorEnabled: isTwoFactorEnabled ?? this.isTwoFactorEnabled,
-      isPostNotificationsEnabled: isPostNotificationsEnabled ?? this.isPostNotificationsEnabled,
-      messageRequestsPreference: messageRequestsPreference ?? this.messageRequestsPreference,
+      isPostNotificationsEnabled:
+          isPostNotificationsEnabled ?? this.isPostNotificationsEnabled,
+      messageRequestsPreference:
+          messageRequestsPreference ?? this.messageRequestsPreference,
       isCommentsEnabled: isCommentsEnabled ?? this.isCommentsEnabled,
       tagPreference: tagPreference ?? this.tagPreference,
       isBackupEnabled: isBackupEnabled ?? this.isBackupEnabled,

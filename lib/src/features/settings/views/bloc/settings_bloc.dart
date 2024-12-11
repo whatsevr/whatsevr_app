@@ -34,7 +34,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Future<void> _initHive() async {
     _settingsBox = await Hive.openBox<SettingsState>(settingsBoxName);
     final savedSettings = _settingsBox.get('userSettings');
-    if (savedSettings != null) { 
+    if (savedSettings != null) {
       emit(savedSettings);
     }
   }
@@ -176,7 +176,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       final newState = state.copyWith(textSize: event.size);
       emit(newState);
       await _saveSettings(newState);
-      
+
       // Apply text size changes to app
       await _applyTextSizeChanges(event.size);
     } catch (e, s) {
@@ -231,7 +231,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     try {
-      final newNotificationTypes = Map<String, bool>.from(state.notificationTypes);
+      final newNotificationTypes =
+          Map<String, bool>.from(state.notificationTypes);
       newNotificationTypes[event.type] = event.enabled;
       final newState = state.copyWith(notificationTypes: newNotificationTypes);
       emit(newState);

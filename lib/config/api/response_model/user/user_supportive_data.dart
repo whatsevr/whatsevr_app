@@ -35,8 +35,10 @@ class UserSupportiveDataResponse {
             : UserInfo.fromMap(json['user_info']),
         ownedCommunities: json['owned_communities'] == null
             ? []
-            : List<OwnedCommunity>.from(json['owned_communities']!
-                .map((x) => OwnedCommunity.fromMap(x)),),
+            : List<OwnedCommunity>.from(
+                json['owned_communities']!
+                    .map((x) => OwnedCommunity.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
