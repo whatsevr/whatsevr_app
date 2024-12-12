@@ -376,7 +376,9 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
       }
       if (event.countryName == null &&
           event.stateName == null &&
-          event.cityName == null) return;
+          event.cityName == null) {
+        return;
+      }
       String address = '';
       if (event.countryName?.isNotEmpty ?? false) {
         address += '${event.countryName}';

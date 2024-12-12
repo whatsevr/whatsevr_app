@@ -78,7 +78,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     if (state.videoPaginationData?.isLoading == true ||
-        state.videoPaginationData?.noMoreData == true) return;
+        state.videoPaginationData?.noMoreData == true) {
+      return;
+    }
     try {
       emit(
         state.copyWith(
@@ -143,7 +145,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     if (state.memoryPaginationData?.isLoading == true ||
-        state.memoryPaginationData?.noMoreData == true) return;
+        state.memoryPaginationData?.noMoreData == true) {
+      return;
+    }
     try {
       emit(
         state.copyWith(
@@ -208,7 +212,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     if (state.offersPaginationData?.isLoading == true ||
-        state.offersPaginationData?.noMoreData == true) return;
+        state.offersPaginationData?.noMoreData == true) {
+      return;
+    }
     try {
       emit(
         state.copyWith(
@@ -274,7 +280,9 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     if (state.photoPostPaginationData?.isLoading == true ||
-        state.photoPostPaginationData?.noMoreData == true) return;
+        state.photoPostPaginationData?.noMoreData == true) {
+      return;
+    }
     try {
       emit(
         state.copyWith(

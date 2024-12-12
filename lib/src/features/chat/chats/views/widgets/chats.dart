@@ -1,9 +1,7 @@
 part of '../page.dart';
 
 class _ChatListView extends StatelessWidget {
-  const _ChatListView({
-    super.key,
-  });
+  const _ChatListView();
 
   @override
   Widget build(BuildContext context) {

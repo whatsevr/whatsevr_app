@@ -64,7 +64,8 @@ class UserProfileUpdateBloc
     if (profileDetailsResponse == null) {
       SmartDialog.showLoading();
       profileDetailsResponse = await UsersApi.getProfileDetails(
-          userUid: (AuthUserDb.getLastLoggedUserUid())!);
+        userUid: (AuthUserDb.getLastLoggedUserUid())!,
+      );
       SmartDialog.dismiss();
     }
     emit(

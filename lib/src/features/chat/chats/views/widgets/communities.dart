@@ -1,9 +1,7 @@
 part of '../page.dart';
 
 class _CommunitiesListView extends StatelessWidget {
-  const _CommunitiesListView({
-    super.key,
-  });
+  const _CommunitiesListView();
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +19,15 @@ class _CommunitiesListView extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
                 onTap: () {
                   AppNavigationService.pushPage(
-                      screen: ConversationsPage(
-                    pageArguments: ConversationPageArguments(
-                      isCommunity: true,
-                      communityUid: community.uid,
-                      title: community.title,
-                      profilePicture: community.profilePicture ?? '',
+                    screen: ConversationsPage(
+                      pageArguments: ConversationPageArguments(
+                        isCommunity: true,
+                        communityUid: community.uid,
+                        title: community.title,
+                        profilePicture: community.profilePicture ?? '',
+                      ),
                     ),
-                  ));
+                  );
                 },
                 leading: AdvancedAvatar(
                   decoration: BoxDecoration(
@@ -63,7 +62,9 @@ class _CommunitiesListView extends StatelessWidget {
                 trailing: community.lastMessageAt == null
                     ? null
                     : Text(
-                        '${GetTimeAgo.parse(community.lastMessageAt!, pattern: 'ddMMM')}'),
+                        GetTimeAgo.parse(community.lastMessageAt!,
+                            pattern: 'ddMMM'),
+                      ),
               );
             },
           ),

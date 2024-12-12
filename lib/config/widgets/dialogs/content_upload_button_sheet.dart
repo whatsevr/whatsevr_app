@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/fa6_solid.dart';
-import 'package:iconify_flutter/icons/ic.dart';
-import 'package:iconify_flutter/icons/mdi.dart';
-import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/page.dart';

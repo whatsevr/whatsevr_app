@@ -29,18 +29,20 @@ class UpdateCommunityCoverMediaRequest {
 
   factory UpdateCommunityCoverMediaRequest.fromMap(Map<String, dynamic> json) =>
       UpdateCommunityCoverMediaRequest(
-        communityUid: json["community_uid"],
-        userUid: json["user_uid"],
-        communityCoverMedia: json["community_cover_media"] == null
+        communityUid: json['community_uid'],
+        userUid: json['user_uid'],
+        communityCoverMedia: json['community_cover_media'] == null
             ? []
-            : List<CommunityCoverMedia>.from(json["community_cover_media"]!
-                .map((x) => CommunityCoverMedia.fromMap(x))),
+            : List<CommunityCoverMedia>.from(
+                json['community_cover_media']!
+                    .map((x) => CommunityCoverMedia.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
-        "community_uid": communityUid,
-        "user_uid": userUid,
-        "community_cover_media": communityCoverMedia == null
+        'community_uid': communityUid,
+        'user_uid': userUid,
+        'community_cover_media': communityCoverMedia == null
             ? []
             : List<dynamic>.from(communityCoverMedia!.map((x) => x.toMap())),
       };
@@ -79,16 +81,16 @@ class CommunityCoverMedia {
 
   factory CommunityCoverMedia.fromMap(Map<String, dynamic> json) =>
       CommunityCoverMedia(
-        imageUrl: json["image_url"],
-        isVideo: json["is_video"],
-        communityUid: json["community_uid"],
-        videoUrl: json["video_url"],
+        imageUrl: json['image_url'],
+        isVideo: json['is_video'],
+        communityUid: json['community_uid'],
+        videoUrl: json['video_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "image_url": imageUrl,
-        "is_video": isVideo,
-        "community_uid": communityUid,
-        "video_url": videoUrl,
+        'image_url': imageUrl,
+        'is_video': isVideo,
+        'community_uid': communityUid,
+        'video_url': videoUrl,
       };
 }

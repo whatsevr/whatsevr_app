@@ -734,10 +734,14 @@ class _WhatsevrIconsShowcase extends StatelessWidget {
                     final icon = _iconData[index];
                     return GestureDetector(
                       onTap: () {
-                        Clipboard.setData(ClipboardData(
-                            text: 'Icon(WhatsevrIcons.${icon.$1})'));
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: 'Icon(WhatsevrIcons.${icon.$1})',
+                          ),
+                        );
                         WhatsevrStackToast.showSuccess(
-                            'Copied ${icon.$1} to clipboard');
+                          'Copied ${icon.$1} to clipboard',
+                        );
                       },
                       child: Card(
                         color: theme.card,

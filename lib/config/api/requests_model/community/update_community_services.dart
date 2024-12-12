@@ -29,18 +29,20 @@ class UpdateCommunityServicesRequest {
 
   factory UpdateCommunityServicesRequest.fromMap(Map<String, dynamic> json) =>
       UpdateCommunityServicesRequest(
-        communityUid: json["community_uid"],
-        userUid: json["user_uid"],
-        communityServices: json["community_services"] == null
+        communityUid: json['community_uid'],
+        userUid: json['user_uid'],
+        communityServices: json['community_services'] == null
             ? []
-            : List<CommunityService>.from(json["community_services"]!
-                .map((x) => CommunityService.fromMap(x))),
+            : List<CommunityService>.from(
+                json['community_services']!
+                    .map((x) => CommunityService.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
-        "community_uid": communityUid,
-        "user_uid": userUid,
-        "community_services": communityServices == null
+        'community_uid': communityUid,
+        'user_uid': userUid,
+        'community_services': communityServices == null
             ? []
             : List<dynamic>.from(communityServices!.map((x) => x.toMap())),
       };
@@ -75,14 +77,14 @@ class CommunityService {
 
   factory CommunityService.fromMap(Map<String, dynamic> json) =>
       CommunityService(
-        title: json["title"],
-        communityUid: json["community_uid"],
-        description: json["description"],
+        title: json['title'],
+        communityUid: json['community_uid'],
+        description: json['description'],
       );
 
   Map<String, dynamic> toMap() => {
-        "title": title,
-        "community_uid": communityUid,
-        "description": description,
+        'title': title,
+        'community_uid': communityUid,
+        'description': description,
       };
 }

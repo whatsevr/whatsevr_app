@@ -259,7 +259,8 @@ class CommunityProfileUpdateBloc
       );
       (int?, String?)? userInfoUpdateResponse =
           await CommunityApi.updateCommunityInfo(
-              request: newUpdateUserInfoRequest);
+        request: newUpdateUserInfoRequest,
+      );
       if (userInfoUpdateResponse?.$1 != HttpStatus.ok) {
         throw BusinessException(
           userInfoUpdateResponse?.$2 ?? 'Failed to update profile info',
@@ -283,7 +284,8 @@ class CommunityProfileUpdateBloc
             .toList(),
       );
       (int?, String?)? m4 = await CommunityApi.updateCommunityServices(
-          request: newUserServicesRequest);
+        request: newUserServicesRequest,
+      );
       SmartDialog.showLoading(msg: '${m4?.$2}');
       SmartDialog.dismiss();
       AppNavigationService.goBack();

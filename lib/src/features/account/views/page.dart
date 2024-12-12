@@ -4,8 +4,6 @@ import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
@@ -29,7 +27,6 @@ import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 
 import 'package:whatsevr_app/src/features/settings/views/page.dart';
-import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 import 'package:whatsevr_app/src/features/account/bloc/account_bloc.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/about.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/cover_media.dart';

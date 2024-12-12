@@ -28,16 +28,17 @@ class CommunityProfilePictureUpdateRequest {
   String toJson() => json.encode(toMap());
 
   factory CommunityProfilePictureUpdateRequest.fromMap(
-          Map<String, dynamic> json) =>
+    Map<String, dynamic> json,
+  ) =>
       CommunityProfilePictureUpdateRequest(
-        communityUid: json["community_uid"],
-        userUid: json["user_uid"],
-        profilePictureUrl: json["profile_picture_url"],
+        communityUid: json['community_uid'],
+        userUid: json['user_uid'],
+        profilePictureUrl: json['profile_picture_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "community_uid": communityUid,
-        "user_uid": userUid,
-        "profile_picture_url": profilePictureUrl,
+        'community_uid': communityUid,
+        'user_uid': userUid,
+        'profile_picture_url': profilePictureUrl,
       };
 }

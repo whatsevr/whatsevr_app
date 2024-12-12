@@ -29,17 +29,17 @@ class UpdateCommunityInfoRequest {
 
   factory UpdateCommunityInfoRequest.fromMap(Map<String, dynamic> json) =>
       UpdateCommunityInfoRequest(
-        communityUid: json["community_uid"],
-        userUid: json["user_uid"],
-        communityInfo: json["community_info"] == null
+        communityUid: json['community_uid'],
+        userUid: json['user_uid'],
+        communityInfo: json['community_info'] == null
             ? null
-            : CommunityInfo.fromMap(json["community_info"]),
+            : CommunityInfo.fromMap(json['community_info']),
       );
 
   Map<String, dynamic> toMap() => {
-        "community_uid": communityUid,
-        "user_uid": userUid,
-        "community_info": communityInfo?.toMap(),
+        'community_uid': communityUid,
+        'user_uid': userUid,
+        'community_info': communityInfo?.toMap(),
       };
 }
 
@@ -84,20 +84,20 @@ class CommunityInfo {
   String toJson() => json.encode(toMap());
 
   factory CommunityInfo.fromMap(Map<String, dynamic> json) => CommunityInfo(
-        title: json["title"],
-        status: json["status"],
-        bio: json["bio"],
-        description: json["description"],
-        location: json["location"],
-        requireJoiningApproval: json["require_joining_approval"],
+        title: json['title'],
+        status: json['status'],
+        bio: json['bio'],
+        description: json['description'],
+        location: json['location'],
+        requireJoiningApproval: json['require_joining_approval'],
       );
 
   Map<String, dynamic> toMap() => {
-        "title": title,
-        "status": status,
-        "bio": bio,
-        "description": description,
-        "location": location,
-        "require_joining_approval": requireJoiningApproval,
+        'title': title,
+        'status': status,
+        'bio': bio,
+        'description': description,
+        'location': location,
+        'require_joining_approval': requireJoiningApproval,
       };
 }

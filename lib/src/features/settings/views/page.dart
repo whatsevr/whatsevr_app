@@ -14,10 +14,8 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/src/features/new_community/views/page.dart';
 import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
@@ -96,7 +94,9 @@ class SettingsPage extends StatelessWidget {
                         leading: Icon(
                           _getAvailabilityIcon(state.availabilityStatus),
                           color: _getAvailabilityColor(
-                              state.availabilityStatus, theme),
+                            state.availabilityStatus,
+                            theme,
+                          ),
                           size: 20,
                         ),
                         title: Text(
@@ -530,8 +530,8 @@ class SettingsSection extends StatelessWidget {
   const SettingsSection({
     required this.title,
     required this.children,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -541,7 +541,9 @@ class SettingsSection extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-              vertical: 12, horizontal: 4), // Reduced padding
+            vertical: 12,
+            horizontal: 4,
+          ), // Reduced padding
           child: Text(
             title,
             style: theme.subtitle.copyWith(
@@ -570,8 +572,8 @@ class SettingsTile extends StatelessWidget {
     this.trailing,
     this.onTap,
     this.icon,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -70,7 +70,9 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
     Emitter<NewCommunityState> emit,
   ) async {
     if (state.topCommunitiesPaginationData?.isLoading == true ||
-        state.topCommunitiesPaginationData?.noMoreData == true) return;
+        state.topCommunitiesPaginationData?.noMoreData == true) {
+      return;
+    }
     try {
       emit(
         state.copyWith(

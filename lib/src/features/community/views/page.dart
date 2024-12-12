@@ -4,12 +4,9 @@ import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ri.dart';
 import 'package:whatsevr_app/config/global_bloc/join_leave_community/join_leave_community_bloc.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
@@ -363,8 +360,10 @@ class CommunityPage extends StatelessWidget {
                                     .read<JoinLeaveCommunityBloc>()
                                     .state
                                     .userOwnedCommunityUids
-                                    .contains(state.communityDetailsResponse
-                                        ?.communityInfo?.uid) !=
+                                    .contains(
+                                      state.communityDetailsResponse
+                                          ?.communityInfo?.uid,
+                                    ) !=
                                 true) ...[
                               const Gap(8),
                               Expanded(
@@ -372,7 +371,7 @@ class CommunityPage extends StatelessWidget {
                                   communityUid: state.communityDetailsResponse
                                       ?.communityInfo?.uid,
                                 ),
-                              )
+                              ),
                             ],
                           ],
                         ),
