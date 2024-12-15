@@ -6,6 +6,30 @@ import 'package:whatsevr_app/config/api/response_model/chats/user_private_chats.
 import 'package:whatsevr_app/config/api/response_model/chats/user_community_chats.dart';
 
 class ChatsApi {
+  //startChat
+  static Future<(int? statusCode, String? message, String? privateChatUid)?>
+      startChat({
+    String? currentUserUid,
+    String? otherUserUid,
+    String? communityUid,
+  }) async {
+    try {
+      
+      final Response response = await ApiClient.client.post(
+        '/v1/start-chat',
+        data: {
+          if (currentUserUid != null) 'current_user_uid': currentUserUid,
+          if (otherUserUid != null) 'other_user_uid': otherUserUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      return (response.statusCode, response.data['message'] as String?, response.data['private_chat_uid'] as String?);
+    }  catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
   static Future<UserPrivateChatsResponse?> getUserPrivateChats({
     required String userUid,
     int page = 1,

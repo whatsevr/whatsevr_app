@@ -21,8 +21,9 @@ class _ChatListView extends StatelessWidget {
                 dense: true,
                 visualDensity: VisualDensity.compact,
                 onTap: () {
-                  AppNavigationService.pushPage(
-                    screen: ConversationsPage(
+                  AppNavigationService.newRoute(
+                    RoutesName.chatConversation,
+                    extras: ConversationsPage(
                       pageArguments: ConversationPageArguments(
                         isCommunity: false,
                         privateChatUid: chat.uid,

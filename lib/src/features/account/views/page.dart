@@ -7,6 +7,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
 
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
@@ -443,6 +444,16 @@ class AccountPage extends StatelessWidget {
                                     child: WhatsevrButton.filled(
                                       miniButton: true,
                                       label: 'Message',
+                                      onPressed: () {
+                                        startChat(
+                                          currentUserUid: AuthUserDb
+                                              .getLastLoggedUserUid(),
+                                          otherUserUid: state
+                                              .profileDetailsResponse
+                                              ?.userInfo
+                                              ?.uid,
+                                        );
+                                      },
                                     ),
                                   ),
                                   const Gap(8),

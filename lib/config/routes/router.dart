@@ -7,6 +7,7 @@ import 'package:whatsevr_app/constants.dart';
 import 'package:whatsevr_app/dev/routes/routes.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/src/features/account/views/page.dart';
+import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
 import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
@@ -289,6 +290,16 @@ class AppNavigationService {
               state.extra as NewCommunityPageArgument;
           return NewCommunityPage(
             pageArgument: pageArgument,
+          );
+        },
+      ),
+      GoRoute(
+        path: RoutesName.chatConversation,
+        builder: (BuildContext context, GoRouterState state) {
+          final ConversationPageArguments pageArgument =
+              state.extra as ConversationPageArguments;
+          return ConversationsPage(
+            pageArguments: pageArgument,
           );
         },
       ),

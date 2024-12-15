@@ -25,4 +25,5 @@ class RoutesName {
 
   static const String settings = '/settings';
   static const String newCommunity = '/new-community';
+  static const String chatConversation = '/chat-conversation';
 }
