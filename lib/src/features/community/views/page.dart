@@ -7,10 +7,12 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/global_bloc/join_leave_community/join_leave_community_bloc.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
+import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
 import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
 
@@ -353,7 +355,13 @@ class CommunityPage extends StatelessWidget {
                               child: WhatsevrButton.outlined(
                                 label: 'Chat',
                                 miniButton: true,
-                                onPressed: () {},
+                                onPressed: () {
+                                  startChat(
+                                    senderUserUid:  AuthUserDb.getLastLoggedUserUid(),
+                                    communityUid: state.communityDetailsResponse
+                                        ?.communityInfo?.uid,
+                                  );
+                                },
                               ),
                             ),
                             if (context

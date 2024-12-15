@@ -12,19 +12,19 @@ import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart'
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
 void startChat({
-  String? currentUserUid,
+  String? senderUserUid,
   String? otherUserUid,
   String? communityUid,
 }) async {
-  try {
+  try { 
     assert(
-      (currentUserUid != null && otherUserUid != null) || communityUid != null,
+      (senderUserUid != null && otherUserUid != null) || communityUid != null,
       'Either provide both currentUserUid and otherUserUid or provide communityUid',
     );
     SmartDialog.showLoading(msg: 'Starting chat...');
     final (int? statusCode, String? message, String? privateChatUid)? response =
         await ChatsApi.startChat(
-      currentUserUid: currentUserUid,
+      currentUserUid: senderUserUid,
       otherUserUid: otherUserUid,
       communityUid: communityUid,
     );
@@ -32,7 +32,7 @@ void startChat({
     if (response?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${response?.$2}');
     }
-    if (currentUserUid != null && otherUserUid != null) {
+    if (senderUserUid != null && otherUserUid != null) {
       if (response?.$3 != null) {
         AppNavigationService.newRoute(
           RoutesName.chatConversation,
@@ -43,11 +43,12 @@ void startChat({
         );
         return;
       }
-      showAppModalSheet(child: _SendPrivateMessageUi(
-      
-        currentUserUid: currentUserUid,
-        otherUserUid: otherUserUid,
-      ));
+      showAppModalSheet(
+          flexibleSheet: false,
+          child: _SendPrivateMessageUi(
+            currentUserUid: senderUserUid,
+            otherUserUid: otherUserUid,
+          ));
     }
     if (communityUid != null) {
       AppNavigationService.newRoute(
@@ -62,20 +63,52 @@ void startChat({
 }
 
 class _SendPrivateMessageUi extends StatelessWidget {
-  final String?  currentUserUid;
+  final String? currentUserUid;
   final String? otherUserUid;
-  const _SendPrivateMessageUi({
+  _SendPrivateMessageUi({
     this.currentUserUid,
     this.otherUserUid,
     super.key,
   });
-
+  final TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        WhatsevrFormField.multilineTextField(),
-        WhatsevrButton.filled(label: 'Send Message'),
+        WhatsevrFormField.multilineTextField(
+          controller: messageController,
+          minLines: 1,
+        ),
+        WhatsevrButton.filled(
+          label: 'Send Message',
+          onPressed: () async {
+            SmartDialog.showLoading(msg: 'Sending message...');
+            final (
+              int? statusCode,
+              String? message,
+              String? privateChatUid
+            )? response = await ChatsApi.startChat(
+              currentUserUid: currentUserUid,
+              otherUserUid: otherUserUid,
+              message: messageController.text.trim(),
+            );
+            SmartDialog.dismiss();
+            if (response?.$1 != HttpStatus.ok) {
+              SmartDialog.showToast('${response?.$2}');
+              return;
+            }
+            if (response?.$3 != null) {
+              AppNavigationService.newRoute(
+                RoutesName.chatConversation,
+                extras: ConversationPageArguments(
+                  isCommunity: false,
+                  privateChatUid: response?.$3,
+                ),
+              );
+            }
+          },
+        ),
       ],
     );
   }

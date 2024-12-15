@@ -12,15 +12,17 @@ class ChatsApi {
     String? currentUserUid,
     String? otherUserUid,
     String? communityUid,
+    String? message,
   }) async {
     try {
       
       final Response response = await ApiClient.client.post(
         '/v1/start-chat',
-        data: {
-          if (currentUserUid != null) 'current_user_uid': currentUserUid,
-          if (otherUserUid != null) 'other_user_uid': otherUserUid,
-          if (communityUid != null) 'community_uid': communityUid,
+        data: { 
+           'sender_user_uid': currentUserUid,
+           'other_user_uid': otherUserUid,
+         'community_uid': communityUid,
+          'message': message,
         },
       );
       return (response.statusCode, response.data['message'] as String?, response.data['private_chat_uid'] as String?);

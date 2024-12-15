@@ -446,7 +446,7 @@ class AccountPage extends StatelessWidget {
                                       label: 'Message',
                                       onPressed: () {
                                         startChat(
-                                          currentUserUid: AuthUserDb
+                                          senderUserUid: AuthUserDb
                                               .getLastLoggedUserUid(),
                                           otherUserUid: state
                                               .profileDetailsResponse
