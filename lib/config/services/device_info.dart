@@ -8,25 +8,33 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 
 class DeviceInfo {
   DeviceInfo({
+    required this.deviceId,
     required this.deviceName,
     required this.countryCode,
+    required this.deviceOs,
+    
     required this.isAndroid,
     required this.isIos,
   });
-
+  final String? deviceId;
   final String? deviceName;
   final String? countryCode;
+  final String? deviceOs;
   final bool isAndroid;
   final bool isIos;
 
   Map<String, dynamic> toMap() {
     return {
+      'deviceId': deviceId,
       'deviceName': deviceName,
       'countryCode': countryCode,
+      'deviceOs': deviceOs,
       'isAndroid': isAndroid,
       'isIos': isIos,
     };
   }
+
+  
 }
 
 class DeviceInfoService {
@@ -60,8 +68,10 @@ class DeviceInfoService {
       final androidInfo = await deviceInfoPlugin.androidInfo;
       final countryCode = await _getCurrentCountryCode();
       _currentDeviceInfo = DeviceInfo(
+        deviceId: androidInfo.id,
         deviceName: androidInfo.model,
         countryCode: countryCode,
+        deviceOs: 'android',
         isAndroid: true,
         isIos: false,
       );
@@ -76,8 +86,10 @@ class DeviceInfoService {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       final countryCode = await _getCurrentCountryCode();
       _currentDeviceInfo = DeviceInfo(
+        deviceId: iosInfo.identifierForVendor,
         deviceName: iosInfo.utsname.machine,
         countryCode: countryCode,
+        deviceOs: 'ios',
         isAndroid: false,
         isIos: true,
       );

@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:whatsevr_app/config/api/response_model/user/user_supportive_data.dart';
+import 'package:whatsevr_app/config/services/device_info.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
@@ -98,9 +99,10 @@ class AuthUserService {
     required String? emailId,
   }) async {
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
-      userUid,
-      mobileNumber,
-      emailId,
+      userUid: userUid,
+      mobileNumber: mobileNumber,
+      emailId: emailId,
+     
     );
     if (loginInfo?.$1 == HttpStatus.ok) {
       await AuthUserDb.saveAuthorisedUserUid(userUid);

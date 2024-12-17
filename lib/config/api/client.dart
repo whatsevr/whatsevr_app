@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/services/device_info.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/interceptors/cache.dart';
@@ -33,6 +35,11 @@ class ApiClient {
         },
         headers: <String, dynamic>{
           'Authorization': 'Bearer <user token>',
+          'x-user-uid' : AuthUserDb.getLastLoggedUserUid(),
+          'x-user-agent-id': DeviceInfoService.currentDeviceInfo?.deviceId,
+          'x-user-agent-name': DeviceInfoService.currentDeviceInfo?.deviceName,
+          'x-user-agent-type': DeviceInfoService.currentDeviceInfo?.deviceOs,
+          'x-app-version-code': 1,
         },
       ),
     );
