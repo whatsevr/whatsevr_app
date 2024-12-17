@@ -9,7 +9,7 @@ import 'package:whatsevr_app/config/api/methods/reactions.dart';
 import 'package:whatsevr_app/config/enums/reaction_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/detectable_text.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';

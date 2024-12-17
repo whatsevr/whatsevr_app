@@ -445,7 +445,7 @@ class AccountPage extends StatelessWidget {
                                       miniButton: true,
                                       label: 'Message',
                                       onPressed: () {
-                                        startChat(
+                                        startChatHelper(
                                           senderUserUid: AuthUserDb
                                               .getLastLoggedUserUid(),
                                           otherUserUid: state

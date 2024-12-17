@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/ai_button.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -45,7 +46,7 @@ class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (showAiAction) const AiButton(),
           if (showInfo != null)
             IconButton(
-              icon: const Icon(Icons.info_outline),
+              icon:  Icon(WhatsevrIcons.iButtonIcon),
               onPressed: showInfo,
             ),
         ],

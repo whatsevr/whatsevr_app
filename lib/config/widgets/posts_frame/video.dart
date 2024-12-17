@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 

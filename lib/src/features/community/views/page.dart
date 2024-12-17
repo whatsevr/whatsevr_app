@@ -356,7 +356,7 @@ class CommunityPage extends StatelessWidget {
                                 label: 'Chat',
                                 miniButton: true,
                                 onPressed: () {
-                                  startChat(
+                                  startChatHelper(
                                     senderUserUid:  AuthUserDb.getLastLoggedUserUid(),
                                     communityUid: state.communityDetailsResponse
                                         ?.communityInfo?.uid,

@@ -16,15 +16,15 @@ class ConversationPageArguments {
   final bool isCommunity;
   final String? communityUid;
   final String? privateChatUid;
-  final String? title;
-  final String? profilePicture;
+  final String? chat_title;
+  final String? chat_avatar_url;
 
   ConversationPageArguments({
     required this.isCommunity,
     this.communityUid,
     this.privateChatUid,
-    this.title,
-    this.profilePicture,
+    this.chat_title,
+    this.chat_avatar_url,
   });
 }
 

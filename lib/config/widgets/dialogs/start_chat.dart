@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/chats.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/start_chat.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
@@ -11,18 +12,18 @@ import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 
-void startChat({
+void startChatHelper({
   String? senderUserUid,
   String? otherUserUid,
   String? communityUid,
 }) async {
-  try { 
+  try {
     assert(
       (senderUserUid != null && otherUserUid != null) || communityUid != null,
       'Either provide both currentUserUid and otherUserUid or provide communityUid',
     );
     SmartDialog.showLoading(msg: 'Starting chat...');
-    final (int? statusCode, String? message, String? privateChatUid)? response =
+    final (int? statusCode, StartChatResponse? startChatResponse)? response =
         await ChatsApi.startChat(
       currentUserUid: senderUserUid,
       otherUserUid: otherUserUid,
@@ -33,12 +34,14 @@ void startChat({
       SmartDialog.showToast('${response?.$2}');
     }
     if (senderUserUid != null && otherUserUid != null) {
-      if (response?.$3 != null) {
+      if (response?.$2?.privateChatUid != null) {
         AppNavigationService.newRoute(
           RoutesName.chatConversation,
           extras: ConversationPageArguments(
             isCommunity: false,
-            privateChatUid: response?.$3,
+            privateChatUid: response?.$2?.privateChatUid,
+            chat_avatar_url: response?.$2?.chatAvatarUrl,
+            chat_title: response?.$2?.chatTitle,
           ),
         );
         return;
@@ -54,7 +57,11 @@ void startChat({
       AppNavigationService.newRoute(
         RoutesName.chatConversation,
         extras: ConversationPageArguments(
-            isCommunity: true, communityUid: communityUid),
+          isCommunity: true,
+          communityUid: communityUid,
+          chat_avatar_url: response?.$2?.chatAvatarUrl,
+          chat_title: response?.$2?.chatTitle,
+        ),
       );
     }
   } catch (e, s) {
@@ -86,8 +93,7 @@ class _SendPrivateMessageUi extends StatelessWidget {
             SmartDialog.showLoading(msg: 'Sending message...');
             final (
               int? statusCode,
-              String? message,
-              String? privateChatUid
+              StartChatResponse? startChatResponse
             )? response = await ChatsApi.startChat(
               currentUserUid: currentUserUid,
               otherUserUid: otherUserUid,
@@ -98,12 +104,14 @@ class _SendPrivateMessageUi extends StatelessWidget {
               SmartDialog.showToast('${response?.$2}');
               return;
             }
-            if (response?.$3 != null) {
+            if (response?.$2?.privateChatUid != null) {
               AppNavigationService.newRoute(
                 RoutesName.chatConversation,
                 extras: ConversationPageArguments(
                   isCommunity: false,
-                  privateChatUid: response?.$3,
+                  privateChatUid: response?.$2?.privateChatUid,
+                  chat_avatar_url: response?.$2?.chatAvatarUrl,
+                  chat_title: response?.$2?.chatTitle,
                 ),
               );
             }

@@ -9,7 +9,7 @@ import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/widgets/buttons/animated_like_icon_button.dart';
+import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 

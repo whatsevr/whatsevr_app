@@ -12,6 +12,7 @@ import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/reactions_view.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
+import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 class WhatsevrReactButton extends StatefulWidget {
   final int? reactionCount;
@@ -111,10 +112,10 @@ class _WhatsevrReactButtonState extends State<WhatsevrReactButton> {
                   size: widget.size ?? 26,
                   padding: const EdgeInsets.all(6),
                   likeBuilder: (bool isLiked) {
-                    return Iconify(
+                    return Icon(
                       isLiked
-                          ? AntDesign.heart_filled
-                          : AntDesign.heart_outlined,
+                          ? WhatsevrIcons.likeSolid
+                          : WhatsevrIcons.likeOutline,
                       color: isLiked
                           ? Colors.red
                           : widget.firstColor ?? Colors.black,
@@ -192,12 +193,12 @@ class WhatsevrBookmarkButton extends StatelessWidget {
           onUnBookmarkRemoved?.call(null);
         }
       },
-      firstStateUi: Iconify(
-        Ph.bookmark_simple_thin,
+      firstStateUi: Icon(
+        WhatsevrIcons.bookMarkIconLine,
         color: firstStateColor ?? theme.icon,
       ),
       secondStateUi:
-          Iconify(Ph.bookmark_fill, color: secondStateColor ?? theme.icon),
+          Icon( WhatsevrIcons.bookMarkIcon, color: secondStateColor ?? theme.icon),
     );
   }
 }
@@ -215,7 +216,7 @@ class WhatsevrCommentButton extends StatelessWidget {
       onPressed: () {
         onTapComment?.call();
       },
-      icon: Iconify(Octicon.comment_24, color: iconColor ?? theme.icon),
+      icon: Icon(WhatsevrIcons.commentIcon, color: iconColor ?? theme.icon),
     );
   }
 }
@@ -233,8 +234,8 @@ class WhatsevrShareButton extends StatelessWidget {
       onPressed: () {
         onTapShare?.call();
       },
-      icon: Iconify(
-        La.share,
+      icon: Icon(
+        WhatsevrIcons.share,
         color: iconColor ?? theme.icon,
       ),
     );
@@ -254,8 +255,8 @@ class Whatsevr3DotMenuButton extends StatelessWidget {
       onPressed: () {
         onTapMenu?.call();
       },
-      icon: Iconify(
-        SystemUicons.menu_vertical,
+      icon: Icon(
+        WhatsevrIcons.doctsIcon,
         color: iconColor ?? theme.icon,
       ),
     );

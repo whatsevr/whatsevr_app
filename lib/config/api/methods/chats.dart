@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
+import 'package:whatsevr_app/config/api/response_model/chats/start_chat.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/user_private_chats.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/user_community_chats.dart';
 
 class ChatsApi {
   //startChat
-  static Future<(int? statusCode, String? message, String? privateChatUid)?>
+  static Future<(int? statusCode, StartChatResponse? startChatResponse)?>
       startChat({
     String? currentUserUid,
     String? otherUserUid,
@@ -25,7 +26,7 @@ class ChatsApi {
           'message': message,
         },
       );
-      return (response.statusCode, response.data['message'] as String?, response.data['private_chat_uid'] as String?);
+      return (response.statusCode, StartChatResponse.fromMap(response.data));
     }  catch (e, s) {
       lowLevelCatch(e, s);
     }

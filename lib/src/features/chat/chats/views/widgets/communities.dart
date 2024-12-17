@@ -23,8 +23,8 @@ class _CommunitiesListView extends StatelessWidget {
                       pageArguments: ConversationPageArguments(
                         isCommunity: true,
                         communityUid: community.uid,
-                        title: community.title,
-                        profilePicture: community.profilePicture ?? '',
+                        chat_title: community.title,
+                        chat_avatar_url: community.profilePicture ?? '',
                       ),
                     ),
                   );
