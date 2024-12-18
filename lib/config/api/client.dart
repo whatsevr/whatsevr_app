@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:whatsevr_app/config/api/interceptors/header.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
 
@@ -34,8 +35,7 @@ class ApiClient {
               status == HttpStatus.notAcceptable;
         },
         headers: <String, dynamic>{
-          'Authorization': 'Bearer <user token>',
-          'x-user-uid' : AuthUserDb.getLastLoggedUserUid(),
+         
           'x-user-agent-id': DeviceInfoService.currentDeviceInfo?.deviceId,
           'x-user-agent-name': DeviceInfoService.currentDeviceInfo?.deviceName,
           'x-user-agent-type': DeviceInfoService.currentDeviceInfo?.deviceOs,
@@ -46,6 +46,7 @@ class ApiClient {
     dioCacheDirectory = await getTemporaryDirectory();
 
     client.interceptors.addAll(<Interceptor>[
+      ApiHeaderInterceptor(),
       ApiRetryInterceptor(dio: client),
       ApiCacheInterceptor(
         cacheDirectoryPath: dioCacheDirectory?.path,
@@ -68,6 +69,7 @@ class ApiClient {
       ),
     );
     dio.interceptors.addAll(<Interceptor>[
+    
       ApiRetryInterceptor(dio: dio),
       ApiCacheInterceptor(
         cacheDirectoryPath: dioCacheDirectory?.path,
