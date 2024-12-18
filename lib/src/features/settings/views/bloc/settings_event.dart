@@ -41,19 +41,7 @@ class UpdatePrivacySettings extends SettingsEvent {
       [isProfileVisible, isActivityStatusVisible, messageRequests];
 }
 
-class UpdateDataSettings extends SettingsEvent {
-  final bool isDataSaverEnabled;
-  final bool isAutoPlayEnabled;
-  final String mediaQuality;
-  const UpdateDataSettings({
-    required this.isDataSaverEnabled,
-    required this.isAutoPlayEnabled,
-    required this.mediaQuality,
-  });
-  @override
-  List<Object> get props =>
-      [isDataSaverEnabled, isAutoPlayEnabled, mediaQuality];
-}
+
 
 class UpdateSecuritySettings extends SettingsEvent {
   final bool isBiometricEnabled;
@@ -77,37 +65,13 @@ class UpdatePermission extends SettingsEvent {
   List<Object> get props => [permission, isEnabled];
 }
 
-class UpdateInteractionSettings extends SettingsEvent {
-  final bool isCommentsEnabled;
-  final String tagPreference;
-  const UpdateInteractionSettings({
-    required this.isCommentsEnabled,
-    required this.tagPreference,
-  });
-  @override
-  List<Object> get props => [isCommentsEnabled, tagPreference];
-}
 
-class UpdateTextSize extends SettingsEvent {
-  final String size;
-  const UpdateTextSize(this.size);
-  @override
-  List<Object> get props => [size];
-}
 
-class ToggleBackup extends SettingsEvent {
-  final bool enabled;
-  const ToggleBackup(this.enabled);
-  @override
-  List<Object> get props => [enabled];
-}
 
-class ToggleDeveloperMode extends SettingsEvent {
-  final bool enabled;
-  const ToggleDeveloperMode(this.enabled);
-  @override
-  List<Object> get props => [enabled];
-}
+
+
+
+
 
 class UpdateNotificationType extends SettingsEvent {
   final String type;

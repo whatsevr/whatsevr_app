@@ -19,6 +19,7 @@ import 'package:whatsevr_app/src/features/settings/views/bloc/settings_bloc.dart
 import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
+part 'package:whatsevr_app/src/features/settings/views/widgets/permissions.dart';
 
 class SettingsPageArgument {
   const SettingsPageArgument();
@@ -56,10 +57,10 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   SettingsTile(
                     icon: Icons.lock_outline,
-                    title: 'Privacy Settings',
-                    subtitle: 'Control your profile visibility and data',
+                    title: 'Business Portfolio',
+                    subtitle: 'Grow your business and professional services',
                     trailing: Switch(
-                      value: state.isProfileVisible,
+                      value: state.isBusinessPortfolio,
                       onChanged: (value) {
                         context.read<SettingsBloc>().add(
                               UpdatePrivacySettings(
@@ -147,10 +148,39 @@ class SettingsPage extends StatelessWidget {
                       // Navigate to blocked users page
                     },
                   ),
+                  SettingsTile(
+                    icon: Icons.fingerprint,
+                    title: 'Biometric Lock',
+                    subtitle: 'Secure app access with biometrics',
+                    trailing: Switch(
+                      value: state.isBiometricEnabled,
+                      onChanged: (value) {
+                        context.read<SettingsBloc>().add(
+                              UpdateSecuritySettings(
+                                isBiometricEnabled: value,
+                                isTwoFactorEnabled: state.isTwoFactorEnabled,
+                              ),
+                            );
+                      },
+                      activeColor: theme.primary,
+                    ),
+                  ),
+                  SettingsTile(
+                    title: 'Permissions',
+                    onTap: () {
+                      AppNavigationService.pushPage(
+                        screen: BlocProvider.value(
+                          value: context.read<SettingsBloc>(),
+                          child: _PermissionsPage(),
+                        ),
+                      );
+                    },
+                    trailing: Icon(Icons.arrow_forward_ios_outlined),
+                  )
                 ],
               ),
               SettingsSection(
-                title: 'Notifications',
+                title: 'Notification Preferences',
                 children: [
                   SettingsTile(
                     icon: Icons.notifications_outlined,
@@ -187,97 +217,6 @@ class SettingsPage extends StatelessWidget {
                       activeColor: theme.primary,
                     ),
                   ),
-                ],
-              ),
-              SettingsSection(
-                title: 'Data & Storage',
-                children: [
-                  SettingsTile(
-                    icon: Icons.data_usage,
-                    title: 'Data Saver',
-                    subtitle: 'Reduce data usage',
-                    trailing: Switch(
-                      value: state.isDataSaverEnabled,
-                      onChanged: (value) {
-                        context.read<SettingsBloc>().add(
-                              UpdateDataSettings(
-                                isDataSaverEnabled: value,
-                                isAutoPlayEnabled: state.isAutoPlayEnabled,
-                                mediaQuality: state.mediaQuality,
-                              ),
-                            );
-                      },
-                      activeColor: theme.primary,
-                    ),
-                  ),
-                  SettingsTile(
-                    icon: Icons.wifi_outlined,
-                    title: 'Auto-play Videos',
-                    subtitle: 'Play videos automatically',
-                    trailing: Switch(
-                      value: state.isAutoPlayEnabled,
-                      onChanged: (value) {
-                        context.read<SettingsBloc>().add(
-                              UpdateDataSettings(
-                                isDataSaverEnabled: state.isDataSaverEnabled,
-                                isAutoPlayEnabled: value,
-                                mediaQuality: state.mediaQuality,
-                              ),
-                            );
-                      },
-                      activeColor: theme.primary,
-                    ),
-                  ),
-                ],
-              ),
-              SettingsSection(
-                title: 'Security',
-                children: [
-                  SettingsTile(
-                    icon: Icons.fingerprint,
-                    title: 'Biometric Lock',
-                    subtitle: 'Secure app access with biometrics',
-                    trailing: Switch(
-                      value: state.isBiometricEnabled,
-                      onChanged: (value) {
-                        context.read<SettingsBloc>().add(
-                              UpdateSecuritySettings(
-                                isBiometricEnabled: value,
-                                isTwoFactorEnabled: state.isTwoFactorEnabled,
-                              ),
-                            );
-                      },
-                      activeColor: theme.primary,
-                    ),
-                  ),
-                ],
-              ),
-              SettingsSection(
-                title: 'Device Permissions',
-                children: [
-                  for (final permission in state.permissions.entries)
-                    SettingsTile(
-                      icon: _getPermissionIcon(permission.key),
-                      title: _getPermissionTitle(permission.key),
-                      subtitle: 'Allow access to ${permission.key}',
-                      trailing: Switch(
-                        value: permission.value,
-                        onChanged: (value) {
-                          context.read<SettingsBloc>().add(
-                                UpdatePermission(
-                                  permission: permission.key,
-                                  isEnabled: value,
-                                ),
-                              );
-                        },
-                        activeColor: theme.primary,
-                      ),
-                    ),
-                ],
-              ),
-              SettingsSection(
-                title: 'Notification Preferences',
-                children: [
                   for (final type in state.notificationTypes.entries)
                     SettingsTile(
                       icon: _getNotificationIcon(type.key),
@@ -298,60 +237,11 @@ class SettingsPage extends StatelessWidget {
                     ),
                 ],
               ),
-              SettingsSection(
-                title: 'Display',
-                children: [
-                  SettingsTile(
-                    icon: Icons.text_fields,
-                    title: 'Text Size',
-                    subtitle: state.textSize,
-                    onTap: () => _showTextSizeDialog(context, state),
-                  ),
-                ],
-              ),
-              SettingsSection(
-                title: 'Developer',
-                children: [
-                  SettingsTile(
-                    icon: Icons.code,
-                    title: 'Developer Mode',
-                    subtitle: 'Enable advanced debugging features',
-                    trailing: Switch(
-                      value: state.isDeveloperMode,
-                      onChanged: (value) {
-                        context
-                            .read<SettingsBloc>()
-                            .add(ToggleDeveloperMode(value));
-                      },
-                      activeColor: theme.primary,
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         );
       },
     );
-  }
-
-  IconData _getPermissionIcon(String permission) {
-    switch (permission) {
-      case 'camera':
-        return Icons.camera_alt_outlined;
-      case 'storage':
-        return Icons.folder_outlined;
-      case 'location':
-        return Icons.location_on_outlined;
-      case 'microphone':
-        return Icons.mic_outlined;
-      default:
-        return Icons.settings;
-    }
-  }
-
-  String _getPermissionTitle(String permission) {
-    return permission.substring(0, 1).toUpperCase() + permission.substring(1);
   }
 
   IconData _getNotificationIcon(String type) {
@@ -391,32 +281,6 @@ class SettingsPage extends StatelessWidget {
       default:
         return '';
     }
-  }
-
-  void _showTextSizeDialog(BuildContext context, SettingsState state) {
-    final theme = context.whatsevrTheme;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Choose Text Size'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (final size in ['Small', 'Medium', 'Large', 'Extra Large'])
-              ListTile(
-                title: Text(size),
-                trailing: state.textSize == size
-                    ? Icon(Icons.check, color: theme.primary)
-                    : null,
-                onTap: () {
-                  context.read<SettingsBloc>().add(UpdateTextSize(size));
-                  Navigator.pop(context);
-                },
-              ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildProfileCard(BuildContext context) {
@@ -522,6 +386,25 @@ class SettingsPage extends StatelessWidget {
         return theme.primary;
     }
   }
+}
+
+IconData _getPermissionIcon(String permission) {
+  switch (permission) {
+    case 'camera':
+      return Icons.camera_alt_outlined;
+    case 'storage':
+      return Icons.folder_outlined;
+    case 'location':
+      return Icons.location_on_outlined;
+    case 'microphone':
+      return Icons.mic_outlined;
+    default:
+      return Icons.settings;
+  }
+}
+
+String _getPermissionTitle(String permission) {
+  return permission.substring(0, 1).toUpperCase() + permission.substring(1);
 }
 
 class SettingsSection extends StatelessWidget {

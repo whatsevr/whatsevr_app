@@ -9,7 +9,7 @@ class SettingsState extends Equatable {
   @HiveField(2)
   final bool isEmailNotificationsEnabled;
   @HiveField(3)
-  final bool isProfileVisible;
+  final bool isBusinessPortfolio;
   @HiveField(4)
   final bool isBiometricEnabled;
   @HiveField(5)
@@ -51,7 +51,7 @@ class SettingsState extends Equatable {
     this.userCommunitiesResponse,
     this.isPushNotificationsEnabled = true,
     this.isEmailNotificationsEnabled = true,
-    this.isProfileVisible = true,
+    this.isBusinessPortfolio = true,
     this.isBiometricEnabled = false,
     this.isActivityStatusVisible = true,
     this.isDataSaverEnabled = false,
@@ -86,7 +86,7 @@ class SettingsState extends Equatable {
         userCommunitiesResponse,
         isPushNotificationsEnabled,
         isEmailNotificationsEnabled,
-        isProfileVisible,
+        isBusinessPortfolio,
         isBiometricEnabled,
         isActivityStatusVisible,
         isDataSaverEnabled,
@@ -138,7 +138,7 @@ class SettingsState extends Equatable {
           isPushNotificationsEnabled ?? this.isPushNotificationsEnabled,
       isEmailNotificationsEnabled:
           isEmailNotificationsEnabled ?? this.isEmailNotificationsEnabled,
-      isProfileVisible: isProfileVisible ?? this.isProfileVisible,
+      isBusinessPortfolio: isProfileVisible ?? this.isBusinessPortfolio,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
       isActivityStatusVisible:
           isActivityStatusVisible ?? this.isActivityStatusVisible,
