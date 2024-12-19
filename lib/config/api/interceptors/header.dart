@@ -13,6 +13,7 @@ class ApiHeaderInterceptor extends Interceptor {
       }
 
       // final String? token = AuthUserDb.getAuthToken();
+
       final String? userUid = AuthUserDb.getLastLoggedUserUid();
 
       if (userUid == null) {
@@ -27,6 +28,7 @@ class ApiHeaderInterceptor extends Interceptor {
       }
 
       options.headers['authorization'] = 'Bearer XXXXXXXXXX';
+      options.headers['x-user-auth-token'] = 'XXXXXXXXXXXXXX';
       options.headers['x-user-uid'] = userUid;
       
       handler.next(options);

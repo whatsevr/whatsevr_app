@@ -29,6 +29,7 @@ dependencies:
   detectable_text_field: ^3.0.2
   device_region: ^1.4.0
   dio: ^5.7.0
+  device_info_plus: any
   dio_cache_interceptor: ^3.5.0
   dio_cache_interceptor_hive_store: ^4.0.0
   dio_smart_retry: ^6.0.0

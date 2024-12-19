@@ -14,6 +14,7 @@ class DeviceInfo {
     required this.deviceOs,
     
     required this.isAndroid,
+    required this.isAndroid13OrHigher,
     required this.isIos,
   });
   final String? deviceId;
@@ -21,6 +22,7 @@ class DeviceInfo {
   final String? countryCode;
   final String? deviceOs;
   final bool isAndroid;
+  final bool isAndroid13OrHigher;
   final bool isIos;
 
   Map<String, dynamic> toMap() {
@@ -30,6 +32,7 @@ class DeviceInfo {
       'countryCode': countryCode,
       'deviceOs': deviceOs,
       'isAndroid': isAndroid,
+      'isAndroid13OrHigher': isAndroid13OrHigher,
       'isIos': isIos,
     };
   }
@@ -73,6 +76,7 @@ class DeviceInfoService {
         countryCode: countryCode,
         deviceOs: 'android',
         isAndroid: true,
+        isAndroid13OrHigher: androidInfo.version.sdkInt >= 33,
         isIos: false,
       );
     } catch (e, stackTrace) {
@@ -91,6 +95,7 @@ class DeviceInfoService {
         countryCode: countryCode,
         deviceOs: 'ios',
         isAndroid: false,
+        isAndroid13OrHigher: false,
         isIos: true,
       );
     } catch (e, stackTrace) {
