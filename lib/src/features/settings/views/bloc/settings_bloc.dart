@@ -180,9 +180,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emit,
   ) async {
     try {
-      // TODO: Implement logout device API call
-      // After successful logout, reload sessions
-      add(LoadLoginSessionsEvent());
+      final response = await SecurityApi.removeUserLoginSession(
+        loginSessionUids: [event.sessionId],
+        userUid: AuthUserDb.getLastLoggedUserUid(),
+      );
+      
+      if (response != null) {
+        // Reload sessions after successful logout
+        add(LoadLoginSessionsEvent());
+      }
     } catch (e, s) {
       highLevelCatch(e, s);
     }

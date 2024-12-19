@@ -22,4 +22,26 @@ class SecurityApi {
     }
     return null;
   }
+  ///remove-user-logins
+  static Future<dynamic> removeUserLoginSession({
+    
+    required List<String>? loginSessionUids,
+    required String? userUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.post(
+        '/v1/remove-user-login-sessions',
+        data: {
+          'user_uid': userUid,
+          'login_session_uids': loginSessionUids,
+        },
+      );
+      if (response.data != null) {
+        return response.data;
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
 }
