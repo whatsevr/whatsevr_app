@@ -5,6 +5,7 @@ import 'package:device_region/device_region.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/utils/aes.dart';
 
 class DeviceInfo {
   DeviceInfo({
@@ -31,7 +32,7 @@ class DeviceInfo {
       'deviceName': deviceName,
       'countryCode': countryCode,
       'deviceOs': deviceOs,
-      'isAndroid': isAndroid,
+      'isAndroid': isAndroid,     
       'isAndroid13OrHigher': isAndroid13OrHigher,
       'isIos': isIos,
     };
@@ -45,6 +46,7 @@ class DeviceInfoService {
 
   static final DeviceInfoService _instance =
       DeviceInfoService._privateConstructor();
+  static final AesService _aesService = AesService();
 
   static DeviceInfoService get instance => _instance;
 
@@ -70,9 +72,12 @@ class DeviceInfoService {
     try {
       final androidInfo = await deviceInfoPlugin.androidInfo;
       final countryCode = await _getCurrentCountryCode();
+      final deviceData = '${androidInfo.id}_${androidInfo.fingerprint}_${androidInfo.bootloader}';
+      final uniquedeviceId = _aesService.encrypt(deviceData);
+      
       _currentDeviceInfo = DeviceInfo(
-        deviceId: androidInfo.id,
-        deviceName: androidInfo.model,
+        deviceId: uniquedeviceId,
+       deviceName: '${androidInfo.manufacturer} ${androidInfo.model}',
         countryCode: countryCode,
         deviceOs: 'android',
         isAndroid: true,
@@ -89,9 +94,12 @@ class DeviceInfoService {
     try {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       final countryCode = await _getCurrentCountryCode();
+      final deviceData = '${iosInfo.identifierForVendor ?? ''}_${iosInfo.systemName}_${iosInfo.name}_${iosInfo.model}';
+      final uniqueDeviceId = _aesService.encrypt(deviceData);
+      
       _currentDeviceInfo = DeviceInfo(
-        deviceId: iosInfo.identifierForVendor,
-        deviceName: iosInfo.utsname.machine,
+        deviceId: uniqueDeviceId,
+        deviceName: '${iosInfo.name} ${iosInfo.model}',
         countryCode: countryCode,
         deviceOs: 'ios',
         isAndroid: false,
