@@ -102,7 +102,6 @@ class AuthUserService {
       userUid: userUid,
       mobileNumber: mobileNumber,
       emailId: emailId,
-     
     );
     if (loginInfo?.$1 == HttpStatus.ok) {
       await AuthUserDb.saveAuthorisedUserUid(userUid);
@@ -177,12 +176,18 @@ class AuthUserService {
           userUid: currentlyLoggedUserUid,
         );
         if (supportiveDataResponse?.$1 == HttpStatus.unauthorized) {
-          throw BusinessException('Authenticity check failed');
+          throw BusinessException('User authenticity check failed');
         }
         supportiveData = supportiveDataResponse?.$2;
       }
     } catch (e, stackTrace) {
+      AuthUserDb.removeAuthorisedUserUid(currentlyLoggedUserUid!);
       AuthUserDb.clearLastLoggedUserUid();
+      if (AuthUserDb.getAllAuthorisedUserUid().isNotEmpty) {
+        AuthUserDb.saveLastLoggedUserUid(
+        AuthUserDb.getAllAuthorisedUserUid().first,
+      );
+      }
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
       highLevelCatch(e, stackTrace);
     }

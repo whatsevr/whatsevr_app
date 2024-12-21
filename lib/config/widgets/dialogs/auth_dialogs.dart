@@ -109,6 +109,12 @@ class _SwitchUserDialogUiState extends State<SwitchUserDialogUi> {
                             if (user.uid == currentUserId) {
                               Navigator.pop(context);
                               AuthUserDb.clearLastLoggedUserUid();
+                              if (AuthUserDb.getAllAuthorisedUserUid()
+                                  .isNotEmpty) {
+                                AuthUserDb.saveLastLoggedUserUid(
+                                  AuthUserDb.getAllAuthorisedUserUid().first,
+                                );
+                              }
                               AppNavigationService.clearAllAndNewRoute(
                                 RoutesName.auth,
                               );

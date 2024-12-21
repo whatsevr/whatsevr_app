@@ -6,9 +6,9 @@ class ApiRetryInterceptor extends RetryInterceptor {
     super.retries,
     super.retryDelays = const <Duration>[
       // set delays between retries (optional)
-      Duration(seconds: 1),
       Duration(seconds: 2),
       Duration(seconds: 3),
+      Duration(seconds: 5),
     ],
   }) : super();
 }
