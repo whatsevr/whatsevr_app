@@ -97,6 +97,7 @@ class AccountPageAboutView extends StatelessWidget {
                           Gap(8),
                           Wrap(
                             spacing: 8,
+                            runSpacing: 8,
                             children: <Widget>[
                               for (UserService? service in state
                                       .profileDetailsResponse?.userServices ??

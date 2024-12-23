@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
@@ -51,6 +52,7 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppTheme theme = context.whatsevrTheme;
     return BlocProvider(
       create: (BuildContext context) => AccountBloc()
         ..add(
@@ -93,19 +95,36 @@ class AccountPage extends StatelessWidget {
                           AccountPageCoverVideoView(),
                           if (state.profileDetailsResponse?.userInfo
                                   ?.isPortfolio ==
-                              true) ...[
-                            const Gap(8),
-                            PadHorizontal(
-                              child: Text(
+                              true)
+                            Container(
+                              decoration: BoxDecoration(
+                                color: theme.surface,
+                                borderRadius: BorderRadius.vertical(
+                                  bottom: Radius.circular(12),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 10,
+                              ),
+                              child: Text( 
                                 '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                          ],
-                          const Gap(8),
+                          const Gap(18),
                           Builder(
                             builder: (context) {
                               return PadHorizontal(
@@ -446,8 +465,8 @@ class AccountPage extends StatelessWidget {
                                       label: 'Message',
                                       onPressed: () {
                                         startChatHelper(
-                                          senderUserUid: AuthUserDb
-                                              .getLastLoggedUserUid(),
+                                          senderUserUid:
+                                              AuthUserDb.getLastLoggedUserUid(),
                                           otherUserUid: state
                                               .profileDetailsResponse
                                               ?.userInfo
@@ -573,7 +592,14 @@ class AccountPage extends StatelessWidget {
                                         true)
                                       ('Services', AccountPageServicesView()),
                                     ('Media', Text('Media')),
-                                    ('Videos', AccountPageVideosView()),
+                                    (
+                                      state.profileDetailsResponse?.userInfo
+                                                  ?.isPortfolio ==
+                                              true
+                                          ? 'Wtv'
+                                          : 'Videos',
+                                      AccountPageVideosView()
+                                    ),
                                     ('Flicks', AccountPageFlicksView()),
                                     ('Offerings', AccountPageOffersView()),
                                     if (state.profileDetailsResponse?.userInfo
