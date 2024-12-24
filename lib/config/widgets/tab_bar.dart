@@ -7,7 +7,7 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
   final List<(String tabName, Widget view)> tabViews;
   final TabAlignment? tabAlignment;
   final Function(int)? onTabChanged;
-
+  final double? spaceBetween ;
   const WhatsevrTabBarWithViews({
     super.key,
     this.shrinkViews,
@@ -15,6 +15,7 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
     this.isTabsScrollable,
     this.tabAlignment,
     this.onTabChanged,
+    this.spaceBetween
   });
 
   @override
@@ -41,7 +42,8 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
             isScrollable: widget.isTabsScrollable,
             tabAlignment: widget.tabAlignment,
           ),
-          const Gap(8),
+          if(widget.spaceBetween!=null)
+           Gap(widget.spaceBetween!),
           Builder(
             builder: (BuildContext context) {
               if (widget.shrinkViews == true) {

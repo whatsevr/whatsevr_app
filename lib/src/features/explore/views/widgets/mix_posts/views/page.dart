@@ -13,31 +13,41 @@ class ExploreMixPostsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PadHorizontal(
-      child: GridView.custom(
-        controller: scrollController,
-        gridDelegate: SliverQuiltedGridDelegate(
-          crossAxisCount: 3,
-          mainAxisSpacing: 2,
-          crossAxisSpacing: 2,
-          repeatPattern: QuiltedGridRepeatPattern.inverted,
-          pattern: <QuiltedGridTile>[
-            const QuiltedGridTile(2, 1),
-            const QuiltedGridTile(1, 1),
-            const QuiltedGridTile(1, 1),
-            const QuiltedGridTile(1, 1),
-            const QuiltedGridTile(1, 1),
-          ],
-        ),
-        childrenDelegate: SliverChildBuilderDelegate(
-          (BuildContext context, int index) {
-            if (index % 5 == 0) return const FlickPostTile();
-            if (index % 5 == 1) return const PhotoPostTile();
-            if (index % 5 == 2) return const PhotoPostTile();
-            if (index % 5 == 3) return const PhotoPostTile();
-            return const VideoPostTile();
-          },
-        ),
+    return GridView.custom(
+      padding: EdgeInsets.symmetric(
+        horizontal: 2,
+      ),
+      controller: scrollController,
+      gridDelegate: SliverQuiltedGridDelegate(
+        crossAxisCount: 3,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 2,
+        repeatPattern: QuiltedGridRepeatPattern.inverted,
+        pattern: <QuiltedGridTile>[
+          const QuiltedGridTile(2, 1),
+          const QuiltedGridTile(1, 1),
+          const QuiltedGridTile(1, 1),
+          const QuiltedGridTile(1, 1),
+          const QuiltedGridTile(1, 1),
+        ],
+      ),
+      childrenDelegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final isInvertedPattern = (index ~/ 5) % 2 == 1;
+          final positionInPattern = index % 5;
+
+            if (isInvertedPattern) {
+            // Inverted pattern: Video, Photo, Flick, Photo, Photo
+            if (positionInPattern == 0) return const VideoPostTile();
+            if (positionInPattern == 2) return const FlickPostTile();
+            return const PhotoPostTile();
+            } else {
+            // Normal pattern: Flick, Photo, Photo, Photo, Video
+            if (positionInPattern == 0) return const FlickPostTile();
+            if (positionInPattern == 4) return const VideoPostTile();
+            return const PhotoPostTile();
+            }
+        },
       ),
     );
   }

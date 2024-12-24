@@ -37,6 +37,7 @@ class ExplorePage extends StatelessWidget {
         ),
         Expanded(
           child: WhatsevrTabBarWithViews(
+            spaceBetween: 2,
             isTabsScrollable: true,
             tabAlignment: TabAlignment.start,
             tabViews: [

@@ -13,7 +13,7 @@ class VideoPostTile extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: Colors.grey,
-            borderRadius: BorderRadius.circular(18.0),
+            borderRadius: BorderRadius.circular(4.0),
             image: DecorationImage(
               image: ExtendedNetworkImageProvider(
                 MockData.randomImage(),
