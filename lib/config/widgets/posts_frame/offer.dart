@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:whatsevr_app/utils/conversion.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';

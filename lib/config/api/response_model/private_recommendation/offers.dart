@@ -1,46 +1,46 @@
 import 'dart:convert';
 
-class RecommendationFlicksResponse {
+class PrivateRecommendationOffersResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<RecommendedFlick>? recommendedFlicks;
+  final List<RecommendedOffer>? recommendedOffers;
 
-  RecommendationFlicksResponse({
+  PrivateRecommendationOffersResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.recommendedFlicks,
+    this.recommendedOffers,
   });
 
-  RecommendationFlicksResponse copyWith({
+  PrivateRecommendationOffersResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<RecommendedFlick>? recommendedFlicks,
+    List<RecommendedOffer>? recommendedOffers,
   }) =>
-      RecommendationFlicksResponse(
+      PrivateRecommendationOffersResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        recommendedFlicks: recommendedFlicks ?? this.recommendedFlicks,
+        recommendedOffers: recommendedOffers ?? this.recommendedOffers,
       );
 
-  factory RecommendationFlicksResponse.fromJson(String str) =>
-      RecommendationFlicksResponse.fromMap(json.decode(str));
+  factory PrivateRecommendationOffersResponse.fromJson(String str) =>
+      PrivateRecommendationOffersResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendationFlicksResponse.fromMap(Map<String, dynamic> json) =>
-      RecommendationFlicksResponse(
+  factory PrivateRecommendationOffersResponse.fromMap(Map<String, dynamic> json) =>
+      PrivateRecommendationOffersResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        recommendedFlicks: json['recommended_flicks'] == null
+        recommendedOffers: json['recommended_offers'] == null
             ? []
-            : List<RecommendedFlick>.from(
-                json['recommended_flicks']!
-                    .map((x) => RecommendedFlick.fromMap(x)),
+            : List<RecommendedOffer>.from(
+                json['recommended_offers']!
+                    .map((x) => RecommendedOffer.fromMap(x)),
               ),
       );
 
@@ -48,13 +48,13 @@ class RecommendationFlicksResponse {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'recommended_flicks': recommendedFlicks == null
+        'recommended_offers': recommendedOffers == null
             ? []
-            : List<dynamic>.from(recommendedFlicks!.map((x) => x.toMap())),
+            : List<dynamic>.from(recommendedOffers!.map((x) => x.toMap())),
       };
 }
 
-class RecommendedFlick {
+class RecommendedOffer {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -66,25 +66,24 @@ class RecommendedFlick {
   final bool? isArchived;
   final bool? isActive;
   final String? postCreatorType;
-  final DateTime? updatedAt;
   final String? userUid;
-  final String? thumbnail;
-  final String? videoUrl;
-  final String? location;
-  final int? totalViews;
+  final int? totalImpressions;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
-  final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-
-  final int? videoDurationInSec;
+  final String? ctaAction;
+  final String? ctaActionUrl;
+  final List<FilesDatum>? filesData;
+  final String? status;
+  final String? targetGender;
+  final List<String>? targetAreas;
   final User? user;
 
-  RecommendedFlick({
+  RecommendedOffer({
     this.id,
     this.createdAt,
     this.uid,
@@ -96,25 +95,25 @@ class RecommendedFlick {
     this.isArchived,
     this.isActive,
     this.postCreatorType,
-    this.updatedAt,
     this.userUid,
-    this.thumbnail,
-    this.videoUrl,
-    this.location,
-    this.totalViews,
+    this.totalImpressions,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
-    this.addressLatLongWkb,
     this.creatorLatLongWkb,
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.videoDurationInSec,
+    this.ctaAction,
+    this.ctaActionUrl,
+    this.filesData,
+    this.status,
+    this.targetGender,
+    this.targetAreas,
     this.user,
   });
 
-  RecommendedFlick copyWith({
+  RecommendedOffer copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -126,24 +125,24 @@ class RecommendedFlick {
     bool? isArchived,
     bool? isActive,
     String? postCreatorType,
-    DateTime? updatedAt,
     String? userUid,
-    String? thumbnail,
-    String? videoUrl,
-    String? location,
-    int? totalViews,
+    int? totalImpressions,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
-    String? addressLatLongWkb,
     String? creatorLatLongWkb,
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    int? videoDurationInSec,
+    String? ctaAction,
+    String? ctaActionUrl,
+    List<FilesDatum>? filesData,
+    String? status,
+    String? targetGender,
+    List<String>? targetAreas,
     User? user,
   }) =>
-      RecommendedFlick(
+      RecommendedOffer(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -155,32 +154,32 @@ class RecommendedFlick {
         isArchived: isArchived ?? this.isArchived,
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
-        updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
-        thumbnail: thumbnail ?? this.thumbnail,
-        videoUrl: videoUrl ?? this.videoUrl,
-        location: location ?? this.location,
-        totalViews: totalViews ?? this.totalViews,
+        totalImpressions: totalImpressions ?? this.totalImpressions,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
             internalAiDescription ?? this.internalAiDescription,
-        addressLatLongWkb: addressLatLongWkb ?? this.addressLatLongWkb,
         creatorLatLongWkb: creatorLatLongWkb ?? this.creatorLatLongWkb,
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
+        ctaAction: ctaAction ?? this.ctaAction,
+        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+        filesData: filesData ?? this.filesData,
+        status: status ?? this.status,
+        targetGender: targetGender ?? this.targetGender,
+        targetAreas: targetAreas ?? this.targetAreas,
         user: user ?? this.user,
       );
 
-  factory RecommendedFlick.fromJson(String str) =>
-      RecommendedFlick.fromMap(json.decode(str));
+  factory RecommendedOffer.fromJson(String str) =>
+      RecommendedOffer.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendedFlick.fromMap(Map<String, dynamic> json) =>
-      RecommendedFlick(
+  factory RecommendedOffer.fromMap(Map<String, dynamic> json) =>
+      RecommendedOffer(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null
@@ -198,25 +197,29 @@ class RecommendedFlick {
         isArchived: json['is_archived'],
         isActive: json['is_active'],
         postCreatorType: json['post_creator_type'],
-        updatedAt: json['updated_at'] == null
-            ? null
-            : DateTime.parse(json['updated_at']),
         userUid: json['user_uid'],
-        thumbnail: json['thumbnail'],
-        videoUrl: json['video_url'],
-        location: json['location'],
-        totalViews: json['total_views'],
+        totalImpressions: json['total_impressions'],
         totalLikes: json['total_likes'],
         totalComments: json['total_comments'],
         internalAiDescription: json['internal_ai_description'],
-        addressLatLongWkb: json['address_lat_long_wkb'],
         creatorLatLongWkb: json['creator_lat_long_wkb'],
         taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         totalShares: json['total_shares'],
         cumulativeScore: json['cumulative_score'],
-        videoDurationInSec: json['video_duration_in_sec'],
+        ctaAction: json['cta_action'],
+        ctaActionUrl: json['cta_action_url'],
+        filesData: json['files_data'] == null
+            ? []
+            : List<FilesDatum>.from(
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
+        status: json['status'],
+        targetGender: json['target_gender'],
+        targetAreas: json['target_areas'] == null
+            ? []
+            : List<String>.from(json['target_areas']!.map((x) => x)),
         user: json['user'] == null ? null : User.fromMap(json['user']),
       );
 
@@ -235,24 +238,80 @@ class RecommendedFlick {
         'is_archived': isArchived,
         'is_active': isActive,
         'post_creator_type': postCreatorType,
-        'updated_at': updatedAt?.toIso8601String(),
         'user_uid': userUid,
-        'thumbnail': thumbnail,
-        'video_url': videoUrl,
-        'location': location,
-        'total_views': totalViews,
+        'total_impressions': totalImpressions,
         'total_likes': totalLikes,
         'total_comments': totalComments,
         'internal_ai_description': internalAiDescription,
-        'address_lat_long_wkb': addressLatLongWkb,
         'creator_lat_long_wkb': creatorLatLongWkb,
         'tagged_community_uids': taggedCommunityUids == null
             ? []
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         'total_shares': totalShares,
         'cumulative_score': cumulativeScore,
-        'video_duration_in_sec': videoDurationInSec,
+        'cta_action': ctaAction,
+        'cta_action_url': ctaActionUrl,
+        'files_data': filesData == null
+            ? []
+            : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        'status': status,
+        'target_gender': targetGender,
+        'target_areas': targetAreas == null
+            ? []
+            : List<dynamic>.from(targetAreas!.map((x) => x)),
         'user': user?.toMap(),
+      };
+}
+
+class FilesDatum {
+  final String? type;
+  final String? imageUrl;
+  final String? videoUrl;
+  final int? videoDurationMs;
+  final String? videoThumbnailUrl;
+
+  FilesDatum({
+    this.type,
+    this.imageUrl,
+    this.videoUrl,
+    this.videoDurationMs,
+    this.videoThumbnailUrl,
+  });
+
+  FilesDatum copyWith({
+    String? type,
+    String? imageUrl,
+    String? videoUrl,
+    int? videoDurationMs,
+    String? videoThumbnailUrl,
+  }) =>
+      FilesDatum(
+        type: type ?? this.type,
+        imageUrl: imageUrl ?? this.imageUrl,
+        videoUrl: videoUrl ?? this.videoUrl,
+        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
+        videoThumbnailUrl: videoThumbnailUrl ?? this.videoThumbnailUrl,
+      );
+
+  factory FilesDatum.fromJson(String str) =>
+      FilesDatum.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
+        type: json['type'],
+        imageUrl: json['image_url'],
+        videoUrl: json['video_url'],
+        videoDurationMs: json['video_duration_ms'],
+        videoThumbnailUrl: json['video_thumbnail_url'],
+      );
+
+  Map<String, dynamic> toMap() => {
+        'type': type,
+        'image_url': imageUrl,
+        'video_url': videoUrl,
+        'video_duration_ms': videoDurationMs,
+        'video_thumbnail_url': videoThumbnailUrl,
       };
 }
 

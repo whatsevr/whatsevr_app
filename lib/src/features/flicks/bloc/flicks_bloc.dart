@@ -6,7 +6,7 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/flicks.dart';
 
 part 'flicks_event.dart';
 part 'flicks_state.dart';
@@ -40,8 +40,8 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
     Emitter<FlicksState> emit,
   ) async {
     try {
-      final RecommendationFlicksResponse? recommendationVideos =
-          await RecommendationApi.publicFlickPosts(
+      final PublicRecommendationFlicksResponse? recommendationVideos =
+          await PublicRecommendationApi.publicFlickPosts(
         page: 1,
       );
       emit(
@@ -74,8 +74,8 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
           ),
         ),
       );
-      final RecommendationFlicksResponse? recommendationVideos =
-          await RecommendationApi.publicFlickPosts(
+      final PublicRecommendationFlicksResponse? recommendationVideos =
+          await PublicRecommendationApi.publicFlickPosts(
         page: event.page!,
       );
 

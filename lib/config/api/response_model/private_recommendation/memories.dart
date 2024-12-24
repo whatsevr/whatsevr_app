@@ -1,38 +1,38 @@
 import 'dart:convert';
 
-class RecommendationMemoriesResponse {
+class PrivateRecommendationMemoriesResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
   final List<RecommendedMemory>? recommendedMemories;
 
-  RecommendationMemoriesResponse({
+  PrivateRecommendationMemoriesResponse({
     this.message,
     this.page,
     this.lastPage,
     this.recommendedMemories,
   });
 
-  RecommendationMemoriesResponse copyWith({
+  PrivateRecommendationMemoriesResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
     List<RecommendedMemory>? recommendedMemories,
   }) =>
-      RecommendationMemoriesResponse(
+      PrivateRecommendationMemoriesResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
         recommendedMemories: recommendedMemories ?? this.recommendedMemories,
       );
 
-  factory RecommendationMemoriesResponse.fromJson(String str) =>
-      RecommendationMemoriesResponse.fromMap(json.decode(str));
+  factory PrivateRecommendationMemoriesResponse.fromJson(String str) =>
+      PrivateRecommendationMemoriesResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendationMemoriesResponse.fromMap(Map<String, dynamic> json) =>
-      RecommendationMemoriesResponse(
+  factory PrivateRecommendationMemoriesResponse.fromMap(Map<String, dynamic> json) =>
+      PrivateRecommendationMemoriesResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],

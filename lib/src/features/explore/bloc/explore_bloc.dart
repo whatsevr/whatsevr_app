@@ -6,10 +6,10 @@ import 'package:equatable/equatable.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_photo_posts.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
 
 part 'explore_event.dart';
 part 'explore_state.dart';
@@ -54,8 +54,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     try {
-      final RecommendationVideosResponse? recommendationVideos =
-          await RecommendationApi.publicVideoPosts(
+      final PublicRecommendationVideosResponse? recommendationVideos =
+          await PublicRecommendationApi.publicVideoPosts(
         page: 1,
       );
       emit(
@@ -88,8 +88,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.videoPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final RecommendationVideosResponse? recommendationVideos =
-          await RecommendationApi.publicVideoPosts(
+      final PublicRecommendationVideosResponse? recommendationVideos =
+          await PublicRecommendationApi.publicVideoPosts(
         page: event.page!,
       );
 
@@ -121,8 +121,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     try {
-      final RecommendationMemoriesResponse? recommendationMemories =
-          await RecommendationApi.publicMemories(
+      final PublicRecommendationMemoriesResponse? recommendationMemories =
+          await PublicRecommendationApi.publicMemories(
         page: 1,
       );
       emit(
@@ -155,8 +155,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.memoryPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final RecommendationMemoriesResponse? recommendationMemories =
-          await RecommendationApi.publicMemories(
+      final PublicRecommendationMemoriesResponse? recommendationMemories =
+          await PublicRecommendationApi.publicMemories(
         page: event.page!,
       );
 
@@ -188,8 +188,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     try {
-      final RecommendationOffersResponse? recommendationOffers =
-          await RecommendationApi.publicOffers(
+      final PublicRecommendationOffersResponse? recommendationOffers =
+          await PublicRecommendationApi.publicOffers(
         page: 1,
       );
       emit(
@@ -222,8 +222,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.offersPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final RecommendationOffersResponse? recommendationOffers =
-          await RecommendationApi.publicOffers(
+      final PublicRecommendationOffersResponse? recommendationOffers =
+          await PublicRecommendationApi.publicOffers(
         page: event.page!,
       );
 
@@ -255,8 +255,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     Emitter<ExploreState> emit,
   ) async {
     try {
-      final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
-          await RecommendationApi.publicPhotoPosts(
+      final PublicRecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await PublicRecommendationApi.publicPhotoPosts(
         page: 1,
       );
       emit(
@@ -290,8 +290,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.photoPostPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final RecommendationPhotoPostsResponse? recommendationPhotoPosts =
-          await RecommendationApi.publicPhotoPosts(
+      final PublicRecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await PublicRecommendationApi.publicPhotoPosts(
         page: event.page!,
       );
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:preload_page_view/preload_page_view.dart';
-import 'package:whatsevr_app/config/api/response_model/recommendation_flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/flicks.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';

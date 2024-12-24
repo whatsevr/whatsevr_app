@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-import 'package:whatsevr_app/config/api/response_model/recommendation_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';

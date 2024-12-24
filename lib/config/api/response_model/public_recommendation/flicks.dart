@@ -1,47 +1,46 @@
 import 'dart:convert';
 
-class RecommendationPhotoPostsResponse {
+class PublicRecommendationFlicksResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<RecommendedPhotoPost>? recommendedPhotoPosts;
+  final List<RecommendedFlick>? recommendedFlicks;
 
-  RecommendationPhotoPostsResponse({
+  PublicRecommendationFlicksResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.recommendedPhotoPosts,
+    this.recommendedFlicks,
   });
 
-  RecommendationPhotoPostsResponse copyWith({
+  PublicRecommendationFlicksResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<RecommendedPhotoPost>? recommendedPhotoPosts,
+    List<RecommendedFlick>? recommendedFlicks,
   }) =>
-      RecommendationPhotoPostsResponse(
+      PublicRecommendationFlicksResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        recommendedPhotoPosts:
-            recommendedPhotoPosts ?? this.recommendedPhotoPosts,
+        recommendedFlicks: recommendedFlicks ?? this.recommendedFlicks,
       );
 
-  factory RecommendationPhotoPostsResponse.fromJson(String str) =>
-      RecommendationPhotoPostsResponse.fromMap(json.decode(str));
+  factory PublicRecommendationFlicksResponse.fromJson(String str) =>
+      PublicRecommendationFlicksResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendationPhotoPostsResponse.fromMap(Map<String, dynamic> json) =>
-      RecommendationPhotoPostsResponse(
+  factory PublicRecommendationFlicksResponse.fromMap(Map<String, dynamic> json) =>
+      PublicRecommendationFlicksResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        recommendedPhotoPosts: json['recommended_photo_posts'] == null
+        recommendedFlicks: json['recommended_flicks'] == null
             ? []
-            : List<RecommendedPhotoPost>.from(
-                json['recommended_photo_posts']!
-                    .map((x) => RecommendedPhotoPost.fromMap(x)),
+            : List<RecommendedFlick>.from(
+                json['recommended_flicks']!
+                    .map((x) => RecommendedFlick.fromMap(x)),
               ),
       );
 
@@ -49,13 +48,13 @@ class RecommendationPhotoPostsResponse {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'recommended_photo_posts': recommendedPhotoPosts == null
+        'recommended_flicks': recommendedFlicks == null
             ? []
-            : List<dynamic>.from(recommendedPhotoPosts!.map((x) => x.toMap())),
+            : List<dynamic>.from(recommendedFlicks!.map((x) => x.toMap())),
       };
 }
 
-class RecommendedPhotoPost {
+class RecommendedFlick {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -69,8 +68,10 @@ class RecommendedPhotoPost {
   final String? postCreatorType;
   final DateTime? updatedAt;
   final String? userUid;
+  final String? thumbnail;
+  final String? videoUrl;
   final String? location;
-  final int? totalImpressions;
+  final int? totalViews;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
@@ -79,10 +80,11 @@ class RecommendedPhotoPost {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final List<FilesDatum>? filesData;
+
+  final int? videoDurationInSec;
   final User? user;
 
-  RecommendedPhotoPost({
+  RecommendedFlick({
     this.id,
     this.createdAt,
     this.uid,
@@ -96,8 +98,10 @@ class RecommendedPhotoPost {
     this.postCreatorType,
     this.updatedAt,
     this.userUid,
+    this.thumbnail,
+    this.videoUrl,
     this.location,
-    this.totalImpressions,
+    this.totalViews,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
@@ -106,11 +110,11 @@ class RecommendedPhotoPost {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.filesData,
+    this.videoDurationInSec,
     this.user,
   });
 
-  RecommendedPhotoPost copyWith({
+  RecommendedFlick copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -124,8 +128,10 @@ class RecommendedPhotoPost {
     String? postCreatorType,
     DateTime? updatedAt,
     String? userUid,
+    String? thumbnail,
+    String? videoUrl,
     String? location,
-    int? totalImpressions,
+    int? totalViews,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
@@ -134,10 +140,10 @@ class RecommendedPhotoPost {
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    List<FilesDatum>? filesData,
+    int? videoDurationInSec,
     User? user,
   }) =>
-      RecommendedPhotoPost(
+      RecommendedFlick(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -151,8 +157,10 @@ class RecommendedPhotoPost {
         postCreatorType: postCreatorType ?? this.postCreatorType,
         updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
+        thumbnail: thumbnail ?? this.thumbnail,
+        videoUrl: videoUrl ?? this.videoUrl,
         location: location ?? this.location,
-        totalImpressions: totalImpressions ?? this.totalImpressions,
+        totalViews: totalViews ?? this.totalViews,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
@@ -162,17 +170,17 @@ class RecommendedPhotoPost {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        filesData: filesData ?? this.filesData,
+        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
         user: user ?? this.user,
       );
 
-  factory RecommendedPhotoPost.fromJson(String str) =>
-      RecommendedPhotoPost.fromMap(json.decode(str));
+  factory RecommendedFlick.fromJson(String str) =>
+      RecommendedFlick.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory RecommendedPhotoPost.fromMap(Map<String, dynamic> json) =>
-      RecommendedPhotoPost(
+  factory RecommendedFlick.fromMap(Map<String, dynamic> json) =>
+      RecommendedFlick(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null
@@ -194,8 +202,10 @@ class RecommendedPhotoPost {
             ? null
             : DateTime.parse(json['updated_at']),
         userUid: json['user_uid'],
+        thumbnail: json['thumbnail'],
+        videoUrl: json['video_url'],
         location: json['location'],
-        totalImpressions: json['total_impressions'],
+        totalViews: json['total_views'],
         totalLikes: json['total_likes'],
         totalComments: json['total_comments'],
         internalAiDescription: json['internal_ai_description'],
@@ -206,11 +216,7 @@ class RecommendedPhotoPost {
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         totalShares: json['total_shares'],
         cumulativeScore: json['cumulative_score'],
-        filesData: json['files_data'] == null
-            ? []
-            : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
-              ),
+        videoDurationInSec: json['video_duration_in_sec'],
         user: json['user'] == null ? null : User.fromMap(json['user']),
       );
 
@@ -231,8 +237,10 @@ class RecommendedPhotoPost {
         'post_creator_type': postCreatorType,
         'updated_at': updatedAt?.toIso8601String(),
         'user_uid': userUid,
+        'thumbnail': thumbnail,
+        'video_url': videoUrl,
         'location': location,
-        'total_impressions': totalImpressions,
+        'total_views': totalViews,
         'total_likes': totalLikes,
         'total_comments': totalComments,
         'internal_ai_description': internalAiDescription,
@@ -243,44 +251,8 @@ class RecommendedPhotoPost {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         'total_shares': totalShares,
         'cumulative_score': cumulativeScore,
-        'files_data': filesData == null
-            ? []
-            : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        'video_duration_in_sec': videoDurationInSec,
         'user': user?.toMap(),
-      };
-}
-
-class FilesDatum {
-  final String? type;
-  final String? imageUrl;
-
-  FilesDatum({
-    this.type,
-    this.imageUrl,
-  });
-
-  FilesDatum copyWith({
-    String? type,
-    String? imageUrl,
-  }) =>
-      FilesDatum(
-        type: type ?? this.type,
-        imageUrl: imageUrl ?? this.imageUrl,
-      );
-
-  factory FilesDatum.fromJson(String str) =>
-      FilesDatum.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: json['type'],
-        imageUrl: json['image_url'],
-      );
-
-  Map<String, dynamic> toMap() => {
-        'type': type,
-        'image_url': imageUrl,
       };
 }
 

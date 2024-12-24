@@ -2,21 +2,21 @@ import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/mix_content.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/flicks.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
 
-class PublicRecommendationApi {
+class PrivateRecommendationApi {
   static Future<PublicRecommendationVideosResponse?> publicVideoPosts({
     required int page,
     int pageSize = 10,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/video-posts',
+        '/v1/private-recommendations/video-posts',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -34,7 +34,7 @@ class PublicRecommendationApi {
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/flick-posts',
+        '/v1/private-recommendations/flick-posts',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -52,7 +52,7 @@ class PublicRecommendationApi {
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/memories',
+        '/v1/private-recommendations/memories',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -70,7 +70,7 @@ class PublicRecommendationApi {
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/offers',
+        '/v1/private-recommendations/offers',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -88,7 +88,7 @@ class PublicRecommendationApi {
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/photo-posts',
+        '/v1/private-recommendations/photo-posts',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
@@ -100,17 +100,17 @@ class PublicRecommendationApi {
     return null;
   }
 
-    static Future<PublicRecommendationMixContentResponse?> getMixContent({
+    static Future<PrivateRecommendationMixContentResponse?> getMixContent({
     required int page,
     int pageSize = 20,
   }) async {
     try {
       final Response response = await ApiClient.client.get(
-        '/v1/public-recommendations/get-mix-content',
+        '/v1/private-recommendations/get-mix-content',
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationMixContentResponse.fromMap(response.data);
+        return PrivateRecommendationMixContentResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

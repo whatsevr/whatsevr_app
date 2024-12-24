@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 
-import 'package:whatsevr_app/config/api/response_model/recommendation_videos.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
