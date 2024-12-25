@@ -9,6 +9,8 @@ class ExploreState extends Equatable {
   final List<RecommendedOffer>? recommendationOffers;
   final PaginationData? photoPostPaginationData;
   final List<RecommendedPhotoPost>? recommendationPhotoPosts;
+    final PaginationData? mixContentPaginationData;
+  final List<RecommendedPhotoPost>? mixContent;
   const ExploreState({
     this.recommendationVideos = const [],
     this.videoPaginationData,
@@ -18,6 +20,8 @@ class ExploreState extends Equatable {
     this.recommendationOffers = const [],
     this.photoPostPaginationData,
     this.recommendationPhotoPosts = const [],
+    this.mixContentPaginationData,
+    this.mixContent=const[],
   });
 
   @override
@@ -30,6 +34,7 @@ class ExploreState extends Equatable {
         recommendationOffers,
         photoPostPaginationData,
         recommendationPhotoPosts,
+        
       ];
 
   ExploreState copyWith({

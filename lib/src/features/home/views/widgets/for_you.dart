@@ -1,17 +1,19 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/flick.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/photo.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/video.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
+import 'package:whatsevr_app/src/features/explore/views/widgets/mix_posts/views/page.dart';
 
 class HomePageForYouPage extends StatelessWidget {
+    final ScrollController? scrollController;
   const HomePageForYouPage({
     super.key,
+    this.scrollController
   });
 
   @override
@@ -108,24 +110,42 @@ class HomePageForYouPage extends StatelessWidget {
         ),
         const Gap(8.0),
         Expanded(
-          child: PadHorizontal(
-            child: WaterfallFlow.builder(
-              //cacheExtent: 0.0,
+          child:     GridView.custom(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      controller: scrollController,
+      gridDelegate: SliverQuiltedGridDelegate(
+        crossAxisCount: 3,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 2,
+        repeatPattern: QuiltedGridRepeatPattern.inverted,
+        pattern: const [
+          QuiltedGridTile(2, 1),
+          QuiltedGridTile(1, 1),
+          QuiltedGridTile(1, 1),
+          QuiltedGridTile(1, 1),
+          QuiltedGridTile(1, 1),
+        ],
+      ),
+      childrenDelegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          final isInvertedPattern = (index ~/ 5) % 2 == 1;
+          final positionInPattern = index % 5;
 
-              gridDelegate:
-                  const SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                if (index % 3 == 0) return const PhotoPostTile();
-                if (index % 3 == 1) return const FlickPostTile();
-                if (index % 3 == 2) return const VideoPostTile();
-                return const SizedBox();
-              },
-            ),
-          ),
+          if (isInvertedPattern) {
+            // Inverted pattern: Video, Photo, Flick, Photo, Photo
+            if (positionInPattern == 0) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.video);
+            if (positionInPattern == 2) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.flick);
+            return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
+          } else {
+            // Normal pattern: Flick, Photo, Photo, Photo, Video
+            if (positionInPattern == 0) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.flick);
+            if (positionInPattern == 4) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.video);
+            return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
+          }
+        },
+      ),
+    )
+ ,
         ),
       ],
     );

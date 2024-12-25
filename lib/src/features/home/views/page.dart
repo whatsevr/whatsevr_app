@@ -29,6 +29,7 @@ class HomePage extends StatelessWidget {
           const Gap(8.0),
           const Expanded(
             child: WhatsevrTabBarWithViews(
+              spaceBetween: 4,
               tabViews: [
                 ('For You', HomePageForYouPage()),
                 ('Communities', HomePageCommunitiesPage()),
