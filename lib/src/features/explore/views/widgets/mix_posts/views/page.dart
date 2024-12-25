@@ -9,20 +9,14 @@ import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dar
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
 
-class ExploreMixPostsView extends StatefulWidget {
+class ExploreMixPostsView extends StatelessWidget {
   final ScrollController? scrollController;
   const ExploreMixPostsView({super.key, this.scrollController});
 
   @override
-  State<ExploreMixPostsView> createState() => _ExploreMixPostsViewState();
-}
-
-class _ExploreMixPostsViewState extends State<ExploreMixPostsView> {
-  @override
-  void initState() {
-    super.initState();
-        onReachingEndOfTheList(
-      widget.scrollController,
+  Widget build(BuildContext context) {
+    onReachingEndOfTheList(
+      scrollController,
       execute: () {
         context.read<ExploreBloc>().add(
               LoadMoreMixContentEvent(
@@ -36,14 +30,10 @@ class _ExploreMixPostsViewState extends State<ExploreMixPostsView> {
             );
       },
     );
-  }
-  @override
-  Widget build(BuildContext context) {
-
 
     return BlocSelector<ExploreBloc, ExploreState, List<MixContent>?>(
       selector: (ExploreState state) => state.mixContent,
-      builder: (BuildContext context, List<MixContent>? data) {
+      builder: (BuildContext context, List<MixContent>? mixContent) {
         return MyRefreshIndicator(
           onPullDown: () async {
             context.read<ExploreBloc>().add(LoadMixContentEvent());
@@ -51,7 +41,7 @@ class _ExploreMixPostsViewState extends State<ExploreMixPostsView> {
           },
           child: GridView.custom(
             padding: const EdgeInsets.symmetric(horizontal: 2),
-            controller: widget.scrollController,
+            controller: scrollController,
             gridDelegate: SliverQuiltedGridDelegate(
               crossAxisCount: 3,
               mainAxisSpacing: 2,
@@ -67,17 +57,17 @@ class _ExploreMixPostsViewState extends State<ExploreMixPostsView> {
             ),
             childrenDelegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                if (data == null || data.isEmpty) {
+                if (mixContent == null || mixContent.isEmpty) {
                   return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
                 }
 
-                if (index == data.length) {
+                if (index == mixContent.length) {
                   return context.read<ExploreBloc>().state.mixContentPaginationData!.isLoading
                       ? WhatsevrLoadingIndicator()
                       : const SizedBox();
                 }
 
-                final content = data[index];
+                final content = mixContent[index];
                 final isInvertedPattern = (index ~/ 5) % 2 == 1;
                 final positionInPattern = index % 5;
 
@@ -117,7 +107,7 @@ class _ExploreMixPostsViewState extends State<ExploreMixPostsView> {
                   );
                 }
               },
-              childCount: (data?.length ?? 0) + 1,
+              childCount: mixContent?.length ,
             ),
           ),
         );
