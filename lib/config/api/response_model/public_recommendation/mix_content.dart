@@ -2,30 +2,30 @@ import 'dart:convert';
 
 class PublicRecommendationMixContentResponse {
     String? message;
-    List<Datum>? data;
-    bool? hasMore;
+    List<MixContent>? mixContent;
+    bool? lastPage;
     int? page;
     ContentCounts? contentCounts;
 
     PublicRecommendationMixContentResponse({
         this.message,
-        this.data,
-        this.hasMore,
+        this.mixContent,
+        this.lastPage,
         this.page,
         this.contentCounts,
     });
 
     PublicRecommendationMixContentResponse copyWith({
         String? message,
-        List<Datum>? data,
-        bool? hasMore,
+        List<MixContent>? mixContent,
+        bool? lastPage,
         int? page,
         ContentCounts? contentCounts,
     }) => 
         PublicRecommendationMixContentResponse(
             message: message ?? this.message,
-            data: data ?? this.data,
-            hasMore: hasMore ?? this.hasMore,
+            mixContent: mixContent ?? this.mixContent,
+            lastPage: lastPage ?? this.lastPage,
             page: page ?? this.page,
             contentCounts: contentCounts ?? this.contentCounts,
         );
@@ -36,16 +36,16 @@ class PublicRecommendationMixContentResponse {
 
     factory PublicRecommendationMixContentResponse.fromMap(Map<String, dynamic> json) => PublicRecommendationMixContentResponse(
         message: json["message"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
-        hasMore: json["hasMore"],
+        mixContent: json["mix_content"] == null ? [] : List<MixContent>.from(json["mix_content"]!.map((x) => MixContent.fromMap(x))),
+        lastPage: json["last_page"],
         page: json["page"],
         contentCounts: json["contentCounts"] == null ? null : ContentCounts.fromMap(json["contentCounts"]),
     );
 
     Map<String, dynamic> toMap() => {
         "message": message,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-        "hasMore": hasMore,
+        "mix_content": mixContent == null ? [] : List<dynamic>.from(mixContent!.map((x) => x.toMap())),
+        "last_page": lastPage,
         "page": page,
         "contentCounts": contentCounts?.toMap(),
     };
@@ -90,35 +90,35 @@ class ContentCounts {
     };
 }
 
-class Datum {
-    DatumType? type;
+class MixContent {
+    String? type;
     Content? content;
 
-    Datum({
+    MixContent({
         this.type,
         this.content,
     });
 
-    Datum copyWith({
-        DatumType? type,
+    MixContent copyWith({
+        String? type,
         Content? content,
     }) => 
-        Datum(
+        MixContent(
             type: type ?? this.type,
             content: content ?? this.content,
         );
 
-    factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+    factory MixContent.fromJson(String str) => MixContent.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory Datum.fromMap(Map<String, dynamic> json) => Datum(
-        type: datumTypeValues.map[json["type"]]!,
+    factory MixContent.fromMap(Map<String, dynamic> json) => MixContent(
+        type: json["type"],
         content: json["content"] == null ? null : Content.fromMap(json["content"]),
     );
 
     Map<String, dynamic> toMap() => {
-        "type": datumTypeValues.reverse[type],
+        "type": type,
         "content": content?.toMap(),
     };
 }
@@ -133,7 +133,7 @@ class Content {
     bool? isDeleted;
     bool? isArchived;
     bool? isActive;
-    PostCreatorType? postCreatorType;
+    String? postCreatorType;
     DateTime? updatedAt;
     String? userUid;
     String? thumbnail;
@@ -198,7 +198,7 @@ class Content {
         bool? isDeleted,
         bool? isArchived,
         bool? isActive,
-        PostCreatorType? postCreatorType,
+        String? postCreatorType,
         DateTime? updatedAt,
         String? userUid,
         String? thumbnail,
@@ -267,7 +267,7 @@ class Content {
         isDeleted: json["is_deleted"],
         isArchived: json["is_archived"],
         isActive: json["is_active"],
-        postCreatorType: postCreatorTypeValues.map[json["post_creator_type"]]!,
+        postCreatorType: json["post_creator_type"],
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         userUid: json["user_uid"],
         thumbnail: json["thumbnail"],
@@ -300,7 +300,7 @@ class Content {
         "is_deleted": isDeleted,
         "is_archived": isArchived,
         "is_active": isActive,
-        "post_creator_type": postCreatorTypeValues.reverse[postCreatorType],
+        "post_creator_type": postCreatorType,
         "updated_at": updatedAt?.toIso8601String(),
         "user_uid": userUid,
         "thumbnail": thumbnail,
@@ -325,7 +325,7 @@ class Content {
 }
 
 class FilesDatum {
-    FilesDatumType? type;
+    String? type;
     String? imageUrl;
 
     FilesDatum({
@@ -334,7 +334,7 @@ class FilesDatum {
     });
 
     FilesDatum copyWith({
-        FilesDatumType? type,
+        String? type,
         String? imageUrl,
     }) => 
         FilesDatum(
@@ -347,31 +347,15 @@ class FilesDatum {
     String toJson() => json.encode(toMap());
 
     factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: filesDatumTypeValues.map[json["type"]]!,
+        type: json["type"],
         imageUrl: json["image_url"],
     );
 
     Map<String, dynamic> toMap() => {
-        "type": filesDatumTypeValues.reverse[type],
+        "type": type,
         "image_url": imageUrl,
     };
 }
-
-enum FilesDatumType {
-    IMAGE
-}
-
-final filesDatumTypeValues = EnumValues({
-    "image": FilesDatumType.IMAGE
-});
-
-enum PostCreatorType {
-    PORTFOLIO
-}
-
-final postCreatorTypeValues = EnumValues({
-    "portfolio": PostCreatorType.PORTFOLIO
-});
 
 class User {
     String? bio;
@@ -566,28 +550,4 @@ class User {
         "portfolio_description": portfolioDescription,
         "user_last_lat_long_wkb": userLastLatLongWkb,
     };
-}
-
-enum DatumType {
-    FLICK,
-    PHOTO_POST,
-    VIDEO_POST
-}
-
-final datumTypeValues = EnumValues({
-    "flick": DatumType.FLICK,
-    "photo_post": DatumType.PHOTO_POST,
-    "video_post": DatumType.VIDEO_POST
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-    late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-            reverseMap = map.map((k, v) => MapEntry(v, k));
-            return reverseMap;
-    }
 }

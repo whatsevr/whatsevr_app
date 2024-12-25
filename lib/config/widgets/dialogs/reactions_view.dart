@@ -136,7 +136,7 @@ class _UiState extends State<_Ui> {
         reactionsPaginationData = reactionsPaginationData?.copyWith(
           isLoading: false,
           currentPage: page,
-          noMoreData: response.lastPage,
+          isLastPage: response.lastPage,
         );
       });
     }

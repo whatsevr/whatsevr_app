@@ -10,17 +10,17 @@ class ExploreState extends Equatable {
   final PaginationData? photoPostPaginationData;
   final List<RecommendedPhotoPost>? recommendationPhotoPosts;
     final PaginationData? mixContentPaginationData;
-  final List<RecommendedPhotoPost>? mixContent;
+  final List<MixContent>? mixContent;
   const ExploreState({
     this.recommendationVideos = const [],
-    this.videoPaginationData,
+    this.videoPaginationData = const PaginationData(),
     this.recommendationMemories = const [],
-    this.memoryPaginationData,
-    this.offersPaginationData,
+    this.memoryPaginationData = const PaginationData(),
+    this.offersPaginationData = const PaginationData(),
     this.recommendationOffers = const [],
-    this.photoPostPaginationData,
+    this.photoPostPaginationData = const PaginationData(),
     this.recommendationPhotoPosts = const [],
-    this.mixContentPaginationData,
+    this.mixContentPaginationData = const PaginationData(),
     this.mixContent=const[],
   });
 
@@ -34,7 +34,8 @@ class ExploreState extends Equatable {
         recommendationOffers,
         photoPostPaginationData,
         recommendationPhotoPosts,
-        
+        mixContentPaginationData,
+        mixContent,
       ];
 
   ExploreState copyWith({
@@ -46,6 +47,9 @@ class ExploreState extends Equatable {
     PaginationData? offersPaginationData,
     PaginationData? photoPostPaginationData,
     List<RecommendedPhotoPost>? recommendationPhotoPosts,
+    PaginationData? mixContentPaginationData,
+    List<MixContent>? mixContent,
+
   }) {
     return ExploreState(
       recommendationVideos: recommendationVideos ?? this.recommendationVideos,
@@ -59,6 +63,10 @@ class ExploreState extends Equatable {
           photoPostPaginationData ?? this.photoPostPaginationData,
       recommendationPhotoPosts:
           recommendationPhotoPosts ?? this.recommendationPhotoPosts,
+      mixContentPaginationData:
+          mixContentPaginationData ?? this.mixContentPaginationData,
+      mixContent: mixContent ?? this.mixContent,
+
     );
   }
 }

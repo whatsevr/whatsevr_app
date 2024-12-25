@@ -17,12 +17,12 @@ class PaginationData extends Equatable {
   PaginationData copyWith({
     int? currentPage,
     bool? isLoading,
-    bool? noMoreData,
+    bool? isLastPage,
   }) {
     return PaginationData(
       currentPage: currentPage ?? this.currentPage,
       isLoading: isLoading ?? this.isLoading,
-      noMoreData: noMoreData ?? this.noMoreData,
+      noMoreData: isLastPage ?? this.noMoreData,
     );
   }
 

@@ -9,12 +9,19 @@ class WhatsevrMixPostTile extends StatelessWidget {
   static const String photo = 'photo';
   static const String video = 'video';
   static const String flick = 'flick';
-
+ //on click
+ // thumbnailUrl
   final String type;
+  final VoidCallback? onClick;
+  final String? thumbnailUrl;
+
 
   const WhatsevrMixPostTile({
     super.key,
     required this.type,
+    this.onClick,
+    this.thumbnailUrl,
+   
   });
 
   Widget? _getOverlay() {
@@ -30,27 +37,32 @@ class WhatsevrMixPostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(4.0),
-            image: DecorationImage(
-              image: ExtendedNetworkImageProvider(MockData.randomImage()),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onClick,
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(4.0),
+              image: thumbnailUrl != null ? DecorationImage(
+                image: ExtendedNetworkImageProvider(thumbnailUrl!),
+                fit: BoxFit.cover,
+              ) : DecorationImage(
+                image: ExtendedNetworkImageProvider(MockData.randomImage()),
+                fit: BoxFit.cover,
+              ),
             ),
+            alignment: Alignment.center,
           ),
-          
-          alignment: Alignment.center,
-        ),
-        if (_getOverlay() != null)
-          Positioned(
-            top: 8,
-            right: 8,
-            child: _getOverlay()!,
-          ),
-      ],
+          if (_getOverlay() != null)
+            Positioned(
+              top: 8,
+              right: 8,
+              child: _getOverlay()!,
+            ),
+        ],
+      ),
     );
   }
 }

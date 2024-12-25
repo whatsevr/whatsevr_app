@@ -355,7 +355,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         emit(
           state.copyWith(
             usersAndCommunitiesPagination:
-                state.usersAndCommunitiesPagination.copyWith(noMoreData: true),
+                state.usersAndCommunitiesPagination.copyWith(isLastPage: true),
           ),
         );
         return;

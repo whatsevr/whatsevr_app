@@ -56,3 +56,15 @@ class LoadMorePhotoPostsEvent extends ExploreEvent {
   @override
   List<Object?> get props => <Object?>[page];
 }
+
+class LoadMixContentEvent extends ExploreEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreMixContentEvent extends ExploreEvent {
+  final int? page;
+  const LoadMoreMixContentEvent({required this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

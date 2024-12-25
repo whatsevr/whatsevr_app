@@ -2,11 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/public_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
@@ -15,18 +17,10 @@ part 'explore_event.dart';
 part 'explore_state.dart';
 
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
+
   ExploreBloc()
       : super(
-          const ExploreState(
-            recommendationVideos: [],
-            recommendationMemories: [],
-            recommendationOffers: [],
-            recommendationPhotoPosts: [],
-            videoPaginationData: PaginationData(),
-            memoryPaginationData: PaginationData(),
-            offersPaginationData: PaginationData(),
-            photoPostPaginationData: PaginationData(),
-          ),
+          const ExploreState(),
         ) {
     on<ExploreInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
@@ -37,6 +31,17 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMoreOffersEvent>(_onLoadMoreOffers);
     on<LoadPhotoPostsEvent>(_loadPhotoPosts);
     on<LoadMorePhotoPostsEvent>(_onLoadMorePhotoPosts);
+    on<LoadMixContentEvent>(_loadMixContent);
+    on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
+   
+  }
+
+  
+
+  @override
+  Future<void> close() {
+    
+    return super.close();
   }
 
   Future<void> _onInitial(
@@ -47,6 +52,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     add(LoadMemoriesEvent());
     add(LoadOffersEvent());
     add(LoadPhotoPostsEvent());
+    add(LoadMixContentEvent());
   }
 
   FutureOr<void> _loadVideos(
@@ -64,7 +70,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           videoPaginationData: state.videoPaginationData?.copyWith(
             isLoading: false,
             currentPage: 1,
-            noMoreData: recommendationVideos?.lastPage,
+            isLastPage: recommendationVideos?.lastPage,
           ),
         ),
       );
@@ -100,7 +106,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           videoPaginationData: state.videoPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: recommendationVideos?.lastPage,
+            isLastPage: recommendationVideos?.lastPage,
           ),
         ),
       );
@@ -131,7 +137,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           memoryPaginationData: state.memoryPaginationData?.copyWith(
             isLoading: false,
             currentPage: 1,
-            noMoreData: recommendationMemories?.lastPage,
+            isLastPage: recommendationMemories?.lastPage,
           ),
         ),
       );
@@ -167,7 +173,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           memoryPaginationData: state.memoryPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: recommendationMemories?.lastPage,
+            isLastPage: recommendationMemories?.lastPage,
           ),
         ),
       );
@@ -198,7 +204,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           offersPaginationData: state.offersPaginationData?.copyWith(
             isLoading: false,
             currentPage: 1,
-            noMoreData: recommendationOffers?.lastPage,
+            isLastPage: recommendationOffers?.lastPage,
           ),
         ),
       );
@@ -234,7 +240,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           offersPaginationData: state.offersPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: recommendationOffers?.lastPage,
+            isLastPage: recommendationOffers?.lastPage,
           ),
         ),
       );
@@ -266,7 +272,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           photoPostPaginationData: state.photoPostPaginationData?.copyWith(
             isLoading: false,
             currentPage: 1,
-            noMoreData: recommendationPhotoPosts?.lastPage,
+            isLastPage: recommendationPhotoPosts?.lastPage,
           ),
         ),
       );
@@ -302,7 +308,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
           photoPostPaginationData: state.photoPostPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: recommendationPhotoPosts?.lastPage,
+            isLastPage: recommendationPhotoPosts?.lastPage,
           ),
         ),
       );
@@ -310,6 +316,73 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadMixContent(
+    LoadMixContentEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
+    try {
+      final PublicRecommendationMixContentResponse? mixContentResponse =
+          await PublicRecommendationApi.getMixContent(
+        page: 1,
+      );
+      emit(
+        state.copyWith(
+          mixContent: mixContentResponse?.mixContent,
+          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
+            isLoading: false,
+            currentPage: 1,
+            isLastPage: mixContentResponse?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMoreMixContent(
+    LoadMoreMixContentEvent event,
+    Emitter<ExploreState> emit,
+  ) async {
+    if (state.mixContentPaginationData?.isLoading == true ||
+        state.mixContentPaginationData?.noMoreData == true) {
+      return;
+    }
+    try {
+      emit(
+        state.copyWith(
+          mixContentPaginationData:
+              state.mixContentPaginationData?.copyWith(isLoading: true),
+        ),
+      );
+      final PublicRecommendationMixContentResponse? mixContentResponse =
+          await PublicRecommendationApi.getMixContent(
+        page: event.page!,
+      );
+
+      emit(
+        state.copyWith(
+          mixContent: state.mixContent! +
+              (mixContentResponse?.mixContent ?? []),
+          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            isLastPage: mixContentResponse?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
             isLoading: false,
           ),
         ),

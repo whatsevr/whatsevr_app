@@ -56,7 +56,7 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
               state.topCommunitiesPaginationData?.copyWith(
             currentPage: 1,
             isLoading: false,
-            noMoreData: topCommunities?.lastPage,
+            isLastPage: topCommunities?.lastPage,
           ),
         ),
       );
@@ -90,7 +90,7 @@ class NewCommunityBloc extends Bloc<NewCommunityEvent, NewCommunityState> {
               state.topCommunitiesPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: topCommunities.lastPage,
+            isLastPage: topCommunities.lastPage,
           ),
         ),
       );

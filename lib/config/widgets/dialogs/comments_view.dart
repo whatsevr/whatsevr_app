@@ -144,7 +144,7 @@ class _UiState extends State<_Ui> {
         commentsPaginationData = commentsPaginationData?.copyWith(
           isLoading: false,
           currentPage: page,
-          noMoreData: response.lastPage,
+          isLastPage: response.lastPage,
         );
       });
     }

@@ -49,7 +49,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
           recommendationFlicks: recommendationVideos?.recommendedFlicks,
           flicksPaginationData: state.flicksPaginationData?.copyWith(
             isLoading: false,
-            noMoreData: recommendationVideos?.lastPage,
+            isLastPage: recommendationVideos?.lastPage,
           ),
         ),
       );
@@ -88,7 +88,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
           flicksPaginationData: state.flicksPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
-            noMoreData: recommendationVideos?.lastPage,
+            isLastPage: recommendationVideos?.lastPage,
           ),
         ),
       );
