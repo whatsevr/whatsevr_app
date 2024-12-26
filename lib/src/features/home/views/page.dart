@@ -7,6 +7,7 @@ import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart
 import 'package:whatsevr_app/src/features/home/views/widgets/activities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
+import 'package:whatsevr_app/src/features/home/views/widgets/offers/views/page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -33,7 +34,10 @@ class HomePage extends StatelessWidget {
               tabViews: [
                 ('For You', HomePageForYouPage()),
                 ('Communities', HomePageCommunitiesPage()),
-                ('Offers', Text('Offers')),
+                (
+                  'Offers',
+                  HomePageOffersPage(), 
+                ),
                 ('Activities', HomePageActivitiesPage()),
               ],
             ),

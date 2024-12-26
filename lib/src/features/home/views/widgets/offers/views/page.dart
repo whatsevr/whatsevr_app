@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
-
-
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/offers.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/offer.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
-import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
-class ExplorePageOffersPage extends StatelessWidget {
-  const ExplorePageOffersPage({super.key, this.scrollController});
+class HomePageOffersPage extends StatelessWidget {
+  const HomePageOffersPage({super.key, this.scrollController});
   final ScrollController? scrollController;
   @override
   Widget build(BuildContext context) {
@@ -22,10 +20,10 @@ class ExplorePageOffersPage extends StatelessWidget {
            context,
      scrollController: scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(
+        context.read<HomeBloc>().add(
               LoadMoreOffersEvent(
                 page: context
-                        .read<ExploreBloc>()
+                        .read<HomeBloc>()
                         .state
                         .videoPaginationData!
                         .currentPage +
@@ -35,12 +33,12 @@ class ExplorePageOffersPage extends StatelessWidget {
       },
     );
 
-    return BlocSelector<ExploreBloc, ExploreState, List<RecommendedOffer>?>(
-      selector: (ExploreState state) => state.recommendationOffers,
+    return BlocSelector<HomeBloc, HomeState, List<RecommendedOffer>?>(
+      selector: (HomeState state) => state.recommendationOffers,
       builder: (BuildContext context, List<RecommendedOffer>? data) {
         return MyRefreshIndicator(
           onPullDown: () async {
-            context.read<ExploreBloc>().add(LoadOffersEvent());
+            context.read<HomeBloc>().add(LoadOffersEvent());
             await Future<void>.delayed(const Duration(seconds: 2));
           },
           child: ListView.separated(
@@ -87,7 +85,7 @@ class ExplorePageOffersPage extends StatelessWidget {
                   ),
                   if (index == data.length - 1 &&
                       context
-                          .read<ExploreBloc>()
+                          .read<HomeBloc>()
                           .state
                           .videoPaginationData!
                           .isLoading) ...[

@@ -8,6 +8,7 @@ import 'package:whatsevr_app/config/global_bloc/react_unreact_bloc/react_unreact
 import 'package:whatsevr_app/src/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/widgets/bottom_navigation.dart';
 import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -36,6 +37,11 @@ class DashboardPage extends StatelessWidget {
             lazy: false,
             create: (BuildContext context) =>
                 ExploreBloc()..add(ExploreInitialEvent()),
+          ),
+           BlocProvider(
+            lazy: false,
+            create: (BuildContext context) =>
+                HomeBloc()..add(HomeInitialEvent()),
           ),
         ],
         child: Builder(

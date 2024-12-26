@@ -1,7 +1,5 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/pepicons.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
@@ -10,8 +8,7 @@ class WhatsevrMixPostTile extends StatelessWidget {
   static const String video = 'video';
   static const String flick = 'flick';
   static const String offer = 'offer'; // Added offer type
- //on click
- // thumbnailUrl
+ 
   final String tileType;
   final VoidCallback? onClick;
   final String? thumbnailUrl;
