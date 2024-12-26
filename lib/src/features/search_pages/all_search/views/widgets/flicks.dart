@@ -6,7 +6,8 @@ class _FlicksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-      _scrollController,
+            context,
+     scrollController: _scrollController,
       execute: () {
         context.read<AllSearchBloc>().add(SearchMoreFlickPosts());
       },

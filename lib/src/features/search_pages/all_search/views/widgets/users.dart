@@ -8,7 +8,8 @@ class _AccountsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-      _scrollController,
+                context,
+     scrollController: _scrollController,
       execute: () {
         context.read<AllSearchBloc>().add(SearchMoreUsers());
       },

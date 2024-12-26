@@ -91,7 +91,8 @@ class _UiState extends State<_Ui> {
     getCurrentUserDetails();
     getReactions(1);
     onReachingEndOfTheList(
-      scrollController,
+            context,
+     scrollController: scrollController,
       execute: () {
         getReactions((reactionsPaginationData?.currentPage ?? 0) + 1);
       },

@@ -11,9 +11,18 @@ import 'package:whatsevr_app/src/features/explore/views/widgets/offers/views/pag
 import 'package:whatsevr_app/src/features/explore/views/widgets/photos/views/page.dart';
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
-class ExplorePage extends StatelessWidget {
-  ExplorePage({super.key});
-  final ScrollController searchBoxHideController = ScrollController();
+class ExplorePage extends StatefulWidget {
+  const ExplorePage({super.key}); 
+
+  @override
+  State<ExplorePage> createState() => _ExplorePageState();
+}
+
+class _ExplorePageState extends State<ExplorePage> {
+  final ScrollController searchBoxHideController = ScrollController(
+
+  );
+
   @override
   Widget build(BuildContext context) {
     return Column(

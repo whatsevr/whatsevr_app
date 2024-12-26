@@ -19,7 +19,8 @@ class ExplorePageMemoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-      scrollController,
+         context,
+     scrollController: scrollController,
       execute: () {
         context.read<ExploreBloc>().add(
               LoadMoreMemoriesEvent(

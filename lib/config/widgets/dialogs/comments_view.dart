@@ -101,7 +101,8 @@ class _UiState extends State<_Ui> {
     getCurrentUserDetails();
     getComments(1);
     onReachingEndOfTheList(
-      scrollController,
+      context,
+     scrollController: scrollController,
       execute: () {
         getComments((commentsPaginationData?.currentPage ?? 0) + 1);
       },

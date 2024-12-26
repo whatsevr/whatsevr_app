@@ -32,16 +32,27 @@ class WhatsevrAnimatedSearchField extends StatefulWidget {
 
 class _WhatsevrAnimatedSearchFieldState
     extends State<WhatsevrAnimatedSearchField> {
+  late final ScrollController _defaultScrollController;
+
   @override
   void initState() {
     super.initState();
     widget.controller ??= TextEditingController();
+    _defaultScrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    if (widget.hideOnScrollController == null) {
+      _defaultScrollController.dispose();
+    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Hidable(
-      controller: widget.hideOnScrollController ?? ScrollController(),
+      controller: widget.hideOnScrollController ?? _defaultScrollController,
       preferredWidgetSize: const Size(0, 40),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

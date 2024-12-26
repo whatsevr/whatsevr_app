@@ -1,11 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
 void onReachingEndOfTheList(
-  ScrollController? scrollController, {
+   BuildContext? context,
+   {
+    ScrollController? scrollController,
   required Function()? execute,
+ 
 }) {
-  scrollController?.addListener(() {
-    if (!scrollController.hasClients) return;
+  if (scrollController == null) return;
+  if (context == null || !scrollController.hasClients || !context.mounted
+  ) return;
+ 
+  scrollController.addListener(() {
+    
     if (scrollController.position.pixels ==
         scrollController.position.maxScrollExtent) {
       debugPrint('Reached the end of the list.');
