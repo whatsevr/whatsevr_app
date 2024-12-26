@@ -10,7 +10,7 @@ import 'package:whatsevr_app/config/api/response_model/public_recommendation/pho
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
 
 class PublicRecommendationApi {
-  static Future<PublicRecommendationVideosResponse?> publicVideoPosts({
+  static Future<PublicRecommendationVideosResponse?> getVideoPosts({
     required int page,
     int pageSize = 10,
   }) async {
@@ -28,7 +28,7 @@ class PublicRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationFlicksResponse?> publicFlickPosts({
+  static Future<PublicRecommendationFlicksResponse?> getFlickPosts({
     required int page,
     int pageSize = 10,
   }) async {
@@ -46,7 +46,7 @@ class PublicRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationMemoriesResponse?> publicMemories({
+  static Future<PublicRecommendationMemoriesResponse?> getMemories({
     required int page,
     int pageSize = 60,
   }) async {
@@ -64,7 +64,7 @@ class PublicRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationOffersResponse?> publicOffers({
+  static Future<PublicRecommendationOffersResponse?> getOffers({
     required int page,
     int pageSize = 10,
   }) async {
@@ -82,7 +82,7 @@ class PublicRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationPhotoPostsResponse?> publicPhotoPosts({
+  static Future<PublicRecommendationPhotoPostsResponse?> getPhotoPosts({
     required int page,
     int pageSize = 10,
   }) async {

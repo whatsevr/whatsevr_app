@@ -1,16 +1,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
-
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
-import 'package:whatsevr_app/src/features/explore/views/widgets/mix_posts/views/page.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
 class HomePageForYouPage extends StatelessWidget {
-    final ScrollController? scrollController;
+  final ScrollController? scrollController;
   const HomePageForYouPage({
     super.key,
     this.scrollController
@@ -110,42 +112,108 @@ class HomePageForYouPage extends StatelessWidget {
         ),
         const Gap(8.0),
         Expanded(
-          child:     GridView.custom(
-      padding: const EdgeInsets.symmetric(horizontal: 2),
-      controller: scrollController,
-      gridDelegate: SliverQuiltedGridDelegate(
-        crossAxisCount: 3,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-        repeatPattern: QuiltedGridRepeatPattern.inverted,
-        pattern: const [
-          QuiltedGridTile(2, 1),
-          QuiltedGridTile(1, 1),
-          QuiltedGridTile(1, 1),
-          QuiltedGridTile(1, 1),
-          QuiltedGridTile(1, 1),
-        ],
-      ),
-      childrenDelegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          final isInvertedPattern = (index ~/ 5) % 2 == 1;
-          final positionInPattern = index % 5;
+          child: BlocSelector<HomeBloc, HomeState, List<MixContent>?>(
+            selector: (HomeState state) => state.mixContent,
+            builder: (BuildContext context, List<MixContent>? mixContent) {
+              return MyRefreshIndicator(
+                onPullDown: () async {
+                  context.read<HomeBloc>().add(LoadMixContentEvent());
+                  await Future<void>.delayed(const Duration(seconds: 2));
+                },
+                child: GridView.custom(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  controller: scrollController,
+                  gridDelegate: SliverQuiltedGridDelegate(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 2,
+                    crossAxisSpacing: 2,
+                    repeatPattern: QuiltedGridRepeatPattern.inverted,
+                    pattern: const [
+                      QuiltedGridTile(2, 1),
+                      QuiltedGridTile(1, 1),
+                      QuiltedGridTile(1, 1),
+                      QuiltedGridTile(1, 1),
+                      QuiltedGridTile(1, 1),
+                    ],
+                  ),
+                  childrenDelegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      if (mixContent == null || mixContent.isEmpty) {
+                        return const WhatsevrMixPostTile(tileType: WhatsevrMixPostTile.photo);
+                      }
 
-          if (isInvertedPattern) {
-            // Inverted pattern: Video, Photo, Flick, Photo, Photo
-            if (positionInPattern == 0) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.video);
-            if (positionInPattern == 2) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.flick);
-            return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
-          } else {
-            // Normal pattern: Flick, Photo, Photo, Photo, Video
-            if (positionInPattern == 0) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.flick);
-            if (positionInPattern == 4) return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.video);
-            return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
-          }
-        },
-      ),
-    )
- ,
+                      if (index == mixContent.length) {
+                        return context.read<HomeBloc>().state.mixContentPaginationData!.isLoading
+                            ? WhatsevrLoadingIndicator()
+                            : const SizedBox();
+                      }
+
+                      final content = mixContent[index];
+                      final isInvertedPattern = (index ~/ 5) % 2 == 1;
+                      final positionInPattern = index % 5;
+
+                      if (isInvertedPattern) {
+                        // Inverted pattern: video, photo, photo, offer, flick
+                        switch (positionInPattern) {
+                          case 0:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.video,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 1:
+                          case 2:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.photo,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 3:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.offer,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 4:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.flick,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                        }
+                      } else {
+                        // Normal pattern: flick, photo, photo, offer, video
+                        switch (positionInPattern) {
+                          case 0:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.flick,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 1:
+                          case 2:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.photo,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 3:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.offer,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                          case 4:
+                            return WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.video,
+                              thumbnailUrl: content.content?.thumbnail,
+                            );
+                        }
+                      }
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.photo,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    },
+                    childCount: mixContent?.length,
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );

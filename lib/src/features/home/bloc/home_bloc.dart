@@ -2,27 +2,25 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
-import 'package:whatsevr_app/config/api/methods/public_recommendations.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/mix_content.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
+import 'package:whatsevr_app/config/api/methods/private_recommendations.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/videos.dart';
 
-part 'explore_event.dart';
-part 'explore_state.dart';
+part 'home_event.dart';
+part 'home_state.dart';
 
-class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
+class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
-  ExploreBloc()
+  HomeBloc()
       : super(
-          const ExploreState(),
+          const HomeState(),
         ) {
-    on<ExploreInitialEvent>(_onInitial);
+    on<HomeInitialEvent>(_onInitial);
     on<LoadVideosEvent>(_loadVideos);
     on<LoadMoreVideosEvent>(_onLoadMoreVideos);
     on<LoadMemoriesEvent>(_loadMemories);
@@ -33,7 +31,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMorePhotoPostsEvent>(_onLoadMorePhotoPosts);
     on<LoadMixContentEvent>(_loadMixContent);
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
-   
   }
 
   
@@ -45,8 +42,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
   }
 
   Future<void> _onInitial(
-    ExploreInitialEvent event,
-    Emitter<ExploreState> emit,
+    HomeInitialEvent event,
+    Emitter<HomeState> emit,
   ) async {
     add(LoadVideosEvent());
     add(LoadMemoriesEvent());
@@ -57,11 +54,11 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _loadVideos(
     LoadVideosEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     try {
-      final PublicRecommendationVideosResponse? recommendationVideos =
-          await PublicRecommendationApi.getVideoPosts(
+      final PrivateRecommendationVideosResponse? recommendationVideos =
+          await PrivateRecommendationApi.getVideoPosts(
         page: 1,
       );
       emit(
@@ -81,7 +78,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreVideos(
     LoadMoreVideosEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     if (state.videoPaginationData?.isLoading == true ||
         state.videoPaginationData?.noMoreData == true) {
@@ -94,8 +91,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.videoPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final PublicRecommendationVideosResponse? recommendationVideos =
-          await PublicRecommendationApi.getVideoPosts(
+      final PrivateRecommendationVideosResponse? recommendationVideos =
+          await PrivateRecommendationApi.getVideoPosts(
         page: event.page!,
       );
 
@@ -124,11 +121,11 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _loadMemories(
     LoadMemoriesEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     try {
-      final PublicRecommendationMemoriesResponse? recommendationMemories =
-          await PublicRecommendationApi.getMemories(
+      final PrivateRecommendationMemoriesResponse? recommendationMemories =
+          await PrivateRecommendationApi.getMemories(
         page: 1,
       );
       emit(
@@ -148,7 +145,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreMemories(
     LoadMoreMemoriesEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     if (state.memoryPaginationData?.isLoading == true ||
         state.memoryPaginationData?.noMoreData == true) {
@@ -161,8 +158,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.memoryPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final PublicRecommendationMemoriesResponse? recommendationMemories =
-          await PublicRecommendationApi.getMemories(
+      final PrivateRecommendationMemoriesResponse? recommendationMemories =
+          await PrivateRecommendationApi.getMemories(
         page: event.page!,
       );
 
@@ -191,11 +188,11 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _loadOffers(
     LoadOffersEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     try {
-      final PublicRecommendationOffersResponse? recommendationOffers =
-          await PublicRecommendationApi.getOffers(
+      final PrivateRecommendationOffersResponse? recommendationOffers =
+          await PrivateRecommendationApi.getOffers(
         page: 1,
       );
       emit(
@@ -215,7 +212,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreOffers(
     LoadMoreOffersEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     if (state.offersPaginationData?.isLoading == true ||
         state.offersPaginationData?.noMoreData == true) {
@@ -228,8 +225,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.offersPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final PublicRecommendationOffersResponse? recommendationOffers =
-          await PublicRecommendationApi.getOffers(
+      final PrivateRecommendationOffersResponse? recommendationOffers =
+          await PrivateRecommendationApi.getOffers(
         page: event.page!,
       );
 
@@ -258,11 +255,11 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _loadPhotoPosts(
     LoadPhotoPostsEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     try {
-      final PublicRecommendationPhotoPostsResponse? recommendationPhotoPosts =
-          await PublicRecommendationApi.getPhotoPosts(
+      final PrivateRecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await PrivateRecommendationApi.getPhotoPosts(
         page: 1,
       );
       emit(
@@ -283,7 +280,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMorePhotoPosts(
     LoadMorePhotoPostsEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     if (state.photoPostPaginationData?.isLoading == true ||
         state.photoPostPaginationData?.noMoreData == true) {
@@ -296,8 +293,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.photoPostPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final PublicRecommendationPhotoPostsResponse? recommendationPhotoPosts =
-          await PublicRecommendationApi.getPhotoPosts(
+      final PrivateRecommendationPhotoPostsResponse? recommendationPhotoPosts =
+          await PrivateRecommendationApi.getPhotoPosts(
         page: event.page!,
       );
 
@@ -326,11 +323,11 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _loadMixContent(
     LoadMixContentEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     try {
-      final PublicRecommendationMixContentResponse? mixContentResponse =
-          await PublicRecommendationApi.getMixContent(
+      final PrivateRecommendationMixContentResponse? mixContentResponse =
+          await PrivateRecommendationApi.getMixContent(
         page: 1,
       );
       emit(
@@ -350,7 +347,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
   FutureOr<void> _onLoadMoreMixContent(
     LoadMoreMixContentEvent event,
-    Emitter<ExploreState> emit,
+    Emitter<HomeState> emit,
   ) async {
     if (state.mixContentPaginationData?.isLoading == true ||
         state.mixContentPaginationData?.noMoreData == true) {
@@ -363,8 +360,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
               state.mixContentPaginationData?.copyWith(isLoading: true),
         ),
       );
-      final PublicRecommendationMixContentResponse? mixContentResponse =
-          await PublicRecommendationApi.getMixContent(
+      final PrivateRecommendationMixContentResponse? mixContentResponse =
+          await PrivateRecommendationApi.getMixContent(
         page: event.page!,
       );
 

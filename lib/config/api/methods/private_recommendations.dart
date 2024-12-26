@@ -2,15 +2,15 @@ import 'package:dio/dio.dart';
 
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/memories.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/flicks.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/videos.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/videos.dart';
 
 class PrivateRecommendationApi {
-  static Future<PublicRecommendationVideosResponse?> publicVideoPosts({
+  static Future<PrivateRecommendationVideosResponse?> getVideoPosts({
     required int page,
     int pageSize = 10,
   }) async {
@@ -20,7 +20,7 @@ class PrivateRecommendationApi {
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationVideosResponse.fromMap(response.data);
+        return PrivateRecommendationVideosResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -28,7 +28,7 @@ class PrivateRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationFlicksResponse?> publicFlickPosts({
+  static Future<PrivateRecommendationFlicksResponse?> getFlickPosts({
     required int page,
     int pageSize = 10,
   }) async {
@@ -38,7 +38,7 @@ class PrivateRecommendationApi {
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationFlicksResponse.fromMap(response.data);
+        return PrivateRecommendationFlicksResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -46,7 +46,7 @@ class PrivateRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationMemoriesResponse?> publicMemories({
+  static Future<PrivateRecommendationMemoriesResponse?> getMemories({
     required int page,
     int pageSize = 60,
   }) async {
@@ -56,7 +56,7 @@ class PrivateRecommendationApi {
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationMemoriesResponse.fromMap(response.data);
+        return PrivateRecommendationMemoriesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -64,7 +64,7 @@ class PrivateRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationOffersResponse?> publicOffers({
+  static Future<PrivateRecommendationOffersResponse?> getOffers({
     required int page,
     int pageSize = 10,
   }) async {
@@ -74,7 +74,7 @@ class PrivateRecommendationApi {
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationOffersResponse.fromMap(response.data);
+        return PrivateRecommendationOffersResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -82,7 +82,7 @@ class PrivateRecommendationApi {
     return null;
   }
 
-  static Future<PublicRecommendationPhotoPostsResponse?> publicPhotoPosts({
+  static Future<PrivateRecommendationPhotoPostsResponse?> getPhotoPosts({
     required int page,
     int pageSize = 10,
   }) async {
@@ -92,7 +92,7 @@ class PrivateRecommendationApi {
         queryParameters: {'page': page, 'page_size': pageSize},
       );
       if (response.data != null) {
-        return PublicRecommendationPhotoPostsResponse.fromMap(response.data);
+        return PrivateRecommendationPhotoPostsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

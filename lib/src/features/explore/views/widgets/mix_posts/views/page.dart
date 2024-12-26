@@ -59,7 +59,7 @@ class ExploreMixPostsView extends StatelessWidget {
             childrenDelegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 if (mixContent == null || mixContent.isEmpty) {
-                  return const WhatsevrMixPostTile(type: WhatsevrMixPostTile.photo);
+                  return const WhatsevrMixPostTile(tileType: WhatsevrMixPostTile.photo);
                 }
 
                 if (index == mixContent.length) {
@@ -72,41 +72,62 @@ class ExploreMixPostsView extends StatelessWidget {
                 final isInvertedPattern = (index ~/ 5) % 2 == 1;
                 final positionInPattern = index % 5;
 
+                // Updated pattern: flick, photo, photo, offer, video
                 if (isInvertedPattern) {
-                  if (positionInPattern == 0) {
-                    return WhatsevrMixPostTile(
-                      type: WhatsevrMixPostTile.video,
-                      thumbnailUrl: content.content?.thumbnail,
-                    );
-                  }
-                  if (positionInPattern == 2) {
-                    return WhatsevrMixPostTile(
-                      type: WhatsevrMixPostTile.flick,
+                  // Inverted pattern: video, photo, photo, offer, flick
+                  switch (positionInPattern) {
+                    case 0:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.video,
                         thumbnailUrl: content.content?.thumbnail,
-                    );
+                      );
+                    case 1:
+                    case 2:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.photo,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    case 3:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.offer,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    case 4:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.flick,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
                   }
-                  return WhatsevrMixPostTile(
-                    type: WhatsevrMixPostTile.photo,
-                       thumbnailUrl: content.content?.thumbnail,
-                  );
                 } else {
-                  if (positionInPattern == 0) {
-                    return WhatsevrMixPostTile(
-                      type: WhatsevrMixPostTile.flick,
-                         thumbnailUrl: content.content?.thumbnail,
-                    );
+                  // Normal pattern: flick, photo, photo, offer, video
+                  switch (positionInPattern) {
+                    case 0:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.flick,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    case 1:
+                    case 2:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.photo,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    case 3:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.offer,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
+                    case 4:
+                      return WhatsevrMixPostTile(
+                        tileType: WhatsevrMixPostTile.video,
+                        thumbnailUrl: content.content?.thumbnail,
+                      );
                   }
-                  if (positionInPattern == 4) {
-                    return WhatsevrMixPostTile(
-                      type: WhatsevrMixPostTile.video,
-                       thumbnailUrl: content.content?.thumbnail,
-                    );
-                  }
-                  return WhatsevrMixPostTile(
-                    type: WhatsevrMixPostTile.photo,
-                       thumbnailUrl: content.content?.thumbnail,
-                  );
                 }
+                return WhatsevrMixPostTile(
+                  tileType: WhatsevrMixPostTile.photo,
+                  thumbnailUrl: content.content?.thumbnail,
+                );
               },
               childCount: mixContent?.length ,
             ),

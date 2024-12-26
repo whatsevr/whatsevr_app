@@ -9,27 +9,31 @@ class WhatsevrMixPostTile extends StatelessWidget {
   static const String photo = 'photo';
   static const String video = 'video';
   static const String flick = 'flick';
+  static const String offer = 'offer'; // Added offer type
  //on click
  // thumbnailUrl
-  final String type;
+  final String tileType;
   final VoidCallback? onClick;
   final String? thumbnailUrl;
 
 
   const WhatsevrMixPostTile({
     super.key,
-    required this.type,
+    required this.tileType,
     this.onClick,
     this.thumbnailUrl,
    
   });
 
   Widget? _getOverlay() {
-    switch (type) {
+    final double iconSize = 16.0;
+    switch (tileType) {
       case video:
-        return const Icon(WhatsevrIcons.wtvIcon, color: Colors.white);
+        return  Icon(WhatsevrIcons.wtvIcon, color: Colors.white, size: iconSize);
       case flick:
-        return const Icon(WhatsevrIcons.flicksIcon001, color: Colors.white);
+        return  Icon(WhatsevrIcons.flicksIcon001, color: Colors.white, size: iconSize);
+      case offer:
+        return  Icon(WhatsevrIcons.offerIcon, color: Colors.white, size: iconSize);
       default:
         return null;
     }

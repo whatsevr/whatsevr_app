@@ -41,7 +41,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
   ) async {
     try {
       final PublicRecommendationFlicksResponse? recommendationVideos =
-          await PublicRecommendationApi.publicFlickPosts(
+          await PublicRecommendationApi.getFlickPosts(
         page: 1,
       );
       emit(
@@ -75,7 +75,7 @@ class FlicksBloc extends Bloc<FlicksEvent, FlicksState> {
         ),
       );
       final PublicRecommendationFlicksResponse? recommendationVideos =
-          await PublicRecommendationApi.publicFlickPosts(
+          await PublicRecommendationApi.getFlickPosts(
         page: event.page!,
       );
 
