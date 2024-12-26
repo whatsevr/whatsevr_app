@@ -54,22 +54,26 @@ class PrivateRecommendationMixContentResponse {
 class ContentCounts {
     int? flicks;
     int? photos;
+    int? offers;
     int? videos;
 
     ContentCounts({
         this.flicks,
         this.photos,
+        this.offers,
         this.videos,
     });
 
     ContentCounts copyWith({
         int? flicks,
         int? photos,
+        int? offers,
         int? videos,
     }) => 
         ContentCounts(
             flicks: flicks ?? this.flicks,
             photos: photos ?? this.photos,
+            offers: offers ?? this.offers,
             videos: videos ?? this.videos,
         );
 
@@ -80,12 +84,14 @@ class ContentCounts {
     factory ContentCounts.fromMap(Map<String, dynamic> json) => ContentCounts(
         flicks: json["flicks"],
         photos: json["photos"],
+        offers: json["offers"],
         videos: json["videos"],
     );
 
     Map<String, dynamic> toMap() => {
         "flicks": flicks,
         "photos": photos,
+        "offers": offers,
         "videos": videos,
     };
 }
@@ -154,6 +160,11 @@ class Content {
     User? user;
     int? totalImpressions;
     List<FilesDatum>? filesData;
+    String? ctaAction;
+    String? ctaActionUrl;
+    String? status;
+    String? targetGender;
+    List<String>? targetAreas;
 
     Content({
         this.createdAt,
@@ -186,6 +197,11 @@ class Content {
         this.user,
         this.totalImpressions,
         this.filesData,
+        this.ctaAction,
+        this.ctaActionUrl,
+        this.status,
+        this.targetGender,
+        this.targetAreas,
     });
 
     Content copyWith({
@@ -219,6 +235,11 @@ class Content {
         User? user,
         int? totalImpressions,
         List<FilesDatum>? filesData,
+        String? ctaAction,
+        String? ctaActionUrl,
+        String? status,
+        String? targetGender,
+        List<String>? targetAreas,
     }) => 
         Content(
             createdAt: createdAt ?? this.createdAt,
@@ -251,6 +272,11 @@ class Content {
             user: user ?? this.user,
             totalImpressions: totalImpressions ?? this.totalImpressions,
             filesData: filesData ?? this.filesData,
+            ctaAction: ctaAction ?? this.ctaAction,
+            ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+            status: status ?? this.status,
+            targetGender: targetGender ?? this.targetGender,
+            targetAreas: targetAreas ?? this.targetAreas,
         );
 
     factory Content.fromJson(String str) => Content.fromMap(json.decode(str));
@@ -288,6 +314,11 @@ class Content {
         user: json["user"] == null ? null : User.fromMap(json["user"]),
         totalImpressions: json["total_impressions"],
         filesData: json["files_data"] == null ? [] : List<FilesDatum>.from(json["files_data"]!.map((x) => FilesDatum.fromMap(x))),
+        ctaAction: json["cta_action"],
+        ctaActionUrl: json["cta_action_url"],
+        status: json["status"],
+        targetGender: json["target_gender"],
+        targetAreas: json["target_areas"] == null ? [] : List<String>.from(json["target_areas"]!.map((x) => x)),
     );
 
     Map<String, dynamic> toMap() => {
@@ -321,6 +352,11 @@ class Content {
         "user": user?.toMap(),
         "total_impressions": totalImpressions,
         "files_data": filesData == null ? [] : List<dynamic>.from(filesData!.map((x) => x.toMap())),
+        "cta_action": ctaAction,
+        "cta_action_url": ctaActionUrl,
+        "status": status,
+        "target_gender": targetGender,
+        "target_areas": targetAreas == null ? [] : List<dynamic>.from(targetAreas!.map((x) => x)),
     };
 }
 
