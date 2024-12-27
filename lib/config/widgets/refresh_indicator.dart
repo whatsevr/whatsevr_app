@@ -19,7 +19,7 @@ class MyRefreshIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EasyRefresh(
-      header:triggerAxis== Axis.horizontal?const MaterialHeader():
+      header:triggerAxis== Axis.horizontal?const ClassicHeader():
        const MaterialHeader(),
       simultaneously: false,
       onRefresh: onPullDown,

@@ -7,15 +7,16 @@ import 'package:whatsevr_app/config/api/external/models/memory.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/memories.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
 class HomePageMemoriesView extends StatelessWidget {
-  final ScrollController? scrollController;
+  final ScrollController? scrollController=ScrollController();
 
-  const HomePageMemoriesView({super.key, this.scrollController});
+   HomePageMemoriesView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,23 +41,17 @@ class HomePageMemoriesView extends StatelessWidget {
       child: BlocSelector<HomeBloc, HomeState, List<RecommendedMemory>?>(
         selector: (HomeState state) => state.recommendationMemories,
         builder: (context, data) {
-          return MyRefreshIndicator(
-            onPullDown: () async {
-              context.read<HomeBloc>().add(LoadMemoriesEvent());
-              await Future<void>.delayed(const Duration(seconds: 2));
-            },
-            child: GridView.builder(
-              controller: scrollController,
-              scrollDirection: Axis.horizontal,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-                childAspectRatio: 3 / 5,
-              ),
-              itemCount: data?.length ?? 0,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
+          return ListView.separated(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Gap(8.0),
+          
+            itemCount: data?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return AspectRatio(
+                aspectRatio: WhatsevrAspectRatio.vertical9by16.ratio,
+                child: GestureDetector(
                   onTap: () {
                     showMemoriesPlayer(
                       context,
@@ -93,7 +88,7 @@ class HomePageMemoriesView extends StatelessWidget {
                         decoration: BoxDecoration(
                           color:
                               Colors.primaries[index % Colors.primaries.length],
-                          borderRadius: BorderRadius.circular(18.0),
+                          borderRadius: BorderRadius.circular(8.0),
                           image: DecorationImage(
                             image: ExtendedNetworkImageProvider(
                               '${data?[index].userMemories?.first.imageUrl}',
@@ -104,7 +99,7 @@ class HomePageMemoriesView extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                       ),
-
+                  
                       /// profile avatar
                       Positioned(
                         top: 8,
@@ -116,7 +111,7 @@ class HomePageMemoriesView extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                           child: CircleAvatar(
-                            radius: 24.0,
+                            radius: 18.0,
                             backgroundImage: ExtendedNetworkImageProvider(
                               data?[index].user?.profilePicture ??
                                   MockData.blankProfileAvatar,
@@ -170,8 +165,8 @@ class HomePageMemoriesView extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.black,
                                 borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(18.0),
-                                  bottomRight: Radius.circular(18.0),
+                                  bottomLeft: Radius.circular(8.0),
+                                  bottomRight: Radius.circular(8.0),
                                 ),
                               ),
                               child: Text(
@@ -189,9 +184,9 @@ class HomePageMemoriesView extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           );
         },
       ),
