@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/api/external/models/network_file.dart';
 
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -14,7 +15,7 @@ class OfferPostFrame extends StatelessWidget {
   final String? title;
   final String? description;
   final String? status;
-  final List<FilesDatum>? filesData;
+  final List<WhatsevrNetworkFile>? filesData;
   final String? ctaAction;
   final String? ctaActionUrl;
   final int? views;
@@ -72,7 +73,7 @@ class OfferPostFrame extends StatelessWidget {
                   key: UniqueKey(),
                   children: [
                     if (filesData != null && filesData!.isNotEmpty)
-                      for (final FilesDatum file in filesData!)
+                      for (final WhatsevrNetworkFile file in filesData!)
                         if (file.type == 'image')
                           ExtendedImage.network(
                             file.imageUrl ?? MockData.imagePlaceholder('Offer'),

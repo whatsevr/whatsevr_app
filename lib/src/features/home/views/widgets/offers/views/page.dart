@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/api/external/models/network_file.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/offers.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
@@ -61,7 +62,9 @@ class HomePageOffersPage extends StatelessWidget {
                     title: data[index].title,
                     description: data[index].description,
                     status: data[index].status,
-                    filesData: data[index].filesData,
+                                   filesData: data[index].filesData?.map((e) =>WhatsevrNetworkFile.fromMap(
+                      e.toMap(),
+                    )).toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,
                     timeAgo: GetTimeAgo.parse(
