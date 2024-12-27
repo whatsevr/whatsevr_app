@@ -6,6 +6,7 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:story_view_advance/controller/story_controller.dart';
 import 'package:story_view_advance/utils.dart';
 import 'package:story_view_advance/widgets/story_view_advance.dart';
+import 'package:whatsevr_app/config/api/external/models/memory.dart';
 
 import 'package:whatsevr_app/config/services/launch_url.dart';
 import 'package:whatsevr_app/config/widgets/links_preview_list.dart';
@@ -32,42 +33,6 @@ showMemoriesPlayer(
   );
 }
 
-class UiMemoryGroup {
-  final String? userUid;
-  final String? username;
-  final String? profilePicture;
-  final List<UiMemoryGroupItems?> uiMemoryGroupItems;
-
-  UiMemoryGroup({
-    required this.userUid,
-    required this.username,
-    required this.profilePicture,
-    required this.uiMemoryGroupItems,
-  });
-}
-
-class UiMemoryGroupItems {
-  final String? imageUrl;
-  final String? videoUrl;
-  final String? caption;
-  final String? ctaAction;
-  final String? ctaActionUrl;
-  final int? videoDurationMs;
-  final bool? isImage;
-  final bool? isVideo;
-  final DateTime? createdAt;
-  UiMemoryGroupItems({
-    this.imageUrl,
-    this.videoUrl,
-    this.caption,
-    this.ctaAction,
-    this.ctaActionUrl,
-    this.videoDurationMs,
-    this.isImage,
-    this.isVideo,
-    this.createdAt,
-  });
-}
 
 class _MemoriesPlayer extends StatefulWidget {
   final List<UiMemoryGroup>? uiMemoryGroups;

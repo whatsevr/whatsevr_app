@@ -4,18 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/external/models/memory.dart';
 
-import 'package:whatsevr_app/config/api/response_model/public_recommendation/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/memories.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
-import 'package:whatsevr_app/src/features/explore/bloc/explore_bloc.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
-class ExplorePageMemoriesPage extends StatelessWidget {
+class HomePageMemoriesView extends StatelessWidget {
   final ScrollController? scrollController;
 
-  const ExplorePageMemoriesPage({super.key, this.scrollController});
+  const HomePageMemoriesView({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +23,10 @@ class ExplorePageMemoriesPage extends StatelessWidget {
          context,
      scrollController: scrollController,
       execute: () {
-        context.read<ExploreBloc>().add(
+        context.read<HomeBloc>().add(
               LoadMoreMemoriesEvent(
                 page: context
-                        .read<ExploreBloc>()
+                        .read<HomeBloc>()
                         .state
                         .memoryPaginationData!
                         .currentPage +
@@ -37,16 +37,17 @@ class ExplorePageMemoriesPage extends StatelessWidget {
     );
 
     return PadHorizontal(
-      child: BlocSelector<ExploreBloc, ExploreState, List<RecommendedMemory>?>(
-        selector: (ExploreState state) => state.recommendationMemories,
+      child: BlocSelector<HomeBloc, HomeState, List<RecommendedMemory>?>(
+        selector: (HomeState state) => state.recommendationMemories,
         builder: (context, data) {
           return MyRefreshIndicator(
             onPullDown: () async {
-              context.read<ExploreBloc>().add(LoadMemoriesEvent());
+              context.read<HomeBloc>().add(LoadMemoriesEvent());
               await Future<void>.delayed(const Duration(seconds: 2));
             },
             child: GridView.builder(
               controller: scrollController,
+              scrollDirection: Axis.horizontal,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 5.0,

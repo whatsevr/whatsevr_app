@@ -52,7 +52,7 @@ class _DashboardPageBottomNavigationBarState
         const Icon(WhatsevrIcons.iconWhatServ001Svg, size: 28),
         () {
           context.read<DashboardBloc>().add(
-                const TabChanged(
+                 TabChanged(
                   newView: HomePage(),
                 ),
               );
