@@ -7,30 +7,30 @@ class WhatsevrMixPostTile extends StatelessWidget {
   static const String photo = 'photo';
   static const String video = 'video';
   static const String flick = 'flick';
-  static const String offer = 'offer'; // Added offer type
- 
+  static const String offer = 'offer';
+
   final String tileType;
   final VoidCallback? onClick;
   final String? thumbnailUrl;
-
 
   const WhatsevrMixPostTile({
     super.key,
     required this.tileType,
     this.onClick,
     this.thumbnailUrl,
-   
   });
 
   Widget? _getOverlay() {
     final double iconSize = 16.0;
     switch (tileType) {
       case video:
-        return  Icon(WhatsevrIcons.wtvIcon, color: Colors.white, size: iconSize);
+        return Icon(WhatsevrIcons.wtvIcon, color: Colors.white, size: iconSize);
       case flick:
-        return  Icon(WhatsevrIcons.flicksIcon001, color: Colors.white, size: iconSize);
+        return Icon(WhatsevrIcons.flicksIcon001,
+            color: Colors.white, size: iconSize);
       case offer:
-        return  Icon(WhatsevrIcons.offerIcon, color: Colors.white, size: iconSize);
+        return Icon(WhatsevrIcons.offerIcon,
+            color: Colors.white, size: iconSize);
       default:
         return null;
     }
@@ -43,14 +43,22 @@ class WhatsevrMixPostTile extends StatelessWidget {
       child: Stack(
         children: [
           Container(
+            
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(4.0),
-              image: thumbnailUrl != null ? DecorationImage(
-                image: ExtendedNetworkImageProvider(thumbnailUrl!),
-                fit: BoxFit.cover,
-              ) : DecorationImage(
-                image: ExtendedNetworkImageProvider(MockData.randomImage()),
+              image: DecorationImage(
+                image: ExtendedNetworkImageProvider(
+                  thumbnailUrl ??
+                      MockData.imagePlaceholder(
+                        'Thumbnail',
+                        tileType == flick
+                            ? true
+                            : false,
+                      ),
+                      cache: true,
+                      printError: true, 
+                ),
                 fit: BoxFit.cover,
               ),
             ),

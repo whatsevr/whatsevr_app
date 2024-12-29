@@ -13,7 +13,7 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/memories/views/page.dart';
+import 'package:whatsevr_app/src/features/home/views/widgets/memories.dart';
 
 class HomePageForYouPage extends StatelessWidget {
   final ScrollController? scrollController;

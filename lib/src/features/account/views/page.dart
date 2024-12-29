@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/external/models/memory.dart';
@@ -11,7 +14,7 @@ import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
-
+import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -21,6 +24,7 @@ import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/content_upload_button_sheet.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/showAppModalSheet.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
 import 'package:whatsevr_app/config/widgets/previewers/photo.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
@@ -38,6 +42,8 @@ import 'package:whatsevr_app/src/features/account/views/widgets/offers.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/pdfs.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/services.dart';
 import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
+
+part 'widgets/mix_content.dart';
 
 class AccountPageArgument {
   final bool isEditMode;
@@ -592,7 +598,7 @@ class AccountPage extends StatelessWidget {
                                             ?.isPortfolio ==
                                         true)
                                       ('Services', AccountPageServicesView()),
-                                    ('Media', Text('Media')),
+                                    ('Media', _MixContentView()),
                                     (
                                       state.profileDetailsResponse?.userInfo
                                                   ?.isPortfolio ==
