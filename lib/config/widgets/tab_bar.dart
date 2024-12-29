@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WhatsevrTabBarWithViews extends StatefulWidget {
   final bool? shrinkViews;
@@ -49,7 +50,7 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
               if (widget.shrinkViews == true) {
                 return widget
                     .tabViews[DefaultTabController.of(context).index].$2;
-              }
+              } 
               return Expanded(
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
@@ -86,6 +87,12 @@ class WhatsevrTabBar extends StatelessWidget {
       isScrollable: isScrollable ?? true,
       indicatorColor: Colors.blue,
       labelColor: Colors.black,
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      labelPadding: EdgeInsets.symmetric(horizontal: 16.w),
+      labelStyle: TextStyle(fontSize: 14.sp),
+      unselectedLabelStyle: TextStyle(fontSize: 14.sp),
+      indicatorPadding: EdgeInsets.symmetric(horizontal: 4.w),
+      indicatorWeight:  4.0.r,
       tabs: tabs.map((String e) => Tab(text: e)).toList(),
     );
   }

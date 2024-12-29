@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -48,67 +49,72 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ThemeBloc>(
-          create: (context) => ThemeBloc(),
-        ),
-        BlocProvider<ReactUnreactBloc>(
-          create: (context) => ReactUnreactBloc()..add(FetchReactions()),
-        ),
-        BlocProvider<FollowUnfollowBloc>(
-          create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
-        ),
-        BlocProvider<JoinLeaveCommunityBloc>(
-          create: (context) =>
-              JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
-        ),
-      ],
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        builder: (context, state) {
-          final AppTheme theme = context.whatsevrTheme;
-          return WhatsevrStackToast(
-            child: MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              title: 'WhatsEvr',
-              theme: ThemeData(
-                primaryColor: theme.primary,
-                scaffoldBackgroundColor: theme.background,
-                textSelectionTheme: const TextSelectionThemeData(
-                  cursorColor: Colors.grey,
-                  selectionColor: Colors.grey,
-                  selectionHandleColor: Colors.grey,
+    return ScreenUtilInit(
+      designSize: MediaQuery.of(context).orientation == Orientation.landscape ? const Size(812, 375) : 
+      const Size(375, 812), 
+      minTextAdapt: true,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<ThemeBloc>(
+            create: (context) => ThemeBloc(),
+          ),
+          BlocProvider<ReactUnreactBloc>(
+            create: (context) => ReactUnreactBloc()..add(FetchReactions()),
+          ),
+          BlocProvider<FollowUnfollowBloc>(
+            create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
+          ),
+          BlocProvider<JoinLeaveCommunityBloc>(
+            create: (context) =>
+                JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
+          ),
+        ],
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            final AppTheme theme = context.whatsevrTheme;
+            return WhatsevrStackToast(
+              child: MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                title: 'WhatsEvr',
+                theme: ThemeData(
+                  primaryColor: theme.primary,
+                  scaffoldBackgroundColor: theme.background,
+                  textSelectionTheme: const TextSelectionThemeData(
+                    cursorColor: Colors.grey,
+                    selectionColor: Colors.grey,
+                    selectionHandleColor: Colors.grey,
+                  ),
+                  useMaterial3: true,
+                  textTheme: GoogleFonts.poppinsTextTheme(),
                 ),
-                useMaterial3: true,
-                textTheme: GoogleFonts.poppinsTextTheme(),
+                routerConfig: routeConfig,
+                scrollBehavior: const MaterialScrollBehavior().copyWith(
+                  scrollbars: false,
+                  dragDevices: PointerDeviceKind.values.toSet(),
+                ),
+                builder: FlutterSmartDialog.init(
+                  toastBuilder: (msg) => _toastUi(msg),
+                  loadingBuilder: (String msg) => _loaderUi(msg),
+                  builder: (BuildContext context, Widget? child) {
+                    return GestureDetector(
+                      onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      child: Stack(
+                        children: <Widget>[
+                          SafeArea(
+                            child: child!,
+                          ),
+                          if (kTestingMode) const DraggableWidget(),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
-              routerConfig: routeConfig,
-              scrollBehavior: const MaterialScrollBehavior().copyWith(
-                scrollbars: false,
-                dragDevices: PointerDeviceKind.values.toSet(),
-              ),
-              builder: FlutterSmartDialog.init(
-                toastBuilder: (msg) => _toastUi(msg),
-                loadingBuilder: (String msg) => _loaderUi(msg),
-                builder: (BuildContext context, Widget? child) {
-                  return GestureDetector(
-                    onTap: () {
-                      FocusManager.instance.primaryFocus?.unfocus();
-                    },
-                    child: Stack(
-                      children: <Widget>[
-                        SafeArea(
-                          child: child!,
-                        ),
-                        if (kTestingMode) const DraggableWidget(),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

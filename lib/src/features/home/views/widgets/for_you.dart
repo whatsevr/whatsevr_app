@@ -1,10 +1,12 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
@@ -41,8 +43,8 @@ class HomePageForYouPage extends StatelessWidget {
     return ListView(
       controller: scrollController,
       children: <Widget>[
-        SizedBox( 
-          height: 140,
+        SizedBox(
+          height: 150.h,
           child: HomePageMemoriesView(),
         ),
         const Gap(8.0),

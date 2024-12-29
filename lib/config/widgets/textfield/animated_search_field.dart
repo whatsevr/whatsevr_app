@@ -1,5 +1,6 @@
 import 'package:animated_hint_textfield/animated_hint_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:hidable/hidable.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
@@ -53,13 +54,13 @@ class _WhatsevrAnimatedSearchFieldState
   Widget build(BuildContext context) {
     return Hidable(
       controller: widget.hideOnScrollController ?? _defaultScrollController,
-      preferredWidgetSize: const Size(0, 40),
+      preferredWidgetSize: Size(0, 40.h),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 6.0.h),
         decoration: BoxDecoration(
           color: context.whatsevrTheme.surface,
           border: Border.all(color: Colors.grey[400]!),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Row(
           children: <Widget>[
@@ -68,10 +69,10 @@ class _WhatsevrAnimatedSearchFieldState
                 onTap: () {
                   AppNavigationService.goBack();
                 },
-                child: const Icon(Icons.arrow_back),
+                child: Icon(Icons.arrow_back, size: 18.sp),
               ),
-            if (widget.showBackButton != true) const Icon(Icons.search),
-            const Gap(8),
+            if (widget.showBackButton != true) Icon(Icons.search, size: 18.sp),
+            Gap(8.w),
             Expanded(
               child: AnimatedTextField(
                 animationType: Animationtype
@@ -89,23 +90,23 @@ class _WhatsevrAnimatedSearchFieldState
                   setState(() {});
                   widget.onChanged?.call(value);
                 },
-                style: const TextStyle(
+                style:  TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
-            const Gap(8),
+            Gap(8.w),
             if (widget.controller?.text.isNotEmpty ?? false)
               GestureDetector(
                 onTap: () {
                   widget.controller?.clear();
                   setState(() {});
                 },
-                child: const Icon(
+                child: Icon(
                   Icons.close,
                   color: Colors.black,
-                  size: 20,
+                  size: 20.sp,
                 ),
               ),
           ],

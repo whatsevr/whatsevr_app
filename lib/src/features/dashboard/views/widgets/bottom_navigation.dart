@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
@@ -38,7 +39,7 @@ class _DashboardPageBottomNavigationBarState
     final List<(Widget icon, VoidCallback? onTap, VoidCallback? onLongTap)>
         items = [
       (
-        const Icon(WhatsevrIcons.iconExplore002Svg, size: 28),
+        Icon(WhatsevrIcons.iconExplore002Svg, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -49,7 +50,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.iconWhatServ001Svg, size: 28),
+        Icon(WhatsevrIcons.iconWhatServ001Svg, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                  TabChanged(
@@ -60,7 +61,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.postUploadIcon002, size: 28),
+        Icon(WhatsevrIcons.postUploadIcon002, size: 28.sp),
         () {
           final bool? isPortfolio =
               AuthUserService.supportiveData?.userInfo?.isPortfolio;
@@ -78,7 +79,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.flicksIcon001, size: 28),
+        Icon(WhatsevrIcons.flicksIcon001, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -89,7 +90,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.message, size: 28),
+        Icon(WhatsevrIcons.message, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -100,7 +101,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.notificationIcon001, size: 28),
+        Icon(WhatsevrIcons.notificationIcon001, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                 const TabChanged(
@@ -111,7 +112,7 @@ class _DashboardPageBottomNavigationBarState
         null
       ),
       (
-        const Icon(WhatsevrIcons.account, size: 28),
+        Icon(WhatsevrIcons.account, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
                 TabChanged(
@@ -135,9 +136,9 @@ class _DashboardPageBottomNavigationBarState
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
+            spreadRadius: 5.r,
+            blurRadius: 7.r,
+            offset: Offset(0, 3.h),
           ),
         ],
       ),
@@ -154,7 +155,7 @@ class _DashboardPageBottomNavigationBarState
                 },
                 onLongPress: itm.$3,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(8.0.r),
                   child: Theme(
                     data: ThemeData(
                       iconTheme: IconThemeData(
@@ -168,15 +169,29 @@ class _DashboardPageBottomNavigationBarState
                 ),
               ),
           ];
-          return SizedBox(
-            height: 45,
+          //    return SizedBox(
+          //   height: 48.h,
+          //   child: FittedBox(
+          //     child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       for (int i = 0; i < children.length; i++) ...[
+          //         children[i],
+          //         if (i < children.length - 1) Gap(10.w),
+          //       ],
+          //     ],
+          //   ),
+          //   ),
+          // );
+           return SizedBox(
+            height: 50.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
                 return children[index];
               },
               separatorBuilder: (BuildContext context, int index) {
-                return const Gap(10);
+                return  Gap(25.r);
               },
               itemCount: children.length,
             ),

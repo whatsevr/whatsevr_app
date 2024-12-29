@@ -45,7 +45,7 @@ class HomePageMemoriesView extends StatelessWidget {
             controller: scrollController,
             scrollDirection: Axis.horizontal,
             separatorBuilder: (BuildContext context, int index) =>
-                const Gap(8.0),
+                const Gap(4.0),
           
             itemCount: data?.length ?? 0,
             itemBuilder: (BuildContext context, int index) {
@@ -127,36 +127,6 @@ class HomePageMemoriesView extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: <Color>[
-                                    Colors.black.withOpacity(0.0),
-                                    Colors.black,
-                                  ],
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Gap(22),
-                                  Text(
-                                    data?[index].userMemories?.first.caption ??
-                                        '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.fade,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0,

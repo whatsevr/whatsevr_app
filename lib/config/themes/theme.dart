@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:whatsevr_app/config/themes/bloc/theme_bloc.dart';
 
 enum ThemeType { light, dark }
@@ -45,67 +46,67 @@ abstract class AppTheme {
   double get elevationLarge => 8;
 
   // Common properties
-  double get spacing1 => 8;
-  double get spacing2 => 16;
-  double get spacing3 => 24;
-  double get spacing4 => 32;
-  double get spacing5 => 40;
-  double get spacing6 => 48;
-  double get borderRadius => 8;
-  double get buttonHeight => 48;
+  double get spacing1 => 8.w;
+  double get spacing2 => 16.w;
+  double get spacing3 => 24.w;
+  double get spacing4 => 32.w;
+  double get spacing5 => 40.w;
+  double get spacing6 => 48.w;
+  double get borderRadius => 8.r;
+  double get buttonHeight => 48.h;
 
   EdgeInsets get padding => EdgeInsets.all(spacing2);
   EdgeInsets get margin => EdgeInsets.all(spacing2);
 
   TextStyle get h1 => TextStyle(
-        fontSize: 32,
+        fontSize: 32.sp,
         fontWeight: FontWeight.bold,
         color: text,
         height: 1.2,
       );
 
   TextStyle get h2 => TextStyle(
-        fontSize: 24,
+        fontSize: 24.sp,
         fontWeight: FontWeight.bold,
         color: text,
         height: 1.2,
       );
 
   TextStyle get h3 => TextStyle(
-        fontSize: 20,
+        fontSize: 20.sp,
         fontWeight: FontWeight.bold,
         color: text,
         height: 1.2,
       );
 
   TextStyle get body => TextStyle(
-        fontSize: 16,
+        fontSize: 16.sp,
         color: text,
         height: 1.5,
       );
 
   TextStyle get bodySmall => TextStyle(
-        fontSize: 14,
+        fontSize: 14.sp,
         color: text,
         height: 1.5,
       );
 
   TextStyle get subtitle => TextStyle(
-        fontSize: 18,
+        fontSize: 18.sp,
         fontWeight: FontWeight.w500,
         color: text,
         height: 1.3,
       );
 
   TextStyle get caption => TextStyle(
-        fontSize: 12,
+        fontSize: 12.sp,
         color: textLight,
         height: 1.4,
       );
 
   TextStyle get buttonText => TextStyle(
         // rename from 'buttonStyle' to 'buttonText'
-        fontSize: 16,
+        fontSize: 16.sp,
         fontWeight: FontWeight.w600, // make slightly bolder
         color:
             surface, // should use surface color since buttons usually have primary background
@@ -114,15 +115,15 @@ abstract class AppTheme {
       );
 
   // Border styles
-  BorderRadius get borderRadiusSmall => BorderRadius.circular(4);
-  BorderRadius get borderRadiusLarge => BorderRadius.circular(12);
-  BorderRadius get borderRadiusFull => BorderRadius.circular(999);
+  BorderRadius get borderRadiusSmall => BorderRadius.circular(4.r);
+  BorderRadius get borderRadiusLarge => BorderRadius.circular(12.r);
+  BorderRadius get borderRadiusFull => BorderRadius.circular(999.r);
 
-  Border get border => Border.all(color: divider, width: 1);
+  Border get border => Border.all(color: divider, width: 1.w);
   BoxShadow get boxShadow => BoxShadow(
         color: shadow,
-        blurRadius: 8,
-        offset: const Offset(0, 2),
+        blurRadius: 8.r,
+        offset:  Offset(0, 2.h),
       );
 
   // Card theme
@@ -140,15 +141,15 @@ abstract class AppTheme {
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: divider),
+          borderSide: BorderSide(color: divider, width: 1.w),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: primary),
+          borderSide: BorderSide(color: primary, width: 1.w),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: error),
+          borderSide: BorderSide(color: error, width: 1.w),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       );
@@ -281,8 +282,8 @@ class DarkTheme extends AppTheme {
   @override
   BoxShadow get boxShadow => BoxShadow(
         color: shadow,
-        blurRadius: 12,
-        offset: const Offset(0, 4),
+        blurRadius: 12.r,
+        offset:  Offset(0, 4.h),
       );
 }
 
