@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/external/models/memory.dart';
@@ -14,9 +15,10 @@ import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/community_members.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
 import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
+import 'package:whatsevr_app/config/api/response_model/post/memories.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
@@ -36,6 +38,7 @@ import 'package:whatsevr_app/src/features/community/views/widgets/cover_media.da
 
 import 'package:whatsevr_app/src/features/community/views/widgets/services.dart';
 import 'package:whatsevr_app/src/features/community/views/widgets/videos.dart';
+part 'widgets/mix_content.dart';
 
 class CommunityPageArgument {
   final bool isEditMode;
@@ -75,9 +78,9 @@ class CommunityPage extends StatelessWidget {
                     CommunityPageCoverVideoView(),
                     Container(
                       padding: EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 10,
-                              ),
+                        horizontal: 4,
+                        vertical: 10,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.surface,
                         borderRadius: BorderRadius.vertical(

@@ -1,38 +1,38 @@
 import 'dart:convert';
 
-class UserOffersResponse {
+class UserAndCommunityOffersResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
   final List<OfferPost>? offerPosts;
 
-  UserOffersResponse({
+  UserAndCommunityOffersResponse({
     this.message,
     this.page,
     this.lastPage,
     this.offerPosts,
   });
 
-  UserOffersResponse copyWith({
+  UserAndCommunityOffersResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
     List<OfferPost>? offerPosts,
   }) =>
-      UserOffersResponse(
+      UserAndCommunityOffersResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
         offerPosts: offerPosts ?? this.offerPosts,
       );
 
-  factory UserOffersResponse.fromJson(String str) =>
-      UserOffersResponse.fromMap(json.decode(str));
+  factory UserAndCommunityOffersResponse.fromJson(String str) =>
+      UserAndCommunityOffersResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserOffersResponse.fromMap(Map<String, dynamic> json) =>
-      UserOffersResponse(
+  factory UserAndCommunityOffersResponse.fromMap(Map<String, dynamic> json) =>
+      UserAndCommunityOffersResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],

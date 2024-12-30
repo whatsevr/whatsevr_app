@@ -1,59 +1,57 @@
 import 'dart:convert';
 
-class UserPhotoPostsResponse {
+class UserAndCommunityFlicksResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<PhotoPost>? photoPosts;
+  final List<Flick>? flicks;
 
-  UserPhotoPostsResponse({
+  UserAndCommunityFlicksResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.photoPosts,
+    this.flicks,
   });
 
-  UserPhotoPostsResponse copyWith({
+  UserAndCommunityFlicksResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<PhotoPost>? photoPosts,
+    List<Flick>? flicks,
   }) =>
-      UserPhotoPostsResponse(
+      UserAndCommunityFlicksResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        photoPosts: photoPosts ?? this.photoPosts,
+        flicks: flicks ?? this.flicks,
       );
 
-  factory UserPhotoPostsResponse.fromJson(String str) =>
-      UserPhotoPostsResponse.fromMap(json.decode(str));
+  factory UserAndCommunityFlicksResponse.fromJson(String str) =>
+      UserAndCommunityFlicksResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserPhotoPostsResponse.fromMap(Map<String, dynamic> json) =>
-      UserPhotoPostsResponse(
+  factory UserAndCommunityFlicksResponse.fromMap(Map<String, dynamic> json) =>
+      UserAndCommunityFlicksResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        photoPosts: json['photo_posts'] == null
+        flicks: json['flicks'] == null
             ? []
-            : List<PhotoPost>.from(
-                json['photo_posts']!.map((x) => PhotoPost.fromMap(x)),
-              ),
+            : List<Flick>.from(json['flicks']!.map((x) => Flick.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'photo_posts': photoPosts == null
+        'flicks': flicks == null
             ? []
-            : List<dynamic>.from(photoPosts!.map((x) => x.toMap())),
+            : List<dynamic>.from(flicks!.map((x) => x.toMap())),
       };
 }
 
-class PhotoPost {
+class Flick {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -67,8 +65,10 @@ class PhotoPost {
   final String? postCreatorType;
   final DateTime? updatedAt;
   final String? userUid;
+  final String? thumbnail;
+  final String? videoUrl;
   final String? location;
-  final int? totalImpressions;
+  final int? totalViews;
   final int? totalLikes;
   final int? totalComments;
   final String? internalAiDescription;
@@ -77,9 +77,9 @@ class PhotoPost {
   final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final List<FilesDatum>? filesData;
+  final int? videoDurationInSec;
 
-  PhotoPost({
+  Flick({
     this.id,
     this.createdAt,
     this.uid,
@@ -93,8 +93,10 @@ class PhotoPost {
     this.postCreatorType,
     this.updatedAt,
     this.userUid,
+    this.thumbnail,
+    this.videoUrl,
     this.location,
-    this.totalImpressions,
+    this.totalViews,
     this.totalLikes,
     this.totalComments,
     this.internalAiDescription,
@@ -103,10 +105,10 @@ class PhotoPost {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.filesData,
+    this.videoDurationInSec,
   });
 
-  PhotoPost copyWith({
+  Flick copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -120,8 +122,10 @@ class PhotoPost {
     String? postCreatorType,
     DateTime? updatedAt,
     String? userUid,
+    String? thumbnail,
+    String? videoUrl,
     String? location,
-    int? totalImpressions,
+    int? totalViews,
     int? totalLikes,
     int? totalComments,
     String? internalAiDescription,
@@ -130,9 +134,9 @@ class PhotoPost {
     List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    List<FilesDatum>? filesData,
+    int? videoDurationInSec,
   }) =>
-      PhotoPost(
+      Flick(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -146,8 +150,10 @@ class PhotoPost {
         postCreatorType: postCreatorType ?? this.postCreatorType,
         updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
+        thumbnail: thumbnail ?? this.thumbnail,
+        videoUrl: videoUrl ?? this.videoUrl,
         location: location ?? this.location,
-        totalImpressions: totalImpressions ?? this.totalImpressions,
+        totalViews: totalViews ?? this.totalViews,
         totalLikes: totalLikes ?? this.totalLikes,
         totalComments: totalComments ?? this.totalComments,
         internalAiDescription:
@@ -157,14 +163,14 @@ class PhotoPost {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        filesData: filesData ?? this.filesData,
+        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
       );
 
-  factory PhotoPost.fromJson(String str) => PhotoPost.fromMap(json.decode(str));
+  factory Flick.fromJson(String str) => Flick.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PhotoPost.fromMap(Map<String, dynamic> json) => PhotoPost(
+  factory Flick.fromMap(Map<String, dynamic> json) => Flick(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null
@@ -186,8 +192,10 @@ class PhotoPost {
             ? null
             : DateTime.parse(json['updated_at']),
         userUid: json['user_uid'],
+        thumbnail: json['thumbnail'],
+        videoUrl: json['video_url'],
         location: json['location'],
-        totalImpressions: json['total_impressions'],
+        totalViews: json['total_views'],
         totalLikes: json['total_likes'],
         totalComments: json['total_comments'],
         internalAiDescription: json['internal_ai_description'],
@@ -198,11 +206,7 @@ class PhotoPost {
             : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         totalShares: json['total_shares'],
         cumulativeScore: json['cumulative_score'],
-        filesData: json['files_data'] == null
-            ? []
-            : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
-              ),
+        videoDurationInSec: json['video_duration_in_sec'],
       );
 
   Map<String, dynamic> toMap() => {
@@ -222,8 +226,10 @@ class PhotoPost {
         'post_creator_type': postCreatorType,
         'updated_at': updatedAt?.toIso8601String(),
         'user_uid': userUid,
+        'thumbnail': thumbnail,
+        'video_url': videoUrl,
         'location': location,
-        'total_impressions': totalImpressions,
+        'total_views': totalViews,
         'total_likes': totalLikes,
         'total_comments': totalComments,
         'internal_ai_description': internalAiDescription,
@@ -234,42 +240,6 @@ class PhotoPost {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         'total_shares': totalShares,
         'cumulative_score': cumulativeScore,
-        'files_data': filesData == null
-            ? []
-            : List<dynamic>.from(filesData!.map((x) => x.toMap())),
-      };
-}
-
-class FilesDatum {
-  final String? type;
-  final String? imageUrl;
-
-  FilesDatum({
-    this.type,
-    this.imageUrl,
-  });
-
-  FilesDatum copyWith({
-    String? type,
-    String? imageUrl,
-  }) =>
-      FilesDatum(
-        type: type ?? this.type,
-        imageUrl: imageUrl ?? this.imageUrl,
-      );
-
-  factory FilesDatum.fromJson(String str) =>
-      FilesDatum.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory FilesDatum.fromMap(Map<String, dynamic> json) => FilesDatum(
-        type: json['type'],
-        imageUrl: json['image_url'],
-      );
-
-  Map<String, dynamic> toMap() => {
-        'type': type,
-        'image_url': imageUrl,
+        'video_duration_in_sec': videoDurationInSec,
       };
 }

@@ -9,9 +9,10 @@ import 'package:whatsevr_app/config/api/methods/posts.dart';
 import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/src/features/community/views/page.dart';
 
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/post/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/post/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/post/video_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/post/mix_content.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -54,18 +55,22 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
           communityDetailsResponse: profileDetailsResponse,
         ),
       );
-      final UserVideoPostsResponse? videoPosts =
+      
+      final UserAndCommunityVideoPostsResponse? videoPosts =
           await PostApi.getVideoPosts(communityUid: state.communityUid!);
-
-      final UserMemoriesResponse? memories =
+      final UserAndCommunityMemoriesResponse? memories =
           await PostApi.getMemories(communityUid: state.communityUid!);
-      final UserOffersResponse? offers =
+      final UserAndCommunityOffersResponse? offers =
           await PostApi.getOfferPosts(communityUid: state.communityUid!);
+      final UserAndCommunityMixContentResponse? mixContent = 
+          await PostApi.getMixContent(communityUid: state.communityUid!);
+
       emit(
         state.copyWith(
           communityVideoPosts: videoPosts?.videoPosts ?? [],
           communityMemories: memories?.memories ?? [],
           communityOffers: offers?.offerPosts ?? [],
+          communityMixContent: mixContent?.mixContent ?? [],
         ),
       );
     } catch (e, s) {

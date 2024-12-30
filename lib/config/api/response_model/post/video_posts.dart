@@ -1,45 +1,45 @@
 import 'dart:convert';
 
-class UserMemoriesResponse {
+class UserAndCommunityVideoPostsResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<Memory>? memories;
+  final List<VideoPost>? videoPosts;
 
-  UserMemoriesResponse({
+  UserAndCommunityVideoPostsResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.memories,
+    this.videoPosts,
   });
 
-  UserMemoriesResponse copyWith({
+  UserAndCommunityVideoPostsResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<Memory>? memories,
+    List<VideoPost>? videoPosts,
   }) =>
-      UserMemoriesResponse(
+      UserAndCommunityVideoPostsResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        memories: memories ?? this.memories,
+        videoPosts: videoPosts ?? this.videoPosts,
       );
 
-  factory UserMemoriesResponse.fromJson(String str) =>
-      UserMemoriesResponse.fromMap(json.decode(str));
+  factory UserAndCommunityVideoPostsResponse.fromJson(String str) =>
+      UserAndCommunityVideoPostsResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserMemoriesResponse.fromMap(Map<String, dynamic> json) =>
-      UserMemoriesResponse(
+  factory UserAndCommunityVideoPostsResponse.fromMap(Map<String, dynamic> json) =>
+      UserAndCommunityVideoPostsResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        memories: json['memories'] == null
+        videoPosts: json['video_posts'] == null
             ? []
-            : List<Memory>.from(
-                json['memories']!.map((x) => Memory.fromMap(x)),
+            : List<VideoPost>.from(
+                json['video_posts']!.map((x) => VideoPost.fromMap(x)),
               ),
       );
 
@@ -47,28 +47,28 @@ class UserMemoriesResponse {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'memories': memories == null
+        'video_posts': videoPosts == null
             ? []
-            : List<dynamic>.from(memories!.map((x) => x.toMap())),
+            : List<dynamic>.from(videoPosts!.map((x) => x.toMap())),
       };
 }
 
-class Memory {
+class VideoPost {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
-  final String? caption;
-  final List<dynamic>? hashtags;
+  final String? title;
+  final String? description;
+  final List<String>? hashtags;
   final List<String>? taggedUserUids;
   final bool? isDeleted;
   final bool? isArchived;
   final bool? isActive;
   final String? postCreatorType;
-  final DateTime? expiresAt;
+  final DateTime? updatedAt;
   final String? userUid;
-  final String? imageUrl;
+  final String? thumbnail;
   final String? videoUrl;
-  final bool? isVideo;
   final String? location;
   final int? totalViews;
   final int? totalLikes;
@@ -76,31 +76,27 @@ class Memory {
   final String? internalAiDescription;
   final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
-  final List<dynamic>? taggedCommunityUids;
+  final List<String>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final String? ctaAction;
-  final String? ctaActionUrl;
-  final bool? isImage;
-  final dynamic isText;
-  final int? videoDurationMs;
+  final int? videoDurationInSec;
 
-  Memory({
+  VideoPost({
     this.id,
     this.createdAt,
     this.uid,
-    this.caption,
+    this.title,
+    this.description,
     this.hashtags,
     this.taggedUserUids,
     this.isDeleted,
     this.isArchived,
     this.isActive,
     this.postCreatorType,
-    this.expiresAt,
+    this.updatedAt,
     this.userUid,
-    this.imageUrl,
+    this.thumbnail,
     this.videoUrl,
-    this.isVideo,
     this.location,
     this.totalViews,
     this.totalLikes,
@@ -111,29 +107,25 @@ class Memory {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.ctaAction,
-    this.ctaActionUrl,
-    this.isImage,
-    this.isText,
-    this.videoDurationMs,
+    this.videoDurationInSec,
   });
 
-  Memory copyWith({
+  VideoPost copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
-    String? caption,
-    List<dynamic>? hashtags,
+    String? title,
+    String? description,
+    List<String>? hashtags,
     List<String>? taggedUserUids,
     bool? isDeleted,
     bool? isArchived,
     bool? isActive,
     String? postCreatorType,
-    DateTime? expiresAt,
+    DateTime? updatedAt,
     String? userUid,
-    String? imageUrl,
+    String? thumbnail,
     String? videoUrl,
-    bool? isVideo,
     String? location,
     int? totalViews,
     int? totalLikes,
@@ -141,31 +133,27 @@ class Memory {
     String? internalAiDescription,
     String? addressLatLongWkb,
     String? creatorLatLongWkb,
-    List<dynamic>? taggedCommunityUids,
+    List<String>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    String? ctaAction,
-    String? ctaActionUrl,
-    bool? isImage,
-    dynamic isText,
-    int? videoDurationMs,
+    int? videoDurationInSec,
   }) =>
-      Memory(
+      VideoPost(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
-        caption: caption ?? this.caption,
+        title: title ?? this.title,
+        description: description ?? this.description,
         hashtags: hashtags ?? this.hashtags,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         isDeleted: isDeleted ?? this.isDeleted,
         isArchived: isArchived ?? this.isArchived,
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
-        expiresAt: expiresAt ?? this.expiresAt,
+        updatedAt: updatedAt ?? this.updatedAt,
         userUid: userUid ?? this.userUid,
-        imageUrl: imageUrl ?? this.imageUrl,
+        thumbnail: thumbnail ?? this.thumbnail,
         videoUrl: videoUrl ?? this.videoUrl,
-        isVideo: isVideo ?? this.isVideo,
         location: location ?? this.location,
         totalViews: totalViews ?? this.totalViews,
         totalLikes: totalLikes ?? this.totalLikes,
@@ -177,27 +165,24 @@ class Memory {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        ctaAction: ctaAction ?? this.ctaAction,
-        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
-        isImage: isImage ?? this.isImage,
-        isText: isText ?? this.isText,
-        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
+        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
       );
 
-  factory Memory.fromJson(String str) => Memory.fromMap(json.decode(str));
+  factory VideoPost.fromJson(String str) => VideoPost.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Memory.fromMap(Map<String, dynamic> json) => Memory(
+  factory VideoPost.fromMap(Map<String, dynamic> json) => VideoPost(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null
             : DateTime.parse(json['created_at']),
         uid: json['uid'],
-        caption: json['caption'],
+        title: json['title'],
+        description: json['description'],
         hashtags: json['hashtags'] == null
             ? []
-            : List<dynamic>.from(json['hashtags']!.map((x) => x)),
+            : List<String>.from(json['hashtags']!.map((x) => x)),
         taggedUserUids: json['tagged_user_uids'] == null
             ? []
             : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
@@ -205,13 +190,12 @@ class Memory {
         isArchived: json['is_archived'],
         isActive: json['is_active'],
         postCreatorType: json['post_creator_type'],
-        expiresAt: json['expires_at'] == null
+        updatedAt: json['updated_at'] == null
             ? null
-            : DateTime.parse(json['expires_at']),
+            : DateTime.parse(json['updated_at']),
         userUid: json['user_uid'],
-        imageUrl: json['image_url'],
+        thumbnail: json['thumbnail'],
         videoUrl: json['video_url'],
-        isVideo: json['is_video'],
         location: json['location'],
         totalViews: json['total_views'],
         totalLikes: json['total_likes'],
@@ -221,21 +205,18 @@ class Memory {
         creatorLatLongWkb: json['creator_lat_long_wkb'],
         taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<dynamic>.from(json['tagged_community_uids']!.map((x) => x)),
+            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
         totalShares: json['total_shares'],
         cumulativeScore: json['cumulative_score'],
-        ctaAction: json['cta_action'],
-        ctaActionUrl: json['cta_action_url'],
-        isImage: json['is_image'],
-        isText: json['is_text'],
-        videoDurationMs: json['video_duration_ms'],
+        videoDurationInSec: json['video_duration_in_sec'],
       );
 
   Map<String, dynamic> toMap() => {
         'id': id,
         'created_at': createdAt?.toIso8601String(),
         'uid': uid,
-        'caption': caption,
+        'title': title,
+        'description': description,
         'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         'tagged_user_uids': taggedUserUids == null
@@ -245,11 +226,10 @@ class Memory {
         'is_archived': isArchived,
         'is_active': isActive,
         'post_creator_type': postCreatorType,
-        'expires_at': expiresAt?.toIso8601String(),
+        'updated_at': updatedAt?.toIso8601String(),
         'user_uid': userUid,
-        'image_url': imageUrl,
+        'thumbnail': thumbnail,
         'video_url': videoUrl,
-        'is_video': isVideo,
         'location': location,
         'total_views': totalViews,
         'total_likes': totalLikes,
@@ -262,10 +242,6 @@ class Memory {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         'total_shares': totalShares,
         'cumulative_score': cumulativeScore,
-        'cta_action': ctaAction,
-        'cta_action_url': ctaActionUrl,
-        'is_image': isImage,
-        'is_text': isText,
-        'video_duration_ms': videoDurationMs,
+        'video_duration_in_sec': videoDurationInSec,
       };
 }

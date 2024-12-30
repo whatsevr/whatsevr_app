@@ -8,6 +8,7 @@ class AccountState extends Equatable {
   final List<Flick?> userFlicks;
   final List<Memory?> userMemories;
   final List<OfferPost?> userOffers;
+  final List<MixContent?> userMixContent;
 
   const AccountState({
     this.userUid,
@@ -17,6 +18,7 @@ class AccountState extends Equatable {
     this.userFlicks = const [],
     this.userMemories = const [],
     this.userOffers = const [],
+    this.userMixContent = const [],
   });
 
   @override
@@ -26,6 +28,7 @@ class AccountState extends Equatable {
         userFlicks,
         userMemories,
         userOffers,
+        userMixContent,
       ];
 
   AccountState copyWith({
@@ -36,6 +39,7 @@ class AccountState extends Equatable {
     List<Flick>? userFlicks,
     List<Memory>? userMemories,
     List<OfferPost>? userOffers,
+    List<MixContent>? userMixContent,
   }) {
     return AccountState(
       userUid: userUid ?? this.userUid,
@@ -46,6 +50,7 @@ class AccountState extends Equatable {
       userFlicks: userFlicks ?? this.userFlicks,
       userMemories: userMemories ?? this.userMemories,
       userOffers: userOffers ?? this.userOffers,
+      userMixContent: userMixContent ?? this.userMixContent,
     );
   }
 }

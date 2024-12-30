@@ -13,11 +13,12 @@ import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_offer.da
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_photo_posts.dart';
 import 'package:whatsevr_app/config/api/requests_model/sanity_check_new_video_post.dart';
 import 'package:whatsevr_app/config/api/requests_model/upload_pdf.dart';
-import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_photo_posts.dart';
-import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/post/flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/post/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/post/mix_content.dart';
+import 'package:whatsevr_app/config/api/response_model/post/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/post/photo_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/post/video_posts.dart';
 
 class PostApi {
   static Future<(String? message, int? statusCode)?> sanityCheckNewVideoPost({
@@ -196,7 +197,7 @@ class PostApi {
     return null;
   }
 
-  static Future<UserVideoPostsResponse?> getVideoPosts({
+  static Future<UserAndCommunityVideoPostsResponse?> getVideoPosts({
     String? userUid,
     String? communityUid,
   }) async {
@@ -209,7 +210,7 @@ class PostApi {
         },
       );
       if (response.data != null) {
-        return UserVideoPostsResponse.fromMap(response.data);
+        return UserAndCommunityVideoPostsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -217,7 +218,7 @@ class PostApi {
     return null;
   }
 
-  static Future<UserFlicksResponse?> getFlicks({
+  static Future<UserAndCommunityFlicksResponse?> getFlicks({
     String? userUid,
     String? communityUid,
   }) async {
@@ -230,7 +231,7 @@ class PostApi {
         },
       );
       if (response.data != null) {
-        return UserFlicksResponse.fromMap(response.data);
+        return UserAndCommunityFlicksResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -238,7 +239,7 @@ class PostApi {
     return null;
   }
 
-  static Future<UserMemoriesResponse?> getMemories({
+  static Future<UserAndCommunityMemoriesResponse?> getMemories({
     String? userUid,
     String? communityUid,
   }) async {
@@ -251,7 +252,7 @@ class PostApi {
         },
       );
       if (response.data != null) {
-        return UserMemoriesResponse.fromMap(response.data);
+        return UserAndCommunityMemoriesResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -259,7 +260,7 @@ class PostApi {
     return null;
   }
 
-  static Future<UserPhotoPostsResponse?> getPhotoPosts({
+  static Future<UserAndCommunityPhotoPostsResponse?> getPhotoPosts({
     String? userUid,
     String? communityUid,
   }) async {
@@ -272,7 +273,7 @@ class PostApi {
         },
       );
       if (response.data != null) {
-        return UserPhotoPostsResponse.fromMap(response.data);
+        return UserAndCommunityPhotoPostsResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);
@@ -280,7 +281,7 @@ class PostApi {
     return null;
   }
 
-  static Future<UserOffersResponse?> getOfferPosts({
+  static Future<UserAndCommunityOffersResponse?> getOfferPosts({
     String? userUid,
     String? communityUid,
   }) async {
@@ -293,7 +294,28 @@ class PostApi {
         },
       );
       if (response.data != null) {
-        return UserOffersResponse.fromMap(response.data);
+        return UserAndCommunityOffersResponse.fromMap(response.data);
+      }
+    } catch (e, s) {
+      lowLevelCatch(e, s);
+    }
+    return null;
+  }
+
+    static Future<UserAndCommunityMixContentResponse?> getMixContent({
+    String? userUid,
+    String? communityUid,
+  }) async {
+    try {
+      final Response response = await ApiClient.client.get(
+        '/v1/get-mix-content',
+        queryParameters: <String, dynamic>{
+          if (userUid != null) 'user_uid': userUid,
+          if (communityUid != null) 'community_uid': communityUid,
+        },
+      );
+      if (response.data != null) {
+        return UserAndCommunityMixContentResponse.fromMap(response.data);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

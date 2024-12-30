@@ -9,11 +9,12 @@ import 'package:whatsevr_app/src/features/account/views/page.dart';
 
 import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/profile_details.dart';
-import 'package:whatsevr_app/config/api/response_model/user_flicks.dart';
-import 'package:whatsevr_app/config/api/response_model/user_memories.dart';
-import 'package:whatsevr_app/config/api/response_model/user_offers.dart';
-import 'package:whatsevr_app/config/api/response_model/user_video_posts.dart';
+import 'package:whatsevr_app/config/api/response_model/post/flicks.dart';
+import 'package:whatsevr_app/config/api/response_model/post/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/post/offers.dart';
+import 'package:whatsevr_app/config/api/response_model/post/video_posts.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/api/response_model/post/mix_content.dart';
 
 part 'account_event.dart';
 part 'account_state.dart';
@@ -55,14 +56,16 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           profileDetailsResponse: profileDetailsResponse,
         ),
       );
-      final UserVideoPostsResponse? userVideoPostsResponse =
+      final UserAndCommunityVideoPostsResponse? userVideoPostsResponse =
           await PostApi.getVideoPosts(userUid: state.userUid!);
-      final UserFlicksResponse? userFlicksResponse =
+      final UserAndCommunityFlicksResponse? userFlicksResponse =
           await PostApi.getFlicks(userUid: state.userUid!);
-      final UserMemoriesResponse? userMemoriesResponse =
+      final UserAndCommunityMemoriesResponse? userMemoriesResponse =
           await PostApi.getMemories(userUid: state.userUid!);
-      final UserOffersResponse? userOffersResponse =
+      final UserAndCommunityOffersResponse? userOffersResponse =
           await PostApi.getOfferPosts(userUid: state.userUid!);
+      final UserAndCommunityMixContentResponse? userMixContentResponse =
+          await PostApi.getMixContent(userUid: state.userUid!);
 
       emit(
         state.copyWith(
@@ -70,6 +73,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           userFlicks: userFlicksResponse?.flicks ?? [],
           userMemories: userMemoriesResponse?.memories ?? [],
           userOffers: userOffersResponse?.offerPosts ?? [],
+          userMixContent: userMixContentResponse?.mixContent ?? [],
         ),
       );
     } catch (e, s) {

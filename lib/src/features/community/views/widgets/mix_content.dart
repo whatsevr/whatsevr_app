@@ -5,9 +5,9 @@ class _MixContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AccountBloc, AccountState>(
+    return BlocBuilder<CommunityBloc, CommunityState>(
       builder: (context, state) {
-        if (state.userMixContent.isEmpty) {
+        if (state.communityMixContent.isEmpty) {
           return const Center(
             child: Text('No mix content available'),
           );
@@ -16,12 +16,12 @@ class _MixContentView extends StatelessWidget {
         return MasonryGridView.count(
           crossAxisCount: 3,
           shrinkWrap: true,
-          itemCount: state.userMixContent.length,
+          itemCount: state.communityMixContent.length,
           mainAxisSpacing: 2,
           crossAxisSpacing: 2,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            final mixContent = state.userMixContent[index];
+            final mixContent = state.communityMixContent[index];
             if (mixContent == null) return const SizedBox();
 
             String tileType = WhatsevrMixPostTile.photo; // default type

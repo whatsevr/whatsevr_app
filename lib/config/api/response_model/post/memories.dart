@@ -1,72 +1,74 @@
 import 'dart:convert';
 
-class UserFlicksResponse {
+class UserAndCommunityMemoriesResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<Flick>? flicks;
+  final List<Memory>? memories;
 
-  UserFlicksResponse({
+  UserAndCommunityMemoriesResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.flicks,
+    this.memories,
   });
 
-  UserFlicksResponse copyWith({
+  UserAndCommunityMemoriesResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<Flick>? flicks,
+    List<Memory>? memories,
   }) =>
-      UserFlicksResponse(
+      UserAndCommunityMemoriesResponse(
         message: message ?? this.message,
         page: page ?? this.page,
         lastPage: lastPage ?? this.lastPage,
-        flicks: flicks ?? this.flicks,
+        memories: memories ?? this.memories,
       );
 
-  factory UserFlicksResponse.fromJson(String str) =>
-      UserFlicksResponse.fromMap(json.decode(str));
+  factory UserAndCommunityMemoriesResponse.fromJson(String str) =>
+      UserAndCommunityMemoriesResponse.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory UserFlicksResponse.fromMap(Map<String, dynamic> json) =>
-      UserFlicksResponse(
+  factory UserAndCommunityMemoriesResponse.fromMap(Map<String, dynamic> json) =>
+      UserAndCommunityMemoriesResponse(
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        flicks: json['flicks'] == null
+        memories: json['memories'] == null
             ? []
-            : List<Flick>.from(json['flicks']!.map((x) => Flick.fromMap(x))),
+            : List<Memory>.from(
+                json['memories']!.map((x) => Memory.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'flicks': flicks == null
+        'memories': memories == null
             ? []
-            : List<dynamic>.from(flicks!.map((x) => x.toMap())),
+            : List<dynamic>.from(memories!.map((x) => x.toMap())),
       };
 }
 
-class Flick {
+class Memory {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
-  final String? title;
-  final String? description;
-  final List<String>? hashtags;
+  final String? caption;
+  final List<dynamic>? hashtags;
   final List<String>? taggedUserUids;
   final bool? isDeleted;
   final bool? isArchived;
   final bool? isActive;
   final String? postCreatorType;
-  final DateTime? updatedAt;
+  final DateTime? expiresAt;
   final String? userUid;
-  final String? thumbnail;
+  final String? imageUrl;
   final String? videoUrl;
+  final bool? isVideo;
   final String? location;
   final int? totalViews;
   final int? totalLikes;
@@ -74,27 +76,31 @@ class Flick {
   final String? internalAiDescription;
   final String? addressLatLongWkb;
   final String? creatorLatLongWkb;
-  final List<String>? taggedCommunityUids;
+  final List<dynamic>? taggedCommunityUids;
   final int? totalShares;
   final int? cumulativeScore;
-  final int? videoDurationInSec;
+  final String? ctaAction;
+  final String? ctaActionUrl;
+  final bool? isImage;
+  final dynamic isText;
+  final int? videoDurationMs;
 
-  Flick({
+  Memory({
     this.id,
     this.createdAt,
     this.uid,
-    this.title,
-    this.description,
+    this.caption,
     this.hashtags,
     this.taggedUserUids,
     this.isDeleted,
     this.isArchived,
     this.isActive,
     this.postCreatorType,
-    this.updatedAt,
+    this.expiresAt,
     this.userUid,
-    this.thumbnail,
+    this.imageUrl,
     this.videoUrl,
+    this.isVideo,
     this.location,
     this.totalViews,
     this.totalLikes,
@@ -105,25 +111,29 @@ class Flick {
     this.taggedCommunityUids,
     this.totalShares,
     this.cumulativeScore,
-    this.videoDurationInSec,
+    this.ctaAction,
+    this.ctaActionUrl,
+    this.isImage,
+    this.isText,
+    this.videoDurationMs,
   });
 
-  Flick copyWith({
+  Memory copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
-    String? title,
-    String? description,
-    List<String>? hashtags,
+    String? caption,
+    List<dynamic>? hashtags,
     List<String>? taggedUserUids,
     bool? isDeleted,
     bool? isArchived,
     bool? isActive,
     String? postCreatorType,
-    DateTime? updatedAt,
+    DateTime? expiresAt,
     String? userUid,
-    String? thumbnail,
+    String? imageUrl,
     String? videoUrl,
+    bool? isVideo,
     String? location,
     int? totalViews,
     int? totalLikes,
@@ -131,27 +141,31 @@ class Flick {
     String? internalAiDescription,
     String? addressLatLongWkb,
     String? creatorLatLongWkb,
-    List<String>? taggedCommunityUids,
+    List<dynamic>? taggedCommunityUids,
     int? totalShares,
     int? cumulativeScore,
-    int? videoDurationInSec,
+    String? ctaAction,
+    String? ctaActionUrl,
+    bool? isImage,
+    dynamic isText,
+    int? videoDurationMs,
   }) =>
-      Flick(
+      Memory(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
-        title: title ?? this.title,
-        description: description ?? this.description,
+        caption: caption ?? this.caption,
         hashtags: hashtags ?? this.hashtags,
         taggedUserUids: taggedUserUids ?? this.taggedUserUids,
         isDeleted: isDeleted ?? this.isDeleted,
         isArchived: isArchived ?? this.isArchived,
         isActive: isActive ?? this.isActive,
         postCreatorType: postCreatorType ?? this.postCreatorType,
-        updatedAt: updatedAt ?? this.updatedAt,
+        expiresAt: expiresAt ?? this.expiresAt,
         userUid: userUid ?? this.userUid,
-        thumbnail: thumbnail ?? this.thumbnail,
+        imageUrl: imageUrl ?? this.imageUrl,
         videoUrl: videoUrl ?? this.videoUrl,
+        isVideo: isVideo ?? this.isVideo,
         location: location ?? this.location,
         totalViews: totalViews ?? this.totalViews,
         totalLikes: totalLikes ?? this.totalLikes,
@@ -163,24 +177,27 @@ class Flick {
         taggedCommunityUids: taggedCommunityUids ?? this.taggedCommunityUids,
         totalShares: totalShares ?? this.totalShares,
         cumulativeScore: cumulativeScore ?? this.cumulativeScore,
-        videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
+        ctaAction: ctaAction ?? this.ctaAction,
+        ctaActionUrl: ctaActionUrl ?? this.ctaActionUrl,
+        isImage: isImage ?? this.isImage,
+        isText: isText ?? this.isText,
+        videoDurationMs: videoDurationMs ?? this.videoDurationMs,
       );
 
-  factory Flick.fromJson(String str) => Flick.fromMap(json.decode(str));
+  factory Memory.fromJson(String str) => Memory.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Flick.fromMap(Map<String, dynamic> json) => Flick(
+  factory Memory.fromMap(Map<String, dynamic> json) => Memory(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null
             : DateTime.parse(json['created_at']),
         uid: json['uid'],
-        title: json['title'],
-        description: json['description'],
+        caption: json['caption'],
         hashtags: json['hashtags'] == null
             ? []
-            : List<String>.from(json['hashtags']!.map((x) => x)),
+            : List<dynamic>.from(json['hashtags']!.map((x) => x)),
         taggedUserUids: json['tagged_user_uids'] == null
             ? []
             : List<String>.from(json['tagged_user_uids']!.map((x) => x)),
@@ -188,12 +205,13 @@ class Flick {
         isArchived: json['is_archived'],
         isActive: json['is_active'],
         postCreatorType: json['post_creator_type'],
-        updatedAt: json['updated_at'] == null
+        expiresAt: json['expires_at'] == null
             ? null
-            : DateTime.parse(json['updated_at']),
+            : DateTime.parse(json['expires_at']),
         userUid: json['user_uid'],
-        thumbnail: json['thumbnail'],
+        imageUrl: json['image_url'],
         videoUrl: json['video_url'],
+        isVideo: json['is_video'],
         location: json['location'],
         totalViews: json['total_views'],
         totalLikes: json['total_likes'],
@@ -203,18 +221,21 @@ class Flick {
         creatorLatLongWkb: json['creator_lat_long_wkb'],
         taggedCommunityUids: json['tagged_community_uids'] == null
             ? []
-            : List<String>.from(json['tagged_community_uids']!.map((x) => x)),
+            : List<dynamic>.from(json['tagged_community_uids']!.map((x) => x)),
         totalShares: json['total_shares'],
         cumulativeScore: json['cumulative_score'],
-        videoDurationInSec: json['video_duration_in_sec'],
+        ctaAction: json['cta_action'],
+        ctaActionUrl: json['cta_action_url'],
+        isImage: json['is_image'],
+        isText: json['is_text'],
+        videoDurationMs: json['video_duration_ms'],
       );
 
   Map<String, dynamic> toMap() => {
         'id': id,
         'created_at': createdAt?.toIso8601String(),
         'uid': uid,
-        'title': title,
-        'description': description,
+        'caption': caption,
         'hashtags':
             hashtags == null ? [] : List<dynamic>.from(hashtags!.map((x) => x)),
         'tagged_user_uids': taggedUserUids == null
@@ -224,10 +245,11 @@ class Flick {
         'is_archived': isArchived,
         'is_active': isActive,
         'post_creator_type': postCreatorType,
-        'updated_at': updatedAt?.toIso8601String(),
+        'expires_at': expiresAt?.toIso8601String(),
         'user_uid': userUid,
-        'thumbnail': thumbnail,
+        'image_url': imageUrl,
         'video_url': videoUrl,
+        'is_video': isVideo,
         'location': location,
         'total_views': totalViews,
         'total_likes': totalLikes,
@@ -240,6 +262,10 @@ class Flick {
             : List<dynamic>.from(taggedCommunityUids!.map((x) => x)),
         'total_shares': totalShares,
         'cumulative_score': cumulativeScore,
-        'video_duration_in_sec': videoDurationInSec,
+        'cta_action': ctaAction,
+        'cta_action_url': ctaActionUrl,
+        'is_image': isImage,
+        'is_text': isText,
+        'video_duration_ms': videoDurationMs,
       };
 }
