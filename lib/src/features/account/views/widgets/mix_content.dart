@@ -29,7 +29,7 @@ class _MixContentView extends StatelessWidget {
             // Determine tile type based on mixContent.type
             switch (mixContent.type?.toLowerCase()) {
               case 'video':
-                tileType = WhatsevrMixPostTile.video;
+                tileType = WhatsevrMixPostTile.wtv;
                 break;
               case 'flick':
                 tileType = WhatsevrMixPostTile.flick;

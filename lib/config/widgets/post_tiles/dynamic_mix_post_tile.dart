@@ -5,7 +5,7 @@ import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
 
 class WhatsevrMixPostTile extends StatelessWidget {
   static const String photo = 'photo';
-  static const String video = 'video';
+  static const String wtv = 'wtv';
   static const String flick = 'flick';
   static const String offer = 'offer';
 
@@ -23,7 +23,7 @@ class WhatsevrMixPostTile extends StatelessWidget {
   Widget? _getOverlay() {
     final double iconSize = 16.0;
     switch (tileType) {
-      case video:
+      case wtv:
         return Icon(WhatsevrIcons.wtvIcon, color: Colors.white, size: iconSize);
       case flick:
         return Icon(WhatsevrIcons.flicksIcon001,

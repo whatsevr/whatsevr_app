@@ -78,7 +78,7 @@ class ExploreMixPostsView extends StatelessWidget {
                   switch (positionInPattern) {
                     case 0:
                       return WhatsevrMixPostTile(
-                        tileType: WhatsevrMixPostTile.video,
+                        tileType: WhatsevrMixPostTile.wtv,
                         thumbnailUrl: content.content?.thumbnail,
                       );
                     case 1:
@@ -119,7 +119,7 @@ class ExploreMixPostsView extends StatelessWidget {
                       );
                     case 4:
                       return WhatsevrMixPostTile(
-                        tileType: WhatsevrMixPostTile.video,
+                        tileType: WhatsevrMixPostTile.wtv,
                         thumbnailUrl: content.content?.thumbnail,
                       );
                   }
