@@ -67,7 +67,7 @@ class ExplorePageOffersPage extends StatelessWidget {
                         .filesData
                         ?.map((e) => WhatsevrNetworkFile.fromMap(
                               e.toMap(),
-                            ))
+                            ),)
                         .toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,

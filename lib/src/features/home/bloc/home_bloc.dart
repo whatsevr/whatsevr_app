@@ -33,10 +33,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
   }
 
-  @override
-  Future<void> close() {
-    return super.close();
-  }
 
   Future<void> _onInitial(
     HomeInitialEvent event,
@@ -62,7 +58,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           recommendationVideos: recommendationVideos?.recommendedVideos,
-          videoPaginationData: state.videoPaginationData?.copyWith(
+          videoPaginationData: state.videoPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: recommendationVideos?.lastPage,
@@ -78,15 +74,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadMoreVideosEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.videoPaginationData?.isLoading == true ||
-        state.videoPaginationData?.noMoreData == true) {
+    if (state.videoPaginationData.isLoading == true ||
+        state.videoPaginationData.noMoreData == true) {
       return;
     }
     try {
       emit(
         state.copyWith(
           videoPaginationData:
-              state.videoPaginationData?.copyWith(isLoading: true),
+              state.videoPaginationData.copyWith(isLoading: true),
         ),
       );
       final PrivateRecommendationVideosResponse? recommendationVideos =
@@ -97,9 +93,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          recommendationVideos: state.recommendationVideos! +
+          recommendationVideos: state.recommendationVideos +
               (recommendationVideos?.recommendedVideos ?? []),
-          videoPaginationData: state.videoPaginationData?.copyWith(
+          videoPaginationData: state.videoPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: recommendationVideos?.lastPage,
@@ -109,7 +105,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          videoPaginationData: state.videoPaginationData?.copyWith(
+          videoPaginationData: state.videoPaginationData.copyWith(
             isLoading: false,
           ),
         ),
@@ -131,7 +127,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           recommendationMemories: recommendationMemories?.recommendedMemories,
-          memoryPaginationData: state.memoryPaginationData?.copyWith(
+          memoryPaginationData: state.memoryPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: recommendationMemories?.lastPage,
@@ -147,15 +143,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadMoreMemoriesEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.memoryPaginationData?.isLoading == true ||
-        state.memoryPaginationData?.noMoreData == true) {
+    if (state.memoryPaginationData.isLoading == true ||
+        state.memoryPaginationData.noMoreData == true) {
       return;
     }
     try {
       emit(
         state.copyWith(
           memoryPaginationData:
-              state.memoryPaginationData?.copyWith(isLoading: true),
+              state.memoryPaginationData.copyWith(isLoading: true),
         ),
       );
       final PrivateRecommendationMemoriesResponse? recommendationMemories =
@@ -166,9 +162,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          recommendationMemories: state.recommendationMemories! +
+          recommendationMemories: state.recommendationMemories +
               (recommendationMemories?.recommendedMemories ?? []),
-          memoryPaginationData: state.memoryPaginationData?.copyWith(
+          memoryPaginationData: state.memoryPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: recommendationMemories?.lastPage,
@@ -178,7 +174,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          memoryPaginationData: state.memoryPaginationData?.copyWith(
+          memoryPaginationData: state.memoryPaginationData.copyWith(
             isLoading: false,
           ),
         ),
@@ -200,7 +196,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           recommendationOffers: recommendationOffers?.recommendedOffers,
-          offersPaginationData: state.offersPaginationData?.copyWith(
+          offersPaginationData: state.offersPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: recommendationOffers?.lastPage,
@@ -216,15 +212,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadMoreOffersEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.offersPaginationData?.isLoading == true ||
-        state.offersPaginationData?.noMoreData == true) {
+    if (state.offersPaginationData.isLoading == true ||
+        state.offersPaginationData.noMoreData == true) {
       return;
     }
     try {
       emit(
         state.copyWith(
           offersPaginationData:
-              state.offersPaginationData?.copyWith(isLoading: true),
+              state.offersPaginationData.copyWith(isLoading: true),
         ),
       );
       final PrivateRecommendationOffersResponse? recommendationOffers =
@@ -235,9 +231,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          recommendationOffers: state.recommendationOffers! +
+          recommendationOffers: state.recommendationOffers +
               (recommendationOffers?.recommendedOffers ?? []),
-          offersPaginationData: state.offersPaginationData?.copyWith(
+          offersPaginationData: state.offersPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: recommendationOffers?.lastPage,
@@ -247,7 +243,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          offersPaginationData: state.offersPaginationData?.copyWith(
+          offersPaginationData: state.offersPaginationData.copyWith(
             isLoading: false,
           ),
         ),
@@ -270,7 +266,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         state.copyWith(
           recommendationPhotoPosts:
               recommendationPhotoPosts?.recommendedPhotoPosts,
-          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+          photoPostPaginationData: state.photoPostPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: recommendationPhotoPosts?.lastPage,
@@ -286,15 +282,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadMorePhotoPostsEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.photoPostPaginationData?.isLoading == true ||
-        state.photoPostPaginationData?.noMoreData == true) {
+    if (state.photoPostPaginationData.isLoading == true ||
+        state.photoPostPaginationData.noMoreData == true) {
       return;
     }
     try {
       emit(
         state.copyWith(
           photoPostPaginationData:
-              state.photoPostPaginationData?.copyWith(isLoading: true),
+              state.photoPostPaginationData.copyWith(isLoading: true),
         ),
       );
       final PrivateRecommendationPhotoPostsResponse? recommendationPhotoPosts =
@@ -305,9 +301,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          recommendationPhotoPosts: state.recommendationPhotoPosts! +
+          recommendationPhotoPosts: state.recommendationPhotoPosts +
               (recommendationPhotoPosts?.recommendedPhotoPosts ?? []),
-          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+          photoPostPaginationData: state.photoPostPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: recommendationPhotoPosts?.lastPage,
@@ -317,7 +313,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          photoPostPaginationData: state.photoPostPaginationData?.copyWith(
+          photoPostPaginationData: state.photoPostPaginationData.copyWith(
             isLoading: false,
           ),
         ),
@@ -339,7 +335,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           mixContent: mixContentResponse?.mixContent,
-          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
+          mixContentPaginationData: state.mixContentPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: mixContentResponse?.lastPage,
@@ -355,15 +351,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     LoadMoreMixContentEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.mixContentPaginationData?.isLoading == true ||
-        state.mixContentPaginationData?.noMoreData == true) {
+    if (state.mixContentPaginationData.isLoading == true ||
+        state.mixContentPaginationData.noMoreData == true) {
       return;
     }
     try {
       emit(
         state.copyWith(
           mixContentPaginationData:
-              state.mixContentPaginationData?.copyWith(isLoading: true),
+              state.mixContentPaginationData.copyWith(isLoading: true),
         ),
       );
       final PrivateRecommendationMixContentResponse? mixContentResponse =
@@ -375,8 +371,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           mixContent:
-              state.mixContent! + (mixContentResponse?.mixContent ?? []),
-          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
+              state.mixContent + (mixContentResponse?.mixContent ?? []),
+          mixContentPaginationData: state.mixContentPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: mixContentResponse?.lastPage,
@@ -386,7 +382,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          mixContentPaginationData: state.mixContentPaginationData?.copyWith(
+          mixContentPaginationData: state.mixContentPaginationData.copyWith(
             isLoading: false,
           ),
         ),

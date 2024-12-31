@@ -32,7 +32,7 @@ class PrivateRecommendationOffersResponse {
   String toJson() => json.encode(toMap());
 
   factory PrivateRecommendationOffersResponse.fromMap(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       PrivateRecommendationOffersResponse(
         message: json['message'],
         page: json['page'],

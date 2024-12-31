@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ant_design.dart';
-import 'package:iconify_flutter/icons/la.dart';
-import 'package:iconify_flutter/icons/octicon.dart';
-import 'package:iconify_flutter/icons/ph.dart';
-import 'package:iconify_flutter/icons/system_uicons.dart';
 import 'package:like_button/like_button.dart';
 import 'package:whatsevr_app/config/global_bloc/react_unreact_bloc/react_unreact_bloc.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
@@ -198,7 +192,7 @@ class WhatsevrBookmarkButton extends StatelessWidget {
         color: firstStateColor ?? theme.icon,
       ),
       secondStateUi: Icon(WhatsevrIcons.bookMarkIcon,
-          color: secondStateColor ?? theme.icon),
+          color: secondStateColor ?? theme.icon,),
     );
   }
 }

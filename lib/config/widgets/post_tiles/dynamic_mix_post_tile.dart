@@ -27,10 +27,10 @@ class WhatsevrMixPostTile extends StatelessWidget {
         return Icon(WhatsevrIcons.wtvIcon, color: Colors.white, size: iconSize);
       case flick:
         return Icon(WhatsevrIcons.flicksIcon001,
-            color: Colors.white, size: iconSize);
+            color: Colors.white, size: iconSize,);
       case offer:
         return Icon(WhatsevrIcons.offerIcon,
-            color: Colors.white, size: iconSize);
+            color: Colors.white, size: iconSize,);
       default:
         return null;
     }

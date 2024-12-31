@@ -6,10 +6,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/chats.dart';
-import 'package:whatsevr_app/config/api/methods/community.dart';
-import 'package:whatsevr_app/config/api/methods/users.dart';
 import 'package:whatsevr_app/config/api/response_model/chats/chat_messages.dart';
-import 'package:whatsevr_app/config/api/response_model/community/community_details.dart';
 import 'package:whatsevr_app/config/services/supabase.dart';
 import 'package:whatsevr_app/src/features/chat/conversation/views/page.dart';
 

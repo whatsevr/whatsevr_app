@@ -22,7 +22,7 @@ class PaginationData extends Equatable {
     return PaginationData(
       currentPage: currentPage ?? this.currentPage,
       isLoading: isLoading ?? this.isLoading,
-      noMoreData: isLastPage ?? this.noMoreData,
+      noMoreData: isLastPage ?? noMoreData,
     );
   }
 

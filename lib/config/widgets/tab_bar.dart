@@ -16,7 +16,7 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
       this.isTabsScrollable,
       this.tabAlignment,
       this.onTabChanged,
-      this.spaceBetween});
+      this.spaceBetween,});
 
   @override
   State<WhatsevrTabBarWithViews> createState() =>

@@ -32,7 +32,7 @@ class PrivateRecommendationVideosResponse {
   String toJson() => json.encode(toMap());
 
   factory PrivateRecommendationVideosResponse.fromMap(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       PrivateRecommendationVideosResponse(
         message: json['message'],
         page: json['page'],

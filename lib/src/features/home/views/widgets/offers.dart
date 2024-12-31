@@ -26,7 +26,7 @@ class HomePageOffersPage extends StatelessWidget {
                 page: context
                         .read<HomeBloc>()
                         .state
-                        .videoPaginationData!
+                        .videoPaginationData
                         .currentPage +
                     1,
               ),
@@ -66,7 +66,7 @@ class HomePageOffersPage extends StatelessWidget {
                         .filesData
                         ?.map((e) => WhatsevrNetworkFile.fromMap(
                               e.toMap(),
-                            ))
+                            ),)
                         .toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,
@@ -93,7 +93,7 @@ class HomePageOffersPage extends StatelessWidget {
                       context
                           .read<HomeBloc>()
                           .state
-                          .videoPaginationData!
+                          .videoPaginationData
                           .isLoading) ...[
                     const Gap(8),
                     WhatsevrLoadingIndicator(),

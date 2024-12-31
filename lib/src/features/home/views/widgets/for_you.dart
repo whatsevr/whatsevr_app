@@ -1,15 +1,11 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
-import 'package:whatsevr_app/config/mocks/mocks.dart';
-import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
 import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
@@ -30,7 +26,7 @@ class HomePageForYouPage extends StatelessWidget {
                 page: context
                         .read<HomeBloc>()
                         .state
-                        .mixContentPaginationData!
+                        .mixContentPaginationData
                         .currentPage +
                     1,
               ),
@@ -47,7 +43,7 @@ class HomePageForYouPage extends StatelessWidget {
                 height: 150.h,
                 child: HomePageMemoriesView(),
               ),
-              const Gap(8.0)
+              const Gap(8.0),
             ],
             BlocSelector<HomeBloc, HomeState, List<MixContent>?>(
               selector: (HomeState state) => state.mixContent,
@@ -78,14 +74,14 @@ class HomePageForYouPage extends StatelessWidget {
                       (BuildContext context, int index) {
                         if (mixContent == null || mixContent.isEmpty) {
                           return const WhatsevrMixPostTile(
-                              tileType: WhatsevrMixPostTile.photo);
+                              tileType: WhatsevrMixPostTile.photo,);
                         }
 
                         if (index == mixContent.length) {
                           return context
                                   .read<HomeBloc>()
                                   .state
-                                  .mixContentPaginationData!
+                                  .mixContentPaginationData
                                   .isLoading
                               ? WhatsevrLoadingIndicator()
                               : const SizedBox();

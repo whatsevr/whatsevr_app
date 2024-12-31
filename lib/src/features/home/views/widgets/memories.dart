@@ -9,7 +9,6 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
-import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
 import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
@@ -29,7 +28,7 @@ class HomePageMemoriesView extends StatelessWidget {
                 page: context
                         .read<HomeBloc>()
                         .state
-                        .memoryPaginationData!
+                        .memoryPaginationData
                         .currentPage +
                     1,
               ),

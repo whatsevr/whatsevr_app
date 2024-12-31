@@ -5,7 +5,6 @@ import 'package:flutter_advanced_avatar/flutter_advanced_avatar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
 import 'package:whatsevr_app/config/services/permission.dart';
@@ -120,7 +119,7 @@ class SettingsPage extends StatelessWidget {
                         ),
                       );
                     },
-                  )
+                  ),
                 ],
               ),
               SettingsSection(

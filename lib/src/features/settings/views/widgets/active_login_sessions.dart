@@ -1,7 +1,7 @@
 part of '../page.dart';
 
 class _ActiveLoginSessionsPage extends StatelessWidget {
-  const _ActiveLoginSessionsPage({Key? key}) : super(key: key);
+  const _ActiveLoginSessionsPage();
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
                           DeviceInfoService.currentDeviceInfo?.deviceId,
                       deviceType: session.agentType ?? 'Unknown',
                       sessionId: session.uid ?? '',
-                    )),
+                    ),),
             ],
           ),
         );

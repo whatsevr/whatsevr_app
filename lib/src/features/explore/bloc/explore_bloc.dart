@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
@@ -34,10 +33,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
   }
 
-  @override
-  Future<void> close() {
-    return super.close();
-  }
 
   Future<void> _onInitial(
     ExploreInitialEvent event,

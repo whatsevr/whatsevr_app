@@ -1,7 +1,7 @@
 part of 'package:whatsevr_app/src/features/settings/views/page.dart';
 
 class _PermissionsPage extends StatefulWidget {
-  const _PermissionsPage({super.key});
+  const _PermissionsPage();
 
   @override
   State<_PermissionsPage> createState() => _PermissionsPageState();
@@ -39,7 +39,7 @@ class _PermissionsPageState extends State<_PermissionsPage> {
           builder: (context) => AlertDialog(
             title: const Text('Permission Required'),
             content: Text(
-                'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.'),
+                'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.',),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
-import 'dart:typed_data';
 
 class AesService {
   late final Key _key;
@@ -15,7 +14,7 @@ class AesService {
     // Ensure key is exactly 32 bytes (256 bits) for AES-256
     if (keyBytes.length < 32) {
       throw ArgumentError(
-          'Encryption key must be at least 32 bytes when decoded');
+          'Encryption key must be at least 32 bytes when decoded',);
     }
     final normalized32ByteKey = keyBytes.sublist(0, 32);
     _key = Key(normalized32ByteKey);

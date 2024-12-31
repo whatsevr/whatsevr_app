@@ -6,8 +6,9 @@ void onReachingEndOfTheList(
   required Function()? execute,
 }) {
   if (scrollController == null) return;
-  if (context == null || !scrollController.hasClients || !context.mounted)
+  if (context == null || !scrollController.hasClients || !context.mounted) {
     return;
+  }
 
   scrollController.addListener(() {
     if (scrollController.position.pixels ==

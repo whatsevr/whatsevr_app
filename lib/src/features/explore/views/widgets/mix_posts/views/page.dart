@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:gap/gap.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
@@ -60,7 +59,7 @@ class ExploreMixPostsView extends StatelessWidget {
               (BuildContext context, int index) {
                 if (mixContent == null || mixContent.isEmpty) {
                   return const WhatsevrMixPostTile(
-                      tileType: WhatsevrMixPostTile.photo);
+                      tileType: WhatsevrMixPostTile.photo,);
                 }
 
                 if (index == mixContent.length) {

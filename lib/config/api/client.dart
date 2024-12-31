@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:whatsevr_app/config/api/interceptors/header.dart';
-import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';

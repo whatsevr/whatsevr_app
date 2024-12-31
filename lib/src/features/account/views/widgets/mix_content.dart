@@ -1,7 +1,7 @@
 part of '../page.dart';
 
 class _MixContentView extends StatelessWidget {
-  const _MixContentView({super.key});
+  const _MixContentView();
 
   @override
   Widget build(BuildContext context) {

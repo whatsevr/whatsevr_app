@@ -51,7 +51,7 @@ void startChatHelper({
           child: _SendPrivateMessageUi(
             currentUserUid: senderUserUid,
             otherUserUid: otherUserUid,
-          ));
+          ),);
     }
     if (communityUid != null) {
       AppNavigationService.newRoute(
@@ -75,7 +75,6 @@ class _SendPrivateMessageUi extends StatelessWidget {
   _SendPrivateMessageUi({
     this.currentUserUid,
     this.otherUserUid,
-    super.key,
   });
   final TextEditingController messageController = TextEditingController();
   @override

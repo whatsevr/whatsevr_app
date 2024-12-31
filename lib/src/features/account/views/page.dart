@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,6 @@ import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/follow_unfollow.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/start_chat.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/user_relations.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 import 'package:whatsevr_app/config/api/response_model/post/memories.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';

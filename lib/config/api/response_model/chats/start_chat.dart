@@ -37,18 +37,18 @@ class StartChatResponse {
 
   factory StartChatResponse.fromMap(Map<String, dynamic> json) =>
       StartChatResponse(
-        message: json["message"],
-        privateChatUid: json["private_chat_uid"],
-        communityUid: json["community_uid"],
-        chatTitle: json["chat_title"],
-        chatAvatarUrl: json["chat_avatar_url"],
+        message: json['message'],
+        privateChatUid: json['private_chat_uid'],
+        communityUid: json['community_uid'],
+        chatTitle: json['chat_title'],
+        chatAvatarUrl: json['chat_avatar_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "message": message,
-        "private_chat_uid": privateChatUid,
-        "community_uid": communityUid,
-        "chat_title": chatTitle,
-        "chat_avatar_url": chatAvatarUrl,
+        'message': message,
+        'private_chat_uid': privateChatUid,
+        'community_uid': communityUid,
+        'chat_title': chatTitle,
+        'chat_avatar_url': chatAvatarUrl,
       };
 }
