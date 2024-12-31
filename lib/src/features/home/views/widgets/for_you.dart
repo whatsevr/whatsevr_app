@@ -17,16 +17,13 @@ import 'package:whatsevr_app/src/features/home/views/widgets/memories.dart';
 
 class HomePageForYouPage extends StatelessWidget {
   final ScrollController? scrollController;
-  const HomePageForYouPage({
-    super.key,
-    this.scrollController
-  });
+  const HomePageForYouPage({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
-       onReachingEndOfTheList(
-         context,
-     scrollController: scrollController,
+    onReachingEndOfTheList(
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<HomeBloc>().add(
               LoadMoreMixContentEvent(
@@ -40,118 +37,129 @@ class HomePageForYouPage extends StatelessWidget {
             );
       },
     );
-    return ListView(
-      controller: scrollController,
-      children: <Widget>[
-        SizedBox(
-          height: 150.h,
-          child: HomePageMemoriesView(),
-        ),
-        const Gap(8.0),
-        BlocSelector<HomeBloc, HomeState, List<MixContent>?>(
-          selector: (HomeState state) => state.mixContent,
-          builder: (BuildContext context, List<MixContent>? mixContent) {
-            return MyRefreshIndicator(
-              onPullDown: () async {
-                context.read<HomeBloc>().add(LoadMixContentEvent());
-                await Future<void>.delayed(const Duration(seconds: 2));
-              },
-              child: GridView.custom(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverQuiltedGridDelegate(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 2,
-                  crossAxisSpacing: 2,
-                  repeatPattern: QuiltedGridRepeatPattern.inverted,
-                  pattern: const [
-                    QuiltedGridTile(2, 1),
-                    QuiltedGridTile(1, 1),
-                    QuiltedGridTile(1, 1),
-                    QuiltedGridTile(1, 1),
-                    QuiltedGridTile(1, 1),
-                  ],
-                ),
-                childrenDelegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    if (mixContent == null || mixContent.isEmpty) {
-                      return const WhatsevrMixPostTile(tileType: WhatsevrMixPostTile.photo);
-                    }
-        
-                    if (index == mixContent.length) {
-                      return context.read<HomeBloc>().state.mixContentPaginationData!.isLoading
-                          ? WhatsevrLoadingIndicator()
-                          : const SizedBox();
-                    }
-        
-                    final content = mixContent[index];
-                    final isInvertedPattern = (index ~/ 5) % 2 == 1;
-                    final positionInPattern = index % 5;
-        
-                    if (isInvertedPattern) {
-                      // Inverted pattern: video, photo, photo, offer, flick
-                      switch (positionInPattern) {
-                        case 0:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.wtv,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 1:
-                        case 2:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.photo,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 3:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.offer,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 4:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.flick,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                      }
-                    } else {
-                      // Normal pattern: flick, photo, photo, offer, video
-                      switch (positionInPattern) {
-                        case 0:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.flick,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 1:
-                        case 2:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.photo,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 3:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.offer,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                        case 4:
-                          return WhatsevrMixPostTile(
-                            tileType: WhatsevrMixPostTile.wtv,
-                            thumbnailUrl: content.content?.thumbnail,
-                          );
-                      }
-                    }
-                    return WhatsevrMixPostTile(
-                      tileType: WhatsevrMixPostTile.photo,
-                      thumbnailUrl: content.content?.thumbnail,
-                    );
-                  },
-                  childCount: mixContent?.length,
-                ),
+    return BlocBuilder < HomeBloc, HomeState > ( 
+      builder: (context, state) {
+        return ListView(
+          controller: scrollController,
+          children: <Widget>[
+            if (state.recommendationMemories.isNotEmpty) ...[
+              SizedBox(
+                height: 150.h,
+                child: HomePageMemoriesView(),
               ),
-            );
-          },
-        ),
-      ],
+              const Gap(8.0)
+            ],
+            BlocSelector<HomeBloc, HomeState, List<MixContent>?>(
+              selector: (HomeState state) => state.mixContent,
+              builder: (BuildContext context, List<MixContent>? mixContent) {
+                return MyRefreshIndicator(
+                  onPullDown: () async {
+                    context.read<HomeBloc>().add(LoadMixContentEvent());
+                    await Future<void>.delayed(const Duration(seconds: 2));
+                  },
+                  child: GridView.custom(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverQuiltedGridDelegate(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 2,
+                      repeatPattern: QuiltedGridRepeatPattern.inverted,
+                      pattern: const [
+                        QuiltedGridTile(2, 1),
+                        QuiltedGridTile(1, 1),
+                        QuiltedGridTile(1, 1),
+                        QuiltedGridTile(1, 1),
+                        QuiltedGridTile(1, 1),
+                      ],
+                    ),
+                    childrenDelegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        if (mixContent == null || mixContent.isEmpty) {
+                          return const WhatsevrMixPostTile(
+                              tileType: WhatsevrMixPostTile.photo);
+                        }
+
+                        if (index == mixContent.length) {
+                          return context
+                                  .read<HomeBloc>()
+                                  .state
+                                  .mixContentPaginationData!
+                                  .isLoading
+                              ? WhatsevrLoadingIndicator()
+                              : const SizedBox();
+                        }
+
+                        final content = mixContent[index];
+                        final isInvertedPattern = (index ~/ 5) % 2 == 1;
+                        final positionInPattern = index % 5;
+
+                        if (isInvertedPattern) {
+                          // Inverted pattern: video, photo, photo, offer, flick
+                          switch (positionInPattern) {
+                            case 0:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.wtv,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 1:
+                            case 2:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.photo,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 3:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.offer,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 4:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.flick,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                          }
+                        } else {
+                          // Normal pattern: flick, photo, photo, offer, video
+                          switch (positionInPattern) {
+                            case 0:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.flick,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 1:
+                            case 2:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.photo,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 3:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.offer,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                            case 4:
+                              return WhatsevrMixPostTile(
+                                tileType: WhatsevrMixPostTile.wtv,
+                                thumbnailUrl: content.content?.thumbnail,
+                              );
+                          }
+                        }
+                        return WhatsevrMixPostTile(
+                          tileType: WhatsevrMixPostTile.photo,
+                          thumbnailUrl: content.content?.thumbnail,
+                        );
+                      },
+                      childCount: mixContent?.length,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

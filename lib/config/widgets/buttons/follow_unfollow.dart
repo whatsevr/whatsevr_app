@@ -24,7 +24,7 @@ class WhatsevrFollowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (AuthUserDb.getLastLoggedUserUid() == followeeUserUid) {
-      return WhatsevrButton.text(label: 'Owner');
+      return WhatsevrButton.text(label: 'You');
     }
 
     final AppTheme theme = context.whatsevrTheme;

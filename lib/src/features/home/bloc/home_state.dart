@@ -1,16 +1,16 @@
 part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
-  final PaginationData? videoPaginationData;
-  final List<RecommendedVideo>? recommendationVideos;
-  final PaginationData? memoryPaginationData;
-  final List<RecommendedMemory>? recommendationMemories;
-  final PaginationData? offersPaginationData;
-  final List<RecommendedOffer>? recommendationOffers;
-  final PaginationData? photoPostPaginationData;
-  final List<RecommendedPhotoPost>? recommendationPhotoPosts;
-    final PaginationData? mixContentPaginationData;
-  final List<MixContent>? mixContent;
+  final PaginationData videoPaginationData;
+  final List<RecommendedVideo> recommendationVideos;
+  final PaginationData memoryPaginationData;
+  final List<RecommendedMemory> recommendationMemories;
+  final PaginationData offersPaginationData;
+  final List<RecommendedOffer> recommendationOffers;
+  final PaginationData photoPostPaginationData;
+  final List<RecommendedPhotoPost> recommendationPhotoPosts;
+    final PaginationData mixContentPaginationData;
+  final List<MixContent> mixContent;
   const HomeState({
     this.recommendationVideos = const [],
     this.videoPaginationData = const PaginationData(),

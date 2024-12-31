@@ -496,6 +496,7 @@ class CommunityPage extends StatelessWidget {
                             shrinkViews: true,
                             tabAlignment: TabAlignment.start,
                             isTabsScrollable: true,
+                            spaceBetween: 2,
                             tabViews: [
                               ('About', CommunityPageAboutView()),
                               ('Services', CommunityPageServicesView()),

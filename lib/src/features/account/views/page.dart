@@ -415,7 +415,7 @@ class AccountPage extends StatelessWidget {
                                           style: TextStyle(fontSize: 20),
                                         ),
                                         Text(
-                                          'Networks',
+                                          'Followers',
                                           style: TextStyle(fontSize: 14),
                                         ),
                                       ],
@@ -592,6 +592,7 @@ class AccountPage extends StatelessWidget {
                                   shrinkViews: true,
                                   tabAlignment: TabAlignment.start,
                                   isTabsScrollable: true,
+                                  spaceBetween: 2,
                                   tabViews: [
                                     ('About', AccountPageAboutView()),
                                     if (state.profileDetailsResponse?.userInfo
