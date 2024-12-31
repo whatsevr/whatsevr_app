@@ -43,8 +43,8 @@ class NewCommunityPage extends StatelessWidget {
     return BlocBuilder<NewCommunityBloc, NewCommunityState>(
       builder: (context, state) {
         onReachingEndOfTheList(
-               context,
-     scrollController: scrollController,
+          context,
+          scrollController: scrollController,
           execute: () {
             context.read<NewCommunityBloc>().add(
                   LoadMoreTopCommunitiesEvent(

@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:whatsevr_app/config/services/device_info.dart';
+
 class PermissionService {
   static final Map<Permission, String> _androidPermissions = {
     Permission.notification: 'Notifications',
@@ -31,14 +32,11 @@ class PermissionService {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       return _iosPermissions;
     }
-    
+
     // For Android, check version and filter permissions accordingly
-    return  DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
-        ? Map.fromEntries(
-            _androidPermissions.entries.where((entry) => 
-              entry.key != Permission.storage
-            )
-          )
+    return DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
+        ? Map.fromEntries(_androidPermissions.entries
+            .where((entry) => entry.key != Permission.storage))
         : _androidPermissions;
   }
 
@@ -59,33 +57,36 @@ class PermissionService {
     }
   }
 
-  static Future<Map<Permission, PermissionStatus>> requestAllPermissions() async {
+  static Future<Map<Permission, PermissionStatus>>
+      requestAllPermissions() async {
     try {
       Map<Permission, PermissionStatus> statuses = {};
-      
+
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         for (var permission in _iosPermissions.keys) {
           statuses[permission] = await permission.request();
         }
       } else {
         // Android platform
-        if (
-          DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
-        ) {
+        if (DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true) {
           final mediaPermissions = [
             Permission.photos,
             Permission.videos,
             Permission.audio,
-            ...permissionNames.keys.where((p) => 
-              p != Permission.storage && 
-              ![Permission.photos, Permission.videos, Permission.audio].contains(p))
+            ...permissionNames.keys.where((p) =>
+                p != Permission.storage &&
+                ![Permission.photos, Permission.videos, Permission.audio]
+                    .contains(p))
           ];
           for (var permission in mediaPermissions) {
             statuses[permission] = await permission.request();
           }
         } else {
-          final permissions = permissionNames.keys.where((p) => 
-            ![Permission.photos, Permission.videos, Permission.audio].contains(p));
+          final permissions = permissionNames.keys.where((p) => ![
+                Permission.photos,
+                Permission.videos,
+                Permission.audio
+              ].contains(p));
           for (var permission in permissions) {
             statuses[permission] = await permission.request();
           }
@@ -98,33 +99,30 @@ class PermissionService {
     }
   }
 
-
-
   static Future<Map<String, bool>> checkPermissionStatuses() async {
     final Map<String, bool> permissions = {};
     final currentPermissions = await _getCurrentPlatformPermissions();
-    
+
     for (var permission in currentPermissions.keys) {
       permissions[permission.toString()] = await permission.isGranted;
     }
-    
+
     return permissions;
   }
 
-  static Future<Map<Permission, String>> _getCurrentPlatformPermissions() async {
+  static Future<Map<Permission, String>>
+      _getCurrentPlatformPermissions() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       return _iosPermissions;
     }
-    
-    final isAndroid13Plus = DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true;
+
+    final isAndroid13Plus =
+        DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true;
     if (isAndroid13Plus) {
-      return Map.fromEntries(
-        _androidPermissions.entries.where((entry) => 
-          entry.key != Permission.storage
-        )
-      );
+      return Map.fromEntries(_androidPermissions.entries
+          .where((entry) => entry.key != Permission.storage));
     }
-    
+
     return _androidPermissions;
   }
 
@@ -168,9 +166,10 @@ class PermissionService {
 
   // Helper method to get all media permissions
   static List<Permission> get mediaPermissions => [
-    Permission.photos,
-    Permission.videos,
-    Permission.audio,
-    if (defaultTargetPlatform == TargetPlatform.iOS) Permission.mediaLibrary,
-  ];
+        Permission.photos,
+        Permission.videos,
+        Permission.audio,
+        if (defaultTargetPlatform == TargetPlatform.iOS)
+          Permission.mediaLibrary,
+      ];
 }

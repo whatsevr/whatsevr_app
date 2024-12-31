@@ -123,7 +123,7 @@ abstract class AppTheme {
   BoxShadow get boxShadow => BoxShadow(
         color: shadow,
         blurRadius: 8.r,
-        offset:  Offset(0, 2.h),
+        offset: Offset(0, 2.h),
       );
 
   // Card theme
@@ -283,7 +283,7 @@ class DarkTheme extends AppTheme {
   BoxShadow get boxShadow => BoxShadow(
         color: shadow,
         blurRadius: 12.r,
-        offset:  Offset(0, 4.h),
+        offset: Offset(0, 4.h),
       );
 }
 

@@ -43,7 +43,6 @@ class WhatsevrMixPostTile extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(4.0),
@@ -52,12 +51,10 @@ class WhatsevrMixPostTile extends StatelessWidget {
                   thumbnailUrl ??
                       MockData.imagePlaceholder(
                         'Thumbnail',
-                        tileType == flick
-                            ? true
-                            : false,
+                        tileType == flick ? true : false,
                       ),
-                      cache: true,
-                      printError: true, 
+                  cache: true,
+                  printError: true,
                 ),
                 fit: BoxFit.cover,
               ),

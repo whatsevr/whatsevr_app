@@ -8,16 +8,15 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
   final List<(String tabName, Widget view)> tabViews;
   final TabAlignment? tabAlignment;
   final Function(int)? onTabChanged;
-  final double? spaceBetween ;
-  const WhatsevrTabBarWithViews({
-    super.key,
-    this.shrinkViews,
-    required this.tabViews,
-    this.isTabsScrollable,
-    this.tabAlignment,
-    this.onTabChanged,
-    this.spaceBetween
-  });
+  final double? spaceBetween;
+  const WhatsevrTabBarWithViews(
+      {super.key,
+      this.shrinkViews,
+      required this.tabViews,
+      this.isTabsScrollable,
+      this.tabAlignment,
+      this.onTabChanged,
+      this.spaceBetween});
 
   @override
   State<WhatsevrTabBarWithViews> createState() =>
@@ -43,14 +42,13 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
             isScrollable: widget.isTabsScrollable,
             tabAlignment: widget.tabAlignment,
           ),
-          if(widget.spaceBetween!=null)
-           Gap(widget.spaceBetween!),
+          if (widget.spaceBetween != null) Gap(widget.spaceBetween!),
           Builder(
             builder: (BuildContext context) {
               if (widget.shrinkViews == true) {
                 return widget
                     .tabViews[DefaultTabController.of(context).index].$2;
-              } 
+              }
               return Expanded(
                 child: TabBarView(
                   physics: const NeverScrollableScrollPhysics(),
@@ -92,7 +90,7 @@ class WhatsevrTabBar extends StatelessWidget {
       labelStyle: TextStyle(fontSize: 14.sp),
       unselectedLabelStyle: TextStyle(fontSize: 14.sp),
       indicatorPadding: EdgeInsets.symmetric(horizontal: 4.w),
-      indicatorWeight:  4.0.r,
+      indicatorWeight: 4.0.r,
       tabs: tabs.map((String e) => Tab(text: e)).toList(),
     );
   }

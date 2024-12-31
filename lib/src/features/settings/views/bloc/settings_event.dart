@@ -45,10 +45,6 @@ class TooglePortfolioStatus extends SettingsEvent {
   List<Object> get props => [isVisible];
 }
 
-
-
-
-
 // Replace UpdateSecuritySettings with:
 class UpdateBiometricSecurity extends SettingsEvent {
   final bool isEnabled;
@@ -56,7 +52,6 @@ class UpdateBiometricSecurity extends SettingsEvent {
   @override
   List<Object> get props => [isEnabled];
 }
-
 
 class UpdatePermission extends SettingsEvent {
   final String permission;
@@ -95,5 +90,3 @@ class LogoutDeviceEvent extends SettingsEvent {
   @override
   List<Object> get props => [sessionId];
 }
-
-

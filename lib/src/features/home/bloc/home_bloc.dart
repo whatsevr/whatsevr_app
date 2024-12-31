@@ -16,7 +16,6 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-
   HomeBloc()
       : super(
           const HomeState(),
@@ -34,11 +33,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
   }
 
-  
-
   @override
   Future<void> close() {
-    
     return super.close();
   }
 
@@ -96,7 +92,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationVideosResponse? recommendationVideos =
           await PrivateRecommendationApi.getVideoPosts(
         page: event.page!,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
       emit(
@@ -130,7 +126,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationMemoriesResponse? recommendationMemories =
           await PrivateRecommendationApi.getMemories(
         page: 1,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
       emit(
         state.copyWith(
@@ -165,7 +161,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationMemoriesResponse? recommendationMemories =
           await PrivateRecommendationApi.getMemories(
         page: event.page!,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
       emit(
@@ -199,7 +195,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationOffersResponse? recommendationOffers =
           await PrivateRecommendationApi.getOffers(
         page: 1,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
       emit(
         state.copyWith(
@@ -234,7 +230,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationOffersResponse? recommendationOffers =
           await PrivateRecommendationApi.getOffers(
         page: event.page!,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
       emit(
@@ -268,7 +264,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await PrivateRecommendationApi.getPhotoPosts(
         page: 1,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
       emit(
         state.copyWith(
@@ -304,7 +300,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationPhotoPostsResponse? recommendationPhotoPosts =
           await PrivateRecommendationApi.getPhotoPosts(
         page: event.page!,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
       emit(
@@ -338,7 +334,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationMixContentResponse? mixContentResponse =
           await PrivateRecommendationApi.getMixContent(
         page: 1,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
       emit(
         state.copyWith(
@@ -373,13 +369,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final PrivateRecommendationMixContentResponse? mixContentResponse =
           await PrivateRecommendationApi.getMixContent(
         page: event.page!,
-            userUid: AuthUserDb.getLastLoggedUserUid()!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
       );
 
       emit(
         state.copyWith(
-          mixContent: state.mixContent! +
-              (mixContentResponse?.mixContent ?? []),
+          mixContent:
+              state.mixContent! + (mixContentResponse?.mixContent ?? []),
           mixContentPaginationData: state.mixContentPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,

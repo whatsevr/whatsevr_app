@@ -185,8 +185,8 @@ class AuthUserService {
       AuthUserDb.clearLastLoggedUserUid();
       if (AuthUserDb.getAllAuthorisedUserUid().isNotEmpty) {
         AuthUserDb.saveLastLoggedUserUid(
-        AuthUserDb.getAllAuthorisedUserUid().first,
-      );
+          AuthUserDb.getAllAuthorisedUserUid().first,
+        );
       }
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
       highLevelCatch(e, stackTrace);

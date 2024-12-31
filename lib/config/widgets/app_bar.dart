@@ -46,7 +46,7 @@ class WhatsevrAppBar extends StatelessWidget implements PreferredSizeWidget {
           if (showAiAction) const AiButton(),
           if (showInfo != null)
             IconButton(
-              icon:  Icon(WhatsevrIcons.iButtonIcon),
+              icon: Icon(WhatsevrIcons.iButtonIcon),
               onPressed: showInfo,
             ),
         ],

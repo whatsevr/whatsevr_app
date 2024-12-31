@@ -13,7 +13,6 @@ class DeviceInfo {
     required this.deviceName,
     required this.countryCode,
     required this.deviceOs,
-    
     required this.isAndroid,
     required this.isAndroid13OrHigher,
     required this.isIos,
@@ -32,13 +31,11 @@ class DeviceInfo {
       'deviceName': deviceName,
       'countryCode': countryCode,
       'deviceOs': deviceOs,
-      'isAndroid': isAndroid,     
+      'isAndroid': isAndroid,
       'isAndroid13OrHigher': isAndroid13OrHigher,
       'isIos': isIos,
     };
   }
-
-  
 }
 
 class DeviceInfoService {
@@ -72,12 +69,13 @@ class DeviceInfoService {
     try {
       final androidInfo = await deviceInfoPlugin.androidInfo;
       final countryCode = await _getCurrentCountryCode();
-      final deviceData = '${androidInfo.id}_${androidInfo.fingerprint}_${androidInfo.bootloader}';
+      final deviceData =
+          '${androidInfo.id}_${androidInfo.fingerprint}_${androidInfo.bootloader}';
       final uniquedeviceId = _aesService.encrypt(deviceData);
-      
+
       _currentDeviceInfo = DeviceInfo(
         deviceId: uniquedeviceId,
-       deviceName: '${androidInfo.manufacturer} ${androidInfo.model}',
+        deviceName: '${androidInfo.manufacturer} ${androidInfo.model}',
         countryCode: countryCode,
         deviceOs: 'android',
         isAndroid: true,
@@ -94,9 +92,10 @@ class DeviceInfoService {
     try {
       final iosInfo = await deviceInfoPlugin.iosInfo;
       final countryCode = await _getCurrentCountryCode();
-      final deviceData = '${iosInfo.identifierForVendor ?? ''}_${iosInfo.systemName}_${iosInfo.name}_${iosInfo.model}';
+      final deviceData =
+          '${iosInfo.identifierForVendor ?? ''}_${iosInfo.systemName}_${iosInfo.name}_${iosInfo.model}';
       final uniqueDeviceId = _aesService.encrypt(deviceData);
-      
+
       _currentDeviceInfo = DeviceInfo(
         deviceId: uniqueDeviceId,
         deviceName: '${iosInfo.name} ${iosInfo.model}',

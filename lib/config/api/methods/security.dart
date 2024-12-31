@@ -22,9 +22,9 @@ class SecurityApi {
     }
     return null;
   }
+
   ///remove-user-logins
   static Future<dynamic> removeUserLoginSession({
-    
     required List<String>? loginSessionUids,
     required String? userUid,
   }) async {

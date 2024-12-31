@@ -406,7 +406,6 @@ class _WhatsevrFormFieldState extends State<WhatsevrFormField> {
                 hintStyle: TextStyle(
                   color: baseColor,
                   fontSize: 12.0,
-                  
                 ),
                 hintMaxLines: widget.minLines,
                 suffixIconColor: baseColor,

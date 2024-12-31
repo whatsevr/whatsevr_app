@@ -44,7 +44,7 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     _currentChatId = event.pageArguments?.isCommunity == true
         ? event.pageArguments?.communityUid
         : event.pageArguments?.privateChatUid;
-    
+
     emit(
       state.copyWith(
         isCommunity: event.pageArguments?.isCommunity,

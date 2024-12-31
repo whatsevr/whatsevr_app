@@ -12,11 +12,9 @@ import 'package:whatsevr_app/src/features/explore/views/widgets/photos/views/pag
 import 'package:whatsevr_app/src/features/explore/views/widgets/wtv/views/page.dart';
 
 class ExplorePage extends StatelessWidget {
-   ExplorePage({super.key}); 
+  ExplorePage({super.key});
 
-  final ScrollController searchBoxHideController = ScrollController(
-
-  );
+  final ScrollController searchBoxHideController = ScrollController();
 
   @override
   Widget build(BuildContext context) {

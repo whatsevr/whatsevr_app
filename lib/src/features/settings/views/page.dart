@@ -25,6 +25,7 @@ import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
 part 'package:whatsevr_app/src/features/settings/views/widgets/my_communities.dart';
 part 'package:whatsevr_app/src/features/settings/views/widgets/permissions.dart';
 part 'package:whatsevr_app/src/features/settings/views/widgets/active_login_sessions.dart';
+
 class SettingsPageArgument {
   const SettingsPageArgument();
 }
@@ -105,7 +106,7 @@ class SettingsPage extends StatelessWidget {
                           value: context.read<SettingsBloc>(),
                           child: const _ActiveLoginSessionsPage(),
                         ),
-                      ); 
+                      );
                     },
                   ),
                   SettingsTile(
@@ -343,15 +344,14 @@ class SettingsTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (trailing != null)
-                trailing!,
-                    if (showTrailingArrow) ...[
-                      const Gap(12), // Reduced gap
-                      Icon(
-                        Icons.arrow_forward_ios_outlined,
-                        size: 14,
-                      ),
-                    ],
+                if (trailing != null) trailing!,
+                if (showTrailingArrow) ...[
+                  const Gap(12), // Reduced gap
+                  Icon(
+                    Icons.arrow_forward_ios_outlined,
+                    size: 14,
+                  ),
+                ],
               ],
             ),
           ),

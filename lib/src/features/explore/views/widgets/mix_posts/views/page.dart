@@ -16,8 +16,8 @@ class ExploreMixPostsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-            context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<ExploreBloc>().add(
               LoadMoreMixContentEvent(
@@ -59,11 +59,16 @@ class ExploreMixPostsView extends StatelessWidget {
             childrenDelegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 if (mixContent == null || mixContent.isEmpty) {
-                  return const WhatsevrMixPostTile(tileType: WhatsevrMixPostTile.photo);
+                  return const WhatsevrMixPostTile(
+                      tileType: WhatsevrMixPostTile.photo);
                 }
 
                 if (index == mixContent.length) {
-                  return context.read<ExploreBloc>().state.mixContentPaginationData!.isLoading
+                  return context
+                          .read<ExploreBloc>()
+                          .state
+                          .mixContentPaginationData!
+                          .isLoading
                       ? WhatsevrLoadingIndicator()
                       : const SizedBox();
                 }
@@ -129,7 +134,7 @@ class ExploreMixPostsView extends StatelessWidget {
                   thumbnailUrl: content.content?.thumbnail,
                 );
               },
-              childCount: mixContent?.length ,
+              childCount: mixContent?.length,
             ),
           ),
         );

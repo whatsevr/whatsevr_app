@@ -7,15 +7,12 @@ class ApiHeaderInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
-      options.headers['authorization'] = 
-      
-      'Bearer ZSLBTlLJf8yrOAojKmcYQTyA6aS4WK3Quv1yCWGU1rI/6VAQIh8y';
+      options.headers['authorization'] =
+          'Bearer ZSLBTlLJf8yrOAojKmcYQTyA6aS4WK3Quv1yCWGU1rI/6VAQIh8y';
       if (_excludedRoutes.any((route) => options.path.contains(route))) {
         handler.next(options);
         return;
       }
-
-     
 
       final String? userUid = AuthUserDb.getLastLoggedUserUid();
 
@@ -30,9 +27,8 @@ class ApiHeaderInterceptor extends Interceptor {
         return;
       }
 
-      
       options.headers['x-user-jwt-token'] = userUid;
-      
+
       handler.next(options);
     } catch (e) {
       handler.reject(
@@ -45,4 +41,3 @@ class ApiHeaderInterceptor extends Interceptor {
     }
   }
 }
-

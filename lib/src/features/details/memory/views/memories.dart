@@ -33,7 +33,6 @@ showMemoriesPlayer(
   );
 }
 
-
 class _MemoriesPlayer extends StatefulWidget {
   final List<UiMemoryGroup>? uiMemoryGroups;
   final int startGroupIndex;

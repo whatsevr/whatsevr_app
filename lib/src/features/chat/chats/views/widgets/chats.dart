@@ -24,11 +24,11 @@ class _ChatListView extends StatelessWidget {
                   AppNavigationService.newRoute(
                     RoutesName.chatConversation,
                     extras: ConversationPageArguments(
-                        isCommunity: false,
-                        privateChatUid: chat.uid,
-                        chat_title: otherUser?.name,
-                        chat_avatar_url: otherUser?.profilePicture,
-                      ),
+                      isCommunity: false,
+                      privateChatUid: chat.uid,
+                      chat_title: otherUser?.name,
+                      chat_avatar_url: otherUser?.profilePicture,
+                    ),
                   );
                 },
                 leading: CircleAvatar(

@@ -302,7 +302,7 @@ class PostApi {
     return null;
   }
 
-    static Future<UserAndCommunityMixContentResponse?> getMixContent({
+  static Future<UserAndCommunityMixContentResponse?> getMixContent({
     String? userUid,
     String? communityUid,
   }) async {

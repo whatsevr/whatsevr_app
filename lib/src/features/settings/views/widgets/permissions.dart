@@ -20,7 +20,7 @@ class _PermissionsPageState extends State<_PermissionsPage> {
     setState(() => _isLoading = true);
     final permissions = await PermissionService.checkPermissionStatuses();
     if (!mounted) return;
-    
+
     context.read<SettingsBloc>().add(
           UpdatePermissionsStatus(permissions: permissions),
         );
@@ -29,7 +29,7 @@ class _PermissionsPageState extends State<_PermissionsPage> {
 
   Future<void> _handlePermissionRequest(Permission permission) async {
     final status = await PermissionService.requestPermission(permission);
-    if (!mounted) return; 
+    if (!mounted) return;
 
     if (!status) {
       final isPermanentlyDenied = await permission.isPermanentlyDenied;
@@ -39,8 +39,7 @@ class _PermissionsPageState extends State<_PermissionsPage> {
           builder: (context) => AlertDialog(
             title: const Text('Permission Required'),
             content: Text(
-              'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.'
-            ),
+                'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -61,7 +60,6 @@ class _PermissionsPageState extends State<_PermissionsPage> {
     _checkPermissions();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final theme = context.whatsevrTheme;
@@ -73,29 +71,33 @@ class _PermissionsPageState extends State<_PermissionsPage> {
               ? const Center(child: CircularProgressIndicator())
               : ListView(
                   children: [
-                    for (final permission in PermissionService.permissionNames.entries)
+                    for (final permission
+                        in PermissionService.permissionNames.entries)
                       SettingsTile(
-                          title: permission.value,
-                         onTap: () async {
-                          final isGranted = state.permissions[permission.key.toString()] ?? false;
+                        title: permission.value,
+                        onTap: () async {
+                          final isGranted =
+                              state.permissions[permission.key.toString()] ??
+                                  false;
                           if (!isGranted) {
                             await _handlePermissionRequest(permission.key);
                           } else {
                             PermissionService.openSettings();
                           }
                         },
-                          trailing: Text(
-                            state.permissions[permission.key.toString()] ?? false
-                                ? 'Allowed'
-                                : 'Not allowed', 
-                            style: TextStyle(
-                              color: state.permissions[permission.key.toString()] ?? false
-                                  ? theme.primary
-                                  : Colors.grey,
-                            ),
+                        trailing: Text(
+                          state.permissions[permission.key.toString()] ?? false
+                              ? 'Allowed'
+                              : 'Not allowed',
+                          style: TextStyle(
+                            color:
+                                state.permissions[permission.key.toString()] ??
+                                        false
+                                    ? theme.primary
+                                    : Colors.grey,
                           ),
                         ),
-                      
+                      ),
                   ],
                 ),
         );

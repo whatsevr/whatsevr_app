@@ -100,7 +100,7 @@ class PublicRecommendationApi {
     return null;
   }
 
-    static Future<PublicRecommendationMixContentResponse?> getMixContent({
+  static Future<PublicRecommendationMixContentResponse?> getMixContent({
     required int page,
     int pageSize = 20,
   }) async {

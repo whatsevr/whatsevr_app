@@ -19,7 +19,7 @@ class CommunityPageAboutView extends StatelessWidget {
         return Column(
           children: <Widget>[
             const Gap(12),
- ...<Widget>[
+            ...<Widget>[
               if (state.communityDetailsResponse?.communityInfo?.status
                       ?.isNotEmpty ??
                   false)
@@ -58,7 +58,8 @@ class CommunityPageAboutView extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (state.communityDetailsResponse?.communityServices?.isNotEmpty ??
+              if (state.communityDetailsResponse?.communityServices
+                      ?.isNotEmpty ??
                   false)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -95,12 +96,13 @@ class CommunityPageAboutView extends StatelessWidget {
                           Gap(8),
                           Wrap(
                             spacing: 8,
-                               runSpacing: 8, 
+                            runSpacing: 8,
                             children: <Widget>[
                               for (CommunityService? service in state
-                                      .communityDetailsResponse?.communityServices ??
+                                      .communityDetailsResponse
+                                      ?.communityServices ??
                                   <CommunityService?>[])
-                                Container( 
+                                Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
                                     vertical: 4,

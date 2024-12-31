@@ -42,8 +42,8 @@ class _FlicksPageState extends State<FlicksPage> {
 
   Widget _buildBody(BuildContext context) {
     onReachingEndOfTheList(
-           context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<FlicksBloc>().add(
               LoadMoreFlicksEvent(

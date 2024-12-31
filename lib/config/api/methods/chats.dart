@@ -16,18 +16,17 @@ class ChatsApi {
     String? message,
   }) async {
     try {
-      
       final Response response = await ApiClient.client.post(
         '/v1/start-chat',
-        data: { 
-           'sender_user_uid': currentUserUid,
-           'other_user_uid': otherUserUid,
-         'community_uid': communityUid,
+        data: {
+          'sender_user_uid': currentUserUid,
+          'other_user_uid': otherUserUid,
+          'community_uid': communityUid,
           'message': message,
         },
       );
       return (response.statusCode, StartChatResponse.fromMap(response.data));
-    }  catch (e, s) {
+    } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;

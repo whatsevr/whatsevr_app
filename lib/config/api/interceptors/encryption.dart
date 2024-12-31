@@ -5,7 +5,8 @@ import 'package:whatsevr_app/utils/aes.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
 class ApiEncryptionInterceptor extends Interceptor {
-  final AesService _aesService =AesService('A8AtppMyToX2AglM+YR0OxEc+QNhKYumcbiS11DZcCLq3UnI2ugHilCEYSyFx7SQ');
+  final AesService _aesService = AesService(
+      'A8AtppMyToX2AglM+YR0OxEc+QNhKYumcbiS11DZcCLq3UnI2ugHilCEYSyFx7SQ');
 
   ApiEncryptionInterceptor();
 
@@ -17,7 +18,8 @@ class ApiEncryptionInterceptor extends Interceptor {
           final encryptedData = _aesService.encrypt(jsonEncode(options.data));
           options.data = {'data': encryptedData};
         } else if (options.queryParameters.isNotEmpty) {
-          final encryptedQueryParams = _aesService.encrypt(jsonEncode(options.queryParameters));
+          final encryptedQueryParams =
+              _aesService.encrypt(jsonEncode(options.queryParameters));
           options.queryParameters = {'data': encryptedQueryParams};
         }
       }
@@ -44,4 +46,3 @@ class ApiEncryptionInterceptor extends Interceptor {
     return encryptedEndpoints.contains(path);
   }
 }
-

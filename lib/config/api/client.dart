@@ -35,7 +35,6 @@ class ApiClient {
               status == HttpStatus.notAcceptable;
         },
         headers: <String, dynamic>{
-         
           'x-user-agent-id': DeviceInfoService.currentDeviceInfo?.deviceId,
           'x-user-agent-name': DeviceInfoService.currentDeviceInfo?.deviceName,
           'x-user-agent-type': DeviceInfoService.currentDeviceInfo?.deviceOs,
@@ -69,7 +68,6 @@ class ApiClient {
       ),
     );
     dio.interceptors.addAll(<Interceptor>[
-    
       ApiRetryInterceptor(dio: dio),
       ApiCacheInterceptor(
         cacheDirectoryPath: dioCacheDirectory?.path,

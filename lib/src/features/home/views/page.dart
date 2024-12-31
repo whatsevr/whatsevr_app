@@ -10,10 +10,8 @@ import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/offers.dart';
 
 class HomePage extends StatelessWidget {
-   HomePage({super.key});
-  final ScrollController searchBoxHideController = ScrollController(
-
-  );
+  HomePage({super.key});
+  final ScrollController searchBoxHideController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +19,7 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           PadHorizontal(
             child: WhatsevrAnimatedSearchField(
-              hideOnScrollController: searchBoxHideController,  
+              hideOnScrollController: searchBoxHideController,
               hintTexts: const <String>[
                 'Search for Wtv from connections',
                 'Search for Media from connections',
@@ -31,19 +29,22 @@ class HomePage extends StatelessWidget {
             ),
           ),
           const Gap(8.0),
-           Expanded(
+          Expanded(
             child: WhatsevrTabBarWithViews(
               spaceBetween: 4,
               tabViews: [
-                ('For You', HomePageForYouPage(
-                  scrollController: searchBoxHideController,
-                )),
+                (
+                  'For You',
+                  HomePageForYouPage(
+                    scrollController: searchBoxHideController,
+                  )
+                ),
                 ('Communities', HomePageCommunitiesPage()),
                 (
                   'Offers',
                   HomePageOffersPage(
                     scrollController: searchBoxHideController,
-                  ), 
+                  ),
                 ),
                 ('Activities', HomePageActivitiesPage()),
               ],

@@ -197,8 +197,8 @@ class WhatsevrBookmarkButton extends StatelessWidget {
         WhatsevrIcons.bookMarkIconLine,
         color: firstStateColor ?? theme.icon,
       ),
-      secondStateUi:
-          Icon( WhatsevrIcons.bookMarkIcon, color: secondStateColor ?? theme.icon),
+      secondStateUi: Icon(WhatsevrIcons.bookMarkIcon,
+          color: secondStateColor ?? theme.icon),
     );
   }
 }

@@ -4,7 +4,5 @@ void main() {
   final aesService = AesService();
   var encryptedText = aesService.encrypt('Hello, Baby!');
   print(encryptedText);
-  print(AesService().decrypt(
-    '$encryptedText'
-  ));
+  print(AesService().decrypt('$encryptedText'));
 }

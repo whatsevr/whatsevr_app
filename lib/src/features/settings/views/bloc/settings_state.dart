@@ -58,13 +58,18 @@ class SettingsState extends Equatable {
     Map<String, bool>? permissions,
   }) {
     return SettingsState(
-      userCommunitiesResponse: userCommunitiesResponse ?? this.userCommunitiesResponse,
-      isPushNotificationsEnabled: isPushNotificationsEnabled ?? this.isPushNotificationsEnabled,
-      isEmailNotificationsEnabled: isEmailNotificationsEnabled ?? this.isEmailNotificationsEnabled,
-      isPostNotificationsEnabled: isPostNotificationsEnabled ?? this.isPostNotificationsEnabled,
+      userCommunitiesResponse:
+          userCommunitiesResponse ?? this.userCommunitiesResponse,
+      isPushNotificationsEnabled:
+          isPushNotificationsEnabled ?? this.isPushNotificationsEnabled,
+      isEmailNotificationsEnabled:
+          isEmailNotificationsEnabled ?? this.isEmailNotificationsEnabled,
+      isPostNotificationsEnabled:
+          isPostNotificationsEnabled ?? this.isPostNotificationsEnabled,
       isBusinessPortfolio: isBusinessPortfolio ?? this.isBusinessPortfolio,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      loginSessionsResponse: loginSessionsResponse ?? this.loginSessionsResponse,
+      loginSessionsResponse:
+          loginSessionsResponse ?? this.loginSessionsResponse,
       notificationTypes: notificationTypes ?? this.notificationTypes,
       permissions: permissions ?? this.permissions,
     );

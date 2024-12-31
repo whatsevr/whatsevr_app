@@ -53,7 +53,7 @@ class _DashboardPageBottomNavigationBarState
         Icon(WhatsevrIcons.iconWhatServ001Svg, size: 28.sp),
         () {
           context.read<DashboardBloc>().add(
-                 TabChanged(
+                TabChanged(
                   newView: HomePage(),
                 ),
               );
@@ -183,7 +183,7 @@ class _DashboardPageBottomNavigationBarState
           //   ),
           //   ),
           // );
-           return SizedBox(
+          return SizedBox(
             height: 50.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
@@ -191,7 +191,7 @@ class _DashboardPageBottomNavigationBarState
                 return children[index];
               },
               separatorBuilder: (BuildContext context, int index) {
-                return  Gap(25.r);
+                return Gap(25.r);
               },
               itemCount: children.length,
             ),

@@ -8,8 +8,8 @@ class _WtvView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-               context,
-     scrollController: _scrollController,
+      context,
+      scrollController: _scrollController,
       execute: () {
         context.read<AllSearchBloc>().add(SearchMoreVideoPosts());
       },

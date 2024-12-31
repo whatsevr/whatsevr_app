@@ -18,8 +18,8 @@ class HomePageOffersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-           context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<HomeBloc>().add(
               LoadMoreOffersEvent(
@@ -62,9 +62,12 @@ class HomePageOffersPage extends StatelessWidget {
                     title: data[index].title,
                     description: data[index].description,
                     status: data[index].status,
-                                   filesData: data[index].filesData?.map((e) =>WhatsevrNetworkFile.fromMap(
-                      e.toMap(),
-                    )).toList(),
+                    filesData: data[index]
+                        .filesData
+                        ?.map((e) => WhatsevrNetworkFile.fromMap(
+                              e.toMap(),
+                            ))
+                        .toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,
                     timeAgo: GetTimeAgo.parse(

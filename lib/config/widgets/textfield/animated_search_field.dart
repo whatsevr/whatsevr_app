@@ -90,7 +90,7 @@ class _WhatsevrAnimatedSearchFieldState
                   setState(() {});
                   widget.onChanged?.call(value);
                 },
-                style:  TextStyle(
+                style: TextStyle(
                   color: Colors.black,
                   fontSize: 14.sp,
                 ),

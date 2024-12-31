@@ -13,12 +13,11 @@ class AuthApi {
         int? statusCode,
         String? message,
         LoginSuccessResponse? loginSuccessResponse
-      )?> login(
-    {String? userUid,
+      )?> login({
+    String? userUid,
     String? mobileNumber,
     String? emailId,
-}
-  ) async {
+  }) async {
     try {
       final Response response = await ApiClient.client.post(
         '/v1/auth/login',
@@ -26,7 +25,6 @@ class AuthApi {
           'user_uid': userUid,
           'mobile_number': mobileNumber,
           'email_id': emailId,
-         
         },
       );
 

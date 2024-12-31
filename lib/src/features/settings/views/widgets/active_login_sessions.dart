@@ -2,7 +2,7 @@ part of '../page.dart';
 
 class _ActiveLoginSessionsPage extends StatelessWidget {
   const _ActiveLoginSessionsPage({Key? key}) : super(key: key);
- 
+
   @override
   Widget build(BuildContext context) {
     context.read<SettingsBloc>().add(LoadLoginSessionsEvent());
@@ -10,7 +10,7 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
         final sessions = state.loginSessionsResponse?.activeLoginSessions ?? [];
-        
+
         return Scaffold(
           backgroundColor: theme.background,
           appBar: WhatsevrAppBar(
@@ -23,7 +23,8 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: theme.primary.withOpacity(0.1),
                       borderRadius: theme.borderRadiusFull,
@@ -65,9 +66,10 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
                       context,
                       deviceName: session.agentName ?? 'Unknown Device',
                       loginTime: session.createdAt ?? DateTime.now(),
-                      isCurrentDevice: session.agentId == DeviceInfoService.currentDeviceInfo?.deviceId, 
+                      isCurrentDevice: session.agentId ==
+                          DeviceInfoService.currentDeviceInfo?.deviceId,
                       deviceType: session.agentType ?? 'Unknown',
-                      sessionId: session.uid ?? '', 
+                      sessionId: session.uid ?? '',
                     )),
             ],
           ),
@@ -85,15 +87,16 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
     required String sessionId,
   }) {
     final theme = context.whatsevrTheme;
-    
+
     return BlocBuilder<SettingsBloc, SettingsState>(
-      buildWhen: (previous, current) => 
-        previous.loginSessionsResponse != current.loginSessionsResponse,
+      buildWhen: (previous, current) =>
+          previous.loginSessionsResponse != current.loginSessionsResponse,
       builder: (context, state) {
         // Check if this session still exists
         final sessionExists = state.loginSessionsResponse?.activeLoginSessions
-          ?.any((session) => session.uid == sessionId) ?? false;
-            
+                ?.any((session) => session.uid == sessionId) ??
+            false;
+
         if (!sessionExists && !isCurrentDevice) {
           return const SizedBox.shrink(); // Don't show logged out sessions
         }
@@ -195,7 +198,8 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
                         ),
                         if (!isCurrentDevice)
                           TextButton.icon(
-                            onPressed: () => _showLogoutDialog(context, sessionId),
+                            onPressed: () =>
+                                _showLogoutDialog(context, sessionId),
                             style: TextButton.styleFrom(
                               foregroundColor: theme.error,
                               padding: const EdgeInsets.symmetric(
@@ -239,7 +243,7 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
         title: Text(
           'Logout Device',
           style: theme.h3,
-        ), 
+        ),
         content: Text(
           'This will terminate the session on this device. Are you sure?',
           style: theme.body,
@@ -274,8 +278,8 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
   String _formatDateTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
-    if (difference.inDays > 0) { 
+
+    if (difference.inDays > 0) {
       return '${difference.inDays} days ago';
     } else if (difference.inHours > 0) {
       return '${difference.inHours} hours ago';
@@ -286,7 +290,3 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
     }
   }
 }
-
-
-
-

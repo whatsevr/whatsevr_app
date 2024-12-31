@@ -5,7 +5,6 @@ import 'package:get_time_ago/get_time_ago.dart';
 import 'package:whatsevr_app/config/api/external/models/network_file.dart';
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/offers.dart';
 
-
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
@@ -20,8 +19,8 @@ class ExplorePageOffersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-           context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<ExploreBloc>().add(
               LoadMoreOffersEvent(
@@ -64,9 +63,12 @@ class ExplorePageOffersPage extends StatelessWidget {
                     title: data[index].title,
                     description: data[index].description,
                     status: data[index].status,
-                    filesData: data[index].filesData?.map((e) =>WhatsevrNetworkFile.fromMap(
-                      e.toMap(),
-                    )).toList(),
+                    filesData: data[index]
+                        .filesData
+                        ?.map((e) => WhatsevrNetworkFile.fromMap(
+                              e.toMap(),
+                            ))
+                        .toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,
                     timeAgo: GetTimeAgo.parse(

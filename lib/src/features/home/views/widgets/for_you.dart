@@ -37,7 +37,7 @@ class HomePageForYouPage extends StatelessWidget {
             );
       },
     );
-    return BlocBuilder < HomeBloc, HomeState > ( 
+    return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         return ListView(
           controller: scrollController,

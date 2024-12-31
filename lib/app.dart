@@ -50,8 +50,9 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: MediaQuery.of(context).orientation == Orientation.landscape ? const Size(812, 375) : 
-      const Size(375, 812), 
+      designSize: MediaQuery.of(context).orientation == Orientation.landscape
+          ? const Size(812, 375)
+          : const Size(375, 812),
       minTextAdapt: true,
       child: MultiBlocProvider(
         providers: [
@@ -62,7 +63,8 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
             create: (context) => ReactUnreactBloc()..add(FetchReactions()),
           ),
           BlocProvider<FollowUnfollowBloc>(
-            create: (context) => FollowUnfollowBloc()..add(FetchFollowedUsers()),
+            create: (context) =>
+                FollowUnfollowBloc()..add(FetchFollowedUsers()),
           ),
           BlocProvider<JoinLeaveCommunityBloc>(
             create: (context) =>

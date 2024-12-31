@@ -31,7 +31,8 @@ class PublicRecommendationOffersResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory PublicRecommendationOffersResponse.fromMap(Map<String, dynamic> json) =>
+  factory PublicRecommendationOffersResponse.fromMap(
+          Map<String, dynamic> json) =>
       PublicRecommendationOffersResponse(
         message: json['message'],
         page: json['page'],

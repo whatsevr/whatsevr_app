@@ -31,7 +31,8 @@ class UserAndCommunityPhotoPostsResponse {
 
   String toJson() => json.encode(toMap());
 
-  factory UserAndCommunityPhotoPostsResponse.fromMap(Map<String, dynamic> json) =>
+  factory UserAndCommunityPhotoPostsResponse.fromMap(
+          Map<String, dynamic> json) =>
       UserAndCommunityPhotoPostsResponse(
         message: json['message'],
         page: json['page'],

@@ -55,14 +55,14 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
           communityDetailsResponse: profileDetailsResponse,
         ),
       );
-      
+
       final UserAndCommunityVideoPostsResponse? videoPosts =
           await PostApi.getVideoPosts(communityUid: state.communityUid!);
       final UserAndCommunityMemoriesResponse? memories =
           await PostApi.getMemories(communityUid: state.communityUid!);
       final UserAndCommunityOffersResponse? offers =
           await PostApi.getOfferPosts(communityUid: state.communityUid!);
-      final UserAndCommunityMixContentResponse? mixContent = 
+      final UserAndCommunityMixContentResponse? mixContent =
           await PostApi.getMixContent(communityUid: state.communityUid!);
 
       emit(

@@ -121,7 +121,7 @@ class AccountPage extends StatelessWidget {
                                 horizontal: 4,
                                 vertical: 10,
                               ),
-                              child: Text( 
+                              child: Text(
                                 '${state.profileDetailsResponse?.userInfo?.portfolioTitle}',
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

@@ -9,7 +9,7 @@ class HomeState extends Equatable {
   final List<RecommendedOffer> recommendationOffers;
   final PaginationData photoPostPaginationData;
   final List<RecommendedPhotoPost> recommendationPhotoPosts;
-    final PaginationData mixContentPaginationData;
+  final PaginationData mixContentPaginationData;
   final List<MixContent> mixContent;
   const HomeState({
     this.recommendationVideos = const [],
@@ -21,7 +21,7 @@ class HomeState extends Equatable {
     this.photoPostPaginationData = const PaginationData(),
     this.recommendationPhotoPosts = const [],
     this.mixContentPaginationData = const PaginationData(),
-    this.mixContent=const[],
+    this.mixContent = const [],
   });
 
   @override
@@ -49,7 +49,6 @@ class HomeState extends Equatable {
     List<RecommendedPhotoPost>? recommendationPhotoPosts,
     PaginationData? mixContentPaginationData,
     List<MixContent>? mixContent,
-
   }) {
     return HomeState(
       recommendationVideos: recommendationVideos ?? this.recommendationVideos,
@@ -66,7 +65,6 @@ class HomeState extends Equatable {
       mixContentPaginationData:
           mixContentPaginationData ?? this.mixContentPaginationData,
       mixContent: mixContent ?? this.mixContent,
-
     );
   }
 }

@@ -25,7 +25,7 @@ class _MixContentView extends StatelessWidget {
             if (mixContent == null) return const SizedBox();
 
             String tileType = WhatsevrMixPostTile.photo; // default type
-            
+
             // Determine tile type based on mixContent.type
             switch (mixContent.type?.toLowerCase()) {
               case 'wtv':

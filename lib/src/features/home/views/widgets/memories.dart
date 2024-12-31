@@ -14,15 +14,15 @@ import 'package:whatsevr_app/src/features/details/memory/views/memories.dart';
 import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
 class HomePageMemoriesView extends StatelessWidget {
-  final ScrollController? scrollController=ScrollController();
+  final ScrollController? scrollController = ScrollController();
 
-   HomePageMemoriesView({super.key});
+  HomePageMemoriesView({super.key});
 
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-         context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<HomeBloc>().add(
               LoadMoreMemoriesEvent(
@@ -46,7 +46,6 @@ class HomePageMemoriesView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             separatorBuilder: (BuildContext context, int index) =>
                 const Gap(4.0),
-          
             itemCount: data?.length ?? 0,
             itemBuilder: (BuildContext context, int index) {
               return AspectRatio(
@@ -99,7 +98,7 @@ class HomePageMemoriesView extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                       ),
-                  
+
                       /// profile avatar
                       Positioned(
                         top: 8,

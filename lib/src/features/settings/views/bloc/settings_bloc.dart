@@ -78,16 +78,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       newNotificationTypes[event.type] = event.enabled;
       final newState = state.copyWith(notificationTypes: newNotificationTypes);
       emit(newState);
-      
 
       // Update notification settings on the server
-      
     } catch (e, s) {
       highLevelCatch(e, s);
     }
   }
-
-
 
   FutureOr<void> _onPortfolioStatus(
     TooglePortfolioStatus event,
@@ -99,10 +95,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       highLevelCatch(e, s);
     }
   }
-
-
-
-
 
   FutureOr<void> _onUpdatePushNotification(
     UpdatePushNotification event,
@@ -184,7 +176,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         loginSessionUids: [event.sessionId],
         userUid: AuthUserDb.getLastLoggedUserUid(),
       );
-      
+
       if (response != null) {
         // Reload sessions after successful logout
         add(LoadLoginSessionsEvent());
@@ -194,5 +186,3 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
   }
 }
-
-

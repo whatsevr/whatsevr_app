@@ -18,8 +18,8 @@ class ExplorePagePhotosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onReachingEndOfTheList(
-          context,
-     scrollController: scrollController,
+      context,
+      scrollController: scrollController,
       execute: () {
         context.read<ExploreBloc>().add(
               LoadMorePhotoPostsEvent(

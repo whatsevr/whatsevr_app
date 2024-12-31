@@ -35,7 +35,8 @@ class WhatsevrNetworkFile {
 
   String toJson() => json.encode(toMap());
 
-  factory WhatsevrNetworkFile.fromMap(Map<String, dynamic> json) => WhatsevrNetworkFile(
+  factory WhatsevrNetworkFile.fromMap(Map<String, dynamic> json) =>
+      WhatsevrNetworkFile(
         type: json['type'],
         videoUrl: json['video_url'],
         videoDurationMs: json['video_duration_ms'],

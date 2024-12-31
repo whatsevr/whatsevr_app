@@ -17,7 +17,6 @@ part 'explore_event.dart';
 part 'explore_state.dart';
 
 class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
-
   ExploreBloc()
       : super(
           const ExploreState(),
@@ -33,14 +32,10 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMorePhotoPostsEvent>(_onLoadMorePhotoPosts);
     on<LoadMixContentEvent>(_loadMixContent);
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
-   
   }
-
-  
 
   @override
   Future<void> close() {
-    
     return super.close();
   }
 
@@ -370,8 +365,8 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       emit(
         state.copyWith(
-          mixContent: state.mixContent! +
-              (mixContentResponse?.mixContent ?? []),
+          mixContent:
+              state.mixContent! + (mixContentResponse?.mixContent ?? []),
           mixContentPaginationData: state.mixContentPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,
