@@ -9,14 +9,15 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
   final TabAlignment? tabAlignment;
   final Function(int)? onTabChanged;
   final double? spaceBetween;
-  const WhatsevrTabBarWithViews(
-      {super.key,
-      this.shrinkViews,
-      required this.tabViews,
-      this.isTabsScrollable,
-      this.tabAlignment,
-      this.onTabChanged,
-      this.spaceBetween,});
+  const WhatsevrTabBarWithViews({
+    super.key,
+    this.shrinkViews,
+    required this.tabViews,
+    this.isTabsScrollable,
+    this.tabAlignment,
+    this.onTabChanged,
+    this.spaceBetween,
+  });
 
   @override
   State<WhatsevrTabBarWithViews> createState() =>

@@ -6,7 +6,8 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 
 class ApiEncryptionInterceptor extends Interceptor {
   final AesService _aesService = AesService(
-      'A8AtppMyToX2AglM+YR0OxEc+QNhKYumcbiS11DZcCLq3UnI2ugHilCEYSyFx7SQ',);
+    'A8AtppMyToX2AglM+YR0OxEc+QNhKYumcbiS11DZcCLq3UnI2ugHilCEYSyFx7SQ',
+  );
 
   ApiEncryptionInterceptor();
 

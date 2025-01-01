@@ -73,8 +73,7 @@ class HomePageForYouPage extends StatelessWidget {
                     childrenDelegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         if (mixContent == null || mixContent.isEmpty) {
-                          return const WhatsevrMixPostTile(
-                              tileType: WhatsevrMixPostTile.photo,);
+                          return SizedBox();
                         }
 
                         if (index == mixContent.length) {
@@ -90,29 +89,49 @@ class HomePageForYouPage extends StatelessWidget {
                         final content = mixContent[index];
                         final isInvertedPattern = (index ~/ 5) % 2 == 1;
                         final positionInPattern = index % 5;
+                        String? tileType; // default type
 
+                        // Determine tile type based on mixContent.type
+                        switch (content.type?.toLowerCase()) {
+                          case 'wtv':
+                            tileType = WhatsevrMixPostTile.wtv;
+                            break;
+                          case 'flick':
+                            tileType = WhatsevrMixPostTile.flick;
+                            break;
+                          case 'offer':
+                            tileType = WhatsevrMixPostTile.offer;
+                            break;
+                          case 'photo':
+                            tileType = WhatsevrMixPostTile.photo;
+                            break;
+                        }
                         if (isInvertedPattern) {
                           // Inverted pattern: video, photo, photo, offer, flick
                           switch (positionInPattern) {
                             case 0:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.wtv,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 1:
                             case 2:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.photo,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 3:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.offer,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 4:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.flick,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                           }
@@ -121,31 +140,32 @@ class HomePageForYouPage extends StatelessWidget {
                           switch (positionInPattern) {
                             case 0:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.flick,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 1:
                             case 2:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.photo,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 3:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.offer,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                             case 4:
                               return WhatsevrMixPostTile(
-                                tileType: WhatsevrMixPostTile.wtv,
+                                uid: content.content?.uid,
+                                tileType: tileType,
                                 thumbnailUrl: content.content?.thumbnail,
                               );
                           }
                         }
-                        return WhatsevrMixPostTile(
-                          tileType: WhatsevrMixPostTile.photo,
-                          thumbnailUrl: content.content?.thumbnail,
-                        );
+                        return SizedBox();
                       },
                       childCount: mixContent?.length,
                     ),

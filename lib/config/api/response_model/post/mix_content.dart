@@ -40,13 +40,15 @@ class UserAndCommunityMixContentResponse {
   String toJson() => json.encode(toMap());
 
   factory UserAndCommunityMixContentResponse.fromMap(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       UserAndCommunityMixContentResponse(
         message: json['message'],
         mixContent: json['mix_content'] == null
             ? []
             : List<MixContent>.from(
-                json['mix_content']!.map((x) => MixContent.fromMap(x)),),
+                json['mix_content']!.map((x) => MixContent.fromMap(x)),
+              ),
         lastPage: json['last_page'],
         page: json['page'],
         totalItems: json['total_items'],
@@ -342,7 +344,8 @@ class Content {
         filesData: json['files_data'] == null
             ? []
             : List<FilesDatum>.from(
-                json['files_data']!.map((x) => FilesDatum.fromMap(x)),),
+                json['files_data']!.map((x) => FilesDatum.fromMap(x)),
+              ),
         ctaAction: json['cta_action'],
         ctaActionUrl: json['cta_action_url'],
         status: json['status'],

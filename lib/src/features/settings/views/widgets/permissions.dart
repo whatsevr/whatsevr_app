@@ -39,7 +39,8 @@ class _PermissionsPageState extends State<_PermissionsPage> {
           builder: (context) => AlertDialog(
             title: const Text('Permission Required'),
             content: Text(
-                'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.',),
+              'Please enable ${PermissionService.permissionNames[permission]} permission from settings to use this feature.',
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),

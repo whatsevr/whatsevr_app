@@ -62,15 +62,17 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
                   ),
                 )
               else
-                ...sessions.map((session) => _buildSessionCard(
-                      context,
-                      deviceName: session.agentName ?? 'Unknown Device',
-                      loginTime: session.createdAt ?? DateTime.now(),
-                      isCurrentDevice: session.agentId ==
-                          DeviceInfoService.currentDeviceInfo?.deviceId,
-                      deviceType: session.agentType ?? 'Unknown',
-                      sessionId: session.uid ?? '',
-                    ),),
+                ...sessions.map(
+                  (session) => _buildSessionCard(
+                    context,
+                    deviceName: session.agentName ?? 'Unknown Device',
+                    loginTime: session.createdAt ?? DateTime.now(),
+                    isCurrentDevice: session.agentId ==
+                        DeviceInfoService.currentDeviceInfo?.deviceId,
+                    deviceType: session.agentType ?? 'Unknown',
+                    sessionId: session.uid ?? '',
+                  ),
+                ),
             ],
           ),
         );

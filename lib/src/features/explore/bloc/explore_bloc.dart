@@ -33,7 +33,6 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
   }
 
-
   Future<void> _onInitial(
     ExploreInitialEvent event,
     Emitter<ExploreState> emit,

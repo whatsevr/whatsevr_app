@@ -28,8 +28,10 @@ class GetUserLoginSessionsResponse {
         message: json['message'],
         activeLoginSessions: json['active_login_sessions'] == null
             ? []
-            : List<ActiveLoginSession>.from(json['active_login_sessions']!
-                .map((x) => ActiveLoginSession.fromMap(x)),),
+            : List<ActiveLoginSession>.from(
+                json['active_login_sessions']!
+                    .map((x) => ActiveLoginSession.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

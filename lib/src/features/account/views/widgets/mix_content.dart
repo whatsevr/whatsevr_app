@@ -24,7 +24,7 @@ class _MixContentView extends StatelessWidget {
             final mixContent = state.userMixContent[index];
             if (mixContent == null) return const SizedBox();
 
-            String tileType = WhatsevrMixPostTile.photo; // default type
+            String? tileType ; // default type
 
             // Determine tile type based on mixContent.type
             switch (mixContent.type?.toLowerCase()) {
@@ -38,7 +38,7 @@ class _MixContentView extends StatelessWidget {
                 tileType = WhatsevrMixPostTile.offer;
                 break;
               case 'photo':
-              default:
+        
                 tileType = WhatsevrMixPostTile.photo;
                 break;
             }
@@ -47,6 +47,7 @@ class _MixContentView extends StatelessWidget {
               color: Colors.grey[200],
               height: tileType == WhatsevrMixPostTile.flick ? 250 : 100,
               child: WhatsevrMixPostTile(
+                uid: mixContent.content?.uid,
                 tileType: tileType,
                 thumbnailUrl: mixContent.content?.thumbnail,
               ),

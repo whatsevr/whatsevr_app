@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -32,8 +31,10 @@ class PermissionService {
 
     // For Android, check version and filter permissions accordingly
     return DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
-        ? Map.fromEntries(_androidPermissions.entries
-            .where((entry) => entry.key != Permission.storage),)
+        ? Map.fromEntries(
+            _androidPermissions.entries
+                .where((entry) => entry.key != Permission.storage),
+          )
         : _androidPermissions;
   }
 
@@ -70,20 +71,24 @@ class PermissionService {
             Permission.photos,
             Permission.videos,
             Permission.audio,
-            ...permissionNames.keys.where((p) =>
-                p != Permission.storage &&
-                ![Permission.photos, Permission.videos, Permission.audio]
-                    .contains(p),),
+            ...permissionNames.keys.where(
+              (p) =>
+                  p != Permission.storage &&
+                  ![Permission.photos, Permission.videos, Permission.audio]
+                      .contains(p),
+            ),
           ];
           for (var permission in mediaPermissions) {
             statuses[permission] = await permission.request();
           }
         } else {
-          final permissions = permissionNames.keys.where((p) => ![
-                Permission.photos,
-                Permission.videos,
-                Permission.audio,
-              ].contains(p),);
+          final permissions = permissionNames.keys.where(
+            (p) => ![
+              Permission.photos,
+              Permission.videos,
+              Permission.audio,
+            ].contains(p),
+          );
           for (var permission in permissions) {
             statuses[permission] = await permission.request();
           }
@@ -116,8 +121,10 @@ class PermissionService {
     final isAndroid13Plus =
         DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true;
     if (isAndroid13Plus) {
-      return Map.fromEntries(_androidPermissions.entries
-          .where((entry) => entry.key != Permission.storage),);
+      return Map.fromEntries(
+        _androidPermissions.entries
+            .where((entry) => entry.key != Permission.storage),
+      );
     }
 
     return _androidPermissions;

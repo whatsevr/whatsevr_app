@@ -47,11 +47,12 @@ void startChatHelper({
         return;
       }
       showAppModalSheet(
-          flexibleSheet: false,
-          child: _SendPrivateMessageUi(
-            currentUserUid: senderUserUid,
-            otherUserUid: otherUserUid,
-          ),);
+        flexibleSheet: false,
+        child: _SendPrivateMessageUi(
+          currentUserUid: senderUserUid,
+          otherUserUid: otherUserUid,
+        ),
+      );
     }
     if (communityUid != null) {
       AppNavigationService.newRoute(

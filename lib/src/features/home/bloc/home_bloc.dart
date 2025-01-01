@@ -33,7 +33,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
   }
 
-
   Future<void> _onInitial(
     HomeInitialEvent event,
     Emitter<HomeState> emit,
@@ -370,8 +369,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          mixContent:
-              state.mixContent + (mixContentResponse?.mixContent ?? []),
+          mixContent: state.mixContent + (mixContentResponse?.mixContent ?? []),
           mixContentPaginationData: state.mixContentPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,

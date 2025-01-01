@@ -32,7 +32,8 @@ class UserAndCommunityVideoPostsResponse {
   String toJson() => json.encode(toMap());
 
   factory UserAndCommunityVideoPostsResponse.fromMap(
-          Map<String, dynamic> json,) =>
+    Map<String, dynamic> json,
+  ) =>
       UserAndCommunityVideoPostsResponse(
         message: json['message'],
         page: json['page'],

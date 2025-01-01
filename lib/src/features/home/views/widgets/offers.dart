@@ -64,9 +64,11 @@ class HomePageOffersPage extends StatelessWidget {
                     status: data[index].status,
                     filesData: data[index]
                         .filesData
-                        ?.map((e) => WhatsevrNetworkFile.fromMap(
-                              e.toMap(),
-                            ),)
+                        ?.map(
+                          (e) => WhatsevrNetworkFile.fromMap(
+                            e.toMap(),
+                          ),
+                        )
                         .toList(),
                     ctaAction: data[index].ctaAction,
                     ctaActionUrl: data[index].ctaActionUrl,
