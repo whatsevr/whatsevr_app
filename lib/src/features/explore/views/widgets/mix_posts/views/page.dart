@@ -74,21 +74,30 @@ class ExploreMixPostsView extends StatelessWidget {
                 final content = mixContent[index];
                 final isInvertedPattern = (index ~/ 5) % 2 == 1;
                 final positionInPattern = index % 5;
-                String? tileType; // default type
+                String? tileType;
+                String? thumbnailUrl;
 
                 // Determine tile type based on mixContent.type
                 switch (content.type?.toLowerCase()) {
                   case 'wtv':
                     tileType = WhatsevrMixPostTile.wtv;
+                    thumbnailUrl = content.content?.thumbnail;
                     break;
                   case 'flick':
                     tileType = WhatsevrMixPostTile.flick;
+                    thumbnailUrl = content.content?.thumbnail;
                     break;
                   case 'offer':
                     tileType = WhatsevrMixPostTile.offer;
+
+                    thumbnailUrl =
+                        content.content?.filesData?.firstOrNull?.imageUrl;
+
                     break;
                   case 'photo':
                     tileType = WhatsevrMixPostTile.photo;
+                    thumbnailUrl =
+                        content.content?.filesData?.firstOrNull?.imageUrl;
                     break;
                 }
                 // Updated pattern: flick, photo, photo, offer, video
@@ -99,26 +108,26 @@ class ExploreMixPostsView extends StatelessWidget {
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 1:
                     case 2:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 3:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 4:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                   }
                 } else {
@@ -128,26 +137,26 @@ class ExploreMixPostsView extends StatelessWidget {
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl:thumbnailUrl,
                       );
                     case 1:
                     case 2:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 3:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl:thumbnailUrl,
                       );
                     case 4:
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl: content.content?.thumbnail,
+                        thumbnailUrl: thumbnailUrl,
                       );
                   }
                 }

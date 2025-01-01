@@ -24,21 +24,29 @@ class _MixContentView extends StatelessWidget {
             final mixContent = state.communityMixContent[index];
             if (mixContent == null) return const SizedBox();
 
-            String? tileType; // default type
+            String? tileType;
+            String? thumbnailUrl;
 
             // Determine tile type based on mixContent.type
             switch (mixContent.type?.toLowerCase()) {
               case 'wtv':
                 tileType = WhatsevrMixPostTile.wtv;
+                thumbnailUrl = mixContent.content?.thumbnail;
                 break;
               case 'flick':
                 tileType = WhatsevrMixPostTile.flick;
+                thumbnailUrl = mixContent.content?.thumbnail;
                 break;
               case 'offer':
                 tileType = WhatsevrMixPostTile.offer;
+
+                thumbnailUrl =
+                    mixContent.content?.filesData?.firstOrNull?.imageUrl;
+
                 break;
               case 'photo':
                 tileType = WhatsevrMixPostTile.photo;
+                thumbnailUrl =thumbnailUrl;
                 break;
             }
 
