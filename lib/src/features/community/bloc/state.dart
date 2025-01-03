@@ -5,10 +5,10 @@ class CommunityState extends Equatable {
   final bool isEditMode;
   final CommunityProfileDataResponse? communityDetailsResponse;
   final List<VideoPost?> communityVideoPosts;
-
   final List<Memory?> communityMemories;
   final List<OfferPost?> communityOffers;
   final List<MixContent?> communityMixContent;
+  final List<TaggedContent?> communityTaggedContent;
 
   const CommunityState({
     this.communityUid,
@@ -18,6 +18,7 @@ class CommunityState extends Equatable {
     this.communityMemories = const [],
     this.communityOffers = const [],
     this.communityMixContent = const [],
+    this.communityTaggedContent = const [],
   });
 
   @override
@@ -27,6 +28,7 @@ class CommunityState extends Equatable {
         communityMemories,
         communityOffers,
         communityMixContent,
+        communityTaggedContent,
       ];
 
   CommunityState copyWith({
@@ -37,6 +39,7 @@ class CommunityState extends Equatable {
     List<Memory>? communityMemories,
     List<OfferPost>? communityOffers,
     List<MixContent>? communityMixContent,
+    List<TaggedContent>? communityTaggedContent,
   }) {
     return CommunityState(
       communityUid: communityUid ?? this.communityUid,
@@ -47,6 +50,8 @@ class CommunityState extends Equatable {
       communityMemories: communityMemories ?? this.communityMemories,
       communityOffers: communityOffers ?? this.communityOffers,
       communityMixContent: communityMixContent ?? this.communityMixContent,
+      communityTaggedContent:
+          communityTaggedContent ?? this.communityTaggedContent,
     );
   }
 }

@@ -87,7 +87,7 @@ class WhatsevrMixPostTile extends StatelessWidget {
                 image: ExtendedNetworkImageProvider(
                   thumbnailUrl ??
                       MockData.imagePlaceholder(
-                        'Thumbnail',
+                        tileType ?? 'Thumbnail',
                         tileType == flick ? true : false,
                       ),
                   cache: true,

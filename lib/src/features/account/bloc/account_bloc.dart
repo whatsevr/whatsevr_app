@@ -15,6 +15,8 @@ import 'package:whatsevr_app/config/api/response_model/post/offers.dart';
 import 'package:whatsevr_app/config/api/response_model/post/video_posts.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/api/response_model/post/mix_content.dart';
+import 'package:whatsevr_app/config/api/methods/tag_registry.dart';
+import 'package:whatsevr_app/config/api/response_model/tag_registry/user_tagged_content.dart';
 
 part 'account_event.dart';
 part 'account_state.dart';
@@ -66,6 +68,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           await PostApi.getOfferPosts(userUid: state.userUid!);
       final UserAndCommunityMixContentResponse? userMixContentResponse =
           await PostApi.getMixContent(userUid: state.userUid!);
+      final UserTaggedContentResponse? userTaggedContent =
+          await TagRegistryApi.getUserTaggedContent(
+        userUid: state.userUid!,
+        page: 1,
+      );
 
       emit(
         state.copyWith(
@@ -74,6 +81,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
           userMemories: userMemoriesResponse?.memories ?? [],
           userOffers: userOffersResponse?.offerPosts ?? [],
           userMixContent: userMixContentResponse?.mixContent ?? [],
+          userTaggedContent: userTaggedContent?.taggedContent ?? [],
         ),
       );
     } catch (e, s) {
