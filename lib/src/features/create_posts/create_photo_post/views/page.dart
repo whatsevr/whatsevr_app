@@ -265,6 +265,8 @@ class CreatePhotoPostPage extends StatelessWidget {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       showAppModalSheet(
+                          flexibleSheet: false,
+                        maxSheetHeight: 0.8,
                         child: SearchAndTagUsersAndCommunityPage(
                           onDone: (selectedUsersUid, selectedCommunitiesUid) {
                             context.read<CreatePhotoPostBloc>().add(
