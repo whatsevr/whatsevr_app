@@ -111,6 +111,7 @@ dependencies:
   waterfall_flow: ^3.0.3
   wechat_assets_picker: ^9.4.1
   crypto: ^3.0.6
+  timeago: ^3.2.2
 
 dependency_overrides:
   file_picker:
