@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/activities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/offers.dart';
-
+part 'widgets/history.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
   final ScrollController searchBoxHideController = ScrollController();
@@ -46,7 +46,12 @@ class HomePage extends StatelessWidget {
                     scrollController: searchBoxHideController,
                   ),
                 ),
-                ('Activities', HomePageActivitiesPage()),
+                ('Activities', WhatsevrTabBarWithViews(
+      tabViews: [
+        ('History', _HistoryView()),
+        ('Saved', Text('Saved')),
+      ], 
+    )),
               ],
             ),
           ),
