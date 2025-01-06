@@ -6,18 +6,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/dev/talker.dart';
-import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 
-// Interface for event loggers
-abstract class EventLogger {
+// Make logger interface private since it's internal
+/// Event logging abstraction for tracking user activities
+abstract class _EventLogger {
+  /// Logs multiple events in a batch
   Future<void> logEvents(List<TrackedActivity> events);
 }
 
-// Activity type enum matching lookup.app_activity_types table
+// Public enums used in API
 enum ActivityType {
   view,
   like,
@@ -26,16 +26,15 @@ enum ActivityType {
   download,
 }
 
-// Add event priority levels
-enum EventPriority {
+// Make internal enums private
+enum _EventPriority {
   low,
   medium,
   high,
   critical
 }
 
-// Add event categories
-enum EventCategory {
+enum _EventCategory {
   interaction,
   navigation,
   media,
@@ -45,6 +44,7 @@ enum EventCategory {
 }
 
 // Model matching public.tracked_activities table
+/// Represents a tracked user activity with associated metadata
 class TrackedActivity {
   final String? uid; // UUID
   final String? userUid;
@@ -61,10 +61,11 @@ class TrackedActivity {
   final String? appVersion;
   final ActivityType activityType;
   final String userAgentUid; // UUID, not null
-  final EventPriority priority; // For client-side prioritization
-  final EventCategory category; // For client-side categorization
+  final _EventPriority priority; // For client-side prioritization
+  final _EventCategory category; // For client-side categorization
   final Map<String, dynamic>? metadata; // For client-side use
 
+  /// Validates and creates a new activity instance
   TrackedActivity({
     this.uid,
     this.userUid,
@@ -81,8 +82,8 @@ class TrackedActivity {
     this.appVersion,
     required this.activityType,
     required this.userAgentUid,
-    this.priority = EventPriority.medium,
-    this.category = EventCategory.interaction,
+    this.priority = _EventPriority.medium,
+    this.category = _EventCategory.interaction,
     this.metadata,
   }) : activityAt = activityAt ?? DateTime.now() {
     // Validate UUID format for required fields
@@ -97,6 +98,7 @@ class TrackedActivity {
     if (pdfUid != null) assert(_isValidUuid(pdfUid!));
   }
 
+  /// Validates UUID format using regex
   static bool _isValidUuid(String uuid) {
     final RegExp uuidRegExp = RegExp(
       r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
@@ -105,6 +107,7 @@ class TrackedActivity {
     return uuidRegExp.hasMatch(uuid);
   }
 
+  /// Converts activity to JSON format for storage/transmission
   Map<String, dynamic> toJson() => {
     if (uid != null) 'uid': uid,
     if (userUid != null) 'user_uid': userUid,
@@ -126,6 +129,7 @@ class TrackedActivity {
     'user_agent_uid': userAgentUid,
   };
 
+  /// Creates activity instance from JSON data
   factory TrackedActivity.fromJson(Map<String, dynamic> json) {
     Position? geoLocation;
     if (json['geo_location'] != null) {
@@ -163,25 +167,29 @@ class TrackedActivity {
       ),
       userAgentUid: json['user_agent_uid'],
       // Client-side only fields
-      priority: EventPriority.medium,
-      category: EventCategory.interaction,
+      priority: _EventPriority.medium,
+      category: _EventCategory.interaction,
     );
   }
 }
 
-// Enhanced EventStorage
-class EventStorage<T> {
+// Make storage implementation private
+/// Handles persistent storage of activity events
+class _EventStorage {
   late Box<String> _eventBox;
   
+  /// Initializes storage and opens Hive box
   Future<void> initialize() async {
     _eventBox = await Hive.openBox<String>('activity_logs');
   }
   
+  /// Saves single activity event to storage
   Future<void> saveEvent(TrackedActivity event) async {
     final jsonString = jsonEncode(event.toJson());
     await _eventBox.add(jsonString);
   }
   
+  /// Retrieves stored events with optional limit
   Future<List<TrackedActivity>> getEvents({int? limit}) async {
     final events = <TrackedActivity>[];
     final end = limit != null ? min(_eventBox.length, limit) : _eventBox.length;
@@ -196,24 +204,28 @@ class EventStorage<T> {
     return events;
   }
   
+  /// Removes specified number of oldest events
   Future<void> deleteEvents(int count) async {
     final keys = _eventBox.keys.take(count);
     await _eventBox.deleteAll(keys);
   }
 
-  Future<List<TrackedActivity>> getPriorityEvents(EventPriority minPriority) async {
+  /// Gets events matching minimum priority level
+  Future<List<TrackedActivity>> getPriorityEvents(_EventPriority minPriority) async {
     final events = await getEvents();
     return events.where((e) => e.priority.index >= minPriority.index).toList();
   }
 }
 
-// Custom REST API logger for TrackedActivity
-class ApiActivityLogger implements EventLogger {
+// Make logger implementation private
+/// REST API implementation of event logging
+class _ApiActivityLogger implements _EventLogger {
   final String _apiEndpoint;
   final Dio _dio;
 
-  ApiActivityLogger(this._apiEndpoint) : _dio = Dio();
+  _ApiActivityLogger(this._apiEndpoint) : _dio = Dio();
 
+  /// Posts events batch to API endpoint
   @override
   Future<void> logEvents(List<TrackedActivity> events) async {
     try {
@@ -230,11 +242,12 @@ class ApiActivityLogger implements EventLogger {
   }
 }
 
-// Enhanced ActivityLoggingService
+// Public service class
+/// Main service for managing activity logging and batch uploads
 class ActivityLoggingService {
-  final EventStorage<TrackedActivity> _storage;
+  final _EventStorage _storage;
   final String _userAgentUid;
-  final List<EventLogger> _loggers;
+  final List<_EventLogger> _loggers;
   Timer? _uploadTimer;
   bool _isUploading = false;
   
@@ -250,9 +263,10 @@ class ActivityLoggingService {
   
   static ActivityLoggingService? _instance;
   
+  /// Gets singleton instance with optional configuration
   static Future<ActivityLoggingService> getInstance({
     required String userAgentUid,
-    List<EventLogger> loggers = const [],
+    List<_EventLogger> loggers = const [],
     Duration uploadInterval = const Duration(minutes: 5),
     int batchSize = 50,
     int maxRetries = 3,
@@ -275,14 +289,14 @@ class ActivityLoggingService {
   
   ActivityLoggingService._internal({
     required String userAgentUid,
-    List<EventLogger> loggers = const [],
+    List<_EventLogger> loggers = const [],
     required this.uploadInterval,
     required this.batchSize,
     required this.maxRetries,
     required this.retryDelay,
     Duration? backoffInterval,
     int? maxBatchSize,
-  }) : _storage = EventStorage<TrackedActivity>(),
+  }) : _storage = _EventStorage(),
        _userAgentUid = userAgentUid,
        _loggers = loggers,
        _backoffInterval = backoffInterval ?? const Duration(minutes: 1),
@@ -291,6 +305,7 @@ class ActivityLoggingService {
 
   Stream<TrackedActivity> get eventStream => _eventController.stream;
 
+  /// Initializes storage and starts upload timer
   Future<void> initialize() async {
     await _storage.initialize();
     await UserAgentInfoService.setDeviceInfo();
@@ -301,10 +316,11 @@ class ActivityLoggingService {
     _uploadTimer = Timer.periodic(uploadInterval, (_) => _uploadPendingEvents());
   }
 
+  /// Logs a single activity with optional context data
   Future<void> logActivity({
     required ActivityType activityType,
-    required EventCategory category,
-    EventPriority priority = EventPriority.medium,
+    required _EventCategory category,
+    _EventPriority priority = _EventPriority.medium,
     Map<String, dynamic>? metadata,
     String? userUid,
     String? videoPostUid,
@@ -317,11 +333,10 @@ class ActivityLoggingService {
   }) async {
     try {
       // Get device info
-      final deviceInfo = UserAgentInfoService.currentDeviceInfo;
+      final userAgentInfo = UserAgentInfoService.currentDeviceInfo;
      
 
-      // Get package info
-      final packageInfo = await PackageInfo.fromPlatform();
+   
       
       // Get location if requested
       Position? location;
@@ -341,10 +356,10 @@ class ActivityLoggingService {
         offerUid: offerUid,
         memoryUid: memoryUid,
         pdfUid: pdfUid,
-        deviceOs: deviceInfo?.deviceOs,
-        deviceModel: deviceInfo?.deviceName,
+        deviceOs: userAgentInfo?.deviceOs,
+        deviceModel: userAgentInfo?.deviceName,
         geoLocation: location,
-        appVersion: packageInfo.version,
+        appVersion: userAgentInfo?.appVersion,
         activityType: activityType,
         userAgentUid: _userAgentUid,
         
@@ -357,7 +372,7 @@ class ActivityLoggingService {
       _eventController.add(activity);
 
       // Upload immediately if high priority
-      if (priority == EventPriority.critical) {
+      if (priority == _EventPriority.critical) {
         await _uploadPendingEvents(forcePriority: priority);
       }
     } catch (e, stackTrace) {
@@ -366,7 +381,8 @@ class ActivityLoggingService {
     }
   }
   
-  Future<void> _uploadPendingEvents({EventPriority? forcePriority}) async {
+  /// Processes pending events for upload
+  Future<void> _uploadPendingEvents({_EventPriority? forcePriority}) async {
     if (_isUploading) return;
     _isUploading = true;
     
@@ -386,6 +402,7 @@ class ActivityLoggingService {
     }
   }
 
+  /// Handles batch upload with retries
   Future<void> _processEventBatch(List<TrackedActivity> events) async {
     var retryCount = 0;
     bool uploaded = false;
@@ -415,6 +432,7 @@ class ActivityLoggingService {
     }
   }
 
+  /// Splits events into smaller batches
   List<List<TrackedActivity>> _createBatches(List<TrackedActivity> events, int batchSize) {
     return [
       for (var i = 0; i < events.length; i += batchSize)
@@ -422,24 +440,27 @@ class ActivityLoggingService {
     ];
   }
 
+  /// Updates failure tracking counter
   void _updateFailureCount() {
     final key = DateTime.now().toString().substring(0, 10);
     _failureCounters[key] = (_failureCounters[key] ?? 0) + 1;
   }
 
+  /// Implements exponential backoff delay
   Future<void> _exponentialBackoff(int retryCount) async {
     final backoff = _backoffInterval * pow(2, retryCount - 1);
     await Future.delayed(backoff);
   }
   
+  /// Cleans up resources
   void dispose() {
     _uploadTimer?.cancel();
     _uploadTimer = null;
   }
 }
 
-// Usage example
-void main() async {
+// Make example private or move to separate file
+void _example() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   
@@ -456,7 +477,7 @@ void main() async {
   try {
     await activityLogger.logActivity(
       activityType: ActivityType.view,
-      category: EventCategory.media,
+      category: _EventCategory.media,
       userUid: 'current-user-uid',
       videoPostUid: 'video-123',
       includeLocation: true,
