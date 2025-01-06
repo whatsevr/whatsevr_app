@@ -14,7 +14,7 @@ import 'package:whatsevr_app/app.dart';
 import 'package:whatsevr_app/config/api/client.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
-import 'package:whatsevr_app/config/services/device_info.dart';
+import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/config/services/file_download.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/config/services/long_running_task/controller.dart';
@@ -40,7 +40,7 @@ Future<void> main() async {
         return true;
       };
       TalkerService.init();
-      await DeviceInfoService.setDeviceInfo();
+      await UserAgentInfoService.setDeviceInfo();
       WakelockPlus.enable();
       await AuthUserDb.initDB();
       await ApiClient.init();

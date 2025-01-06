@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'package:whatsevr_app/config/services/device_info.dart';
+import 'package:whatsevr_app/config/services/user_agent_info.dart';
 
 class PermissionService {
   static final Map<Permission, String> _androidPermissions = {
@@ -30,7 +30,7 @@ class PermissionService {
     }
 
     // For Android, check version and filter permissions accordingly
-    return DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
+    return UserAgentInfoService.currentDeviceInfo?.isAndroid13OrHigher == true
         ? Map.fromEntries(
             _androidPermissions.entries
                 .where((entry) => entry.key != Permission.storage),
@@ -66,7 +66,7 @@ class PermissionService {
         }
       } else {
         // Android platform
-        if (DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true) {
+        if (UserAgentInfoService.currentDeviceInfo?.isAndroid13OrHigher == true) {
           final mediaPermissions = [
             Permission.photos,
             Permission.videos,
@@ -119,7 +119,7 @@ class PermissionService {
     }
 
     final isAndroid13Plus =
-        DeviceInfoService.currentDeviceInfo?.isAndroid13OrHigher == true;
+        UserAgentInfoService.currentDeviceInfo?.isAndroid13OrHigher == true;
     if (isAndroid13Plus) {
       return Map.fromEntries(
         _androidPermissions.entries

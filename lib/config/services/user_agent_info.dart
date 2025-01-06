@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_region/device_region.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/utils/aes.dart';
 
-class DeviceInfo {
-  DeviceInfo({
+class UserAgentInfo {
+  UserAgentInfo({
     required this.deviceId,
     required this.deviceName,
     required this.countryCode,
@@ -16,6 +17,8 @@ class DeviceInfo {
     required this.isAndroid,
     required this.isAndroid13OrHigher,
     required this.isIos,
+    required this.appVersion,
+    required this.buildNumber,
   });
   final String? deviceId;
   final String? deviceName;
@@ -24,6 +27,8 @@ class DeviceInfo {
   final bool isAndroid;
   final bool isAndroid13OrHigher;
   final bool isIos;
+  final String appVersion;
+  final String buildNumber;
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,22 +39,24 @@ class DeviceInfo {
       'isAndroid': isAndroid,
       'isAndroid13OrHigher': isAndroid13OrHigher,
       'isIos': isIos,
+      'appVersion': appVersion,
+      'buildNumber': buildNumber,
     };
   }
 }
 
-class DeviceInfoService {
-  DeviceInfoService._privateConstructor();
+class UserAgentInfoService {
+  UserAgentInfoService._privateConstructor();
 
-  static final DeviceInfoService _instance =
-      DeviceInfoService._privateConstructor();
+  static final UserAgentInfoService _instance =
+      UserAgentInfoService._privateConstructor();
   static final AesService _aesService = AesService();
 
-  static DeviceInfoService get instance => _instance;
+  static UserAgentInfoService get instance => _instance;
 
-  static DeviceInfo? _currentDeviceInfo;
+  static UserAgentInfo? _currentDeviceInfo;
 
-  static DeviceInfo? get currentDeviceInfo => _currentDeviceInfo;
+  static UserAgentInfo? get currentDeviceInfo => _currentDeviceInfo;
 
   static Future<void> setDeviceInfo() async {
     if (_currentDeviceInfo != null) {
@@ -73,7 +80,10 @@ class DeviceInfoService {
           '${androidInfo.id}_${androidInfo.fingerprint}_${androidInfo.bootloader}';
       final uniquedeviceId = _aesService.encrypt(deviceData);
 
-      _currentDeviceInfo = DeviceInfo(
+      // Get package info
+      final packageInfo = await PackageInfo.fromPlatform();
+
+      _currentDeviceInfo = UserAgentInfo(
         deviceId: uniquedeviceId,
         deviceName: '${androidInfo.manufacturer} ${androidInfo.model}',
         countryCode: countryCode,
@@ -81,6 +91,8 @@ class DeviceInfoService {
         isAndroid: true,
         isAndroid13OrHigher: androidInfo.version.sdkInt >= 33,
         isIos: false,
+        appVersion: packageInfo.version,
+        buildNumber: packageInfo.buildNumber,
       );
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);
@@ -96,7 +108,10 @@ class DeviceInfoService {
           '${iosInfo.identifierForVendor ?? ''}_${iosInfo.systemName}_${iosInfo.name}_${iosInfo.model}';
       final uniqueDeviceId = _aesService.encrypt(deviceData);
 
-      _currentDeviceInfo = DeviceInfo(
+      // Get package info
+      final packageInfo = await PackageInfo.fromPlatform();
+
+      _currentDeviceInfo = UserAgentInfo(
         deviceId: uniqueDeviceId,
         deviceName: '${iosInfo.name} ${iosInfo.model}',
         countryCode: countryCode,
@@ -104,6 +119,8 @@ class DeviceInfoService {
         isAndroid: false,
         isAndroid13OrHigher: false,
         isIos: true,
+        appVersion: packageInfo.version,
+        buildNumber: packageInfo.buildNumber,
       );
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);

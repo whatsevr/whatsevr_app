@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:whatsevr_app/config/api/interceptors/header.dart';
-import 'package:whatsevr_app/config/services/device_info.dart';
+import 'package:whatsevr_app/config/services/user_agent_info.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/interceptors/cache.dart';
@@ -34,9 +34,9 @@ class ApiClient {
               status == HttpStatus.notAcceptable;
         },
         headers: <String, dynamic>{
-          'x-user-agent-id': DeviceInfoService.currentDeviceInfo?.deviceId,
-          'x-user-agent-name': DeviceInfoService.currentDeviceInfo?.deviceName,
-          'x-user-agent-type': DeviceInfoService.currentDeviceInfo?.deviceOs,
+          'x-user-agent-id': UserAgentInfoService.currentDeviceInfo?.deviceId,
+          'x-user-agent-name': UserAgentInfoService.currentDeviceInfo?.deviceName,
+          'x-user-agent-type': UserAgentInfoService.currentDeviceInfo?.deviceOs,
           'x-app-version-code': 1,
         },
       ),

@@ -8,7 +8,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
-import 'package:whatsevr_app/config/services/device_info.dart';
+import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
 import 'package:whatsevr_app/config/widgets/whatsevr_icons.dart';
@@ -82,17 +82,17 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
           for ((String, String) itm in <(String, String)>[
             (
               'Device Name',
-              DeviceInfoService.currentDeviceInfo?.deviceName ?? 'Unknown'
+              UserAgentInfoService.currentDeviceInfo?.deviceName ?? 'Unknown'
             ),
             (
               'Country Code',
-              DeviceInfoService.currentDeviceInfo?.countryCode ?? 'Unknown'
+              UserAgentInfoService.currentDeviceInfo?.countryCode ?? 'Unknown'
             ),
             (
               'Device Type',
-              DeviceInfoService.currentDeviceInfo?.isAndroid ?? false
+              UserAgentInfoService.currentDeviceInfo?.isAndroid ?? false
                   ? 'Android'
-                  : DeviceInfoService.currentDeviceInfo?.isIos ?? false
+                  : UserAgentInfoService.currentDeviceInfo?.isIos ?? false
                       ? 'iOS'
                       : 'Unknown',
             ),

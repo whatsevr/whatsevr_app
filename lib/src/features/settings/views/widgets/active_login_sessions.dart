@@ -68,7 +68,7 @@ class _ActiveLoginSessionsPage extends StatelessWidget {
                     deviceName: session.agentName ?? 'Unknown Device',
                     loginTime: session.createdAt ?? DateTime.now(),
                     isCurrentDevice: session.agentId ==
-                        DeviceInfoService.currentDeviceInfo?.deviceId,
+                        UserAgentInfoService.currentDeviceInfo?.deviceId,
                     deviceType: session.agentType ?? 'Unknown',
                     sessionId: session.uid ?? '',
                   ),
