@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:whatsevr_app/config/api/methods/tracked_activities.dart';
+import 'package:whatsevr_app/config/api/requests_model/tracked_activity/track_activities.dart';
 
 import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/dev/talker.dart';
@@ -14,7 +16,8 @@ import 'package:whatsevr_app/dev/talker.dart';
 /// Event logging abstraction for tracking user activities
 abstract class _EventLogger {
   /// Logs multiple events in a batch
-  Future<void> logEvents(List<TrackedActivity> events);
+  /// Returns a tuple of (statusCode, message) or null if failed
+  Future<(int? statusCode, String? message)?> logEvents(List<TrackedActivity> events);
 }
 
 // Public enums used in API
@@ -23,7 +26,7 @@ enum ActivityType {
   like,
   comment,
   share,
-  download,
+
 }
 
 // Make internal enums private
@@ -218,23 +221,33 @@ class _EventStorage {
 }
 
 // Make logger implementation private
-/// REST API implementation of event logging
+/// REST API implementation of event logging using TrackedActivityApi
 class _ApiActivityLogger implements _EventLogger {
-  final String _apiEndpoint;
-  final Dio _dio;
-
-  _ApiActivityLogger(this._apiEndpoint) : _dio = Dio();
-
-  /// Posts events batch to API endpoint
   @override
-  Future<void> logEvents(List<TrackedActivity> events) async {
+  Future<(int? statusCode, String? message)?> logEvents(List<TrackedActivity> events) async {
     try {
-      await _dio.post(
-        _apiEndpoint,
-        data: {
-          'activities': events.map((e) => e.toJson()).toList(),
-        },
-      );
+      // Convert TrackedActivity list to API request model
+      final activities = events.map((event) => Activity(
+        userAgentUid: event.userAgentUid,
+        userUid: event.userUid,
+        activityType: event.activityType.name,
+        wtvUid: event.videoPostUid,
+        deviceOs: event.deviceOs,
+        deviceModel: event.deviceModel,
+        appVersion: event.appVersion,
+        geoLocation: event.geoLocation != null 
+          ? '${event.geoLocation!.latitude},${event.geoLocation!.longitude}'
+          : null,
+        flickUid: event.flickPostUid,
+        description: event.metadata?['description'],
+        photoUid: event.photoPostUid,
+        commentUid: event.metadata?['commentUid'],
+        memoryUid: event.memoryUid,
+      )).toList();
+
+      final request = TrackActivitiesRequest(activities: activities);
+      return await TrackedActivityApi.trackActivities(request: request);
+      
     } catch (e) {
       TalkerService.instance.error('API logging error', e);
       rethrow;
@@ -254,10 +267,6 @@ class ActivityLoggingService {
   // Configuration
   final Duration uploadInterval;
   final int batchSize;
-  final int maxRetries;
-  final Duration retryDelay;
-  final Map<String, int> _failureCounters = {};
-  final Duration _backoffInterval;
   final int _maxBatchSize;
   final StreamController<TrackedActivity> _eventController;
   
@@ -269,21 +278,15 @@ class ActivityLoggingService {
     List<_EventLogger> loggers = const [],
     Duration uploadInterval = const Duration(minutes: 5),
     int batchSize = 50,
-    int maxRetries = 3,
-    Duration retryDelay = const Duration(seconds: 30),
-    Duration? backoffInterval,
     int? maxBatchSize,
   }) async {
-    _instance ??=  ActivityLoggingService._internal(
-        userAgentUid: userAgentUid,
-        loggers: loggers,
-        uploadInterval: uploadInterval,
-        batchSize: batchSize,
-        maxRetries: maxRetries,
-        retryDelay: retryDelay,
-        backoffInterval: backoffInterval,
-        maxBatchSize: maxBatchSize,
-      );
+    _instance ??= ActivityLoggingService._internal(
+      userAgentUid: userAgentUid,
+      loggers: loggers,
+      uploadInterval: uploadInterval,
+      batchSize: batchSize,
+      maxBatchSize: maxBatchSize,
+    );
     return _instance!;
   }
   
@@ -292,14 +295,10 @@ class ActivityLoggingService {
     List<_EventLogger> loggers = const [],
     required this.uploadInterval,
     required this.batchSize,
-    required this.maxRetries,
-    required this.retryDelay,
-    Duration? backoffInterval,
     int? maxBatchSize,
   }) : _storage = _EventStorage(),
        _userAgentUid = userAgentUid,
        _loggers = loggers,
-       _backoffInterval = backoffInterval ?? const Duration(minutes: 1),
        _maxBatchSize = maxBatchSize ?? 100,
        _eventController = StreamController<TrackedActivity>.broadcast();
 
@@ -392,43 +391,26 @@ class ActivityLoggingService {
           : await _storage.getEvents(limit: _maxBatchSize);
 
       if (events.isEmpty) {
-        _isUploading = false;
         return;
       }
 
-      await _processEventBatch(events);
-    } finally {
-      _isUploading = false;
-    }
-  }
-
-  /// Handles batch upload with retries
-  Future<void> _processEventBatch(List<TrackedActivity> events) async {
-    var retryCount = 0;
-    bool uploaded = false;
-
-    while (!uploaded && retryCount < maxRetries) {
-      try {
-        final batches = _createBatches(events, _maxBatchSize);
-        for (final batch in batches) {
-          for (final logger in _loggers) {
-            await logger.logEvents(batch);
+      final batches = _createBatches(events, _maxBatchSize);
+      for (final batch in batches) {
+        for (final logger in _loggers) {
+          final result = await logger.logEvents(batch);
+          if (result == null || result.$1 == null || result.$1! >= 400) {
+            throw Exception('Failed to upload events: ${result?.$2}');
           }
         }
-        uploaded = true;
-        await _storage.deleteEvents(events.length);
-        _failureCounters.clear();
-      } catch (e) {
-        retryCount++;
-        _updateFailureCount();
-        TalkerService.instance.error(
-          'Failed to upload events (attempt $retryCount/$maxRetries)',
-          e,
-        );
-        if (retryCount < maxRetries) {
-          await _exponentialBackoff(retryCount);
-        }
       }
+      
+      await _storage.deleteEvents(events.length);
+
+    } catch (e) {
+      TalkerService.instance.error('Failed to upload events', e);
+      rethrow;
+    } finally {
+      _isUploading = false;
     }
   }
 
@@ -438,18 +420,6 @@ class ActivityLoggingService {
       for (var i = 0; i < events.length; i += batchSize)
         events.skip(i).take(batchSize).toList()
     ];
-  }
-
-  /// Updates failure tracking counter
-  void _updateFailureCount() {
-    final key = DateTime.now().toString().substring(0, 10);
-    _failureCounters[key] = (_failureCounters[key] ?? 0) + 1;
-  }
-
-  /// Implements exponential backoff delay
-  Future<void> _exponentialBackoff(int retryCount) async {
-    final backoff = _backoffInterval * pow(2, retryCount - 1);
-    await Future.delayed(backoff);
   }
   
   /// Cleans up resources

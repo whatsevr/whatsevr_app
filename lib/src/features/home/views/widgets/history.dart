@@ -4,7 +4,6 @@ enum ActivityType {
   viewed,    // from tracked_activities
   reacted,   // from user_reactions
   commented, // from user_comments
-  saved,     // from tracked_activities
   shared     // from tracked_activities
 }
 
@@ -95,8 +94,7 @@ class ActivityItem {
         return 'Liked ${contentType.name} "${title ?? ''}"';
       case ActivityType.commented:
         return 'Commented on ${contentType.name} "${title ?? ''}"';
-      case ActivityType.saved:
-        return 'Saved ${contentType.name} "${title ?? ''}"';
+  
       case ActivityType.shared:
         return 'Shared ${contentType.name} "${title ?? ''}"';
     }
@@ -211,7 +209,7 @@ class _SampleActivityData {
       uid: "memory1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      type: ActivityType.saved,
+      type: ActivityType.commented,
       contentType: ContentType.memory,
       contentTitle: "Team Hackathon 2024",
       contentThumbnail: "https://picsum.photos/800/450?random=5",
@@ -670,8 +668,7 @@ class _ActivityTile extends StatelessWidget {
         return Icons.favorite;
       case ActivityType.commented:
         return Icons.comment;
-      case ActivityType.saved:
-        return Icons.bookmark;
+     
       case ActivityType.shared:
         return Icons.share;
     }
@@ -685,8 +682,7 @@ class _ActivityTile extends StatelessWidget {
         return 'Liked';
       case ActivityType.commented:
         return 'Commented';
-      case ActivityType.saved:
-        return 'Saved';
+  
       case ActivityType.shared:
         return 'Shared';
     }
@@ -700,8 +696,7 @@ class _ActivityTile extends StatelessWidget {
         return Colors.red;
       case ActivityType.commented:
         return context.whatsevrTheme.accent;
-      case ActivityType.saved:
-        return context.whatsevrTheme.success;
+    
       case ActivityType.shared:
         return context.whatsevrTheme.warning;
     }
