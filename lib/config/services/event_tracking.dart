@@ -255,10 +255,10 @@ class _ApiActivityLogger implements _EventLogger {
 /// Handles caching, priorities, and batched processing
 class ActivityLoggingService {
   final _EventStorage _storage;
-
   final List<_EventLogger> _loggers;
   Timer? _uploadTimer;
   bool _isUploading = false;
+  bool _hasUnuploadedLogs = false; // Track if logs are pending
 
   // Configuration
   final Duration uploadInterval;
@@ -308,8 +308,8 @@ class ActivityLoggingService {
   }
 
   void _startUploadTimer() {
-    _uploadTimer =
-        Timer.periodic(uploadInterval, (_) => _uploadPendingEvents());
+    _uploadTimer?.cancel();
+    _uploadTimer = Timer.periodic(uploadInterval, (_) => _uploadPendingEvents());
   }
 
   /// Logs a single activity with optional context data
@@ -368,15 +368,21 @@ class ActivityLoggingService {
       );
 
       await _storage.saveEvent(activity);
+      _hasUnuploadedLogs = true; // Mark that we have pending logs
       _eventController.add(activity);
+
+      if (!(_uploadTimer?.isActive ?? true)) {
+        _startUploadTimer(); // Restart timer if stopped
+      }
 
       // Upload immediately if critical priority
       if (priority == _EventPriority.critical) {
         // Cancel any pending timer to avoid conflicts
         _uploadTimer?.cancel();
         await _uploadPendingEvents(forcePriority: _EventPriority.critical);
-        // Restart the timer for regular uploads
-        _startUploadTimer();
+        if (_hasUnuploadedLogs) {
+          _startUploadTimer();
+        }
       }
     } catch (e, stackTrace) {
       TalkerService.instance.handle(e, stackTrace);
@@ -397,6 +403,9 @@ class ActivityLoggingService {
               limit: batchSize); // Use configured batchSize
 
       if (events.isEmpty) {
+        _hasUnuploadedLogs = false;
+        _uploadTimer?.cancel(); // Stop timer when no more logs
+        _uploadTimer = null;
         return;
       }
 
@@ -412,6 +421,15 @@ class ActivityLoggingService {
 
       // Only delete events if upload was successful
       await _storage.deleteEvents(events.length);
+      
+      // Check if more events exist
+      final remaining = await _storage.getEvents();
+      _hasUnuploadedLogs = remaining.isNotEmpty;
+      
+      if (!_hasUnuploadedLogs) {
+        _uploadTimer?.cancel();
+        _uploadTimer = null;
+      }
     } catch (e) {
       TalkerService.instance.error('Failed to upload events', e);
     } finally {
@@ -429,10 +447,17 @@ class ActivityLoggingService {
   }
 
   /// Cleans up resources
-  void dispose() {
+  Future<void> dispose() async {
+    // Try to upload any remaining logs before disposing
+    if (_hasUnuploadedLogs && !_isUploading) {
+      await _uploadPendingEvents();
+    }
+    
     _uploadTimer?.cancel();
     _uploadTimer = null;
-    _PositionCache.clear(); // Clear position cache on dispose
+    _PositionCache.clear();
+    await _eventController.close();
+    _instance = null; // Reset singleton instance
   }
 }
 
