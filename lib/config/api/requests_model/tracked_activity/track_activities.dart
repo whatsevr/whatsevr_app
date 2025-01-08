@@ -31,13 +31,14 @@ class Activity {
     String? userAgentUid;
     String? userUid;
     String? activityType;
-    String? wtvUid;
     String? deviceOs;
     String? deviceModel;
     String? appVersion;
     dynamic geoLocation;
-    String? flickUid;
     String? description;
+    DateTime? activityAt;
+    String? wtvUid;
+    String? flickUid;
     String? photoUid;
     String? commentUid;
     String? memoryUid;
@@ -46,13 +47,14 @@ class Activity {
         this.userAgentUid,
         this.userUid,
         this.activityType,
-        this.wtvUid,
         this.deviceOs,
         this.deviceModel,
         this.appVersion,
         this.geoLocation,
-        this.flickUid,
         this.description,
+        this.activityAt,
+        this.wtvUid,
+        this.flickUid,
         this.photoUid,
         this.commentUid,
         this.memoryUid,
@@ -62,13 +64,14 @@ class Activity {
         String? userAgentUid,
         String? userUid,
         String? activityType,
-        String? wtvUid,
         String? deviceOs,
         String? deviceModel,
         String? appVersion,
         dynamic geoLocation,
-        String? flickUid,
         String? description,
+        DateTime? activityAt,
+        String? wtvUid,
+        String? flickUid,
         String? photoUid,
         String? commentUid,
         String? memoryUid,
@@ -77,13 +80,14 @@ class Activity {
             userAgentUid: userAgentUid ?? this.userAgentUid,
             userUid: userUid ?? this.userUid,
             activityType: activityType ?? this.activityType,
-            wtvUid: wtvUid ?? this.wtvUid,
             deviceOs: deviceOs ?? this.deviceOs,
             deviceModel: deviceModel ?? this.deviceModel,
             appVersion: appVersion ?? this.appVersion,
             geoLocation: geoLocation ?? this.geoLocation,
-            flickUid: flickUid ?? this.flickUid,
             description: description ?? this.description,
+            activityAt: activityAt ?? this.activityAt,
+            wtvUid: wtvUid ?? this.wtvUid,
+            flickUid: flickUid ?? this.flickUid,
             photoUid: photoUid ?? this.photoUid,
             commentUid: commentUid ?? this.commentUid,
             memoryUid: memoryUid ?? this.memoryUid,
@@ -97,13 +101,14 @@ class Activity {
         userAgentUid: json["user_agent_uid"],
         userUid: json["user_uid"],
         activityType: json["activity_type"],
-        wtvUid: json["wtv_uid"],
         deviceOs: json["device_os"],
         deviceModel: json["device_model"],
         appVersion: json["app_version"],
         geoLocation: json["geo_location"],
-        flickUid: json["flick_uid"],
         description: json["description"],
+        activityAt: json["activity_at"] == null ? null : DateTime.parse(json["activity_at"]),
+        wtvUid: json["wtv_uid"],
+        flickUid: json["flick_uid"],
         photoUid: json["photo_uid"],
         commentUid: json["comment_uid"],
         memoryUid: json["memory_uid"],
@@ -113,13 +118,14 @@ class Activity {
         "user_agent_uid": userAgentUid,
         "user_uid": userUid,
         "activity_type": activityType,
-        "wtv_uid": wtvUid,
         "device_os": deviceOs,
         "device_model": deviceModel,
         "app_version": appVersion,
         "geo_location": geoLocation,
-        "flick_uid": flickUid,
         "description": description,
+        "activity_at": activityAt?.toIso8601String(),
+        "wtv_uid": wtvUid,
+        "flick_uid": flickUid,
         "photo_uid": photoUid,
         "comment_uid": commentUid,
         "memory_uid": memoryUid,

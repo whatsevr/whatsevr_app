@@ -8,6 +8,7 @@ import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/auth_user_service.dart';
+import 'package:whatsevr_app/config/services/event_tracking.dart';
 import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 import 'package:whatsevr_app/config/widgets/stack_toast.dart';
@@ -318,15 +319,22 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               }
             ),
             (
-              'Test Function 1',
+              'Success Toast',
               () async {
                 SmartDialog.showToast('Success Test Function');
               }
             ),
             (
-              'Test Function 2',
+              'Failed Toast',
               () async {
                 WhatsevrStackToast.showFailed('Failed Test Function');
+              }
+            ),
+            //blank
+            (
+              'Act Log',
+              () async {
+               example546();
               }
             ),
           ])

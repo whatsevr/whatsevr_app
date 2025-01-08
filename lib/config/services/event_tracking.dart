@@ -17,34 +17,27 @@ import 'package:whatsevr_app/dev/talker.dart';
 abstract class _EventLogger {
   /// Logs multiple events in a batch
   /// Returns a tuple of (statusCode, message) or null if failed
-  Future<(int? statusCode, String? message)?> logEvents(List<TrackedActivity> events);
+  Future<(int? statusCode, String? message)?> logEvents(
+      List<TrackedActivity> events);
 }
 
 // Public enums used in API
 enum ActivityType {
   view,
-  like,
+  react,
   comment,
   share,
-
+  system,
 }
 
 // Make internal enums private
 enum _EventPriority {
-  low,
   medium,
-  high,
+
   critical
 }
 
-enum _EventCategory {
-  interaction,
-  navigation,
-  media,
-  error,
-  performance,
-  security
-}
+// Remove _EventCategory enum completely
 
 // Model matching public.tracked_activities table
 /// Represents a tracked user activity with associated metadata
@@ -57,7 +50,7 @@ class TrackedActivity {
   final String? offerUid; // UUID
   final String? memoryUid; // UUID
   final String? pdfUid; // UUID
-  final DateTime activityAt;
+  final DateTime activityAt; // Now required
   final String? deviceOs;
   final String? deviceModel;
   final Position? geoLocation;
@@ -65,8 +58,8 @@ class TrackedActivity {
   final ActivityType activityType;
   final String userAgentUid; // UUID, not null
   final _EventPriority priority; // For client-side prioritization
-  final _EventCategory category; // For client-side categorization
-  final Map<String, dynamic>? metadata; // For client-side use
+  final String? description; // Add description field instead of metadata
+  final String? commentUid; // Add commentUid field
 
   /// Validates and creates a new activity instance
   TrackedActivity({
@@ -78,7 +71,7 @@ class TrackedActivity {
     this.offerUid,
     this.memoryUid,
     this.pdfUid,
-    DateTime? activityAt,
+    required this.activityAt, // Make required
     this.deviceOs,
     this.deviceModel,
     this.geoLocation,
@@ -86,51 +79,38 @@ class TrackedActivity {
     required this.activityType,
     required this.userAgentUid,
     this.priority = _EventPriority.medium,
-    this.category = _EventCategory.interaction,
-    this.metadata,
-  }) : activityAt = activityAt ?? DateTime.now() {
+    this.description, // Replace metadata with description
+    this.commentUid, // Add commentUid parameter
+  }) {
     // Validate UUID format for required fields
     assert(userAgentUid.isNotEmpty, 'userAgentUid is required');
-    assert(_isValidUuid(userAgentUid), 'Invalid UUID format for userAgentUid');
-    // Validate optional UUIDs if provided
-    if (videoPostUid != null) assert(_isValidUuid(videoPostUid!));
-    if (flickPostUid != null) assert(_isValidUuid(flickPostUid!));
-    if (photoPostUid != null) assert(_isValidUuid(photoPostUid!));
-    if (offerUid != null) assert(_isValidUuid(offerUid!));
-    if (memoryUid != null) assert(_isValidUuid(memoryUid!));
-    if (pdfUid != null) assert(_isValidUuid(pdfUid!));
-  }
-
-  /// Validates UUID format using regex
-  static bool _isValidUuid(String uuid) {
-    final RegExp uuidRegExp = RegExp(
-      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-      caseSensitive: false,
-    );
-    return uuidRegExp.hasMatch(uuid);
   }
 
   /// Converts activity to JSON format for storage/transmission
   Map<String, dynamic> toJson() => {
-    if (uid != null) 'uid': uid,
-    if (userUid != null) 'user_uid': userUid,
-    if (videoPostUid != null) 'video_post_uid': videoPostUid,
-    if (flickPostUid != null) 'flick_post_uid': flickPostUid,
-    if (photoPostUid != null) 'photo_post_uid': photoPostUid,
-    if (offerUid != null) 'offer_uid': offerUid,
-    if (memoryUid != null) 'memory_uid': memoryUid,
-    if (pdfUid != null) 'pdf_uid': pdfUid,
-    'activity_at': activityAt.toUtc().toIso8601String(),
-    if (deviceOs != null) 'device_os': deviceOs,
-    if (deviceModel != null) 'device_model': deviceModel,
-    if (geoLocation != null) 'geo_location': {
-      'type': 'Point',
-      'coordinates': [geoLocation!.longitude, geoLocation!.latitude]
-    },
-    if (appVersion != null) 'app_version': appVersion,
-    'activity_type': activityType.name,
-    'user_agent_uid': userAgentUid,
-  };
+        if (uid != null) 'uid': uid,
+        if (userUid != null) 'user_uid': userUid,
+        if (videoPostUid != null) 'video_post_uid': videoPostUid,
+        if (flickPostUid != null) 'flick_post_uid': flickPostUid,
+        if (photoPostUid != null) 'photo_post_uid': photoPostUid,
+        if (offerUid != null) 'offer_uid': offerUid,
+        if (memoryUid != null) 'memory_uid': memoryUid,
+        if (pdfUid != null) 'pdf_uid': pdfUid,
+        'activity_at': activityAt.toUtc().toIso8601String(),
+        if (deviceOs != null) 'device_os': deviceOs,
+        if (deviceModel != null) 'device_model': deviceModel,
+        if (geoLocation != null)
+          'geo_location': {
+            'type': 'Point',
+            'coordinates': [geoLocation!.longitude, geoLocation!.latitude]
+          },
+        if (appVersion != null) 'app_version': appVersion,
+        'activity_type': activityType.name,
+        'user_agent_uid': userAgentUid,
+        if (description != null) 'description': description,
+        if (commentUid != null) 'comment_uid': commentUid,
+        // Remove metadata from toJson
+      };
 
   /// Creates activity instance from JSON data
   factory TrackedActivity.fromJson(Map<String, dynamic> json) {
@@ -169,9 +149,9 @@ class TrackedActivity {
         (e) => e.name == json['activity_type'],
       ),
       userAgentUid: json['user_agent_uid'],
-      // Client-side only fields
+      description: json['description'], // Add description
+      commentUid: json['comment_uid'], // Add commentUid
       priority: _EventPriority.medium,
-      category: _EventCategory.interaction,
     );
   }
 }
@@ -180,23 +160,23 @@ class TrackedActivity {
 /// Handles persistent storage of activity events
 class _EventStorage {
   late Box<String> _eventBox;
-  
+
   /// Initializes storage and opens Hive box
   Future<void> initialize() async {
-    _eventBox = await Hive.openBox<String>('activity_logs');
+    _eventBox = await Hive.openBox<String>('activity_logs_434325');
   }
-  
+
   /// Saves single activity event to storage
   Future<void> saveEvent(TrackedActivity event) async {
     final jsonString = jsonEncode(event.toJson());
     await _eventBox.add(jsonString);
   }
-  
+
   /// Retrieves stored events with optional limit
   Future<List<TrackedActivity>> getEvents({int? limit}) async {
     final events = <TrackedActivity>[];
     final end = limit != null ? min(_eventBox.length, limit) : _eventBox.length;
-    
+
     for (var i = 0; i < end; i++) {
       final jsonString = _eventBox.getAt(i);
       if (jsonString != null) {
@@ -206,7 +186,7 @@ class _EventStorage {
     }
     return events;
   }
-  
+
   /// Removes specified number of oldest events
   Future<void> deleteEvents(int count) async {
     final keys = _eventBox.keys.take(count);
@@ -214,7 +194,8 @@ class _EventStorage {
   }
 
   /// Gets events matching minimum priority level
-  Future<List<TrackedActivity>> getPriorityEvents(_EventPriority minPriority) async {
+  Future<List<TrackedActivity>> getPriorityEvents(
+      _EventPriority minPriority) async {
     final events = await getEvents();
     return events.where((e) => e.priority.index >= minPriority.index).toList();
   }
@@ -224,30 +205,33 @@ class _EventStorage {
 /// REST API implementation of event logging using TrackedActivityApi
 class _ApiActivityLogger implements _EventLogger {
   @override
-  Future<(int? statusCode, String? message)?> logEvents(List<TrackedActivity> events) async {
+  Future<(int? statusCode, String? message)?> logEvents(
+      List<TrackedActivity> events) async {
     try {
       // Convert TrackedActivity list to API request model
-      final activities = events.map((event) => Activity(
-        userAgentUid: event.userAgentUid,
-        userUid: event.userUid,
-        activityType: event.activityType.name,
-        wtvUid: event.videoPostUid,
-        deviceOs: event.deviceOs,
-        deviceModel: event.deviceModel,
-        appVersion: event.appVersion,
-        geoLocation: event.geoLocation != null 
-          ? '${event.geoLocation!.latitude},${event.geoLocation!.longitude}'
-          : null,
-        flickUid: event.flickPostUid,
-        description: event.metadata?['description'],
-        photoUid: event.photoPostUid,
-        commentUid: event.metadata?['commentUid'],
-        memoryUid: event.memoryUid,
-      )).toList();
+      final activities = events
+          .map((event) => Activity(
+                activityAt: event.activityAt,
+                userAgentUid: event.userAgentUid,
+                userUid: event.userUid,
+                activityType: event.activityType.name,
+                wtvUid: event.videoPostUid,
+                deviceOs: event.deviceOs,
+                deviceModel: event.deviceModel,
+                appVersion: event.appVersion,
+                geoLocation: event.geoLocation != null
+                    ? '${event.geoLocation!.latitude},${event.geoLocation!.longitude}'
+                    : null,
+                flickUid: event.flickPostUid,
+                description: event.description,
+                photoUid: event.photoPostUid,
+                commentUid: event.commentUid, // Use commentUid directly
+                memoryUid: event.memoryUid,
+              ))
+          .toList();
 
       final request = TrackActivitiesRequest(activities: activities);
       return await TrackedActivityApi.trackActivities(request: request);
-      
     } catch (e) {
       TalkerService.instance.error('API logging error', e);
       rethrow;
@@ -259,29 +243,27 @@ class _ApiActivityLogger implements _EventLogger {
 /// Main service for managing activity logging and batch uploads
 class ActivityLoggingService {
   final _EventStorage _storage;
-  final String _userAgentUid;
+
   final List<_EventLogger> _loggers;
   Timer? _uploadTimer;
   bool _isUploading = false;
-  
+
   // Configuration
   final Duration uploadInterval;
   final int batchSize;
   final int _maxBatchSize;
   final StreamController<TrackedActivity> _eventController;
-  
+
   static ActivityLoggingService? _instance;
-  
+
   /// Gets singleton instance with optional configuration
   static Future<ActivityLoggingService> getInstance({
-    required String userAgentUid,
     List<_EventLogger> loggers = const [],
-    Duration uploadInterval = const Duration(minutes: 5),
-    int batchSize = 50,
+    Duration uploadInterval = const Duration(seconds: 10),
+    int batchSize = 10,
     int? maxBatchSize,
   }) async {
     _instance ??= ActivityLoggingService._internal(
-      userAgentUid: userAgentUid,
       loggers: loggers,
       uploadInterval: uploadInterval,
       batchSize: batchSize,
@@ -289,18 +271,16 @@ class ActivityLoggingService {
     );
     return _instance!;
   }
-  
+
   ActivityLoggingService._internal({
-    required String userAgentUid,
     List<_EventLogger> loggers = const [],
     required this.uploadInterval,
     required this.batchSize,
     int? maxBatchSize,
-  }) : _storage = _EventStorage(),
-       _userAgentUid = userAgentUid,
-       _loggers = loggers,
-       _maxBatchSize = maxBatchSize ?? 100,
-       _eventController = StreamController<TrackedActivity>.broadcast();
+  })  : _storage = _EventStorage(),
+        _loggers = loggers,
+        _maxBatchSize = maxBatchSize ?? 15,
+        _eventController = StreamController<TrackedActivity>.broadcast();
 
   Stream<TrackedActivity> get eventStream => _eventController.stream;
 
@@ -312,15 +292,16 @@ class ActivityLoggingService {
   }
 
   void _startUploadTimer() {
-    _uploadTimer = Timer.periodic(uploadInterval, (_) => _uploadPendingEvents());
+    _uploadTimer =
+        Timer.periodic(uploadInterval, (_) => _uploadPendingEvents());
   }
 
   /// Logs a single activity with optional context data
   Future<void> logActivity({
     required ActivityType activityType,
-    required _EventCategory category,
     _EventPriority priority = _EventPriority.medium,
-    Map<String, dynamic>? metadata,
+    String? description, // Add description parameter
+    String? commentUid, // Add commentUid parameter
     String? userUid,
     String? videoPostUid,
     String? flickPostUid,
@@ -328,15 +309,15 @@ class ActivityLoggingService {
     String? offerUid,
     String? memoryUid,
     String? pdfUid,
-    bool includeLocation = false,
+    bool includeLocation = true,
   }) async {
     try {
       // Get device info
       final userAgentInfo = UserAgentInfoService.currentDeviceInfo;
-     
 
-   
-      
+      // Get userAgentUid
+      final userAgentUid = '5e5abad1-b8eb-4e31-8952-dfcf86e1ecf2';
+
       // Get location if requested
       Position? location;
       if (includeLocation) {
@@ -346,7 +327,7 @@ class ActivityLoggingService {
           TalkerService.instance.error('Error getting location', e);
         }
       }
-      
+
       final activity = TrackedActivity(
         userUid: userUid,
         videoPostUid: videoPostUid,
@@ -355,18 +336,18 @@ class ActivityLoggingService {
         offerUid: offerUid,
         memoryUid: memoryUid,
         pdfUid: pdfUid,
+        activityAt: DateTime.now(), // Use provided or current time
         deviceOs: userAgentInfo?.deviceOs,
         deviceModel: userAgentInfo?.deviceName,
         geoLocation: location,
         appVersion: userAgentInfo?.appVersion,
         activityType: activityType,
-        userAgentUid: _userAgentUid,
-        
+        userAgentUid: userAgentUid,
         priority: priority,
-        category: category,
-        metadata: metadata,
+        description: description, // Use description
+        commentUid: commentUid, // Add commentUid
       );
-      
+
       await _storage.saveEvent(activity);
       _eventController.add(activity);
 
@@ -379,12 +360,12 @@ class ActivityLoggingService {
       rethrow;
     }
   }
-  
+
   /// Processes pending events for upload
   Future<void> _uploadPendingEvents({_EventPriority? forcePriority}) async {
     if (_isUploading) return;
     _isUploading = true;
-    
+
     try {
       final events = forcePriority != null
           ? await _storage.getPriorityEvents(forcePriority)
@@ -403,9 +384,8 @@ class ActivityLoggingService {
           }
         }
       }
-      
-      await _storage.deleteEvents(events.length);
 
+      await _storage.deleteEvents(events.length);
     } catch (e) {
       TalkerService.instance.error('Failed to upload events', e);
       rethrow;
@@ -415,13 +395,14 @@ class ActivityLoggingService {
   }
 
   /// Splits events into smaller batches
-  List<List<TrackedActivity>> _createBatches(List<TrackedActivity> events, int batchSize) {
+  List<List<TrackedActivity>> _createBatches(
+      List<TrackedActivity> events, int batchSize) {
     return [
       for (var i = 0; i < events.length; i += batchSize)
         events.skip(i).take(batchSize).toList()
     ];
   }
-  
+
   /// Cleans up resources
   void dispose() {
     _uploadTimer?.cancel();
@@ -430,29 +411,82 @@ class ActivityLoggingService {
 }
 
 // Make example private or move to separate file
-void _example() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  
-  // Initialize the service
+void example546() async {
+  final userUid = "MO-ee730066d3464444991ef9610a322d01";
+
+  TalkerService.instance.debug('Starting activity logging example...');
+
+  // Initialize the service with API logger
   final activityLogger = await ActivityLoggingService.getInstance(
-    userAgentUid: 'your-user-agent-uid',
-    uploadInterval: Duration(minutes: 15),
-    batchSize: 100,
+    loggers: [_ApiActivityLogger()], // Make sure logger is added
+    uploadInterval: Duration(seconds: 5),
+    batchSize: 5,
   );
-  
+
   await activityLogger.initialize();
-  
-  // Log a video view activity
+  TalkerService.instance.debug('Logger initialized');
+
+  // Listen to event stream
+  activityLogger.eventStream.listen(
+    (activity) {
+      TalkerService.instance
+          .log('Activity logged successfully: ${activity.activityType}');
+    },
+    onError: (error) {
+      TalkerService.instance.error('Activity logging error', error);
+    },
+  );
+
   try {
+    TalkerService.instance.debug('Logging system activity...');
+    await activityLogger.logActivity(
+      activityType: ActivityType.system,
+      userUid: userUid,
+      description: 'Registered as @johndoe',
+    );
+    TalkerService.instance.debug('Logging video view...');
     await activityLogger.logActivity(
       activityType: ActivityType.view,
-      category: _EventCategory.media,
-      userUid: 'current-user-uid',
-      videoPostUid: 'video-123',
-      includeLocation: true,
+      userUid: userUid,
+      videoPostUid: '008f735f-6033-4e05-a123-e34f628851fc',
+    );
+
+    await Future.delayed(Duration(seconds: 2)); // Add delay between logs
+
+    TalkerService.instance.debug('Logging flick reaction...');
+    await activityLogger.logActivity(
+      activityType: ActivityType.react,
+      userUid: userUid,
+      flickPostUid: '00327731-e8f9-4f33-b700-29b16798a65a',
+      description: 'ddddd',
+    );
+
+    await Future.delayed(Duration(seconds: 2));
+
+    await activityLogger.logActivity(
+      activityType: ActivityType.comment,
+      userUid: userUid,
+      memoryUid: '0039635d-7b69-4a53-a37e-018833d12c53',
+      description: 'User comment',
+      commentUid: '255b707f-2b01-4d23-8836-503107a9647f',
+    );
+
+    await Future.delayed(Duration(seconds: 2));
+
+    // Add share activity
+    TalkerService.instance.debug('Logging photo share...');
+    await activityLogger.logActivity(
+      activityType: ActivityType.share,
+      userUid: userUid,
+      photoPostUid: '00518fee-3c8a-4eec-b184-75e79b39f62c',
+      description: 'iPad Pro, iOS', // Device info as description
     );
   } catch (e, stackTrace) {
     TalkerService.instance.handle(e, stackTrace);
+  } finally {
+    // Delay disposal to allow events to be processed
+    await Future.delayed(Duration(seconds: 5));
+    activityLogger.dispose();
+    TalkerService.instance.debug('Logger disposed');
   }
 }
