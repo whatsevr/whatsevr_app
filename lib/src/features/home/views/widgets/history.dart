@@ -1,58 +1,42 @@
 part of '../page.dart';
 
-enum ActivityType {
-  viewed,    // from tracked_activities
-  reacted,   // from user_reactions
-  commented, // from user_comments
-  shared     // from tracked_activities
-}
-
-enum ContentType {
-  wtv,
-  flick,
-  photo,
-  offer,
-  memory,
-  pdf
-}
+enum ContentType { wtv, flick, photo, offer, memory, pdf }
 
 // Add TimeFilter enum
-enum TimeFilter {
-  thisWeek,
-  allTime
-}
+enum TimeFilter { thisWeek, allTime }
 
 class ActivityItem {
-  final String uid;          // Unique identifier for the activity
-  final String userUid;      // From users table
+  final String uid; // Unique identifier for the activity
+  final String userUid; // From users table
   final DateTime timestamp;
-  final ActivityType type;
+  final WhatsevrActivityType
+      type; // Changed from ActivityType to WhatsevrActivityType
   final ContentType contentType;
-  final String? contentUid;  // UUID of the related content
+  final String? contentUid; // UUID of the related content
   final String? contentTitle;
   final String? contentThumbnail;
   final String? description;
   final String? location;
   final bool isRead;
-  
+
   // New fields from schema
-  final String? deviceOs;           // from tracked_activities
-  final String? deviceModel;        // from tracked_activities
-  final String? appVersion;         // from tracked_activities
-  final String? geoLocation;        // from tracked_activities
-  final String? reactionType;       // from user_reactions
-  final String? commentText;        // from user_comments
-  final String? commentImageUrl;    // from user_comments
-  final int? videoDurationInSec;    // from wtvs/flicks
-  final int? totalViews;           // from content tables
-  final int? totalLikes;           // from content tables
-  final int? totalComments;        // from content tables
-  final int? totalShares;          // from content tables
-  final double? cumulativeScore;    // from content tables
-  final List<String>? hashtags;     // from content tables
-  final List<String>? taggedUsers;  // from content tables
-  final String? ctaAction;          // from offers/memories
-  final String? ctaActionUrl;       // from offers/memories
+  final String? deviceOs; // from tracked_activities
+  final String? deviceModel; // from tracked_activities
+  final String? appVersion; // from tracked_activities
+  final String? geoLocation; // from tracked_activities
+  final String? reactionType; // from user_reactions
+  final String? commentText; // from user_comments
+  final String? commentImageUrl; // from user_comments
+  final int? videoDurationInSec; // from wtvs/flicks
+  final int? totalViews; // from content tables
+  final int? totalLikes; // from content tables
+  final int? totalComments; // from content tables
+  final int? totalShares; // from content tables
+  final double? cumulativeScore; // from content tables
+  final List<String>? hashtags; // from content tables
+  final List<String>? taggedUsers; // from content tables
+  final String? ctaAction; // from offers/memories
+  final String? ctaActionUrl; // from offers/memories
 
   ActivityItem({
     required this.uid,
@@ -86,17 +70,19 @@ class ActivityItem {
     this.ctaActionUrl,
   });
 
-  static String getActivityDescription(ActivityType type, ContentType contentType, String? title) {
+  static String getActivityDescription(
+      WhatsevrActivityType type, ContentType contentType, String? title) {
     switch (type) {
-      case ActivityType.viewed:
+      case WhatsevrActivityType.view:
         return 'Viewed ${contentType.name} "${title ?? ''}"';
-      case ActivityType.reacted:
+      case WhatsevrActivityType.react:
         return 'Liked ${contentType.name} "${title ?? ''}"';
-      case ActivityType.commented:
+      case WhatsevrActivityType.comment:
         return 'Commented on ${contentType.name} "${title ?? ''}"';
-  
-      case ActivityType.shared:
+      case WhatsevrActivityType.share:
         return 'Shared ${contentType.name} "${title ?? ''}"';
+      case WhatsevrActivityType.system:
+        return 'System update for ${contentType.name} "${title ?? ''}"';
     }
   }
 
@@ -125,7 +111,8 @@ class _SampleActivityData {
       uid: "wtv1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
-      type: ActivityType.viewed,
+      type: WhatsevrActivityType.view,
+      // Update all type values
       contentType: ContentType.wtv,
       contentTitle: "How to Master Flutter Development",
       contentThumbnail: "https://picsum.photos/800/450?random=1",
@@ -150,7 +137,7 @@ class _SampleActivityData {
       uid: "flick1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-      type: ActivityType.reacted,
+      type: WhatsevrActivityType.react,
       contentType: ContentType.flick,
       contentTitle: "Daily Coding Tips",
       contentThumbnail: "https://picsum.photos/800/450?random=2",
@@ -171,7 +158,7 @@ class _SampleActivityData {
       uid: "photo1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(hours: 4)),
-      type: ActivityType.commented,
+      type: WhatsevrActivityType.comment,
       contentType: ContentType.photo,
       contentTitle: "UI Design Showcase",
       contentThumbnail: "https://picsum.photos/800/450?random=3",
@@ -190,7 +177,7 @@ class _SampleActivityData {
       uid: "offer1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(hours: 6)),
-      type: ActivityType.shared,
+      type: WhatsevrActivityType.share,
       contentType: ContentType.offer,
       contentTitle: "Special Flutter Course Discount",
       contentThumbnail: "https://picsum.photos/800/450?random=4",
@@ -209,7 +196,7 @@ class _SampleActivityData {
       uid: "memory1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      type: ActivityType.commented,
+      type: WhatsevrActivityType.comment,
       contentType: ContentType.memory,
       contentTitle: "Team Hackathon 2024",
       contentThumbnail: "https://picsum.photos/800/450?random=5",
@@ -230,14 +217,13 @@ class _SampleActivityData {
       uid: "pdf1",
       userUid: "user1",
       timestamp: DateTime.now().subtract(const Duration(days: 2)),
-      type: ActivityType.viewed,
+      type: WhatsevrActivityType.view,
       contentType: ContentType.pdf,
       contentTitle: "Flutter Architecture Guidelines",
       contentThumbnail: "https://picsum.photos/800/450?random=6",
       description: "Official documentation for Flutter architecture",
       isRead: true,
       totalViews: 892,
-    
       deviceOs: "macOS 14.2",
       deviceModel: "MacBook Pro",
       appVersion: "2.1.0",
@@ -245,10 +231,13 @@ class _SampleActivityData {
     ),
   ];
 
-  static List<ActivityItem> getFilteredActivities(ActivityType? activityFilter, ContentType? contentFilter) {
+  static List<ActivityItem> getFilteredActivities(
+      WhatsevrActivityType? activityFilter, ContentType? contentFilter) {
     return activities.where((activity) {
-      bool matchesActivityType = activityFilter == null || activity.type == activityFilter;
-      bool matchesContentType = contentFilter == null || activity.contentType == contentFilter;
+      bool matchesActivityType =
+          activityFilter == null || activity.type == activityFilter;
+      bool matchesContentType =
+          contentFilter == null || activity.contentType == contentFilter;
       return matchesActivityType && matchesContentType;
     }).toList();
   }
@@ -276,7 +265,9 @@ class _HistoryViewState extends State<_HistoryView> {
   List<ActivityItem> _getFilteredActivities() {
     if (_selectedTimeFilter == TimeFilter.thisWeek) {
       final weekAgo = DateTime.now().subtract(const Duration(days: 7));
-      return _activities.where((activity) => activity.timestamp.isAfter(weekAgo)).toList();
+      return _activities
+          .where((activity) => activity.timestamp.isAfter(weekAgo))
+          .toList();
     }
     return _activities;
   }
@@ -284,22 +275,20 @@ class _HistoryViewState extends State<_HistoryView> {
   @override
   Widget build(BuildContext context) {
     final filteredActivities = _getFilteredActivities();
-    
+
     return Column(
       children: [
-       
-    
         // Activities list
         Expanded(
           child: ListView.builder(
             itemCount: filteredActivities.length,
             itemBuilder: (context, index) {
               final activity = filteredActivities[index];
-              return _ActivityTile(activity: activity); 
+              return _ActivityTile(activity: activity);
             },
           ),
         ),
-         // Time filter section
+        // Time filter section
         Container(
           decoration: BoxDecoration(
             color: context.whatsevrTheme.surface,
@@ -312,8 +301,7 @@ class _HistoryViewState extends State<_HistoryView> {
 
   Widget _buildTimeFilterChips() {
     return Padding(
-      padding: 
-      EdgeInsets.symmetric(
+      padding: EdgeInsets.symmetric(
         horizontal: context.whatsevrTheme.spacing2,
         vertical: context.whatsevrTheme.spacing2,
       ),
@@ -348,9 +336,7 @@ class _HistoryViewState extends State<_HistoryView> {
       ),
     );
   }
-
 }
-
 
 class _ActivityTile extends StatelessWidget {
   final ActivityItem activity;
@@ -368,8 +354,8 @@ class _ActivityTile extends StatelessWidget {
         color: context.whatsevrTheme.surface,
         borderRadius: context.whatsevrTheme.borderRadiusSmall,
         border: Border.all(
-          color: activity.isRead 
-              ? context.whatsevrTheme.divider 
+          color: activity.isRead
+              ? context.whatsevrTheme.divider
               : context.whatsevrTheme.accent,
           width: 1,
         ),
@@ -407,11 +393,14 @@ class _ActivityTile extends StatelessWidget {
                         child: Container(
                           padding: EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: context.whatsevrTheme.surface.withOpacity(0.8),
-                            borderRadius: context.whatsevrTheme.borderRadiusSmall,
+                            color:
+                                context.whatsevrTheme.surface.withOpacity(0.8),
+                            borderRadius:
+                                context.whatsevrTheme.borderRadiusSmall,
                           ),
                           child: Icon(
-                            ActivityItem.getContentTypeIcon(activity.contentType),
+                            ActivityItem.getContentTypeIcon(
+                                activity.contentType),
                             size: 12,
                             color: _getActionColor(context, activity.type),
                           ),
@@ -420,7 +409,7 @@ class _ActivityTile extends StatelessWidget {
                     ],
                   ),
                 const Gap(12),
-                
+
                 // Content details
                 Expanded(
                   child: Column(
@@ -444,11 +433,14 @@ class _ActivityTile extends StatelessWidget {
                           ),
                           const Gap(8),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: context.whatsevrTheme.background,
-                              borderRadius: context.whatsevrTheme.borderRadiusSmall,
-                              border: Border.all(color: context.whatsevrTheme.divider),
+                              borderRadius:
+                                  context.whatsevrTheme.borderRadiusSmall,
+                              border: Border.all(
+                                  color: context.whatsevrTheme.divider),
                             ),
                             child: Text(
                               activity.contentType.name.toUpperCase(),
@@ -467,7 +459,7 @@ class _ActivityTile extends StatelessWidget {
                         ],
                       ),
                       const Gap(4),
-                      
+
                       // Content title with truncation indicator
                       Text(
                         activity.contentTitle ?? '',
@@ -479,7 +471,7 @@ class _ActivityTile extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const Gap(2),
-                      
+
                       // Description with metadata
                       if (activity.description != null) ...[
                         Text(
@@ -492,7 +484,7 @@ class _ActivityTile extends StatelessWidget {
                         ),
                         const Gap(4),
                       ],
-                      
+
                       // Bottom metadata row with stats
                       Row(
                         children: [
@@ -516,10 +508,13 @@ class _ActivityTile extends StatelessWidget {
                           ],
                           if (!activity.isRead)
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: context.whatsevrTheme.accent.withOpacity(0.1),
-                                borderRadius: context.whatsevrTheme.borderRadiusSmall,
+                                color: context.whatsevrTheme.accent
+                                    .withOpacity(0.1),
+                                borderRadius:
+                                    context.whatsevrTheme.borderRadiusSmall,
                               ),
                               child: Text(
                                 'NEW',
@@ -597,14 +592,17 @@ class _ActivityTile extends StatelessWidget {
                           padding: EdgeInsets.only(top: 4),
                           child: Wrap(
                             spacing: 4,
-                            children: activity.hashtags!.map((tag) => 
-                              Text(
-                                '#$tag',
-                                style: context.whatsevrTheme.caption.copyWith(
-                                  color: context.whatsevrTheme.accent,
-                                ),
-                              ),
-                            ).toList(),
+                            children: activity.hashtags!
+                                .map(
+                                  (tag) => Text(
+                                    '#$tag',
+                                    style:
+                                        context.whatsevrTheme.caption.copyWith(
+                                      color: context.whatsevrTheme.accent,
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
 
@@ -635,14 +633,13 @@ class _ActivityTile extends StatelessWidget {
     );
   }
 
-  bool get _hasStats => 
-    activity.totalViews != null || 
-    activity.totalLikes != null || 
-    activity.totalComments != null;
+  bool get _hasStats =>
+      activity.totalViews != null ||
+      activity.totalLikes != null ||
+      activity.totalComments != null;
 
   bool get _hasDeviceInfo =>
-    activity.deviceModel != null ||
-    activity.videoDurationInSec != null;
+      activity.deviceModel != null || activity.videoDurationInSec != null;
 
   String formatNumber(int number) {
     if (number >= 1000000) {
@@ -660,45 +657,48 @@ class _ActivityTile extends StatelessWidget {
     return '$minutes:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
-  IconData _getActionIcon(ActivityType type) {
+  IconData _getActionIcon(WhatsevrActivityType type) {
     switch (type) {
-      case ActivityType.viewed:
+      case WhatsevrActivityType.view:
         return Icons.visibility;
-      case ActivityType.reacted:
+      case WhatsevrActivityType.react:
         return Icons.favorite;
-      case ActivityType.commented:
+      case WhatsevrActivityType.comment:
         return Icons.comment;
-     
-      case ActivityType.shared:
+      case WhatsevrActivityType.share:
         return Icons.share;
+      case WhatsevrActivityType.system:
+        return Icons.system_update;
     }
   }
 
-  String _getActionText(ActivityType type) {
+  String _getActionText(WhatsevrActivityType type) {
     switch (type) {
-      case ActivityType.viewed:
+      case WhatsevrActivityType.view:
         return 'Viewed';
-      case ActivityType.reacted:
+      case WhatsevrActivityType.react:
         return 'Liked';
-      case ActivityType.commented:
+      case WhatsevrActivityType.comment:
         return 'Commented';
-  
-      case ActivityType.shared:
+      case WhatsevrActivityType.share:
         return 'Shared';
+      case WhatsevrActivityType.system:
+        return 'System';
     }
   }
 
-  Color _getActionColor(BuildContext context, ActivityType type) {
+  Color _getActionColor(BuildContext context, WhatsevrActivityType type) {
     switch (type) {
-      case ActivityType.viewed:
+      case WhatsevrActivityType.view:
         return context.whatsevrTheme.info;
-      case ActivityType.reacted:
+      case WhatsevrActivityType.react:
         return Colors.red;
-      case ActivityType.commented:
+      case WhatsevrActivityType.comment:
         return context.whatsevrTheme.accent;
-    
-      case ActivityType.shared:
+      case WhatsevrActivityType.share:
         return context.whatsevrTheme.warning;
+      case WhatsevrActivityType.system:
+        return context.whatsevrTheme.disabled;
     }
   }
 
@@ -719,5 +719,3 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1)}";
   }
 }
-
-

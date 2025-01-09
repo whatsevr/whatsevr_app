@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:whatsevr_app/config/enums/activity_type.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';

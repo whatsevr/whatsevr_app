@@ -5,7 +5,8 @@ import 'package:whatsevr_app/dev/talker.dart';
 /// Utility class for handling Well-Known Binary (WKB) format conversions
 /// for geographic points.
 class WKBUtil {
-  WKBUtil._();
+  // Private constructor to prevent instantiation
+  const WKBUtil._();
 
   /// Maximum valid latitude value
   static const double _maxLatitude = 90.0;
@@ -66,7 +67,7 @@ class WKBUtil {
     }
   }
 
-  /// Validates if the given coordinates are within valid range
+  /// Private helper methods - add underscore
   static bool _isValidCoordinates(double? lat, double? long) {
     if (lat == null || long == null) return false;
     return lat.abs() <= _maxLatitude && 
@@ -74,7 +75,6 @@ class WKBUtil {
            !lat.isNaN && !long.isNaN;
   }
 
-  /// Validates WKB string format
   static bool _isValidWkbString(String? wkb) {
     if (wkb == null || wkb.isEmpty) return false;
     return RegExp(r'^[0-9A-Fa-f]+$').hasMatch(wkb) && wkb.length % 2 == 0;
