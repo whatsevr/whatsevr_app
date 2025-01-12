@@ -71,7 +71,7 @@ class WhatsevrLongTaskController extends TaskHandler {
         return;
       }
 
-      final response = await PostApi.createVideoPost(
+      final response = await PostApi.createWtv(
         post: CreateVideoPostRequest(
           title: taskData.title,
           description: taskData.description,

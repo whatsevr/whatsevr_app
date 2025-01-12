@@ -192,7 +192,7 @@ class _ActivityTile extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          if(contentType != null)
+                          if(contentType != null) 
                           ...[const Gap(8),
                           Container(
                             padding: EdgeInsets.symmetric(

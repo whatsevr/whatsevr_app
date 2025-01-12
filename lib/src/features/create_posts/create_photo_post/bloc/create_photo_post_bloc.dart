@@ -149,7 +149,7 @@ class CreatePhotoPostBloc
         throw BusinessException(itm!.$1!);
       }
       SmartDialog.showLoading(msg: 'Creating post...');
-      (String?, int?)? response = await PostApi.createPhotoPost(
+      final response = await PostApi.createPhotoPost(
         post: CreatePhotoPostRequest(
           title: titleController.text,
           description: descriptionController.text,
@@ -177,7 +177,7 @@ class CreatePhotoPostBloc
       );
       if (response != null) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
+        SmartDialog.showToast('${response.$2}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {

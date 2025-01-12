@@ -159,8 +159,8 @@ class CreateVideoPostBloc
             userUid: (AuthUserDb.getLastLoggedUserUid())!,
             fileRelatedTo: 'video-post-thumbnail',
           );
-          (String? message, int? statusCode)? response =
-              await PostApi.createVideoPost(
+          final response =
+              await PostApi.createWtv(
             post: CreateVideoPostRequest(
               title: titleController.text,
               description: descriptionController.text,
@@ -180,9 +180,9 @@ class CreateVideoPostBloc
               communityUid: state.communityUid,
             ),
           );
-          if (response?.$2 == 200) {
+          if (response?.$1 == 200) {
             SmartDialog.dismiss();
-            SmartDialog.showToast('${response?.$1}');
+            SmartDialog.showToast('${response?.$2}');
             AppNavigationService.goBack();
           }
         },

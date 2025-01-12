@@ -81,7 +81,7 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
         userUid: (AuthUserDb.getLastLoggedUserUid())!,
         fileRelatedTo: 'pdf-doc-thumbnail',
       );
-      (String? message, int? statusCode)? response = await PostApi.uploadPdfDoc(
+      final response = await PostApi.uploadPdfDoc(
         post: UploadPdfRequest(
           title: titleController.text,
           description: descriptionController.text,
@@ -92,9 +92,9 @@ class UploadPdfBloc extends Bloc<UploadPdfPostEvent, UploadPdfState> {
           creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
         ),
       );
-      if (response?.$2 == 200) {
+      if (response?.$1 == 200) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response?.$1}');
+        SmartDialog.showToast('${response?.$2}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {

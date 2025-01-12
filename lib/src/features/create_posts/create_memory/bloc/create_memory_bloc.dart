@@ -332,7 +332,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
+      final response = await PostApi.createMemory(
         post: CreateMemoryRequest(
           isVideo: true,
           caption: captionController.text,
@@ -360,7 +360,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       );
       if (response != null) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
+        SmartDialog.showToast('${response.$2}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {
@@ -383,7 +383,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
         fileRelatedTo: 'memory-image',
       );
       SmartDialog.showLoading(msg: 'Creating memory...');
-      (String? message, int? statusCode)? response = await PostApi.createMemory(
+      final response = await PostApi.createMemory(
         post: CreateMemoryRequest(
           isImage: true,
           caption: captionController.text,
@@ -409,7 +409,7 @@ class CreateMemoryBloc extends Bloc<CreateMemoryEvent, CreateMemoryState> {
       );
       if (response != null) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
+        SmartDialog.showToast('${response.$2}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {

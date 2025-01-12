@@ -48,7 +48,8 @@ class CommentsApi {
         return (
           response.statusCode,
           response.data['message'] as String?,
-          response.data['new_comment_uid'] as String?
+          response.data['comment_uid'] as String?,
+
         );
       }
     } catch (e, s) {

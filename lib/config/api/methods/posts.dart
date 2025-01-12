@@ -37,7 +37,7 @@ class PostApi {
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> createVideoPost({
+  static Future<(int? statusCode, String? message, String? wtvUid)?> createWtv({
     required CreateVideoPostRequest post,
   }) async {
     try {
@@ -46,7 +46,11 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['wtv_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
@@ -69,7 +73,8 @@ class PostApi {
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> createFlickPost({
+  static Future<(int? statusCode, String? message, String? flickUid)?>
+      createFlickPost({
     required CreateFlickPostRequest post,
   }) async {
     try {
@@ -78,7 +83,11 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['flick_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
@@ -101,7 +110,8 @@ class PostApi {
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> createMemory({
+  static Future<(int? statusCode, String? message, String? memoryUid)?>
+      createMemory({
     required CreateMemoryRequest post,
   }) async {
     try {
@@ -110,7 +120,11 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['memory_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
@@ -133,7 +147,8 @@ class PostApi {
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> createOffer({
+  static Future<(int? statusCode, String? message, String? offerUid)?>
+      createOffer({
     required CreateOfferRequest post,
   }) async {
     try {
@@ -142,7 +157,11 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['offer_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
@@ -165,7 +184,8 @@ class PostApi {
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> createPhotoPost({
+  static Future<(int? statusCode, String? message, String? photoUid)?>
+      createPhotoPost({
     required CreatePhotoPostRequest post,
   }) async {
     try {
@@ -174,14 +194,19 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['photo_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }
     return null;
   }
 
-  static Future<(String? message, int? statusCode)?> uploadPdfDoc({
+  static Future<(int? statusCode, String? message, String? pdfUid)?>
+      uploadPdfDoc({
     required UploadPdfRequest post,
   }) async {
     try {
@@ -190,7 +215,11 @@ class PostApi {
         data: post.toMap(),
       );
 
-      return (response.data['message'] as String?, response.statusCode);
+      return (
+        response.statusCode,
+        response.data['message'] as String?,
+        response.data['pdf_uid'] as String?,
+      );
     } catch (e, s) {
       lowLevelCatch(e, s);
     }

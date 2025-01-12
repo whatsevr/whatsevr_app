@@ -130,7 +130,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
         throw BusinessException(itm!.$1!);
       }
       SmartDialog.showLoading(msg: 'Creating post...');
-      (String?, int?)? response = await PostApi.createOffer(
+      final response = await PostApi.createOffer(
         post: CreateOfferRequest(
           title: titleController.text,
           description: descriptionController.text,
@@ -181,7 +181,7 @@ class CreateOfferBloc extends Bloc<CreateOfferEvent, CreateOfferState> {
 
       if (response != null) {
         SmartDialog.dismiss();
-        SmartDialog.showToast('${response.$1}');
+        SmartDialog.showToast('${response.$2}');
         AppNavigationService.goBack();
       }
     } catch (e, stackTrace) {
