@@ -13,7 +13,7 @@ import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/p
 import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_offer/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_photo_post/views/page.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_wtv/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/upload_pdf/views/page.dart';
 import 'package:whatsevr_app/src/features/dashboard/views/page.dart';
 import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
@@ -166,9 +166,9 @@ class AppNavigationService {
       GoRoute(
         path: RoutesName.createVideoPost,
         builder: (BuildContext context, GoRouterState state) {
-          final CreateVideoPostPageArgument pageArgument =
-              state.extra as CreateVideoPostPageArgument;
-          return CreateVideoPostPage(
+          final CreateWtvPageArgument pageArgument =
+              state.extra as CreateWtvPageArgument;
+          return CreateWtvPage(
             pageArgument: pageArgument,
           );
         },

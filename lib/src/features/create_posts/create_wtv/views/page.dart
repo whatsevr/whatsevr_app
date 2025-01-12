@@ -17,20 +17,20 @@ import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/previewers/video.dart';
 import 'package:whatsevr_app/config/widgets/product_guide/product_guides.dart';
 import 'package:whatsevr_app/config/widgets/textfield/super_textform_field.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/bloc/create_post_bloc.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_wtv/bloc/create_wtv_bloc.dart';
 
-class CreateVideoPostPageArgument {
+class CreateWtvPageArgument {
   final EnumPostCreatorType postCreatorType;
   final String? communityUid;
-  const CreateVideoPostPageArgument({
+  const CreateWtvPageArgument({
     required this.postCreatorType,
     this.communityUid,
   });
 }
 
-class CreateVideoPostPage extends StatelessWidget {
-  final CreateVideoPostPageArgument pageArgument;
-  const CreateVideoPostPage({super.key, required this.pageArgument});
+class CreateWtvPage extends StatelessWidget {
+  final CreateWtvPageArgument pageArgument;
+  const CreateWtvPage({super.key, required this.pageArgument});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-part of 'create_post_bloc.dart';
+part of 'create_wtv_bloc.dart';
 
 class CreateVideoPostState extends Equatable {
   final EnumPostCreatorType? postCreatorType;

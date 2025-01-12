@@ -1,11 +1,11 @@
-part of 'create_post_bloc.dart';
+part of 'create_wtv_bloc.dart';
 
 sealed class CreateVideoPostEvent extends Equatable {
   const CreateVideoPostEvent();
 }
 
 class CreatePostInitialEvent extends CreateVideoPostEvent {
-  final CreateVideoPostPageArgument pageArgument;
+  final CreateWtvPageArgument pageArgument;
   const CreatePostInitialEvent({required this.pageArgument});
 
   @override

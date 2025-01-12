@@ -6,7 +6,7 @@ import 'package:whatsevr_app/src/features/create_posts/create_flick_post/views/p
 import 'package:whatsevr_app/src/features/create_posts/create_memory/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_offer/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/create_photo_post/views/page.dart';
-import 'package:whatsevr_app/src/features/create_posts/create_video_post/views/page.dart';
+import 'package:whatsevr_app/src/features/create_posts/create_wtv/views/page.dart';
 import 'package:whatsevr_app/src/features/create_posts/upload_pdf/views/page.dart';
 import 'package:whatsevr_app/config/enums/post_creator_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
@@ -91,7 +91,7 @@ class _Ui extends StatelessWidget {
               Navigator.pop(context);
               AppNavigationService.newRoute(
                 RoutesName.createVideoPost,
-                extras: CreateVideoPostPageArgument(
+                extras: CreateWtvPageArgument(
                   postCreatorType: postCreatorType,
                   communityUid: communityUid,
                 ),
