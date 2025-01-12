@@ -11,6 +11,8 @@ import 'package:whatsevr_app/config/api/response_model/private_recommendation/of
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/photo_posts.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/videos.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
+import 'package:whatsevr_app/config/api/methods/tracked_activities.dart';
+import 'package:whatsevr_app/config/api/response_model/tracked_activities/user_tracked_activities.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -31,6 +33,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMorePhotoPostsEvent>(_onLoadMorePhotoPosts);
     on<LoadMixContentEvent>(_loadMixContent);
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
+    on<LoadTrackedActivitiesEvent>(_loadTrackedActivities);
+    on<LoadMoreTrackedActivitiesEvent>(_onLoadMoreTrackedActivities);
   }
 
   Future<void> _onInitial(
@@ -381,6 +385,75 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           mixContentPaginationData: state.mixContentPaginationData.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadTrackedActivities(
+    LoadTrackedActivitiesEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    try {
+      final UserTrackedActivitiesResponse? trackedActivities =
+          await TrackedActivityApi.getUserActivities(
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
+        page: 1,
+      );
+      emit(
+        state.copyWith(
+          trackedActivities: trackedActivities?.activities,
+          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+            isLoading: false,
+            currentPage: 1,
+            isLastPage: trackedActivities?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMoreTrackedActivities(
+    LoadMoreTrackedActivitiesEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state.trackedActivitiesPaginationData.isLoading == true ||
+        state.trackedActivitiesPaginationData.noMoreData == true) {
+      return;
+    }
+    try {
+      emit(
+        state.copyWith(
+          trackedActivitiesPaginationData:
+              state.trackedActivitiesPaginationData.copyWith(isLoading: true),
+        ),
+      );
+      final UserTrackedActivitiesResponse? trackedActivities =
+          await TrackedActivityApi.getUserActivities(
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
+        page: event.page!,
+      );
+
+      emit(
+        state.copyWith(
+          trackedActivities: state.trackedActivities +
+              (trackedActivities?.activities ?? []),
+          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            isLastPage: trackedActivities?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
             isLoading: false,
           ),
         ),

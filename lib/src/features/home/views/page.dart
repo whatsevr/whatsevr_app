@@ -1,18 +1,24 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:whatsevr_app/config/api/response_model/tracked_activities/user_tracked_activities.dart';
 import 'package:whatsevr_app/config/enums/activity_type.dart';
+import 'package:whatsevr_app/config/enums/content_type.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/offers.dart';
-part 'widgets/history.dart';
+part 'widgets/activity_history.dart';
 part 'widgets/bookmarks.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
   final ScrollController searchBoxHideController = ScrollController();
@@ -50,12 +56,18 @@ class HomePage extends StatelessWidget {
                     scrollController: searchBoxHideController,
                   ),
                 ),
-                ('Activities', WhatsevrTabBarWithViews(
-      tabViews: [
-        ('History', _HistoryView()),
-        ('Saved', _BookmarksView()),
-      ], 
-    )),
+                (
+                  'Activities',
+                  WhatsevrTabBarWithViews(
+                    onInit: () {
+                      context.read<HomeBloc>().add( LoadTrackedActivitiesEvent());
+                    },
+                    tabViews: [
+                      ('History', _ActivityHistoryView()),
+                      ('Saved', _BookmarksView()),
+                    ],
+                  )
+                ),
               ],
             ),
           ),

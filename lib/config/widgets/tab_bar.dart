@@ -9,6 +9,8 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
   final TabAlignment? tabAlignment;
   final Function(int)? onTabChanged;
   final double? spaceBetween;
+  final int initialIndex;
+  final VoidCallback? onInit;
   const WhatsevrTabBarWithViews({
     super.key,
     this.shrinkViews,
@@ -17,6 +19,8 @@ class WhatsevrTabBarWithViews extends StatefulWidget {
     this.tabAlignment,
     this.onTabChanged,
     this.spaceBetween,
+    this.initialIndex = 0,
+    this.onInit,
   });
 
   @override
@@ -29,11 +33,17 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
     if (widget.shrinkViews == true) setState(() {});
     if (widget.onTabChanged != null) widget.onTabChanged!(index);
   }
-
+  @override
+  void initState() {
+    super.initState();
+    widget.onInit?.call();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: widget.tabViews.length,
+      initialIndex: widget.initialIndex,
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

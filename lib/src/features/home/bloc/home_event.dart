@@ -68,3 +68,15 @@ class LoadMoreMixContentEvent extends HomeEvent {
   @override
   List<Object?> get props => <Object?>[page];
 }
+
+class LoadTrackedActivitiesEvent extends HomeEvent {
+  @override
+  List<Object> get props => <Object>[];
+}
+
+class LoadMoreTrackedActivitiesEvent extends HomeEvent {
+  final int? page;
+  const LoadMoreTrackedActivitiesEvent({required this.page});
+  @override
+  List<Object?> get props => <Object?>[page];
+}

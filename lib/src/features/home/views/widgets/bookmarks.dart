@@ -18,7 +18,7 @@ class BookmarkFolder {
 
 class SavedContent {
   final String uid;
-  final ContentType type;
+  final WhatsevrContentType type;
   final String title;
   final String? thumbnail;
   final DateTime savedAt;
@@ -55,7 +55,7 @@ class _BookmarksViewState extends State<_BookmarksView> {
       items: [
         SavedContent(
           uid: '1',
-          type: ContentType.wtv,
+          type: WhatsevrContentType.wtv,
           title: 'Flutter Animation Tutorial',
           thumbnail: 'https://picsum.photos/200/200?random=1',
           savedAt: DateTime.now(),
@@ -64,7 +64,7 @@ class _BookmarksViewState extends State<_BookmarksView> {
         ),
         SavedContent(
           uid: '2',
-          type: ContentType.pdf,
+          type: WhatsevrContentType.pdf,
           title: 'UI Design Guidelines',
           thumbnail: 'https://picsum.photos/200/200?random=2',
           savedAt: DateTime.now(),
@@ -80,14 +80,14 @@ class _BookmarksViewState extends State<_BookmarksView> {
       items: [
         SavedContent(
           uid: '3',
-          type: ContentType.photo,
+          type: WhatsevrContentType.photo,
           title: 'Modern UI Examples',
           thumbnail: 'https://picsum.photos/200/200?random=3',
           savedAt: DateTime.now(),
         ),
         SavedContent(
           uid: '4',
-          type: ContentType.flick,
+          type: WhatsevrContentType.flick,
           title: 'Design Process',
           thumbnail: 'https://picsum.photos/200/200?random=4',
           savedAt: DateTime.now(),
@@ -280,12 +280,7 @@ class _SavedItemTile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          ActivityItem.getContentTypeIcon(item.type),
-                          size: 16,
-                          color: context.whatsevrTheme.icon,
-                        ),
-                        const Gap(4),
+                      
                         Text(
                           item.type.name.toUpperCase(),
                           style: context.whatsevrTheme.caption,
