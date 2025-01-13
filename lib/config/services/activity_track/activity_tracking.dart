@@ -27,7 +27,7 @@ class _TrackedActivity {
   // Required fields
   final DateTime activityAt;
   final WhatsevrActivityType activityType;
-  final String userAgentUid;
+
 
   // Optional identifying fields
   final String? uid;
@@ -64,7 +64,7 @@ class _TrackedActivity {
     this.geoLocationWkb,
     this.appVersion,
     required this.activityType,
-    required this.userAgentUid,
+
     this.priority = Priority.normal,
     this.metadata, // Replace metadata with description
     this.commentUid, // Add commentUid parameter
@@ -79,9 +79,7 @@ class _TrackedActivity {
       }
     }
 
-    // Regular constructor validation
-    assert(userAgentUid.isNotEmpty, 'userAgentUid is required');
-  }
+}
 
   /// Converts activity to JSON format for storage/transmission
   Map<String, dynamic> toJson() => {
@@ -99,7 +97,7 @@ class _TrackedActivity {
         if (geoLocationWkb != null) 'geo_location_wkb': geoLocationWkb,
         if (appVersion != null) 'app_version': appVersion,
         'activity_type': activityType.name,
-        'user_agent_uid': userAgentUid,
+        
         if (metadata != null) 'metadata': metadata, // Will be stored as JSONB
         if (commentUid != null) 'comment_uid': commentUid,
         'priority': priority.name, // Add priority to JSON
@@ -125,7 +123,7 @@ class _TrackedActivity {
       activityType: WhatsevrActivityType.values.firstWhere(
         (e) => e.name == json['activity_type'],
       ),
-      userAgentUid: json['user_agent_uid'],
+
       metadata: json['metadata'] != null
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
@@ -145,6 +143,7 @@ class ActivityLoggingService {
   // Keep the public static log method as the main API
   static Future<void> log({
     required WhatsevrActivityType activityType,
+    String? userUid,
     Priority priority = Priority.normal, // Add priority parameter
     bool uploadToDb = true,
     bool uploadToFirebase = false,
@@ -171,6 +170,7 @@ class ActivityLoggingService {
       );
 
       await instance?._logActivity(
+        userUid: userUid,
         activityType: activityType,
         priority: priority, // Pass the priority parameter
         metadata: metadata,
@@ -268,6 +268,7 @@ class ActivityLoggingService {
   /// Logs a single activity with optional context data
   Future<void> _logActivity({
     required WhatsevrActivityType activityType,
+    String? userUid,
     Priority priority = Priority.normal,
     Map<String, dynamic>? metadata,
     String? commentUid, // Add commentUid parameter
@@ -281,13 +282,11 @@ class ActivityLoggingService {
     bool includeLocation = true,
   }) async {
     try {
-      final String? userUid = AuthUserDb.getLastLoggedUserUid();
+      userUid ??= AuthUserDb.getLastLoggedUserUid();
       // Get device info
       final userAgentInfo = UserAgentInfoService.currentDeviceInfo;
 
-      // Get userAgentUid
-      final userAgentUid = '5e5abad1-b8eb-4e31-8952-dfcf86e1ecf2';
-
+      
       // Get location if requested
       String? locationWkb;
       if (includeLocation) {
@@ -314,7 +313,6 @@ class ActivityLoggingService {
         geoLocationWkb: locationWkb,
         appVersion: userAgentInfo?.appVersion,
         activityType: activityType,
-        userAgentUid: userAgentUid,
         priority: priority,
         metadata: metadata, // Use description
         commentUid: commentUid, // Add commentUid
@@ -481,7 +479,7 @@ abstract class _EventLogger {
 
 class _EventStorage {
   late Box<String> _eventBox;
-  static const String boxName = 'activity_logs_56436';
+  static const String boxName = 'activity_logs_868';
 
   Future<void> initialize() async {
     try {
@@ -592,7 +590,6 @@ class _ApiActivityLogger implements _EventLogger {
           .debug('Attempting to log ${events.length} events to API');
 
       final activities = events.map((event) => Activity(
-            userAgentUid: event.userAgentUid,
             userUid: event.userUid,
             activityType: event.activityType.name,
             deviceOs: event.deviceOs,
@@ -606,6 +603,7 @@ class _ApiActivityLogger implements _EventLogger {
             commentUid: event.commentUid,
             memoryUid: event.memoryUid,
             metadata: event.metadata,
+            
           )).toList();
 
       final request = TrackActivitiesRequest(activities: activities);
@@ -712,10 +710,7 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
           parameters: params.cast<String, Object>(),
         );
 
-        // Set user properties for better tracking
-        if (event.userUid != null) {
-          await _setUserProperties(event);
-        }
+        
       }
       return (200, 'Events logged to Firebase Analytics');
     } catch (e, stackTrace) {
@@ -732,58 +727,4 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
     );
   }
 
-  /// Set user properties for better user segmentation
-  Future<void> _setUserProperties(_TrackedActivity event) async {
-    if (event.userUid != null) {
-      await _analytics.setUserId(id: event.userUid);
-
-      // Set user device properties
-      if (event.deviceOs != null) {
-        await _analytics.setUserProperty(
-          name: 'user_device_os',
-          value: event.deviceOs,
-        );
-      }
-      if (event.deviceModel != null) {
-        await _analytics.setUserProperty(
-          name: 'user_device_model',
-          value: event.deviceModel,
-        );
-      }
-      if (event.appVersion != null) {
-        await _analytics.setUserProperty(
-          name: 'app_version',
-          value: event.appVersion,
-        );
-      }
-
-      // Set user engagement properties
-      await _analytics.setUserProperty(
-        name: 'last_activity_type',
-        value: event.activityType.name,
-      );
-
-      // Set content preference based on most recent interaction
-      if (event.videoPostUid != null ||
-          event.flickPostUid != null ||
-          event.photoPostUid != null ||
-          event.memoryUid != null ||
-          event.pdfUid != null) {
-        await _analytics.setUserProperty(
-          name: 'preferred_content_type',
-          value: _determineContentType(event),
-        );
-      }
-    }
-  }
-
-  /// Determine the content type from the event
-  String _determineContentType(_TrackedActivity event) {
-    if (event.videoPostUid != null) return 'video';
-    if (event.flickPostUid != null) return 'flick';
-    if (event.photoPostUid != null) return 'photo';
-    if (event.memoryUid != null) return 'memory';
-    if (event.pdfUid != null) return 'pdf';
-    return 'unknown';
-  }
 }

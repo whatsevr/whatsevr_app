@@ -133,6 +133,7 @@ class _ActivityTile extends StatelessWidget {
         horizontal: context.whatsevrTheme.spacing2,
         vertical: context.whatsevrTheme.spacing1 / 2,
       ),
+      padding: EdgeInsets.all(context.whatsevrTheme.spacing2),
       decoration: BoxDecoration(
         color: context.whatsevrTheme.surface,
         borderRadius: context.whatsevrTheme.borderRadiusSmall,
@@ -141,128 +142,131 @@ class _ActivityTile extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: InkWell(
-        borderRadius: context.whatsevrTheme.borderRadiusSmall,
-        onTap: () {
-          // Handle activity tap
-        },
-        child: Padding(
-          padding: EdgeInsets.all(context.whatsevrTheme.spacing2),
-          child: IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Content thumbnail with overlay icon
-                if (contentThumbnail != null)
-                  Stack(
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Content thumbnail with overlay icon
+            if (contentThumbnail != null)
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: context.whatsevrTheme.borderRadiusSmall,
+                    child: SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Image.network(
+                        contentThumbnail!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            const Gap(12),
+            
+            // Content details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Action and timestamp row
+                  Row(
                     children: [
-                      ClipRRect(
-                        borderRadius: context.whatsevrTheme.borderRadiusSmall,
-                        child: SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: Image.network(
-                            contentThumbnail!,
-                            fit: BoxFit.cover,
+                      Icon(
+                        _getActionIcon(type),
+                        size: 16,
+                        color: _getActionColor(context, type),
+                      ),
+                      const Gap(4),
+                      Text(
+                        _getActionText(type),
+                        style: context.whatsevrTheme.caption.copyWith(
+                          color: _getActionColor(context, type),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if(contentType != null) 
+                      ...[const Gap(8),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: context.whatsevrTheme.background,
+                          borderRadius:
+                              context.whatsevrTheme.borderRadiusSmall,
+                          border: Border.all(
+                              color: context.whatsevrTheme.divider),
+                        ),
+                        child: Text(
+                          '${contentType?.name.toUpperCase()}',
+                          style: context.whatsevrTheme.caption.copyWith(
+                            fontSize: 10,
+                            letterSpacing: 0.5,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
+                      )],
+                      const Spacer(),
+                      Text(
+                        _formatTimestamp(activity.activityAt!),
+                        style: context.whatsevrTheme.caption,
                       ),
                     ],
                   ),
-                const Gap(12),
-
-                // Content details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Action and timestamp row
-                      Row(
-                        children: [
-                          Icon(
-                            _getActionIcon(type),
-                            size: 16,
-                            color: _getActionColor(context, type),
-                          ),
-                          const Gap(4),
+                  
+            
+                  // Content title with truncation indicator
+                  if(contentTitle?.isNotEmpty ?? false)...[
+                    const Gap(4),
+                     Text(
+                    contentTitle ?? '',
+                    style: context.whatsevrTheme.subtitle.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  ],
+                 
+                  
+            
+                  if(activity.metadata?['message'].isNotEmpty ?? false)
+                  ...[
+                    
+                    const Gap(4),Text(
+                    activity.metadata?['message'] ?? '',
+                    style: context.whatsevrTheme.caption,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  )],
+                  
+            
+                  // Device Info
+                  if (activity.deviceModel != null)
+                   ... [
+                    const Gap(8),
+                    Row(
+                                
+                      children: [
+                       
+                        if (activity.deviceModel != null) ...[
+                          Icon(Icons.devices_outlined, size: 12),
+                          Gap(4),
                           Text(
-                            _getActionText(type),
-                            style: context.whatsevrTheme.caption.copyWith(
-                              color: _getActionColor(context, type),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          if(contentType != null) 
-                          ...[const Gap(8),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: context.whatsevrTheme.background,
-                              borderRadius:
-                                  context.whatsevrTheme.borderRadiusSmall,
-                              border: Border.all(
-                                  color: context.whatsevrTheme.divider),
-                            ),
-                            child: Text(
-                              '${contentType?.name.toUpperCase()}',
-                              style: context.whatsevrTheme.caption.copyWith(
-                                fontSize: 10,
-                                letterSpacing: 0.5,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )],
-                          const Spacer(),
-                          Text(
-                            _formatTimestamp(activity.activityAt!),
+                            activity.deviceModel!,
                             style: context.whatsevrTheme.caption,
                           ),
                         ],
-                      ),
-                      const Gap(4),
-
-                      // Content title with truncation indicator
-                      Text(
-                        contentTitle ?? '',
-                        style: context.whatsevrTheme.subtitle.copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const Gap(2),
-
-                      
-
-                      // Device Info
-                      if (activity.deviceModel != null)
-                        Padding(
-                          padding: EdgeInsets.only(top: 4),
-                          child: Row(
-
-                            children: [
-                             
-                              if (activity.deviceModel != null) ...[
-                                Icon(Icons.devices_outlined, size: 12),
-                                Gap(4),
-                                Text(
-                                  activity.deviceModel!,
-                                  style: context.whatsevrTheme.caption,
-                                ),
-                              ],
-                            ],
-                          ),
-                        ),
-
-                    
-                   ],
-                  ),
-                ),
-              ],
+                      ],
+                    ),
+            ]
+                
+               ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

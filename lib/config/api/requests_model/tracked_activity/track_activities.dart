@@ -28,7 +28,7 @@ class TrackActivitiesRequest {
 }
 
 class Activity {
-    String? userAgentUid;
+  
     String? userUid;
     String? activityType;
     String? deviceOs;
@@ -44,7 +44,7 @@ class Activity {
     Map<String, dynamic>? metadata;
 
     Activity({
-        this.userAgentUid,
+
         this.userUid,
         this.activityType,
         this.deviceOs,
@@ -61,7 +61,7 @@ class Activity {
     });
 
     Activity copyWith({
-        String? userAgentUid,
+     
         String? userUid,
         String? activityType,
         String? deviceOs,
@@ -77,7 +77,7 @@ class Activity {
         Map<String, dynamic>? metadata,
     }) => 
         Activity(
-            userAgentUid: userAgentUid ?? this.userAgentUid,
+           
             userUid: userUid ?? this.userUid,
             activityType: activityType ?? this.activityType,
             deviceOs: deviceOs ?? this.deviceOs,
@@ -98,7 +98,7 @@ class Activity {
     String toJson() => json.encode(toMap());
 
     factory Activity.fromMap(Map<String, dynamic> json) => Activity(
-        userAgentUid: json["user_agent_uid"],
+
         userUid: json["user_uid"],
         activityType: json["activity_type"],
         deviceOs: json["device_os"],
@@ -115,7 +115,6 @@ class Activity {
     );
 
     Map<String, dynamic> toMap() => {
-        "user_agent_uid": userAgentUid,
         "user_uid": userUid,
         "activity_type": activityType,
         "device_os": deviceOs,

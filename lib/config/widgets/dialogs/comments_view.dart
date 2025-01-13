@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/enums/activity_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/services/activity_track/activity_tracking.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
 
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
@@ -172,8 +174,7 @@ class _UiState extends State<_Ui> {
         fileRelatedTo: 'comment',
       );
     }
-    (int?, String?, String?)? replyResponse =
-        await CommentsApi.postCommentOrReply(
+    final replyResponse = await CommentsApi.postCommentOrReply(
       CommentAndReplyRequest(
         commentText: replyingToTheComment != null ? null : text,
         replyText: replyingToTheComment != null ? text : null,
@@ -190,6 +191,17 @@ class _UiState extends State<_Ui> {
     );
     if (replyResponse?.$1 != HttpStatus.ok) {
       SmartDialog.showToast('${replyResponse?.$2}');
+      if (replyResponse?.$3 != null) {
+        ActivityLoggingService.log(
+          activityType: WhatsevrActivityType.comment,
+          commentUid:  replyResponse?.$3,
+        );
+      }
+      // if (replyResponse?.$4 != null) {
+      //   ActivityLoggingService.log(
+      //     activityType: WhatsevrActivityType.comment,
+      //   );
+      // }
       return;
     }
     setState(() {

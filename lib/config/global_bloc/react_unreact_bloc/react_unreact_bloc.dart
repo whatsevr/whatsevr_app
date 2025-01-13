@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:whatsevr_app/config/api/methods/reactions.dart';
 import 'package:whatsevr_app/config/api/response_model/reactions/user_reacted_items.dart';
+import 'package:whatsevr_app/config/enums/activity_type.dart';
+import 'package:whatsevr_app/config/services/activity_track/activity_tracking.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 
 part 'react_unreact_event.dart';
@@ -181,7 +185,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
     String? pdfUid,
   ) async {
     try {
-      await ReactionsApi.recordReaction(
+      final response = await ReactionsApi.recordReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
         reactionType: reactionType,
         videoPostUid: videoPostUid,
@@ -191,6 +195,19 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
         photoPostUid: photoPostUid,
         pdfUid: pdfUid,
       );
+      if (response?.$1 == HttpStatus.ok) {
+        ActivityLoggingService.log(
+          activityType: WhatsevrActivityType.react,
+          videoPostUid: videoPostUid,
+          flickPostUid: flickPostUid,
+          memoryUid: memoryUid,
+          offerUid: offerPostUid,
+          photoPostUid: photoPostUid,
+          pdfUid: pdfUid,
+          priority: Priority.critical,
+          uploadToDb: true, 
+        );
+      }
     } catch (e) {
       print('Error reacting to item: $e');
     }
@@ -205,7 +222,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
     String? pdfUid,
   ) async {
     try {
-      await ReactionsApi.deleteReaction(
+      final response = await ReactionsApi.deleteReaction(
         userUid: AuthUserDb.getLastLoggedUserUid()!,
         videoPostUid: videoPostUid,
         flickPostUid: flickPostUid,
@@ -214,6 +231,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
         photoPostUid: photoPostUid,
         pdfUid: pdfUid,
       );
+   
     } catch (e) {
       print('Error unreacting to item: $e');
     }

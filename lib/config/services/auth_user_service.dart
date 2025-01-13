@@ -7,6 +7,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:otpless_flutter/otpless_flutter.dart';
 import 'package:whatsevr_app/config/api/response_model/user/user_supportive_data.dart';
+import 'package:whatsevr_app/config/enums/activity_type.dart';
+import 'package:whatsevr_app/config/services/activity_track/activity_tracking.dart';
+import 'package:whatsevr_app/config/services/user_agent_info.dart';
 
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
@@ -43,6 +46,7 @@ class AuthUserService {
         onLoginSuccess,
     required Function(String errorMessage) onLoginFailed,
   }) async {
+      
     final Otpless otplessFlutterPlugin = Otpless();
     final Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
@@ -79,6 +83,7 @@ class AuthUserService {
             onLoginFailed('Email id and mobile number both are empty');
             return;
           }
+           
           onLoginSuccess(
             authServiceUserResponse.userId!,
             mobileNumber,
@@ -86,6 +91,7 @@ class AuthUserService {
           );
         } else {
           onLoginFailed('${result['errorMessage']}');
+          
         }
       },
       arg,
@@ -97,6 +103,12 @@ class AuthUserService {
     required String? mobileNumber,
     required String? emailId,
   }) async {
+    ActivityLoggingService.log(
+              userUid:userUid,
+                    activityType: WhatsevrActivityType.system,
+                    metadata: {'message': 'Login  attempt'},
+                    priority: Priority.critical,
+                  );
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid: userUid,
       mobileNumber: mobileNumber,
@@ -119,6 +131,10 @@ class AuthUserService {
         name: 'email_id',
         value: loginInfo?.$3?.userInfo?.emailId,
       );
+       FirebaseAnalytics.instance.setUserProperty(
+          name: 'app_version',
+          value: UserAgentInfoService.currentDeviceInfo?.appVersion,
+        );
       FirebaseAnalytics.instance.setDefaultEventParameters(
         <String, dynamic>{
           'user_uid': userUid,
@@ -129,6 +145,14 @@ class AuthUserService {
 
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     } else {
+      ActivityLoggingService.log(
+              userUid:userUid,
+                    activityType: WhatsevrActivityType.system,
+                    metadata: {'message': 'Login failed',
+                    if(loginInfo?.$2!=null)'description': loginInfo?.$2 
+                    },
+                    priority: Priority.critical,
+                  );
       if (loginInfo?.$1 == HttpStatus.notAcceptable) {
         showAppModalSheet(
           dismissPrevious: true,
@@ -178,8 +202,20 @@ class AuthUserService {
           throw BusinessException('User authenticity check failed');
         }
         supportiveData = supportiveDataResponse?.$2;
+        ActivityLoggingService.log(
+                    activityType: WhatsevrActivityType.system,
+                    metadata: {'message': 'Account accessed'},
+                    priority: Priority.critical,
+                    uploadToDb: true, 
+                  );
       }
     } catch (e, stackTrace) {
+      ActivityLoggingService.log(
+                    activityType: WhatsevrActivityType.system,
+                    metadata: {'message': 'Account accessed failed',},
+                    priority: Priority.critical,
+                    uploadToDb: true, 
+                  );
       AuthUserDb.removeAuthorisedUserUid(currentlyLoggedUserUid!);
       AuthUserDb.clearLastLoggedUserUid();
       if (AuthUserDb.getAllAuthorisedUserUid().isNotEmpty) {
@@ -190,5 +226,6 @@ class AuthUserService {
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
       highLevelCatch(e, stackTrace);
     }
+       
   }
 }
