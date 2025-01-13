@@ -102,6 +102,7 @@ class _TrackedActivity {
         'user_agent_uid': userAgentUid,
         if (metadata != null) 'metadata': metadata, // Will be stored as JSONB
         if (commentUid != null) 'comment_uid': commentUid,
+        'priority': priority.name, // Add priority to JSON
         // Remove metadata from toJson
       };
 
@@ -129,7 +130,12 @@ class _TrackedActivity {
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
       commentUid: json['comment_uid'], // Add commentUid
-      priority: Priority.normal,
+      priority: json['priority'] != null 
+          ? Priority.values.firstWhere(
+              (e) => e.name == json['priority'],
+              orElse: () => Priority.normal,
+            )
+          : Priority.normal,
     );
   }
 }
@@ -314,9 +320,12 @@ class ActivityLoggingService {
         commentUid: commentUid, // Add commentUid
       );
 
-      await _storage.saveEvent(activity);
-      _hasUnuploadedLogs = true; // Mark that we have pending logs
+      TalkerService.instance.debug('Saving activity to storage');
+      await _storage.saveEvent(activity); // Make sure this is awaited
+      _hasUnuploadedLogs = true;
       _eventController.add(activity);
+
+      TalkerService.instance.debug('Activity saved, has unuploaded logs: $_hasUnuploadedLogs');
 
       if (!(_uploadTimer?.isActive ?? true)) {
         _startUploadTimer(); // Restart timer if stopped
@@ -353,13 +362,20 @@ class ActivityLoggingService {
         await _storage.initialize();
       }
 
+      // Get total events count first for debugging
+      final totalEvents = await _storage.getEvents();
+      TalkerService.instance.debug('Total events in storage: ${totalEvents.length}');
+
       // Get events based on priority
       final events = forcePriority != null
           ? await _storage.getPriorityEvents(forcePriority)
           : await _storage.getEvents(limit: _batchSize);
 
+      TalkerService.instance.debug(
+          'Retrieved ${events.length} events${forcePriority != null ? " with priority >= ${forcePriority.name}" : ""}');
+
       if (events.isEmpty) {
-        TalkerService.instance.debug('No events to upload');
+        TalkerService.instance.debug('No events to upload after filtering');
         _hasUnuploadedLogs = false;
         _uploadTimer?.cancel();
         _uploadTimer = null;
@@ -465,34 +481,38 @@ abstract class _EventLogger {
 
 class _EventStorage {
   late Box<String> _eventBox;
-  static const String boxName = 'activity_logs_4363456';
-  
-  /// Initializes storage and opens Hive box
+  static const String boxName = 'activity_logs_56436';
+
   Future<void> initialize() async {
     try {
       if (!Hive.isBoxOpen(boxName)) {
         _eventBox = await Hive.openBox<String>(boxName);
-      } else {
+        TalkerService.instance.debug('Initialized Hive box: $boxName');
+      } else { 
         _eventBox = Hive.box<String>(boxName);
+        TalkerService.instance.debug('Reused existing Hive box: $boxName');
       }
-      
-      // Verify box is ready
-      if (!_eventBox.isOpen) {
-        throw StateError('Failed to open Hive box: $boxName');
-      }
+      TalkerService.instance.debug('Current box length: ${_eventBox.length}');
     } catch (e, stack) {
       TalkerService.instance.error('Hive initialization failed', e, stack);
       rethrow;
     }
   }
 
-  /// Saves single activity event to storage
   Future<void> saveEvent(_TrackedActivity event) async {
-    final jsonString = jsonEncode(event.toJson());
-    await _eventBox.add(jsonString);
+    try {
+      if (!_eventBox.isOpen) {
+        await initialize();
+      }
+      final jsonString = jsonEncode(event.toJson());
+      await _eventBox.add(jsonString);
+      TalkerService.instance.debug('Saved event to storage. Box values: ${_eventBox.values.length}');
+    } catch (e, stack) {
+      TalkerService.instance.error('Failed to save event', e, stack);
+      rethrow;
+    }
   }
 
-  /// Retrieves stored events with optional limit
   Future<List<_TrackedActivity>> getEvents({int? limit}) async {
     try {
       if (!_eventBox.isOpen) {
@@ -500,21 +520,22 @@ class _EventStorage {
       }
 
       final events = <_TrackedActivity>[];
-      final end = limit != null ? min(_eventBox.length, limit) : _eventBox.length;
+      final values = _eventBox.values.toList();
+      TalkerService.instance.debug('Getting events. Total in box: ${values.length}');
+
+      final end = limit != null ? min(values.length, limit) : values.length;
 
       for (var i = 0; i < end; i++) {
-        final jsonString = _eventBox.getAt(i);
-        if (jsonString != null) {
-          try {
-            final json = jsonDecode(jsonString);
-            events.add(_TrackedActivity.fromJson(json));
-          } catch (e) {
-            TalkerService.instance.error('Failed to parse event at index $i', e);
-            // Skip invalid events but continue processing
-            continue;
-          }
+        try {
+          final json = jsonDecode(values[i]);
+          events.add(_TrackedActivity.fromJson(json));
+        } catch (e) {
+          TalkerService.instance.error('Failed to parse event at index $i', e);
+          continue;
         }
       }
+
+      TalkerService.instance.debug('Retrieved ${events.length} events');
       return events;
     } catch (e, stack) {
       TalkerService.instance.error('Error getting events', e, stack);
@@ -522,16 +543,43 @@ class _EventStorage {
     }
   }
 
-  /// Removes specified number of oldest events
   Future<void> deleteEvents(int count) async {
-    final keys = _eventBox.keys.take(count);
-    await _eventBox.deleteAll(keys);
+    try {
+      if (!_eventBox.isOpen) {
+        await initialize();
+      }
+      
+      final keys = _eventBox.keys.take(count).toList();
+      TalkerService.instance.debug('Deleting ${keys.length} events');
+      await _eventBox.deleteAll(keys);
+      TalkerService.instance.debug('After deletion, remaining events: ${_eventBox.length}');
+    } catch (e, stack) {
+      TalkerService.instance.error('Failed to delete events', e, stack);
+      rethrow;
+    }
   }
 
   /// Gets events matching minimum priority level
   Future<List<_TrackedActivity>> getPriorityEvents(Priority minPriority) async {
-    final events = await getEvents();
-    return events.where((e) => e.priority.index >= minPriority.index).toList();
+    try {
+      final events = await getEvents();
+      TalkerService.instance.debug(
+          'Filtering ${events.length} events for priority >= ${minPriority.name}');
+      
+      final filteredEvents = events.where((e) {
+        final meets = e.priority.index >= minPriority.index;
+        TalkerService.instance.debug(
+            'Event priority ${e.priority.name} ${meets ? "meets" : "does not meet"} minimum ${minPriority.name}');
+        return meets;
+      }).toList();
+
+      TalkerService.instance.debug(
+          'Found ${filteredEvents.length} events matching priority ${minPriority.name}');
+      return filteredEvents;
+    } catch (e, stack) {
+      TalkerService.instance.error('Error filtering priority events', e, stack);
+      return [];
+    }
   }
 }
 
