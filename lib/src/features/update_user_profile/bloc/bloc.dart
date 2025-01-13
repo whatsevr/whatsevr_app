@@ -23,7 +23,9 @@ import 'package:whatsevr_app/config/api/response_model/profile_details.dart'
         UserWorkExperience,
         UserService,
         UserCoverMedia;
+import 'package:whatsevr_app/config/enums/activity_type.dart';
 import 'package:whatsevr_app/config/routes/router.dart';
+import 'package:whatsevr_app/config/services/activity_track/activity_tracking.dart';
 import 'package:whatsevr_app/config/services/auth_db.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
 import 'package:whatsevr_app/src/features/update_user_profile/views/page.dart';
@@ -158,6 +160,10 @@ class UserProfileUpdateBloc
           userUid: state.currentProfileDetailsResponse?.userInfo?.uid,
           profilePictureUrl: profilePictureUrl,
         ),
+      );
+      ActivityLoggingService.log(
+        activityType: WhatsevrActivityType.system,
+        metadata: {'message':'Profile picture changed'},
       );
     } catch (e) {
       SmartDialog.showToast(e.toString());

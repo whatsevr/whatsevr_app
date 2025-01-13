@@ -234,18 +234,7 @@ class _ActivityTile extends StatelessWidget {
                       ),
                       const Gap(2),
 
-                      // Description with metadata
-                      if (activity.description != null) ...[
-                        Text(
-                          activity.description!,
-                          style: context.whatsevrTheme.caption.copyWith(
-                            color: context.whatsevrTheme.textLight,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const Gap(4),
-                      ],
+                      
 
                       // Device Info
                       if (activity.deviceModel != null)

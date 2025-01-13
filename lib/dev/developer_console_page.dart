@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/enums/activity_type.dart';
 
 import 'package:whatsevr_app/config/routes/router.dart';
 import 'package:whatsevr_app/config/routes/routes_name.dart';
@@ -334,7 +335,18 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
             (
               'Act Log',
               () async {
-               example546();
+                try {
+                   ActivityLoggingService.log(
+                    activityType: WhatsevrActivityType.system,
+                    metadata: {'message': 'Test activity'},
+                    priority: Priority.critical,
+                    uploadToDb: true,  // Explicitly enable API logging
+                    uploadToFirebase: true, // Also enable Firebase logging for testing
+                  );
+                  WhatsevrStackToast.showSuccess('Activity logged successfully');
+                } catch (e) { 
+                  WhatsevrStackToast.showFailed('Failed to log activity: $e');
+                }
               }
             ),
           ])

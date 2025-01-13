@@ -63,7 +63,8 @@ class Activity {
     String? userAgentUid;
     String? commentUid;
     String? commentReplyUid;
-    String? description;
+   
+    Map<String, dynamic>? metadata;
     Flick? wtv;
     Flick? flick;
     Flick? photo;
@@ -91,7 +92,8 @@ class Activity {
         this.userAgentUid,
         this.commentUid,
         this.commentReplyUid,
-        this.description,
+      
+        this.metadata,
         this.wtv,
         this.flick,
         this.photo,
@@ -120,7 +122,8 @@ class Activity {
         String? userAgentUid,
         String? commentUid,
         String? commentReplyUid,
-        String? description,
+       
+        Map<String, dynamic>? metadata,
         Flick? wtv,
         Flick? flick,
         Flick? photo,
@@ -148,7 +151,8 @@ class Activity {
             userAgentUid: userAgentUid ?? this.userAgentUid,
             commentUid: commentUid ?? this.commentUid,
             commentReplyUid: commentReplyUid ?? this.commentReplyUid,
-            description: description ?? this.description,
+            
+            metadata: metadata ?? this.metadata,
             wtv: wtv ?? this.wtv,
             flick: flick ?? this.flick,
             photo: photo ?? this.photo,
@@ -181,7 +185,8 @@ class Activity {
         userAgentUid: json["user_agent_uid"],
         commentUid: json["comment_uid"],
         commentReplyUid: json["comment_reply_uid"],
-        description: json["description"],
+        
+        metadata: json["metadata"] != null ? Map<String, dynamic>.from(json["metadata"]) : null,
         wtv: json["wtv"] == null ? null : Flick.fromMap(json["wtv"]),
         flick: json["flick"] == null ? null : Flick.fromMap(json["flick"]),
         photo: json["photo"] == null ? null : Flick.fromMap(json["photo"]),
@@ -210,7 +215,8 @@ class Activity {
         "user_agent_uid": userAgentUid,
         "comment_uid": commentUid,
         "comment_reply_uid": commentReplyUid,
-        "description": description,
+   
+        "metadata": metadata,
         "wtv": wtv?.toMap(),
         "flick": flick?.toMap(),
         "photo": photo?.toMap(),

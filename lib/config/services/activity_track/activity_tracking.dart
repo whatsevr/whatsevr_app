@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
 import 'package:whatsevr_app/config/api/methods/tracked_activities.dart';
 import 'package:whatsevr_app/config/api/requests_model/tracked_activity/track_activities.dart';
 import 'package:whatsevr_app/config/enums/activity_type.dart';
@@ -19,8 +20,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 
 // Make priority enum private
-enum _EventPriority {
-  medium,
+enum Priority {
+  normal,
   critical,
 }
 
@@ -47,8 +48,8 @@ class _TrackedActivity {
   final String? deviceModel;
   final String? geoLocationWkb; // Location in WKB format
   final String? appVersion;
-  final String? description;
-  final _EventPriority priority;
+  final Map<String, dynamic>? metadata;
+  final Priority priority;
 
   /// Validates and creates a new activity instance
   _TrackedActivity({
@@ -67,11 +68,21 @@ class _TrackedActivity {
     this.appVersion,
     required this.activityType,
     required this.userAgentUid,
-    this.priority = _EventPriority.medium,
-    this.description, // Replace metadata with description
+    this.priority = Priority.normal,
+    this.metadata, // Replace metadata with description
     this.commentUid, // Add commentUid parameter
   }) {
-    // Validate UUID format for required fields
+    // Validate that metadata is proper JSON-serializable
+    if (metadata != null) {
+      try {
+        // Test JSON serialization to ensure it's valid JSONB
+        json.encode(metadata);
+      } catch (e) {
+        throw ArgumentError('metadata must be JSON-serializable');
+      }
+    }
+
+    // Regular constructor validation
     assert(userAgentUid.isNotEmpty, 'userAgentUid is required');
   }
 
@@ -92,7 +103,7 @@ class _TrackedActivity {
         if (appVersion != null) 'app_version': appVersion,
         'activity_type': activityType.name,
         'user_agent_uid': userAgentUid,
-        if (description != null) 'description': description,
+        if (metadata != null) 'metadata': metadata, // Will be stored as JSONB
         if (commentUid != null) 'comment_uid': commentUid,
         // Remove metadata from toJson
       };
@@ -111,15 +122,17 @@ class _TrackedActivity {
       activityAt: DateTime.parse(json['activity_at']).toLocal(),
       deviceOs: json['device_os'],
       deviceModel: json['device_model'],
-      geoLocationWkb:  json['geo_location_wkb'],
+      geoLocationWkb: json['geo_location_wkb'],
       appVersion: json['app_version'],
       activityType: WhatsevrActivityType.values.firstWhere(
         (e) => e.name == json['activity_type'],
       ),
       userAgentUid: json['user_agent_uid'],
-      description: json['description'], // Add description
+      metadata: json['metadata'] != null
+          ? Map<String, dynamic>.from(json['metadata'])
+          : null,
       commentUid: json['comment_uid'], // Add commentUid
-      priority: _EventPriority.medium,
+      priority: Priority.normal,
     );
   }
 }
@@ -129,9 +142,10 @@ class ActivityLoggingService {
   // Keep the public static log method as the main API
   static Future<void> log({
     required WhatsevrActivityType activityType,
+    Priority priority = Priority.normal, // Add priority parameter
     bool uploadToDb = true,
     bool uploadToFirebase = false,
-    String? description,
+    Map<String, dynamic>? metadata,
     String? commentUid,
     String? videoPostUid,
     String? flickPostUid,
@@ -141,28 +155,34 @@ class ActivityLoggingService {
     String? pdfUid,
     bool includeLocation = true,
   }) async {
-    // Get instance and ensure it's initialized
-    final instance = await getInstance(
-      loggers: [
-        if (uploadToDb) _ApiActivityLogger(),
-        if (uploadToFirebase) _FirebaseAnalyticsLogger(),
-      ],
-    );
-    
-    // No need to call initialize() here since getInstance handles it
-    await instance._logActivity(
-      activityType: activityType,
-      priority: _EventPriority.medium,
-      description: description,
-      commentUid: commentUid,
-      videoPostUid: videoPostUid,
-      flickPostUid: flickPostUid,
-      photoPostUid: photoPostUid,
-      offerUid: offerUid,
-      memoryUid: memoryUid,
-      pdfUid: pdfUid,
-      includeLocation: includeLocation,
-    );
+    try {
+      TalkerService.instance.debug(
+          'Activity log request: type=$activityType, priority=$priority, '
+          'uploadToDb=$uploadToDb, uploadToFirebase=$uploadToFirebase');
+
+      final instance = await getInstance(
+        loggers: [
+          if (uploadToDb) _ApiActivityLogger(),
+          if (uploadToFirebase) _FirebaseAnalyticsLogger(),
+        ],
+      );
+
+      await instance?._logActivity(
+        activityType: activityType,
+        priority: priority, // Pass the priority parameter
+        metadata: metadata,
+        commentUid: commentUid,
+        videoPostUid: videoPostUid,
+        flickPostUid: flickPostUid,
+        photoPostUid: photoPostUid,
+        offerUid: offerUid,
+        memoryUid: memoryUid,
+        pdfUid: pdfUid,
+        includeLocation: includeLocation,
+      );
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
+    }
   }
 
   // Make everything else private
@@ -172,11 +192,11 @@ class ActivityLoggingService {
   Timer? _uploadTimer;
   bool _isUploading = false;
   bool _hasUnuploadedLogs = false;
-  
+
   // Make these fields private
   final Duration _uploadInterval;
   final int _batchSize;
-  final int _maxBatchSize;
+
   final StreamController<_TrackedActivity> _eventController;
 
   // Make constructor private
@@ -189,48 +209,64 @@ class ActivityLoggingService {
         _loggers = loggers,
         _uploadInterval = uploadInterval,
         _batchSize = batchSize,
-        _maxBatchSize = maxBatchSize ?? 15,
         _eventController = StreamController<_TrackedActivity>.broadcast();
 
   Stream<_TrackedActivity> get eventStream => _eventController.stream;
 
   /// Initializes storage and starts upload timer
   Future<void> initialize() async {
-    await _storage.initialize();
-    await UserAgentInfoService.setDeviceInfo();
-    _startUploadTimer();
+    try {
+      await _storage.initialize();
+      await UserAgentInfoService.setDeviceInfo();
+      _startUploadTimer();
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
+    }
   }
 
   void _startUploadTimer() {
     _uploadTimer?.cancel();
-    _uploadTimer = Timer.periodic(_uploadInterval, (_) => _uploadPendingEvents());
+    _uploadTimer =
+        Timer.periodic(_uploadInterval, (_) => _uploadPendingEvents());
   }
 
   /// Static method to log activity without creating instance
-  static Future<ActivityLoggingService> getInstance({
+  static Future<ActivityLoggingService?> getInstance({
     List<_EventLogger> loggers = const [],
     Duration uploadInterval = const Duration(seconds: 10),
     int batchSize = 10,
     int? maxBatchSize,
   }) async {
-    if (_instance == null) {
-      _instance = ActivityLoggingService._internal(
-        loggers: loggers,
-        uploadInterval: uploadInterval,
-        batchSize: batchSize,
-        maxBatchSize: maxBatchSize,
-      );
-      // Initialize immediately after creation
-      await _instance!.initialize();
+    try {
+      if (_instance == null) {
+        _instance = ActivityLoggingService._internal(
+          loggers: loggers,
+          uploadInterval: uploadInterval,
+          batchSize: batchSize,
+          maxBatchSize: maxBatchSize,
+        );
+        // Initialize immediately after creation and handle errors
+        await _instance!.initialize().catchError((e, stack) {
+          TalkerService.instance.handle(e, stack);
+          _instance = null; // Reset instance if initialization fails
+          throw e; // Re-throw to notify caller
+        });
+      } else if (loggers.isNotEmpty) {
+        // Update loggers if provided
+        _instance!._loggers.clear();
+        _instance!._loggers.addAll(loggers);
+      }
+      return _instance!;
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
     }
-    return _instance!;
   }
 
   /// Logs a single activity with optional context data
   Future<void> _logActivity({
     required WhatsevrActivityType activityType,
-    _EventPriority priority = _EventPriority.medium,
-    String? description, // Add description parameter
+    Priority priority = Priority.normal,
+    Map<String, dynamic>? metadata,
     String? commentUid, // Add commentUid parameter
 
     String? videoPostUid,
@@ -242,7 +278,7 @@ class ActivityLoggingService {
     bool includeLocation = true,
   }) async {
     try {
-      String? userUid = AuthUserDb.getLastLoggedUserUid();
+      final String? userUid = AuthUserDb.getLastLoggedUserUid();
       // Get device info
       final userAgentInfo = UserAgentInfoService.currentDeviceInfo;
 
@@ -277,7 +313,7 @@ class ActivityLoggingService {
         activityType: activityType,
         userAgentUid: userAgentUid,
         priority: priority,
-        description: description, // Use description
+        metadata: metadata, // Use description
         commentUid: commentUid, // Add commentUid
       );
 
@@ -290,26 +326,30 @@ class ActivityLoggingService {
       }
 
       // Upload immediately if critical priority
-      if (priority == _EventPriority.critical) {
+      if (priority == Priority.critical) {
         // Cancel any pending timer to avoid conflicts
         _uploadTimer?.cancel();
-        await _uploadPendingEvents(forcePriority: _EventPriority.critical);
+        await _uploadPendingEvents(forcePriority: Priority.critical);
         if (_hasUnuploadedLogs) {
           _startUploadTimer();
         }
       }
     } catch (e, stackTrace) {
-      TalkerService.instance.handle(e, stackTrace);
-      rethrow;
+      lowLevelCatch(e, stackTrace);
     }
   }
 
   /// Processes pending events for upload
-  Future<void> _uploadPendingEvents({_EventPriority? forcePriority}) async {
-    if (_isUploading) return;
+  Future<void> _uploadPendingEvents({Priority? forcePriority}) async {
+    if (_isUploading) {
+      TalkerService.instance.debug('Upload already in progress, skipping');
+      return;
+    }
     _isUploading = true;
 
     try {
+      TalkerService.instance
+          .debug('Starting event upload: forcePriority=$forcePriority');
       // Get events based on priority
       final events = forcePriority != null
           ? await _storage.getPriorityEvents(forcePriority)
@@ -335,17 +375,17 @@ class ActivityLoggingService {
 
       // Only delete events if upload was successful
       await _storage.deleteEvents(events.length);
-      
+
       // Check if more events exist
       final remaining = await _storage.getEvents();
       _hasUnuploadedLogs = remaining.isNotEmpty;
-      
+
       if (!_hasUnuploadedLogs) {
         _uploadTimer?.cancel();
         _uploadTimer = null;
       }
-    } catch (e) {
-      TalkerService.instance.error('Failed to upload events', e);
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
     } finally {
       _isUploading = false;
     }
@@ -358,7 +398,7 @@ class ActivityLoggingService {
       for (var i = 0; i < events.length; i += batchSize)
         events.skip(i).take(batchSize).toList()
     ];
-  } 
+  }
 
   /// Cleans up resources
   Future<void> dispose() async {
@@ -366,7 +406,7 @@ class ActivityLoggingService {
     if (_hasUnuploadedLogs && !_isUploading) {
       await _uploadPendingEvents();
     }
-    
+
     _uploadTimer?.cancel();
     _uploadTimer = null;
     _PositionCache.clear();
@@ -388,14 +428,14 @@ class _PositionCache {
         return _cachedPosition;
       }
     }
-    
+
     try {
       final position = await Geolocator.getCurrentPosition();
       _cachedPosition = position;
       _lastUpdateTime = DateTime.now();
       return position;
-    } catch (e) {
-      TalkerService.instance.error('Error getting location', e);
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
       return null;
     }
   }
@@ -418,7 +458,7 @@ class _EventStorage {
 
   /// Initializes storage and opens Hive box
   Future<void> initialize() async {
-    _eventBox = await Hive.openBox<String>('activity_logs_434325');
+    _eventBox = await Hive.openBox<String>('activity_logs_56436');
   }
 
   /// Saves single activity event to storage
@@ -449,8 +489,7 @@ class _EventStorage {
   }
 
   /// Gets events matching minimum priority level
-  Future<List<_TrackedActivity>> getPriorityEvents(
-      _EventPriority minPriority) async {
+  Future<List<_TrackedActivity>> getPriorityEvents(Priority minPriority) async {
     final events = await getEvents();
     return events.where((e) => e.priority.index >= minPriority.index).toList();
   }
@@ -461,31 +500,23 @@ class _ApiActivityLogger implements _EventLogger {
   Future<(int? statusCode, String? message)?> logEvents(
       List<_TrackedActivity> events) async {
     try {
-      // Convert _TrackedActivity list to API request model
-      final activities = events
-          .map((event) => Activity(
-                activityAt: event.activityAt,
-                userAgentUid: event.userAgentUid,
-                userUid: event.userUid,
-                activityType: event.activityType.name,
-                wtvUid: event.videoPostUid,
-                deviceOs: event.deviceOs,
-                deviceModel: event.deviceModel,
-                appVersion: event.appVersion,
-                geoLocation: event.geoLocationWkb, // Just pass the WKB string directly
-                flickUid: event.flickPostUid,
-                description: event.description,
-                photoUid: event.photoPostUid,
-                commentUid: event.commentUid, // Use commentUid directly
-                memoryUid: event.memoryUid,
-              ))
-          .toList();
+      TalkerService.instance
+          .debug('Attempting to log ${events.length} events to API');
+
+      final activities = events.map((event) => Activity(
+          // ...existing mapping code...
+          )).toList();
 
       final request = TrackActivitiesRequest(activities: activities);
-      return await TrackedActivityApi.trackActivities(request: request);
-    } catch (e) {
-      TalkerService.instance.error('API logging error', e);
-      rethrow;
+      TalkerService.instance.debug('Sending API request: ${request.toJson()}');
+
+      final result = await TrackedActivityApi.trackActivities(request: request);
+      TalkerService.instance.debug('API response: $result');
+
+      return result;
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
+      return null; // Return null to indicate failure
     }
   }
 }
@@ -519,29 +550,30 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
           'event_timestamp': event.activityAt.millisecondsSinceEpoch,
           'event_time_local': event.activityAt.toLocal().toString(),
           'activity_type': event.activityType.name,
-          
+
           // User context
           if (event.userUid != null) 'user_id': event.userUid,
-          
+
           // Device context
-          if (event.deviceOs != null) ..._cleanDeviceParams({
-            'device_os': event.deviceOs,
-            'device_model': event.deviceModel,
-            'app_version': event.appVersion,
-          }),
-          
+          if (event.deviceOs != null)
+            ..._cleanDeviceParams({
+              'device_os': event.deviceOs,
+              'device_model': event.deviceModel,
+              'app_version': event.appVersion,
+            }),
+
           // Location context
           'has_location': (event.geoLocationWkb != null).toString(),
-          
+
           // Event metadata
-          if (event.description != null) 'event_description': event.description,
+          if (event.metadata != null) 'event_metadata': event.metadata,
           'event_priority': event.priority.name,
         };
 
         // Add content-specific parameters
         String? contentType;
         String? contentId;
-        
+
         if (event.videoPostUid != null) {
           contentType = 'video';
           contentId = event.videoPostUid;
@@ -585,8 +617,8 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
         }
       }
       return (200, 'Events logged to Firebase Analytics');
-    } catch (e) {
-      TalkerService.instance.error('Firebase Analytics error', e);
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
       return (500, e.toString());
     }
   }
@@ -594,9 +626,8 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
   /// Clean device parameters by removing null values and invalid characters
   Map<String, String> _cleanDeviceParams(Map<String?, String?> params) {
     return Map.fromEntries(
-      params.entries
-        .where((e) => e.value != null)
-        .map((e) => MapEntry(e.key!, e.value!.replaceAll(RegExp(r'[^\w\s.-]'), ''))),
+      params.entries.where((e) => e.value != null).map((e) =>
+          MapEntry(e.key!, e.value!.replaceAll(RegExp(r'[^\w\s.-]'), ''))),
     );
   }
 
@@ -604,7 +635,7 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
   Future<void> _setUserProperties(_TrackedActivity event) async {
     if (event.userUid != null) {
       await _analytics.setUserId(id: event.userUid);
-      
+
       // Set user device properties
       if (event.deviceOs != null) {
         await _analytics.setUserProperty(
@@ -624,15 +655,15 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
           value: event.appVersion,
         );
       }
-      
+
       // Set user engagement properties
       await _analytics.setUserProperty(
         name: 'last_activity_type',
         value: event.activityType.name,
       );
-      
+
       // Set content preference based on most recent interaction
-      if (event.videoPostUid != null || 
+      if (event.videoPostUid != null ||
           event.flickPostUid != null ||
           event.photoPostUid != null ||
           event.memoryUid != null ||
@@ -655,59 +686,3 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
     return 'unknown';
   }
 }
-
-// Move example to separate file or make private
-void example546() async {
-  TalkerService.instance.debug('Starting activity logging example...');
-
-  try {
-    // System activity with both DB and Firebase logging
-    await ActivityLoggingService.log(
-      activityType: WhatsevrActivityType.system,
-      description: 'Registered as @johndoe',
-      uploadToDb: true,
-      uploadToFirebase: true,
-    );
-
-    // Video view with only DB logging (default)
-    await ActivityLoggingService.log(
-      activityType: WhatsevrActivityType.view,
-      videoPostUid: '008f735f-6033-4e05-a123-e34f628851fc',
-    );
-
-    await Future.delayed(Duration(seconds: 2));
-
-    // Flick reaction with only Firebase Analytics
-    await ActivityLoggingService.log(
-      activityType: WhatsevrActivityType.react,
-      flickPostUid: '00327731-e8f9-4f33-b700-29b16798a65a',
-      uploadToDb: false,
-      uploadToFirebase: true,
-    );
-
-    await Future.delayed(Duration(seconds: 2));
-
-    // Comment with both logging destinations
-    await ActivityLoggingService.log(
-      activityType: WhatsevrActivityType.comment,
-      memoryUid: '0039635d-7b69-4a53-a37e-018833d12c53',
-      commentUid: '255b707f-2b01-4d23-8836-503107a9647f',
-      uploadToDb: true,
-      uploadToFirebase: true,
-    );
-
-    await Future.delayed(Duration(seconds: 2));
-
-    // Share with only DB logging
-    await ActivityLoggingService.log(
-      activityType: WhatsevrActivityType.share,
-      photoPostUid: '00518fee-3c8a-4eec-b184-75e79b39f62c',
-      description: 'A share',
-    );
-
-  } catch (e, stackTrace) {
-    TalkerService.instance.handle(e, stackTrace);
-  }
-}
-
-

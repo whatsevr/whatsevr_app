@@ -35,13 +35,13 @@ class Activity {
     String? deviceModel;
     String? appVersion;
     dynamic geoLocation;
-    String? description;
     DateTime? activityAt;
     String? wtvUid;
     String? flickUid;
     String? photoUid;
     String? commentUid;
     String? memoryUid;
+    Map<String, dynamic>? metadata;
 
     Activity({
         this.userAgentUid,
@@ -51,13 +51,13 @@ class Activity {
         this.deviceModel,
         this.appVersion,
         this.geoLocation,
-        this.description,
         this.activityAt,
         this.wtvUid,
         this.flickUid,
         this.photoUid,
         this.commentUid,
         this.memoryUid,
+        this.metadata,
     });
 
     Activity copyWith({
@@ -68,13 +68,13 @@ class Activity {
         String? deviceModel,
         String? appVersion,
         dynamic geoLocation,
-        String? description,
         DateTime? activityAt,
         String? wtvUid,
         String? flickUid,
         String? photoUid,
         String? commentUid,
         String? memoryUid,
+        Map<String, dynamic>? metadata,
     }) => 
         Activity(
             userAgentUid: userAgentUid ?? this.userAgentUid,
@@ -84,13 +84,13 @@ class Activity {
             deviceModel: deviceModel ?? this.deviceModel,
             appVersion: appVersion ?? this.appVersion,
             geoLocation: geoLocation ?? this.geoLocation,
-            description: description ?? this.description,
             activityAt: activityAt ?? this.activityAt,
             wtvUid: wtvUid ?? this.wtvUid,
             flickUid: flickUid ?? this.flickUid,
             photoUid: photoUid ?? this.photoUid,
             commentUid: commentUid ?? this.commentUid,
             memoryUid: memoryUid ?? this.memoryUid,
+            metadata: metadata ?? this.metadata,
         );
 
     factory Activity.fromJson(String str) => Activity.fromMap(json.decode(str));
@@ -105,13 +105,13 @@ class Activity {
         deviceModel: json["device_model"],
         appVersion: json["app_version"],
         geoLocation: json["geo_location"],
-        description: json["description"],
         activityAt: json["activity_at"] == null ? null : DateTime.parse(json["activity_at"]),
         wtvUid: json["wtv_uid"],
         flickUid: json["flick_uid"],
         photoUid: json["photo_uid"],
         commentUid: json["comment_uid"],
         memoryUid: json["memory_uid"],
+        metadata: json["metadata"] != null ? Map<String, dynamic>.from(json["metadata"]) : null,
     );
 
     Map<String, dynamic> toMap() => {
@@ -122,12 +122,12 @@ class Activity {
         "device_model": deviceModel,
         "app_version": appVersion,
         "geo_location": geoLocation,
-        "description": description,
         "activity_at": activityAt?.toIso8601String(),
         "wtv_uid": wtvUid,
         "flick_uid": flickUid,
         "photo_uid": photoUid,
         "comment_uid": commentUid,
         "memory_uid": memoryUid,
+        "metadata": metadata,
     };
 }
