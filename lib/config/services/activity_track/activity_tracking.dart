@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:async';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsevr_app/config/api/external/models/business_validation_exception.dart';
@@ -16,7 +13,7 @@ import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-
+ 
 
 
 // Make priority enum private
@@ -345,47 +342,60 @@ class ActivityLoggingService {
       TalkerService.instance.debug('Upload already in progress, skipping');
       return;
     }
+
     _isUploading = true;
 
     try {
-      TalkerService.instance
-          .debug('Starting event upload: forcePriority=$forcePriority');
+      TalkerService.instance.debug('Starting event upload: forcePriority=$forcePriority');
+      
+      // Verify storage is initialized
+      if (!_storage._eventBox.isOpen) {
+        await _storage.initialize();
+      }
+
       // Get events based on priority
       final events = forcePriority != null
           ? await _storage.getPriorityEvents(forcePriority)
-          : await _storage.getEvents(
-              limit: _batchSize); // Use configured batchSize
+          : await _storage.getEvents(limit: _batchSize);
 
       if (events.isEmpty) {
+        TalkerService.instance.debug('No events to upload');
         _hasUnuploadedLogs = false;
-        _uploadTimer?.cancel(); // Stop timer when no more logs
+        _uploadTimer?.cancel();
         _uploadTimer = null;
         return;
       }
 
-      // Process events in a single batch
+      TalkerService.instance.debug('Processing ${events.length} events');
+
+      // Process events with each logger
+      bool uploadSuccess = true;
       for (final logger in _loggers) {
         final result = await logger.logEvents(events);
         if (result == null || result.$1 == null || result.$1! >= 400) {
-          // Log error but don't retry
-          TalkerService.instance.error('Upload failed: ${result?.$2}');
-          return;
+          TalkerService.instance.error(
+              'Upload failed for logger ${logger.runtimeType}: ${result?.$2}');
+          uploadSuccess = false;
+          break;
         }
       }
 
-      // Only delete events if upload was successful
-      await _storage.deleteEvents(events.length);
+      // Only delete events if all uploads were successful
+      if (uploadSuccess) {
+        await _storage.deleteEvents(events.length);
+        TalkerService.instance.debug('Successfully uploaded and deleted ${events.length} events');
+      }
 
-      // Check if more events exist
+      // Check remaining events
       final remaining = await _storage.getEvents();
       _hasUnuploadedLogs = remaining.isNotEmpty;
-
+      
       if (!_hasUnuploadedLogs) {
         _uploadTimer?.cancel();
         _uploadTimer = null;
       }
     } catch (e, stackTrace) {
-      lowLevelCatch(e, stackTrace);
+      TalkerService.instance.error('Error during event upload', e, stackTrace);
     } finally {
       _isUploading = false;
     }
@@ -455,10 +465,25 @@ abstract class _EventLogger {
 
 class _EventStorage {
   late Box<String> _eventBox;
-
+  static const String boxName = 'activity_logs_4363456';
+  
   /// Initializes storage and opens Hive box
   Future<void> initialize() async {
-    _eventBox = await Hive.openBox<String>('activity_logs_56436');
+    try {
+      if (!Hive.isBoxOpen(boxName)) {
+        _eventBox = await Hive.openBox<String>(boxName);
+      } else {
+        _eventBox = Hive.box<String>(boxName);
+      }
+      
+      // Verify box is ready
+      if (!_eventBox.isOpen) {
+        throw StateError('Failed to open Hive box: $boxName');
+      }
+    } catch (e, stack) {
+      TalkerService.instance.error('Hive initialization failed', e, stack);
+      rethrow;
+    }
   }
 
   /// Saves single activity event to storage
@@ -469,17 +494,32 @@ class _EventStorage {
 
   /// Retrieves stored events with optional limit
   Future<List<_TrackedActivity>> getEvents({int? limit}) async {
-    final events = <_TrackedActivity>[];
-    final end = limit != null ? min(_eventBox.length, limit) : _eventBox.length;
-
-    for (var i = 0; i < end; i++) {
-      final jsonString = _eventBox.getAt(i);
-      if (jsonString != null) {
-        final json = jsonDecode(jsonString);
-        events.add(_TrackedActivity.fromJson(json));
+    try {
+      if (!_eventBox.isOpen) {
+        await initialize();
       }
+
+      final events = <_TrackedActivity>[];
+      final end = limit != null ? min(_eventBox.length, limit) : _eventBox.length;
+
+      for (var i = 0; i < end; i++) {
+        final jsonString = _eventBox.getAt(i);
+        if (jsonString != null) {
+          try {
+            final json = jsonDecode(jsonString);
+            events.add(_TrackedActivity.fromJson(json));
+          } catch (e) {
+            TalkerService.instance.error('Failed to parse event at index $i', e);
+            // Skip invalid events but continue processing
+            continue;
+          }
+        }
+      }
+      return events;
+    } catch (e, stack) {
+      TalkerService.instance.error('Error getting events', e, stack);
+      return [];
     }
-    return events;
   }
 
   /// Removes specified number of oldest events
@@ -504,7 +544,20 @@ class _ApiActivityLogger implements _EventLogger {
           .debug('Attempting to log ${events.length} events to API');
 
       final activities = events.map((event) => Activity(
-          // ...existing mapping code...
+            userAgentUid: event.userAgentUid,
+            userUid: event.userUid,
+            activityType: event.activityType.name,
+            deviceOs: event.deviceOs,
+            deviceModel: event.deviceModel,
+            appVersion: event.appVersion,
+            geoLocation: event.geoLocationWkb,
+            activityAt: event.activityAt, // Pass DateTime directly
+            wtvUid: event.videoPostUid,
+            flickUid: event.flickPostUid,
+            photoUid: event.photoPostUid,
+            commentUid: event.commentUid,
+            memoryUid: event.memoryUid,
+            metadata: event.metadata,
           )).toList();
 
       final request = TrackActivitiesRequest(activities: activities);
@@ -516,7 +569,7 @@ class _ApiActivityLogger implements _EventLogger {
       return result;
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);
-      return null; // Return null to indicate failure
+      return null;
     }
   }
 }

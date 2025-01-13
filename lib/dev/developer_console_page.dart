@@ -341,7 +341,7 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
                     metadata: {'message': 'Test activity'},
                     priority: Priority.critical,
                     uploadToDb: true,  // Explicitly enable API logging
-                    uploadToFirebase: true, // Also enable Firebase logging for testing
+                    uploadToFirebase: false, // Also enable Firebase logging for testing
                   );
                   WhatsevrStackToast.showSuccess('Activity logged successfully');
                 } catch (e) { 
