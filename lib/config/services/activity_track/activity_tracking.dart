@@ -13,6 +13,7 @@ import 'package:whatsevr_app/config/services/user_agent_info.dart';
 import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:easy_debounce/easy_debounce.dart';
  
 
 
@@ -198,25 +199,21 @@ class ActivityLoggingService {
   static ActivityLoggingService? _instance;
   final _EventStorage _storage;
   final List<_EventLogger> _loggers;
-  Timer? _uploadTimer;
   bool _isUploading = false;
   bool _hasUnuploadedLogs = false;
-
-  // Make these fields private
-  final Duration _uploadInterval;
   final int _batchSize;
-
   final StreamController<_TrackedActivity> _eventController;
+
+  static const _uploadDebounceKey = 'activity_upload_debouncer';
+  static const _defaultDebounceTime = Duration(seconds: 5);
 
   // Make constructor private
   ActivityLoggingService._internal({
     required List<_EventLogger> loggers,
-    required Duration uploadInterval,
     required int batchSize,
     int? maxBatchSize,
   })  : _storage = _EventStorage(),
         _loggers = loggers,
-        _uploadInterval = uploadInterval,
         _batchSize = batchSize,
         _eventController = StreamController<_TrackedActivity>.broadcast();
 
@@ -225,18 +222,12 @@ class ActivityLoggingService {
   /// Initializes storage and starts upload timer
   Future<void> initialize() async {
     try {
+      EasyDebounce.cancel(_uploadDebounceKey);
       await _storage.initialize();
       await UserAgentInfoService.setDeviceInfo();
-      _startUploadTimer();
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);
     }
-  }
-
-  void _startUploadTimer() {
-    _uploadTimer?.cancel();
-    _uploadTimer =
-        Timer.periodic(_uploadInterval, (_) => _uploadPendingEvents());
   }
 
   /// Static method to log activity without creating instance
@@ -250,7 +241,6 @@ class ActivityLoggingService {
       if (_instance == null) {
         _instance = ActivityLoggingService._internal(
           loggers: loggers,
-          uploadInterval: uploadInterval,
           batchSize: batchSize,
           maxBatchSize: maxBatchSize,
         );
@@ -333,18 +323,18 @@ class ActivityLoggingService {
 
       TalkerService.instance.debug('Activity saved, has unuploaded logs: $_hasUnuploadedLogs');
 
-      if (!(_uploadTimer?.isActive ?? true)) {
-        _startUploadTimer(); // Restart timer if stopped
-      }
-
-      // Upload immediately if critical priority
+      // Replace timer-based upload with debounced upload
       if (priority == Priority.critical) {
-        // Cancel any pending timer to avoid conflicts
-        _uploadTimer?.cancel();
+        // Cancel any pending debounced upload
+        EasyDebounce.cancel(_uploadDebounceKey);
         await _uploadPendingEvents(forcePriority: Priority.critical);
-        if (_hasUnuploadedLogs) {
-          _startUploadTimer();
-        }
+      } else {
+        // Schedule debounced upload for normal priority events
+        EasyDebounce.debounce(
+          _uploadDebounceKey,
+          _defaultDebounceTime,
+          () => _uploadPendingEvents(),
+        );
       }
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);
@@ -387,11 +377,6 @@ class ActivityLoggingService {
       if (events.isEmpty) {
         TalkerService.instance.debug('No events to upload after filtering');
         _hasUnuploadedLogs = false;
-        if (forcePriority == null) {  // Changed from !forcePriority
-          // Only stop timer if this was a normal scheduled upload
-          _uploadTimer?.cancel();
-          _uploadTimer = null;
-        }
         return;
       }
 
@@ -420,12 +405,9 @@ class ActivityLoggingService {
       final remainingHighPriority = await _storage.getPriorityEvents(Priority.critical);
       _hasUnuploadedLogs = remainingHighPriority.isNotEmpty;
       
-      // If only normal priority events are left and this wasn't a forced upload,
-      // stop the timer until new events are added
-      if (!_hasUnuploadedLogs && forcePriority == null) {  // Changed from !forcePriority
-        _uploadTimer?.cancel();
-        _uploadTimer = null;
-        TalkerService.instance.debug('No high priority events remaining, stopped timer');
+      if (!_hasUnuploadedLogs) {
+        EasyDebounce.cancel(_uploadDebounceKey);
+        TalkerService.instance.debug('No high priority events remaining, canceled debouncer');
       }
     } catch (e, stackTrace) {
       TalkerService.instance.error('Error during event upload', e, stackTrace);
@@ -445,16 +427,20 @@ class ActivityLoggingService {
 
   /// Cleans up resources
   Future<void> dispose() async {
-    // Try to upload any remaining logs before disposing
-    if (_hasUnuploadedLogs && !_isUploading) {
-      await _uploadPendingEvents();
-    }
+    try {
+      EasyDebounce.cancel(_uploadDebounceKey);
+      
+      // Upload any remaining logs before disposing
+      if (_hasUnuploadedLogs && !_isUploading) {
+        await _uploadPendingEvents();
+      }
 
-    _uploadTimer?.cancel();
-    _uploadTimer = null;
-    _PositionCache.clear();
-    await _eventController.close();
-    _instance = null; // Reset singleton instance
+      _PositionCache.clear();
+      await _eventController.close();
+      _instance = null;
+    } catch (e, stackTrace) {
+      lowLevelCatch(e, stackTrace);
+    }
   }
 }
 
