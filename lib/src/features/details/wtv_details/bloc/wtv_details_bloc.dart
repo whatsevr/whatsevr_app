@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:whatsevr_app/config/api/methods/post_details.dart';
 import 'package:whatsevr_app/config/api/response_model/post_details/video.dart';
+import 'package:whatsevr_app/config/enums/activity_type.dart';
+import 'package:whatsevr_app/config/services/activity_track/activity_tracking.dart';
 import 'package:whatsevr_app/src/features/details/wtv_details/views/page.dart';
 
 part 'wtv_details_event.dart';
@@ -32,6 +34,15 @@ class WtvDetailsBloc extends Bloc<WtvDetailsEvent, WtvDetailsState> {
     FetchVideoPostDetails event,
     Emitter<WtvDetailsState> emit,
   ) async {
+    ActivityLoggingService.log(
+        activityType: WhatsevrActivityType.view,
+        wtvUid: event.videoPostUid,
+        metadata: {
+         if (state.videoPostUid != null)
+          'previous_wtv_uid': state.videoPostUid,
+           if (state.videoPostDetailsResponse?.videoPostDetails?.title != null)
+          'previous_wtv_title': state.videoPostDetailsResponse?.videoPostDetails?.title,
+        },);
     emit(
       WtvDetailsState(
         thumbnail: event.thumbnail,

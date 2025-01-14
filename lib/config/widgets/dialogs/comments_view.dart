@@ -194,14 +194,18 @@ class _UiState extends State<_Ui> {
       if (replyResponse?.$3 != null) {
         ActivityLoggingService.log(
           activityType: WhatsevrActivityType.comment,
-          commentUid:  replyResponse?.$3,
+          commentUid: replyResponse?.$3,
         );
       }
-      // if (replyResponse?.$4 != null) {
-      //   ActivityLoggingService.log(
-      //     activityType: WhatsevrActivityType.comment,
-      //   );
-      // }
+      if (replyResponse?.$4 != null) {
+        ActivityLoggingService.log(
+            activityType: WhatsevrActivityType.comment,
+            commentReplyUid: replyResponse?.$4,
+            metadata: {
+              'original_comment': text,
+            },
+            );
+      }
       return;
     }
     setState(() {

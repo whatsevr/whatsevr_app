@@ -32,13 +32,14 @@ class _TrackedActivity {
   // Optional identifying fields
   final String? uid;
   final String? userUid;
-  final String? videoPostUid;
+  final String? wtvUid;
   final String? flickPostUid;
   final String? photoPostUid;
   final String? offerUid;
   final String? memoryUid;
   final String? pdfUid;
   final String? commentUid;
+  final String? commentReplyUid;  // Renamed from replyUid
 
   // Metadata fields
   final String? deviceOs;
@@ -52,7 +53,7 @@ class _TrackedActivity {
   _TrackedActivity({
     this.uid,
     this.userUid,
-    this.videoPostUid,
+    this.wtvUid,
     this.flickPostUid,
     this.photoPostUid,
     this.offerUid,
@@ -68,6 +69,7 @@ class _TrackedActivity {
     this.priority = Priority.normal,
     this.metadata, // Replace metadata with description
     this.commentUid, // Add commentUid parameter
+    this.commentReplyUid,  // Renamed from replyUid
   }) {
     // Validate that metadata is proper JSON-serializable
     if (metadata != null) {
@@ -85,7 +87,7 @@ class _TrackedActivity {
   Map<String, dynamic> toJson() => {
         if (uid != null) 'uid': uid,
         if (userUid != null) 'user_uid': userUid,
-        if (videoPostUid != null) 'video_post_uid': videoPostUid,
+        if (wtvUid != null) 'wtv_uid': wtvUid,
         if (flickPostUid != null) 'flick_post_uid': flickPostUid,
         if (photoPostUid != null) 'photo_post_uid': photoPostUid,
         if (offerUid != null) 'offer_uid': offerUid,
@@ -100,6 +102,7 @@ class _TrackedActivity {
         
         if (metadata != null) 'metadata': metadata, // Will be stored as JSONB
         if (commentUid != null) 'comment_uid': commentUid,
+        if (commentReplyUid != null) 'comment_reply_uid': commentReplyUid,  // Update key name too
         'priority': priority.name, // Add priority to JSON
         // Remove metadata from toJson
       };
@@ -109,7 +112,7 @@ class _TrackedActivity {
     return _TrackedActivity(
       uid: json['uid'],
       userUid: json['user_uid'],
-      videoPostUid: json['video_post_uid'],
+      wtvUid: json['wtv_uid'],
       flickPostUid: json['flick_post_uid'],
       photoPostUid: json['photo_post_uid'],
       offerUid: json['offer_uid'],
@@ -128,6 +131,7 @@ class _TrackedActivity {
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
       commentUid: json['comment_uid'], // Add commentUid
+      commentReplyUid: json['comment_reply_uid'],  // Updated key name
       priority: json['priority'] != null 
           ? Priority.values.firstWhere(
               (e) => e.name == json['priority'],
@@ -149,7 +153,8 @@ class ActivityLoggingService {
     bool uploadToFirebase = false,
     Map<String, dynamic>? metadata,
     String? commentUid,
-    String? videoPostUid,
+    String? commentReplyUid,  // Renamed parameter
+    String? wtvUid,
     String? flickPostUid,
     String? photoPostUid,
     String? offerUid,
@@ -175,7 +180,8 @@ class ActivityLoggingService {
         priority: priority, // Pass the priority parameter
         metadata: metadata,
         commentUid: commentUid,
-        videoPostUid: videoPostUid,
+        commentReplyUid: commentReplyUid,  // Renamed argument
+        wtvUid: wtvUid,
         flickPostUid: flickPostUid,
         photoPostUid: photoPostUid,
         offerUid: offerUid,
@@ -272,8 +278,9 @@ class ActivityLoggingService {
     Priority priority = Priority.normal,
     Map<String, dynamic>? metadata,
     String? commentUid, // Add commentUid parameter
+    String? commentReplyUid,  // Renamed parameter
 
-    String? videoPostUid,
+    String? wtvUid,
     String? flickPostUid,
     String? photoPostUid,
     String? offerUid,
@@ -301,7 +308,7 @@ class ActivityLoggingService {
 
       final activity = _TrackedActivity(
         userUid: userUid,
-        videoPostUid: videoPostUid,
+        wtvUid: wtvUid,
         flickPostUid: flickPostUid,
         photoPostUid: photoPostUid,
         offerUid: offerUid,
@@ -316,6 +323,7 @@ class ActivityLoggingService {
         priority: priority,
         metadata: metadata, // Use description
         commentUid: commentUid, // Add commentUid
+        commentReplyUid: commentReplyUid,  // Renamed argument
       );
 
       TalkerService.instance.debug('Saving activity to storage');
@@ -365,18 +373,25 @@ class ActivityLoggingService {
       TalkerService.instance.debug('Total events in storage: ${totalEvents.length}');
 
       // Get events based on priority
-      final events = forcePriority != null
-          ? await _storage.getPriorityEvents(forcePriority)
-          : await _storage.getEvents(limit: _batchSize);
+      List<_TrackedActivity> events;
+      if (forcePriority != null) {
+        events = await _storage.getPriorityEvents(forcePriority);
+      } else {
+        // For normal scheduled uploads, get all normal priority events
+        events = await _storage.getPriorityEvents(Priority.normal);
+      }
 
       TalkerService.instance.debug(
-          'Retrieved ${events.length} events${forcePriority != null ? " with priority >= ${forcePriority.name}" : ""}');
+          'Retrieved ${events.length} events${forcePriority != null ? " with priority >= ${forcePriority.name}" : " with normal priority"}');
 
       if (events.isEmpty) {
         TalkerService.instance.debug('No events to upload after filtering');
         _hasUnuploadedLogs = false;
-        _uploadTimer?.cancel();
-        _uploadTimer = null;
+        if (forcePriority == null) {  // Changed from !forcePriority
+          // Only stop timer if this was a normal scheduled upload
+          _uploadTimer?.cancel();
+          _uploadTimer = null;
+        }
         return;
       }
 
@@ -400,13 +415,17 @@ class ActivityLoggingService {
         TalkerService.instance.debug('Successfully uploaded and deleted ${events.length} events');
       }
 
-      // Check remaining events
+      // Check for any remaining events that aren't normal priority
       final remaining = await _storage.getEvents();
-      _hasUnuploadedLogs = remaining.isNotEmpty;
+      final remainingHighPriority = await _storage.getPriorityEvents(Priority.critical);
+      _hasUnuploadedLogs = remainingHighPriority.isNotEmpty;
       
-      if (!_hasUnuploadedLogs) {
+      // If only normal priority events are left and this wasn't a forced upload,
+      // stop the timer until new events are added
+      if (!_hasUnuploadedLogs && forcePriority == null) {  // Changed from !forcePriority
         _uploadTimer?.cancel();
         _uploadTimer = null;
+        TalkerService.instance.debug('No high priority events remaining, stopped timer');
       }
     } catch (e, stackTrace) {
       TalkerService.instance.error('Error during event upload', e, stackTrace);
@@ -597,10 +616,11 @@ class _ApiActivityLogger implements _EventLogger {
             appVersion: event.appVersion,
             geoLocation: event.geoLocationWkb,
             activityAt: event.activityAt, // Pass DateTime directly
-            wtvUid: event.videoPostUid,
+            wtvUid: event.wtvUid,
             flickUid: event.flickPostUid,
             photoUid: event.photoPostUid,
             commentUid: event.commentUid,
+            commentReplyUid: event.commentReplyUid,  // Renamed field
             memoryUid: event.memoryUid,
             metadata: event.metadata,
             
@@ -673,9 +693,9 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
         String? contentType;
         String? contentId;
 
-        if (event.videoPostUid != null) {
+        if (event.wtvUid != null) {
           contentType = 'video';
-          contentId = event.videoPostUid;
+          contentId = event.wtvUid;
         } else if (event.flickPostUid != null) {
           contentType = 'flick';
           contentId = event.flickPostUid;
@@ -698,9 +718,10 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
         }
 
         // Add interaction-specific parameters
-        if (event.commentUid != null) {
-          params['interaction_type'] = 'comment';
-          params['comment_id'] = event.commentUid;
+        if (event.commentUid != null || event.commentReplyUid != null) {
+          params['interaction_type'] = event.commentReplyUid != null ? 'reply' : 'comment';
+          if (event.commentUid != null) params['comment_id'] = event.commentUid;
+          if (event.commentReplyUid != null) params['comment_reply_id'] = event.commentReplyUid;
         }
 
         // Log the enhanced event

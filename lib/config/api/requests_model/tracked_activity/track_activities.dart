@@ -41,6 +41,7 @@ class Activity {
     String? photoUid;
     String? commentUid;
     String? memoryUid;
+    String? commentReplyUid;
     Map<String, dynamic>? metadata;
 
     Activity({
@@ -57,6 +58,7 @@ class Activity {
         this.photoUid,
         this.commentUid,
         this.memoryUid,
+        this.commentReplyUid,
         this.metadata,
     });
 
@@ -74,6 +76,7 @@ class Activity {
         String? photoUid,
         String? commentUid,
         String? memoryUid,
+        String? commentReplyUid,
         Map<String, dynamic>? metadata,
     }) => 
         Activity(
@@ -90,6 +93,7 @@ class Activity {
             photoUid: photoUid ?? this.photoUid,
             commentUid: commentUid ?? this.commentUid,
             memoryUid: memoryUid ?? this.memoryUid,
+            commentReplyUid: commentReplyUid ?? this.commentReplyUid,
             metadata: metadata ?? this.metadata,
         );
 
@@ -111,6 +115,7 @@ class Activity {
         photoUid: json["photo_uid"],
         commentUid: json["comment_uid"],
         memoryUid: json["memory_uid"],
+        commentReplyUid: json["comment_reply_uid"],
         metadata: json["metadata"] != null ? Map<String, dynamic>.from(json["metadata"]) : null,
     );
 
@@ -127,6 +132,7 @@ class Activity {
         "photo_uid": photoUid,
         "comment_uid": commentUid,
         "memory_uid": memoryUid,
+        "comment_reply_uid": commentReplyUid,
         "metadata": metadata,
     };
 }

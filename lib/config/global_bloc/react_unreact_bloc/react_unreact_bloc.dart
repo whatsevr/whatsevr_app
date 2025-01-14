@@ -198,7 +198,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
       if (response?.$1 == HttpStatus.ok) {
         ActivityLoggingService.log(
           activityType: WhatsevrActivityType.react,
-          videoPostUid: videoPostUid,
+          wtvUid: videoPostUid,
           flickPostUid: flickPostUid,
           memoryUid: memoryUid,
           offerUid: offerPostUid,
