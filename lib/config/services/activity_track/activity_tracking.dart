@@ -351,64 +351,55 @@ class ActivityLoggingService {
     _isUploading = true;
 
     try {
-      TalkerService.instance.debug('Starting event upload: forcePriority=$forcePriority');
+      TalkerService.instance.debug('Starting event upload');
       
-      // Verify storage is initialized
       if (!_storage._eventBox.isOpen) {
         await _storage.initialize();
       }
 
-      // Get total events count first for debugging
-      final totalEvents = await _storage.getEvents();
-      TalkerService.instance.debug('Total events in storage: ${totalEvents.length}');
-
-      // Get events based on priority
+      // Get ALL events of specified priority or normal priority
       List<_TrackedActivity> events;
       if (forcePriority != null) {
         events = await _storage.getPriorityEvents(forcePriority);
       } else {
-        // For normal scheduled uploads, get all normal priority events
+        // For normal upload, get ALL normal priority events including any new ones
         events = await _storage.getPriorityEvents(Priority.normal);
       }
 
-      TalkerService.instance.debug(
-          'Retrieved ${events.length} events${forcePriority != null ? " with priority >= ${forcePriority.name}" : " with normal priority"}');
+      TalkerService.instance.debug('Found ${events.length} events to upload');
 
       if (events.isEmpty) {
-        TalkerService.instance.debug('No events to upload after filtering');
         _hasUnuploadedLogs = false;
         return;
       }
 
-      TalkerService.instance.debug('Processing ${events.length} events');
-
-      // Process events with each logger
+      // Upload all events in a single batch
       bool uploadSuccess = true;
       for (final logger in _loggers) {
         final result = await logger.logEvents(events);
         if (result == null || result.$1 == null || result.$1! >= 400) {
+          uploadSuccess = false;
           TalkerService.instance.error(
               'Upload failed for logger ${logger.runtimeType}: ${result?.$2}');
-          uploadSuccess = false;
           break;
         }
       }
 
-      // Only delete events if all uploads were successful
+      // Only delete events if upload was successful
       if (uploadSuccess) {
         await _storage.deleteEvents(events.length);
         TalkerService.instance.debug('Successfully uploaded and deleted ${events.length} events');
+        
+        // Check for any remaining events
+        final remaining = await _storage.getEvents();
+        _hasUnuploadedLogs = remaining.isNotEmpty;
+        
+        // If no more events, cancel any pending debouncer
+        if (!_hasUnuploadedLogs) {
+          EasyDebounce.cancel(_uploadDebounceKey);
+        }
       }
 
-      // Check for any remaining events that aren't normal priority
-      final remaining = await _storage.getEvents();
-      final remainingHighPriority = await _storage.getPriorityEvents(Priority.critical);
-      _hasUnuploadedLogs = remainingHighPriority.isNotEmpty;
-      
-      if (!_hasUnuploadedLogs) {
-        EasyDebounce.cancel(_uploadDebounceKey);
-        TalkerService.instance.debug('No high priority events remaining, canceled debouncer');
-      }
     } catch (e, stackTrace) {
       TalkerService.instance.error('Error during event upload', e, stackTrace);
     } finally {

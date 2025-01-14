@@ -35,14 +35,20 @@ class WtvDetailsBloc extends Bloc<WtvDetailsEvent, WtvDetailsState> {
     Emitter<WtvDetailsState> emit,
   ) async {
     ActivityLoggingService.log(
-        activityType: WhatsevrActivityType.view,
-        wtvUid: event.videoPostUid,
-        metadata: {
-         if (state.videoPostUid != null)
-          'previous_wtv_uid': state.videoPostUid,
-           if (state.videoPostDetailsResponse?.videoPostDetails?.title != null)
-          'previous_wtv_title': state.videoPostDetailsResponse?.videoPostDetails?.title,
-        },);
+      activityType: WhatsevrActivityType.view,
+      wtvUid: event.videoPostUid,
+      metadata: state.videoPostUid == null &&
+              state.videoPostDetailsResponse?.videoPostDetails?.title == null
+          ? null
+          : {
+              if (state.videoPostUid != null)
+                'previous_wtv_uid': state.videoPostUid,
+              if (state.videoPostDetailsResponse?.videoPostDetails?.title !=
+                  null)
+                'previous_wtv_title':
+                    state.videoPostDetailsResponse?.videoPostDetails?.title,
+            },
+    );
     emit(
       WtvDetailsState(
         thumbnail: event.thumbnail,
