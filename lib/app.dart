@@ -57,16 +57,20 @@ class _WhatsevrAppState extends State<WhatsevrApp> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<ThemeBloc>(
+             lazy: false,
             create: (context) => ThemeBloc(),
           ),
           BlocProvider<ReactUnreactBloc>(
+             lazy: false,
             create: (context) => ReactUnreactBloc()..add(FetchReactions()),
           ),
           BlocProvider<FollowUnfollowBloc>(
+             lazy: false,
             create: (context) =>
                 FollowUnfollowBloc()..add(FetchFollowedUsers()),
           ),
           BlocProvider<JoinLeaveCommunityBloc>(
+             lazy: false,
             create: (context) =>
                 JoinLeaveCommunityBloc()..add(FetchUserCommunities()),
           ),

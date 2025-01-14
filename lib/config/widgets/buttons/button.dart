@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class WhatsevrButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
   final bool miniButton;
   final bool hasIcon;
   final IconData? icon;
@@ -13,6 +14,7 @@ class WhatsevrButton extends StatelessWidget {
   const WhatsevrButton._({
     required this.label,
     required this.onPressed,
+    this.onLongPress,
     this.miniButton = false,
     this.hasIcon = false,
     this.icon,
@@ -25,6 +27,7 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.filled({
     required String label,
     VoidCallback? onPressed,
+    VoidCallback? onLongPress,
     bool miniButton = false,
     bool shrink = false,
     bool hasIcon = false,
@@ -33,6 +36,7 @@ class WhatsevrButton extends StatelessWidget {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
+      onLongPress: onLongPress,
       miniButton: miniButton,
       isOutlined: false,
       shrink: shrink,
@@ -45,6 +49,7 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.outlined({
     required String label,
     VoidCallback? onPressed,
+    VoidCallback? onLongPress,
     bool miniButton = false,
     bool shrink = false,
     bool hasIcon = false,
@@ -53,6 +58,7 @@ class WhatsevrButton extends StatelessWidget {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
+      onLongPress: onLongPress,
       miniButton: miniButton,
       isOutlined: true,
       shrink: shrink,
@@ -65,6 +71,7 @@ class WhatsevrButton extends StatelessWidget {
   factory WhatsevrButton.text({
     required String label,
     VoidCallback? onPressed,
+    VoidCallback? onLongPress,
     bool miniButton = true,
     bool shrink = true,
     bool hasIcon = false,
@@ -73,6 +80,7 @@ class WhatsevrButton extends StatelessWidget {
     return WhatsevrButton._(
       label: label,
       onPressed: onPressed,
+      onLongPress: onLongPress,
       miniButton: miniButton,
       isOutlined: false,
       shrink: shrink,
@@ -95,6 +103,7 @@ class WhatsevrButton extends StatelessWidget {
       onPressed: () {
         onPressed?.call();
       },
+      onLongPress: onLongPress,
       color: isTextButton ? Colors.transparent : buttonColor,
       padding: EdgeInsets.symmetric(
         vertical: miniButton ? 8 : 10.0,

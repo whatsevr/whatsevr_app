@@ -126,7 +126,46 @@ class CreateVideoPostBloc
       if (itm?.$2 != 200) {
         throw BusinessException(itm!.$1!);
       }
-
+      void forgroundProcess() async {
+        SmartDialog.showLoading();
+        final String? videoUrl = await FileUploadService.uploadFilesToSupabase(
+          state.videoFile!,
+          userUid: (AuthUserDb.getLastLoggedUserUid())!,
+          fileRelatedTo: 'video-post',
+        );
+        final String? thumbnailUrl =
+            await FileUploadService.uploadFilesToSupabase(
+          state.thumbnailFile!,
+          userUid: (AuthUserDb.getLastLoggedUserUid())!,
+          fileRelatedTo: 'video-post-thumbnail',
+        );
+        final response = await PostApi.createWtv(
+          post: CreateVideoPostRequest(
+            title: titleController.text,
+            description: descriptionController.text,
+            userUid: AuthUserDb.getLastLoggedUserUid(),
+            hashtags: hashtags.isEmpty
+                ? null
+                : hashtags.map((e) => e.replaceAll('#', '')).toList(),
+            location: state.selectedPostLocation,
+            postCreatorType: state.postCreatorType?.value,
+            thumbnail: thumbnailUrl,
+            videoUrl: videoUrl,
+            addressLatLongWkb: state.selectedPostLocationLatLongWkb,
+            creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+            taggedUserUids: state.taggedUsersUid,
+            taggedCommunityUids: state.taggedCommunitiesUid,
+            videoDurationInSec: state.videoMetaData?.durationInSec,
+            communityUid: state.communityUid,
+          ),
+        );
+        if (response?.$1 == 200) {
+          SmartDialog.dismiss();
+          SmartDialog.showToast('${response?.$2}');
+          AppNavigationService.goBack();
+        }
+      }
+      event.processInBackground==true?
       WhatsevrLongTaskController.startServiceWithTaskData(
         taskData: VideoPostTaskDataForLRT(
           videoFilePath: state.videoFile!.path,
@@ -146,52 +185,14 @@ class CreateVideoPostBloc
           videoDurationInSec: state.videoMetaData?.durationInSec,
         ),
         onTaskAssignFail: () async {
-          SmartDialog.showLoading();
-          final String? videoUrl =
-              await FileUploadService.uploadFilesToSupabase(
-            state.videoFile!,
-            userUid: (AuthUserDb.getLastLoggedUserUid())!,
-            fileRelatedTo: 'video-post',
-          );
-          final String? thumbnailUrl =
-              await FileUploadService.uploadFilesToSupabase(
-            state.thumbnailFile!,
-            userUid: (AuthUserDb.getLastLoggedUserUid())!,
-            fileRelatedTo: 'video-post-thumbnail',
-          );
-          final response =
-              await PostApi.createWtv(
-            post: CreateVideoPostRequest(
-              title: titleController.text,
-              description: descriptionController.text,
-              userUid: AuthUserDb.getLastLoggedUserUid(),
-              hashtags: hashtags.isEmpty
-                  ? null
-                  : hashtags.map((e) => e.replaceAll('#', '')).toList(),
-              location: state.selectedPostLocation,
-              postCreatorType: state.postCreatorType?.value,
-              thumbnail: thumbnailUrl,
-              videoUrl: videoUrl,
-              addressLatLongWkb: state.selectedPostLocationLatLongWkb,
-              creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-              taggedUserUids: state.taggedUsersUid,
-              taggedCommunityUids: state.taggedCommunitiesUid,
-              videoDurationInSec: state.videoMetaData?.durationInSec,
-              communityUid: state.communityUid,
-            ),
-          );
-          if (response?.$1 == 200) {
-            SmartDialog.dismiss();
-            SmartDialog.showToast('${response?.$2}');
-            AppNavigationService.goBack();
-          }
+          forgroundProcess.call();
         },
         onTaskAssigned: () {
           SmartDialog.dismiss();
           SmartDialog.showToast('Creating post, do not close the app');
           AppNavigationService.goBack();
         },
-      );
+      ) : forgroundProcess();
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

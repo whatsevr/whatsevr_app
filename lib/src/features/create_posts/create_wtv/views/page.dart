@@ -427,10 +427,19 @@ class CreateWtvPage extends StatelessWidget {
               ],
             ),
             child: WhatsevrButton.filled(
+              onLongPress: () {
+                 context
+                    .read<CreateVideoPostBloc>()
+                    .add(const SubmitPostEvent(
+                      processInBackground: true,
+                    ));
+              },
               onPressed: () {
                 context
                     .read<CreateVideoPostBloc>()
-                    .add(const SubmitPostEvent());
+                    .add(const SubmitPostEvent(
+                      processInBackground: false,
+                    ));
               },
               label: 'Done',
             ),

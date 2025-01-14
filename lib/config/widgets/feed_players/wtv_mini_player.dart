@@ -5,6 +5,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/services/file_upload.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 class WTVMiniPlayer extends StatefulWidget {
@@ -28,24 +29,57 @@ class WTVMiniPlayer extends StatefulWidget {
 
 class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   CachedVideoPlayerPlusController? videoPlayerController;
+  bool _isInitializing = false;
+
   @override
   void initState() {
     super.initState();
-    initiateVideoPlayer();
   }
 
   Future<void> initiateVideoPlayer() async {
-    final String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
-      originalUrl: widget.videoUrl!,
-      quality: 30,
-    );
-    videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
-      Uri.parse(adaptiveVideoUrl),
-      invalidateCacheIfOlderThan: const Duration(days: 90),
-      videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
-    );
-    await videoPlayerController!.initialize();
-    videoPlayerController!.setLooping(widget.loopVideo ?? false);
+    if (_isInitializing || videoPlayerController?.value.isInitialized == true) return;
+    
+    try {
+      _isInitializing = true;
+      setState(() {});
+      
+      final String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
+        originalUrl: widget.videoUrl!,
+        quality: 30,
+      );
+      
+      videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
+        Uri.parse(adaptiveVideoUrl),
+        skipCache: true,
+        videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
+      );
+      
+      await videoPlayerController!.initialize();
+      videoPlayerController!.setLooping(widget.loopVideo ?? false);
+    } catch (e) {
+      debugPrint('Error initializing video player: $e');
+    } finally {
+      _isInitializing = false;
+      setState(() {});
+    }
+  }
+
+  void _pauseVideo() {
+    if (_isInitialized) {
+      videoPlayerController?.pause();
+      setState(() {});
+    }
+  }
+
+  void _playVideo() async {
+    if (!_isInitialized && !_isInitializing) {
+      await initiateVideoPlayer();
+    }
+     
+    if (_isInitialized) {
+      videoPlayerController?.play();
+      setState(() {});
+    }
   }
 
   @override
@@ -54,17 +88,57 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
     super.dispose();
   }
 
+  bool get _isPlaying => videoPlayerController?.value.isPlaying == true;
+  bool get _isInitialized => videoPlayerController?.value.isInitialized == true;
+  bool get _isMuted => videoPlayerController?.value.volume == 0;
+  bool get _isBuffering => _isInitialized && videoPlayerController?.value.isBuffering == true;
+
+  void _toggleVolume() {
+    videoPlayerController?.setVolume(_isMuted ? 1.0 : 0.0);
+    setState(() {});
+  }
+
+  void _seekForward() {
+    if (!_isInitialized) return;
+    final position = videoPlayerController!.value.position;
+    videoPlayerController!.seekTo(position + const Duration(seconds: 20));
+  }
+
+  void _seekBackward() {
+    if (!_isInitialized) return;
+    final position = videoPlayerController!.value.position;
+    videoPlayerController!.seekTo(position - const Duration(seconds: 20));
+  }
+
+  double get _aspectRatio {
+    if (_isInitialized) {
+      return videoPlayerController!.value.aspectRatio;
+    }
+    return widget.thumbnailHeightAspectRatio ?? WhatsevrAspectRatio.landscape.ratio;
+  }
+
+  void _handleTap() {
+    _pauseVideo();
+    if (!_isPlaying) {
+      widget.onTapFreeArea?.call();
+    }
+  }
+
+  void _handlePlayPause() {
+    if (_isPlaying) {
+      _pauseVideo();
+    } else {
+      _playVideo();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: Key('${widget.videoUrl}'),
-      onVisibilityChanged: (VisibilityInfo info) {
-        final visibleFraction = info.visibleFraction;
-
-        if (visibleFraction < 0.1 &&
-            videoPlayerController?.value.isPlaying == true) {
-          videoPlayerController?.pause();
-          setState(() {});
+      key: Key(widget.videoUrl ?? ''),
+      onVisibilityChanged: (info) {
+        if (info.visibleFraction < 0.1 && _isPlaying) {
+          _pauseVideo();
         }
       },
       child: Column(
@@ -73,127 +147,81 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
             alignment: Alignment.center,
             children: <Widget>[
               GestureDetector(
-                onTap: () {
-                  if (videoPlayerController?.value.isPlaying == true) {
-                    videoPlayerController?.pause();
-                    setState(() {});
-                  } else {
-                    videoPlayerController?.pause();
-                    setState(() {});
-                    widget.onTapFreeArea?.call();
-                  }
-                },
-                child: Builder(
-                  builder: (BuildContext context) {
-                    if (videoPlayerController?.value.isInitialized != true ||
-                        videoPlayerController?.value.isPlaying != true) {
-                      return AspectRatio(
-                        aspectRatio: widget.thumbnailHeightAspectRatio ??
-                            WhatsevrAspectRatio.landscape.ratio,
-                        child: ExtendedImage.network(
-                          widget.thumbnail ??
-                              MockData.imagePlaceholder('Thumbnail'),
+                onTap: _handleTap,
+                child: AspectRatio(
+                  aspectRatio: _aspectRatio,
+                  child: !_isInitialized || !_isPlaying
+                      ? ExtendedImage.network(
+                          widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
                           width: double.infinity,
                           fit: BoxFit.cover,
                           enableLoadState: false,
-                        ),
-                      );
-                    }
-                    return AspectRatio(
-                      aspectRatio: videoPlayerController?.value.aspectRatio ??
-                          WhatsevrAspectRatio.landscape.ratio,
-                      child: CachedVideoPlayerPlus(videoPlayerController!),
-                    );
-                  },
+                        )
+                      : CachedVideoPlayerPlus(videoPlayerController!),
                 ),
               ),
-              if (videoPlayerController?.value.isPlaying != true)
-                IconButton(
-                  padding: const EdgeInsets.all(0.0),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
+              if (_isInitialized && _isBuffering)
+                Positioned(
+                  left: 8,
+                  top: 8,
+                  child: SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: WhatsevrLoadingIndicator(
+                      showBorder: false, 
+                    ),
                   ),
-                  icon: const Icon(
-                    Icons.play_arrow,
-                    color: Colors.white,
-                    size: 45,
-                  ),
-                  onPressed: () async {
-                    setState(() {
-                      if (videoPlayerController?.value.isPlaying == true) {
-                        videoPlayerController?.pause();
-                        setState(() {});
-                      } else {
-                        videoPlayerController?.play();
-                        setState(() {});
-                      }
-                    });
-                  },
                 ),
-              if (videoPlayerController?.value.isPlaying == true) ...<Widget>[
+              if (!_isInitialized && videoPlayerController != null)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: WhatsevrLoadingIndicator( 
+                    showBorder: false,
+                  ),
+                ),
+              if (!_isPlaying)
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                        Colors.black.withOpacity(0.3)),
+                  ),
+                  icon: const Icon(Icons.play_arrow, color: Colors.white, size: 45),
+                  onPressed: _handlePlayPause,
+                ),
+              if (_isPlaying)
                 Positioned(
                   bottom: 2,
                   right: 2,
                   child: Row(
-                    children: <Widget>[
+                    children: [
                       IconButton(
                         visualDensity: VisualDensity.compact,
-                        onPressed: () {
-                          videoPlayerController!.seekTo(
-                            videoPlayerController!.value.position -
-                                const Duration(seconds: 20),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.fast_rewind,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        onPressed: _seekBackward,
+                        icon: const Icon(Icons.fast_rewind,
+                            color: Colors.white, size: 20),
                       ),
-                      //fast forward
                       IconButton(
                         visualDensity: VisualDensity.compact,
-                        onPressed: () {
-                          videoPlayerController!.seekTo(
-                            videoPlayerController!.value.position +
-                                const Duration(seconds: 20),
-                          );
-                        },
-                        icon: Icon(
-                          Icons.fast_forward,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        onPressed: _seekForward,
+                        icon: const Icon(Icons.fast_forward,
+                            color: Colors.white, size: 20),
                       ),
-
                       IconButton(
                         visualDensity: VisualDensity.compact,
-                        onPressed: () {
-                          setState(() {
-                            if (videoPlayerController!.value.volume == 0) {
-                              videoPlayerController!.setVolume(1);
-                            } else {
-                              videoPlayerController!.setVolume(0);
-                            }
-                          });
-                        },
+                        onPressed: _toggleVolume,
                         icon: Icon(
-                          videoPlayerController?.value.volume == 0
-                              ? Icons.volume_off
-                              : Icons.volume_up,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                            _isMuted ? Icons.volume_off : Icons.volume_up,
+                            color: Colors.white,
+                            size: 20),
                       ),
                     ],
                   ),
                 ),
-              ],
             ],
           ),
-          //linear progress bar
-          if (videoPlayerController?.value.isPlaying == true)
+          if (_isPlaying)
             VideoProgressIndicator(
               videoPlayerController!,
               allowScrubbing: true,
