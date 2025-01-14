@@ -4,7 +4,7 @@ class CommunityState extends Equatable {
   final String? communityUid;
   final bool isEditMode;
   final CommunityProfileDataResponse? communityDetailsResponse;
-  final List<VideoPost?> communityVideoPosts;
+  final List<Wtv?> communityVideoPosts;
   final List<Memory?> communityMemories;
   final List<OfferPost?> communityOffers;
   final List<MixContent?> communityMixContent;
@@ -35,7 +35,7 @@ class CommunityState extends Equatable {
     String? communityUid,
     bool? isEditMode,
     CommunityProfileDataResponse? communityDetailsResponse,
-    List<VideoPost>? communityVideoPosts,
+    List<Wtv>? communityVideoPosts,
     List<Memory>? communityMemories,
     List<OfferPost>? communityOffers,
     List<MixContent>? communityMixContent,

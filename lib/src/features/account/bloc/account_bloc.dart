@@ -76,7 +76,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
       emit(
         state.copyWith(
-          userVideoPosts: userVideoPostsResponse?.videoPosts ?? [],
+          userVideoPosts: userVideoPostsResponse?.wtvs ?? [],
           userFlicks: userFlicksResponse?.flicks ?? [],
           userMemories: userMemoriesResponse?.memories ?? [],
           userOffers: userOffersResponse?.offerPosts ?? [],

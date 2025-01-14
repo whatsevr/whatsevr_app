@@ -74,7 +74,7 @@ class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {
 
       emit(
         state.copyWith(
-          communityVideoPosts: videoPosts?.videoPosts ?? [],
+          communityVideoPosts: videoPosts?.wtvs ?? [],
           communityMemories: memories?.memories ?? [],
           communityOffers: offers?.offerPosts ?? [],
           communityMixContent: mixContent?.mixContent ?? [],

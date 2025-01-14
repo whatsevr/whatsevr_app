@@ -4,7 +4,7 @@ class AccountState extends Equatable {
   final String? userUid;
   final bool isEditMode;
   final UserProfileDetailsResponse? profileDetailsResponse;
-  final List<VideoPost?> userVideoPosts;
+  final List<Wtv?> userVideoPosts;
   final List<Flick?> userFlicks;
   final List<Memory?> userMemories;
   final List<OfferPost?> userOffers;
@@ -41,7 +41,7 @@ class AccountState extends Equatable {
     String? userUid,
     bool? isEditMode,
     UserProfileDetailsResponse? profileDetailsResponse,
-    List<VideoPost>? userVideoPosts,
+    List<Wtv>? userVideoPosts,
     List<Flick>? userFlicks,
     List<Memory>? userMemories,
     List<OfferPost>? userOffers,

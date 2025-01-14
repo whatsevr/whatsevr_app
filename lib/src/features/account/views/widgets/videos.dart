@@ -18,7 +18,7 @@ class AccountPageVideosView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final VideoPost? userVideoPost = state.userVideoPosts[index];
+            final Wtv? userVideoPost = state.userVideoPosts[index];
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

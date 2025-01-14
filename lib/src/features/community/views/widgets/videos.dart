@@ -18,7 +18,7 @@ class CommunityPageVideosView extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final VideoPost? userVideoPost = state.communityVideoPosts[index];
+            final Wtv? userVideoPost = state.communityVideoPosts[index];
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

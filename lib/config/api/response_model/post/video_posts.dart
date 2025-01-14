@@ -4,28 +4,28 @@ class UserAndCommunityVideoPostsResponse {
   final String? message;
   final int? page;
   final bool? lastPage;
-  final List<VideoPost>? videoPosts;
+  final List<Wtv>? wtvs;
 
   UserAndCommunityVideoPostsResponse({
     this.message,
     this.page,
     this.lastPage,
-    this.videoPosts,
+    this.wtvs,
   });
 
   UserAndCommunityVideoPostsResponse copyWith({
     String? message,
     int? page,
     bool? lastPage,
-    List<VideoPost>? videoPosts,
+    List<Wtv>? wtvs,
   }) =>
       UserAndCommunityVideoPostsResponse(
         message: message ?? this.message,
         page: page ?? this.page,
-        lastPage: lastPage ?? this.lastPage,
-        videoPosts: videoPosts ?? this.videoPosts,
+        lastPage: lastPage ?? this.lastPage, 
+        wtvs: wtvs ?? this.wtvs,
       );
-
+ 
   factory UserAndCommunityVideoPostsResponse.fromJson(String str) =>
       UserAndCommunityVideoPostsResponse.fromMap(json.decode(str));
 
@@ -38,10 +38,10 @@ class UserAndCommunityVideoPostsResponse {
         message: json['message'],
         page: json['page'],
         lastPage: json['last_page'],
-        videoPosts: json['video_posts'] == null
+        wtvs: json['wtvs'] == null
             ? []
-            : List<VideoPost>.from(
-                json['video_posts']!.map((x) => VideoPost.fromMap(x)),
+            : List<Wtv>.from(
+                json['wtvs']!.map((x) => Wtv.fromMap(x)),
               ),
       );
 
@@ -49,13 +49,13 @@ class UserAndCommunityVideoPostsResponse {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'video_posts': videoPosts == null
+        'wtvs': wtvs == null
             ? []
-            : List<dynamic>.from(videoPosts!.map((x) => x.toMap())),
+            : List<dynamic>.from(wtvs!.map((x) => x.toMap())),
       };
 }
 
-class VideoPost {
+class Wtv {
   final int? id;
   final DateTime? createdAt;
   final String? uid;
@@ -83,7 +83,7 @@ class VideoPost {
   final int? cumulativeScore;
   final int? videoDurationInSec;
 
-  VideoPost({
+  Wtv({
     this.id,
     this.createdAt,
     this.uid,
@@ -112,7 +112,7 @@ class VideoPost {
     this.videoDurationInSec,
   });
 
-  VideoPost copyWith({
+  Wtv copyWith({
     int? id,
     DateTime? createdAt,
     String? uid,
@@ -140,7 +140,7 @@ class VideoPost {
     int? cumulativeScore,
     int? videoDurationInSec,
   }) =>
-      VideoPost(
+      Wtv(
         id: id ?? this.id,
         createdAt: createdAt ?? this.createdAt,
         uid: uid ?? this.uid,
@@ -170,11 +170,11 @@ class VideoPost {
         videoDurationInSec: videoDurationInSec ?? this.videoDurationInSec,
       );
 
-  factory VideoPost.fromJson(String str) => VideoPost.fromMap(json.decode(str));
+  factory Wtv.fromJson(String str) => Wtv.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory VideoPost.fromMap(Map<String, dynamic> json) => VideoPost(
+  factory Wtv.fromMap(Map<String, dynamic> json) => Wtv(
         id: json['id'],
         createdAt: json['created_at'] == null
             ? null

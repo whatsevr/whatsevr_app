@@ -222,7 +222,6 @@ class _UiState extends State<_Ui> {
           ),
           ...?replyingToTheComment!.userCommentReplies,
         ];
-
         setState(() {
           _comments = _comments.map((comment) {
             if (comment == replyingToTheComment) {
