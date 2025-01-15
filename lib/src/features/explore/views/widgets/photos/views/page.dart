@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:get_time_ago/get_time_ago.dart';
+import 'package:whatsevr_app/config/api/external/models/network_file.dart';
 
 import 'package:whatsevr_app/config/api/response_model/public_recommendation/photo_posts.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
@@ -61,7 +62,14 @@ class ExplorePagePhotosPage extends StatelessWidget {
                     fullName: data[index].user?.name,
                     title: data[index].title,
                     description: data[index].description,
-                    filesData: data[index].filesData,
+                    filesData:  data[index]
+                        .filesData
+                        ?.map(
+                          (e) => WhatsevrNetworkFile.fromMap(
+                            e.toMap(),
+                          ),
+                        )
+                        .toList(),
                     timeAgo: GetTimeAgo.parse(
                       data[index].createdAt!,
                     ),

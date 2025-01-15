@@ -38,7 +38,9 @@ class _CommunityContentView extends StatelessWidget {
             controller: scrollController,
            
             itemCount: state.mixCommunityContent.length + 1,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            separatorBuilder: (context, index) => Divider(
+              thickness: 6, 
+            ),
             itemBuilder: (context, index) {
               if (index == state.mixCommunityContent.length) {
                 return state.mixCommunityContentPaginationData.isLoading

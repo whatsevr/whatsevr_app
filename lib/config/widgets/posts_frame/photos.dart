@@ -12,13 +12,14 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/dynamic_height_views.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
+import 'package:whatsevr_app/config/api/external/models/network_file.dart';
 
 class PhotosPostFrame extends StatelessWidget {
   final String? photoPostUid;
   final String? title;
   final String? description;
 
-  final List<FilesDatum>? filesData;
+  final List<WhatsevrNetworkFile>? filesData;
 
   final int? impressions;
   final String? timeAgo;
@@ -97,7 +98,7 @@ class PhotosPostFrame extends StatelessWidget {
                   key: UniqueKey(),
                   children: [
                     if (filesData != null && filesData!.isNotEmpty)
-                      for (final FilesDatum file in filesData!)
+                      for (final WhatsevrNetworkFile file in filesData!)
                         ExtendedImage.network(
                           file.imageUrl ?? MockData.imagePlaceholder('Photo'),
                           width: double.infinity,
