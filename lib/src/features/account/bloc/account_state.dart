@@ -11,7 +11,6 @@ class AccountState extends Equatable {
   final List<MixContent?> userMixContent;
   final List<TaggedContent?> userTaggedContent;
 
-
   const AccountState({
     this.userUid,
     this.isEditMode = false,
@@ -22,7 +21,6 @@ class AccountState extends Equatable {
     this.userOffers = const [],
     this.userMixContent = const [],
     this.userTaggedContent = const [],
-  
   });
 
   @override
@@ -34,7 +32,6 @@ class AccountState extends Equatable {
         userOffers,
         userMixContent,
         userTaggedContent,
-
       ];
 
   AccountState copyWith({
@@ -47,7 +44,6 @@ class AccountState extends Equatable {
     List<OfferPost>? userOffers,
     List<MixContent>? userMixContent,
     List<TaggedContent>? userTaggedContent,
- 
   }) {
     return AccountState(
       userUid: userUid ?? this.userUid,
@@ -60,7 +56,6 @@ class AccountState extends Equatable {
       userOffers: userOffers ?? this.userOffers,
       userMixContent: userMixContent ?? this.userMixContent,
       userTaggedContent: userTaggedContent ?? this.userTaggedContent,
-
     );
   }
 }

@@ -12,7 +12,7 @@ class HomeState extends Equatable {
   final PaginationData mixContentPaginationData;
   final List<MixContent> mixContent;
   final PaginationData trackedActivitiesPaginationData;
-  final List<Activity> trackedActivities; 
+  final List<Activity> trackedActivities;
   final PaginationData mixCommunityContentPaginationData;
   final List<CommunityMixContent> mixCommunityContent;
   const HomeState({
@@ -81,11 +81,11 @@ class HomeState extends Equatable {
       mixContentPaginationData:
           mixContentPaginationData ?? this.mixContentPaginationData,
       mixContent: mixContent ?? this.mixContent,
-      trackedActivitiesPaginationData:
-          trackedActivitiesPaginationData ?? this.trackedActivitiesPaginationData,
+      trackedActivitiesPaginationData: trackedActivitiesPaginationData ??
+          this.trackedActivitiesPaginationData,
       trackedActivities: trackedActivities ?? this.trackedActivities,
-      mixCommunityContentPaginationData:
-          mixCommunityContentPaginationData ?? this.mixCommunityContentPaginationData,
+      mixCommunityContentPaginationData: mixCommunityContentPaginationData ??
+          this.mixCommunityContentPaginationData,
       mixCommunityContent: mixCommunityContent ?? this.mixCommunityContent,
     );
   }

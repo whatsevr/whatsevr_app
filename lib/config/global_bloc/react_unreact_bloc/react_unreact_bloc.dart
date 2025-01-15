@@ -205,7 +205,7 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
           photoPostUid: photoPostUid,
           pdfUid: pdfUid,
           priority: Priority.critical,
-          uploadToDb: true, 
+          uploadToDb: true,
         );
       }
     } catch (e) {
@@ -231,7 +231,6 @@ class ReactUnreactBloc extends Bloc<ReactUnreactEvent, ReactUnreactState> {
         photoPostUid: photoPostUid,
         pdfUid: pdfUid,
       );
-   
     } catch (e) {
       print('Error unreacting to item: $e');
     }

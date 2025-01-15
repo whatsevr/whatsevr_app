@@ -90,7 +90,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       emit(
         state.copyWith(
-          recommendationVideos: state.recommendationVideos! +
+          recommendationVideos: state.recommendationVideos +
               (recommendationVideos?.recommendedVideos ?? []),
           videoPaginationData: state.videoPaginationData?.copyWith(
             currentPage: event.page,
@@ -157,7 +157,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       emit(
         state.copyWith(
-          recommendationMemories: state.recommendationMemories! +
+          recommendationMemories: state.recommendationMemories +
               (recommendationMemories?.recommendedMemories ?? []),
           memoryPaginationData: state.memoryPaginationData?.copyWith(
             currentPage: event.page,
@@ -224,7 +224,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       emit(
         state.copyWith(
-          recommendationOffers: state.recommendationOffers! +
+          recommendationOffers: state.recommendationOffers +
               (recommendationOffers?.recommendedOffers ?? []),
           offersPaginationData: state.offersPaginationData?.copyWith(
             currentPage: event.page,
@@ -292,7 +292,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
 
       emit(
         state.copyWith(
-          recommendationPhotoPosts: state.recommendationPhotoPosts! +
+          recommendationPhotoPosts: state.recommendationPhotoPosts +
               (recommendationPhotoPosts?.recommendedPhotoPosts ?? []),
           photoPostPaginationData: state.photoPostPaginationData?.copyWith(
             currentPage: event.page,
@@ -360,7 +360,7 @@ class ExploreBloc extends Bloc<ExploreEvent, ExploreState> {
       emit(
         state.copyWith(
           mixContent:
-              state.mixContent! + (mixContentResponse?.mixContent ?? []),
+              state.mixContent + (mixContentResponse?.mixContent ?? []),
           mixContentPaginationData: state.mixContentPaginationData?.copyWith(
             currentPage: event.page,
             isLoading: false,

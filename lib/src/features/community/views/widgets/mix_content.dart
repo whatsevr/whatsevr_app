@@ -46,7 +46,7 @@ class _MixContentView extends StatelessWidget {
                 break;
               case 'photo':
                 tileType = WhatsevrMixPostTile.photo;
-                thumbnailUrl =thumbnailUrl;
+                thumbnailUrl = thumbnailUrl;
                 break;
             }
 

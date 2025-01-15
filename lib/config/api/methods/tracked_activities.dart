@@ -19,7 +19,7 @@ class TrackedActivityApi {
           'page_size': pageSize,
         },
       );
-      
+
       if (response.data != null) {
         return UserTrackedActivitiesResponse.fromMap(response.data);
       }

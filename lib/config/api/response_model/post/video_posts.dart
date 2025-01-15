@@ -22,10 +22,10 @@ class UserAndCommunityVideoPostsResponse {
       UserAndCommunityVideoPostsResponse(
         message: message ?? this.message,
         page: page ?? this.page,
-        lastPage: lastPage ?? this.lastPage, 
+        lastPage: lastPage ?? this.lastPage,
         wtvs: wtvs ?? this.wtvs,
       );
- 
+
   factory UserAndCommunityVideoPostsResponse.fromJson(String str) =>
       UserAndCommunityVideoPostsResponse.fromMap(json.decode(str));
 
@@ -49,9 +49,8 @@ class UserAndCommunityVideoPostsResponse {
         'message': message,
         'page': page,
         'last_page': lastPage,
-        'wtvs': wtvs == null
-            ? []
-            : List<dynamic>.from(wtvs!.map((x) => x.toMap())),
+        'wtvs':
+            wtvs == null ? [] : List<dynamic>.from(wtvs!.map((x) => x.toMap())),
       };
 }
 

@@ -199,12 +199,12 @@ class _UiState extends State<_Ui> {
       }
       if (replyResponse?.$4 != null) {
         ActivityLoggingService.log(
-            activityType: WhatsevrActivityType.comment,
-            commentReplyUid: replyResponse?.$4,
-            metadata: {
-              'original_comment': text,
-            },
-            );
+          activityType: WhatsevrActivityType.comment,
+          commentReplyUid: replyResponse?.$4,
+          metadata: {
+            'original_comment': text,
+          },
+        );
       }
       return;
     }

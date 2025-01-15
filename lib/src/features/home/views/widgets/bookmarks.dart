@@ -37,7 +37,7 @@ class SavedContent {
 }
 
 class _BookmarksView extends StatefulWidget {
-  const _BookmarksView({super.key});
+  const _BookmarksView();
 
   @override
   State<_BookmarksView> createState() => _BookmarksViewState();
@@ -45,7 +45,7 @@ class _BookmarksView extends StatefulWidget {
 
 class _BookmarksViewState extends State<_BookmarksView> {
   BookmarkFolder? _selectedFolder;
-  
+
   final List<BookmarkFolder> _folders = [
     BookmarkFolder(
       id: '1',
@@ -280,7 +280,6 @@ class _SavedItemTile extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                      
                         Text(
                           item.type.name.toUpperCase(),
                           style: context.whatsevrTheme.caption,
@@ -325,38 +324,44 @@ class _SavedItemTile extends StatelessWidget {
         metadata.add(Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.timer_outlined, size: 12, color: context.whatsevrTheme.textLight),
+            Icon(Icons.timer_outlined,
+                size: 12, color: context.whatsevrTheme.textLight,),
             const Gap(4),
             Text(
               item.metadata!['duration'],
               style: context.whatsevrTheme.caption,
             ),
           ],
-        ));
+        ),);
       }
 
       if (item.metadata!['views'] != null) {
         metadata.add(Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.visibility_outlined, size: 12, color: context.whatsevrTheme.textLight),
+            Icon(Icons.visibility_outlined,
+                size: 12, color: context.whatsevrTheme.textLight,),
             const Gap(4),
             Text(
               NumberFormat.compact().format(item.metadata!['views']),
               style: context.whatsevrTheme.caption,
             ),
           ],
-        ));
+        ),);
       }
     }
 
     return Row(
       children: [
         if (metadata.isNotEmpty) ...[
-          ...metadata.asMap().entries.map((entry) => [
-            entry.value,
-            if (entry.key < metadata.length - 1) const Gap(8),
-          ]).expand((x) => x),
+          ...metadata
+              .asMap()
+              .entries
+              .map((entry) => [
+                    entry.value,
+                    if (entry.key < metadata.length - 1) const Gap(8),
+                  ],)
+              .expand((x) => x),
           const Spacer(),
         ],
         Text(
@@ -367,5 +372,3 @@ class _SavedItemTile extends StatelessWidget {
     );
   }
 }
-
-

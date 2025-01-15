@@ -336,15 +336,17 @@ class _DeveloperConsolePageState extends State<DeveloperConsolePage> {
               'Act Log',
               () async {
                 try {
-                   ActivityLoggingService.log(
+                  ActivityLoggingService.log(
                     activityType: WhatsevrActivityType.system,
                     metadata: {'message': 'Test activity'},
                     priority: Priority.critical,
-                    uploadToDb: true,  // Explicitly enable API logging
-                    uploadToFirebase: false, // Also enable Firebase logging for testing
+                    uploadToDb: true, // Explicitly enable API logging
+                    uploadToFirebase:
+                        false, // Also enable Firebase logging for testing
                   );
-                  WhatsevrStackToast.showSuccess('Activity logged successfully');
-                } catch (e) { 
+                  WhatsevrStackToast.showSuccess(
+                      'Activity logged successfully',);
+                } catch (e) {
                   WhatsevrStackToast.showFailed('Failed to log activity: $e');
                 }
               }

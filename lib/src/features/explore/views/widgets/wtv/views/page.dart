@@ -38,18 +38,18 @@ class ExplorePageWtvPage extends StatelessWidget {
       },
     );
 
-    return BlocSelector<ExploreBloc, ExploreState, List<RecommendedVideo>?>(
+    return BlocSelector<ExploreBloc, ExploreState, List<RecommendedVideo>>(
       selector: (ExploreState state) => state.recommendationVideos,
-      builder: (BuildContext context, List<RecommendedVideo>? data) {
+      builder: (BuildContext context, List<RecommendedVideo> data) {
         return MyRefreshIndicator(
           onPullDown: () async {
             context.read<ExploreBloc>().add(LoadVideosEvent());
             await Future<void>.delayed(const Duration(seconds: 2));
           },
           child: ContentMask(
-            showMask: data == null || data.isEmpty,
+            showMask: data.isEmpty,
             customMask: ListView.separated(
-              shrinkWrap: data == null || data.isEmpty,
+              shrinkWrap: data.isEmpty,
               itemCount: 3,
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
@@ -98,12 +98,21 @@ class ExplorePageWtvPage extends StatelessWidget {
             child: ListView.separated(
               cacheExtent: MediaQuery.of(context).size.height * 2,
               controller: scrollController,
-              shrinkWrap: data == null || data.isEmpty,
-              itemCount: data?.length ?? 3,
+              shrinkWrap: data.isEmpty,
+              itemCount: data.length + 1,
               separatorBuilder: (BuildContext context, int index) =>
                   const Gap(8),
               itemBuilder: (BuildContext context, int index) {
-                final RecommendedVideo video = data![index];
+                if (index == data.length) {
+                  return context
+                          .read<ExploreBloc>()
+                          .state
+                          .videoPaginationData!
+                          .isLoading
+                      ? const WhatsevrLoadingIndicator()
+                      : const SizedBox();
+                }
+                final RecommendedVideo video = data[index];
 
                 return Column(
                   children: [

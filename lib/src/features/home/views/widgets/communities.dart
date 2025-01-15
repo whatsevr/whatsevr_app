@@ -4,7 +4,6 @@ class _CommunityContentView extends StatelessWidget {
   final ScrollController? scrollController;
 
   const _CommunityContentView({
-    super.key,
     this.scrollController,
   });
 
@@ -36,10 +35,9 @@ class _CommunityContentView extends StatelessWidget {
           },
           child: ListView.separated(
             controller: scrollController,
-           
             itemCount: state.mixCommunityContent.length + 1,
             separatorBuilder: (context, index) => Divider(
-              thickness: 6, 
+              thickness: 6,
             ),
             itemBuilder: (context, index) {
               if (index == state.mixCommunityContent.length) {
@@ -57,9 +55,9 @@ class _CommunityContentView extends StatelessWidget {
                   description: wtv?.description,
                   videoUrl: wtv?.videoUrl,
                   views: wtv?.totalViews,
-                  timeAgo: wtv?.createdAt != null 
-                    ? GetTimeAgo.parse(wtv!.createdAt!) 
-                    : null,
+                  timeAgo: wtv?.createdAt != null
+                      ? GetTimeAgo.parse(wtv!.createdAt!)
+                      : null,
                   avatarUrl: wtv?.user?.profilePicture,
                   likes: wtv?.totalLikes,
                   shares: wtv?.totalShares,
@@ -74,7 +72,7 @@ class _CommunityContentView extends StatelessWidget {
                       taggedUserUids: wtv?.taggedUserUids,
                     );
                   },
-                  onRequestOfVideoDetails: () { 
+                  onRequestOfVideoDetails: () {
                     AppNavigationService.newRoute(
                       RoutesName.wtvDetails,
                       extras: WtvDetailsPageArgument(
@@ -94,13 +92,15 @@ class _CommunityContentView extends StatelessWidget {
                   photoPostUid: photo?.uid,
                   title: photo?.title,
                   description: photo?.description,
-                  filesData: photo?.filesData?.map(
-                    (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
-                  ).toList(),
+                  filesData: photo?.filesData
+                      ?.map(
+                        (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
+                      )
+                      .toList(),
                   impressions: photo?.totalImpressions,
-                  timeAgo: photo?.createdAt != null 
-                    ? GetTimeAgo.parse(photo!.createdAt!) 
-                    : null,
+                  timeAgo: photo?.createdAt != null
+                      ? GetTimeAgo.parse(photo!.createdAt!)
+                      : null,
                   avatarUrl: photo?.user?.profilePicture,
                   likes: photo?.totalLikes,
                   shares: photo?.totalShares,
@@ -126,15 +126,17 @@ class _CommunityContentView extends StatelessWidget {
                   title: offer?.title,
                   description: offer?.description,
                   status: offer?.status,
-                  filesData: offer?.filesData?.map(
-                    (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
-                  ).toList(),
+                  filesData: offer?.filesData
+                      ?.map(
+                        (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
+                      )
+                      .toList(),
                   ctaAction: offer?.ctaAction,
                   ctaActionUrl: offer?.ctaActionUrl,
                   views: offer?.totalImpressions,
-                  timeAgo: offer?.createdAt != null 
-                    ? GetTimeAgo.parse(offer!.createdAt!) 
-                    : null,
+                  timeAgo: offer?.createdAt != null
+                      ? GetTimeAgo.parse(offer!.createdAt!)
+                      : null,
                   avatarUrl: offer?.user?.profilePicture,
                   likes: offer?.totalLikes,
                   shares: offer?.totalShares,

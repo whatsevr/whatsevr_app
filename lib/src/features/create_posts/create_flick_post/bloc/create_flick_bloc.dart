@@ -138,8 +138,7 @@ class CreateFlickPostBloc
         fileRelatedTo: 'video-post-thumbnail',
       );
       SmartDialog.showLoading(msg: 'Creating post...');
-      final response =
-          await PostApi.createFlickPost(
+      final response = await PostApi.createFlickPost(
         post: CreateFlickPostRequest(
           title: titleController.text,
           description: descriptionController.text,

@@ -265,7 +265,7 @@ class CreatePhotoPostPage extends StatelessWidget {
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
                       showAppModalSheet(
-                          flexibleSheet: false,
+                        flexibleSheet: false,
                         maxSheetHeight: 0.8,
                         child: SearchAndTagUsersAndCommunityPage(
                           onDone: (selectedUsersUid, selectedCommunitiesUid) {

@@ -2,15 +2,15 @@ part of 'explore_bloc.dart';
 
 class ExploreState extends Equatable {
   final PaginationData? videoPaginationData;
-  final List<RecommendedVideo>? recommendationVideos;
+  final List<RecommendedVideo> recommendationVideos;
   final PaginationData? memoryPaginationData;
-  final List<RecommendedMemory>? recommendationMemories;
+  final List<RecommendedMemory> recommendationMemories;
   final PaginationData? offersPaginationData;
-  final List<RecommendedOffer>? recommendationOffers;
+  final List<RecommendedOffer> recommendationOffers;
   final PaginationData? photoPostPaginationData;
-  final List<RecommendedPhotoPost>? recommendationPhotoPosts;
+  final List<RecommendedPhotoPost> recommendationPhotoPosts;
   final PaginationData? mixContentPaginationData;
-  final List<MixContent>? mixContent;
+  final List<MixContent> mixContent;
   const ExploreState({
     this.recommendationVideos = const [],
     this.videoPaginationData = const PaginationData(),

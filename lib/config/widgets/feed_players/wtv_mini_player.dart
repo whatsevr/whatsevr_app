@@ -37,23 +37,25 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   }
 
   Future<void> initiateVideoPlayer() async {
-    if (_isInitializing || videoPlayerController?.value.isInitialized == true) return;
-    
+    if (_isInitializing || videoPlayerController?.value.isInitialized == true) {
+      return;
+    }
+
     try {
       _isInitializing = true;
       setState(() {});
-      
+
       final String adaptiveVideoUrl = generateOptimizedCloudinaryVideoUrl(
         originalUrl: widget.videoUrl!,
         quality: 30,
       );
-      
+
       videoPlayerController ??= CachedVideoPlayerPlusController.networkUrl(
         Uri.parse(adaptiveVideoUrl),
         skipCache: true,
         videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: false),
       );
-      
+
       await videoPlayerController!.initialize();
       videoPlayerController!.setLooping(widget.loopVideo ?? false);
     } catch (e) {
@@ -75,7 +77,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
     if (!_isInitialized && !_isInitializing) {
       await initiateVideoPlayer();
     }
-     
+
     if (_isInitialized) {
       videoPlayerController?.play();
       setState(() {});
@@ -91,7 +93,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
   bool get _isPlaying => videoPlayerController?.value.isPlaying == true;
   bool get _isInitialized => videoPlayerController?.value.isInitialized == true;
   bool get _isMuted => videoPlayerController?.value.volume == 0;
-  bool get _isBuffering => _isInitialized && videoPlayerController?.value.isBuffering == true;
+  bool get _isBuffering =>
+      _isInitialized && videoPlayerController?.value.isBuffering == true;
 
   void _toggleVolume() {
     videoPlayerController?.setVolume(_isMuted ? 1.0 : 0.0);
@@ -114,7 +117,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
     if (_isInitialized) {
       return videoPlayerController!.value.aspectRatio;
     }
-    return widget.thumbnailHeightAspectRatio ?? WhatsevrAspectRatio.landscape.ratio;
+    return widget.thumbnailHeightAspectRatio ??
+        WhatsevrAspectRatio.landscape.ratio;
   }
 
   void _handleTap() {
@@ -152,7 +156,8 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                   aspectRatio: _aspectRatio,
                   child: !_isInitialized || !_isPlaying
                       ? ExtendedImage.network(
-                          widget.thumbnail ?? MockData.imagePlaceholder('Thumbnail'),
+                          widget.thumbnail ??
+                              MockData.imagePlaceholder('Thumbnail'),
                           width: double.infinity,
                           fit: BoxFit.cover,
                           enableLoadState: false,
@@ -168,7 +173,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                     width: 18,
                     height: 18,
                     child: WhatsevrLoadingIndicator(
-                      showBorder: false, 
+                      showBorder: false,
                     ),
                   ),
                 ),
@@ -176,7 +181,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                 Positioned(
                   right: 8,
                   top: 8,
-                  child: WhatsevrLoadingIndicator( 
+                  child: WhatsevrLoadingIndicator(
                     showBorder: false,
                   ),
                 ),
@@ -184,10 +189,11 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                 IconButton(
                   padding: EdgeInsets.zero,
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                        Colors.black.withOpacity(0.3)),
+                    backgroundColor:
+                        WidgetStateProperty.all(Colors.black.withOpacity(0.3)),
                   ),
-                  icon: const Icon(Icons.play_arrow, color: Colors.white, size: 45),
+                  icon: const Icon(Icons.play_arrow,
+                      color: Colors.white, size: 45,),
                   onPressed: _handlePlayPause,
                 ),
               if (_isPlaying)
@@ -200,13 +206,13 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                         visualDensity: VisualDensity.compact,
                         onPressed: _seekBackward,
                         icon: const Icon(Icons.fast_rewind,
-                            color: Colors.white, size: 20),
+                            color: Colors.white, size: 20,),
                       ),
                       IconButton(
                         visualDensity: VisualDensity.compact,
                         onPressed: _seekForward,
                         icon: const Icon(Icons.fast_forward,
-                            color: Colors.white, size: 20),
+                            color: Colors.white, size: 20,),
                       ),
                       IconButton(
                         visualDensity: VisualDensity.compact,
@@ -214,7 +220,7 @@ class _WTVMiniPlayerState extends State<WTVMiniPlayer> {
                         icon: Icon(
                             _isMuted ? Icons.volume_off : Icons.volume_up,
                             color: Colors.white,
-                            size: 20),
+                            size: 20,),
                       ),
                     ],
                   ),

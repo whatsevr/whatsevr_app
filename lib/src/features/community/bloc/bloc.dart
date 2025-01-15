@@ -16,7 +16,7 @@ import 'package:whatsevr_app/config/api/response_model/post/video_posts.dart';
 import 'package:whatsevr_app/config/api/response_model/post/mix_content.dart';
 import 'package:whatsevr_app/config/api/response_model/tag_registry/community_tagged_content.dart';
 
-part 'event.dart';  
+part 'event.dart';
 part 'state.dart';
 
 class CommunityBloc extends Bloc<CommunityEvent, CommunityState> {

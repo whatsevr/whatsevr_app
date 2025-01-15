@@ -10,7 +10,7 @@ class WKBUtil {
 
   /// Maximum valid latitude value
   static const double _maxLatitude = 90.0;
-  
+
   /// Maximum valid longitude value
   static const double _maxLongitude = 180.0;
 
@@ -18,7 +18,8 @@ class WKBUtil {
   /// Returns null if coordinates are invalid or conversion fails.
   static String? getWkbString({required double? lat, required double? long}) {
     if (!_isValidCoordinates(lat, long)) {
-      TalkerService.instance.warning('Invalid coordinates: lat=$lat, long=$long');
+      TalkerService.instance
+          .warning('Invalid coordinates: lat=$lat, long=$long');
       return null;
     }
 
@@ -48,7 +49,7 @@ class WKBUtil {
       final wkbBytes = Uint8List.fromList(_hexStringToBytes(wkbString!));
       final point = Point.decode(wkbBytes, format: WKB.geometry);
       final coords = point.position;
-      
+
       final long = coords[0];
       final lat = coords[1];
 
@@ -70,9 +71,10 @@ class WKBUtil {
   /// Private helper methods - add underscore
   static bool _isValidCoordinates(double? lat, double? long) {
     if (lat == null || long == null) return false;
-    return lat.abs() <= _maxLatitude && 
-           long.abs() <= _maxLongitude &&
-           !lat.isNaN && !long.isNaN;
+    return lat.abs() <= _maxLatitude &&
+        long.abs() <= _maxLongitude &&
+        !lat.isNaN &&
+        !long.isNaN;
   }
 
   static bool _isValidWkbString(String? wkb) {
@@ -81,13 +83,14 @@ class WKBUtil {
   }
 
   static String _bytesToHexString(List<int> bytes) {
-    return bytes.map((b) => b.toRadixString(16).padLeft(2, '0'))
-               .join()
-               .toUpperCase();
+    return bytes
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join()
+        .toUpperCase();
   }
 
   static List<int> _hexStringToBytes(String hex) {
-    var normalized = hex.toLowerCase();
+    final normalized = hex.toLowerCase();
     return List<int>.generate(
       hex.length ~/ 2,
       (i) => int.parse(normalized.substring(i * 2, i * 2 + 2), radix: 16),

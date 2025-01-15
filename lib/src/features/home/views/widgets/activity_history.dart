@@ -1,7 +1,7 @@
 part of '../page.dart';
 
 class _ActivityHistoryView extends StatelessWidget {
-  const _ActivityHistoryView({super.key});
+  const _ActivityHistoryView();
 
   @override
   Widget build(BuildContext context) {
@@ -76,20 +76,30 @@ class _ActivityTile extends StatelessWidget {
 
   int? get totalComments {
     if (activity.wtv?.totalComments != null) return activity.wtv?.totalComments;
-    if (activity.flick?.totalComments != null) return activity.flick?.totalComments;
-    if (activity.photo?.totalComments != null) return activity.photo?.totalComments;
-    if (activity.memory?.totalComments != null) return activity.memory?.totalComments;
+    if (activity.flick?.totalComments != null) {
+      return activity.flick?.totalComments;
+    }
+    if (activity.photo?.totalComments != null) {
+      return activity.photo?.totalComments;
+    }
+    if (activity.memory?.totalComments != null) {
+      return activity.memory?.totalComments;
+    }
     return null;
   }
 
   int? get videoDurationInSec {
-    if (activity.wtv?.videoDurationInSec != null) return activity.wtv?.videoDurationInSec;
-    if (activity.flick?.videoDurationInSec != null) return activity.flick?.videoDurationInSec;
+    if (activity.wtv?.videoDurationInSec != null) {
+      return activity.wtv?.videoDurationInSec;
+    }
+    if (activity.flick?.videoDurationInSec != null) {
+      return activity.flick?.videoDurationInSec;
+    }
     return null;
   }
 
   WhatsevrActivityType get type {
-    return activity.activityType?.toLowerCase() == 'view' 
+    return activity.activityType?.toLowerCase() == 'view'
         ? WhatsevrActivityType.view
         : activity.activityType?.toLowerCase() == 'react'
             ? WhatsevrActivityType.react
@@ -164,7 +174,7 @@ class _ActivityTile extends StatelessWidget {
                 ],
               ),
             const Gap(12),
-            
+
             // Content details
             Expanded(
               child: Column(
@@ -186,27 +196,28 @@ class _ActivityTile extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      if(contentType != null) 
-                      ...[const Gap(8),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: context.whatsevrTheme.background,
-                          borderRadius:
-                              context.whatsevrTheme.borderRadiusSmall,
-                          border: Border.all(
-                              color: context.whatsevrTheme.divider),
-                        ),
-                        child: Text(
-                          '${contentType?.name.toUpperCase()}',
-                          style: context.whatsevrTheme.caption.copyWith(
-                            fontSize: 10,
-                            letterSpacing: 0.5,
-                            fontWeight: FontWeight.w500,
+                      if (contentType != null) ...[
+                        const Gap(8),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: context.whatsevrTheme.background,
+                            borderRadius:
+                                context.whatsevrTheme.borderRadiusSmall,
+                            border: Border.all(
+                                color: context.whatsevrTheme.divider,),
+                          ),
+                          child: Text(
+                            '${contentType?.name.toUpperCase()}',
+                            style: context.whatsevrTheme.caption.copyWith(
+                              fontSize: 10,
+                              letterSpacing: 0.5,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                      )],
+                      ],
                       const Spacer(),
                       Text(
                         _formatTimestamp(activity.activityAt!),
@@ -214,43 +225,36 @@ class _ActivityTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
-            
+
                   // Content title with truncation indicator
-                  if(contentTitle?.isNotEmpty ?? false)...[
+                  if (contentTitle?.isNotEmpty ?? false) ...[
                     const Gap(4),
-                     Text(
-                    contentTitle ?? '',
-                    style: context.whatsevrTheme.subtitle.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    Text(
+                      contentTitle ?? '',
+                      style: context.whatsevrTheme.subtitle.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
                   ],
-                 
-                  
-            
-                  if(activity.metadata?['message'].isNotEmpty ?? false)
-                  ...[
-                    
-                    const Gap(4),Text(
-                    activity.metadata?['message'] ?? '',
-                    style: context.whatsevrTheme.caption,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  )],
-                  
-            
+
+                  if (activity.metadata?['message'].isNotEmpty ?? false) ...[
+                    const Gap(4),
+                    Text(
+                      activity.metadata?['message'] ?? '',
+                      style: context.whatsevrTheme.caption,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+
                   // Device Info
-                  if (activity.deviceModel != null)
-                   ... [
+                  if (activity.deviceModel != null) ...[
                     const Gap(8),
                     Row(
-                                
                       children: [
-                       
                         if (activity.deviceModel != null) ...[
                           Icon(Icons.devices_outlined, size: 12),
                           Gap(4),
@@ -261,9 +265,8 @@ class _ActivityTile extends StatelessWidget {
                         ],
                       ],
                     ),
-            ]
-                
-               ],
+                  ],
+                ],
               ),
             ),
           ],
@@ -271,7 +274,6 @@ class _ActivityTile extends StatelessWidget {
       ),
     );
   }
-
 
   String formatNumber(int number) {
     if (number >= 1000000) {

@@ -46,7 +46,6 @@ class AuthUserService {
         onLoginSuccess,
     required Function(String errorMessage) onLoginFailed,
   }) async {
-      
     final Otpless otplessFlutterPlugin = Otpless();
     final Map<String, String> arg = <String, String>{
       'appId': 'YAA8EYVROHZ00125AAAV',
@@ -83,7 +82,7 @@ class AuthUserService {
             onLoginFailed('Email id and mobile number both are empty');
             return;
           }
-           
+
           onLoginSuccess(
             authServiceUserResponse.userId!,
             mobileNumber,
@@ -91,7 +90,6 @@ class AuthUserService {
           );
         } else {
           onLoginFailed('${result['errorMessage']}');
-          
         }
       },
       arg,
@@ -104,11 +102,11 @@ class AuthUserService {
     required String? emailId,
   }) async {
     ActivityLoggingService.log(
-              userUid:userUid,
-                    activityType: WhatsevrActivityType.system,
-                    metadata: {'message': 'Login  attempt'},
-                    priority: Priority.critical,
-                  );
+      userUid: userUid,
+      activityType: WhatsevrActivityType.system,
+      metadata: {'message': 'Login  attempt'},
+      priority: Priority.critical,
+    );
     (int?, String?, LoginSuccessResponse?)? loginInfo = await AuthApi.login(
       userUid: userUid,
       mobileNumber: mobileNumber,
@@ -131,10 +129,10 @@ class AuthUserService {
         name: 'email_id',
         value: loginInfo?.$3?.userInfo?.emailId,
       );
-       FirebaseAnalytics.instance.setUserProperty(
-          name: 'app_version',
-          value: UserAgentInfoService.currentDeviceInfo?.appVersion,
-        );
+      FirebaseAnalytics.instance.setUserProperty(
+        name: 'app_version',
+        value: UserAgentInfoService.currentDeviceInfo?.appVersion,
+      );
       FirebaseAnalytics.instance.setDefaultEventParameters(
         <String, dynamic>{
           'user_uid': userUid,
@@ -146,13 +144,14 @@ class AuthUserService {
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
     } else {
       ActivityLoggingService.log(
-              userUid:userUid,
-                    activityType: WhatsevrActivityType.system,
-                    metadata: {'message': 'Login failed',
-                    if(loginInfo?.$2!=null)'description': loginInfo?.$2 
-                    },
-                    priority: Priority.critical,
-                  );
+        userUid: userUid,
+        activityType: WhatsevrActivityType.system,
+        metadata: {
+          'message': 'Login failed',
+          if (loginInfo?.$2 != null) 'description': loginInfo?.$2,
+        },
+        priority: Priority.critical,
+      );
       if (loginInfo?.$1 == HttpStatus.notAcceptable) {
         showAppModalSheet(
           dismissPrevious: true,
@@ -203,19 +202,21 @@ class AuthUserService {
         }
         supportiveData = supportiveDataResponse?.$2;
         ActivityLoggingService.log(
-                    activityType: WhatsevrActivityType.system,
-                    metadata: {'message': 'Account accessed'},
-                    priority: Priority.critical,
-                    uploadToDb: true, 
-                  );
+          activityType: WhatsevrActivityType.system,
+          metadata: {'message': 'Account accessed'},
+          priority: Priority.critical,
+          uploadToDb: true,
+        );
       }
     } catch (e, stackTrace) {
       ActivityLoggingService.log(
-                    activityType: WhatsevrActivityType.system,
-                    metadata: {'message': 'Account accessed failed',},
-                    priority: Priority.critical,
-                    uploadToDb: true, 
-                  );
+        activityType: WhatsevrActivityType.system,
+        metadata: {
+          'message': 'Account accessed failed',
+        },
+        priority: Priority.critical,
+        uploadToDb: true,
+      );
       AuthUserDb.removeAuthorisedUserUid(currentlyLoggedUserUid!);
       AuthUserDb.clearLastLoggedUserUid();
       if (AuthUserDb.getAllAuthorisedUserUid().isNotEmpty) {
@@ -226,6 +227,5 @@ class AuthUserService {
       AppNavigationService.clearAllAndNewRoute(RoutesName.auth);
       highLevelCatch(e, stackTrace);
     }
-       
   }
 }

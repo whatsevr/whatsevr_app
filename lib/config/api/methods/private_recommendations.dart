@@ -149,7 +149,8 @@ class PrivateRecommendationApi {
     return null;
   }
 
-  static Future<PrivateRecommendationMixCommunityContentResponse?> getMixCommunityContent({
+  static Future<PrivateRecommendationMixCommunityContentResponse?>
+      getMixCommunityContent({
     required int page,
     required String userUid,
     int pageSize = 20,
@@ -164,7 +165,8 @@ class PrivateRecommendationApi {
         },
       );
       if (response.data != null) {
-        return PrivateRecommendationMixCommunityContentResponse.fromMap(response.data);
+        return PrivateRecommendationMixCommunityContentResponse.fromMap(
+            response.data,);
       }
     } catch (e, s) {
       lowLevelCatch(e, s);

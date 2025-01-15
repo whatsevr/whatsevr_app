@@ -40,6 +40,7 @@ import 'package:whatsevr_app/src/features/community/views/widgets/services.dart'
 import 'package:whatsevr_app/src/features/community/views/widgets/videos.dart';
 part 'widgets/mix_content.dart';
 part 'widgets/tagged_content.dart';
+
 class CommunityPageArgument {
   final bool isEditMode;
   final String? communityUid;

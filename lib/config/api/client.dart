@@ -35,7 +35,8 @@ class ApiClient {
         },
         headers: <String, dynamic>{
           'x-user-agent-id': UserAgentInfoService.currentDeviceInfo?.deviceId,
-          'x-user-agent-name': UserAgentInfoService.currentDeviceInfo?.deviceName,
+          'x-user-agent-name':
+              UserAgentInfoService.currentDeviceInfo?.deviceName,
           'x-user-agent-type': UserAgentInfoService.currentDeviceInfo?.deviceOs,
           'x-app-version-code': 1,
         },

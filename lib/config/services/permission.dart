@@ -66,7 +66,8 @@ class PermissionService {
         }
       } else {
         // Android platform
-        if (UserAgentInfoService.currentDeviceInfo?.isAndroid13OrHigher == true) {
+        if (UserAgentInfoService.currentDeviceInfo?.isAndroid13OrHigher ==
+            true) {
           final mediaPermissions = [
             Permission.photos,
             Permission.videos,

@@ -137,7 +137,7 @@ class ExploreMixPostsView extends StatelessWidget {
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl:thumbnailUrl,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 1:
                     case 2:
@@ -150,7 +150,7 @@ class ExploreMixPostsView extends StatelessWidget {
                       return WhatsevrMixPostTile(
                         uid: content.content?.uid,
                         tileType: tileType,
-                        thumbnailUrl:thumbnailUrl,
+                        thumbnailUrl: thumbnailUrl,
                       );
                     case 4:
                       return WhatsevrMixPostTile(

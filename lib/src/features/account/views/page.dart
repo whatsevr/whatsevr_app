@@ -42,6 +42,7 @@ import 'package:whatsevr_app/src/features/account/views/widgets/videos.dart';
 
 part 'widgets/mix_content.dart';
 part 'widgets/tagged_content.dart';
+
 class AccountPageArgument {
   final bool isEditMode;
   final String? userUid;

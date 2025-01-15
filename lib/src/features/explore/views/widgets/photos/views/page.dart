@@ -62,7 +62,7 @@ class ExplorePagePhotosPage extends StatelessWidget {
                     fullName: data[index].user?.name,
                     title: data[index].title,
                     description: data[index].description,
-                    filesData:  data[index]
+                    filesData: data[index]
                         .filesData
                         ?.map(
                           (e) => WhatsevrNetworkFile.fromMap(

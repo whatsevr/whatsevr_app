@@ -33,17 +33,18 @@ class _WhatsevrTabBarWithViewsState extends State<WhatsevrTabBarWithViews> {
     if (widget.shrinkViews == true) setState(() {});
     if (widget.onTabChanged != null) widget.onTabChanged!(index);
   }
+
   @override
   void initState() {
     super.initState();
     widget.onInit?.call();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: widget.tabViews.length,
       initialIndex: widget.initialIndex,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

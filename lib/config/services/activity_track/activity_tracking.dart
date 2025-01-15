@@ -14,8 +14,6 @@ import 'package:whatsevr_app/dev/talker.dart';
 import 'package:whatsevr_app/utils/geopoint_wkb_parser.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:easy_debounce/easy_debounce.dart';
- 
-
 
 // Make priority enum private
 enum Priority {
@@ -29,7 +27,6 @@ class _TrackedActivity {
   final DateTime activityAt;
   final WhatsevrActivityType activityType;
 
-
   // Optional identifying fields
   final String? uid;
   final String? userUid;
@@ -40,7 +37,7 @@ class _TrackedActivity {
   final String? memoryUid;
   final String? pdfUid;
   final String? commentUid;
-  final String? commentReplyUid;  // Renamed from replyUid
+  final String? commentReplyUid; // Renamed from replyUid
 
   // Metadata fields
   final String? deviceOs;
@@ -66,11 +63,10 @@ class _TrackedActivity {
     this.geoLocationWkb,
     this.appVersion,
     required this.activityType,
-
     this.priority = Priority.normal,
     this.metadata, // Replace metadata with description
     this.commentUid, // Add commentUid parameter
-    this.commentReplyUid,  // Renamed from replyUid
+    this.commentReplyUid, // Renamed from replyUid
   }) {
     // Validate that metadata is proper JSON-serializable
     if (metadata != null) {
@@ -81,8 +77,7 @@ class _TrackedActivity {
         throw ArgumentError('metadata must be JSON-serializable');
       }
     }
-
-}
+  }
 
   /// Converts activity to JSON format for storage/transmission
   Map<String, dynamic> toJson() => {
@@ -100,10 +95,11 @@ class _TrackedActivity {
         if (geoLocationWkb != null) 'geo_location_wkb': geoLocationWkb,
         if (appVersion != null) 'app_version': appVersion,
         'activity_type': activityType.name,
-        
+
         if (metadata != null) 'metadata': metadata, // Will be stored as JSONB
         if (commentUid != null) 'comment_uid': commentUid,
-        if (commentReplyUid != null) 'comment_reply_uid': commentReplyUid,  // Update key name too
+        if (commentReplyUid != null)
+          'comment_reply_uid': commentReplyUid, // Update key name too
         'priority': priority.name, // Add priority to JSON
         // Remove metadata from toJson
       };
@@ -132,8 +128,8 @@ class _TrackedActivity {
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
       commentUid: json['comment_uid'], // Add commentUid
-      commentReplyUid: json['comment_reply_uid'],  // Updated key name
-      priority: json['priority'] != null 
+      commentReplyUid: json['comment_reply_uid'], // Updated key name
+      priority: json['priority'] != null
           ? Priority.values.firstWhere(
               (e) => e.name == json['priority'],
               orElse: () => Priority.normal,
@@ -154,7 +150,7 @@ class ActivityLoggingService {
     bool uploadToFirebase = false,
     Map<String, dynamic>? metadata,
     String? commentUid,
-    String? commentReplyUid,  // Renamed parameter
+    String? commentReplyUid, // Renamed parameter
     String? wtvUid,
     String? flickPostUid,
     String? photoPostUid,
@@ -181,7 +177,7 @@ class ActivityLoggingService {
         priority: priority, // Pass the priority parameter
         metadata: metadata,
         commentUid: commentUid,
-        commentReplyUid: commentReplyUid,  // Renamed argument
+        commentReplyUid: commentReplyUid, // Renamed argument
         wtvUid: wtvUid,
         flickPostUid: flickPostUid,
         photoPostUid: photoPostUid,
@@ -211,7 +207,6 @@ class ActivityLoggingService {
   ActivityLoggingService._internal({
     required List<_EventLogger> loggers,
     required int batchSize,
-    int? maxBatchSize,
   })  : _storage = _EventStorage(),
         _loggers = loggers,
         _batchSize = batchSize,
@@ -242,7 +237,7 @@ class ActivityLoggingService {
         _instance = ActivityLoggingService._internal(
           loggers: loggers,
           batchSize: batchSize,
-          maxBatchSize: maxBatchSize,
+         
         );
         // Initialize immediately after creation and handle errors
         await _instance!.initialize().catchError((e, stack) {
@@ -259,6 +254,7 @@ class ActivityLoggingService {
     } catch (e, stackTrace) {
       lowLevelCatch(e, stackTrace);
     }
+    return null;
   }
 
   /// Logs a single activity with optional context data
@@ -268,7 +264,7 @@ class ActivityLoggingService {
     Priority priority = Priority.normal,
     Map<String, dynamic>? metadata,
     String? commentUid, // Add commentUid parameter
-    String? commentReplyUid,  // Renamed parameter
+    String? commentReplyUid, // Renamed parameter
 
     String? wtvUid,
     String? flickPostUid,
@@ -283,7 +279,6 @@ class ActivityLoggingService {
       // Get device info
       final userAgentInfo = UserAgentInfoService.currentDeviceInfo;
 
-      
       // Get location if requested
       String? locationWkb;
       if (includeLocation) {
@@ -313,7 +308,7 @@ class ActivityLoggingService {
         priority: priority,
         metadata: metadata, // Use description
         commentUid: commentUid, // Add commentUid
-        commentReplyUid: commentReplyUid,  // Renamed argument
+        commentReplyUid: commentReplyUid, // Renamed argument
       );
 
       TalkerService.instance.debug('Saving activity to storage');
@@ -321,7 +316,8 @@ class ActivityLoggingService {
       _hasUnuploadedLogs = true;
       _eventController.add(activity);
 
-      TalkerService.instance.debug('Activity saved, has unuploaded logs: $_hasUnuploadedLogs');
+      TalkerService.instance
+          .debug('Activity saved, has unuploaded logs: $_hasUnuploadedLogs');
 
       // Replace timer-based upload with debounced upload
       if (priority == Priority.critical) {
@@ -352,7 +348,7 @@ class ActivityLoggingService {
 
     try {
       TalkerService.instance.debug('Starting event upload');
-      
+
       if (!_storage._eventBox.isOpen) {
         await _storage.initialize();
       }
@@ -380,7 +376,7 @@ class ActivityLoggingService {
         if (result == null || result.$1 == null || result.$1! >= 400) {
           uploadSuccess = false;
           TalkerService.instance.error(
-              'Upload failed for logger ${logger.runtimeType}: ${result?.$2}');
+              'Upload failed for logger ${logger.runtimeType}: ${result?.$2}',);
           break;
         }
       }
@@ -388,18 +384,18 @@ class ActivityLoggingService {
       // Only delete events if upload was successful
       if (uploadSuccess) {
         await _storage.deleteEvents(events.length);
-        TalkerService.instance.debug('Successfully uploaded and deleted ${events.length} events');
-        
+        TalkerService.instance
+            .debug('Successfully uploaded and deleted ${events.length} events');
+
         // Check for any remaining events
         final remaining = await _storage.getEvents();
         _hasUnuploadedLogs = remaining.isNotEmpty;
-        
+
         // If no more events, cancel any pending debouncer
         if (!_hasUnuploadedLogs) {
           EasyDebounce.cancel(_uploadDebounceKey);
         }
       }
-
     } catch (e, stackTrace) {
       TalkerService.instance.error('Error during event upload', e, stackTrace);
     } finally {
@@ -409,10 +405,10 @@ class ActivityLoggingService {
 
   /// Splits events into smaller batches
   List<List<_TrackedActivity>> _createBatches(
-      List<_TrackedActivity> events, int batchSize) {
+      List<_TrackedActivity> events, int batchSize,) {
     return [
       for (var i = 0; i < events.length; i += batchSize)
-        events.skip(i).take(batchSize).toList()
+        events.skip(i).take(batchSize).toList(),
     ];
   }
 
@@ -420,7 +416,7 @@ class ActivityLoggingService {
   Future<void> dispose() async {
     try {
       EasyDebounce.cancel(_uploadDebounceKey);
-      
+
       // Upload any remaining logs before disposing
       if (_hasUnuploadedLogs && !_isUploading) {
         await _uploadPendingEvents();
@@ -470,7 +466,7 @@ abstract class _EventLogger {
   /// Logs multiple events in a batch
   /// Returns a tuple of (statusCode, message) or null if failed
   Future<(int? statusCode, String? message)?> logEvents(
-      List<_TrackedActivity> events);
+      List<_TrackedActivity> events,);
 }
 
 class _EventStorage {
@@ -482,7 +478,7 @@ class _EventStorage {
       if (!Hive.isBoxOpen(boxName)) {
         _eventBox = await Hive.openBox<String>(boxName);
         TalkerService.instance.debug('Initialized Hive box: $boxName');
-      } else { 
+      } else {
         _eventBox = Hive.box<String>(boxName);
         TalkerService.instance.debug('Reused existing Hive box: $boxName');
       }
@@ -500,7 +496,8 @@ class _EventStorage {
       }
       final jsonString = jsonEncode(event.toJson());
       await _eventBox.add(jsonString);
-      TalkerService.instance.debug('Saved event to storage. Box values: ${_eventBox.values.length}');
+      TalkerService.instance.debug(
+          'Saved event to storage. Box values: ${_eventBox.values.length}',);
     } catch (e, stack) {
       TalkerService.instance.error('Failed to save event', e, stack);
       rethrow;
@@ -515,7 +512,8 @@ class _EventStorage {
 
       final events = <_TrackedActivity>[];
       final values = _eventBox.values.toList();
-      TalkerService.instance.debug('Getting events. Total in box: ${values.length}');
+      TalkerService.instance
+          .debug('Getting events. Total in box: ${values.length}');
 
       final end = limit != null ? min(values.length, limit) : values.length;
 
@@ -542,11 +540,12 @@ class _EventStorage {
       if (!_eventBox.isOpen) {
         await initialize();
       }
-      
+
       final keys = _eventBox.keys.take(count).toList();
       TalkerService.instance.debug('Deleting ${keys.length} events');
       await _eventBox.deleteAll(keys);
-      TalkerService.instance.debug('After deletion, remaining events: ${_eventBox.length}');
+      TalkerService.instance
+          .debug('After deletion, remaining events: ${_eventBox.length}');
     } catch (e, stack) {
       TalkerService.instance.error('Failed to delete events', e, stack);
       rethrow;
@@ -558,17 +557,17 @@ class _EventStorage {
     try {
       final events = await getEvents();
       TalkerService.instance.debug(
-          'Filtering ${events.length} events for priority >= ${minPriority.name}');
-      
+          'Filtering ${events.length} events for priority >= ${minPriority.name}',);
+
       final filteredEvents = events.where((e) {
         final meets = e.priority.index >= minPriority.index;
         TalkerService.instance.debug(
-            'Event priority ${e.priority.name} ${meets ? "meets" : "does not meet"} minimum ${minPriority.name}');
+            'Event priority ${e.priority.name} ${meets ? "meets" : "does not meet"} minimum ${minPriority.name}',);
         return meets;
       }).toList();
 
       TalkerService.instance.debug(
-          'Found ${filteredEvents.length} events matching priority ${minPriority.name}');
+          'Found ${filteredEvents.length} events matching priority ${minPriority.name}',);
       return filteredEvents;
     } catch (e, stack) {
       TalkerService.instance.error('Error filtering priority events', e, stack);
@@ -580,28 +579,29 @@ class _EventStorage {
 class _ApiActivityLogger implements _EventLogger {
   @override
   Future<(int? statusCode, String? message)?> logEvents(
-      List<_TrackedActivity> events) async {
+      List<_TrackedActivity> events,) async {
     try {
       TalkerService.instance
           .debug('Attempting to log ${events.length} events to API');
 
-      final activities = events.map((event) => Activity(
-            userUid: event.userUid,
-            activityType: event.activityType.name,
-            deviceOs: event.deviceOs,
-            deviceModel: event.deviceModel,
-            appVersion: event.appVersion,
-            geoLocation: event.geoLocationWkb,
-            activityAt: event.activityAt, // Pass DateTime directly
-            wtvUid: event.wtvUid,
-            flickUid: event.flickPostUid,
-            photoUid: event.photoPostUid,
-            commentUid: event.commentUid,
-            commentReplyUid: event.commentReplyUid,  // Renamed field
-            memoryUid: event.memoryUid,
-            metadata: event.metadata,
-            
-          )).toList();
+      final activities = events
+          .map((event) => Activity(
+                userUid: event.userUid,
+                activityType: event.activityType.name,
+                deviceOs: event.deviceOs,
+                deviceModel: event.deviceModel,
+                appVersion: event.appVersion,
+                geoLocation: event.geoLocationWkb,
+                activityAt: event.activityAt, // Pass DateTime directly
+                wtvUid: event.wtvUid,
+                flickUid: event.flickPostUid,
+                photoUid: event.photoPostUid,
+                commentUid: event.commentUid,
+                commentReplyUid: event.commentReplyUid, // Renamed field
+                memoryUid: event.memoryUid,
+                metadata: event.metadata,
+              ),)
+          .toList();
 
       final request = TrackActivitiesRequest(activities: activities);
       TalkerService.instance.debug('Sending API request: ${request.toJson()}');
@@ -638,7 +638,7 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
 
   @override
   Future<(int? statusCode, String? message)?> logEvents(
-      List<_TrackedActivity> events) async {
+      List<_TrackedActivity> events,) async {
     try {
       for (final event in events) {
         // Base parameters that are common for all events
@@ -696,9 +696,12 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
 
         // Add interaction-specific parameters
         if (event.commentUid != null || event.commentReplyUid != null) {
-          params['interaction_type'] = event.commentReplyUid != null ? 'reply' : 'comment';
+          params['interaction_type'] =
+              event.commentReplyUid != null ? 'reply' : 'comment';
           if (event.commentUid != null) params['comment_id'] = event.commentUid;
-          if (event.commentReplyUid != null) params['comment_reply_id'] = event.commentReplyUid;
+          if (event.commentReplyUid != null) {
+            params['comment_reply_id'] = event.commentReplyUid;
+          }
         }
 
         // Log the enhanced event
@@ -707,8 +710,6 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
           name: eventName,
           parameters: params.cast<String, Object>(),
         );
-
-        
       }
       return (200, 'Events logged to Firebase Analytics');
     } catch (e, stackTrace) {
@@ -721,8 +722,7 @@ class _FirebaseAnalyticsLogger implements _EventLogger {
   Map<String, String> _cleanDeviceParams(Map<String?, String?> params) {
     return Map.fromEntries(
       params.entries.where((e) => e.value != null).map((e) =>
-          MapEntry(e.key!, e.value!.replaceAll(RegExp(r'[^\w\s.-]'), ''))),
+          MapEntry(e.key!, e.value!.replaceAll(RegExp(r'[^\w\s.-]'), '')),),
     );
   }
-
 }

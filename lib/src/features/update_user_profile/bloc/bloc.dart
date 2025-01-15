@@ -163,7 +163,7 @@ class UserProfileUpdateBloc
       );
       ActivityLoggingService.log(
         activityType: WhatsevrActivityType.system,
-        metadata: {'message':'Profile picture changed'},
+        metadata: {'message': 'Profile picture changed'},
       );
     } catch (e) {
       SmartDialog.showToast(e.toString());

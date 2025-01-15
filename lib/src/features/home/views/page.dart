@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -16,7 +15,6 @@ import 'package:whatsevr_app/config/widgets/dialogs/comments_view.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/show_tagged_users_dialog.dart';
 import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
 import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
-import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/offer.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/photos.dart';
 import 'package:whatsevr_app/config/widgets/posts_frame/video.dart';
@@ -63,8 +61,13 @@ class HomePage extends StatelessWidget {
                     scrollController: searchBoxHideController,
                   )
                 ),
-                ('Communities', _CommunityContentView( scrollController: searchBoxHideController,)),
-                ( 
+                (
+                  'Communities',
+                  _CommunityContentView(
+                    scrollController: searchBoxHideController,
+                  )
+                ),
+                (
                   'Offers',
                   HomePageOffersPage(
                     scrollController: searchBoxHideController,
@@ -74,7 +77,9 @@ class HomePage extends StatelessWidget {
                   'Activities',
                   WhatsevrTabBarWithViews(
                     onInit: () {
-                      context.read<HomeBloc>().add( LoadTrackedActivitiesEvent());
+                      context
+                          .read<HomeBloc>()
+                          .add(LoadTrackedActivitiesEvent());
                     },
                     tabViews: [
                       ('History', _ActivityHistoryView()),

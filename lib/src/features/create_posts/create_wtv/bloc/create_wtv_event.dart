@@ -14,9 +14,7 @@ class CreatePostInitialEvent extends CreateVideoPostEvent {
 
 class SubmitPostEvent extends CreateVideoPostEvent {
   final bool processInBackground;
-  const SubmitPostEvent(
-    {required this.processInBackground}
-  );
+  const SubmitPostEvent({required this.processInBackground});
 
   @override
   List<Object?> get props => <Object?>[];

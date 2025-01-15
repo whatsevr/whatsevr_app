@@ -36,7 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
     on<LoadTrackedActivitiesEvent>(_loadTrackedActivities);
     on<LoadMoreTrackedActivitiesEvent>(_onLoadMoreTrackedActivities);
-    on<LoadMixCommunityContentEvent>(_loadMixCommunityContent);  
+    on<LoadMixCommunityContentEvent>(_loadMixCommunityContent);
     on<LoadMoreMixCommunityContentEvent>(_onLoadMoreMixCommunityContent);
   }
 
@@ -410,7 +410,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           trackedActivities: trackedActivities?.activities,
-          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+          trackedActivitiesPaginationData:
+              state.trackedActivitiesPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: trackedActivities?.lastPage,
@@ -445,9 +446,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          trackedActivities: state.trackedActivities +
-              (trackedActivities?.activities ?? []),
-          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+          trackedActivities:
+              state.trackedActivities + (trackedActivities?.activities ?? []),
+          trackedActivitiesPaginationData:
+              state.trackedActivitiesPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: trackedActivities?.lastPage,
@@ -457,7 +459,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+          trackedActivitiesPaginationData:
+              state.trackedActivitiesPaginationData.copyWith(
             isLoading: false,
           ),
         ),
@@ -471,7 +474,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     try {
-      final PrivateRecommendationMixCommunityContentResponse? mixCommunityContentResponse =
+      final PrivateRecommendationMixCommunityContentResponse?
+          mixCommunityContentResponse =
           await PrivateRecommendationApi.getMixCommunityContent(
         page: 1,
         userUid: AuthUserDb.getLastLoggedUserUid()!,
@@ -479,7 +483,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           mixCommunityContent: mixCommunityContentResponse?.communityMixContent,
-          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
+          mixCommunityContentPaginationData:
+              state.mixCommunityContentPaginationData.copyWith(
             isLoading: false,
             currentPage: 1,
             isLastPage: mixCommunityContentResponse?.lastPage,
@@ -506,7 +511,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
               state.mixCommunityContentPaginationData.copyWith(isLoading: true),
         ),
       );
-      final PrivateRecommendationMixCommunityContentResponse? mixCommunityContentResponse =
+      final PrivateRecommendationMixCommunityContentResponse?
+          mixCommunityContentResponse =
           await PrivateRecommendationApi.getMixCommunityContent(
         page: event.page!,
         userUid: AuthUserDb.getLastLoggedUserUid()!,
@@ -514,9 +520,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          mixCommunityContent: state.mixCommunityContent + 
+          mixCommunityContent: state.mixCommunityContent +
               (mixCommunityContentResponse?.communityMixContent ?? []),
-          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
+          mixCommunityContentPaginationData:
+              state.mixCommunityContentPaginationData.copyWith(
             currentPage: event.page,
             isLoading: false,
             isLastPage: mixCommunityContentResponse?.lastPage,
@@ -526,7 +533,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e, s) {
       emit(
         state.copyWith(
-          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
+          mixCommunityContentPaginationData:
+              state.mixCommunityContentPaginationData.copyWith(
             isLoading: false,
           ),
         ),

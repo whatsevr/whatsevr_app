@@ -165,34 +165,36 @@ class CreateVideoPostBloc
           AppNavigationService.goBack();
         }
       }
-      event.processInBackground==true?
-      WhatsevrLongTaskController.startServiceWithTaskData(
-        taskData: VideoPostTaskDataForLRT(
-          videoFilePath: state.videoFile!.path,
-          thumbnailFilePath: state.thumbnailFile!.path,
-          title: titleController.text,
-          description: descriptionController.text,
-          userUid: (AuthUserDb.getLastLoggedUserUid())!,
-          hashtags: hashtags.isEmpty
-              ? null
-              : hashtags.map((e) => e.replaceAll('#', '')).toList(),
-          location: state.selectedPostLocation,
-          postCreatorType: state.postCreatorType?.value,
-          addressLatLongWkb: state.selectedPostLocationLatLongWkb,
-          creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
-          taggedUserUids: state.taggedUsersUid,
-          taggedCommunityUids: state.taggedCommunitiesUid,
-          videoDurationInSec: state.videoMetaData?.durationInSec,
-        ),
-        onTaskAssignFail: () async {
-          forgroundProcess.call();
-        },
-        onTaskAssigned: () {
-          SmartDialog.dismiss();
-          SmartDialog.showToast('Creating post, do not close the app');
-          AppNavigationService.goBack();
-        },
-      ) : forgroundProcess();
+
+      event.processInBackground == true
+          ? WhatsevrLongTaskController.startServiceWithTaskData(
+              taskData: VideoPostTaskDataForLRT(
+                videoFilePath: state.videoFile!.path,
+                thumbnailFilePath: state.thumbnailFile!.path,
+                title: titleController.text,
+                description: descriptionController.text,
+                userUid: (AuthUserDb.getLastLoggedUserUid())!,
+                hashtags: hashtags.isEmpty
+                    ? null
+                    : hashtags.map((e) => e.replaceAll('#', '')).toList(),
+                location: state.selectedPostLocation,
+                postCreatorType: state.postCreatorType?.value,
+                addressLatLongWkb: state.selectedPostLocationLatLongWkb,
+                creatorLatLongWkb: state.userCurrentLocationLatLongWkb,
+                taggedUserUids: state.taggedUsersUid,
+                taggedCommunityUids: state.taggedCommunitiesUid,
+                videoDurationInSec: state.videoMetaData?.durationInSec,
+              ),
+              onTaskAssignFail: () async {
+                forgroundProcess.call();
+              },
+              onTaskAssigned: () {
+                SmartDialog.dismiss();
+                SmartDialog.showToast('Creating post, do not close the app');
+                AppNavigationService.goBack();
+              },
+            )
+          : forgroundProcess();
     } catch (e, stackTrace) {
       highLevelCatch(e, stackTrace);
     }

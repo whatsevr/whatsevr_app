@@ -39,8 +39,13 @@ class CommentsApi {
     return null;
   }
 
-  static Future<(int? statusCode, String? message, String? newCommentUid,String? replyUid,)?>
-      postCommentOrReply(CommentAndReplyRequest request) async {
+  static Future<
+      (
+        int? statusCode,
+        String? message,
+        String? newCommentUid,
+        String? replyUid,
+      )?> postCommentOrReply(CommentAndReplyRequest request) async {
     try {
       final Response response = await ApiClient.client
           .post('/v1/post-comment-or-reply', data: request.toJson());
@@ -50,7 +55,6 @@ class CommentsApi {
           response.data['message'] as String?,
           response.data['comment_uid'] as String?,
           response.data['reply_uid'] as String?,
-
         );
       }
     } catch (e, s) {
