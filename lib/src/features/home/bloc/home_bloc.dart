@@ -6,6 +6,7 @@ import 'package:whatsevr_app/config/api/external/models/business_validation_exce
 import 'package:whatsevr_app/config/api/external/models/pagination_data.dart';
 import 'package:whatsevr_app/config/api/methods/private_recommendations.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/memories.dart';
+import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_community_content.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/mix_content.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/offers.dart';
 import 'package:whatsevr_app/config/api/response_model/private_recommendation/photo_posts.dart';
@@ -35,6 +36,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<LoadMoreMixContentEvent>(_onLoadMoreMixContent);
     on<LoadTrackedActivitiesEvent>(_loadTrackedActivities);
     on<LoadMoreTrackedActivitiesEvent>(_onLoadMoreTrackedActivities);
+    on<LoadMixCommunityContentEvent>(_loadMixCommunityContent);  
+    on<LoadMoreMixCommunityContentEvent>(_onLoadMoreMixCommunityContent);
   }
 
   Future<void> _onInitial(
@@ -46,6 +49,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     add(LoadOffersEvent());
     add(LoadPhotoPostsEvent());
     add(LoadMixContentEvent());
+    add(LoadMixCommunityContentEvent());
   }
 
   FutureOr<void> _loadVideos(
@@ -454,6 +458,75 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           trackedActivitiesPaginationData: state.trackedActivitiesPaginationData.copyWith(
+            isLoading: false,
+          ),
+        ),
+      );
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _loadMixCommunityContent(
+    LoadMixCommunityContentEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    try {
+      final PrivateRecommendationMixCommunityContentResponse? mixCommunityContentResponse =
+          await PrivateRecommendationApi.getMixCommunityContent(
+        page: 1,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
+      );
+      emit(
+        state.copyWith(
+          mixCommunityContent: mixCommunityContentResponse?.communityMixContent,
+          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
+            isLoading: false,
+            currentPage: 1,
+            isLastPage: mixCommunityContentResponse?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      highLevelCatch(e, s);
+    }
+  }
+
+  FutureOr<void> _onLoadMoreMixCommunityContent(
+    LoadMoreMixCommunityContentEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state.mixCommunityContentPaginationData.isLoading == true ||
+        state.mixCommunityContentPaginationData.noMoreData == true) {
+      return;
+    }
+    try {
+      emit(
+        state.copyWith(
+          mixCommunityContentPaginationData:
+              state.mixCommunityContentPaginationData.copyWith(isLoading: true),
+        ),
+      );
+      final PrivateRecommendationMixCommunityContentResponse? mixCommunityContentResponse =
+          await PrivateRecommendationApi.getMixCommunityContent(
+        page: event.page!,
+        userUid: AuthUserDb.getLastLoggedUserUid()!,
+      );
+
+      emit(
+        state.copyWith(
+          mixCommunityContent: state.mixCommunityContent + 
+              (mixCommunityContentResponse?.communityMixContent ?? []),
+          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
+            currentPage: event.page,
+            isLoading: false,
+            isLastPage: mixCommunityContentResponse?.lastPage,
+          ),
+        ),
+      );
+    } catch (e, s) {
+      emit(
+        state.copyWith(
+          mixCommunityContentPaginationData: state.mixCommunityContentPaginationData.copyWith(
             isLoading: false,
           ),
         ),

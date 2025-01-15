@@ -8,16 +8,20 @@ import 'package:whatsevr_app/config/api/response_model/tracked_activities/user_t
 import 'package:whatsevr_app/config/enums/activity_type.dart';
 import 'package:whatsevr_app/config/enums/content_type.dart';
 import 'package:whatsevr_app/config/themes/theme.dart';
+import 'package:whatsevr_app/config/widgets/loading_indicator.dart';
+import 'package:whatsevr_app/config/widgets/max_scroll_listener.dart';
+import 'package:whatsevr_app/config/widgets/post_tiles/dynamic_mix_post_tile.dart';
+import 'package:whatsevr_app/config/widgets/refresh_indicator.dart';
+import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
 
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 import 'package:whatsevr_app/config/widgets/tab_bar.dart';
 import 'package:whatsevr_app/config/widgets/textfield/animated_search_field.dart';
-import 'package:whatsevr_app/src/features/home/bloc/home_bloc.dart';
-import 'package:whatsevr_app/src/features/home/views/widgets/communities.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/for_you.dart';
 import 'package:whatsevr_app/src/features/home/views/widgets/offers.dart';
 part 'widgets/activity_history.dart';
 part 'widgets/bookmarks.dart';
+part 'widgets/communities.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -49,8 +53,8 @@ class HomePage extends StatelessWidget {
                     scrollController: searchBoxHideController,
                   )
                 ),
-                ('Communities', HomePageCommunitiesPage()),
-                (
+                ('Communities', _CommunityContentView( scrollController: searchBoxHideController,)),
+                ( 
                   'Offers',
                   HomePageOffersPage(
                     scrollController: searchBoxHideController,

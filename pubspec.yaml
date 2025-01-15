@@ -99,9 +99,9 @@ dependencies:
   story_view_advance: ^0.2.0
   supabase: ^2.5.0
   supabase_flutter: ^2.8.0
-  talker_bloc_logger: ^4.4.1
-  talker_dio_logger: ^4.4.1
-  talker_flutter: ^4.4.1
+  talker_bloc_logger: ^4.6.3
+  talker_dio_logger: ^4.6.3
+  talker_flutter: ^4.6.3
   timeago: ^3.2.2
   username_generator:
     git:
@@ -112,7 +112,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   wakelock_plus: ^1.2.8
   waterfall_flow: ^3.0.3
-  wechat_assets_picker: ^9.4.1
+  wechat_assets_picker: ^9.4.2
 
 dependency_overrides:
   file_picker:

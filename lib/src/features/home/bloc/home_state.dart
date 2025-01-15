@@ -12,7 +12,9 @@ class HomeState extends Equatable {
   final PaginationData mixContentPaginationData;
   final List<MixContent> mixContent;
   final PaginationData trackedActivitiesPaginationData;
-  final List<Activity> trackedActivities;
+  final List<Activity> trackedActivities; 
+  final PaginationData mixCommunityContentPaginationData;
+  final List<CommunityMixContent> mixCommunityContent;
   const HomeState({
     this.recommendationVideos = const [],
     this.videoPaginationData = const PaginationData(),
@@ -26,6 +28,8 @@ class HomeState extends Equatable {
     this.mixContent = const [],
     this.trackedActivitiesPaginationData = const PaginationData(),
     this.trackedActivities = const [],
+    this.mixCommunityContentPaginationData = const PaginationData(),
+    this.mixCommunityContent = const [],
   });
 
   @override
@@ -42,6 +46,8 @@ class HomeState extends Equatable {
         mixContent,
         trackedActivitiesPaginationData,
         trackedActivities,
+        mixCommunityContentPaginationData,
+        mixCommunityContent,
       ];
 
   HomeState copyWith({
@@ -57,6 +63,8 @@ class HomeState extends Equatable {
     List<MixContent>? mixContent,
     PaginationData? trackedActivitiesPaginationData,
     List<Activity>? trackedActivities,
+    PaginationData? mixCommunityContentPaginationData,
+    List<CommunityMixContent>? mixCommunityContent,
   }) {
     return HomeState(
       recommendationVideos: recommendationVideos ?? this.recommendationVideos,
@@ -76,6 +84,9 @@ class HomeState extends Equatable {
       trackedActivitiesPaginationData:
           trackedActivitiesPaginationData ?? this.trackedActivitiesPaginationData,
       trackedActivities: trackedActivities ?? this.trackedActivities,
+      mixCommunityContentPaginationData:
+          mixCommunityContentPaginationData ?? this.mixCommunityContentPaginationData,
+      mixCommunityContent: mixCommunityContent ?? this.mixCommunityContent,
     );
   }
 }
