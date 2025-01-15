@@ -1,4 +1,5 @@
 part of '../page.dart';
+
 class _CommunityContentView extends StatelessWidget {
   final ScrollController? scrollController;
 
@@ -35,7 +36,7 @@ class _CommunityContentView extends StatelessWidget {
           },
           child: ListView.separated(
             controller: scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+           
             itemCount: state.mixCommunityContent.length + 1,
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
@@ -46,66 +47,112 @@ class _CommunityContentView extends StatelessWidget {
               }
 
               final content = state.mixCommunityContent[index];
-              String? tileType;
-              String? thumbnailUrl;
-
-              switch (content.contentType?.toLowerCase()) {
-                case 'wtv':
-                  tileType = WhatsevrMixPostTile.wtv;
-                  thumbnailUrl = content.content?.thumbnail;
-                  break;
-                case 'flick':
-                  tileType = WhatsevrMixPostTile.flick;
-                  thumbnailUrl = content.content?.thumbnail;
-                  break;
-                case 'offer':
-                  tileType = WhatsevrMixPostTile.offer;
-                  thumbnailUrl = content.content?.filesData?.firstOrNull?.imageUrl;
-                  break;
-                case 'photo':
-                  tileType = WhatsevrMixPostTile.photo;
-                  thumbnailUrl = content.content?.filesData?.firstOrNull?.imageUrl;
-                  break;
+              if (content.contentType == 'wtv') {
+                final wtv = content.content;
+                return WtvVideoPostFrame(
+                  videoPostUid: wtv?.uid,
+                  title: wtv?.title,
+                  description: wtv?.description,
+                  videoUrl: wtv?.videoUrl,
+                  views: wtv?.totalViews,
+                  timeAgo: wtv?.createdAt != null 
+                    ? GetTimeAgo.parse(wtv!.createdAt!) 
+                    : null,
+                  avatarUrl: wtv?.user?.profilePicture,
+                  likes: wtv?.totalLikes,
+                  shares: wtv?.totalShares,
+                  comments: wtv?.totalComments,
+                  username: wtv?.user?.username,
+                  thumbnail: wtv?.thumbnail,
+                  totalTags: (wtv?.taggedUserUids?.length ?? 0) +
+                      (wtv?.taggedCommunityUids?.length ?? 0),
+                  onTapTags: () {
+                    showTaggedUsersBottomSheet(
+                      context,
+                      taggedUserUids: wtv?.taggedUserUids,
+                    );
+                  },
+                  onRequestOfVideoDetails: () { 
+                    AppNavigationService.newRoute(
+                      RoutesName.wtvDetails,
+                      extras: WtvDetailsPageArgument(
+                        videoPostUid: wtv?.uid,
+                        thumbnail: wtv?.thumbnail,
+                        videoUrl: wtv?.videoUrl,
+                      ),
+                    );
+                  },
+                  onTapComment: () {
+                    showCommentsDialog(videoPostUid: wtv?.uid);
+                  },
+                );
+              } else if (content.contentType == 'photo') {
+                final photo = content.content;
+                return PhotosPostFrame(
+                  photoPostUid: photo?.uid,
+                  title: photo?.title,
+                  description: photo?.description,
+                  filesData: photo?.filesData?.map(
+                    (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
+                  ).toList(),
+                  impressions: photo?.totalImpressions,
+                  timeAgo: photo?.createdAt != null 
+                    ? GetTimeAgo.parse(photo!.createdAt!) 
+                    : null,
+                  avatarUrl: photo?.user?.profilePicture,
+                  likes: photo?.totalLikes,
+                  shares: photo?.totalShares,
+                  comments: photo?.totalComments,
+                  username: photo?.user?.username,
+                  fullName: photo?.user?.name,
+                  totalTags: (photo?.taggedUserUids?.length ?? 0) +
+                      (photo?.taggedCommunityUids?.length ?? 0),
+                  onTapTags: () {
+                    showTaggedUsersBottomSheet(
+                      context,
+                      taggedUserUids: photo?.taggedUserUids,
+                    );
+                  },
+                  onTapComment: () {
+                    showCommentsDialog(photoPostUid: photo?.uid);
+                  },
+                );
+              } else if (content.contentType == 'offer') {
+                final offer = content.content;
+                return OfferPostFrame(
+                  offerPostUid: offer?.uid,
+                  title: offer?.title,
+                  description: offer?.description,
+                  status: offer?.status,
+                  filesData: offer?.filesData?.map(
+                    (e) => WhatsevrNetworkFile.fromMap(e.toMap()),
+                  ).toList(),
+                  ctaAction: offer?.ctaAction,
+                  ctaActionUrl: offer?.ctaActionUrl,
+                  views: offer?.totalImpressions,
+                  timeAgo: offer?.createdAt != null 
+                    ? GetTimeAgo.parse(offer!.createdAt!) 
+                    : null,
+                  avatarUrl: offer?.user?.profilePicture,
+                  likes: offer?.totalLikes,
+                  shares: offer?.totalShares,
+                  comments: offer?.totalComments,
+                  username: offer?.user?.username,
+                  fullName: offer?.user?.name,
+                  totalTags: (offer?.taggedUserUids?.length ?? 0) +
+                      (offer?.taggedCommunityUids?.length ?? 0),
+                  onTapTags: () {
+                    showTaggedUsersBottomSheet(
+                      context,
+                      taggedUserUids: offer?.taggedUserUids,
+                    );
+                  },
+                  onTapComment: () {
+                    showCommentsDialog(offerPostUid: offer?.uid);
+                  },
+                );
               }
-
-              return Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(content.contentType ?? ''),
-                    ListTile(
-                      
-                      title: Text(content.content?.community?.title ?? ''),
-                      subtitle: Text(content.content?.community?.description ?? ''),
-                    ),
-                    if (thumbnailUrl != null)
-                      WhatsevrMixPostTile(
-                        uid: content.content?.uid,
-                        tileType: tileType,
-                        thumbnailUrl: thumbnailUrl,
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (content.content?.title != null)
-                            Text(
-                              content.content!.title!,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          if (content.content?.description != null)
-                            Text(
-                              content.content!.description!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
+              return const SizedBox.shrink();
             },
           ),
         );
