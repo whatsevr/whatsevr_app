@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:whatsevr_app/config/widgets/media/aspect_ratio.dart';
 
 import 'package:whatsevr_app/utils/conversion.dart';
 import 'package:whatsevr_app/config/mocks/mocks.dart';
@@ -8,7 +9,7 @@ import 'package:whatsevr_app/config/widgets/buttons/post_actions.dart';
 import 'package:whatsevr_app/config/widgets/feed_players/wtv_mini_player.dart';
 import 'package:whatsevr_app/config/widgets/pad_horizontal.dart';
 
-class WtvVideoPostFrame extends StatelessWidget {
+class FlickPostFrame extends StatelessWidget {
   final String? videoPostUid;
   final String? title;
   final String? description;
@@ -26,7 +27,7 @@ class WtvVideoPostFrame extends StatelessWidget {
   final Function()? onRequestOfVideoDetails;
   final double? thumbnailHeightAspectRatio;
   final VoidCallback? onTapComment;
-  const WtvVideoPostFrame({
+  const FlickPostFrame({
     super.key,
     this.videoPostUid,
     this.title,
@@ -58,11 +59,11 @@ class WtvVideoPostFrame extends StatelessWidget {
         children: <Widget>[
           Stack(
             children: <Widget>[
-              WTVMiniPlayer(
-                key: ValueKey('explore-wtv-video-$videoUrl'),
-                videoUrl: videoUrl,
+              WTVMiniPlayer( 
+                key: ValueKey('home-community-video-$videoUrl'),
+                videoUrl: videoUrl, 
                 thumbnail: thumbnail,
-                thumbnailHeightAspectRatio: thumbnailHeightAspectRatio,
+                thumbnailHeightAspectRatio: WhatsevrAspectRatio.vertical9by16.ratio,
                 onTapFreeArea: () {
                   onRequestOfVideoDetails?.call();
                 },

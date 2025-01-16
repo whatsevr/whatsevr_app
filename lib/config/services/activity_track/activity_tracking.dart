@@ -197,7 +197,7 @@ class ActivityLoggingService {
   final List<_EventLogger> _loggers;
   bool _isUploading = false;
   bool _hasUnuploadedLogs = false;
-  final int _batchSize;
+
   final StreamController<_TrackedActivity> _eventController;
 
   static const _uploadDebounceKey = 'activity_upload_debouncer';
@@ -208,8 +208,8 @@ class ActivityLoggingService {
     required List<_EventLogger> loggers,
     required int batchSize,
   })  : _storage = _EventStorage(),
-        _loggers = loggers,
-        _batchSize = batchSize,
+        _loggers = loggers, 
+       
         _eventController = StreamController<_TrackedActivity>.broadcast();
 
   Stream<_TrackedActivity> get eventStream => _eventController.stream;

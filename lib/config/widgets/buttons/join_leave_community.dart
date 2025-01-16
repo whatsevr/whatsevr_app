@@ -42,7 +42,7 @@ class WhatsevrCommunityJoinLeaveButton extends StatelessWidget {
           onStateChanged: (onJoin, onLeave) {
             if (communityUid == null) return;
             final joinLeaveBloc = context.read<JoinLeaveCommunityBloc>();
-
+ 
             joinLeaveBloc.add(JoinOrLeave(userUid: communityUid!));
           },
           firstStateUi: filledButton

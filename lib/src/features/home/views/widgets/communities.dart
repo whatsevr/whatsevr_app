@@ -36,8 +36,8 @@ class _CommunityContentView extends StatelessWidget {
           child: ListView.separated(
             controller: scrollController,
             itemCount: state.mixCommunityContent.length + 1,
-            separatorBuilder: (context, index) => Divider(
-              thickness: 6,
+            separatorBuilder: (context, index) => SizedBox(
+              height: 30,
             ),
             itemBuilder: (context, index) {
               if (index == state.mixCommunityContent.length) {
@@ -155,7 +155,47 @@ class _CommunityContentView extends StatelessWidget {
                     showCommentsDialog(offerPostUid: offer?.uid);
                   },
                 );
+              } else if (content.contentType == 'flick') {
+                final wtv = content.content;
+                return FlickPostFrame( 
+                  videoPostUid: wtv?.uid,
+                  title: wtv?.title,
+                  description: wtv?.description,
+                  videoUrl: wtv?.videoUrl,
+                  views: wtv?.totalViews,
+                  timeAgo: wtv?.createdAt != null
+                      ? GetTimeAgo.parse(wtv!.createdAt!)
+                      : null,
+                  avatarUrl: wtv?.user?.profilePicture,
+                  likes: wtv?.totalLikes,
+                  shares: wtv?.totalShares,
+                  comments: wtv?.totalComments,
+                  username: wtv?.user?.username,
+                  thumbnail: wtv?.thumbnail,
+                  totalTags: (wtv?.taggedUserUids?.length ?? 0) +
+                      (wtv?.taggedCommunityUids?.length ?? 0),
+                  onTapTags: () {
+                    showTaggedUsersBottomSheet(
+                      context,
+                      taggedUserUids: wtv?.taggedUserUids,
+                    );
+                  },
+                  onRequestOfVideoDetails: () {
+                    AppNavigationService.newRoute(
+                      RoutesName.wtvDetails,
+                      extras: WtvDetailsPageArgument(
+                        videoPostUid: wtv?.uid,
+                        thumbnail: wtv?.thumbnail,
+                        videoUrl: wtv?.videoUrl,
+                      ),
+                    );
+                  },
+                  onTapComment: () {
+                    showCommentsDialog(videoPostUid: wtv?.uid);
+                  },
+                );
               }
+
               return const SizedBox.shrink();
             },
           ),

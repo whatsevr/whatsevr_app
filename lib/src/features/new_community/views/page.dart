@@ -9,6 +9,7 @@ import 'package:whatsevr_app/config/mocks/mocks.dart';
 import 'package:whatsevr_app/config/widgets/app_bar.dart';
 import 'package:whatsevr_app/config/widgets/buttons/button.dart';
 import 'package:whatsevr_app/config/widgets/buttons/choice_chip.dart';
+import 'package:whatsevr_app/config/widgets/buttons/join_leave_community.dart';
 import 'package:whatsevr_app/config/widgets/buttons/two_state_ui.dart';
 import 'package:whatsevr_app/config/widgets/content_mask.dart';
 import 'package:whatsevr_app/config/widgets/dialogs/common_data_list.dart';
@@ -138,29 +139,24 @@ class NewCommunityPage extends StatelessWidget {
                                 color: Colors.grey[600],
                               ),
                               SizedBox(width: 4),
-                              Text(
-                                community?.status ?? 'Unknown',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey[600],
+                              Flexible(
+                                child: Text(
+                                  community?.status ?? 'Unknown',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                           Gap(4),
-                          WhatsevrTwoStateUi(
-                            isSecondState: true,
-                            firstStateUi: WhatsevrButton.outlined(
-                              miniButton: true,
-                              label: 'Join',
-                              onPressed: () {},
-                            ),
-                            secondStateUi: WhatsevrButton.outlined(
-                              miniButton: true,
-                              label: 'Joined',
-                              onPressed: () {},
-                            ),
-                            onStateChanged: (isFirstState, isSecondState) {},
+                          WhatsevrCommunityJoinLeaveButton(
+                            communityUid: community?.uid,
+                            
                           ),
                         ],
                       ),
